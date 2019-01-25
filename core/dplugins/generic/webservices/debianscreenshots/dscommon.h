@@ -28,8 +28,8 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-const QString debshotsUrl = "http://screenshots.debian.net";
-//const QString debshotsUrl("http://localhost:15000"); // Test URL
+const QString debshotsUrl = QLatin1String("http://screenshots.debian.net");
+//const QString debshotsUrl = QLatin1String("http://localhost:15000"); // Test URL
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 

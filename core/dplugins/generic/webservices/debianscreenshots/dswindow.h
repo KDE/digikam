@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSWINDOW_H
-#define DSWINDOW_H
+#ifndef DIGIKAM_DS_WINDOW_H
+#define DIGIKAM_DS_WINDOW_H
 
 // Local includes
 
@@ -47,10 +47,10 @@ using namespace KIPIPlugins;
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-class DsTalker;
-class DsWidget;
+class DSTalker;
+class DSWidget;
 
-class DsWindow : public KP4ToolDialog
+class DSWindow : public KP4ToolDialog
 {
     Q_OBJECT
 
@@ -58,8 +58,8 @@ class DsWindow : public KP4ToolDialog
 
 public:
 
-    DsWindow(const QString& tmpFolder, QWidget* const parent);
-    ~DsWindow();
+    explicit DSWindow(const QString& tmpFolder, QWidget* const parent);
+    ~DSWindow();
 
     /**
      * Use this method to (re-)activate the dialog after it has been created
@@ -105,10 +105,10 @@ private:
 
     QUrl::List   m_transferQueue;
 
-    DsTalker*    m_talker;
-    DsWidget*    m_widget;
+    DSTalker*    m_talker;
+    DSWidget*    m_widget;
 };
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 
-#endif /* DSWINDOW_H */
+#endif // DIGIKAM_DS_WINDOW_H

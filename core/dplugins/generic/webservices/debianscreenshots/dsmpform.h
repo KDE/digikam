@@ -33,13 +33,13 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-class MPForm
+class DSMPForm
 {
 
 public:
 
-    explicit MPForm();
-    ~MPForm();
+    explicit DSMPForm();
+    ~DSMPForm();
 
     void finish();
     void reset();

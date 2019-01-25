@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSTALKER_H
-#define DSTALKER_H
+#ifndef DIGIKAM_DS_TALKER_H
+#define DIGIKAM_DS_TALKER_H
 
 // KDE includes
 
@@ -30,14 +30,14 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-class DsTalker : public QObject
+class DSTalker : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit DsTalker(QWidget* const parent);
-    ~DsTalker();
+    explicit DSTalker(QWidget* const parent);
+    ~DSTalker();
 
     bool addScreenshot(const QString& imgPath, const QString& packageName,
                        const QString& packageVersion = QString(),
@@ -64,4 +64,4 @@ private:
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 
-#endif /* DSTALKER_H */
+#endif // DIGIKAM_DS_TALKER_H

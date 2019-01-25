@@ -29,12 +29,12 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-PackageDelegate::PackageDelegate(QObject* const parent)
+DSPackageDelegate::DSPackageDelegate(QObject* const parent)
     : QStyledItemDelegate(parent)
 {
 }
 
-void PackageDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void DSPackageDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     if (option.state & QStyle::State_Selected)
     {
@@ -50,7 +50,7 @@ void PackageDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
     painter->restore();
 }
 
-QSize PackageDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize DSPackageDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     return 2.2*QStyledItemDelegate::sizeHint(option, index);
 }

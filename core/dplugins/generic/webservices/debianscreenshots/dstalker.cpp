@@ -52,7 +52,7 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-DsTalker::DsTalker(QWidget* const parent)
+DSTalker::DSTalker(QWidget* const parent)
     : QObject(parent),
       m_job(0)
 {
@@ -60,7 +60,7 @@ DsTalker::DsTalker(QWidget* const parent)
     m_uploadUrl = GenericDigikamDebianScreenshotsPlugin::debshotsUrl + "/uploadfile";
 }
 
-DsTalker::~DsTalker()
+DSTalker::~DSTalker()
 {
     if (m_job)
     {
@@ -68,7 +68,7 @@ DsTalker::~DsTalker()
     }
 }
 
-bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
+bool DSTalker::addScreenshot(const QString& imgPath, const QString& packageName,
                              const QString& packageVersion, const QString& description)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding screenshot " << imgPath << " to package "
@@ -82,7 +82,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
 
     emit signalBusy(true);
 
-    MPForm form;
+    DSMPForm form;
     form.addPair("packagename", packageName);
     form.addPair("version", packageVersion);
     form.addPair("description", description);
@@ -106,7 +106,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
     return true;
 }
 
- void DsTalker::data(KIO::Job*, const QByteArray& data)
+ void DSTalker::data(KIO::Job*, const QByteArray& data)
  {
      qCDebug(DIGIKAM_WEBSERVICES_LOG) << Q_FUNC_INFO;
 
@@ -119,7 +119,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
      m_buffer.resize(m_buffer.size() + data.size());
      memcpy(m_buffer.data()+oldSize, data.data(), data.size());
  }
- void DsTalker::slotResult(KJob* kjob)
+ void DSTalker::slotResult(KJob* kjob)
  {
      m_job               = 0;
      KIO::Job* const job = static_cast<KIO::Job*>(kjob);

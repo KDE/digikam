@@ -38,51 +38,47 @@
 #include <QtNetwork/QNetworkReply>
 #include <QStandardItemModel>
 #include <QCompleter>
+#include <QComboBox>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QDialog>
+#include <QListView>
+#include <QUrlQuery>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdialog.h>
-#include <QComboBox>
-#include <kpushbutton.h>
-#include <klineedit.h>
-#include <kcompletion.h>
-#include <kcompletionbox.h>
 #include <kio/accessmanager.h>
 
 // QJSON includes
 
-#include <qjson/parser.h>
+//FIXME #include <qjson/parser.h>
 
 // Local includes
 
 #include "digikam_debug.h"
-#include "ditemslist.h"
-#include "dprogresswidget.h"
 #include "dspackagedelegate.h"
 #include "dscommon.h"
-#include "kclickableimagelabel.h"
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-DsWidget::DsWidget(QWidget* const parent)
+DSWidget::DSWidget(QWidget* const parent)
     : QWidget(parent),
       m_dlGrp(0),
       m_lastTip( QString() ),
       m_lastQueryUrl( QUrl() ),
       m_httpManager( new KIO::AccessManager(this) ),
-      m_jsonManager( new KIO::AccessManager(this) ),
-      m_uploadWidget(0)
+      m_jsonManager( new KIO::AccessManager(this) )
 {
-    setObjectName("DsWidget");
+    setObjectName(QLatin1String("DSWidget"));
 
     QHBoxLayout* const mainLayout = new QHBoxLayout(this);
 
     // -------------------------------------------------------------------
 
-    m_imgList  = new KIPIPlugins::KPImagesList(this);
-    m_imgList->setControlButtonsPlacement(KIPIPlugins::KPImagesList::ControlButtonsBelow);
+    m_imgList  = new DItemsList(this);
+    m_imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     m_imgList->setAllowRAW(true);
     m_imgList->loadImagesFromCurrentSelection();
     m_imgList->listView()->setWhatsThis( i18n("This is the list of images to upload to Debian Screenshots.") );
@@ -90,17 +86,10 @@ DsWidget::DsWidget(QWidget* const parent)
     QWidget* const settingsBox           = new QWidget(this);
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(settingsBox);
 
-//    m_headerLabel = new QLabel(settingsBox);
-//    m_headerLabel->setText(QString("<b><h2><a href='%1'>"
-//                                 "<font color=\"#BF1238\">Debian Screenshots</font>"
-//                                 "</a></h2></b>").arg(GenericDigikamDebianScreenshotsPlugin::debshotsUrl));
-    m_headerLabel = new KClickableImageLabel(settingsBox);
-    QPixmap sdnLogoPixmap(":/debianscreenshots/sdnlogo.png");
-    m_headerLabel->setPixmap(sdnLogoPixmap);
-    m_headerLabel->setUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl);
+    m_headerLabel = new DActiveLabel(QUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl),
+                                     QLatin1String(":/debianscreenshots/sdnlogo.png"),
+                                     settingsBox);
     m_headerLabel->setWhatsThis( i18n("This is a clickable link to open the Debian Screenshots home page in a web browser.") );
-    m_headerLabel->setOpenExternalLinks(true);
-    m_headerLabel->setFocusPolicy(Qt::NoFocus);
 
     QGroupBox* const pkgGroupBox   = new QGroupBox(settingsBox);
     pkgGroupBox->setTitle(i18n("Package"));
@@ -110,7 +99,7 @@ DsWidget::DsWidget(QWidget* const parent)
 
     QLabel* const pkgLabel         = new QLabel(i18n("Package:"), pkgGroupBox);
 
-    m_pkgLineEdit                  = new KLineEdit(pkgGroupBox);
+    m_pkgLineEdit                  = new QLineEdit(pkgGroupBox);
     QCompleter* const pkgCompleter = new QCompleter(this);
     pkgCompleter->setCompletionMode(QCompleter::PopupCompletion);
     pkgCompleter->setCaseSensitivity(Qt::CaseInsensitive);
@@ -118,7 +107,7 @@ DsWidget::DsWidget(QWidget* const parent)
 
     QListView* const listView      = new QListView;
     pkgCompleter->setPopup(listView);
-    listView->setItemDelegateForColumn(0, new PackageDelegate);
+    listView->setItemDelegateForColumn(0, new DSPackageDelegate);
 
     connect(m_pkgLineEdit, SIGNAL(textEdited(QString)),
             this, SLOT(slotCompletePackageName(QString)));
@@ -142,7 +131,7 @@ DsWidget::DsWidget(QWidget* const parent)
             this, SLOT(slotEnableUpload()));
 
     QLabel* const descriptionLabel  = new QLabel(i18n("Screenshot description:"), pkgGroupBox);
-    m_descriptionLineEdit           = new KLineEdit(pkgGroupBox);
+    m_descriptionLineEdit           = new QLineEdit(pkgGroupBox);
     m_descriptionLineEdit->setMaxLength(40); // 40 is taken from screenshots.debian.net/upload page source
     m_descriptionLineEdit->setEnabled(false);
 
@@ -153,7 +142,7 @@ DsWidget::DsWidget(QWidget* const parent)
     sdnLayout->addWidget(descriptionLabel,      3, 0, 1, 1);
     sdnLayout->addWidget(m_descriptionLineEdit, 3, 1, 1, 4);
 
-    m_progressBar = new KIPIPlugins::KPProgressWidget(settingsBox);
+    m_progressBar = new StatusProgressBar(settingsBox);
     m_progressBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_progressBar->hide();
 
@@ -167,28 +156,23 @@ DsWidget::DsWidget(QWidget* const parent)
     mainLayout->setContentsMargins(QMargins());
 }
 
-DsWidget::~DsWidget()
+DSWidget::~DSWidget()
 {
 }
 
-KIPIPlugins::KPImagesList* DsWidget::imagesList() const
+DItemsList* DSWidget::imagesList() const
 {
     return m_imgList;
 }
 
-KIPIPlugins::KPProgressWidget* DsWidget::progressBar() const
+StatusProgressBar* DSWidget::progressBar() const
 {
     return m_progressBar;
 }
 
-QString DsWidget::getDestinationPath() const
+void DSWidget::slotCompletePackageName(const QString& tip)
 {
-    return m_uploadWidget->selectedImageCollection().uploadPath().toLocalFile();
-}
-
-void DsWidget::slotCompletePackageName(const QString& tip)
-{
-    if((!tip.isEmpty()) && (QString::compare(tip, m_lastTip, Qt::CaseInsensitive) != 0) )
+    if ((!tip.isEmpty()) && (QString::compare(tip, m_lastTip, Qt::CaseInsensitive) != 0) )
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -197,10 +181,14 @@ void DsWidget::slotCompletePackageName(const QString& tip)
         m_descriptionLineEdit->setEnabled(false);
         emit requiredPackageInfoAvailable(false);
 
-        QUrl sdnUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl + "/packages/ajax_autocomplete_packages"); // DOES NOT RETURN JSON
-        sdnUrl.addQueryItem("q", tip );
-        sdnUrl.addQueryItem("limit", "30"); // No matter what 'limit' we use, s.d.n will always return 30 results
-
+        QUrl sdnUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl +
+                    QLatin1String("/packages/ajax_autocomplete_packages")); // DOES NOT RETURN JSON
+        QUrlQuery query(sdnUrl);
+        query.addQueryItem(QLatin1String("q"), tip);
+        // No matter what 'limit' we use, s.d.n will always return 30 results
+        query.addQueryItem(QLatin1String("limit"), QLatin1String("30"));
+        sdnUrl.setQuery(query);
+        
         QNetworkRequest request(sdnUrl);
         m_httpManager->get(request);
         m_lastQueryUrl = sdnUrl;
@@ -209,14 +197,14 @@ void DsWidget::slotCompletePackageName(const QString& tip)
     m_lastTip = tip;
 }
 
-void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
+void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 {
     QUrl replyUrl = reply->url();
 
     QApplication::restoreOverrideCursor();
 
     // Check if this is the reply for the last request, or a delayed reply we are receiving just now
-    if( QString::compare(replyUrl.toString(), m_lastQueryUrl.toString(), Qt::CaseInsensitive) != 0 )
+    if ( QString::compare(replyUrl.toString(), m_lastQueryUrl.toString(), Qt::CaseInsensitive) != 0 )
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received a delayed reply, discarding it";
         return; // It was a delayed reply, discard it
@@ -224,7 +212,9 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
     if ( reply->error() )
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Didn't receive a reply for request " << replyUrl.toEncoded().constData() << " - " <<  qPrintable(reply->errorString());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Didn't receive a reply for request "
+                                         << replyUrl.toEncoded().constData() << " - "
+                                         <<  qPrintable(reply->errorString());
     }
     else
     {
@@ -232,7 +222,9 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         if( ba.isEmpty() )
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No completion data received for request " << replyUrl.toEncoded().constData() << "(probably no package matches that pattern)";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No completion data received for request "
+                                             << replyUrl.toEncoded().constData()
+                                             << "(probably no package matches that pattern)";
             return;
         }
 
@@ -240,13 +232,13 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         QStandardItemModel* const m = new QStandardItemModel(pkgSuggestions.count(), 2, m_pkgLineEdit->completer());
 
-        for( int i = 0; i < pkgSuggestions.count(); ++i)
+        for ( int i = 0; i < pkgSuggestions.count(); ++i)
         {
             QModelIndex pkgIdx             = m->index(i, 0);
             QModelIndex descIdx            = m->index(i, 1);
             QList<QByteArray> pkgDescSplit = pkgSuggestions.at(i).split('|');
-            QString pkg                    = pkgDescSplit.at(0);
-            QString desc                   = pkgDescSplit.at(1);
+            QString pkg                    = QString::fromUtf8(pkgDescSplit.at(0));
+            QString desc                   = QString::fromUtf8(pkgDescSplit.at(1));
             m->setData(pkgIdx, pkg);
             m->setData(descIdx, desc);
         }
@@ -258,34 +250,45 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void DsWidget::slotFindVersionsForPackage(const QString& package)
+void DSWidget::slotFindVersionsForPackage(const QString& package)
 {
-    QUrl sdnVersionUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl + "/packages/ajax_get_version_for_package"); // DOES RETURN JSON
-    sdnVersionUrl.addEncodedQueryItem(QByteArray("q"), QUrl::toPercentEncoding(package));
-    sdnVersionUrl.addQueryItem("limit", "30");
+    QUrl sdnVersionUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl + 
+                       QLatin1String("/packages/ajax_get_version_for_package")); // DOES RETURN JSON
+    QUrlQuery query(sdnVersionUrl);
+    query.addQueryItem(QLatin1String("q"),     QString::fromUtf8(QUrl::toPercentEncoding(package)));
+    query.addQueryItem(QLatin1String("limit"), QLatin1String("30"));
+    sdnVersionUrl.setQuery(query);
+
     QNetworkRequest request(sdnVersionUrl);
     m_jsonManager->get(request);
 }
 
-void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
+void DSWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
 {
     QUrl replyUrl = reply->url();
 
     if (reply->error())
     {
-        qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Download of " << replyUrl.toEncoded().constData() << "failed: " <<  qPrintable(reply->errorString());
+        qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Download of "
+                                           << replyUrl.toEncoded().constData()
+                                           << "failed: " << qPrintable(reply->errorString());
     }
     else
     {
         QByteArray ba = reply->readAll();
+        bool ok       = false;
 
-        bool ok;
+/* FIXME
         QJson::Parser jsonParser;
         QVariant versionSuggestions = jsonParser.parse(ba, &ok);
+*/
+        QVariant versionSuggestions;
 
         if (ok)
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query " << replyUrl.toEncoded().constData() << "succeeded";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query "
+                                             << replyUrl.toEncoded().constData()
+                                             << "succeeded";
 
             QMap<QString, QVariant> versions = versionSuggestions.toMap();
 
@@ -299,7 +302,7 @@ void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
 
             m_versionsComboBox->setEnabled(true);
 
-            if( versions.size() == 1 )
+            if ( versions.size() == 1 )
             {
                 m_descriptionLineEdit->setEnabled(true);
                 slotEnableUpload();
@@ -308,16 +311,18 @@ void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
         }
         else
         {
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query " << replyUrl.toEncoded().constData() << "failed";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query "
+                                             << replyUrl.toEncoded().constData()
+                                             << "failed";
         }
     }
 
     reply->deleteLater();
 }
 
-void DsWidget::slotEnableUpload()
+void DSWidget::slotEnableUpload()
 {
-    if(!m_imgList->imageUrls().isEmpty())
+    if (!m_imgList->imageUrls().isEmpty())
     {
         emit requiredPackageInfoAvailable(true);
     }

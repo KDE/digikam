@@ -28,44 +28,38 @@
 #include <QWidget>
 #include <QUrl>
 
+// Local includes
+
+#include "dactivelabel.h"
+#include "ditemslist.h"
+#include "statusprogressbar.h"
+
 class QButtonGroup;
 class QNetworkReply;
 class QComboBox;
-class KLineEdit;
+class QLineEdit;
 
 namespace KIO
 {
     class AccessManager;
 }
 
-namespace KIPI
-{
-    class UploadWidget;
-}
-
-namespace KIPIPlugins
-{
-    class KPImagesList;
-    class KPProgressWidget;
-}
+using namespace Digikam;
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-class KClickableImageLabel;
-
-class DsWidget : public QWidget
+class DSWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit DsWidget(QWidget* const parent);
-    ~DsWidget();
+    explicit DSWidget(QWidget* const parent);
+    ~DSWidget();
 
-    QString getDestinationPath()                 const;
-    KIPIPlugins::KPImagesList* imagesList()      const;
-    KIPIPlugins::KPProgressWidget* progressBar() const;
+    DItemsList* imagesList()         const;
+    StatusProgressBar* progressBar() const;
 
 Q_SIGNALS:
 
@@ -85,20 +79,19 @@ private:
     QString                        m_lastTip;
     QUrl                           m_lastQueryUrl;
 
-    KLineEdit*                     m_pkgLineEdit;
+    QLineEdit*                     m_pkgLineEdit;
     QComboBox*                     m_versionsComboBox;
-    KLineEdit*                     m_descriptionLineEdit;
+    QLineEdit*                     m_descriptionLineEdit;
 
     KIO::AccessManager*            m_httpManager;
     KIO::AccessManager*            m_jsonManager;
 
-    KClickableImageLabel*          m_headerLabel;
+    DActiveLabel*                  m_headerLabel;
 
-    KIPIPlugins::KPImagesList*     m_imgList;
-    KIPI::UploadWidget*            m_uploadWidget;
-    KIPIPlugins::KPProgressWidget* m_progressBar;
+    DItemsList*                    m_imgList;
+    StatusProgressBar*             m_progressBar;
 
-    friend class DsWindow;
+    friend class DSWindow;
 };
 
 } // namespace GenericDigikamDebianScreenshotsPlugin

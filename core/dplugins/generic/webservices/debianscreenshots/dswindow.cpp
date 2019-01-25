@@ -49,20 +49,20 @@ namespace GenericDigikamDebianScreenshotsPlugin
 static int maxWidth  = 800;
 static int maxHeight = 600;
 
-DsWindow::DsWindow(const QString& tmpFolder, QWidget* const /*parent*/)
+DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
     : KP4ToolDialog(0),
       m_uploadEnabled(false),
       m_imagesCount(0),
       m_imagesTotal(0),
-//      m_talker(new DsTalker(this)),
+//      m_talker(new DSTalker(this)),
       m_tmpDir(tmpFolder)
 {
     m_tmpPath.clear();
 //    m_tmpDir      = tmpFolder;
 //    m_imagesCount = 0;
 //    m_imagesTotal = 0;
-    m_talker = new DsTalker(this);
-    m_widget = new DsWidget(this);
+    m_talker = new DSTalker(this);
+    m_widget = new DSWidget(this);
 
     setMainWidget(m_widget);
     setWindowIcon(QIcon::fromTheme("dk-debianscreenshots"));
@@ -111,11 +111,11 @@ DsWindow::DsWindow(const QString& tmpFolder, QWidget* const /*parent*/)
             this, SLOT(slotAddScreenshotDone(int,QString)));
 }
 
-DsWindow::~DsWindow()
+DSWindow::~DSWindow()
 {
 }
 
-void DsWindow::slotStopAndCloseProgressBar()
+void DSWindow::slotStopAndCloseProgressBar()
 {
     m_transferQueue.clear();
     m_widget->m_imgList->cancelProcess();
@@ -124,7 +124,7 @@ void DsWindow::slotStopAndCloseProgressBar()
     done(Close);
 }
 
-void DsWindow::slotButtonClicked(int button)
+void DSWindow::slotButtonClicked(int button)
 {
     switch (button)
     {
@@ -158,13 +158,13 @@ void DsWindow::slotButtonClicked(int button)
     }
 }
 
-void DsWindow::reactivate()
+void DSWindow::reactivate()
 {
     m_widget->imagesList()->loadImagesFromCurrentSelection();
     show();
 }
 
-void DsWindow::closeEvent(QCloseEvent* e)
+void DSWindow::closeEvent(QCloseEvent* e)
 {
     if (!e) return;
 
@@ -172,7 +172,7 @@ void DsWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-void DsWindow::slotStartTransfer()
+void DSWindow::slotStartTransfer()
 {
     m_widget->m_imgList->clearProcessedStatus();
     m_transferQueue = m_widget->m_imgList->imageUrls();
@@ -195,11 +195,11 @@ void DsWindow::slotStartTransfer()
     uploadNextPhoto();
 }
 
-bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage)
+bool DSWindow::prepareImageForUpload(const QString& imgPath, MassageType massage)
 {
     QImage image;
 
-    if ( massage == DsWindow::ImageIsRaw )
+    if ( massage == DSWindow::ImageIsRaw )
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Get RAW preview " << imgPath;
         KDcrawIface::KDcraw::loadRawPreview(image, imgPath);
@@ -210,7 +210,7 @@ bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     }
 
     // rescale image if required
-    if ( massage == DsWindow::ResizeRequired )
+    if ( massage == DSWindow::ResizeRequired )
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing image";
         image = image.scaled(maxWidth, maxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -230,7 +230,7 @@ bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     return true;
 }
 
-void DsWindow::uploadNextPhoto()
+void DSWindow::uploadNextPhoto()
 {
     if (m_transferQueue.isEmpty())
     {
@@ -245,7 +245,7 @@ void DsWindow::uploadNextPhoto()
     m_widget->progressBar()->setValue(m_imagesCount);
 
     // screenshots.debian.net only accepts PNG images, 800x600 max
-    MassageType massageRequired = DsWindow::None;
+    MassageType massageRequired = DSWindow::None;
 
     // check if format is PNG
     QImageReader imgReader(imgPath);
@@ -253,7 +253,7 @@ void DsWindow::uploadNextPhoto()
 
     if( QString::compare(QString(imgFormat), QString("PNG"), Qt::CaseInsensitive) != 0 )
     {
-        massageRequired = DsWindow::NotPNG;
+        massageRequired = DSWindow::NotPNG;
     }
 
     // check if image > 800x600
@@ -261,13 +261,13 @@ void DsWindow::uploadNextPhoto()
 
     if( (img.width() > maxWidth) || (img.height() > maxHeight) )
     {
-        massageRequired = DsWindow::ResizeRequired;
+        massageRequired = DSWindow::ResizeRequired;
     }
 
     // check if we have to RAW file -> use preview image then
     if( KPMetadata::isRawFile(imgPath) )
     {
-        massageRequired = DsWindow::ImageIsRaw;
+        massageRequired = DSWindow::ImageIsRaw;
     }
 
     bool res;
@@ -298,7 +298,7 @@ void DsWindow::uploadNextPhoto()
     }
 }
 
-void DsWindow::slotAddScreenshotDone(int errCode, const QString& errMsg)
+void DSWindow::slotAddScreenshotDone(int errCode, const QString& errMsg)
 {
     // Remove temporary file if it was used
     if (!m_tmpPath.isEmpty())
@@ -330,12 +330,12 @@ void DsWindow::slotAddScreenshotDone(int errCode, const QString& errMsg)
     uploadNextPhoto();
 }
 
-void DsWindow::slotMaybeEnableUser1()
+void DSWindow::slotMaybeEnableUser1()
 {
     enableButton(User1, !(m_widget->m_imgList->imageUrls().isEmpty()) && m_uploadEnabled );
 }
 
-void DsWindow::slotRequiredPackageInfoAvailableReceived(bool enabled)
+void DSWindow::slotRequiredPackageInfoAvailableReceived(bool enabled)
 {
     m_uploadEnabled = enabled; // Save the all-data-completed status to be able to enable the upload
                                // button later in case the image list is empty at the moment

@@ -43,17 +43,17 @@ using namespace Digikam;
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-MPForm::MPForm()
+DSMPForm::DSMPForm()
 {
     m_boundary = WSToolUtils::randomString(42 + 13).toLatin1();
     reset();
 }
 
-MPForm::~MPForm()
+DSMPForm::~DSMPForm()
 {
 }
 
-void MPForm::reset()
+void DSMPForm::reset()
 {
     m_buffer.resize(0);
     QByteArray str(contentType().toLatin1());
@@ -63,7 +63,7 @@ void MPForm::reset()
     m_buffer.append(str);
 }
 
-void MPForm::finish()
+void DSMPForm::finish()
 {
     QByteArray str;
     str += "--";
@@ -72,7 +72,7 @@ void MPForm::finish()
     m_buffer.append(str);
 }
 
-void MPForm::addPair(const QString& name, const QString& value)
+void DSMPForm::addPair(const QString& name, const QString& value)
 {
     QByteArray str;
     QString content_length = QString::number(value.length());
@@ -95,7 +95,7 @@ void MPForm::addPair(const QString& name, const QString& value)
     m_buffer.append(str);
 }
 
-bool MPForm::addFile(const QString& fileName, const QString& path, const QString& fieldName)
+bool DSMPForm::addFile(const QString& fileName, const QString& path, const QString& fieldName)
 {
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
@@ -140,17 +140,17 @@ bool MPForm::addFile(const QString& fileName, const QString& path, const QString
     return true;
 }
 
-QString MPForm::contentType() const
+QString DSMPForm::contentType() const
 {
     return QLatin1String("Content-Type: multipart/form-data; boundary=") + QLatin1String(m_boundary);
 }
 
-QString MPForm::boundary() const
+QString DSMPForm::boundary() const
 {
     return QLatin1String(m_boundary);
 }
 
-QByteArray MPForm::formData() const
+QByteArray DSMPForm::formData() const
 {
     return m_buffer;
 }
