@@ -127,26 +127,26 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     switch (ws)
     {
         case WSSettings::WebService::FLICKR:
-            //d->talker = new FlickrTalker(d->wizard, serviceName, d->iface);
+            //d->talker = new GenericDigikamFlickrPlugin::FlickrTalker(d->wizard, serviceName, d->iface);
             break;
         case WSSettings::WebService::DROPBOX:
-            //d->talker = new DBTalker(d->wizard);
+            //d->talker = new GenericDigikamDropBoxPlugin::DBTalker(d->wizard);
             break;
         case WSSettings::WebService::IMGUR:
-            //d->talker = new ImgurTalker(d->wizard);
+            //d->talker = new GenericDigikamImgUrPlugin::ImgurTalker(d->wizard);
             break;
         case WSSettings::WebService::FACEBOOK:
-            //d->albumDlg = new FbNewAlbumDlg(d->wizard, d->serviceName);
-            //d->talker   = new FbTalker(d->wizard, d->albumDlg);
+            //d->albumDlg = new GenericDigikamFaceBookPlugin::FbNewAlbumDlg(d->wizard, d->serviceName);
+            //d->talker   = new GenericDigikamFaceBookPlugin::FbTalker(d->wizard, d->albumDlg);
             break;
         case WSSettings::WebService::SMUGMUG:
-            //d->talker = new SmugTalker(d->iface, d->wizard);
+            //d->talker = new GenericDigikamSmugMugPlugin::SmugTalker(d->iface, d->wizard);
             break;
         case WSSettings::WebService::GDRIVE:
-            //d->talker = new GDTalker(d->wizard);
+            //d->talker = new GenericDigikamGoogleServicesPlugin::GDTalker(d->wizard);
             break;
         case WSSettings::WebService::GPHOTO:
-            //d->talker = new GPTalker(d->wizard);
+            //d->talker = new GenericDigikamGoogleServicesPlugin::GPTalker(d->wizard);
             break;
     }
 
