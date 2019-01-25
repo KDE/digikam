@@ -43,6 +43,7 @@
 #include "dprogresswdg.h"
 #include "dstalker.h"
 #include "dswidget.h"
+#include "wstoolutils.h"
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
@@ -50,16 +51,16 @@ namespace GenericDigikamDebianScreenshotsPlugin
 static int maxWidth  = 800;
 static int maxHeight = 600;
 
-DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
+DSWindow::DSWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0, QLatin1String("DebianScreenshots Export Dialog")),
       m_uploadEnabled(false),
       m_imagesCount(0),
-      m_imagesTotal(0),
-      m_tmpDir(tmpFolder)
+      m_imagesTotal(0)
 {
     m_tmpPath.clear();
+    m_tmpDir = WSToolUtils::makeTemporaryDir("DebianScreenshots").absolutePath();
     m_talker = new DSTalker(this);
-    m_widget = new DSWidget(this);
+    m_widget = new DSWidget(iface, this);
     m_widget->setMinimumSize(700, 500);
 
     setMainWidget(m_widget);
@@ -95,6 +96,7 @@ DSWindow::DSWindow(const QString& tmpFolder, QWidget* const /*parent*/)
 
 DSWindow::~DSWindow()
 {
+    WSToolUtils::removeTemporaryDir("DebianScreenshots");
 }
 
 void DSWindow::slotStopAndCloseProgressBar()
@@ -130,6 +132,10 @@ void DSWindow::slotButtonClicked(QAbstractButton* button)
         case QDialogButtonBox::ActionRole:
         {
             slotStartTransfer();
+            break;
+        }
+        default:
+        {
             break;
         }
     }

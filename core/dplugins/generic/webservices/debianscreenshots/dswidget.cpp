@@ -63,7 +63,7 @@
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
-DSWidget::DSWidget(QWidget* const parent)
+DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     : QWidget(parent),
       m_dlGrp(0),
       m_lastTip( QString() ),
@@ -80,6 +80,7 @@ DSWidget::DSWidget(QWidget* const parent)
     m_imgList  = new DItemsList(this);
     m_imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     m_imgList->setAllowRAW(true);
+    m_imgList->setIface(iface);
     m_imgList->loadImagesFromCurrentSelection();
     m_imgList->listView()->setWhatsThis( i18n("This is the list of images to upload to Debian Screenshots.") );
 

@@ -33,6 +33,7 @@
 #include "dactivelabel.h"
 #include "ditemslist.h"
 #include "dprogresswdg.h"
+#include "dinfointerface.h"
 
 class QButtonGroup;
 class QNetworkReply;
@@ -55,7 +56,7 @@ class DSWidget : public QWidget
 
 public:
 
-    explicit DSWidget(QWidget* const parent);
+    explicit DSWidget(DInfoInterface* const iface, QWidget* const parent);
     ~DSWidget();
 
     DItemsList* imagesList()    const;

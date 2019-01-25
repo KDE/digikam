@@ -51,7 +51,7 @@ class DSWindow : public WSToolDialog
 
 public:
 
-    explicit DSWindow(const QString& tmpFolder, QWidget* const parent);
+    explicit DSWindow(DInfoInterface* const iface, QWidget* const parent);
     ~DSWindow();
 
     /**

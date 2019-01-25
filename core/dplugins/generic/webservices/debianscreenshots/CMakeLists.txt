@@ -26,7 +26,7 @@ DIGIKAM_ADD_GENERIC_PLUGIN(DebianScreenshots
     ${CMAKE_CURRENT_SOURCE_DIR}/dswidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dstalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dswindow.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/dsplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dsplugin.cpp
     ${debianscreenshotsplugin_QRC_SRCS}
 )
 
