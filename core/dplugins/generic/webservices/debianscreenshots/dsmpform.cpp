@@ -23,23 +23,29 @@
  *
  * ============================================================ */
 
-#include "mpform.h"
+#include "dsmpform.h"
 
 // Qt includes
 
 #include <QFile>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QUrl>
+#include <QString>
 
-// KDE includes
+// Local includes
 
-#include <kmimetype.h>
-#include <krandom.h>
+#include "digikam_debug.h"
+#include "wstoolutils.h"
+
+using namespace Digikam;
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
 
 MPForm::MPForm()
 {
-    m_boundary = KRandom::randomString(42 + 13).toAscii();
+    m_boundary = WSToolUtils::randomString(42 + 13).toLatin1();
     reset();
 }
 
@@ -78,7 +84,7 @@ void MPForm::addPair(const QString& name, const QString& value)
     if (!name.isEmpty())
     {
         str += "Content-Disposition: form-data; name=\"";
-        str += name.toAscii();
+        str += name.toLatin1();
         str += "\"\r\n";
     }
 
@@ -91,11 +97,14 @@ void MPForm::addPair(const QString& name, const QString& value)
 
 bool MPForm::addFile(const QString& fileName, const QString& path, const QString& fieldName)
 {
-    KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-    QString mime       = ptr->name();
+    QMimeDatabase db;
+    QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
+    QString mime  = ptr.name();
 
     if (mime.isEmpty())
         return false;
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "mime = " << mime.toLatin1(); 
 
     QFile imageFile(path);
 
@@ -114,14 +123,14 @@ bool MPForm::addFile(const QString& fileName, const QString& path, const QString
 
     if( !fieldName.isEmpty() )
     {
-        str += "name=\"" + QByteArray(fieldName.toAscii()) + "\"; ";
+        str += "name=\"" + QByteArray(fieldName.toLatin1()) + "\"; ";
     }
 
     str += "filename=\"";
     str += QFile::encodeName(fileName);
     str += "\"\r\n";
     str += "Content-Type: ";
-    str += mime.toAscii();
+    str += mime.toLatin1();
     str += "\r\n\r\n";
 
     m_buffer.append(str);
@@ -133,12 +142,12 @@ bool MPForm::addFile(const QString& fileName, const QString& path, const QString
 
 QString MPForm::contentType() const
 {
-    return QString("Content-Type: multipart/form-data; boundary=" + m_boundary);
+    return QLatin1String("Content-Type: multipart/form-data; boundary=") + QLatin1String(m_boundary);
 }
 
 QString MPForm::boundary() const
 {
-    return m_boundary;
+    return QLatin1String(m_boundary);
 }
 
 QByteArray MPForm::formData() const

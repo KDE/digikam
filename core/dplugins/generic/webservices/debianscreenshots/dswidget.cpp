@@ -218,13 +218,13 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
     // Check if this is the reply for the last request, or a delayed reply we are receiving just now
     if( QString::compare(replyUrl.toString(), m_lastQueryUrl.toString(), Qt::CaseInsensitive) != 0 )
     {
-        qCDebug(KIPIPLUGINS_LOG) << "Received a delayed reply, discarding it";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received a delayed reply, discarding it";
         return; // It was a delayed reply, discard it
     }
 
     if ( reply->error() )
     {
-        qCDebug(KIPIPLUGINS_LOG) << "Didn't receive a reply for request " << replyUrl.toEncoded().constData() << " - " <<  qPrintable(reply->errorString());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Didn't receive a reply for request " << replyUrl.toEncoded().constData() << " - " <<  qPrintable(reply->errorString());
     }
     else
     {
@@ -232,7 +232,7 @@ void DsWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         if( ba.isEmpty() )
         {
-            qCDebug(KIPIPLUGINS_LOG) << "No completion data received for request " << replyUrl.toEncoded().constData() << "(probably no package matches that pattern)";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No completion data received for request " << replyUrl.toEncoded().constData() << "(probably no package matches that pattern)";
             return;
         }
 
@@ -273,7 +273,7 @@ void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
 
     if (reply->error())
     {
-        qCWarning(KIPIPLUGINS_LOG) << "Download of " << replyUrl.toEncoded().constData() << "failed: " <<  qPrintable(reply->errorString());
+        qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Download of " << replyUrl.toEncoded().constData() << "failed: " <<  qPrintable(reply->errorString());
     }
     else
     {
@@ -285,7 +285,7 @@ void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
 
         if (ok)
         {
-            qCDebug(KIPIPLUGINS_LOG) << "Query " << replyUrl.toEncoded().constData() << "succeeded";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query " << replyUrl.toEncoded().constData() << "succeeded";
 
             QMap<QString, QVariant> versions = versionSuggestions.toMap();
 
@@ -308,7 +308,7 @@ void DsWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
         }
         else
         {
-            qCDebug(KIPIPLUGINS_LOG) << "Query " << replyUrl.toEncoded().constData() << "failed";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Query " << replyUrl.toEncoded().constData() << "failed";
         }
     }
 

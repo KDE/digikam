@@ -32,12 +32,11 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QtAlgorithms>
+#include <QApplication>
 
 // KDE includes
 
 #include <kcodecs.h>
-#include "digikam_debug.h"
-#include <QApplication>
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <kio/job.h>
@@ -45,7 +44,8 @@
 
 // Local includes
 
-#include "kpversion.h"
+#include "digikam_version.h"
+#include "digikam_debug.h"
 #include "mpform.h"
 #include "debshots.h"
 
@@ -71,7 +71,7 @@ DsTalker::~DsTalker()
 bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
                              const QString& packageVersion, const QString& description)
 {
-    qCDebug(KIPIPLUGINS_LOG) << "Adding screenshot " << imgPath << " to package "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding screenshot " << imgPath << " to package "
              << packageName << " " << packageVersion<< " using description '" << description << "'";
 
     if (m_job)
@@ -89,7 +89,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
     form.addFile(imgPath, imgPath, "file");
     form.finish();
 
-    qCDebug(KIPIPLUGINS_LOG) << "FORM: " << endl << form.formData();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "FORM: " << endl << form.formData();
 
     KIO::TransferJob* const job = KIO::http_post(m_uploadUrl, form.formData(), KIO::HideProgressInfo);
     job->addMetaData("UserAgent", m_userAgent);
@@ -108,7 +108,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
 
  void DsTalker::data(KIO::Job*, const QByteArray& data)
  {
-     qCDebug(KIPIPLUGINS_LOG) << Q_FUNC_INFO;
+     qCDebug(DIGIKAM_WEBSERVICES_LOG) << Q_FUNC_INFO;
 
      if (data.isEmpty())
      {
@@ -135,7 +135,7 @@ bool DsTalker::addScreenshot(const QString& imgPath, const QString& packageName,
 
 //     else
 //     {
-//         qCDebug(KIPIPLUGINS_LOG) << "Uploaded successfully screenshot " << job->queryMetaData("Screenshot")
+//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Uploaded successfully screenshot " << job->queryMetaData("Screenshot")
 //                  << " to Debian Screenshots for package " << job->queryMetaData("Package")
 //                  << " " << job->queryMetaData("Version")
 //                  << " with description " << job->queryMetaData("Description");

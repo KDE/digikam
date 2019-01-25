@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MPFORM_H
-#define MPFORM_H
+#ifndef DIGIKAM_DS_MPFORM_H
+#define DIGIKAM_DS_MPFORM_H
 
 // Qt includes
 
@@ -38,7 +38,7 @@ class MPForm
 
 public:
 
-    MPForm();
+    explicit MPForm();
     ~MPForm();
 
     void finish();
@@ -59,4 +59,4 @@ private:
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 
-#endif /* MPFORM_H */
+#endif // DIGIKAM_DS_MPFORM_H

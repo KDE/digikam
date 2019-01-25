@@ -207,7 +207,7 @@ bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
 
     if ( massage == DsWindow::ImageIsRaw )
     {
-        qCDebug(KIPIPLUGINS_LOG) << "Get RAW preview " << imgPath;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Get RAW preview " << imgPath;
         KDcrawIface::KDcraw::loadRawPreview(image, imgPath);
     }
     else
@@ -218,7 +218,7 @@ bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     // rescale image if required
     if ( massage == DsWindow::ResizeRequired )
     {
-        qCDebug(KIPIPLUGINS_LOG) << "Resizing image";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing image";
         image = image.scaled(maxWidth, maxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
@@ -230,7 +230,7 @@ bool DsWindow::prepareImageForUpload(const QString& imgPath, MassageType massage
     // get temporary file name
     m_tmpPath = m_tmpDir + QFileInfo(imgPath).baseName().trimmed() + ".png";
 
-    qCDebug(KIPIPLUGINS_LOG) << "Saving to temp file: " << m_tmpPath;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << m_tmpPath;
     image.save(m_tmpPath, "PNG");
 
     return true;
