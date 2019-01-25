@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DS_PACKAGEDELEGATE_H
-#define DIGIKAM_DS_PACKAGEDELEGATE_H
+#ifndef DIGIKAM_DS_PACKAGE_DELEGATE_H
+#define DIGIKAM_DS_PACKAGE_DELEGATE_H
 
 // Qt includes
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 
-#endif // DIGIKAM_DS_PACKAGEDELEGATE_H
+#endif // DIGIKAM_DS_PACKAGE_DELEGATE_H

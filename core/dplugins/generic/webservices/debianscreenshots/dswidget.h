@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSWIDGET_H
-#define DSWIDGET_H
+#ifndef DIGIKAM_DS_WIDGET_H
+#define DIGIKAM_DS_WIDGET_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
 
-#endif // DSWIDGET_H
+#endif // DIGIKAM_DS_WIDGET_H
