@@ -235,16 +235,24 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         for ( int i = 0 ; i < pkgSuggestions.count() ; ++i)
         {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Package suggestion:" << pkgSuggestions.at(i);
+
             QModelIndex pkgIdx             = m->index(i, 0);
             QModelIndex descIdx            = m->index(i, 1);
             QList<QByteArray> pkgDescSplit = pkgSuggestions.at(i).split('|');
             
             if (!pkgDescSplit.isEmpty())
             {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Package suggestion parsed:" << pkgDescSplit;
+
                 QString pkg  = QString::fromUtf8(pkgDescSplit.at(0));
-                QString desc = QString::fromUtf8(pkgDescSplit.at(1));
                 m->setData(pkgIdx, pkg);
-                m->setData(descIdx, desc);
+
+                if (pkgDescSplit.size() > 1)
+                {
+                    QString desc = QString::fromUtf8(pkgDescSplit.at(1));
+                    m->setData(descIdx, desc);
+                }
             }
         }
 
