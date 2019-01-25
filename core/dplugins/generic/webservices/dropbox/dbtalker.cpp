@@ -92,23 +92,24 @@ public:
 
 public:
 
-    QString                apikey;
-    QString                secret;
-    QString                authUrl;
-    QString                tokenUrl;
+    QString                         apikey;
+    QString                         secret;
+    QString                         authUrl;
+    QString                         tokenUrl;
+    QList<QPair<QString, QString> > folderList;
 
-    QWidget*               parent;
-    QNetworkAccessManager* netMngr;
+    QWidget*                        parent;
+    QNetworkAccessManager*          netMngr;
 
-    QNetworkReply*         reply;
+    QNetworkReply*                  reply;
 
-    QSettings*             settings;
+    QSettings*                      settings;
 
-    State                  state;
+    State                           state;
 
-    DMetadata              meta;
+    DMetadata                       meta;
 
-    O2*                    o2;
+    O2*                             o2;
 };
 
 DBTalker::DBTalker(QWidget* const parent)
@@ -248,17 +249,37 @@ void DBTalker::getUserName()
 
 /** Get list of folders by parsing json sent by dropbox
  */
-void DBTalker::listFolders(const QString& path)
+void DBTalker::listFolders(const QString& cursor)
 {
-    QUrl url(QLatin1String("https://api.dropboxapi.com/2/files/list_folder"));
+    QString apiUrl = QLatin1String("https://api.dropboxapi.com/2/files/list_folder");
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
+    if (cursor.isEmpty())
+    {
+        d->folderList.clear();
 
-    QByteArray postData = QString::fromUtf8("{\"path\": \"%1\",\"recursive\": true}").arg(path).toUtf8();
+        QString path;
+        QUrl url(apiUrl);
+        QNetworkRequest netRequest(url);
+        netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
+        netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
 
-    d->reply = d->netMngr->post(netRequest, postData);
+        QByteArray postData = QString::fromUtf8("{\"path\": \"%1\",\"recursive\": true}").arg(path).toUtf8();
+
+        d->reply = d->netMngr->post(netRequest, postData);
+    }
+    else
+    {
+        apiUrl.append(QLatin1String("/continue"));
+
+        QUrl url(apiUrl);
+        QNetworkRequest netRequest(url);
+        netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
+        netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
+
+        QByteArray postData = QString::fromUtf8("{\"cursor\": \"%1\"}").arg(cursor).toUtf8();
+
+        d->reply = d->netMngr->post(netRequest, postData);
+    }
 
     d->state = Private::DB_LISTFOLDERS;
     emit signalBusy(true);
@@ -426,8 +447,10 @@ void DBTalker::parseResponseListFolders(const QByteArray& data)
     QJsonObject jsonObject = doc.object();
     QJsonArray jsonArray   = jsonObject[QLatin1String("entries")].toArray();
 
-    QList<QPair<QString, QString> > list;
-    list.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    if (d->folderList.isEmpty())
+    {
+        d->folderList.append(qMakePair(QLatin1String(""), QLatin1String("root")));
+    }
 
     foreach (const QJsonValue& value, jsonArray)
     {
@@ -442,14 +465,25 @@ void DBTalker::parseResponseListFolders(const QByteArray& data)
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path is" << path;
             QString listName = path.section(QLatin1Char('/'), 1);
-            list.append(qMakePair(path, listName));
+            d->folderList.append(qMakePair(path, listName));
         }
     }
 
-    std::sort(list.begin(), list.end());
+    if (jsonObject[QLatin1String("has_more")].toBool())
+    {
+        QString cursor = jsonObject[QLatin1String("cursor")].toString();
+
+        if (!cursor.isEmpty())
+        {
+            listFolders(cursor);
+            return;
+        }
+    }
+
+    std::sort(d->folderList.begin(), d->folderList.end());
 
     emit signalBusy(false);
-    emit signalListAlbumsDone(list);
+    emit signalListAlbumsDone(d->folderList);
 }
 
 void DBTalker::parseResponseCreateFolder(const QByteArray& data)

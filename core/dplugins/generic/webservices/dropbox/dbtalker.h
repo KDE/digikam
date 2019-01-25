@@ -50,7 +50,7 @@ public:
     void reauthenticate();
     void getUserName();
     void cancel();
-    void listFolders(const QString& path = QString());
+    void listFolders(const QString& cursor = QString());
     bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
     void createFolder(const QString& path);
 
