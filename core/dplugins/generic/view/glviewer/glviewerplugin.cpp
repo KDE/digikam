@@ -101,8 +101,7 @@ void GLViewerPlugin::setup(QObject* const parent)
 
 void GLViewerPlugin::slotGLViewer()
 {
-    DInfoInterface* const iface = infoIface(sender());
-
+    DInfoInterface* const iface   = infoIface(sender());
     QPointer<GLViewerWidget> view = new GLViewerWidget(this, iface);
 
     if (view->listOfFilesIsEmpty())
