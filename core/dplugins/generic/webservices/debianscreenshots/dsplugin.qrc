@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/debianscreenshots">
+        <file>dslogo.png</file>
+    </qresource>
+</RCC>
