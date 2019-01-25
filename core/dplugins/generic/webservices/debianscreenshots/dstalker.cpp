@@ -36,8 +36,6 @@
 
 // KDE includes
 
-#include <kcodecs.h>
-#include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -46,8 +44,11 @@
 
 #include "digikam_version.h"
 #include "digikam_debug.h"
-#include "mpform.h"
-#include "debshots.h"
+#include "dsmpform.h"
+#include "dscommon.h"
+#include "dmessagebox.h"
+
+using namespace Digikam;
 
 namespace GenericDigikamDebianScreenshotsPlugin
 {
@@ -56,8 +57,8 @@ DSTalker::DSTalker(QWidget* const parent)
     : QObject(parent),
       m_job(0)
 {
-    m_userAgent = QString("KIPI-Plugin-DebianScreenshots/%1 (pgquiles@elpauer.org)").arg(kipiplugins_version);
-    m_uploadUrl = GenericDigikamDebianScreenshotsPlugin::debshotsUrl + "/uploadfile";
+    m_userAgent = QString::fromUtf8("KIPI-Plugin-DebianScreenshots/%1 (pgquiles@elpauer.org)").arg(digiKamVersion());
+    m_uploadUrl = GenericDigikamDebianScreenshotsPlugin::debshotsUrl + QLatin1String("/uploadfile");
 }
 
 DSTalker::~DSTalker()
@@ -83,17 +84,17 @@ bool DSTalker::addScreenshot(const QString& imgPath, const QString& packageName,
     emit signalBusy(true);
 
     DSMPForm form;
-    form.addPair("packagename", packageName);
-    form.addPair("version", packageVersion);
-    form.addPair("description", description);
-    form.addFile(imgPath, imgPath, "file");
+    form.addPair(QLatin1String("packagename"), packageName);
+    form.addPair(QLatin1String("version"), packageVersion);
+    form.addPair(QLatin1String("description"), description);
+    form.addFile(imgPath, imgPath, QLatin1String("file"));
     form.finish();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "FORM: " << endl << form.formData();
 
-    KIO::TransferJob* const job = KIO::http_post(m_uploadUrl, form.formData(), KIO::HideProgressInfo);
-    job->addMetaData("UserAgent", m_userAgent);
-    job->addMetaData("content-type", form.contentType());
+    KIO::TransferJob* const job = KIO::http_post(QUrl(m_uploadUrl), form.formData(), KIO::HideProgressInfo);
+    job->addMetaData(QLatin1String("UserAgent"), m_userAgent);
+    job->addMetaData(QLatin1String("content-type"), form.contentType());
 
     connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
             this, SLOT(data(KIO::Job*,QByteArray)));
@@ -117,7 +118,7 @@ bool DSTalker::addScreenshot(const QString& imgPath, const QString& packageName,
 
      int oldSize = m_buffer.size();
      m_buffer.resize(m_buffer.size() + data.size());
-     memcpy(m_buffer.data()+oldSize, data.data(), data.size());
+     memcpy(m_buffer.data() + oldSize, data.data(), data.size());
  }
  void DSTalker::slotResult(KJob* kjob)
  {
@@ -129,18 +130,20 @@ bool DSTalker::addScreenshot(const QString& imgPath, const QString& packageName,
          emit signalBusy(false);
          emit signalAddScreenshotDone(job->error(), job->errorText());
      }
-
+/*
+     else
+     {
+         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Uploaded successfully screenshot "
+                                          << job->queryMetaData("Screenshot")
+                                          << " to Debian Screenshots for package "
+                                          << job->queryMetaData("Package")
+                                          << " " << job->queryMetaData("Version")
+                                          << " with description "
+                                          << job->queryMetaData("Description");
+     }
+*/
      emit signalBusy(false);
      emit signalAddScreenshotDone(0, QString());
-
-//     else
-//     {
-//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Uploaded successfully screenshot " << job->queryMetaData("Screenshot")
-//                  << " to Debian Screenshots for package " << job->queryMetaData("Package")
-//                  << " " << job->queryMetaData("Version")
-//                  << " with description " << job->queryMetaData("Description");
-//     }
-
  }
 
 } // namespace GenericDigikamDebianScreenshotsPlugin
