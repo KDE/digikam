@@ -33,7 +33,9 @@
 #include "ditemslist.h"
 #include "ipfstalker.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamIpfsPlugin
 {
 
 class IpfsImagesListViewItem;
@@ -84,6 +86,6 @@ public:
     QString IpfsUrl() const;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamIpfsPlugin
 
 #endif // DIGIKAM_IPFS_IMAGES_LIST_H

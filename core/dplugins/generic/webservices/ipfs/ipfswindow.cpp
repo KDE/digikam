@@ -44,7 +44,7 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-namespace Digikam
+namespace GenericDigikamIpfsPlugin
 {
 
 class Q_DECL_HIDDEN IpfsWindow::Private
@@ -146,6 +146,9 @@ void IpfsWindow::reactivate()
 void IpfsWindow::slotUpload()
 {
     QList<const IpfsImagesListViewItem*> pending = d->list->getPendingItems();
+
+    if (pending.isEmpty())
+        return;
 
     for (auto item : pending)
     {
@@ -275,4 +278,4 @@ void IpfsWindow::saveSettings()
     config.sync();
 }
 
-} // namespace Digikam
+} // namespace GenericDigikamIpfsPlugin

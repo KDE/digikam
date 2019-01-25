@@ -37,7 +37,9 @@
 #include "digikam_export.h"
 #include "dinfointerface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamIpfsPlugin
 {
 
 class DIGIKAM_EXPORT IpfsWindow : public WSToolDialog
@@ -84,6 +86,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamIpfsPlugin
 
 #endif // DIGIKAM_IPFS_WINDOW_H

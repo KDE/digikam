@@ -29,10 +29,12 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.generic.IpFs"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace GenericDigikamIpfsPlugin
 {
 
-class DPluginDialog;
+class IpfsWindow;
 
 class IpfsPlugin : public DPluginGeneric
 {
@@ -60,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<DPluginDialog> m_toolDlg;
+    QPointer<IpfsWindow> m_toolDlg;
 };
 
-} // namespace Digikam
+} // namespace GenericDigikamIpfsPlugin
 
 #endif // DIGIKAM_IPFS_PLUGIN_H
