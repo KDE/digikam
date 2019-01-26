@@ -29,7 +29,7 @@
 
 #include <QRect>
 
-namespace Digikam
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 class HotPixel
@@ -87,6 +87,6 @@ private:
     }
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_HOT_PIXEL_H

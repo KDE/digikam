@@ -44,7 +44,9 @@
 #include "loadsavethread.h"
 #include "hotpixel.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 class BlackFrameParser: public QObject
@@ -91,6 +93,6 @@ private:
     LoadSaveThread* m_imageLoaderThread;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_BLACK_FRAME_PARSER_H

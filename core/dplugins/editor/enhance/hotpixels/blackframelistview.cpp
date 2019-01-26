@@ -36,7 +36,7 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 BlackFrameListView::BlackFrameListView(QWidget* const parent)
@@ -150,4 +150,4 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     return thumb;
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin

@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.HotPixelsTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 class HotPixelsToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotHotPixels();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin
 
 #endif // DIGIKAM_HOTPIXELSTOOL_PLUGIN_H

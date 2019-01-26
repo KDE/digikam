@@ -54,7 +54,7 @@
 #   define DBL_MAX 1e37
 #endif
 
-namespace Digikam
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 HotPixelFixer::HotPixelFixer(QObject* const parent)
@@ -386,4 +386,4 @@ void HotPixelFixer::weightPixels(DImg& img, HotPixel& px, int method, Direction 
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin

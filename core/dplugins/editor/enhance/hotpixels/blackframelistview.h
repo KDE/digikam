@@ -41,7 +41,7 @@
 #include "blackframeparser.h"
 #include "hotpixel.h"
 
-namespace Digikam
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 class BlackFrameListView : public QTreeWidget
@@ -113,6 +113,6 @@ private:
     BlackFrameListView* m_parent;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_BLACK_FRAME_LIST_VIEW_H

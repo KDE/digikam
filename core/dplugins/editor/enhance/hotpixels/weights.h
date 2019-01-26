@@ -30,7 +30,7 @@
 #include <QList>
 #include <QRect>
 
-namespace Digikam
+namespace EditorDigikamHotPixelsToolPlugin
 {
 
 class Weights
@@ -141,6 +141,6 @@ private:
     QList<QPoint> mPositions;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_WEIGHTS_H
