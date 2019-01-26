@@ -457,11 +457,11 @@ bool TimeAdjust::toolOperations()
         else
             modtime = dt.toTime_t();
 
-        utimbuf times;
-        times.actime  = QDateTime::currentDateTime().toTime_t();
-        times.modtime = modtime;
+        struct utimbuf ut;
+        ut.modtime = modtime;
+        ut.actime  = QDateTime::currentDateTime().toTime_t();
 
-        if (utime(QFile::encodeName(outputUrl().toLocalFile()).constData(), &times) != 0)
+        if (::utime(QFile::encodeName(outputUrl().toLocalFile()).constData(), &ut) != 0)
         {
             ret = false;
         }
