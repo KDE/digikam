@@ -30,7 +30,9 @@
 #include "editortool.h"
 #include "dimg.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamHealingCloneToolPlugin
 {
 
 class HealingCloneTool : public EditorTool
@@ -87,6 +89,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHealingCloneToolPlugin
 
 #endif // DIGIKAM_EDITOR_HEALING_CLONE_TOOL_H

@@ -28,7 +28,9 @@
 
 #include "imageguidewidget.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamHealingCloneToolPlugin
 {
 
 class ImageBrushGuideWidget : public ImageGuideWidget
@@ -71,6 +73,6 @@ private:
     QPoint dst;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHealingCloneToolPlugin
 
 #endif // DIGIKAM_IMAGE_BRUSH_GUIDE_WIDGET_H

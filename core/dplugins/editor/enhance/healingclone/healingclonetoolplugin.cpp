@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "healingclonetool.h"
 
-namespace Digikam
+namespace EditorDigikamHealingCloneToolPlugin
 {
 
 HealingCloneToolPlugin::HealingCloneToolPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void HealingCloneToolPlugin::slotHealingClone()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamHealingCloneToolPlugin

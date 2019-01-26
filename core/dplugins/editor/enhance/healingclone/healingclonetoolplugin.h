@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.HealingCloneTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamHealingCloneToolPlugin
 {
 
 class HealingCloneToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotHealingClone();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamHealingCloneToolPlugin
 
 #endif // DIGIKAM_HEALINGCLONETOOL_PLUGIN_H
