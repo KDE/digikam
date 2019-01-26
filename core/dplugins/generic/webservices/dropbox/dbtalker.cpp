@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QMimeDatabase>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -106,8 +107,6 @@ public:
     QSettings*                      settings;
 
     State                           state;
-
-    DMetadata                       meta;
 
     O2*                             o2;
 };
@@ -285,32 +284,42 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     emit signalBusy(true);
 
+    QString path = imgPath;
+
+    QMimeDatabase mimeDB;
+
+    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
+    {
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+
+        if (image.isNull())
+        {
+            emit signalBusy(false);
+            return false;
+        }
+
+        path = WSToolUtils::makeTemporaryDir("dropbox").filePath(QFileInfo(imgPath)
+                                             .baseName().trimmed() + QLatin1String(".jpg"));
+
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
+        {
+            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+
+        image.save(path, "JPEG", imageQuality);
+
+        DMetadata meta;
+
+        if (meta.load(imgPath))
+        {
+            meta.setItemDimensions(image.size());
+            meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+            meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+            meta.save(path, true);
+        }
+    }
+
     DBMPForm form;
-    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-
-    if (image.isNull())
-    {
-        emit signalBusy(false);
-        return false;
-    }
-
-    QString path = WSToolUtils::makeTemporaryDir("dropbox").filePath(QFileInfo(imgPath)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
-
-    if (rescale && (image.width() > maxDim || image.height() > maxDim))
-    {
-        image = image.scaled(maxDim,maxDim, Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    }
-
-    image.save(path,"JPEG",imageQuality);
-
-    if (d->meta.load(imgPath))
-    {
-        d->meta.setItemDimensions(image.size());
-        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-        d->meta.save(path, true);
-    }
 
     if (!form.addFile(path))
     {
