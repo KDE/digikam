@@ -252,7 +252,6 @@ void DBTalker::getUserName()
 void DBTalker::listFolders(const QString& cursor)
 {
     QUrl url(QLatin1String("https://api.dropboxapi.com/2/files/list_folder"));
-    QNetworkRequest netRequest;
     QByteArray postData;
 
     if (cursor.isEmpty())
@@ -266,7 +265,7 @@ void DBTalker::listFolders(const QString& cursor)
         postData = QString::fromUtf8("{\"cursor\": \"%1\"}").arg(cursor).toUtf8();
     }
 
-    netRequest.setUrl(url);
+    QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
     netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
 
