@@ -284,13 +284,18 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     emit signalBusy(true);
 
-    QString path = imgPath;
+    QString path(imgPath);
 
     QMimeDatabase mimeDB;
 
-    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
+    if (mimeDB.mimeTypeForFile(imgPath).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+
+        if (image.isNull())
+        {
+            image.load(imgPath);
+        }
 
         if (image.isNull())
         {

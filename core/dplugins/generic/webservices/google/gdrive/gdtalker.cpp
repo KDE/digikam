@@ -217,14 +217,11 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     emit signalBusy(true);
 
-    GDMPForm form;
-    form.addPair(QUrl::fromLocalFile(imgPath).fileName(), info.description, imgPath, id);
-
-    QString path = imgPath;
+    QString path(imgPath);
 
     QMimeDatabase mimeDB;
 
-    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
+    if (mimeDB.mimeTypeForFile(imgPath).name().startsWith(QLatin1String("image/")))
     {
         QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
@@ -259,6 +256,9 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             meta.save(path, true);
         }
     }
+
+    GDMPForm form;
+    form.addPair(QUrl::fromLocalFile(imgPath).fileName(), info.description, imgPath, id);
 
     if (!form.addFile(path))
     {
