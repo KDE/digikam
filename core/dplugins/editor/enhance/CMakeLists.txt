@@ -20,6 +20,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 add_subdirectory(antivignetting)
 add_subdirectory(blur)
 add_subdirectory(hotpixels)
+add_subdirectory(redeye)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(RestorationTool
     ${CMAKE_CURRENT_SOURCE_DIR}/restorationtoolplugin.cpp
@@ -39,11 +40,6 @@ DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
 DIGIKAM_ADD_EDITOR_PLUGIN(SharpenTool
     ${CMAKE_CURRENT_SOURCE_DIR}/sharpentoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
-)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/redeyetoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/redeyetool.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool

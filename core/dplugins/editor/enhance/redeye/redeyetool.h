@@ -28,14 +28,12 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
-class QColor;
+using namespace Digikam;
 
-namespace Digikam
+namespace EditorDigikamRedEyeToolPlugin
 {
-
-class DImg;
-class DColor;
 
 class RedEyeTool : public EditorToolThreaded
 {
@@ -65,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRedEyeToolPlugin
 
 #endif // DIGIKAM_EDITOR_RED_EYE_TOOL_H

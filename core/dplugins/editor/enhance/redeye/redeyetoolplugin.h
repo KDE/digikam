@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.RedEyeTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamRedEyeToolPlugin
 {
 
 class RedEyeToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotRedEye();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRedEyeToolPlugin
 
 #endif // DIGIKAM_REDEYETOOL_PLUGIN_H

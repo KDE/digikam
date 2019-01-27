@@ -46,7 +46,6 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogramwidget.h"
 #include "histogrambox.h"
@@ -55,7 +54,7 @@
 #include "redeyecorrectionsettings.h"
 #include "imageregionwidget.h"
 
-namespace Digikam
+namespace EditorDigikamRedEyeToolPlugin
 {
 
 class Q_DECL_HIDDEN RedEyeTool::Private
@@ -185,4 +184,4 @@ void RedEyeTool::setFinalImage()
     iface.setOriginal(i18n("Red Eyes Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamRedEyeToolPlugin
