@@ -17,14 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN(TextureTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/texturetoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/texturetool.cpp
+DIGIKAM_ADD_EDITOR_PLUGIN(BorderTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/bordertoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bordertool.cpp
 )
-
-DIGIKAM_ADD_EDITOR_PLUGIN(InserTextTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/inserttexttoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/inserttextwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/inserttexttool.cpp
-)
-

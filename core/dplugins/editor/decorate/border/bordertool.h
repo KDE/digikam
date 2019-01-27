@@ -34,7 +34,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamBorderToolPlugin
 {
 
 class BorderTool : public EditorToolThreaded
@@ -65,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamBorderToolPlugin
 
 #endif // DIGIKAM_EDITOR_BORDER_TOOL_H

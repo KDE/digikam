@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "bordertool.h"
 
-namespace Digikam
+namespace EditorDigikamBorderToolPlugin
 {
 
 BorderToolPlugin::BorderToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void BorderToolPlugin::slotBorder()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamBorderToolPlugin

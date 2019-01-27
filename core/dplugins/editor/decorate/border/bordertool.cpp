@@ -44,7 +44,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
-namespace Digikam
+namespace EditorDigikamBorderToolPlugin
 {
 
 class Q_DECL_HIDDEN BorderTool::Private
@@ -171,4 +171,4 @@ void BorderTool::setFinalImage()
     iface.setOriginal(i18n("Add Border"), filter()->filterAction(), targetImage);
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamBorderToolPlugin

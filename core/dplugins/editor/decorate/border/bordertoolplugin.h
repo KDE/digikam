@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.BorderTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamBorderToolPlugin
 {
 
 class BorderToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotBorder();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamBorderToolPlugin
 
 #endif // DIGIKAM_BORDERTOOL_PLUGIN_H
