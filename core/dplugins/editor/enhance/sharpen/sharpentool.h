@@ -28,7 +28,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamSharpenToolPlugin
 {
 
 class SharpenTool : public EditorToolThreaded
@@ -63,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamSharpenToolPlugin
 
 #endif // DIGIKAM_EDITOR_SHARPEN_TOOL_H

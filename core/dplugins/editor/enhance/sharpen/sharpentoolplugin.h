@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.SharpenTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamSharpenToolPlugin
 {
 
 class SharpenToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotSharpen();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamSharpenToolPlugin
 
 #endif // DIGIKAM_SHARPENTOOL_PLUGIN_H

@@ -21,6 +21,7 @@ add_subdirectory(antivignetting)
 add_subdirectory(blur)
 add_subdirectory(hotpixels)
 add_subdirectory(redeye)
+add_subdirectory(sharpen)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(RestorationTool
     ${CMAKE_CURRENT_SOURCE_DIR}/restorationtoolplugin.cpp
@@ -35,11 +36,6 @@ DIGIKAM_ADD_EDITOR_PLUGIN(LocalContrastTool
 DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontool.cpp
-)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(SharpenTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool

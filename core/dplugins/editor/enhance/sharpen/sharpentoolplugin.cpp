@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "sharpentool.h"
 
-namespace Digikam
+namespace EditorDigikamSharpenToolPlugin
 {
 
 SharpenToolPlugin::SharpenToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void SharpenToolPlugin::slotSharpen()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamSharpenToolPlugin

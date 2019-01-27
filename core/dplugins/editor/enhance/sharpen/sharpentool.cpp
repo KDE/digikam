@@ -52,7 +52,7 @@
 #   include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
-namespace Digikam
+namespace EditorDigikamSharpenToolPlugin
 {
 
 class Q_DECL_HIDDEN SharpenTool::Private
@@ -312,4 +312,4 @@ void SharpenTool::slotSaveAsSettings()
     d->sharpSettings->saveAsSettings();
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamSharpenToolPlugin
