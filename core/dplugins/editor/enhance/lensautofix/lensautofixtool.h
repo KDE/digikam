@@ -26,7 +26,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLensAutoFixToolPlugin
 {
 
 class LensAutoFixTool : public EditorToolThreaded
@@ -58,6 +60,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLensAutoFixToolPlugin
 
 #endif // DIGIKAM_EDITOR_LENS_AUTO_FIX_TOOL_H

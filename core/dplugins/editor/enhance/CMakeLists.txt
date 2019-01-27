@@ -8,15 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
 add_subdirectory(antivignetting)
 add_subdirectory(blur)
 add_subdirectory(hotpixels)
@@ -28,14 +19,7 @@ add_subdirectory(noisereduction)
 add_subdirectory(lensdistortion)
 
 if(LensFun_FOUND)
-
-    include_directories(${LENSFUN_INCLUDE_DIRS})
-
-    DIGIKAM_ADD_EDITOR_PLUGIN(LensAutoFixTool
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtoolplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
-    )
-
+    add_subdirectory(lensautofix)
 endif()
 
 # Not yet finalized

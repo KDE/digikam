@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.LensAutoFixTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLensAutoFixToolPlugin
 {
 
 class LensAutoFixToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotLensAutoFix();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLensAutoFixToolPlugin
 
 #endif // DIGIKAM_LENSAUTOFIXTOOL_PLUGIN_H
