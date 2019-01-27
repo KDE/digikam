@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.AntiVignettingTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamAntivignettingToolPlugin
 {
 
 class AntiVignettingToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotAntiVignetting();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamAntivignettingToolPlugin
 
 #endif // DIGIKAM_ANTIVIGNETTINGTOOL_PLUGIN_H

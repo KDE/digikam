@@ -49,7 +49,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
-namespace Digikam
+namespace EditorDigikamAntivignettingToolPlugin
 {
 
 class Q_DECL_HIDDEN AntiVignettingTool::Private
@@ -167,4 +167,4 @@ void AntiVignettingTool::setFinalImage()
     iface->setOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamAntivignettingToolPlugin

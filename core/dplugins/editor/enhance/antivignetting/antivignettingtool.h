@@ -29,7 +29,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamAntivignettingToolPlugin
 {
 
 class AntiVignettingTool : public EditorToolThreaded
@@ -60,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamAntivignettingToolPlugin
 
 #endif // DIGIKAM_EDITOR_ANTI_VIGNETTING_TOOL_H

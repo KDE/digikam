@@ -17,6 +17,8 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+add_subdirectory(antivignetting)
+
 DIGIKAM_ADD_EDITOR_PLUGIN(RestorationTool
     ${CMAKE_CURRENT_SOURCE_DIR}/restorationtoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/restorationtool.cpp
@@ -45,11 +47,6 @@ DIGIKAM_ADD_EDITOR_PLUGIN(RedEyeTool
 DIGIKAM_ADD_EDITOR_PLUGIN(BlurTool
     ${CMAKE_CURRENT_SOURCE_DIR}/blurtoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blurtool.cpp
-)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(AntivignettingTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingtool.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool
