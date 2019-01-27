@@ -29,7 +29,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamBlurToolPlugin
 {
 
 class BlurTool : public EditorToolThreaded
@@ -60,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamBlurToolPlugin
 
 #endif // DIGIKAM_EDITOR_BLUR_TOOL_H

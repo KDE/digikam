@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.BlurTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamBlurToolPlugin
 {
 
 class BlurToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotBlur();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamBlurToolPlugin
 
 #endif // DIGIKAM_BLURTOOL_PLUGIN_H

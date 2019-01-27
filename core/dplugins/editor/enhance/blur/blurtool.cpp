@@ -43,7 +43,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace Digikam
+namespace EditorDigikamBlurToolPlugin
 {
 
 class Q_DECL_HIDDEN BlurTool::Private
@@ -165,4 +165,4 @@ void BlurTool::setFinalImage()
     iface.setOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamBlurToolPlugin
