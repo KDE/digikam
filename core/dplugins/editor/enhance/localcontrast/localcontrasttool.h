@@ -29,7 +29,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLocalContrastToolPlugin
 {
 
 class LocalContrastTool : public EditorToolThreaded
@@ -62,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLocalContrastToolPlugin
 
 #endif // DIGIKAM_EDITOR_LOCAL_CONTRAST_TOOL_H

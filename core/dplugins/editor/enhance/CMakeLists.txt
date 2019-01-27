@@ -23,11 +23,7 @@ add_subdirectory(hotpixels)
 add_subdirectory(redeye)
 add_subdirectory(sharpen)
 add_subdirectory(restoration)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(LocalContrastTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrasttoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrasttool.cpp
-)
+add_subdirectory(localcontrast)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(NoiseReductionTool
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontoolplugin.cpp

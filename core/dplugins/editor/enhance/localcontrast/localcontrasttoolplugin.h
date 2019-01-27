@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.LocalContrastTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLocalContrastToolPlugin
 {
 
 class LocalContrastToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotLocalContrast();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLocalContrastToolPlugin
 
 #endif // DIGIKAM_LOCALCONTRASTTOOL_PLUGIN_H
