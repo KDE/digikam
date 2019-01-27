@@ -32,7 +32,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamResizeToolPlugin
 {
 
 class ResizeTool : public EditorToolThreaded
@@ -69,6 +71,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamResizeToolPlugin
 
 #endif // DIGIKAM_EDITOR_RESIZE_TOOL_H

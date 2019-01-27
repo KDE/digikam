@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "resizetool.h"
 
-namespace Digikam
+namespace EditorDigikamResizeToolPlugin
 {
 
 ResizeToolPlugin::ResizeToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void ResizeToolPlugin::slotResize()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamResizeToolPlugin

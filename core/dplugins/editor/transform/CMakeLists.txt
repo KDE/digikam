@@ -19,15 +19,11 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 
 add_subdirectory(autocrop)
 add_subdirectory(freerotation)
+add_subdirectory(resize)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
     ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sheartool.cpp
-)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(ResizeTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/resizetoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/resizetool.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(PerspectiveTool

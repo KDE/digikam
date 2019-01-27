@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.ResizeTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamResizeToolPlugin
 {
 
 class ResizeToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotResize();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamResizeToolPlugin
 
 #endif // DIGIKAM_RESIZETOOL_PLUGIN_H

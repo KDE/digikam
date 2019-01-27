@@ -71,7 +71,7 @@
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
 
-namespace Digikam
+namespace EditorDigikamResizeToolPlugin
 {
 
 class Q_DECL_HIDDEN ResizeTool::Private
@@ -615,4 +615,4 @@ void ResizeTool::slotSaveAsSettings()
     file.close();
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamResizeToolPlugin
