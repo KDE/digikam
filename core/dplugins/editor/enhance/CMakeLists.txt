@@ -22,11 +22,7 @@ add_subdirectory(blur)
 add_subdirectory(hotpixels)
 add_subdirectory(redeye)
 add_subdirectory(sharpen)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(RestorationTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/restorationtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/restorationtool.cpp
-)
+add_subdirectory(restoration)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(LocalContrastTool
     ${CMAKE_CURRENT_SOURCE_DIR}/localcontrasttoolplugin.cpp

@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.RestoreTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamRestorationToolPlugin
 {
 
 class RestoreToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotRestore();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRestorationToolPlugin
 
 #endif // DIGIKAM_RESTORETOOL_PLUGIN_H

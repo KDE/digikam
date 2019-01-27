@@ -29,9 +29,9 @@
 
 #include "editortool.h"
 
-class QString;
+using namespace Digikam;
 
-namespace Digikam
+namespace EditorDigikamRestorationToolPlugin
 {
 
 class RestorationTool : public EditorToolThreaded
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRestorationToolPlugin
 
 #endif // DIGIKAM_EDITOR_RESTORATION_TOOL_H

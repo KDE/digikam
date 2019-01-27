@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "restorationtool.h"
 
-namespace Digikam
+namespace EditorDigikamRestorationToolPlugin
 {
 
 RestoreToolPlugin::RestoreToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void RestoreToolPlugin::slotRestore()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamRestorationToolPlugin
