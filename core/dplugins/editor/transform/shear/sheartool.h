@@ -28,7 +28,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamShearToolPlugin
 {
 
 class ShearTool : public EditorToolThreaded
@@ -60,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamShearToolPlugin
 
 #endif // DIGIKAM_EDITOR_SHEAR_TOOL_H

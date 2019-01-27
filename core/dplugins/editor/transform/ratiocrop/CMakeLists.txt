@@ -17,13 +17,8 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_subdirectory(autocrop)
-add_subdirectory(freerotation)
-add_subdirectory(resize)
-add_subdirectory(perspective)
-add_subdirectory(ratiocrop)
-add_subdirectory(shear)
-
-if(Lqr-1_FOUND)
-    add_subdirectory(contentawareresize)
-endif()
+DIGIKAM_ADD_EDITOR_PLUGIN(RatioCropTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/imageselectionwidget.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ratiocroptool.cpp
+)

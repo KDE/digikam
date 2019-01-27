@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.ShearTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamShearToolPlugin
 {
 
 class ShearToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotShear();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamShearToolPlugin
 
 #endif // DIGIKAM_SHEARTOOL_PLUGIN_H

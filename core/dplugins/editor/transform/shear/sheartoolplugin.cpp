@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "sheartool.h"
 
-namespace Digikam
+namespace EditorDigikamShearToolPlugin
 {
 
 ShearToolPlugin::ShearToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void ShearToolPlugin::slotShear()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamShearToolPlugin
