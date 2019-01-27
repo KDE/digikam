@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.InsertTextTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamInsertTextToolPlugin
 {
 
 class InsertTextToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotInsertText();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamInsertTextToolPlugin
 
 #endif // DIGIKAM_INSERTTEXTTOOL_PLUGIN_H

@@ -43,13 +43,12 @@
 // Local includes
 
 #include "dimg.h"
+#include "imageiface.h"
 
-class QPixmap;
+using namespace Digikam;
 
-namespace Digikam
+namespace EditorDigikamInsertTextToolPlugin
 {
-
-class ImageIface;
 
 class InsertTextWidget : public QWidget
 {
@@ -124,6 +123,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamInsertTextToolPlugin
 
 #endif // DIGIKAM_EDITOR_INSERT_TEXT_WIDGET_H

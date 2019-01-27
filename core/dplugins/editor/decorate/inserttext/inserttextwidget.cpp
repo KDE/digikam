@@ -34,11 +34,7 @@
 #include <QPixmap>
 #include <QResizeEvent>
 
-// Local includes
-
-#include "imageiface.h"
-
-namespace Digikam
+namespace EditorDigikamInsertTextToolPlugin
 {
 
 class Q_DECL_HIDDEN InsertTextWidget::Private
@@ -747,4 +743,4 @@ void InsertTextWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamInsertTextToolPlugin

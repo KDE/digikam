@@ -61,7 +61,7 @@
 #include "dcolorselector.h"
 #include "dnuminput.h"
 
-namespace Digikam
+namespace EditorDigikamInsertTextToolPlugin
 {
 
 class Q_DECL_HIDDEN InsertTextTool::Private
@@ -449,4 +449,4 @@ void InsertTextTool::finalRendering()
     qApp->restoreOverrideCursor();
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamInsertTextToolPlugin
