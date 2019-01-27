@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.FreeRotationTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamFreeRotationToolPlugin
 {
 
 class FreeRotationToolPlugin : public DPluginEditor
@@ -63,6 +65,6 @@ private Q_SLOTS:
     void slotFreeRotation();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamFreeRotationToolPlugin
 
 #endif // DIGIKAM_FREEROTATIONTOOL_PLUGIN_H

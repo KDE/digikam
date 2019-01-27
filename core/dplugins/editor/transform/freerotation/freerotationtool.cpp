@@ -55,7 +55,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 
-namespace Digikam
+namespace EditorDigikamFreeRotationToolPlugin
 {
 
 class Q_DECL_HIDDEN FreeRotationTool::Private
@@ -578,4 +578,4 @@ QString FreeRotationTool::repeatString(const QString& str, int times) const
     return tmp;
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamFreeRotationToolPlugin

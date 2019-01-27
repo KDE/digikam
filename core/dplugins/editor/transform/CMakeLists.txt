@@ -18,11 +18,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_subdirectory(autocrop)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(FreeRotationTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/freerotationtool.cpp
-)
+add_subdirectory(freerotation)
 
 DIGIKAM_ADD_EDITOR_PLUGIN(ShearTool
     ${CMAKE_CURRENT_SOURCE_DIR}/sheartoolplugin.cpp
