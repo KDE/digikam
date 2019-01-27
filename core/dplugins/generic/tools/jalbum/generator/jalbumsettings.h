@@ -65,9 +65,9 @@ public:
     
 public:
 
-    QUrl                      m_destUrl;
-    QUrl                      m_jalbumUrl;           // jAlbum java archive path.
-    QUrl                      m_javaUrl;             // Java executable path.
+    QString                   m_destPath;
+    QString                   m_jalbumPath;          // jAlbum java archive path.
+    QString                   m_javaPath;            // Java executable path.
     QString                   m_imageSelectionTitle; // Jalbum title to use for JAlbumSettings::ImageGetOption::IMAGES selection.
 
     ImageGetOption            m_getOption;           // Type of image selection (albums or images list).

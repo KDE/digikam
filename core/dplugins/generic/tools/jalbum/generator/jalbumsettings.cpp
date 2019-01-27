@@ -45,16 +45,7 @@ JAlbumSettings::JAlbumSettings(DInfoInterface* const iface)
     dfltAlbumPath.append(QLatin1String("/Documents/My Albums"));
 #endif
 
-    m_destUrl = QUrl::fromLocalFile(dfltAlbumPath);
-    
-    QString dfltJarPath(QLatin1String("/usr/share/jalbum/JAlbum.jar"));
-
-#ifdef Q_OS_WIN
-    dfltJarPath = QLatin1String(qgetenv("ProgramFiles").constData());
-    dfltJarPath.append(QLatin1String("\\jAlbum\\JAlbum.jar"));
-#endif
-
-    m_jalbumUrl = QUrl::fromLocalFile(dfltJarPath);
+    m_destPath = dfltAlbumPath;
 }
 
 JAlbumSettings::~JAlbumSettings()
@@ -63,18 +54,18 @@ JAlbumSettings::~JAlbumSettings()
 
 void JAlbumSettings::readSettings(KConfigGroup& group)
 {
-    m_destUrl             = group.readEntry("destUrl",                 QUrl());
-    m_jalbumUrl           = group.readEntry("jalbumUrl",               QUrl());          
-    m_javaUrl             = group.readEntry("javaUrl",                 QUrl());        
+    m_destPath            = group.readEntry("destPath",                 QString());
+    m_jalbumPath          = group.readEntry("jalbumPath",               QString());          
+    m_javaPath            = group.readEntry("javaPath",                 QString());        
     m_imageSelectionTitle = group.readEntry("imageSelectionTitle",     QString());
     m_getOption           = (ImageGetOption)group.readEntry("SelMode", (int)IMAGES);
 }
 
 void JAlbumSettings::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry("destUrl",             m_destUrl);
-    group.writeEntry("jalbumUrl",           m_jalbumUrl);
-    group.writeEntry("javaUrl",             m_javaUrl);
+    group.writeEntry("destPath",            m_destPath);
+    group.writeEntry("jalbumPath",          m_jalbumPath);
+    group.writeEntry("javaPath",            m_javaPath);
     group.writeEntry("imageSelectionTitle", m_imageSelectionTitle);
     group.writeEntry("SelMode",             (int)m_getOption);
 }
@@ -83,12 +74,12 @@ QDebug operator<<(QDebug dbg, const JAlbumSettings& t)
 {
     dbg.nospace() << "JAlbumSettings::Items: "
                   << t.m_imageList << ", ";
-    dbg.nospace() << "JAlbumSettings::DestUrl: "
-                  << t.m_destUrl;
-    dbg.nospace() << "JAlbumSettings::JalbumUrl: "
-                  << t.m_jalbumUrl;
-    dbg.nospace() << "JAlbumSettings::JavaUrl: "
-                  << t.m_javaUrl;
+    dbg.nospace() << "JAlbumSettings::DestPath: "
+                  << t.m_destPath;
+    dbg.nospace() << "JAlbumSettings::JalbumPath: "
+                  << t.m_jalbumPath;
+    dbg.nospace() << "JAlbumSettings::JavaPath: "
+                  << t.m_javaPath;
     dbg.nospace() << "JAlbumSettings::ImageSelectionTitle: "
                   << t.m_imageSelectionTitle;
     return dbg.space();

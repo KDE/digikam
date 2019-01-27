@@ -120,9 +120,10 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));
 
 #ifdef Q_OS_WIN
+    d->binSearch->addDirectory(QLatin1String(qgetenv("ProgramFiles").constData()) + QLatin1String("\\jAlbum\\"));
 #else
-    d->binSearch->addDirectory(QLatin1String("/usr/share"));
-    d->binSearch->addDirectory(QLatin1String("/usr/share/jalbum"));
+    d->binSearch->addDirectory(QLatin1String("/usr/share/"));
+    d->binSearch->addDirectory(QLatin1String("/usr/share/jAlbum/"));
 #endif
 
     connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
@@ -161,15 +162,15 @@ bool JAlbumIntroPage::validatePage()
 
 void JAlbumIntroPage::slotBinariesFound()
 {
-    d->settings->m_jalbumUrl = QUrl::fromLocalFile(d->jalbumBin.path());
-    d->settings->m_javaUrl   = QUrl::fromLocalFile(d->jalbumJava.path());
+    d->settings->m_jalbumPath = d->jalbumBin.path();
+    d->settings->m_javaPath   = d->jalbumJava.path();
 
     emit completeChanged();
 }
 
 bool JAlbumIntroPage::isComplete() const
 {
-    QString val = d->wizard->settings()->m_javaUrl.toLocalFile() + d->wizard->settings()->m_jalbumUrl.toLocalFile();
+    QString val = d->wizard->settings()->m_javaPath + d->wizard->settings()->m_jalbumPath;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << val;
 
     return (!val.isEmpty());

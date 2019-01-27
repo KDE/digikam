@@ -8,7 +8,7 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/
                     ${CMAKE_CURRENT_SOURCE_DIR}/tools
 
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -32,6 +32,4 @@ set(jalbumplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(JAlbum
-                   ${jalbumplugin_SRCS}
-)
+DIGIKAM_ADD_GENERIC_PLUGIN(JAlbum ${jalbumplugin_SRCS})

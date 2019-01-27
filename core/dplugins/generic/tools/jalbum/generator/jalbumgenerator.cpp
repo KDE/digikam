@@ -244,13 +244,13 @@ bool JAlbumGenerator::run()
     if (!d->init())
         return false;
 
-    QString destDir = d->settings->m_destUrl.toLocalFile();
+    QString destDir = d->settings->m_destPath;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << destDir;
 
-    QString javaDir = d->settings->m_javaUrl.toLocalFile();
+    QString javaDir = d->settings->m_javaPath;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << javaDir;
 
-    QString jarDir  = d->settings->m_jalbumUrl.toLocalFile();
+    QString jarDir  = d->settings->m_jalbumPath;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << jarDir;
 
     QString projDir = destDir + QString::fromLatin1("/") + d->settings->m_imageSelectionTitle;

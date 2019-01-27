@@ -129,7 +129,7 @@ void JAlbumFinalPage::slotProcess()
         d->progressView->addEntry(i18n("%1 albums to process:", info->m_albumList.count()),
                                   DHistoryView::ProgressEntry);
 
-        foreach(const QUrl& url, info->m_iface->albumsItems(info->m_albumList))
+        foreach (const QUrl& url, info->m_iface->albumsItems(info->m_albumList))
         {
             d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
                                       DHistoryView::ProgressEntry);
@@ -142,7 +142,7 @@ void JAlbumFinalPage::slotProcess()
     }
 
     d->progressView->addEntry(i18n("Output directory: %1",
-                              QDir::toNativeSeparators(info->m_destUrl.toLocalFile())),
+                              QDir::toNativeSeparators(info->m_destPath)),
                               DHistoryView::ProgressEntry);
 
     JAlbumGenerator generator(info);

@@ -130,7 +130,7 @@ void JAlbumOutputPage::initializePage()
 
     JAlbumSettings* const info  = wizard->settings();
 
-    d->destUrl->setFileDlgPath(info->m_destUrl.toLocalFile());
+    d->destUrl->setFileDlgPath(info->m_destPath);
     d->imageSelectionTitle->setText(info->m_imageSelectionTitle);
 }
 
@@ -147,9 +147,9 @@ bool JAlbumOutputPage::validatePage()
     if (!wizard)
         return false;
 
-    JAlbumSettings* const info      = wizard->settings();
-    info->m_destUrl             = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
-    info->m_imageSelectionTitle = d->imageSelectionTitle->text();
+    JAlbumSettings* const settings  = wizard->settings();
+    settings->m_destPath            = d->destUrl->fileDlgPath();
+    settings->m_imageSelectionTitle = d->imageSelectionTitle->text();
 
     return true;
 }
