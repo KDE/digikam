@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "noisereductiontool.h"
 
-namespace Digikam
+namespace EditorDigikamNoiseReductionToolPlugin
 {
 
 LocalContrastToolPlugin::LocalContrastToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void LocalContrastToolPlugin::slotNoiseReduction()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamNoiseReductionToolPlugin

@@ -28,7 +28,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamNoiseReductionToolPlugin
 {
 
 class NoiseReductionTool : public EditorToolThreaded
@@ -63,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamNoiseReductionToolPlugin
 
 #endif // DIGIKAM_EDITOR_NOISE_REDUCTION_TOOL_H
