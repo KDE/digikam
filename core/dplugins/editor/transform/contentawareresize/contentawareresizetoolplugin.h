@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.ContentAwareResizeTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamContentAwareResizeToolPlugin
 {
 
 class ContentAwareResizeToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotContentAwareResize();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamContentAwareResizeToolPlugin
 
 #endif // DIGIKAM_CONTENTAWARERESIZETOOL_PLUGIN_H

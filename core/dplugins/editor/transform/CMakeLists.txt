@@ -49,10 +49,5 @@ DIGIKAM_ADD_EDITOR_PLUGIN(RatioCropTool
 )
 
 if(Lqr-1_FOUND)
-
-    DIGIKAM_ADD_EDITOR_PLUGIN(ContentAwareResizeTool
-        ${CMAKE_CURRENT_SOURCE_DIR}/contentawareresizetoolplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/contentawareresizetool.cpp
-       )
-
+    add_subdirectory(contentawareresize)
 endif()

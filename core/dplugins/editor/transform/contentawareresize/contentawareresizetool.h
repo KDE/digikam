@@ -30,7 +30,9 @@
 #include "editortool.h"
 #include "dimg.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamContentAwareResizeToolPlugin
 {
 
 class ContentAwareResizeTool : public EditorToolThreaded
@@ -73,6 +75,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamContentAwareResizeToolPlugin
 
 #endif // DIGIKAM_EDITOR_CONTENT_AWARE_RESIZE_TOOL_H
