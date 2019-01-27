@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "perspectivetool.h"
 
-namespace Digikam
+namespace EditorDigikamPerspectiveToolPlugin
 {
 
 PerspectiveToolPlugin::PerspectiveToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void PerspectiveToolPlugin::slotPerspective()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamPerspectiveToolPlugin

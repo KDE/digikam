@@ -39,10 +39,12 @@
 
 #include "dimg.h"
 #include "matrix.h"
+#include "imageiface.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamPerspectiveToolPlugin
 {
-class ImageIface;
 
 class PerspectiveWidget : public QWidget
 {
@@ -112,6 +114,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamPerspectiveToolPlugin
 
 #endif // DIGIKAM_EDITOR_PERSPECTIVE_WIDGET_H

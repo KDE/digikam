@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.PerspectiveTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamPerspectiveToolPlugin
 {
 
 class PerspectiveToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotPerspective();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamPerspectiveToolPlugin
 
 #endif // DIGIKAM_PERSPECTIVETOOL_PLUGIN_H

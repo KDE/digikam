@@ -47,10 +47,9 @@
 
 #include "digikam_debug.h"
 #include "triangle.h"
-#include "imageiface.h"
 #include "pixelsaliasfilter.h"
 
-namespace Digikam
+namespace EditorDigikamPerspectiveToolPlugin
 {
 
 class Q_DECL_HIDDEN PerspectiveWidget::Private
@@ -1025,4 +1024,4 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamPerspectiveToolPlugin
