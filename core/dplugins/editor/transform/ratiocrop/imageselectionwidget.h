@@ -32,10 +32,14 @@
 #include <QRect>
 #include <QColor>
 
-namespace Digikam
-{
+// Local includes
 
-class ImageIface;
+#include "imageiface.h"
+
+using namespace Digikam;
+
+namespace EditorDigikamRatioCropToolPlugin
+{
 
 class ImageSelectionWidget : public QWidget
 {
@@ -187,6 +191,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin
 
 #endif // DIGIKAM_EDITOR_IMAGE_SELECTION_WIDGET_H

@@ -65,10 +65,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageiface.h"
 #include "dimg.h"
 
-namespace Digikam
+namespace EditorDigikamRatioCropToolPlugin
 {
 
 class Q_DECL_HIDDEN ImageSelectionWidget::Private
@@ -1519,4 +1518,4 @@ void ImageSelectionWidget::setIsDrawingSelection(bool draw)
     d->isDrawingSelection = draw;
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin

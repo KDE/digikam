@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "ratiocroptool.h"
 
-namespace Digikam
+namespace EditorDigikamRatioCropToolPlugin
 {
 
 RatioCropToolPlugin::RatioCropToolPlugin(QObject* const parent)
@@ -113,4 +113,4 @@ void RatioCropToolPlugin::slotRatioCrop()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin

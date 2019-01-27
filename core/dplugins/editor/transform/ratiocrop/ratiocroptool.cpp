@@ -62,7 +62,7 @@
 #include "histogramwidget.h"
 #include "dcolorselector.h"
 
-namespace Digikam
+namespace EditorDigikamRatioCropToolPlugin
 {
 
 class Q_DECL_HIDDEN RatioCropTool::Private
@@ -1122,4 +1122,4 @@ void RatioCropTool::setBackgroundColor(const QColor& bg)
     d->imageSelectionWidget->setBackgroundColor(bg);
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin

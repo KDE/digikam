@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.RatioCropTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamRatioCropToolPlugin
 {
 
 class RatioCropToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotRatioCrop();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin
 
 #endif // DIGIKAM_RATIOCROPTOOL_PLUGIN_H

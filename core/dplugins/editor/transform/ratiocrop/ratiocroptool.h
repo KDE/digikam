@@ -34,7 +34,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamRatioCropToolPlugin
 {
 
 class RatioCropTool : public EditorTool
@@ -89,6 +91,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamRatioCropToolPlugin
 
 #endif // DIGIKAM_EDITOR_RATIO_CROP_TOOL_H
