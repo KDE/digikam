@@ -56,7 +56,7 @@ public:
 
     explicit Private()
       : that(0),
-        info(0),
+        settings(0),
         warnings(false),
         cancel(false),
         pview(0),
@@ -65,10 +65,10 @@ public:
     }
 
     JAlbumGenerator* that;
-    JAlbumSettings*      info;
+    JAlbumSettings*  settings;
     QList<QUrl>      urls;
 
-    // State info
+    // State settings
     bool              warnings;
 
     bool              cancel;
@@ -102,12 +102,12 @@ public:
 
     bool createUrlsList()
     {
-        if (info->m_getOption == JAlbumSettings::ALBUMS)
+        if (settings->m_getOption == JAlbumSettings::ALBUMS)
         {
             // Loop over albums selection
 
-            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = info->m_albumList.constBegin();
-            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = info->m_albumList.constEnd();
+            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = settings->m_albumList.constBegin();
+            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = settings->m_albumList.constEnd();
 
             for ( ; albumIt != albumEnd ; ++albumIt)
             {
@@ -116,16 +116,16 @@ public:
                 // Gather image element list
                 QList<QUrl> imageList;
 
-                if (info->m_iface)
+                if (settings->m_iface)
                 {
-                    imageList = info->m_iface->albumsItems(DInfoInterface::DAlbumIDs() << id);
+                    imageList = settings->m_iface->albumsItems(DInfoInterface::DAlbumIDs() << id);
                     urls.append(imageList);
                 }
             }
         }
         else
         {
-            urls = info->m_imageList;
+            urls = settings->m_imageList;
         }
 
         return true;
@@ -222,12 +222,12 @@ public:
 
 // ----------------------------------------------------------------------
 
-JAlbumGenerator::JAlbumGenerator(JAlbumSettings* const info)
+JAlbumGenerator::JAlbumGenerator(JAlbumSettings* const settings)
     : QObject(),
       d(new Private)
 {
     d->that     = this;
-    d->info     = info;
+    d->settings = settings;
     d->warnings = false;
 
     connect(this, SIGNAL(logWarningRequested(QString)),
@@ -244,16 +244,16 @@ bool JAlbumGenerator::run()
     if (!d->init())
         return false;
 
-    QString destDir = d->info->m_destUrl.toLocalFile();
+    QString destDir = d->settings->m_destUrl.toLocalFile();
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << destDir;
 
-    QString javaDir = d->info->m_javaUrl.toLocalFile();
+    QString javaDir = d->settings->m_javaUrl.toLocalFile();
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << javaDir;
 
-    QString jarDir  = d->info->m_jalbumUrl.toLocalFile();
+    QString jarDir  = d->settings->m_jalbumUrl.toLocalFile();
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << jarDir;
 
-    QString projDir = destDir + QString::fromLatin1("/") + d->info->m_imageSelectionTitle;
+    QString projDir = destDir + QString::fromLatin1("/") + d->settings->m_imageSelectionTitle;
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << projDir;
 
     if (!d->createDir(projDir))
