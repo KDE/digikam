@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.TextureTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamTextureToolPlugin
 {
 
 class TextureToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotTexture();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamTextureToolPlugin
 
 #endif // DIGIKAM_TEXTURETOOL_PLUGIN_H

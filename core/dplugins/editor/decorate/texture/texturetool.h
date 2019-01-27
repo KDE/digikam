@@ -33,7 +33,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamTextureToolPlugin
 {
 
 class TextureTool : public EditorToolThreaded
@@ -68,6 +70,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamTextureToolPlugin
 
 #endif // DIGIKAM_EDITOR_TEXTURE_TOOL_H
