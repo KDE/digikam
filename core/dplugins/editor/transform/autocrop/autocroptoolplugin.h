@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.AutoCropTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamAutoCropToolPlugin
 {
 
 class AutoCropToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotAutoCrop();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamAutoCropToolPlugin
 
 #endif // DIGIKAM_AUTOCROPTOOL_PLUGIN_H
