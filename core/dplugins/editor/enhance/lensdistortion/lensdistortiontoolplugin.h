@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.LensDistortionTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLensDistortionToolPlugin
 {
 
 class LensDistortionToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotLensDistortion();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLensDistortionToolPlugin
 
 #endif // DIGIKAM_LENSDISTORTIONTOOL_PLUGIN_H

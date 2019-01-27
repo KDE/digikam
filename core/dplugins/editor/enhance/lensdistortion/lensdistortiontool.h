@@ -29,7 +29,9 @@
 
 #include "editortool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamLensDistortionToolPlugin
 {
 
 class LensDistortionTool : public EditorToolThreaded
@@ -63,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamLensDistortionToolPlugin
 
 #endif // DIGIKAM_EDITOR_LENS_DISTORTION_TOOL_H

@@ -17,26 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_subdirectory(antivignetting)
-add_subdirectory(blur)
-add_subdirectory(hotpixels)
-add_subdirectory(redeye)
-add_subdirectory(sharpen)
-add_subdirectory(restoration)
-add_subdirectory(localcontrast)
-add_subdirectory(noisereduction)
-add_subdirectory(lensdistortion)
-
-if(LensFun_FOUND)
-
-    include_directories(${LENSFUN_INCLUDE_DIRS})
-
-    DIGIKAM_ADD_EDITOR_PLUGIN(LensAutoFixTool
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtoolplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
-    )
-
-endif()
-
-# Not yet finalized
-#add_subdirectory(healingclone)
+DIGIKAM_ADD_EDITOR_PLUGIN(LensDistortionTool
+    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontoolplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontool.cpp
+)

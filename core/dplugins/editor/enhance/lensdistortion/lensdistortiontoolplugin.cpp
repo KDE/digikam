@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "lensdistortiontool.h"
 
-namespace Digikam
+namespace EditorDigikamLensDistortionToolPlugin
 {
 
 LensDistortionToolPlugin::LensDistortionToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void LensDistortionToolPlugin::slotLensDistortion()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamLensDistortionToolPlugin
