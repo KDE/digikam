@@ -28,10 +28,14 @@
 
 #include <QWidget>
 
-namespace Digikam
-{
+// Local includes
 
-class IccProfile;
+#include "iccprofile.h"
+
+using namespace Digikam;
+
+namespace EditorDigikamPrintToolPlugin
+{
 
 class PrintOptionsPage : public QWidget
 {
@@ -87,6 +91,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin
 
 #endif // DIGIKAM_PRINT_OPTIONS_PAGE_H

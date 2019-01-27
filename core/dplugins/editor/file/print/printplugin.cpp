@@ -36,7 +36,7 @@
 #include "editorwindow.h"
 #include "printhelper.h"
 
-namespace Digikam
+namespace EditorDigikamPrintToolPlugin
 {
 
 PrintToolPlugin::PrintToolPlugin(QObject* const parent)
@@ -119,4 +119,4 @@ void PrintToolPlugin::slotPrint()
     }
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin

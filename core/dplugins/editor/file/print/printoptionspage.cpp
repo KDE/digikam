@@ -46,10 +46,10 @@
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "iccmanager.h"
-#include "ui_printoptionspage.h"
 #include "editorwindow.h"
+#include "ui_printoptionspage.h"
 
-namespace Digikam
+namespace EditorDigikamPrintToolPlugin
 {
 
 static inline double unitToInches(PrintOptionsPage::Unit unit)

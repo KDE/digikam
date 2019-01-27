@@ -44,7 +44,7 @@
 #include "printoptionspage.h"
 #include "iccmanager.h"
 
-namespace Digikam
+namespace EditorDigikamPrintToolPlugin
 {
 
 class Q_DECL_HIDDEN PrintHelper::Private
@@ -202,4 +202,4 @@ void PrintHelper::print(DImg& doc)
     painter.drawImage(0, 0, image);
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin

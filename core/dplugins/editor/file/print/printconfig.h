@@ -38,7 +38,7 @@
 #include "digikam_export.h"
 #include "printoptionspage.h"
 
-namespace Digikam
+namespace EditorDigikamPrintToolPlugin
 {
 
 class DIGIKAM_EXPORT PrintConfig : public KConfigSkeleton
@@ -61,7 +61,7 @@ public:
         return self()->mPrintPosition;
     }
 
-    static void setPrintScaleMode(Digikam::PrintOptionsPage::ScaleMode v)
+    static void setPrintScaleMode(PrintOptionsPage::ScaleMode v)
     {
         if (!self()->isImmutable( QLatin1String( "PrintScaleMode" ) ))
             self()->mPrintScaleMode = v;
@@ -167,6 +167,6 @@ protected:
     bool   mPrintAutoRotate;
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin
 
 #endif // DIGIKAM_PRINT_CONFIG_H

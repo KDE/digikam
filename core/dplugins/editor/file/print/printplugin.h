@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.editor.PrintTool"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace EditorDigikamPrintToolPlugin
 {
 
 class PrintToolPlugin : public DPluginEditor
@@ -57,6 +59,6 @@ private Q_SLOTS:
     void slotPrint();
 };
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin
 
 #endif // DIGIKAM_PRINTTOOL_PLUGIN_H

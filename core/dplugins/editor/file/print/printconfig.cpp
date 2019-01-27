@@ -28,7 +28,7 @@
 #include <qglobal.h>
 #include <QFile>
 
-namespace Digikam
+namespace EditorDigikamPrintToolPlugin
 {
 
 class Q_DECL_HIDDEN PrintConfigHelper
@@ -161,4 +161,4 @@ PrintConfig::~PrintConfig()
     s_globalPrintConfig()->q = 0;
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamPrintToolPlugin
