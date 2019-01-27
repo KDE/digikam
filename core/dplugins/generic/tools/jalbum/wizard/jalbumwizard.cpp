@@ -56,7 +56,7 @@ class Q_DECL_HIDDEN JAlbumWizard::Private
 public:
 
     explicit Private()
-      : info(0),
+      : settings(0),
         introPage(0),
         selectionPage(0),
         outputPage(0),
@@ -64,7 +64,7 @@ public:
     {
     }
 
-    JAlbumSettings*            info;
+    JAlbumSettings*        settings;
 
     JAlbumIntroPage*       introPage;
     JAlbumSelectionPage*   selectionPage;
@@ -79,11 +79,11 @@ JAlbumWizard::JAlbumWizard(QWidget* const parent, DInfoInterface* const iface)
     setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create jAlbum Album"));
 
-    d->info = new JAlbumSettings(iface);
+    d->settings          = new JAlbumSettings(iface);
     
     KConfig config;
     KConfigGroup group   = config.group("jAlbum tool");
-    d->info->readSettings(group);
+    d->settings->readSettings(group);
 
     d->introPage         = new JAlbumIntroPage(this,         i18n("Welcome to jAlbum Album Tool"));
     d->selectionPage     = new JAlbumSelectionPage(this,     i18n("Items Selection"));
@@ -110,7 +110,7 @@ bool JAlbumWizard::validateCurrentPage()
     {
         KConfig config;
         KConfigGroup group = config.group("jAlbum tool");
-        d->info->writeSettings(group);
+        d->settings->writeSettings(group);
     }
 
     return true;
@@ -123,7 +123,7 @@ int JAlbumWizard::nextId() const
 
 JAlbumSettings* JAlbumWizard::settings() const
 {
-    return d->info;
+    return d->settings;
 }
 
 } // namespace GenericDigikamJAlbumPlugin

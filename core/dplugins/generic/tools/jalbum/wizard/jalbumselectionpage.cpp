@@ -47,15 +47,15 @@ public:
         imageList(0),
         stack(0),
         wizard(0),
-        info(0),
+        settings(0),
         iface(0)
     {
         wizard = dynamic_cast<JAlbumWizard*>(dialog);
 
         if (wizard)
         {
-            info  = wizard->settings();
-            iface = info->m_iface;
+            settings = wizard->settings();
+            iface    = settings->m_iface;
         }
     }
 
@@ -64,7 +64,7 @@ public:
     DItemsList*     imageList;
     QStackedWidget* stack;
     JAlbumWizard*   wizard;
-    JAlbumSettings*     info;
+    JAlbumSettings* settings;
     DInfoInterface* iface;
 };
 
@@ -120,12 +120,12 @@ void JAlbumSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
 
-    if (d->info->m_getOption == JAlbumSettings::IMAGES)
+    if (d->settings->m_getOption == JAlbumSettings::IMAGES)
     {
         d->imageList->loadImagesFromCurrentSelection();
     }
 
-    d->stack->setCurrentIndex(d->info->m_getOption);
+    d->stack->setCurrentIndex(d->settings->m_getOption);
 }
 
 bool JAlbumSelectionPage::validatePage()
@@ -137,7 +137,7 @@ bool JAlbumSelectionPage::validatePage()
             if (d->iface->albumChooserItems().isEmpty())
                 return false;
 
-            d->info->m_albumList = d->iface->albumChooserItems();
+            d->settings->m_albumList = d->iface->albumChooserItems();
         }
         else
         {
@@ -149,7 +149,7 @@ bool JAlbumSelectionPage::validatePage()
         if (d->imageList->imageUrls().isEmpty())
             return false;
 
-        d->info->m_imageList = d->imageList->imageUrls();
+        d->settings->m_imageList = d->imageList->imageUrls();
     }
 
     return true;

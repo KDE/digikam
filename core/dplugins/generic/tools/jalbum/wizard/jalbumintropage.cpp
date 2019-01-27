@@ -55,7 +55,7 @@ public:
       : imageGetOption(0),
         hbox(0),
         wizard(0),
-        info(0),
+        settings(0),
         iface(0),
         binSearch(0)
     {
@@ -63,15 +63,15 @@ public:
 
         if (wizard)
         {
-            info  = wizard->settings();
-            iface = info->m_iface;
+            settings  = wizard->settings();
+            iface = settings->m_iface;
         }
     }
 
     QComboBox*       imageGetOption;
     DHBox*           hbox;
     JAlbumWizard*    wizard;
-    JAlbumSettings*      info;
+    JAlbumSettings*  settings;
     DInfoInterface*  iface;
     DBinarySearch*   binSearch;
     JalbumJar        jalbumBin;
@@ -88,10 +88,10 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
     desc->setWordWrap(true);
     desc->setOpenExternalLinks(true);
     desc->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome to jAlbum album tool</b></h1></p>"
-                        "<p>This assistant will guide you to export quickly</p><p></p>"
-                        "<p>your images as a jAlbum project.</p>"
-                        "</qt>"));
+                       "<p><h1><b>Welcome to jAlbum album tool</b></h1></p>"
+                       "<p>This assistant will guide you to export quickly</p><p></p>"
+                       "<p>your images as a jAlbum project.</p>"
+                       "</qt>"));
 
     // ComboBox for image selection method
 
@@ -107,10 +107,14 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
     QGroupBox* const binaryBox      = new QGroupBox(vbox);
     QGridLayout* const binaryLayout = new QGridLayout;
     binaryBox->setLayout(binaryLayout);
-    binaryBox->setTitle(i18nc("@title:group", "jAlbum Binary"));
-    d->binSearch = new DBinarySearch(binaryBox);
+    binaryBox->setTitle(i18nc("@title:group", "jAlbum Binaries"));
+    d->binSearch                    = new DBinarySearch(binaryBox);
     d->binSearch->addBinary(d->jalbumBin);
     d->binSearch->addBinary(d->jalbumJava);
+
+    vbox->setStretchFactor(desc,      2);
+    vbox->setStretchFactor(d->hbox,   1);
+    vbox->setStretchFactor(binaryBox, 3);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));
@@ -118,6 +122,7 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
 #ifdef Q_OS_WIN
 #else
     d->binSearch->addDirectory(QLatin1String("/usr/share"));
+    d->binSearch->addDirectory(QLatin1String("/usr/share/jalbum"));
 #endif
 
     connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
@@ -140,7 +145,7 @@ void JAlbumIntroPage::initializePage()
     }
     else
     {
-        d->imageGetOption->setCurrentIndex(d->info->m_getOption);
+        d->imageGetOption->setCurrentIndex(d->settings->m_getOption);
     }
 
     d->binSearch->allBinariesFound();
@@ -149,15 +154,15 @@ void JAlbumIntroPage::initializePage()
 
 bool JAlbumIntroPage::validatePage()
 {
-    d->info->m_getOption = (JAlbumSettings::ImageGetOption)d->imageGetOption->currentIndex();
+    d->settings->m_getOption = (JAlbumSettings::ImageGetOption)d->imageGetOption->currentIndex();
 
     return true;
 }
 
 void JAlbumIntroPage::slotBinariesFound()
 {
-    d->info->m_jalbumUrl = QUrl::fromLocalFile(d->jalbumBin.path());
-    d->info->m_javaUrl   = QUrl::fromLocalFile(d->jalbumJava.path());
+    d->settings->m_jalbumUrl = QUrl::fromLocalFile(d->jalbumBin.path());
+    d->settings->m_javaUrl   = QUrl::fromLocalFile(d->jalbumJava.path());
 
     emit completeChanged();
 }
