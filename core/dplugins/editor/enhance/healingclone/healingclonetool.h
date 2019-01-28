@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamHealingCloneToolPlugin
+namespace DigikamEditorHealingCloneToolPlugin
 {
 
 class HealingCloneTool : public EditorTool
@@ -89,6 +89,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamHealingCloneToolPlugin
+} // namespace DigikamEditorHealingCloneToolPlugin
 
 #endif // DIGIKAM_EDITOR_HEALING_CLONE_TOOL_H

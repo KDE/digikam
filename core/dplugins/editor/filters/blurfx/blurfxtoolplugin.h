@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamBlurFxToolPlugin
+namespace DigikamEditorBlurFxToolPlugin
 {
 
 class BlurFXToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotBlurFX();
 };
 
-} // namespace EditorDigikamBlurFxToolPlugin
+} // namespace DigikamEditorBlurFxToolPlugin
 
 #endif // DIGIKAM_BLURFXTOOL_PLUGIN_H

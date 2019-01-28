@@ -33,7 +33,7 @@ class QWidget;
 
 using namespace Digikam;
 
-namespace EditorDigikamPrintToolPlugin
+namespace DigikamEditorPrintToolPlugin
 {
 
 class DIGIKAM_EXPORT PrintHelper
@@ -54,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamPrintToolPlugin
+} // namespace DigikamEditorPrintToolPlugin
 
 #endif // DIGIKAM_PRINT_HELPER_H

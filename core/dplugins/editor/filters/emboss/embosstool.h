@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamEmbossToolPlugin
+namespace DigikamEditorEmbossToolPlugin
 {
 
 class EmbossTool : public EditorToolThreaded
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamEmbossToolPlugin
+} // namespace DigikamEditorEmbossToolPlugin
 
 #endif // DIGIKAM_EDITOR_EMBOSS_TOOL_H

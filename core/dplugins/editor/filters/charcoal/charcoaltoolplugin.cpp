@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "charcoaltool.h"
 
-namespace EditorDigikamCharcoalToolPlugin
+namespace DigikamEditorCharcoalToolPlugin
 {
 
 CharcoalToolPlugin::CharcoalToolPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void CharcoalToolPlugin::slotCharcoal()
     }
 }
 
-} // namespace EditorDigikamCharcoalToolPlugin
+} // namespace DigikamEditorCharcoalToolPlugin

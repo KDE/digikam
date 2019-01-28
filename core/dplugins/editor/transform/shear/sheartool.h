@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamShearToolPlugin
+namespace DigikamEditorShearToolPlugin
 {
 
 class ShearTool : public EditorToolThreaded
@@ -62,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamShearToolPlugin
+} // namespace DigikamEditorShearToolPlugin
 
 #endif // DIGIKAM_EDITOR_SHEAR_TOOL_H

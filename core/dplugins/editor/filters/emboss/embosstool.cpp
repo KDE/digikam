@@ -45,7 +45,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamEmbossToolPlugin
+namespace DigikamEditorEmbossToolPlugin
 {
 
 class Q_DECL_HIDDEN EmbossTool::Private
@@ -176,4 +176,4 @@ void EmbossTool::setFinalImage()
     iface.setOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace EditorDigikamEmbossToolPlugin
+} // namespace DigikamEditorEmbossToolPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRestorationToolPlugin
+namespace DigikamEditorRestorationToolPlugin
 {
 
 class RestoreToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotRestore();
 };
 
-} // namespace EditorDigikamRestorationToolPlugin
+} // namespace DigikamEditorRestorationToolPlugin
 
 #endif // DIGIKAM_RESTORETOOL_PLUGIN_H

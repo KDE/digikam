@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamColorFxToolPlugin
+namespace DigikamEditorColorFxToolPlugin
 {
 
 class ColorFxTool : public EditorToolThreaded
@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamColorFxToolPlugin
+} // namespace DigikamEditorColorFxToolPlugin
 
 #endif // DIGIKAM_EDITOR_COLOR_FX_TOOL_H

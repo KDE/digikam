@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "localcontrasttool.h"
 
-namespace EditorDigikamLocalContrastToolPlugin
+namespace DigikamEditorLocalContrastToolPlugin
 {
 
 LocalContrastToolPlugin::LocalContrastToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void LocalContrastToolPlugin::slotLocalContrast()
     }
 }
 
-} // namespace EditorDigikamLocalContrastToolPlugin
+} // namespace DigikamEditorLocalContrastToolPlugin

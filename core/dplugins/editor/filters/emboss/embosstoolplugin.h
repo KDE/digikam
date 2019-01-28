@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamEmbossToolPlugin
+namespace DigikamEditorEmbossToolPlugin
 {
 
 class EmbossToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotEmboss();
 };
 
-} // namespace EditorDigikamEmbossToolPlugin
+} // namespace DigikamEditorEmbossToolPlugin
 
 #endif // DIGIKAM_EMBOSSTOOL_PLUGIN_H

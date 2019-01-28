@@ -46,7 +46,7 @@
 #include "imageguidewidget.h"
 #include "imagebrushguidewidget.h"
 
-namespace EditorDigikamHealingCloneToolPlugin
+namespace DigikamEditorHealingCloneToolPlugin
 {
 
 class Q_DECL_HIDDEN HealingCloneTool::Private
@@ -250,4 +250,4 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
     }
 }
 
-} // namespace EditorDigikamHealingCloneToolPlugin
+} // namespace DigikamEditorHealingCloneToolPlugin

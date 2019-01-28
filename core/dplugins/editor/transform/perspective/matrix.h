@@ -26,7 +26,7 @@
 #ifndef DIGIKAM_EDITOR_MATRIX_H
 #define DIGIKAM_EDITOR_MATRIX_H
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class Matrix
@@ -103,6 +103,6 @@ public:
     double coeff[3][3];
 };
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin
 
 #endif // DIGIKAM_EDITOR_MATRIX_H

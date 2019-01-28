@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "oilpainttool.h"
 
-namespace EditorDigikamOilPaintToolPlugin
+namespace DigikamEditorOilPaintToolPlugin
 {
 
 OilPaintToolPlugin::OilPaintToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void OilPaintToolPlugin::slotOilPaint()
     }
 }
 
-} // namespace EditorDigikamOilPaintToolPlugin
+} // namespace DigikamEditorOilPaintToolPlugin

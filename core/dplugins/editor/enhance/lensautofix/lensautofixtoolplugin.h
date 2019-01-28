@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLensAutoFixToolPlugin
+namespace DigikamEditorLensAutoFixToolPlugin
 {
 
 class LensAutoFixToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotLensAutoFix();
 };
 
-} // namespace EditorDigikamLensAutoFixToolPlugin
+} // namespace DigikamEditorLensAutoFixToolPlugin
 
 #endif // DIGIKAM_LENSAUTOFIXTOOL_PLUGIN_H

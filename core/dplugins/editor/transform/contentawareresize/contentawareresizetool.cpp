@@ -54,7 +54,7 @@
 #include "imageguidewidget.h"
 #include "contentawarefilter.h"
 
-namespace EditorDigikamContentAwareResizeToolPlugin
+namespace DigikamEditorContentAwareResizeToolPlugin
 {
 
 class Q_DECL_HIDDEN ContentAwareResizeTool::Private
@@ -858,4 +858,4 @@ bool ContentAwareResizeTool::eventFilter(QObject* obj, QEvent* ev)
     return false;
 }
 
-} // namespace EditorDigikamContentAwareResizeToolPlugin
+} // namespace DigikamEditorContentAwareResizeToolPlugin

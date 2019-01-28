@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamCharcoalToolPlugin
+namespace DigikamEditorCharcoalToolPlugin
 {
 
 class CharcoalToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotCharcoal();
 };
 
-} // namespace EditorDigikamCharcoalToolPlugin
+} // namespace DigikamEditorCharcoalToolPlugin
 
 #endif // DIGIKAM_CHARCOALTOOL_PLUGIN_H

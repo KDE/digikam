@@ -32,7 +32,7 @@ class QRect;
 
 using namespace Digikam;
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class PerspectiveTool : public EditorTool
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin
 
 #endif // DIGIKAM_EDITOR_PERSPECTIVE_TOOL_H

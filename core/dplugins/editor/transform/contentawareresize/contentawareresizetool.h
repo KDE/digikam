@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamContentAwareResizeToolPlugin
+namespace DigikamEditorContentAwareResizeToolPlugin
 {
 
 class ContentAwareResizeTool : public EditorToolThreaded
@@ -75,6 +75,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamContentAwareResizeToolPlugin
+} // namespace DigikamEditorContentAwareResizeToolPlugin
 
 #endif // DIGIKAM_EDITOR_CONTENT_AWARE_RESIZE_TOOL_H

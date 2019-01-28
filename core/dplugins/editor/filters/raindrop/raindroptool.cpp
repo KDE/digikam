@@ -46,7 +46,7 @@
 #include "imageguidewidget.h"
 #include "raindropfilter.h"
 
-namespace EditorDigikamRainDropToolPlugin
+namespace DigikamEditorRainDropToolPlugin
 {
 
 class Q_DECL_HIDDEN RainDropTool::Private
@@ -245,4 +245,4 @@ void RainDropTool::blockWidgetSignals(bool b)
     d->coeffInput->blockSignals(b);
 }
 
-} // namespace EditorDigikamRainDropToolPlugin
+} // namespace DigikamEditorRainDropToolPlugin

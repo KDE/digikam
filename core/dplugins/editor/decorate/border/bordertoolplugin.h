@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamBorderToolPlugin
+namespace DigikamEditorBorderToolPlugin
 {
 
 class BorderToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotBorder();
 };
 
-} // namespace EditorDigikamBorderToolPlugin
+} // namespace DigikamEditorBorderToolPlugin
 
 #endif // DIGIKAM_BORDERTOOL_PLUGIN_H

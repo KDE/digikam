@@ -49,7 +49,7 @@
 #include "perspectivewidget.h"
 #include "dexpanderbox.h"
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class Q_DECL_HIDDEN PerspectiveTool::Private
@@ -280,4 +280,4 @@ void PerspectiveTool::setBackgroundColor(const QColor& bg)
     d->previewWidget->setBackgroundColor(bg);
 }
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin

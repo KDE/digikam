@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamSharpenToolPlugin
+namespace DigikamEditorSharpenToolPlugin
 {
 
 class SharpenToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotSharpen();
 };
 
-} // namespace EditorDigikamSharpenToolPlugin
+} // namespace DigikamEditorSharpenToolPlugin
 
 #endif // DIGIKAM_SHARPENTOOL_PLUGIN_H

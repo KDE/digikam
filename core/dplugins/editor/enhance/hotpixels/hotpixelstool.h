@@ -41,7 +41,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 class HotPixelsTool : public Digikam::EditorToolThreaded
@@ -78,6 +78,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_HOT_PIXELS_TOOL_H

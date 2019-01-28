@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "hotpixelstool.h"
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 HotPixelsToolPlugin::HotPixelsToolPlugin(QObject* const parent)
@@ -112,4 +112,4 @@ void HotPixelsToolPlugin::slotHotPixels()
     }
 }
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin

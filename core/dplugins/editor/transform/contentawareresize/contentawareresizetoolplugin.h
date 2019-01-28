@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamContentAwareResizeToolPlugin
+namespace DigikamEditorContentAwareResizeToolPlugin
 {
 
 class ContentAwareResizeToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotContentAwareResize();
 };
 
-} // namespace EditorDigikamContentAwareResizeToolPlugin
+} // namespace DigikamEditorContentAwareResizeToolPlugin
 
 #endif // DIGIKAM_CONTENTAWARERESIZETOOL_PLUGIN_H

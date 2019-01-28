@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamPrintToolPlugin
+namespace DigikamEditorPrintToolPlugin
 {
 
 class PrintToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotPrint();
 };
 
-} // namespace EditorDigikamPrintToolPlugin
+} // namespace DigikamEditorPrintToolPlugin
 
 #endif // DIGIKAM_PRINTTOOL_PLUGIN_H

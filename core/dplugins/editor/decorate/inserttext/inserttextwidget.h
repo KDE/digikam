@@ -47,7 +47,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamInsertTextToolPlugin
+namespace DigikamEditorInsertTextToolPlugin
 {
 
 class InsertTextWidget : public QWidget
@@ -123,6 +123,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamInsertTextToolPlugin
+} // namespace DigikamEditorInsertTextToolPlugin
 
 #endif // DIGIKAM_EDITOR_INSERT_TEXT_WIDGET_H

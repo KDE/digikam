@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "raindroptool.h"
 
-namespace EditorDigikamRainDropToolPlugin
+namespace DigikamEditorRainDropToolPlugin
 {
 
 RainDropToolPlugin::RainDropToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void RainDropToolPlugin::slotRainDrop()
     }
 }
 
-} // namespace EditorDigikamRainDropToolPlugin
+} // namespace DigikamEditorRainDropToolPlugin

@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamTextureToolPlugin
+namespace DigikamEditorTextureToolPlugin
 {
 
 class TextureTool : public EditorToolThreaded
@@ -70,6 +70,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamTextureToolPlugin
+} // namespace DigikamEditorTextureToolPlugin
 
 #endif // DIGIKAM_EDITOR_TEXTURE_TOOL_H

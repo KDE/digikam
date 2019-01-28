@@ -49,7 +49,7 @@
 #include "editorwindow.h"
 #include "ui_printoptionspage.h"
 
-namespace EditorDigikamPrintToolPlugin
+namespace DigikamEditorPrintToolPlugin
 {
 
 static inline double unitToInches(PrintOptionsPage::Unit unit)

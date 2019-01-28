@@ -28,7 +28,7 @@
 
 #include <QPoint>
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class Triangle
@@ -54,6 +54,6 @@ private:
     float m_c;
 };
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin
 
 #endif // DIGIKAM_EDITOR_TRIANGLE_H

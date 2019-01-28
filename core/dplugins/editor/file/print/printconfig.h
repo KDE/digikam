@@ -38,7 +38,7 @@
 #include "digikam_export.h"
 #include "printoptionspage.h"
 
-namespace EditorDigikamPrintToolPlugin
+namespace DigikamEditorPrintToolPlugin
 {
 
 class DIGIKAM_EXPORT PrintConfig : public KConfigSkeleton
@@ -167,6 +167,6 @@ protected:
     bool   mPrintAutoRotate;
 };
 
-} // namespace EditorDigikamPrintToolPlugin
+} // namespace DigikamEditorPrintToolPlugin
 
 #endif // DIGIKAM_PRINT_CONFIG_H

@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "inserttexttool.h"
 
-namespace EditorDigikamInsertTextToolPlugin
+namespace DigikamEditorInsertTextToolPlugin
 {
 
 InsertTextToolPlugin::InsertTextToolPlugin(QObject* const parent)
@@ -111,4 +111,4 @@ void InsertTextToolPlugin::slotInsertText()
     }
 }
 
-} // namespace EditorDigikamInsertTextToolPlugin
+} // namespace DigikamEditorInsertTextToolPlugin

@@ -45,7 +45,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamCharcoalToolPlugin
+namespace DigikamEditorCharcoalToolPlugin
 {
 
 class Q_DECL_HIDDEN CharcoalTool::Private
@@ -198,4 +198,4 @@ void CharcoalTool::setFinalImage()
     iface.setOriginal(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace EditorDigikamCharcoalToolPlugin
+} // namespace DigikamEditorCharcoalToolPlugin

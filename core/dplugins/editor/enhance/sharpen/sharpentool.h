@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamSharpenToolPlugin
+namespace DigikamEditorSharpenToolPlugin
 {
 
 class SharpenTool : public EditorToolThreaded
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamSharpenToolPlugin
+} // namespace DigikamEditorSharpenToolPlugin
 
 #endif // DIGIKAM_EDITOR_SHARPEN_TOOL_H

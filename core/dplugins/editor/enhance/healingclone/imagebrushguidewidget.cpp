@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 
-namespace EditorDigikamHealingCloneToolPlugin
+namespace DigikamEditorHealingCloneToolPlugin
 {
 
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
@@ -95,4 +95,4 @@ void ImageBrushGuideWidget::slotSetSourcePoint()
     srcSet = true;
 }
 
-} // namespace EditorDigikamHealingCloneToolPlugin
+} // namespace DigikamEditorHealingCloneToolPlugin

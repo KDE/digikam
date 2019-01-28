@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamResizeToolPlugin
+namespace DigikamEditorResizeToolPlugin
 {
 
 class ResizeTool : public EditorToolThreaded
@@ -71,6 +71,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamResizeToolPlugin
+} // namespace DigikamEditorResizeToolPlugin
 
 #endif // DIGIKAM_EDITOR_RESIZE_TOOL_H

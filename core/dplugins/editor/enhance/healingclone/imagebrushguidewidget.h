@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamHealingCloneToolPlugin
+namespace DigikamEditorHealingCloneToolPlugin
 {
 
 class ImageBrushGuideWidget : public ImageGuideWidget
@@ -73,6 +73,6 @@ private:
     QPoint dst;
 };
 
-} // namespace EditorDigikamHealingCloneToolPlugin
+} // namespace DigikamEditorHealingCloneToolPlugin
 
 #endif // DIGIKAM_IMAGE_BRUSH_GUIDE_WIDGET_H

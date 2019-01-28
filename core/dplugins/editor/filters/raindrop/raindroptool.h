@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRainDropToolPlugin
+namespace DigikamEditorRainDropToolPlugin
 {
 
 class RainDropTool : public EditorToolThreaded
@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamRainDropToolPlugin
+} // namespace DigikamEditorRainDropToolPlugin
 
 #endif // DIGIKAM_EDITOR_RAIN_DROP_TOOL_H

@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "antivignettingtool.h"
 
-namespace EditorDigikamAntivignettingToolPlugin
+namespace DigikamEditorAntivignettingToolPlugin
 {
 
 AntiVignettingToolPlugin::AntiVignettingToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void AntiVignettingToolPlugin::slotAntiVignetting()
     }
 }
 
-} // namespace EditorDigikamAntivignettingToolPlugin
+} // namespace DigikamEditorAntivignettingToolPlugin

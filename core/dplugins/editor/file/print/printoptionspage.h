@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamPrintToolPlugin
+namespace DigikamEditorPrintToolPlugin
 {
 
 class PrintOptionsPage : public QWidget
@@ -91,6 +91,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamPrintToolPlugin
+} // namespace DigikamEditorPrintToolPlugin
 
 #endif // DIGIKAM_PRINT_OPTIONS_PAGE_H

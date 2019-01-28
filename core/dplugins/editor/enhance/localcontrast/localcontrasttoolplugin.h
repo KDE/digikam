@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLocalContrastToolPlugin
+namespace DigikamEditorLocalContrastToolPlugin
 {
 
 class LocalContrastToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotLocalContrast();
 };
 
-} // namespace EditorDigikamLocalContrastToolPlugin
+} // namespace DigikamEditorLocalContrastToolPlugin
 
 #endif // DIGIKAM_LOCALCONTRASTTOOL_PLUGIN_H

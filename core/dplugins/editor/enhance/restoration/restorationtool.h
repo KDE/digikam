@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRestorationToolPlugin
+namespace DigikamEditorRestorationToolPlugin
 {
 
 class RestorationTool : public EditorToolThreaded
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamRestorationToolPlugin
+} // namespace DigikamEditorRestorationToolPlugin
 
 #endif // DIGIKAM_EDITOR_RESTORATION_TOOL_H

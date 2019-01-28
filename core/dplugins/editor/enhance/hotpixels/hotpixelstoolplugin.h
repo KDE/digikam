@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 class HotPixelsToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotHotPixels();
 };
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin
 
 #endif // DIGIKAM_HOTPIXELSTOOL_PLUGIN_H

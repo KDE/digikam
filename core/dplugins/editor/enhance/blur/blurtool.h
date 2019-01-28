@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamBlurToolPlugin
+namespace DigikamEditorBlurToolPlugin
 {
 
 class BlurTool : public EditorToolThreaded
@@ -62,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamBlurToolPlugin
+} // namespace DigikamEditorBlurToolPlugin
 
 #endif // DIGIKAM_EDITOR_BLUR_TOOL_H

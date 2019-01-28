@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamInsertTextToolPlugin
+namespace DigikamEditorInsertTextToolPlugin
 {
 
 class InsertTextToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotInsertText();
 };
 
-} // namespace EditorDigikamInsertTextToolPlugin
+} // namespace DigikamEditorInsertTextToolPlugin
 
 #endif // DIGIKAM_INSERTTEXTTOOL_PLUGIN_H

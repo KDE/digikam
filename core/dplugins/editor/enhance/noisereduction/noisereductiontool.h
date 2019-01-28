@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamNoiseReductionToolPlugin
+namespace DigikamEditorNoiseReductionToolPlugin
 {
 
 class NoiseReductionTool : public EditorToolThreaded
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamNoiseReductionToolPlugin
+} // namespace DigikamEditorNoiseReductionToolPlugin
 
 #endif // DIGIKAM_EDITOR_NOISE_REDUCTION_TOOL_H

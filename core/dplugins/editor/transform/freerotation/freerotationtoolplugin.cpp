@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "freerotationtool.h"
 
-namespace EditorDigikamFreeRotationToolPlugin
+namespace DigikamEditorFreeRotationToolPlugin
 {
 
 FreeRotationToolPlugin::FreeRotationToolPlugin(QObject* const parent)
@@ -141,4 +141,4 @@ void FreeRotationToolPlugin::slotFreeRotation()
     }
 }
 
-} // namespace EditorDigikamFreeRotationToolPlugin
+} // namespace DigikamEditorFreeRotationToolPlugin

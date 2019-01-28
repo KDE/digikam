@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "contentawareresizetool.h"
 
-namespace EditorDigikamContentAwareResizeToolPlugin
+namespace DigikamEditorContentAwareResizeToolPlugin
 {
 
 ContentAwareResizeToolPlugin::ContentAwareResizeToolPlugin(QObject* const parent)
@@ -113,4 +113,4 @@ void ContentAwareResizeToolPlugin::slotContentAwareResize()
     }
 }
 
-} // namespace EditorDigikamContentAwareResizeToolPlugin
+} // namespace DigikamEditorContentAwareResizeToolPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamDistortionFxToolPlugin
+namespace DigikamEditorDistortionFxToolPlugin
 {
 
 class DistortionFXToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotDistortionFX();
 };
 
-} // namespace EditorDigikamDistortionFxToolPlugin
+} // namespace DigikamEditorDistortionFxToolPlugin
 
 #endif // DIGIKAM_DISTORTIONFXTOOL_PLUGIN_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRainDropToolPlugin
+namespace DigikamEditorRainDropToolPlugin
 {
 
 class RainDropToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotRainDrop();
 };
 
-} // namespace EditorDigikamRainDropToolPlugin
+} // namespace DigikamEditorRainDropToolPlugin
 
 #endif // DIGIKAM_RAINDROPTOOL_PLUGIN_H

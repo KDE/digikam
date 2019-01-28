@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRedEyeToolPlugin
+namespace DigikamEditorRedEyeToolPlugin
 {
 
 class RedEyeToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotRedEye();
 };
 
-} // namespace EditorDigikamRedEyeToolPlugin
+} // namespace DigikamEditorRedEyeToolPlugin
 
 #endif // DIGIKAM_REDEYETOOL_PLUGIN_H

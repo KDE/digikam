@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRatioCropToolPlugin
+namespace DigikamEditorRatioCropToolPlugin
 {
 
 class RatioCropToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotRatioCrop();
 };
 
-} // namespace EditorDigikamRatioCropToolPlugin
+} // namespace DigikamEditorRatioCropToolPlugin
 
 #endif // DIGIKAM_RATIOCROPTOOL_PLUGIN_H

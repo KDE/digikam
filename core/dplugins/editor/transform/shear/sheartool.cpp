@@ -48,7 +48,7 @@
 #include "shearfilter.h"
 #include "dexpanderbox.h"
 
-namespace EditorDigikamShearToolPlugin
+namespace DigikamEditorShearToolPlugin
 {
 
 class Q_DECL_HIDDEN ShearTool::Private
@@ -337,4 +337,4 @@ void ShearTool::setFinalImage()
     iface.setOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }
 
-} // namespace EditorDigikamShearToolPlugin
+} // namespace DigikamEditorShearToolPlugin

@@ -44,7 +44,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamNoiseReductionToolPlugin
+namespace DigikamEditorNoiseReductionToolPlugin
 {
 
 class Q_DECL_HIDDEN NoiseReductionTool::Private
@@ -174,4 +174,4 @@ void NoiseReductionTool::analyserCompleted()
     slotPreview();
 }
 
-} // namespace EditorDigikamNoiseReductionToolPlugin
+} // namespace DigikamEditorNoiseReductionToolPlugin

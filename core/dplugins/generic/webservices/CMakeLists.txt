@@ -34,7 +34,7 @@ if(KF5KIO_FOUND)
     add_subdirectory(filetransfer)
 
 #    Not yet finalized
-#    add_subdirectory(debianscreenshots)
+    add_subdirectory(debianscreenshots)
 endif()
 
 # Not yet finalized

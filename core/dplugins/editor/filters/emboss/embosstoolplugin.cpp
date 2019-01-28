@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "embosstool.h"
 
-namespace EditorDigikamEmbossToolPlugin
+namespace DigikamEditorEmbossToolPlugin
 {
 
 EmbossToolPlugin::EmbossToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void EmbossToolPlugin::slotEmboss()
     }
 }
 
-} // namespace EditorDigikamEmbossToolPlugin
+} // namespace DigikamEditorEmbossToolPlugin

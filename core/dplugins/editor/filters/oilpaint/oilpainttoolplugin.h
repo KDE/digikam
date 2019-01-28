@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamOilPaintToolPlugin
+namespace DigikamEditorOilPaintToolPlugin
 {
 
 class OilPaintToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotOilPaint();
 };
 
-} // namespace EditorDigikamOilPaintToolPlugin
+} // namespace DigikamEditorOilPaintToolPlugin
 
 #endif // DIGIKAM_OILPAINTTOOL_PLUGIN_H

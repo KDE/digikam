@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "lensautofixtool.h"
 
-namespace EditorDigikamLensAutoFixToolPlugin
+namespace DigikamEditorLensAutoFixToolPlugin
 {
 
 LensAutoFixToolPlugin::LensAutoFixToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void LensAutoFixToolPlugin::slotLensAutoFix()
     }
 }
 
-} // namespace EditorDigikamLensAutoFixToolPlugin
+} // namespace DigikamEditorLensAutoFixToolPlugin

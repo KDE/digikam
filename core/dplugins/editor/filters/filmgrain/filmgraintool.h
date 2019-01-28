@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamFilmGrainToolPlugin
+namespace DigikamEditorFilmGrainToolPlugin
 {
 
 class FilmGrainTool : public EditorToolThreaded
@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamFilmGrainToolPlugin
+} // namespace DigikamEditorFilmGrainToolPlugin
 
 #endif // DIGIKAM_EDITOR_FILM_GRAIN_TOOL_H

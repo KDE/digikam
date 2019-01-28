@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "filmgraintool.h"
 
-namespace EditorDigikamFilmGrainToolPlugin
+namespace DigikamEditorFilmGrainToolPlugin
 {
 
 FilmGrainToolPlugin::FilmGrainToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void FilmGrainToolPlugin::slotFilmGrain()
     }
 }
 
-} // namespace EditorDigikamFilmGrainToolPlugin
+} // namespace DigikamEditorFilmGrainToolPlugin

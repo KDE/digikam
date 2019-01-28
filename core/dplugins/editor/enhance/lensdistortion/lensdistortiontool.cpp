@@ -52,7 +52,7 @@
 #include "imageguidewidget.h"
 #include "lensdistortionfilter.h"
 
-namespace EditorDigikamLensDistortionToolPlugin
+namespace DigikamEditorLensDistortionToolPlugin
 {
 
 class Q_DECL_HIDDEN LensDistortionTool::Private
@@ -326,4 +326,4 @@ void LensDistortionTool::blockWidgetSignals(bool b)
     d->brightenInput->blockSignals(b);
 }
 
-} // namespace EditorDigikamLensDistortionToolPlugin
+} // namespace DigikamEditorLensDistortionToolPlugin

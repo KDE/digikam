@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamDistortionFxToolPlugin
+namespace DigikamEditorDistortionFxToolPlugin
 {
 
 class DistortionFXTool : public EditorToolThreaded
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamDistortionFxToolPlugin
+} // namespace DigikamEditorDistortionFxToolPlugin
 
 #endif // DIGIKAM_EDITOR_DISTORTION_FX_TOOL_H

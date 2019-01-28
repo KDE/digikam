@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRedEyeToolPlugin
+namespace DigikamEditorRedEyeToolPlugin
 {
 
 class RedEyeTool : public EditorToolThreaded
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamRedEyeToolPlugin
+} // namespace DigikamEditorRedEyeToolPlugin
 
 #endif // DIGIKAM_EDITOR_RED_EYE_TOOL_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamColorFxToolPlugin
+namespace DigikamEditorColorFxToolPlugin
 {
 
 class ColorFXToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotColorFX();
 };
 
-} // namespace EditorDigikamColorFxToolPlugin
+} // namespace DigikamEditorColorFxToolPlugin
 
 #endif // DIGIKAM_COLORFXTOOL_PLUGIN_H

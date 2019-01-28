@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamFilmGrainToolPlugin
+namespace DigikamEditorFilmGrainToolPlugin
 {
 
 class FilmGrainToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotFilmGrain();
 };
 
-} // namespace EditorDigikamFilmGrainToolPlugin
+} // namespace DigikamEditorFilmGrainToolPlugin
 
 #endif // DIGIKAM_FILMGRAINTOOL_PLUGIN_H

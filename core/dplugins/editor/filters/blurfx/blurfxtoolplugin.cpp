@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "blurfxtool.h"
 
-namespace EditorDigikamBlurFxToolPlugin
+namespace DigikamEditorBlurFxToolPlugin
 {
 
 BlurFXToolPlugin::BlurFXToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void BlurFXToolPlugin::slotBlurFX()
     }
 }
 
-} // namespace EditorDigikamBlurFxToolPlugin
+} // namespace DigikamEditorBlurFxToolPlugin

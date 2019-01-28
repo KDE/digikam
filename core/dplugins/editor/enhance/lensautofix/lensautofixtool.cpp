@@ -51,7 +51,7 @@
 #include "lensfuncameraselector.h"
 #include "dexpanderbox.h"
 
-namespace EditorDigikamLensAutoFixToolPlugin
+namespace DigikamEditorLensAutoFixToolPlugin
 {
 
 class Q_DECL_HIDDEN LensAutoFixTool::Private
@@ -256,4 +256,4 @@ void LensAutoFixTool::setFinalImage()
     iface.setOriginalMetadata(data);
 }
 
-} // namespace EditorDigikamLensAutoFixToolPlugin
+} // namespace DigikamEditorLensAutoFixToolPlugin

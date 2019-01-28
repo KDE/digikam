@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRatioCropToolPlugin
+namespace DigikamEditorRatioCropToolPlugin
 {
 
 class ImageSelectionWidget : public QWidget
@@ -191,6 +191,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamRatioCropToolPlugin
+} // namespace DigikamEditorRatioCropToolPlugin
 
 #endif // DIGIKAM_EDITOR_IMAGE_SELECTION_WIDGET_H

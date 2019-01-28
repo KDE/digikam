@@ -54,7 +54,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 class Q_DECL_HIDDEN HotPixelsTool::Private
@@ -295,4 +295,4 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const QUrl& bl
     slotPreview();
 }
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin

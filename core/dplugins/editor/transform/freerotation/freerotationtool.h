@@ -35,7 +35,7 @@ class QString;
 
 using namespace Digikam;
 
-namespace EditorDigikamFreeRotationToolPlugin
+namespace DigikamEditorFreeRotationToolPlugin
 {
 
 class FreeRotationTool : public EditorToolThreaded
@@ -83,6 +83,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamFreeRotationToolPlugin
+} // namespace DigikamEditorFreeRotationToolPlugin
 
 #endif // DIGIKAM_EDITOR_FREE_ROTATION_TOOL_H

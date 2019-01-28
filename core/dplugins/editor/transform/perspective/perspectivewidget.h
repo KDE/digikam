@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class PerspectiveWidget : public QWidget
@@ -114,6 +114,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin
 
 #endif // DIGIKAM_EDITOR_PERSPECTIVE_WIDGET_H

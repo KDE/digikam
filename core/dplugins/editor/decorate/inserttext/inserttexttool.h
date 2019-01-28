@@ -33,7 +33,7 @@ class QFont;
 
 using namespace Digikam;
 
-namespace EditorDigikamInsertTextToolPlugin
+namespace DigikamEditorInsertTextToolPlugin
 {
 
 class InsertTextTool : public EditorTool
@@ -69,6 +69,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamInsertTextToolPlugin
+} // namespace DigikamEditorInsertTextToolPlugin
 
 #endif // DIGIKAM_EDITOR_INSERT_TEXT_TOOL_H

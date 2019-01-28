@@ -32,7 +32,7 @@
 
 #include <cstring>
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 static double identityMatrix[3][3] = {
@@ -175,4 +175,4 @@ double Matrix::determinant() const
     return determinant;
 }
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin

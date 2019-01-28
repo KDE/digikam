@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamBorderToolPlugin
+namespace DigikamEditorBorderToolPlugin
 {
 
 class BorderTool : public EditorToolThreaded
@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamBorderToolPlugin
+} // namespace DigikamEditorBorderToolPlugin
 
 #endif // DIGIKAM_EDITOR_BORDER_TOOL_H

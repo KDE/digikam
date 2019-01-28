@@ -52,7 +52,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamDistortionFxToolPlugin
+namespace DigikamEditorDistortionFxToolPlugin
 {
 
 class Q_DECL_HIDDEN DistortionFXTool::Private
@@ -355,4 +355,4 @@ void DistortionFXTool::blockWidgetSignals(bool b)
     d->iterationInput->blockSignals(b);
 }
 
-} // namespace EditorDigikamDistortionFxToolPlugin
+} // namespace DigikamEditorDistortionFxToolPlugin

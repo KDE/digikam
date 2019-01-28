@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "redeyetool.h"
 
-namespace EditorDigikamRedEyeToolPlugin
+namespace DigikamEditorRedEyeToolPlugin
 {
 
 RedEyeToolPlugin::RedEyeToolPlugin(QObject* const parent)
@@ -112,4 +112,4 @@ void RedEyeToolPlugin::slotRedEye()
     }
 }
 
-} // namespace EditorDigikamRedEyeToolPlugin
+} // namespace DigikamEditorRedEyeToolPlugin

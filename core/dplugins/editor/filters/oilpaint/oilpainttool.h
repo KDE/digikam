@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamOilPaintToolPlugin
+namespace DigikamEditorOilPaintToolPlugin
 {
 
 class OilPaintTool : public EditorToolThreaded
@@ -62,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamOilPaintToolPlugin
+} // namespace DigikamEditorOilPaintToolPlugin
 
 #endif // DIGIKAM_EDITOR_OIL_PAINT_TOOL_H

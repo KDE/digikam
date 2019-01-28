@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "colorfxtool.h"
 
-namespace EditorDigikamColorFxToolPlugin
+namespace DigikamEditorColorFxToolPlugin
 {
 
 ColorFXToolPlugin::ColorFXToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void ColorFXToolPlugin::slotColorFX()
     }
 }
 
-} // namespace EditorDigikamColorFxToolPlugin
+} // namespace DigikamEditorColorFxToolPlugin

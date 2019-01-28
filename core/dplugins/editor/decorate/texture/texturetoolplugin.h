@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamTextureToolPlugin
+namespace DigikamEditorTextureToolPlugin
 {
 
 class TextureToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotTexture();
 };
 
-} // namespace EditorDigikamTextureToolPlugin
+} // namespace DigikamEditorTextureToolPlugin
 
 #endif // DIGIKAM_TEXTURETOOL_PLUGIN_H

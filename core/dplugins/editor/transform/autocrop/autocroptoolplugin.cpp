@@ -35,7 +35,7 @@
 #include "imageiface.h"
 #include "autocrop.h"
 
-namespace EditorDigikamAutoCropToolPlugin
+namespace DigikamEditorAutoCropToolPlugin
 {
 
 AutoCropToolPlugin::AutoCropToolPlugin(QObject* const parent)
@@ -114,4 +114,4 @@ void AutoCropToolPlugin::slotAutoCrop()
     QApplication::restoreOverrideCursor();
 }
 
-} // namespace EditorDigikamAutoCropToolPlugin
+} // namespace DigikamEditorAutoCropToolPlugin

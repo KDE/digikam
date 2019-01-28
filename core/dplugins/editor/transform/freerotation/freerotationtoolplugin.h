@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamFreeRotationToolPlugin
+namespace DigikamEditorFreeRotationToolPlugin
 {
 
 class FreeRotationToolPlugin : public DPluginEditor
@@ -65,6 +65,6 @@ private Q_SLOTS:
     void slotFreeRotation();
 };
 
-} // namespace EditorDigikamFreeRotationToolPlugin
+} // namespace DigikamEditorFreeRotationToolPlugin
 
 #endif // DIGIKAM_FREEROTATIONTOOL_PLUGIN_H

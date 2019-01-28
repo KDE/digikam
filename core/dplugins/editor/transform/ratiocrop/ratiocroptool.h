@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamRatioCropToolPlugin
+namespace DigikamEditorRatioCropToolPlugin
 {
 
 class RatioCropTool : public EditorTool
@@ -91,6 +91,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamRatioCropToolPlugin
+} // namespace DigikamEditorRatioCropToolPlugin
 
 #endif // DIGIKAM_EDITOR_RATIO_CROP_TOOL_H

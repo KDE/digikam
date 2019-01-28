@@ -56,7 +56,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamColorFxToolPlugin
+namespace DigikamEditorColorFxToolPlugin
 {
 
 class Q_DECL_HIDDEN ColorFxTool::Private
@@ -235,4 +235,4 @@ void ColorFxTool::setFinalImage()
     iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace EditorDigikamColorFxToolPlugin
+} // namespace DigikamEditorColorFxToolPlugin

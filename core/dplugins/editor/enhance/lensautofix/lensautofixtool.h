@@ -28,7 +28,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLensAutoFixToolPlugin
+namespace DigikamEditorLensAutoFixToolPlugin
 {
 
 class LensAutoFixTool : public EditorToolThreaded
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamLensAutoFixToolPlugin
+} // namespace DigikamEditorLensAutoFixToolPlugin
 
 #endif // DIGIKAM_EDITOR_LENS_AUTO_FIX_TOOL_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamCharcoalToolPlugin
+namespace DigikamEditorCharcoalToolPlugin
 {
 
 class CharcoalTool : public EditorToolThreaded
@@ -62,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamCharcoalToolPlugin
+} // namespace DigikamEditorCharcoalToolPlugin
 
 #endif // DIGIKAM_EDITOR_CHARCOAL_TOOL_H

@@ -46,7 +46,7 @@
 #include "imageregionwidget.h"
 #include "oilpaintfilter.h"
 
-namespace EditorDigikamOilPaintToolPlugin
+namespace DigikamEditorOilPaintToolPlugin
 {
 
 class Q_DECL_HIDDEN OilPaintTool::Private
@@ -199,4 +199,4 @@ void OilPaintTool::setFinalImage()
     iface.setOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace EditorDigikamOilPaintToolPlugin
+} // namespace DigikamEditorOilPaintToolPlugin

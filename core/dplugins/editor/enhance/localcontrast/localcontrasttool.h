@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLocalContrastToolPlugin
+namespace DigikamEditorLocalContrastToolPlugin
 {
 
 class LocalContrastTool : public EditorToolThreaded
@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamLocalContrastToolPlugin
+} // namespace DigikamEditorLocalContrastToolPlugin
 
 #endif // DIGIKAM_EDITOR_LOCAL_CONTRAST_TOOL_H

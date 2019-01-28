@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamAntivignettingToolPlugin
+namespace DigikamEditorAntivignettingToolPlugin
 {
 
 class AntiVignettingToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotAntiVignetting();
 };
 
-} // namespace EditorDigikamAntivignettingToolPlugin
+} // namespace DigikamEditorAntivignettingToolPlugin
 
 #endif // DIGIKAM_ANTIVIGNETTINGTOOL_PLUGIN_H

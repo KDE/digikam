@@ -52,7 +52,7 @@
 #include "dactivelabel.h"
 #include "dfiledialog.h"
 
-namespace EditorDigikamRestorationToolPlugin
+namespace DigikamEditorRestorationToolPlugin
 {
 
 class Q_DECL_HIDDEN RestorationTool::Private
@@ -412,4 +412,4 @@ void RestorationTool::slotSaveAsSettings()
     file.close();
 }
 
-} // namespace EditorDigikamRestorationToolPlugin
+} // namespace DigikamEditorRestorationToolPlugin

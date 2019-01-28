@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamHealingCloneToolPlugin
+namespace DigikamEditorHealingCloneToolPlugin
 {
 
 class HealingCloneToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotHealingClone();
 };
 
-} // namespace EditorDigikamHealingCloneToolPlugin
+} // namespace DigikamEditorHealingCloneToolPlugin
 
 #endif // DIGIKAM_HEALINGCLONETOOL_PLUGIN_H

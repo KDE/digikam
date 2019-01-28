@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamShearToolPlugin
+namespace DigikamEditorShearToolPlugin
 {
 
 class ShearToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotShear();
 };
 
-} // namespace EditorDigikamShearToolPlugin
+} // namespace DigikamEditorShearToolPlugin
 
 #endif // DIGIKAM_SHEARTOOL_PLUGIN_H

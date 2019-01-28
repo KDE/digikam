@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "distortionfxtool.h"
 
-namespace EditorDigikamDistortionFxToolPlugin
+namespace DigikamEditorDistortionFxToolPlugin
 {
 
 DistortionFXToolPlugin::DistortionFXToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void DistortionFXToolPlugin::slotDistortionFX()
     }
 }
 
-} // namespace EditorDigikamDistortionFxToolPlugin
+} // namespace DigikamEditorDistortionFxToolPlugin

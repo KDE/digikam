@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamAutoCropToolPlugin
+namespace DigikamEditorAutoCropToolPlugin
 {
 
 class AutoCropToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotAutoCrop();
 };
 
-} // namespace EditorDigikamAutoCropToolPlugin
+} // namespace DigikamEditorAutoCropToolPlugin
 
 #endif // DIGIKAM_AUTOCROPTOOL_PLUGIN_H

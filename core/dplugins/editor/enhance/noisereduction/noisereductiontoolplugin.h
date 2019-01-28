@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamNoiseReductionToolPlugin
+namespace DigikamEditorNoiseReductionToolPlugin
 {
 
 class LocalContrastToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotNoiseReduction();
 };
 
-} // namespace EditorDigikamNoiseReductionToolPlugin
+} // namespace DigikamEditorNoiseReductionToolPlugin
 
 #endif // DIGIKAM_NOISEREDUCTIONTTOOL_PLUGIN_H

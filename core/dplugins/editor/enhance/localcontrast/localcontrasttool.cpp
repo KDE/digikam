@@ -51,7 +51,7 @@
 #include "localcontrastsettings.h"
 #include "localcontrastcontainer.h"
 
-namespace EditorDigikamLocalContrastToolPlugin
+namespace DigikamEditorLocalContrastToolPlugin
 {
 
 class Q_DECL_HIDDEN LocalContrastTool::Private
@@ -180,4 +180,4 @@ void LocalContrastTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-} // namespace EditorDigikamLocalContrastToolPlugin
+} // namespace DigikamEditorLocalContrastToolPlugin

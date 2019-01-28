@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class PerspectiveToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotPerspective();
 };
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin
 
 #endif // DIGIKAM_PERSPECTIVETOOL_PLUGIN_H

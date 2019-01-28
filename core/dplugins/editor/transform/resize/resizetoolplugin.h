@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamResizeToolPlugin
+namespace DigikamEditorResizeToolPlugin
 {
 
 class ResizeToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotResize();
 };
 
-} // namespace EditorDigikamResizeToolPlugin
+} // namespace DigikamEditorResizeToolPlugin
 
 #endif // DIGIKAM_RESIZETOOL_PLUGIN_H

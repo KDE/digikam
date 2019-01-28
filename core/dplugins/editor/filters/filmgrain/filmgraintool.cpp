@@ -48,7 +48,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamFilmGrainToolPlugin
+namespace DigikamEditorFilmGrainToolPlugin
 {
 
 class Q_DECL_HIDDEN FilmGrainTool::Private
@@ -160,4 +160,4 @@ void FilmGrainTool::renderingFinished()
     toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
-} // namespace EditorDigikamFilmGrainToolPlugin
+} // namespace DigikamEditorFilmGrainToolPlugin

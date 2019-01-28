@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamAntivignettingToolPlugin
+namespace DigikamEditorAntivignettingToolPlugin
 {
 
 class AntiVignettingTool : public EditorToolThreaded
@@ -62,6 +62,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamAntivignettingToolPlugin
+} // namespace DigikamEditorAntivignettingToolPlugin
 
 #endif // DIGIKAM_EDITOR_ANTI_VIGNETTING_TOOL_H

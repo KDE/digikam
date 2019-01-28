@@ -54,7 +54,7 @@
 #include "redeyecorrectionsettings.h"
 #include "imageregionwidget.h"
 
-namespace EditorDigikamRedEyeToolPlugin
+namespace DigikamEditorRedEyeToolPlugin
 {
 
 class Q_DECL_HIDDEN RedEyeTool::Private
@@ -184,4 +184,4 @@ void RedEyeTool::setFinalImage()
     iface.setOriginal(i18n("Red Eyes Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-} // namespace EditorDigikamRedEyeToolPlugin
+} // namespace DigikamEditorRedEyeToolPlugin

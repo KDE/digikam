@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 class HotPixelFixer : public DImgThreadedFilter
@@ -122,6 +122,6 @@ private:
     QList<HotPixel> m_hpList;
 };
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin
 
 #endif // DIGIKAM_EDITOR_HOT_PIXEL_FIXER_H

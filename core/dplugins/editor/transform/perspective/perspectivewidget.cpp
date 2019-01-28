@@ -49,7 +49,7 @@
 #include "triangle.h"
 #include "pixelsaliasfilter.h"
 
-namespace EditorDigikamPerspectiveToolPlugin
+namespace DigikamEditorPerspectiveToolPlugin
 {
 
 class Q_DECL_HIDDEN PerspectiveWidget::Private
@@ -1024,4 +1024,4 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-} // namespace EditorDigikamPerspectiveToolPlugin
+} // namespace DigikamEditorPerspectiveToolPlugin

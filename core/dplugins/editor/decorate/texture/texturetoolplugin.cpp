@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "texturetool.h"
 
-namespace EditorDigikamTextureToolPlugin
+namespace DigikamEditorTextureToolPlugin
 {
 
 TextureToolPlugin::TextureToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void TextureToolPlugin::slotTexture()
     }
 }
 
-} // namespace EditorDigikamTextureToolPlugin
+} // namespace DigikamEditorTextureToolPlugin

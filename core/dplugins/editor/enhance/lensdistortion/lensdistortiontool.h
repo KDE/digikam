@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLensDistortionToolPlugin
+namespace DigikamEditorLensDistortionToolPlugin
 {
 
 class LensDistortionTool : public EditorToolThreaded
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-} // namespace EditorDigikamLensDistortionToolPlugin
+} // namespace DigikamEditorLensDistortionToolPlugin
 
 #endif // DIGIKAM_EDITOR_LENS_DISTORTION_TOOL_H

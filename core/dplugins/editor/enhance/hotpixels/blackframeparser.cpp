@@ -50,7 +50,7 @@
 
 #include "digikam_debug.h"
 
-namespace EditorDigikamHotPixelsToolPlugin
+namespace DigikamEditorHotPixelsToolPlugin
 {
 
 BlackFrameParser::BlackFrameParser(QObject* const parent)
@@ -239,4 +239,4 @@ void BlackFrameParser::validateAndConsolidate(HotPixel* const a, HotPixel* const
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }
 
-} // namespace EditorDigikamHotPixelsToolPlugin
+} // namespace DigikamEditorHotPixelsToolPlugin

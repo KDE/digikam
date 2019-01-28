@@ -35,7 +35,7 @@
 #include "editorwindow.h"
 #include "blurtool.h"
 
-namespace EditorDigikamBlurToolPlugin
+namespace DigikamEditorBlurToolPlugin
 {
 
 BlurToolPlugin::BlurToolPlugin(QObject* const parent)
@@ -110,4 +110,4 @@ void BlurToolPlugin::slotBlur()
     }
 }
 
-} // namespace EditorDigikamBlurToolPlugin
+} // namespace DigikamEditorBlurToolPlugin

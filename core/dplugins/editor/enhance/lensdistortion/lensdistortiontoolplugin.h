@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace EditorDigikamLensDistortionToolPlugin
+namespace DigikamEditorLensDistortionToolPlugin
 {
 
 class LensDistortionToolPlugin : public DPluginEditor
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotLensDistortion();
 };
 
-} // namespace EditorDigikamLensDistortionToolPlugin
+} // namespace DigikamEditorLensDistortionToolPlugin
 
 #endif // DIGIKAM_LENSDISTORTIONTOOL_PLUGIN_H
