@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2jp2.h"
+#include "converttojp2.h"
 
 // Qt includes
 
@@ -39,20 +39,20 @@
 #include "dimg.h"
 #include "jp2ksettings.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToJp2Plugin
 {
 
-Convert2JP2::Convert2JP2(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2JP2"), ConvertTool, parent)
+ConvertToJP2::ConvertToJP2(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToJP2"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2JP2::~Convert2JP2()
+ConvertToJP2::~ConvertToJP2()
 {
 }
 
-void Convert2JP2::registerSettingsWidget()
+void ConvertToJP2::registerSettingsWidget()
 {
     JP2KSettings* const JP2Box = new JP2KSettings();
 
@@ -64,7 +64,7 @@ void Convert2JP2::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2JP2::defaultSettings()
+BatchToolSettings ConvertToJP2::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
@@ -77,7 +77,7 @@ BatchToolSettings Convert2JP2::defaultSettings()
     return settings;
 }
 
-void Convert2JP2::slotAssignSettings2Widget()
+void ConvertToJP2::slotAssignSettings2Widget()
 {
     m_changeSettings           = false;
     JP2KSettings* const JP2Box = dynamic_cast<JP2KSettings*>(m_settingsWidget);
@@ -91,7 +91,7 @@ void Convert2JP2::slotAssignSettings2Widget()
     m_changeSettings = true;
 }
 
-void Convert2JP2::slotSettingsChanged()
+void ConvertToJP2::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -107,12 +107,12 @@ void Convert2JP2::slotSettingsChanged()
     }
 }
 
-QString Convert2JP2::outputSuffix() const
+QString ConvertToJP2::outputSuffix() const
 {
     return QLatin1String("jp2");
 }
 
-bool Convert2JP2::toolOperations()
+bool ConvertToJP2::toolOperations()
 {
     if (!loadToDImg())
     {
@@ -125,4 +125,4 @@ bool Convert2JP2::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJp2Plugin

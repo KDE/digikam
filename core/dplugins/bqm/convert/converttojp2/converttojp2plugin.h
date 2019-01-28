@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONVERTTOJP2_PLUGIN_H
-#define DIGIKAM_CONVERTTOJP2_PLUGIN_H
+#ifndef DIGIKAM_CONVERT_TO_JP2_PLUGIN_H
+#define DIGIKAM_CONVERT_TO_JP2_PLUGIN_H
 
 // Local includes
 
@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToJp2"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToJp2Plugin
 {
 
 class ConvertToJp2Plugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJp2Plugin
 
-#endif // DIGIKAM_CONVERTTOJP2_PLUGIN_H
+#endif // DIGIKAM_CONVERT_TO_JP2_PLUGIN_H

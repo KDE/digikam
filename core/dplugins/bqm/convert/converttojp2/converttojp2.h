@@ -21,29 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CONVERT2_JP2_H
-#define DIGIKAM_BQM_CONVERT2_JP2_H
+#ifndef DIGIKAM_BQM_CONVERT_TO_JP2_H
+#define DIGIKAM_BQM_CONVERT_TO_JP2_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToJp2Plugin
 {
 
-class Convert2JP2 : public BatchTool
+class ConvertToJP2 : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Convert2JP2(QObject* const parent = 0);
-    ~Convert2JP2();
+    explicit ConvertToJP2(QObject* const parent = 0);
+    ~ConvertToJP2();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert2JP2(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new ConvertToJP2(parent); };
 
     void registerSettingsWidget();
 
@@ -61,6 +63,6 @@ private:
     bool m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJp2Plugin
 
-#endif // DIGIKAM_BQM_CONVERT2_JP2_H
+#endif // DIGIKAM_BQM_CONVERT_TO_JP2_H

@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jp2.h"
+#include "converttojp2.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToJp2Plugin
 {
 
 ConvertToJp2Plugin::ConvertToJp2Plugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToJp2Plugin::authors() const
 
 void ConvertToJp2Plugin::setup(QObject* const parent)
 {
-    Convert2JP2* const tool = new Convert2JP2(parent);
+    ConvertToJP2* const tool = new ConvertToJP2(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJp2Plugin
