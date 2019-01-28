@@ -29,7 +29,9 @@
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmUserScriptPlugin
 {
 
 class UserScript : public BatchTool
@@ -64,6 +66,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmUserScriptPlugin
 
 #endif // DIGIKAM_BQM_USER_SCRIPT_H

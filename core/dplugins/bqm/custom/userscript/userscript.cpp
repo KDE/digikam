@@ -45,7 +45,7 @@
 #include "tagscache.h"
 #include "dlayoutbox.h"
 
-namespace Digikam
+namespace DigikamBqmUserScriptPlugin
 {
 
 class Q_DECL_HIDDEN UserScript::Private
@@ -262,4 +262,4 @@ bool UserScript::toolOperations()
     return true;
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmUserScriptPlugin

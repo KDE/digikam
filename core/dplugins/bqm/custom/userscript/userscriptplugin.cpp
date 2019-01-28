@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "userscript.h"
 
-namespace Digikam
+namespace DigikamBqmUserScriptPlugin
 {
 
 UserScriptPlugin::UserScriptPlugin(QObject* const parent)
@@ -77,9 +77,6 @@ QString UserScriptPlugin::details() const
 QList<DPluginAuthor> UserScriptPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2009-2019"))
             << DPluginAuthor(QString::fromUtf8("Hubert Law"),
                              QString::fromUtf8("hhclaw dot eb at gmail dot com"),
                              QString::fromUtf8("(C) 2014"))
@@ -94,4 +91,4 @@ void UserScriptPlugin::setup(QObject* const parent)
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmUserScriptPlugin

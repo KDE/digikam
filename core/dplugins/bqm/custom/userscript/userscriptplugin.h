@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_USERSCRIPT_PLUGIN_H
-#define DIGIKAM_USERSCRIPT_PLUGIN_H
+#ifndef DIGIKAM_USER_SCRIPT_PLUGIN_H
+#define DIGIKAM_USER_SCRIPT_PLUGIN_H
 
 // Local includes
 
@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMUserScript"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmUserScriptPlugin
 {
 
 class UserScriptPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmUserScriptPlugin
 
-#endif // DIGIKAM_USERSCRIPT_PLUGIN_H
+#endif // DIGIKAM_USER_SCRIPT_PLUGIN_H
