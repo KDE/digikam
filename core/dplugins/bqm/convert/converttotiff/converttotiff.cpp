@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2tiff.h"
+#include "converttotiff.h"
 
 // Qt includes
 
@@ -39,20 +39,20 @@
 #include "dimg.h"
 #include "tiffsettings.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToTiffPlugin
 {
 
-Convert2TIFF::Convert2TIFF(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2TIFF"), ConvertTool, parent)
+ConvertToTIFF::ConvertToTIFF(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToTIFF"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2TIFF::~Convert2TIFF()
+ConvertToTIFF::~ConvertToTIFF()
 {
 }
 
-void Convert2TIFF::registerSettingsWidget()
+void ConvertToTIFF::registerSettingsWidget()
 {
     TIFFSettings* const TIFBox = new TIFFSettings();
 
@@ -64,7 +64,7 @@ void Convert2TIFF::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2TIFF::defaultSettings()
+BatchToolSettings ConvertToTIFF::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
@@ -74,7 +74,7 @@ BatchToolSettings Convert2TIFF::defaultSettings()
     return settings;
 }
 
-void Convert2TIFF::slotAssignSettings2Widget()
+void ConvertToTIFF::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
 
@@ -88,7 +88,7 @@ void Convert2TIFF::slotAssignSettings2Widget()
     m_changeSettings = true;
 }
 
-void Convert2TIFF::slotSettingsChanged()
+void ConvertToTIFF::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -103,12 +103,12 @@ void Convert2TIFF::slotSettingsChanged()
     }
 }
 
-QString Convert2TIFF::outputSuffix() const
+QString ConvertToTIFF::outputSuffix() const
 {
     return QLatin1String("tif");
 }
 
-bool Convert2TIFF::toolOperations()
+bool ConvertToTIFF::toolOperations()
 {
     if (!loadToDImg())
     {
@@ -120,4 +120,4 @@ bool Convert2TIFF::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToTiffPlugin

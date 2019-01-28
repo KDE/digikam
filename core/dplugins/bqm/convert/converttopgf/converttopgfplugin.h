@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToPgf"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConvertToPgf"
 
 using namespace Digikam;
 

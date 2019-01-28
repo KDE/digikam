@@ -21,29 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CONVERT2_TIFF_H
-#define DIGIKAM_BQM_CONVERT2_TIFF_H
+#ifndef DIGIKAM_BQM_CONVERT_TO_TIFF_H
+#define DIGIKAM_BQM_CONVERT_TO_TIFF_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToTiffPlugin
 {
 
-class Convert2TIFF : public BatchTool
+class ConvertToTIFF : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Convert2TIFF(QObject* const parent = 0);
-    ~Convert2TIFF();
+    explicit ConvertToTIFF(QObject* const parent = 0);
+    ~ConvertToTIFF();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert2TIFF(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new ConvertToTIFF(parent); };
 
     void registerSettingsWidget();
 
@@ -61,6 +63,6 @@ private:
     bool m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToTiffPlugin
 
-#endif // DIGIKAM_BQM_CONVERT2_TIFF_H
+#endif // DIGIKAM_BQM_CONVERT_TO_TIFF_H

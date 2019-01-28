@@ -20,16 +20,18 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONVERTTOTIFF_PLUGIN_H
-#define DIGIKAM_CONVERTTOTIFF_PLUGIN_H
+#ifndef DIGIKAM_CONVERT_TO_TIFF_PLUGIN_H
+#define DIGIKAM_CONVERT_TO_TIFF_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToTiff"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConvertToTiff"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToTiffPlugin
 {
 
 class ConvertToTiffPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToTiffPlugin
 
-#endif // DIGIKAM_CONVERTTOTIFF_PLUGIN_H
+#endif // DIGIKAM_CONVERT_TO_TIFF_PLUGIN_H

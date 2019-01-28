@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2tiff.h"
+#include "converttotiff.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToTiffPlugin
 {
 
 ConvertToTiffPlugin::ConvertToTiffPlugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToTiffPlugin::authors() const
 
 void ConvertToTiffPlugin::setup(QObject* const parent)
 {
-    Convert2TIFF* const tool = new Convert2TIFF(parent);
+    ConvertToTIFF* const tool = new ConvertToTIFF(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToTiffPlugin
