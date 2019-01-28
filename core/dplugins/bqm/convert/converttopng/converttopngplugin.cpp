@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2png.h"
+#include "converttopng.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToPngPlugin
 {
 
 ConvertToPngPlugin::ConvertToPngPlugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToPngPlugin::authors() const
 
 void ConvertToPngPlugin::setup(QObject* const parent)
 {
-    Convert2PNG* const tool = new Convert2PNG(parent);
+    ConvertToPNG* const tool = new ConvertToPNG(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPngPlugin

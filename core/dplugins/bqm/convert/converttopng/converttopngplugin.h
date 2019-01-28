@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONVERTTOPNG_PLUGIN_H
-#define DIGIKAM_CONVERTTOPNG_PLUGIN_H
+#ifndef DIGIKAM_CONVERT_TO_PNG_PLUGIN_H
+#define DIGIKAM_CONVERT_TO_PNG_PLUGIN_H
 
 // Local includes
 
@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToPng"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToPngPlugin
 {
 
 class ConvertToPngPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPngPlugin
 
-#endif // DIGIKAM_CONVERTTOPNG_PLUGIN_H
+#endif // DIGIKAM_CONVERT_TO_PNG_PLUGIN_H

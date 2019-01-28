@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2png.h"
+#include "converttopng.h"
 
 // Qt includes
 
@@ -39,20 +39,20 @@
 #include "dimg.h"
 #include "pngsettings.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToPngPlugin
 {
 
-Convert2PNG::Convert2PNG(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2PNG"), ConvertTool, parent)
+ConvertToPNG::ConvertToPNG(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToPNG"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2PNG::~Convert2PNG()
+ConvertToPNG::~ConvertToPNG()
 {
 }
 
-void Convert2PNG::registerSettingsWidget()
+void ConvertToPNG::registerSettingsWidget()
 {
     PNGSettings* const PNGBox = new PNGSettings();
 
@@ -64,7 +64,7 @@ void Convert2PNG::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2PNG::defaultSettings()
+BatchToolSettings ConvertToPNG::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
@@ -74,7 +74,7 @@ BatchToolSettings Convert2PNG::defaultSettings()
     return settings;
 }
 
-void Convert2PNG::slotAssignSettings2Widget()
+void ConvertToPNG::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
 
@@ -88,7 +88,7 @@ void Convert2PNG::slotAssignSettings2Widget()
     m_changeSettings = true;
 }
 
-void Convert2PNG::slotSettingsChanged()
+void ConvertToPNG::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -103,12 +103,12 @@ void Convert2PNG::slotSettingsChanged()
     }
 }
 
-QString Convert2PNG::outputSuffix() const
+QString ConvertToPNG::outputSuffix() const
 {
     return QLatin1String("png");
 }
 
-bool Convert2PNG::toolOperations()
+bool ConvertToPNG::toolOperations()
 {
     if (!loadToDImg())
     {
@@ -121,4 +121,4 @@ bool Convert2PNG::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPngPlugin

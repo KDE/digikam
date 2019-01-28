@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONVERTTODNG_PLUGIN_H
-#define DIGIKAM_CONVERTTODNG_PLUGIN_H
+#ifndef DIGIKAM_CONVERT_TO_DNG_PLUGIN_H
+#define DIGIKAM_CONVERT_TO_DNG_PLUGIN_H
 
 // Local includes
 
@@ -57,4 +57,4 @@ public:
 
 } // namespace DigikamBqmConvertToDngPlugin
 
-#endif // DIGIKAM_CONVERTTODNG_PLUGIN_H
+#endif // DIGIKAM_CONVERT_TO_DNG_PLUGIN_H
