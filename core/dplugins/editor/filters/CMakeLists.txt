@@ -17,6 +17,8 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+add_subdirectory(blurfx)
+
 DIGIKAM_ADD_EDITOR_PLUGIN(ColorFxTool
     ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
@@ -35,11 +37,6 @@ DIGIKAM_ADD_EDITOR_PLUGIN(EmbossTool
 DIGIKAM_ADD_EDITOR_PLUGIN(OilPaintTool
     ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
-)
-
-DIGIKAM_ADD_EDITOR_PLUGIN(BlurFxTool
-    ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtoolplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtool.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(DistortionFxTool

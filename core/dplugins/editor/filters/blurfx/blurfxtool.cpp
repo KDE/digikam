@@ -48,7 +48,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace Digikam
+namespace EditorDigikamBlurFxToolPlugin
 {
 
 class Q_DECL_HIDDEN BlurFXTool::Private
@@ -391,4 +391,4 @@ void BlurFXTool::blockWidgetSignals(bool b)
     d->levelInput->blockSignals(b);
 }
 
-} // namespace Digikam
+} // namespace EditorDigikamBlurFxToolPlugin
