@@ -213,7 +213,7 @@ void DBinaryIface::slotNavigateAndCheck()
     QString dir = QUrl::fromLocalFile(f).adjusted(QUrl::RemoveFilename).toLocalFile();
     m_searchPaths << dir;
 
-    if (checkDir(dir))
+    if (checkDirForPath(dir))
     {
         emit signalSearchDirectoryAdded(dir);
     }
@@ -224,7 +224,7 @@ void DBinaryIface::slotAddPossibleSearchDirectory(const QString& dir)
     if (!isValid())
     {
         m_searchPaths << dir;
-        checkDir(dir);
+        checkDirForPath(dir);
     }
     else
     {
@@ -235,7 +235,7 @@ void DBinaryIface::slotAddPossibleSearchDirectory(const QString& dir)
 void DBinaryIface::slotAddSearchDirectory(const QString& dir)
 {
     m_searchPaths << dir;
-    checkDir(dir);       // Forces the use of that directory
+    checkDirForPath(dir);       // Forces the use of that directory
 }
 
 QString DBinaryIface::readConfig()
@@ -280,22 +280,22 @@ void DBinaryIface::setup(const QString& prev)
     if (!previousDir.isEmpty())
     {
         m_searchPaths << previousDir;
-        checkDir(previousDir);
+        checkDirForPath(previousDir);
         return;
     }
 
     previousDir = readConfig();
     m_searchPaths << previousDir;
-    checkDir(previousDir);
+    checkDirForPath(previousDir);
 
     if ((!previousDir.isEmpty()) && !isValid())
     {
         m_searchPaths << QLatin1String("");
-        checkDir(QLatin1String(""));
+        checkDirForPath(QLatin1String(""));
     }
 }
 
-bool DBinaryIface::checkDir(const QString& possibleDir)
+bool DBinaryIface::checkDirForPath(const QString& possibleDir)
 {
     bool ret             = false;
     QString possiblePath = path(possibleDir);
@@ -353,7 +353,7 @@ bool DBinaryIface::recheckDirectories()
 
     foreach (const QString& dir, m_searchPaths)
     {
-        checkDir(dir);
+        checkDirForPath(dir);
 
         if (isValid())
         {

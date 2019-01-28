@@ -78,8 +78,8 @@ public:
     const QString&      description()               const { return m_description;                   }
 
     virtual void        setup(const QString& prev = QString());
-    virtual bool        checkDir()                        { return checkDir(m_pathDir);             }
-    virtual bool        checkDir(const QString& path);
+    virtual bool        checkDir()                        { return checkDirForPath(m_pathDir);      }
+    virtual bool        checkDirForPath(const QString& path);
     virtual bool        recheckDirectories();
 
     virtual QString     path(const QString& dir)    const;

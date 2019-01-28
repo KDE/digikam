@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-07-04
- * Description : Autodetect JAlbum jar archive
+ * Description : Autodetect jAlbum jar archive
  *
  * Copyright (C) 2013-2019 by Andrew Goodbody <ajg zero two at elfringham dot co dot uk>
  *
@@ -34,24 +34,14 @@ namespace DigikamGenericJAlbumPlugin
 
 class JalbumJar : public DBinaryIface
 {
+    Q_OBJECT
+
 public:
 
-    explicit JalbumJar()
-        : DBinaryIface(
-                       QLatin1String("JAlbum.jar"),
-                       QLatin1String("jAlbum"),
-                       QLatin1String("https://jalbum.net/"),
-                       QLatin1String("jAlbum Export"),
-                       QStringList(QLatin1String("-version")),  // TODO: to check version with "java -jar " prefix
-                       i18n("jAlbum Gallery Generator.")
-                      )
-        {
-            setup();
-        }
+    explicit JalbumJar();
+    ~JalbumJar();
 
-    ~JalbumJar()
-    {
-    }
+    bool checkDirForPath(const QString& possibleDir);
 };
 
 } // namespace DigikamGenericJAlbumPlugin

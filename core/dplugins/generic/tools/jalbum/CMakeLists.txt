@@ -29,6 +29,7 @@ set(jalbumplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumoutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumselectionpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/jalbumwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/jalbumjar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/jalbumplugin.cpp
 )
 
