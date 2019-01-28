@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2dng.h"
+#include "converttodng.h"
 
 // Qt includes
 
@@ -32,20 +32,20 @@
 
 #include <klocalizedstring.h>
 
-namespace Digikam
+namespace DigikamBqmConvertToDngPlugin
 {
 
-Convert2DNG::Convert2DNG(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2DNG"), ConvertTool, parent)
+ConvertToDNG::ConvertToDNG(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToDNG"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2DNG::~Convert2DNG()
+ConvertToDNG::~ConvertToDNG()
 {
 }
 
-void Convert2DNG::registerSettingsWidget()
+void ConvertToDNG::registerSettingsWidget()
 {
     DNGSettings* const DNGBox = new DNGSettings;
 
@@ -57,7 +57,7 @@ void Convert2DNG::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2DNG::defaultSettings()
+BatchToolSettings ConvertToDNG::defaultSettings()
 {
     BatchToolSettings settings;
     settings.insert(QLatin1String("CompressLossLess"),      true);
@@ -67,7 +67,7 @@ BatchToolSettings Convert2DNG::defaultSettings()
     return settings;
 }
 
-void Convert2DNG::slotAssignSettings2Widget()
+void ConvertToDNG::slotAssignSettings2Widget()
 {
     m_changeSettings          = false;
     DNGSettings* const DNGBox = dynamic_cast<DNGSettings*>(m_settingsWidget);
@@ -82,7 +82,7 @@ void Convert2DNG::slotAssignSettings2Widget()
     m_changeSettings          = true;
 }
 
-void Convert2DNG::slotSettingsChanged()
+void ConvertToDNG::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -99,18 +99,18 @@ void Convert2DNG::slotSettingsChanged()
     }
 }
 
-QString Convert2DNG::outputSuffix() const
+QString ConvertToDNG::outputSuffix() const
 {
     return QLatin1String("dng");
 }
 
-void Convert2DNG::cancel()
+void ConvertToDNG::cancel()
 {
     m_dngProcessor.cancel();
     BatchTool::cancel();
 }
 
-bool Convert2DNG::toolOperations()
+bool ConvertToDNG::toolOperations()
 {
     if (!isRawFile(inputUrl()))
         return false;
@@ -127,4 +127,4 @@ bool Convert2DNG::toolOperations()
     return (ret == DNGWriter::PROCESSCOMPLETE);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToDngPlugin

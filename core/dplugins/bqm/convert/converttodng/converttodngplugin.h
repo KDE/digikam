@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToDng"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToDngPlugin
 {
 
 class ConvertToDngPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToDngPlugin
 
 #endif // DIGIKAM_CONVERTTODNG_PLUGIN_H

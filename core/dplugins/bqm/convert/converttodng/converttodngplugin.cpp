@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2dng.h"
+#include "converttodng.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToDngPlugin
 {
 
 ConvertToDngPlugin::ConvertToDngPlugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToDngPlugin::authors() const
 
 void ConvertToDngPlugin::setup(QObject* const parent)
 {
-    Convert2DNG* const tool = new Convert2DNG(parent);
+    ConvertToDNG* const tool = new ConvertToDNG(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToDngPlugin

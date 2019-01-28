@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CONVERT2_DNG_H
-#define DIGIKAM_BQM_CONVERT2_DNG_H
+#ifndef DIGIKAM_BQM_CONVERT_TO_DNG_H
+#define DIGIKAM_BQM_CONVERT_TO_DNG_H
 
 // Local includes
 
@@ -30,23 +30,25 @@
 #include "dngwriter.h"
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToDngPlugin
 {
 
-class Convert2DNG : public BatchTool
+class ConvertToDNG : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Convert2DNG(QObject* const parent = 0);
-    ~Convert2DNG();
+    explicit ConvertToDNG(QObject* const parent = 0);
+    ~ConvertToDNG();
 
     void cancel();
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert2DNG(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new ConvertToDNG(parent); };
 
     void registerSettingsWidget();
 
@@ -65,6 +67,6 @@ private:
     bool      m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToDngPlugin
 
-#endif // DIGIKAM_BQM_CONVERT2_DNG_H
+#endif // DIGIKAM_BQM_CONVERT_TO_DNG_H
