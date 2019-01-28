@@ -32,7 +32,7 @@
 
 #include "geodataparser_time.h"
 
-using namespace GenericDigikamGeolocationEditPlugin;
+using namespace DigikamGenericGeolocationEditPlugin;
 
 QTEST_GUILESS_MAIN(TestGPXParsing)
 
