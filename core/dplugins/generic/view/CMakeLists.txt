@@ -6,6 +6,7 @@
 
 add_subdirectory(presentation)
 
+# Not yet finalized
 #add_subdirectory(slideshow)
 
 if(HAVE_OPENGL)
