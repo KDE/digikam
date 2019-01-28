@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2pgf.h"
+#include "converttopgf.h"
 
 // Qt includes
 
@@ -39,20 +39,20 @@
 #include "dimg.h"
 #include "pgfsettings.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToPgfPlugin
 {
 
-Convert2PGF::Convert2PGF(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2PGF"), ConvertTool, parent)
+ConvertToPGF::ConvertToPGF(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToPGF"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2PGF::~Convert2PGF()
+ConvertToPGF::~ConvertToPGF()
 {
 }
 
-void Convert2PGF::registerSettingsWidget()
+void ConvertToPGF::registerSettingsWidget()
 {
     PGFSettings* const PGFBox = new PGFSettings();
 
@@ -64,7 +64,7 @@ void Convert2PGF::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2PGF::defaultSettings()
+BatchToolSettings ConvertToPGF::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
@@ -76,7 +76,7 @@ BatchToolSettings Convert2PGF::defaultSettings()
     return settings;
 }
 
-void Convert2PGF::slotAssignSettings2Widget()
+void ConvertToPGF::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
 
@@ -91,7 +91,7 @@ void Convert2PGF::slotAssignSettings2Widget()
     m_changeSettings = true;
 }
 
-void Convert2PGF::slotSettingsChanged()
+void ConvertToPGF::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -107,12 +107,12 @@ void Convert2PGF::slotSettingsChanged()
     }
 }
 
-QString Convert2PGF::outputSuffix() const
+QString ConvertToPGF::outputSuffix() const
 {
     return QLatin1String("pgf");
 }
 
-bool Convert2PGF::toolOperations()
+bool ConvertToPGF::toolOperations()
 {
     if (!loadToDImg())
     {
@@ -125,4 +125,4 @@ bool Convert2PGF::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPgfPlugin

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONVERTTOPGF_PLUGIN_H
-#define DIGIKAM_CONVERTTOPGF_PLUGIN_H
+#ifndef DIGIKAM_CONVERT_TO_PGF_PLUGIN_H
+#define DIGIKAM_CONVERT_TO_PGF_PLUGIN_H
 
 // Local includes
 
@@ -29,7 +29,9 @@
 
 #define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConverToPgf"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToPgfPlugin
 {
 
 class ConvertToPgfPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPgfPlugin
 
-#endif // DIGIKAM_CONVERTTOPGF_PLUGIN_H
+#endif // DIGIKAM_CONVERT_TO_PGF_PLUGIN_H

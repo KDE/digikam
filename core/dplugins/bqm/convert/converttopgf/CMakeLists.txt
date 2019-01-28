@@ -17,25 +17,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_subdirectory(converttodng)
-add_subdirectory(converttopng)
-add_subdirectory(converttopgf)
-
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToJPEG
-    ${CMAKE_CURRENT_SOURCE_DIR}/converttojpegplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/convert2jpeg.cpp
+DIGIKAM_ADD_BQM_PLUGIN(ConvertToPGF
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttopgfplugin.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/converttopgf.cpp
 )
-
-DIGIKAM_ADD_BQM_PLUGIN(ConvertToTIFF
-    ${CMAKE_CURRENT_SOURCE_DIR}/converttotiffplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/convert2tiff.cpp
-)
-
-if(Jasper_FOUND)
-
-    DIGIKAM_ADD_BQM_PLUGIN(ConvertToJP2lugin
-        ${CMAKE_CURRENT_SOURCE_DIR}/converttojp2plugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/convert2jp2.cpp
-    )
-
-endif()

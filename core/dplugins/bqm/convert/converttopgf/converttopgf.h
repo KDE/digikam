@@ -21,29 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CONVERT2_PGF_H
-#define DIGIKAM_BQM_CONVERT2_PGF_H
+#ifndef DIGIKAM_BQM_CONVERT_TO_PGF_H
+#define DIGIKAM_BQM_CONVERT_TO_PGF_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToPgfPlugin
 {
 
-class Convert2PGF : public BatchTool
+class ConvertToPGF : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Convert2PGF(QObject* const parent = 0);
-    ~Convert2PGF();
+    explicit ConvertToPGF(QObject* const parent = 0);
+    ~ConvertToPGF();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert2PGF(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new ConvertToPGF(parent); };
 
     void registerSettingsWidget();
 
@@ -61,6 +63,6 @@ private:
     bool m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPgfPlugin
 
-#endif // DIGIKAM_BQM_CONVERT2_PGF_H
+#endif // DIGIKAM_BQM_CONVERT_TO_PGF_H

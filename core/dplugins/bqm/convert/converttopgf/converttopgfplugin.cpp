@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2pgf.h"
+#include "converttopgf.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToPgfPlugin
 {
 
 ConvertToPgfPlugin::ConvertToPgfPlugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToPgfPlugin::authors() const
 
 void ConvertToPgfPlugin::setup(QObject* const parent)
 {
-    Convert2PGF* const tool = new Convert2PGF(parent);
+    ConvertToPGF* const tool = new ConvertToPGF(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToPgfPlugin
