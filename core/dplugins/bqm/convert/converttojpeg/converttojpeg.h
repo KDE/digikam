@@ -21,29 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CONVERT2_JPEG_H
-#define DIGIKAM_BQM_CONVERT2_JPEG_H
+#ifndef DIGIKAM_BQM_CONVERT_TO_JPEG_H
+#define DIGIKAM_BQM_CONVERT_TO_JPEG_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmConvertToJpegPlugin
 {
 
-class Convert2JPEG : public BatchTool
+class ConvertToJPEG : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Convert2JPEG(QObject* const parent = 0);
-    ~Convert2JPEG();
+    explicit ConvertToJPEG(QObject* const parent = 0);
+    ~ConvertToJPEG();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert2JPEG(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new ConvertToJPEG(parent); };
 
     void registerSettingsWidget();
 
@@ -61,6 +63,6 @@ private:
     bool m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJpegPlugin
 
-#endif // DIGIKAM_BQM_CONVERT2_JPEG_H
+#endif // DIGIKAM_BQM_CONVERT_TO_JPEG_H

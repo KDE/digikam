@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2jpeg.h"
+#include "converttojpeg.h"
 
 // Qt includes
 
@@ -39,20 +39,20 @@
 #include "dimg.h"
 #include "jpegsettings.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToJpegPlugin
 {
 
-Convert2JPEG::Convert2JPEG(QObject* const parent)
-    : BatchTool(QLatin1String("Convert2JPEG"), ConvertTool, parent)
+ConvertToJPEG::ConvertToJPEG(QObject* const parent)
+    : BatchTool(QLatin1String("ConvertToJPEG"), ConvertTool, parent)
 {
     m_changeSettings = true;
 }
 
-Convert2JPEG::~Convert2JPEG()
+ConvertToJPEG::~ConvertToJPEG()
 {
 }
 
-void Convert2JPEG::registerSettingsWidget()
+void ConvertToJPEG::registerSettingsWidget()
 {
     JPEGSettings* const JPGBox = new JPEGSettings;
 
@@ -64,7 +64,7 @@ void Convert2JPEG::registerSettingsWidget()
     BatchTool::registerSettingsWidget();
 }
 
-BatchToolSettings Convert2JPEG::defaultSettings()
+BatchToolSettings ConvertToJPEG::defaultSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
@@ -76,7 +76,7 @@ BatchToolSettings Convert2JPEG::defaultSettings()
     return settings;
 }
 
-void Convert2JPEG::slotAssignSettings2Widget()
+void ConvertToJPEG::slotAssignSettings2Widget()
 {
     m_changeSettings = false;
 
@@ -91,7 +91,7 @@ void Convert2JPEG::slotAssignSettings2Widget()
     m_changeSettings = true;
 }
 
-void Convert2JPEG::slotSettingsChanged()
+void ConvertToJPEG::slotSettingsChanged()
 {
     if (m_changeSettings)
     {
@@ -107,12 +107,12 @@ void Convert2JPEG::slotSettingsChanged()
     }
 }
 
-QString Convert2JPEG::outputSuffix() const
+QString ConvertToJPEG::outputSuffix() const
 {
     return QLatin1String("jpg");
 }
 
-bool Convert2JPEG::toolOperations()
+bool ConvertToJPEG::toolOperations()
 {
     if (!loadToDImg())
     {
@@ -126,4 +126,4 @@ bool Convert2JPEG::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJpegPlugin

@@ -35,9 +35,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "convert2jpeg.h"
+#include "converttojpeg.h"
 
-namespace Digikam
+namespace DigikamBqmConvertToJpegPlugin
 {
 
 ConvertToJpegPlugin::ConvertToJpegPlugin(QObject* const parent)
@@ -87,10 +87,10 @@ QList<DPluginAuthor> ConvertToJpegPlugin::authors() const
 
 void ConvertToJpegPlugin::setup(QObject* const parent)
 {
-    Convert2JPEG* const tool = new Convert2JPEG(parent);
+    ConvertToJPEG* const tool = new ConvertToJPEG(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmConvertToJpegPlugin
