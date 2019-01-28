@@ -29,13 +29,12 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
 using namespace Digikam;
 
 namespace EditorDigikamColorFxToolPlugin
 {
-
-class DColor;
 
 class ColorFxTool : public EditorToolThreaded
 {

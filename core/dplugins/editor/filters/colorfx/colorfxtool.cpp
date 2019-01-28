@@ -47,7 +47,6 @@
 
 // Local includes
 
-#include "dimg.h"
 #include "colorfxfilter.h"
 #include "colorfxsettings.h"
 #include "editortoolsettings.h"
@@ -163,7 +162,7 @@ void ColorFxTool::slotResetSettings()
     slotPreview();
 }
 
-void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
+void ColorFxTool::slotColorSelectedFromTarget(const Digikam::DColor& color)
 {
     d->gboxSettings->histogramBox()->histogram()->setHistogramGuideByColor(color);
 }
