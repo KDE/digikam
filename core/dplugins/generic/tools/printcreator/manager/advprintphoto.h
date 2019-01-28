@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class AdvPrintPhotoSize

@@ -48,7 +48,7 @@
 #include "dhistoryview.h"
 #include "wsauthentication.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSFinalPage::Private
@@ -171,4 +171,4 @@ bool WSFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

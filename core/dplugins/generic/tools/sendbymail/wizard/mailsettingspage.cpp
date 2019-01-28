@@ -47,7 +47,7 @@
 #include "filesaveconflictbox.h"
 #include "digikam_debug.h"
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailSettingsPage::Private
@@ -324,4 +324,4 @@ bool MailSettingsPage::validatePage()
     return true;
 }
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin

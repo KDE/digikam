@@ -29,7 +29,7 @@
 #include <QSharedPointer>
 #include <QDate>
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 class CalSystemPrivate;

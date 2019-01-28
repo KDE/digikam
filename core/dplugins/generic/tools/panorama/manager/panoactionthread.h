@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 struct PanoActionData;
@@ -115,9 +115,9 @@ public:
 
 Q_SIGNALS:
 
-    void starting(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
-    void stepFinished(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
-    void jobCollectionFinished(const GenericDigikamPanoramaPlugin::PanoActionData& ad);
+    void starting(const DigikamGenericPanoramaPlugin::PanoActionData& ad);
+    void stepFinished(const DigikamGenericPanoramaPlugin::PanoActionData& ad);
+    void jobCollectionFinished(const DigikamGenericPanoramaPlugin::PanoActionData& ad);
 
     void cpFindPtoReady(const QUrl& cpFindPtoUrl);
     void cpCleanPtoReady(const QUrl& cpCleanPtoUrl);
@@ -151,6 +151,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_PANO_ACTION_THREAD_H

@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 FlickrMPForm::FlickrMPForm()
@@ -165,4 +165,4 @@ QByteArray FlickrMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin

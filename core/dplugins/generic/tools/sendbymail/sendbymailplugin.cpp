@@ -34,7 +34,7 @@
 
 #include "mailwizard.h"
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 SendByMailPlugin::SendByMailPlugin(QObject* const parent)
@@ -111,4 +111,4 @@ void SendByMailPlugin::slotSendByMail()
     delete wzrd;
 }
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin

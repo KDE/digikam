@@ -51,7 +51,7 @@
 #include "wstoolutils.h"
 #include "previewloadthread.h"
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class Q_DECL_HIDDEN PiwigoTalker::Private
@@ -988,4 +988,4 @@ void PiwigoTalker::deleteTemporaryFile()
     }
 }
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin

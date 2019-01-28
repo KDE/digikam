@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class PanoActionThread;
@@ -149,6 +149,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_PANO_MANAGER_H

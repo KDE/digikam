@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class PiwigoWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<PiwigoWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_PLUGIN_H

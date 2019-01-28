@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
    
 class RajceWidget : public WSSettingsWidget
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
 #endif // DIGIKAM_RAJCE_WIDGET_H

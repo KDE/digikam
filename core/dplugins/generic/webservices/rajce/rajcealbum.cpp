@@ -23,7 +23,7 @@
 
 #include "rajcealbum.h"
 
-QTextStream& operator << (QTextStream& str, const GenericDigikamRajcePlugin::RajceAlbum& a)
+QTextStream& operator << (QTextStream& str, const DigikamGenericRajcePlugin::RajceAlbum& a)
 {
     str << "RajceAlbum[";
     str << "id=" << a.id;
@@ -44,7 +44,7 @@ QTextStream& operator << (QTextStream& str, const GenericDigikamRajcePlugin::Raj
     return str;
 }
 
-QDebug operator << (QDebug d, const GenericDigikamRajcePlugin::RajceAlbum& a)
+QDebug operator << (QDebug d, const DigikamGenericRajcePlugin::RajceAlbum& a)
 {
     QString     s;
     QTextStream str(&s);

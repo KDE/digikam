@@ -55,7 +55,7 @@
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class Q_DECL_HIDDEN RajceWidget::Private
@@ -535,4 +535,4 @@ void RajceWidget::writeSettings()
     grp.writeEntry("imageQuality", session.imageQuality());
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

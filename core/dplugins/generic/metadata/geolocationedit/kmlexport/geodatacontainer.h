@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QMetaType>
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class GeoDataContainer
@@ -159,8 +159,8 @@ private:
     double m_longitude;
 };
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
-Q_DECLARE_METATYPE(GenericDigikamGeolocationEditPlugin::GeoDataContainer)
+Q_DECLARE_METATYPE(DigikamGenericGeolocationEditPlugin::GeoDataContainer)
 
 #endif // DIGIKAM_GEO_DATA_CONTAINER_H

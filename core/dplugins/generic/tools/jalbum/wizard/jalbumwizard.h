@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class JAlbumSettings;
@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_WIZARD_H

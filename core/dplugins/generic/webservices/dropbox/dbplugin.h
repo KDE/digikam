@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class DBWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<DBWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin
 
 #endif // DIGIKAM_DB_PLUGIN_H

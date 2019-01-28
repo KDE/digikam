@@ -44,7 +44,7 @@ class QLineEdit;
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class SmugWidget : public QWidget
@@ -124,6 +124,6 @@ private:
     friend class SmugWindow;
 };
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin
 
 #endif // DIGIKAM_SMUG_WIDGET_H

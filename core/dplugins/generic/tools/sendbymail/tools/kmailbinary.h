@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class KmailBinary : public DBinaryIface
@@ -54,6 +54,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // KMAIL_BINARY_H

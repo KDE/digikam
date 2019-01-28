@@ -37,7 +37,7 @@
 
 #include "rajcewidget.h"
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
@@ -99,4 +99,4 @@ void RajceWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

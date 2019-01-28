@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class DIGIKAM_EXPORT MailWizard : public DWizardDlg
@@ -61,6 +61,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_WIZARD_H

@@ -45,7 +45,7 @@ class QPaintEvent;
 
 using namespace Digikam;
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 class CalMonthWidget : public QPushButton

@@ -40,7 +40,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 class DIGIKAM_EXPORT PWindow : public WSToolDialog
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin
 
 #endif // DIGIKAM_P_WINDOW_H

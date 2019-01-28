@@ -47,7 +47,7 @@
 #include "dbnewalbumdlg.h"
 #include "dbwidget.h"
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class Q_DECL_HIDDEN DBWindow::Private
@@ -457,4 +457,4 @@ void DBWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin

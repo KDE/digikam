@@ -31,7 +31,7 @@
 
 #include <QString>
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class PiwigoAlbum
@@ -62,6 +62,6 @@ public:
     QString m_name;           // Album name
 };
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_ITEM_H

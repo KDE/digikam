@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationMainPage;
@@ -113,6 +113,6 @@ public:
     DInfoInterface*          iface;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_CONTAINER_H

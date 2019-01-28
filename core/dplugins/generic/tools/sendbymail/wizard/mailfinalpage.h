@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class MailFinalPage : public DWizardPage
@@ -61,6 +61,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_FINAL_PAGE_H

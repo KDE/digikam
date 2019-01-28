@@ -49,7 +49,7 @@
 
 using namespace QtAV;
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideOutputPage::Private
@@ -209,4 +209,4 @@ bool VidSlideOutputPage::isComplete() const
     return (!d->destUrl->fileDlgPath().isEmpty());
 }
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin

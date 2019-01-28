@@ -44,7 +44,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFDateTime::Private
@@ -546,4 +546,4 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
     xmpData  = meta.getXmp();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

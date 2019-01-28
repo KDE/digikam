@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class JalbumJava : public DBinaryIface
@@ -54,6 +54,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_JAVA_H

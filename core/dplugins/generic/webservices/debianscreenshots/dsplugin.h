@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<DSWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_PLUGIN_H

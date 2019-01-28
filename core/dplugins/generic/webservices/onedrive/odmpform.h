@@ -27,7 +27,7 @@
 
 #include <QByteArray>
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class ODMPForm
@@ -46,6 +46,6 @@ private:
     QByteArray m_buffer;
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_MPFORM_H

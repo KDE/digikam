@@ -46,7 +46,7 @@
 #include "ditemslist.h"
 #include "ftexportwidget.h"
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 class Q_DECL_HIDDEN FTExportWindow::Private
@@ -225,4 +225,4 @@ void FTExportWindow::slotUpload()
             this, SLOT(slotCopyingFinished(KJob*)));
 }
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin

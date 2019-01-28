@@ -28,7 +28,7 @@
 
 #include <QString>
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class ImageShackGallery
@@ -63,6 +63,6 @@ public:
     QString m_bucket;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_ITEM_H

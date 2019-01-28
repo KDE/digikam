@@ -27,7 +27,7 @@
 
 #include <QStyledItemDelegate>
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSPackageDelegate : public QStyledItemDelegate
@@ -42,6 +42,6 @@ public:
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_PACKAGE_DELEGATE_H

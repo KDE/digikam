@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class RajceWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<RajceWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
 #endif // DIGIKAM_RAJCE_PLUGIN_H

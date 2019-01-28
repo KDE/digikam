@@ -34,7 +34,7 @@
 
 #include "odwindow.h"
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 ODPlugin::ODPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void ODPlugin::slotOneDrive()
     }
 }
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin

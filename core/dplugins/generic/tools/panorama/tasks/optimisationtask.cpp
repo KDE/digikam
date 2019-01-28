@@ -26,7 +26,7 @@
 
 #include <QFile>
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 OptimisationTask::OptimisationTask(const QString& workDirPath, const QUrl& input,
@@ -76,4 +76,4 @@ void OptimisationTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("autooptimiser"));
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

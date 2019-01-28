@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 SmugMPForm::SmugMPForm()
@@ -162,4 +162,4 @@ QByteArray SmugMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin

@@ -48,7 +48,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 const QUrl RAJCE_URL(QLatin1String("http://www.rajce.idnes.cz/liveAPI/index.php"));
@@ -265,4 +265,4 @@ void RajceTalker::init(const RajceSession& initialState)
     d->session = initialState;
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

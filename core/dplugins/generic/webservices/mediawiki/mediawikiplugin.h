@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 class MediaWikiWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<MediaWikiWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_PLUGIN_H

@@ -26,7 +26,7 @@
 
 #include <kconfiggroup.h>
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 JAlbumSettings::JAlbumSettings(DInfoInterface* const iface)
@@ -85,4 +85,4 @@ QDebug operator<<(QDebug dbg, const JAlbumSettings& t)
     return dbg.space();
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

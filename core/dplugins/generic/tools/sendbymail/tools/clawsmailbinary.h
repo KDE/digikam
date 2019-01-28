@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class ClawsMailBinary : public DBinaryIface
@@ -54,6 +54,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // CLAWS_MAIL_BINARY_H

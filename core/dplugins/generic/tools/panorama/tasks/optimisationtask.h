@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class OptimisationTask : public CommandTask
@@ -54,6 +54,6 @@ private:
     const bool  buildGPano;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_OPTIMISATION_TASK_H

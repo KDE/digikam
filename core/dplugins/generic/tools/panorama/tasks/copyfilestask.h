@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class CopyFilesTask : public PanoTask
@@ -66,6 +66,6 @@ private:
     MetaEngine                       m_meta;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_COPY_FILES_TASK_H

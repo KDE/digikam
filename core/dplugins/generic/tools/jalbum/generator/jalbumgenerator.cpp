@@ -47,7 +47,7 @@
 #include "jalbumwizard.h"
 #include "dfileoperations.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumGenerator::Private
@@ -298,4 +298,4 @@ void JAlbumGenerator::setProgressWidgets(DHistoryView* const pView, DProgressWdg
             this, SLOT(slotCancel()));
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

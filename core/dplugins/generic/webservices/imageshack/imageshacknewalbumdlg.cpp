@@ -35,7 +35,7 @@
 #include <QApplication>
 #include <QPushButton>
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 ImageShackNewAlbumDlg::ImageShackNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -56,4 +56,4 @@ QString ImageShackNewAlbumDlg::getAlbumTitle()
     return getTitleEdit()->text();
 }
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin

@@ -28,7 +28,7 @@
 
 #include "ui_presentation_captionpage.h"
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -56,6 +56,6 @@ private:
     PresentationContainer* m_sharedData;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_CAPTION_PAGE_H

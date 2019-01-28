@@ -31,7 +31,7 @@
 #include <QGroupBox>
 #include <QComboBox>
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class SmugAlbum;
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin
 
 #endif // DIGIKAM_SMUG_NEW_ALBUM_DLG_H

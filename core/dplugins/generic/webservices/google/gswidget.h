@@ -38,7 +38,7 @@ using namespace Digikam;
 
 class QButtonGroup;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 enum GPhotoTagsBehaviour
@@ -71,6 +71,6 @@ private:
     friend class GSWindow;
 };
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_WIDGET_H

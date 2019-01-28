@@ -52,7 +52,7 @@
 #include "dxmlguiwindow.h"
 #include "dfiledialog.h"
 
-namespace GenericDigikamDScannerPlugin
+namespace DigikamGenericDScannerPlugin
 {
 
 class Q_DECL_HIDDEN ScanDialog::Private
@@ -269,4 +269,4 @@ void ScanDialog::slotThreadDone(const QUrl& url, bool success)
     }
 }
 
-} // namespace GenericDigikamDScannerPlugin
+} // namespace DigikamGenericDScannerPlugin

@@ -51,7 +51,7 @@
 #include "xmpsubjects.h"
 #include "dmetadata.h"
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPEditWidget::Private
@@ -348,4 +348,4 @@ bool XMPEditWidget::isModified() const
     return d->modified;
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

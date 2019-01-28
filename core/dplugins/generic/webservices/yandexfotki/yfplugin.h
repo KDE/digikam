@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class YFWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<YFWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin
 
 #endif // DIGIKAM_YANDEXFOTKI_PLUGIN_H

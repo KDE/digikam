@@ -37,7 +37,7 @@ using namespace Digikam;
 
 class QButtonGroup;
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class ODWidget : public WSSettingsWidget
@@ -59,6 +59,6 @@ private:
     friend class ODWindow;
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_WIDGET_H

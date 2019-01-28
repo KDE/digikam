@@ -47,7 +47,7 @@ using namespace Digikam;
 
 class KConfigGroup;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class AdvPrintPhoto;
@@ -153,6 +153,6 @@ public:
     QString                           outputPath;
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_SETTINGS_H

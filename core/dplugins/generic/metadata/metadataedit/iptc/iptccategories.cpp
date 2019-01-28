@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCCategories::Private
@@ -351,4 +351,4 @@ void IPTCCategories::enableWidgets(bool checked1, bool checked2)
     d->repSubCategoryButton->setEnabled(checked1 && checked2);
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

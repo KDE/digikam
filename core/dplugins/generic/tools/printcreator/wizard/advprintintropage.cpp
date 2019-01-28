@@ -43,7 +43,7 @@
 #include "dbinarysearch.h"
 #include "advprintwizard.h"
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintIntroPage::Private
@@ -163,4 +163,4 @@ bool AdvPrintIntroPage::validatePage()
     return true;
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

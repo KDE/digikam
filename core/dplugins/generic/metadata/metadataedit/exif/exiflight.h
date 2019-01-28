@@ -28,7 +28,7 @@
 #include <QWidget>
 #include <QByteArray>
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class EXIFLight : public QWidget
@@ -53,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin
 
 #endif // DIGIKAM_EXIF_LIGHT_H

@@ -54,7 +54,7 @@
 #include "o1requestor.h"
 #include "o0settingsstore.h"
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class Q_DECL_HIDDEN FlickrTalker::Private
@@ -1159,4 +1159,4 @@ void FlickrTalker::parseResponseSetGeoLocation(const QByteArray& data)
     emit signalAddPhotoSucceeded(QLatin1String(""));
 }
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin

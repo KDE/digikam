@@ -50,7 +50,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackTalker::Private
@@ -556,4 +556,4 @@ void ImageShackTalker::parseAddPhotoToGalleryDone(QByteArray data)
     }
 }
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin

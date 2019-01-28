@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class AdvPrintTask : public ActionJob
@@ -103,6 +103,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_TASK_H

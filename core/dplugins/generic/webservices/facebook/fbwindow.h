@@ -40,7 +40,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbAlbum;
@@ -98,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_WINDOW_H

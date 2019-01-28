@@ -53,7 +53,7 @@ class QPushButton;
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class DIGIKAM_EXPORT KmlWidget : public QWidget
@@ -144,6 +144,6 @@ protected:
     KmlExport    m_kmlExport;
 };
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_WIDGET_H

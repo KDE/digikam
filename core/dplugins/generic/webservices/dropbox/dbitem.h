@@ -28,7 +28,7 @@
 
 #include <QString>
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class DBPhoto
@@ -55,6 +55,6 @@ public:
     QString title;
 };
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin
 
 #endif // DIGIKAM_DB_ITEM_H

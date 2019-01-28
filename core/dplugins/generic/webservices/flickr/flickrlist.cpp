@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "wscomboboxdelegate.h"
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class Q_DECL_HIDDEN FlickrList::Private
@@ -659,4 +659,4 @@ FlickrList::ContentType FlickrListViewItem::contentType() const
     return d->contentType;
 }
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin

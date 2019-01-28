@@ -39,7 +39,7 @@
 #include "dlayoutbox.h"
 #include "calwizard.h"
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 CalIntroPage::CalIntroPage(QWizard* const dialog, const QString& title)
@@ -71,4 +71,4 @@ CalIntroPage::~CalIntroPage()
 {
 }
 
-} // namespace GenericDigikamCalendarPlugin
+} // namespace DigikamGenericCalendarPlugin

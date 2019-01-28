@@ -54,7 +54,7 @@
 #include "advprintcustomdlg.h"
 #include "templateicon.h"
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
@@ -1518,4 +1518,4 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
     }
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

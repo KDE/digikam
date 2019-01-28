@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class CreateFinalPtoTask : public PanoTask
@@ -58,6 +58,6 @@ private:
     const QRect crop;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_CREATE_FINAL_PTO_TASK_H

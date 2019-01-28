@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 FbMPForm::FbMPForm()
@@ -153,4 +153,4 @@ QByteArray FbMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin

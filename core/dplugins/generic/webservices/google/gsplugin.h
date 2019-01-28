@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 class GSWindow;
@@ -69,6 +69,6 @@ private:
     QPointer<GSWindow> m_toolDlgExportGdrive;
 };
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_PLUGIN_H

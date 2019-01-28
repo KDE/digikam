@@ -50,7 +50,7 @@
 #include "sylpheedbinary.h"
 #include "thunderbirdbinary.h"
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class Q_DECL_HIDDEN MailIntroPage::Private
@@ -217,4 +217,4 @@ bool MailIntroPage::isComplete() const
     return (!val.isEmpty());
 }
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin

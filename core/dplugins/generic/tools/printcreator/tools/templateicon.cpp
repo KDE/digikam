@@ -30,7 +30,7 @@
 //define next to get debug output
 #undef DEBUG_OUTPUT
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN TemplateIcon::Private
@@ -157,4 +157,4 @@ QPainter& TemplateIcon::getPainter() const
     return *d->painter;
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

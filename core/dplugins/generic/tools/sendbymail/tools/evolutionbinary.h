@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class EvolutionBinary : public DBinaryIface
@@ -54,6 +54,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // EVOLUTION_BINARY_H

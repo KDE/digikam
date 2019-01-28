@@ -34,7 +34,7 @@
 
 #include "expoblendingmanager.h"
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 ExpoBlendingPlugin::ExpoBlendingPlugin(QObject* const parent)
@@ -115,4 +115,4 @@ void ExpoBlendingPlugin::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin

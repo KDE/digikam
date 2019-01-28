@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class RajceWidget;
@@ -62,6 +62,6 @@ private:
     RajceWidget* m_widget;
 };
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
 #endif // DIGIKAM_RAJCE_WINDOW_H

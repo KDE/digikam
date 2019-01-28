@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class YFNewAlbumDlg: public WSNewAlbumDialog
@@ -55,6 +55,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin
 
 #endif // DIGIKAM_YF_NEW_ALBUM_DLG_H

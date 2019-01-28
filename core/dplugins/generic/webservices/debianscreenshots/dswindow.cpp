@@ -45,7 +45,7 @@
 #include "dswidget.h"
 #include "wstoolutils.h"
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 static int maxWidth  = 800;
@@ -328,4 +328,4 @@ void DSWindow::slotRequiredPackageInfoAvailableReceived(bool enabled)
     slotMaybeEnableStartButton();
 }
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin

@@ -72,7 +72,7 @@
 #include "drawdecoderwidget.h"
 #include "drawdecoding.h"
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 class RawObserver;
@@ -1040,4 +1040,4 @@ bool ExpoBlendingThread::getXmpRational(const char* xmpTagName, long& num, long&
     return false;
 }
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin

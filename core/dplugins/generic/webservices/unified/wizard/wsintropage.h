@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class WSIntroPage : public DWizardPage
@@ -61,6 +61,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin
 
 #endif // DIGIKAM_WS_INTRO_PAGE_H

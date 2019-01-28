@@ -61,7 +61,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class Q_DECL_HIDDEN SmugTalker::Private
@@ -1184,4 +1184,4 @@ QString SmugTalker::htmlToText(const QString& htmlText) const
     return txtDoc.toPlainText();
 }
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin

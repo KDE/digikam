@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 class IpfsWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<IpfsWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin
 
 #endif // DIGIKAM_IPFS_PLUGIN_H

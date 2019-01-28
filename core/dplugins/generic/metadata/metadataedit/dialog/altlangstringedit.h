@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class AltLangStringsEdit : public QWidget
@@ -71,6 +71,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin
 
 #endif // DIGIKAM_ALT_LANG_STRING_EDIT_H

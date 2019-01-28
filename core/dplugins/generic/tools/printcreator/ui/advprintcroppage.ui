@@ -14,7 +14,7 @@
    <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout" stretch="10,1">
      <item>
-      <widget class="GenericDigikamPrintCreatorPlugin::AdvPrintCropFrame" name="cropFrame" native="true">
+      <widget class="DigikamGenericPrintCreatorPlugin::AdvPrintCropFrame" name="cropFrame" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -168,7 +168,7 @@ Enable &quot;Do not crop&quot; to avoid cropping all of the photos.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GenericDigikamPrintCreatorPlugin::AdvPrintCropFrame</class>
+   <class>DigikamGenericPrintCreatorPlugin::AdvPrintCropFrame</class>
    <extends>QWidget</extends>
    <header>advprintcropframe.h</header>
    <container>1</container>

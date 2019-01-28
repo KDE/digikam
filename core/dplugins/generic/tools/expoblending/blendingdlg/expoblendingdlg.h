@@ -38,7 +38,7 @@
 
 class QCloseEvent;
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 class ExpoBlendingManager;
@@ -83,7 +83,7 @@ private Q_SLOTS:
     void slotFinished();
 
     void slotLoadProcessed(const QUrl&);
-    void slotExpoBlendingAction(const GenericDigikamExpoBlendingPlugin::ExpoBlendingActionData&);
+    void slotExpoBlendingAction(const DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData&);
     void slotAddItems(const QList<QUrl>& urls);
     void slotItemClicked(const QUrl& url);
 
@@ -96,6 +96,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_DLG_H

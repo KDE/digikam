@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 class ExpoBlendingIntroPage : public DWizardPage
@@ -54,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin
 
 #endif // DIGIKAM_EXPO_BLENDING_INTRO_PAGE_H

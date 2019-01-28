@@ -23,7 +23,7 @@
 
 #include "yfalbum.h"
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 YandexFotkiAlbum::YandexFotkiAlbum()
@@ -114,4 +114,4 @@ QDebug operator<<(QDebug d, const YandexFotkiAlbum& a)
     return d;
 }
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin

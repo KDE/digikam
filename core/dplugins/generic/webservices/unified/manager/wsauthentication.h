@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class WSAuthentication : public QObject
@@ -169,6 +169,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin
 
 #endif // DIGIKAM_WS_AUTHENTICATION_H

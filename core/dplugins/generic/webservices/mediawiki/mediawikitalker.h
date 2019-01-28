@@ -48,7 +48,7 @@ namespace MediaWiki
 
 using namespace MediaWiki;
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 class MediaWikiTalker : public KJob
@@ -84,6 +84,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_TALKER_H

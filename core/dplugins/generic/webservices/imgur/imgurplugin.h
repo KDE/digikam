@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 class ImgurWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<ImgurWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_PLUGIN_H

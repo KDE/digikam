@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class ImageResizeJob : public ActionJob
@@ -74,6 +74,6 @@ private:
     QMutex m_mutex;
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_IMAGE_RESIZE_JOB_H

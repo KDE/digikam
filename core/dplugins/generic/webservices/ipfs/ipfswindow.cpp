@@ -44,7 +44,7 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 class Q_DECL_HIDDEN IpfsWindow::Private
@@ -278,4 +278,4 @@ void IpfsWindow::saveSettings()
     config.sync();
 }
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin

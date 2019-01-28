@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 ImageShackMPForm::ImageShackMPForm()
@@ -144,4 +144,4 @@ QByteArray ImageShackMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin

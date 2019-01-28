@@ -47,7 +47,7 @@
 #include "wswizard.h"
 #include "wsnewalbumdialog.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSImagesPage::Private
@@ -326,4 +326,4 @@ void WSImagesPage::slotCreateAlbumDone(int errCode, const QString& errMsg, const
     emit signalListAlbumsRequest();
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

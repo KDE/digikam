@@ -41,7 +41,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 class DIGIKAM_EXPORT ImgurWindow : public WSToolDialog
@@ -90,6 +90,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_WINDOW_H

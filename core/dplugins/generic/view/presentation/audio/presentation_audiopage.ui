@@ -26,7 +26,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="GenericDigikamPresentationPlugin::PresentationAudioList" name="m_SoundFilesListBox"/>
+         <widget class="DigikamGenericPresentationPlugin::PresentationAudioList" name="m_SoundFilesListBox"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -432,7 +432,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GenericDigikamPresentationPlugin::PresentationAudioList</class>
+   <class>DigikamGenericPresentationPlugin::PresentationAudioList</class>
    <extends>QListWidget</extends>
    <header>presentationaudiolist.h</header>
   </customwidget>

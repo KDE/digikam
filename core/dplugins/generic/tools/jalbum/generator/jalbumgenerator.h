@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class JAlbumSettings;
@@ -86,6 +86,6 @@ private:
     friend class JAlbumElementFunctor;
 };
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_GENERATOR_H

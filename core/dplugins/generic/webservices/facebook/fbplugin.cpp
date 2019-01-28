@@ -35,7 +35,7 @@
 
 #include "fbwindow.h"
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 FbPlugin::FbPlugin(QObject* const parent)
@@ -124,4 +124,4 @@ void FbPlugin::slotFaceBook()
     }
 }
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin

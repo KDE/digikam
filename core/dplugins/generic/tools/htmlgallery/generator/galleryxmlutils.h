@@ -33,7 +33,7 @@
 
 #include <libxml/xmlwriter.h>
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 /**
@@ -146,6 +146,6 @@ private:
     XMLWriter& m_writer;
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_XML_UTILS_H

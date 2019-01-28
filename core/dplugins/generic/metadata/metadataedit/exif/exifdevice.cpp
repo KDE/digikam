@@ -50,7 +50,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFDevice::Private
@@ -843,4 +843,4 @@ void EXIFDevice::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

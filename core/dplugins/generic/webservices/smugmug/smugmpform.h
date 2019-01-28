@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class SmugMPForm
@@ -62,6 +62,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin
 
 #endif // DIGIKAM_SMUG_MPFORM_H

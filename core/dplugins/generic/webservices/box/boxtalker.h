@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class BOXTalker : public QObject
@@ -100,6 +100,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_TALKER_H

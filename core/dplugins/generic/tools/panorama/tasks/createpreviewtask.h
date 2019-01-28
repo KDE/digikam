@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class CreatePreviewTask : public PanoTask
@@ -60,6 +60,6 @@ private:
     MetaEngine                    m_meta;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_CREATE_PREVIEW_TASK_H

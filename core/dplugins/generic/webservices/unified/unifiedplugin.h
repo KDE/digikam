@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class UnifiedPlugin : public DPluginGeneric
@@ -67,6 +67,6 @@ private:
     QPointer<WSWizard> m_toolDlg;
 };
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin
 
 #endif // DIGIKAM_UNIFIED_PLUGIN_H

@@ -28,7 +28,7 @@
 #include "digikam_debug.h"
 #include "dbitem.h"
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 DBNewAlbumDlg::DBNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -50,4 +50,4 @@ void DBNewAlbumDlg::getFolderTitle(DBFolder& folder)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getFolderTitle:" << folder.title;
 }
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin

@@ -42,7 +42,7 @@
 #include "expoblendingthread.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN ItemsPage::Private
@@ -143,7 +143,7 @@ void ItemsPage::slotImageListChanged()
     emit signalItemsPageIsValid(d->list->imageUrls().count() > 1);
 }
 
-void ItemsPage::slotExpoBlendingAction(const GenericDigikamExpoBlendingPlugin::ExpoBlendingActionData& ad)
+void ItemsPage::slotExpoBlendingAction(const DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData& ad)
 {
     QString text;
 
@@ -165,4 +165,4 @@ void ItemsPage::slotExpoBlendingAction(const GenericDigikamExpoBlendingPlugin::E
     }
 }
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin

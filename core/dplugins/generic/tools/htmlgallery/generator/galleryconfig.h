@@ -32,7 +32,7 @@
 
 #include <kconfigskeleton.h>
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 class GalleryConfig : public KConfigSkeleton
@@ -137,6 +137,6 @@ protected:
     QString    m_imageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_CONFIG_H

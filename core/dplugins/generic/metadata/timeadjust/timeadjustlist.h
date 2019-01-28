@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamTimeAdjustPlugin
+namespace DigikamGenericTimeAdjustPlugin
 {
 
 class TimeAdjustList : public DItemsList
@@ -71,6 +71,6 @@ public:
     void setStatus(const QMap<QUrl, int>& status);
 };
 
-}  // namespace GenericDigikamTimeAdjustPlugin
+}  // namespace DigikamGenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_LIST_H

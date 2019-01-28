@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 class HTMLSelectionPage : public DWizardPage
@@ -57,6 +57,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_HTML_SELECTION_PAGE_H

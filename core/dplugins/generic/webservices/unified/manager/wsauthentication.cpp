@@ -51,7 +51,7 @@
 #include "imgurtalker.h"
 #include "smugtalker.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSAuthentication::Private
@@ -127,26 +127,26 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
     switch (ws)
     {
         case WSSettings::WebService::FLICKR:
-            //d->talker = new GenericDigikamFlickrPlugin::FlickrTalker(d->wizard, serviceName, d->iface);
+            //d->talker = new DigikamGenericFlickrPlugin::FlickrTalker(d->wizard, serviceName, d->iface);
             break;
         case WSSettings::WebService::DROPBOX:
-            //d->talker = new GenericDigikamDropBoxPlugin::DBTalker(d->wizard);
+            //d->talker = new DigikamGenericDropBoxPlugin::DBTalker(d->wizard);
             break;
         case WSSettings::WebService::IMGUR:
-            //d->talker = new GenericDigikamImgUrPlugin::ImgurTalker(d->wizard);
+            //d->talker = new DigikamGenericImgUrPlugin::ImgurTalker(d->wizard);
             break;
         case WSSettings::WebService::FACEBOOK:
-            //d->albumDlg = new GenericDigikamFaceBookPlugin::FbNewAlbumDlg(d->wizard, d->serviceName);
-            //d->talker   = new GenericDigikamFaceBookPlugin::FbTalker(d->wizard, d->albumDlg);
+            //d->albumDlg = new DigikamGenericFaceBookPlugin::FbNewAlbumDlg(d->wizard, d->serviceName);
+            //d->talker   = new DigikamGenericFaceBookPlugin::FbTalker(d->wizard, d->albumDlg);
             break;
         case WSSettings::WebService::SMUGMUG:
-            //d->talker = new GenericDigikamSmugMugPlugin::SmugTalker(d->iface, d->wizard);
+            //d->talker = new DigikamGenericSmugMugPlugin::SmugTalker(d->iface, d->wizard);
             break;
         case WSSettings::WebService::GDRIVE:
-            //d->talker = new GenericDigikamGoogleServicesPlugin::GDTalker(d->wizard);
+            //d->talker = new DigikamGenericGoogleServicesPlugin::GDTalker(d->wizard);
             break;
         case WSSettings::WebService::GPHOTO:
-            //d->talker = new GenericDigikamGoogleServicesPlugin::GPTalker(d->wizard);
+            //d->talker = new DigikamGenericGoogleServicesPlugin::GPTalker(d->wizard);
             break;
     }
 
@@ -434,4 +434,4 @@ void WSAuthentication::slotAddPhotoDone(int errCode, const QString& errMsg)
     uploadNextPhoto();
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

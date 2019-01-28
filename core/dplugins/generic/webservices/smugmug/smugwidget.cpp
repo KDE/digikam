@@ -46,7 +46,7 @@
 
 #include "ditemslist.h"
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool import)
@@ -350,4 +350,4 @@ void SmugWidget::slotResizeChecked()
     m_imageQualitySpB->setEnabled(m_resizeChB->isChecked());
 }
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin

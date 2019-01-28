@@ -48,7 +48,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalPainter::Private

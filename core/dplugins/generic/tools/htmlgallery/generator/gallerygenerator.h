@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 class GalleryInfo;
@@ -87,6 +87,6 @@ private:
     friend class GalleryElementFunctor;
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_GENERATOR_H

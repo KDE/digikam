@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 class IpfsImagesListViewItem;
@@ -88,6 +88,6 @@ public:
     QString IpfsUrl() const;
 };
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin
 
 #endif // DIGIKAM_IPFS_IMAGES_LIST_H

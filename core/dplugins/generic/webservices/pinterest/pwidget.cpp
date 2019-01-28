@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QGroupBox>
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 PWidget::PWidget(QWidget* const parent,
@@ -65,4 +65,4 @@ void PWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin

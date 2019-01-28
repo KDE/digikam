@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFAdjust::Private
@@ -379,4 +379,4 @@ void EXIFAdjust::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

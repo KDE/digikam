@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QGroupBox>
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 ODWidget::ODWidget(QWidget* const parent,
@@ -65,4 +65,4 @@ void ODWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin

@@ -40,7 +40,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class DIGIKAM_EXPORT ODWindow : public WSToolDialog
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_WINDOW_H

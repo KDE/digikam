@@ -61,7 +61,7 @@
 #include "dspackagedelegate.h"
 #include "dscommon.h"
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
@@ -89,7 +89,7 @@ DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(settingsBox);
 
     m_headerLabel = new DActiveLabel(QUrl(), QString(), settingsBox);
-    m_headerLabel->updateData(QUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl), QImage(QLatin1String(":/debianscreenshots/dslogo.png")));
+    m_headerLabel->updateData(QUrl(DigikamGenericDebianScreenshotsPlugin::debshotsUrl), QImage(QLatin1String(":/debianscreenshots/dslogo.png")));
     m_headerLabel->setWhatsThis(i18n("This is a clickable link to open the Debian Screenshots home page in a web browser."));
 
     QGroupBox* const pkgGroupBox   = new QGroupBox(settingsBox);
@@ -182,7 +182,7 @@ void DSWidget::slotCompletePackageName(const QString& tip)
         m_descriptionLineEdit->setEnabled(false);
         emit requiredPackageInfoAvailable(false);
 
-        QUrl sdnUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl +
+        QUrl sdnUrl(DigikamGenericDebianScreenshotsPlugin::debshotsUrl +
                     QLatin1String("/packages/ajax_autocomplete_packages")); // DOES NOT RETURN JSON
         QUrlQuery query(sdnUrl);
         query.addQueryItem(QLatin1String("q"), tip);
@@ -266,7 +266,7 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
 void DSWidget::slotFindVersionsForPackage(const QString& package)
 {
-    QUrl sdnVersionUrl(GenericDigikamDebianScreenshotsPlugin::debshotsUrl + 
+    QUrl sdnVersionUrl(DigikamGenericDebianScreenshotsPlugin::debshotsUrl + 
                        QLatin1String("/packages/ajax_get_version_for_package")); // DOES RETURN JSON
     QUrlQuery query(sdnVersionUrl);
     query.addQueryItem(QLatin1String("q"),     QString::fromUtf8(QUrl::toPercentEncoding(package)));
@@ -337,4 +337,4 @@ void DSWidget::slotEnableUpload()
     }
 }
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin

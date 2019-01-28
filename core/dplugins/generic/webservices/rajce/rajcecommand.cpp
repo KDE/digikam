@@ -46,7 +46,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 const unsigned THUMB_SIZE = 100;
@@ -600,4 +600,4 @@ QByteArray AddPhotoCommand::encode() const
     return ret;
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

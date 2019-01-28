@@ -27,7 +27,7 @@
 #include "digikam_debug.h"
 #include "twitteritem.h"
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 TwNewAlbumDlg::TwNewAlbumDlg(QWidget* const parent, const QString& toolName)
@@ -49,4 +49,4 @@ void TwNewAlbumDlg::getAlbumProperties(TwAlbum& album)
     album.description = getDescEdit()->toPlainText();
 }
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin

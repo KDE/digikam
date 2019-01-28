@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class DIGIKAM_EXPORT ImageShackWindow : public WSToolDialog
@@ -97,6 +97,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WINDOW_H

@@ -34,7 +34,7 @@
 
 #include "dswindow.h"
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 DSPlugin::DSPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void DSPlugin::slotDebianScreenshots()
     }
 }
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin

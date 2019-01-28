@@ -48,7 +48,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com/oauth2/authorize"),
@@ -425,4 +425,4 @@ void ImgurTalker::doWork()
     }
 }
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin

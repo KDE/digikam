@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class ImageShackWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<ImageShackWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGESHACK_PLUGIN_H

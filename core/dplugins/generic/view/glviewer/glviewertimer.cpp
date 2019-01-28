@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamGLViewerPlugin
+namespace DigikamGenericGLViewerPlugin
 {
 
 class GLViewerTimer::Private
@@ -69,4 +69,4 @@ void GLViewerTimer::at(const QString& s)
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "stopwatch:" << s << ": " << d->meantime << " ms    overall: " << d->timer.elapsed() << " ms";
 }
 
-} // namespace GenericDigikamGLViewerPlugin
+} // namespace DigikamGenericGLViewerPlugin

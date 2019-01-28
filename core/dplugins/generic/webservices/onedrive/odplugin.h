@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class ODWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<ODWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_PLUGIN_H

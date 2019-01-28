@@ -26,7 +26,7 @@
 
 #include <QPainter>
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 DSPackageDelegate::DSPackageDelegate(QObject* const parent)
@@ -55,4 +55,4 @@ QSize DSPackageDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     return 2.2*QStyledItemDelegate::sizeHint(option, index);
 }
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin

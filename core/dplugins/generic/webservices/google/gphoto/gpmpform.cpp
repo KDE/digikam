@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 GPMPForm::GPMPForm()
@@ -161,4 +161,4 @@ QByteArray GPMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin

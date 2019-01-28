@@ -26,7 +26,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 CompileMKTask::CompileMKTask(const QString& workDirPath,
@@ -60,4 +60,4 @@ void CompileMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "make output:" << endl << output;
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "dmetadata.h"
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 IpfsImagesList::IpfsImagesList(QWidget* const parent)
@@ -183,4 +183,4 @@ QString IpfsImagesListViewItem::IpfsUrl() const
     return text(IpfsImagesList::Url);
 }
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin

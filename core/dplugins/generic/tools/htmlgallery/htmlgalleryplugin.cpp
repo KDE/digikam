@@ -34,7 +34,7 @@
 
 #include "htmlwizard.h"
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 HtmlGalleryPlugin::HtmlGalleryPlugin(QObject* const parent)
@@ -113,4 +113,4 @@ void HtmlGalleryPlugin::slotHtmlGallery()
     delete wzrd;
 }
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin

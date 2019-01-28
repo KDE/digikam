@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class WSImagesPage : public DWizardPage
@@ -106,6 +106,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin
 
 #endif // DIGIKAM_WS_IMAGES_PAGE_H

@@ -52,7 +52,7 @@
 #include "dimgpreviewitem.h"
 #include "dexpanderbox.h"
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class Q_DECL_HIDDEN GPSItemDetails::Private
@@ -457,4 +457,4 @@ void GPSItemDetails::slotSetActive(const bool state)
     }
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin

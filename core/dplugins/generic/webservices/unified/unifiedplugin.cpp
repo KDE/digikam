@@ -30,7 +30,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 UnifiedPlugin::UnifiedPlugin(QObject* const parent)
@@ -109,4 +109,4 @@ void UnifiedPlugin::slotUnified()
     }
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

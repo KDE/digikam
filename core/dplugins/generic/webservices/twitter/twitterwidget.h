@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 class TwWidget : public WSSettingsWidget
@@ -64,6 +64,6 @@ private:
     friend class TwWindow;
 };
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_WIDGET_H

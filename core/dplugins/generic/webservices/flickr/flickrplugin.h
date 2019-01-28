@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class FlickrWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<FlickrWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_PLUGIN_H

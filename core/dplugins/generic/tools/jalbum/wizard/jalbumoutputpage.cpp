@@ -44,7 +44,7 @@
 #include "jalbumsettings.h"
 #include "dfileselector.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumOutputPage::Private
@@ -167,4 +167,4 @@ bool JAlbumOutputPage::isComplete() const
     return b;
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

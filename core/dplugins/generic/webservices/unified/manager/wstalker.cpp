@@ -51,7 +51,7 @@ bool operator< (const WSAlbum& first, const WSAlbum& second)
 
 } // namespace Digikam
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 WSTalker::WSTalker(QWidget* const parent)
@@ -460,4 +460,4 @@ void WSTalker::slotResponseTokenReceived(const QMap<QString, QString>& /*rep*/)
 {
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

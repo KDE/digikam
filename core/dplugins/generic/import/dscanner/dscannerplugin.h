@@ -36,7 +36,7 @@ namespace KSaneIface
 
 using namespace Digikam;
 
-namespace GenericDigikamDScannerPlugin
+namespace DigikamGenericDScannerPlugin
 {
 
 class DigitalScannerPlugin : public DPluginGeneric
@@ -68,6 +68,6 @@ private:
     KSaneIface::KSaneWidget* m_saneWidget;
 };
 
-} // namespace GenericDigikamDScannerPlugin
+} // namespace DigikamGenericDScannerPlugin
 
 #endif // DIGIKAM_DSCANNER_PLUGIN_H

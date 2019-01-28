@@ -44,7 +44,7 @@
 #include "dfileselector.h"
 #include "filesaveconflictbox.h"
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintOutputPage::Private
@@ -182,4 +182,4 @@ bool AdvPrintOutputPage::isComplete() const
     return (!d->destUrl->fileDlgPath().isEmpty());
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
@@ -80,6 +80,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_WIZARD_H

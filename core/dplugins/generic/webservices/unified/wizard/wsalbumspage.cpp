@@ -31,7 +31,7 @@
 
 #include "wswizard.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSAlbumsPage::Private
@@ -110,4 +110,4 @@ bool WSAlbumsPage::isComplete() const
     return (!d->iface->albumChooserItems().isEmpty());
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

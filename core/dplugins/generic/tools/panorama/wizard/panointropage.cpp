@@ -53,7 +53,7 @@
 #include "huginexecutorbinary.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoIntroPage::Private
@@ -298,4 +298,4 @@ void PanoIntroPage::initializePage()
     emit completeChanged();
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbUser
@@ -111,6 +111,6 @@ public:
     QString originalURL;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_ITEM_H

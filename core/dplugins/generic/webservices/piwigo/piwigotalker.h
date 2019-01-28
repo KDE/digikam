@@ -46,7 +46,7 @@ using namespace Digikam;
 
 template <class T> class QList;
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class PiwigoAlbum;
@@ -147,6 +147,6 @@ private:
     static QString s_authToken;
 };
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin
 
 #endif // PIWIGOTALKER_H

@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 /**
@@ -93,6 +93,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin
 
 #endif // DIGIKAM_FT_IMPORT_WIDGET_H

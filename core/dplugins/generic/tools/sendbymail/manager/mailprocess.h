@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class MailProcess : public QObject
@@ -100,6 +100,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_PROCESS_H

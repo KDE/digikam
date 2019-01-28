@@ -33,7 +33,7 @@
 
 #include "presentationcontainer.h"
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 PresentationCaptionPage::PresentationCaptionPage(QWidget* const parent, PresentationContainer* const sharedData)
@@ -109,4 +109,4 @@ void PresentationCaptionPage::slotOpenFontDialog()
     }
 }
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin

@@ -35,7 +35,7 @@
 
 class QTreeWidgetItem;
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -86,6 +86,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_MAIN_PAGE_H

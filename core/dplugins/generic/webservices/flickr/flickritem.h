@@ -33,7 +33,7 @@
 
 #include "flickrlist.h"
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class GPhoto
@@ -153,6 +153,6 @@ public:
     QString description;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_ITEM_H

@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class PiwigoAlbum;
@@ -82,6 +82,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_WINDOW_H

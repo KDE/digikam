@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class YFWidget : public WSSettingsWidget
@@ -77,6 +77,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin
 
 #endif // DIGIKAM_YF_WIDGET_H

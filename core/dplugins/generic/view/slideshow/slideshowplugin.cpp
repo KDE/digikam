@@ -35,7 +35,7 @@
 
 #include "slideshow.h"
 
-namespace GenericDigikamSlideShowPlugin
+namespace DigikamGenericSlideShowPlugin
 {
 
 SlideShowPlugin::SlideShowPlugin(QObject* const parent)
@@ -172,4 +172,4 @@ void SlideShowPlugin::slotMenuSlideShowRecursive()
 {
 }
 
-} // namespace GenericDigikamSlideShowPlugin
+} // namespace DigikamGenericSlideShowPlugin

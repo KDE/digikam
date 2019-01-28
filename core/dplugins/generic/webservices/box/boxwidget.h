@@ -37,7 +37,7 @@ class QButtonGroup;
 
 using namespace Digikam;
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class BOXWidget : public WSSettingsWidget
@@ -59,6 +59,6 @@ private:
     friend class BOXWindow;
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_WIDGET_H

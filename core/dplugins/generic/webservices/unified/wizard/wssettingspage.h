@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class WSSettingsPage : public DWizardPage
@@ -58,6 +58,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin
 
 #endif // DIGIKAM_WS_SETTINGS_PAGE_H

@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class FlickrList : public DItemsList
@@ -162,6 +162,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_LIST_H

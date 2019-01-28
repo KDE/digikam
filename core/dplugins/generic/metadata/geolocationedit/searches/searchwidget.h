@@ -45,7 +45,7 @@ class KConfigGroup;
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class SearchWidget : public QWidget
@@ -93,6 +93,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_WIDGET_H

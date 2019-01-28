@@ -41,7 +41,7 @@ namespace KSaneIface
 
 using namespace KSaneIface;
 
-namespace GenericDigikamDScannerPlugin
+namespace DigikamGenericDScannerPlugin
 {
 
 class ScanDialog : public DPluginDialog
@@ -76,6 +76,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamDScannerPlugin
+} // namespace DigikamGenericDScannerPlugin
 
 #endif // DIGIKAM_SCAN_DIALOG_H

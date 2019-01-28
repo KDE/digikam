@@ -23,7 +23,7 @@
 
 #include "yfphoto.h"
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 YFPhoto::YFPhoto()
@@ -136,4 +136,4 @@ QDebug operator<<(QDebug d, const YFPhoto& p)
     return d;
 }
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin

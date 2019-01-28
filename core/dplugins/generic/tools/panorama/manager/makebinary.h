@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class MakeBinary : public DBinaryIface
@@ -60,6 +60,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_MAKE_BINARY_H

@@ -31,7 +31,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 XMPSubjects::XMPSubjects(QWidget* const parent)
@@ -112,4 +112,4 @@ void XMPSubjects::applyMetadata(QByteArray& xmpData)
     xmpData = meta.getXmp();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

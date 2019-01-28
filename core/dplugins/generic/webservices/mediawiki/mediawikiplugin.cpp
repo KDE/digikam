@@ -34,7 +34,7 @@
 
 #include "mediawikiwindow.h"
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 MediaWikiPlugin::MediaWikiPlugin(QObject* const parent)
@@ -116,4 +116,4 @@ void MediaWikiPlugin::slotMediaWiki()
     }
 }
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin

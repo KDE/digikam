@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class AdvPrintOutputPage : public DWizardPage
@@ -53,6 +53,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_OUTPUT_PAGE_H

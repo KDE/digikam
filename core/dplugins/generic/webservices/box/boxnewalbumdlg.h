@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class BOXFolder;
@@ -46,6 +46,6 @@ public:
     void getFolderTitle(BOXFolder& folder);
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_NEW_ALBUM_DLG_H

@@ -41,7 +41,7 @@
 
 class QDomElement;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbTalker : public QObject
@@ -107,6 +107,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_TALKER_H

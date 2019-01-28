@@ -44,7 +44,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCKeywords::Private
@@ -291,4 +291,4 @@ void IPTCKeywords::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

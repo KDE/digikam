@@ -60,7 +60,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationMainPage::Private
@@ -494,4 +494,4 @@ void PresentationMainPage::setupConnections()
             this, SLOT(slotImagesFilesSelected(QTreeWidgetItem*)));
 }
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin

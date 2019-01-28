@@ -25,12 +25,12 @@
 
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 const QString debshotsUrl = QLatin1String("http://screenshots.debian.net");
 //const QString debshotsUrl = QLatin1String("http://localhost:15000"); // Test URL
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_COMMON_H

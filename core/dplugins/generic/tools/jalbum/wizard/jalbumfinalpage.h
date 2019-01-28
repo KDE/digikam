@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class JAlbumFinalPage : public DWizardPage
@@ -58,6 +58,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_FINAL_PAGE_H

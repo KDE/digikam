@@ -38,7 +38,7 @@
 #include "gpsundocommand.h"
 #include "gpsitemmodel.h"
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 static bool RowRangeLessThan(const QPair<int, int>& a, const QPair<int, int>& b)
@@ -359,4 +359,4 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     }
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin

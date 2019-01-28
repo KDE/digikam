@@ -58,7 +58,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class Q_DECL_HIDDEN DBTalker::Private
@@ -508,4 +508,4 @@ void DBTalker::parseResponseCreateFolder(const QByteArray& data)
     }
 }
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin

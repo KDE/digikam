@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 DSMPForm::DSMPForm()
@@ -155,4 +155,4 @@ QByteArray DSMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin

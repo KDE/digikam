@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGLViewerPlugin
+namespace DigikamGenericGLViewerPlugin
 {
 
 class GLViewerPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotGLViewer();
 };
 
-} // namespace GenericDigikamGLViewerPlugin
+} // namespace DigikamGenericGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWER_PLUGIN_H

@@ -40,7 +40,7 @@
 using namespace Digikam;
 using namespace KSaneIface;
 
-namespace GenericDigikamDScannerPlugin
+namespace DigikamGenericDScannerPlugin
 {
 
 class Q_DECL_HIDDEN SaveImgThread::Private
@@ -247,4 +247,4 @@ void SaveImgThread::run()
     emit signalComplete(d->newUrl, success);
 }
 
-} // namespace GenericDigikamDScannerPlugin
+} // namespace DigikamGenericDScannerPlugin

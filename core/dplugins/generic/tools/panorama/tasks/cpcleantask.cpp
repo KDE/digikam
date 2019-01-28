@@ -26,7 +26,7 @@
 
 #include <QFile>
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 CpCleanTask::CpCleanTask(const QString& workDirPath, const QUrl& input,
@@ -64,4 +64,4 @@ void CpCleanTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("cpclean"));
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class VideoSlideShowPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotVideoSlideShow();
 };
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDEO_SLIDESHOW_PLUGIN_H

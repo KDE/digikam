@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class PanoramaPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotPanorama();
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_PANORAMA_PLUGIN_H

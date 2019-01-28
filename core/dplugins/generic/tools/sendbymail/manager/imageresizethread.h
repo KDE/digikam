@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class ImageResizeThread : public ActionThreadBase
@@ -61,6 +61,6 @@ private:
     int* m_count;    // although it is private, it's address is passed to Task
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_IMAGE_RESIZE_THREAD_H

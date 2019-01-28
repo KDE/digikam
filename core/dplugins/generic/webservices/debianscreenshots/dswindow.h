@@ -38,7 +38,7 @@ class QAbstractButton;
 
 using namespace Digikam;
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSTalker;
@@ -102,6 +102,6 @@ private:
     DSWidget*    m_widget;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_WINDOW_H

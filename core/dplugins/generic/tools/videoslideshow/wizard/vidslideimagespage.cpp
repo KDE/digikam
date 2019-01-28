@@ -38,7 +38,7 @@
 #include "ditemslist.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideImagesPage::Private
@@ -125,4 +125,4 @@ bool VidSlideImagesPage::isComplete() const
     return (!d->imageList->imageUrls().isEmpty());
 }
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin

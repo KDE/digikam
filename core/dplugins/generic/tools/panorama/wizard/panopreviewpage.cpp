@@ -51,7 +51,7 @@
 #include "huginexecutorbinary.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoPreviewPage::Private
@@ -137,11 +137,11 @@ void PanoPreviewPage::computePreview()
 
     QMutexLocker lock(&d->previewBusyMutex);
 
-    connect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
     d->canceled = false;
 
@@ -177,14 +177,14 @@ void PanoPreviewPage::startStitching()
         return;
     }
 
-    connect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-    connect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
     d->canceled      = false;
     d->stitchingBusy = true;
@@ -318,7 +318,7 @@ void PanoPreviewPage::slotStartStitching()
     startStitching();
 }
 
-void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoActionData& ad)
+void PanoPreviewPage::slotPanoAction(const DigikamGenericPanoramaPlugin::PanoActionData& ad)
 {
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (preview)";
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "\tstarting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
@@ -348,11 +348,11 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->output      = ad.message;
                     d->previewWidget->setBusy(false);
@@ -379,14 +379,14 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->stitchingBusy = false;
                     QString message  = i18nc("Here a makefile is a script for GNU Make",
@@ -407,14 +407,14 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->stitchingBusy = false;
                     QString message  = i18nc("a project file is a .pto file, as given to hugin to build a panorama",
@@ -435,14 +435,14 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->stitchingBusy = false;
                     QString message  = i18nc("Error message for image file number %1 out of %2",
@@ -466,14 +466,14 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->stitchingBusy = false;
                     d->postProcessing->addEntry(i18nc("Error message for panorama compilation",
@@ -511,11 +511,11 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                 {
                     if (d->previewBusy)
                     {
-                        disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                                this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                        disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                                this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                        disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                                this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                        disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                                this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
                     }
 
                     d->previewBusy = false;
@@ -566,14 +566,14 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
                         return;
                     }
 
-                    disconnect(d->mngr->thread(), SIGNAL(starting(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(starting(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->stitchingBusy = false;
                     d->postProcessing->addEntry(i18nc("Success for panorama compilation", "Panorama compilation"), DHistoryView::SuccessEntry);
@@ -637,4 +637,4 @@ void PanoPreviewPage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAct
     }
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

@@ -34,7 +34,7 @@
 #include "jalbumsettings.h"
 #include "ditemslist.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumSelectionPage::Private
@@ -168,4 +168,4 @@ bool JAlbumSelectionPage::isComplete() const
     return (!d->imageList->imageUrls().isEmpty());
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

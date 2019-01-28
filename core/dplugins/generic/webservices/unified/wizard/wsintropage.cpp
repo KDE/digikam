@@ -47,7 +47,7 @@
 #include "wswizard.h"
 #include "wssettings.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 class Q_DECL_HIDDEN WSIntroPage::Private
@@ -235,4 +235,4 @@ bool WSIntroPage::validatePage()
     return true;
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

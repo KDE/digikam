@@ -44,7 +44,7 @@
 #include "jalbumsettings.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumIntroPage::Private
@@ -176,4 +176,4 @@ bool JAlbumIntroPage::isComplete() const
     return (!val.isEmpty());
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

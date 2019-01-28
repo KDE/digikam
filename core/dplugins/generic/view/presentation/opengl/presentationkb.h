@@ -48,7 +48,7 @@
 #include <QTimer>
 #include <QGLWidget>
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -161,6 +161,6 @@ private:
     friend class KBEffect;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_KB_H

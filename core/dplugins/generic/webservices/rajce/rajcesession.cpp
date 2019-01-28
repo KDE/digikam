@@ -27,7 +27,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class Q_DECL_HIDDEN RajceSession::Private
@@ -191,9 +191,9 @@ RajceCommandType& RajceSession::lastCommand()
     return d->lastCommand;
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
-QDebug operator<<(QDebug d, const GenericDigikamRajcePlugin::RajceSession& s)
+QDebug operator<<(QDebug d, const DigikamGenericRajcePlugin::RajceSession& s)
 {
     QString     ss;
     QTextStream str(&ss);
@@ -210,7 +210,7 @@ QDebug operator<<(QDebug d, const GenericDigikamRajcePlugin::RajceSession& s)
     str << ", imageQuality="      << s.imageQuality();
     str << ", albums=[";
 
-    GenericDigikamRajcePlugin::RajceAlbum a;
+    DigikamGenericRajcePlugin::RajceAlbum a;
 
     foreach (a, s.albums())
     {

@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class DIGIKAM_EXPORT AdvPrintThread : public ActionThreadBase
@@ -57,6 +57,6 @@ Q_SIGNALS:
     void signalPreview(const QImage&);
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // DIGIKAM_ADV_PRINT_THREAD_H

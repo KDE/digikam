@@ -64,7 +64,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN GSTalkerBase::Private
@@ -236,4 +236,4 @@ void GSTalkerBase::doOAuth()
     }
 }
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin

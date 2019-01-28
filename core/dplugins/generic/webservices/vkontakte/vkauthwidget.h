@@ -37,7 +37,7 @@ namespace Vkontakte
     class VkApi;
 }
 
-namespace GenericDigikamVKontaktePlugin
+namespace DigikamGenericVKontaktePlugin
 {
 
 class VKAuthWidget : public QGroupBox
@@ -77,6 +77,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamVKontaktePlugin
+} // namespace DigikamGenericVKontaktePlugin
 
 #endif // DIGIKAM_VK_AUTH_WIDGET_H

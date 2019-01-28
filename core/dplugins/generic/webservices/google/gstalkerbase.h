@@ -39,7 +39,7 @@
 
 #include "o2.h"
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 class GSTalkerBase : public QObject
@@ -91,6 +91,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_TALKER_BASE_H

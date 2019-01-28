@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<FbWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_PLUGIN_H

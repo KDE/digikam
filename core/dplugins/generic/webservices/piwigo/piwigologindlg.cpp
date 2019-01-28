@@ -45,7 +45,7 @@
 #include "digikam_debug.h"
 #include "piwigosession.h"
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class Q_DECL_HIDDEN PiwigoLoginDlg::Private
@@ -151,4 +151,4 @@ void PiwigoLoginDlg::slotOk()
     accept();
 }
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin

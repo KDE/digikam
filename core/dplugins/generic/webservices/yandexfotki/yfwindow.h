@@ -42,7 +42,7 @@ using namespace Digikam;
 
 class QCloseEvent;
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class DIGIKAM_EXPORT YFWindow : public WSToolDialog
@@ -108,6 +108,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin
 
 #endif // DIGIKAM_YF_WINDOW_H

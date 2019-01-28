@@ -48,7 +48,7 @@
 #include "jalbumoutputpage.h"
 #include "jalbumselectionpage.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumWizard::Private
@@ -126,4 +126,4 @@ JAlbumSettings* JAlbumWizard::settings() const
     return d->settings;
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

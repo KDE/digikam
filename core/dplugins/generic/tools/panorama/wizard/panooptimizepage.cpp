@@ -54,7 +54,7 @@
 #include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoOptimizePage::Private
@@ -185,10 +185,10 @@ void PanoOptimizePage::process()
 //  d->projectionAndSizeCheckbox->hide();
     d->progressTimer->start(300);
 
-    connect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
-    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-            this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
+    connect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+            this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
     d->mngr->resetAutoOptimisePto();
     d->mngr->resetViewAndCropOptimisePto();
@@ -243,10 +243,10 @@ void PanoOptimizePage::cleanupPage()
 {
     d->canceled = true;
 
-    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
-    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
+    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
     d->mngr->thread()->cancel();
 
@@ -269,7 +269,7 @@ void PanoOptimizePage::slotProgressTimerDone()
     d->progressTimer->start(300);
 }
 
-void PanoOptimizePage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoActionData& ad)
+void PanoOptimizePage::slotPanoAction(const DigikamGenericPanoramaPlugin::PanoActionData& ad)
 {
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "SlotPanoAction (optimize)";
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "starting, success, canceled, action: " << ad.starting << ad.success << d->canceled << ad.action;
@@ -292,10 +292,10 @@ void PanoOptimizePage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAc
                 case PANO_OPTIMIZE:
                 case PANO_AUTOCROP:
                 {
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Job failed (optimize): " << ad.action;
 
@@ -334,10 +334,10 @@ void PanoOptimizePage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAc
                 }
                 case PANO_AUTOCROP:
                 {
-                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
-                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(GenericDigikamPanoramaPlugin::PanoActionData)),
-                               this, SLOT(slotPanoAction(GenericDigikamPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(stepFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
+                    disconnect(d->mngr->thread(), SIGNAL(jobCollectionFinished(DigikamGenericPanoramaPlugin::PanoActionData)),
+                               this, SLOT(slotPanoAction(DigikamGenericPanoramaPlugin::PanoActionData)));
 
                     d->progressTimer->stop();
                     d->progressLabel->clear();
@@ -358,4 +358,4 @@ void PanoOptimizePage::slotPanoAction(const GenericDigikamPanoramaPlugin::PanoAc
     }
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

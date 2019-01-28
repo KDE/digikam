@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class ImageShackNewAlbumDlg : public WSNewAlbumDialog
@@ -55,6 +55,6 @@ public:
     QString getAlbumTitle();
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_NEWALBUMDLG_H

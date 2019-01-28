@@ -31,7 +31,7 @@
 #include <QColor>
 #include <QSize>
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class TemplateIcon
@@ -85,6 +85,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // TEMPLATE_ICON_H

@@ -45,7 +45,7 @@
 #include "dworkingpixmap.h"
 #include "wstoolutils.h"
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 class Q_DECL_HIDDEN ReplaceDialog::Private
@@ -330,4 +330,4 @@ int ReplaceDialog::getResult()
     return d->result;
 }
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin

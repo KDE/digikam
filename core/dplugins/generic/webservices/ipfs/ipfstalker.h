@@ -40,7 +40,7 @@
 
 #include "o2.h"
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 enum class IpfsTalkerActionType
@@ -131,6 +131,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin
 
 #endif // DIGIKAM_IPFS_TALKER_H

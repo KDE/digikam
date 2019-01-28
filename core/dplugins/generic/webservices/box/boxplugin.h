@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class BOXWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<BOXWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_PLUGIN_H

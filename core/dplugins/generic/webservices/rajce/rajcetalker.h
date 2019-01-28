@@ -36,7 +36,7 @@
 class QWidget;
 class QNetworkReply;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class RajceCommand;
@@ -89,6 +89,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
 #endif // DIGIKAM_RAJCE_TALKER_H

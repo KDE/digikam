@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class DIGIKAM_EXPORT FlickrWindow : public WSToolDialog
@@ -106,6 +106,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WINDOW_H

@@ -44,7 +44,7 @@ namespace KIO
 
 using namespace Digikam;
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 class FTExportWidget;
@@ -137,6 +137,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin
 
 #endif // DIGIKAM_FT_EXPORT_WINDOW_H

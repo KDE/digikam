@@ -34,7 +34,7 @@
 
 #include "dbwindow.h"
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 DBPlugin::DBPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void DBPlugin::slotDropBox()
     }
 }
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin

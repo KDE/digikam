@@ -36,7 +36,7 @@
 #include "glviewerwidget.h"
 #include "digikam_debug.h"
 
-namespace GenericDigikamGLViewerPlugin
+namespace DigikamGenericGLViewerPlugin
 {
 
 GLViewerPlugin::GLViewerPlugin(QObject* const parent)
@@ -127,4 +127,4 @@ void GLViewerPlugin::slotGLViewer()
     }
 }
 
-} // namespace GenericDigikamGLViewerPlugin
+} // namespace DigikamGenericGLViewerPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSlideShowPlugin
+namespace DigikamGenericSlideShowPlugin
 {
 
 class SlideShowPlugin : public DPluginGeneric
@@ -62,6 +62,6 @@ private Q_SLOTS:
     void slotMenuSlideShowRecursive();
 };
 
-} // namespace GenericDigikamSlideShowPlugin
+} // namespace DigikamGenericSlideShowPlugin
 
 #endif // DIGIKAM_SLIDESHOW_PLUGIN_H

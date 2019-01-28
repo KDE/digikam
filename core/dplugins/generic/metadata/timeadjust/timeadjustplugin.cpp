@@ -34,7 +34,7 @@
 
 #include "timeadjustdialog.h"
 
-namespace GenericDigikamTimeAdjustPlugin
+namespace DigikamGenericTimeAdjustPlugin
 {
 
 TimeAdjustPlugin::TimeAdjustPlugin(QObject* const parent)
@@ -117,4 +117,4 @@ void TimeAdjustPlugin::slotTimeAdjust()
     delete dialog;
 }
 
-} // namespace GenericDigikamTimeAdjustPlugin
+} // namespace DigikamGenericTimeAdjustPlugin

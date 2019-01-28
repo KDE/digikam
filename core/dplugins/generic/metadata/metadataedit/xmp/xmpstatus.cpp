@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPStatus::Private
@@ -235,4 +235,4 @@ void XMPStatus::applyMetadata(QByteArray& xmpData)
     xmpData = meta.getXmp();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

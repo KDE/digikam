@@ -55,7 +55,7 @@
 #include "thumbnailloadthread.h"
 #include "dxmlguiwindow.h"
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN MetadataEditDialog::Private
@@ -371,4 +371,4 @@ void MetadataEditDialog::slotSetReadOnly(bool state)
     d->isReadOnly = state;
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

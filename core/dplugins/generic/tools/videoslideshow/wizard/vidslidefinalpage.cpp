@@ -48,7 +48,7 @@
 #include "vidslidethread.h"
 #include "vidplayerdlg.h"
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideFinalPage::Private
@@ -223,4 +223,4 @@ bool VidSlideFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin

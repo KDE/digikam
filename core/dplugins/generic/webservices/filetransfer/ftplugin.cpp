@@ -35,7 +35,7 @@
 #include "ftexportwindow.h"
 #include "ftimportwindow.h"
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 FTPlugin::FTPlugin(QObject* const parent)
@@ -140,4 +140,4 @@ void FTPlugin::slotFileTransferImport()
     }
 }
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class SmugWindow;
@@ -67,6 +67,6 @@ private:
     QPointer<SmugWindow> m_toolDlgImport;
 };
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin
 
 #endif // DIGIKAM_SMUG_PLUGIN_H

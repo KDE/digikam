@@ -37,7 +37,7 @@
 #include "presentationaudiowidget.h"
 #include "presentationaudiolist.h"
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationAudioWidget;
@@ -98,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_AUDIO_PAGE_H

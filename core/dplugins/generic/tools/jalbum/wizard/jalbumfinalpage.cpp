@@ -49,7 +49,7 @@
 #include "dhistoryview.h"
 #include "webbrowserdlg.h"
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 class Q_DECL_HIDDEN JAlbumFinalPage::Private
@@ -173,4 +173,4 @@ bool JAlbumFinalPage::isComplete() const
     return d->complete;
 }
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin

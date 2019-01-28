@@ -29,7 +29,7 @@
 
 #include <QDateTime>
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 QDateTime GeoDataParserParseTime(QString timeString)
@@ -81,6 +81,6 @@ QDateTime GeoDataParserParseTime(QString timeString)
     return theTime;
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
 #endif // DIGIKAM_GEO_DATA_PARSER_TIME_H

@@ -37,7 +37,7 @@
 
 #include "dfiledialog.h"
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 class Q_DECL_HIDDEN FTImportWidget::Private
@@ -127,4 +127,4 @@ QList<QUrl> FTImportWidget::sourceUrls() const
     return d->imageList->imageUrls();
 }
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin

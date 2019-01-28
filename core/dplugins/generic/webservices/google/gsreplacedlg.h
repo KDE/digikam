@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 enum ReplaceDialog_Result
@@ -89,6 +89,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin
 
 #endif // DIGIKAM_GS_REPLACE_DLG_H

@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class SearchResultModelHelper : public GeoModelHelper
@@ -74,6 +74,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
 #endif // DIGIKAM_SEARCH_RESULT_MODEL_HELPER_H

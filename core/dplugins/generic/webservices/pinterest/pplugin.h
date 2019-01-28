@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 class PWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<PWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin
 
 #endif // DIGIKAM_OD_PLUGIN_H

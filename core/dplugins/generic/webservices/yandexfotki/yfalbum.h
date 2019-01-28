@@ -31,7 +31,7 @@
 #include <QDateTime>
 #include <QDebug>
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class YandexFotkiAlbum
@@ -144,6 +144,6 @@ private:
 
 QDebug operator<<(QDebug d, const YandexFotkiAlbum& p);
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin
 
 #endif // DIGIKAM_YF_ALBUM_H

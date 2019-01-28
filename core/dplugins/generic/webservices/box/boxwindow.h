@@ -40,7 +40,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class DIGIKAM_EXPORT BOXWindow : public WSToolDialog
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_WINDOW_H

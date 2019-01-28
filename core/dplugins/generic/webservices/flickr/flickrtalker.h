@@ -43,7 +43,7 @@ class QProgressDialog;
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class FPhotoInfo;
@@ -143,6 +143,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_TALKER_H

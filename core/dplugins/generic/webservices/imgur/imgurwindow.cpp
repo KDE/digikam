@@ -45,7 +45,7 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 class Q_DECL_HIDDEN ImgurWindow::Private
@@ -329,4 +329,4 @@ void ImgurWindow::saveSettings()
     config.sync();
 }
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin

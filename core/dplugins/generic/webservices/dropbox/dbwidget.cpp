@@ -31,7 +31,7 @@
 
 #include "ditemslist.h"
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 DBWidget::DBWidget(QWidget* const parent,
@@ -69,4 +69,4 @@ void DBWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin

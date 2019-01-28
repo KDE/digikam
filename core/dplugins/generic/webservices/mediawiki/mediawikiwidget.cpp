@@ -60,7 +60,7 @@
 #include "dprogresswdg.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 class Q_DECL_HIDDEN MediaWikiWidget::Private
@@ -1176,4 +1176,4 @@ QString MediaWikiWidget::longitude() const
     return d->longitudeEdit->text();
 }
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin

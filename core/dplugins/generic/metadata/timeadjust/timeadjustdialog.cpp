@@ -67,7 +67,7 @@
 #include "timeadjustthread.h"
 #include "timeadjustsettings.h"
 
-namespace GenericDigikamTimeAdjustPlugin
+namespace DigikamGenericTimeAdjustPlugin
 {
 
 class Q_DECL_HIDDEN TimeAdjustDialog::Private
@@ -493,4 +493,4 @@ void TimeAdjustDialog::updateListView()
     QApplication::restoreOverrideCursor();
 }
 
-}  // namespace GenericDigikamTimeAdjustPlugin
+}  // namespace DigikamGenericTimeAdjustPlugin

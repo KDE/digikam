@@ -50,7 +50,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPOrigin::Private
@@ -572,4 +572,4 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     xmpData  = meta.getXmp();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

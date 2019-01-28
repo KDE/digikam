@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 RajceMPForm::RajceMPForm()
@@ -164,4 +164,4 @@ QByteArray RajceMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

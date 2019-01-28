@@ -45,7 +45,7 @@ class QNetworkReply;
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class SmugTalker : public QObject
@@ -158,6 +158,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin
 
 #endif // DIGIKAM_SMUG_TALKER_H

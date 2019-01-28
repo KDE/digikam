@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class CPFindBinary : public DBinaryIface
@@ -65,6 +65,6 @@ private:
     QRegExp headerRegExp;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_CPFIND_BINARY_H

@@ -30,7 +30,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 CreateMKTask::CreateMKTask(const QString& workDirPath, const QUrl& input, QUrl& mkUrl,
@@ -82,4 +82,4 @@ void CreateMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "pto2mk output:" << endl << output;
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

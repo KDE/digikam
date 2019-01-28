@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 class XMLWriter;
@@ -98,6 +98,6 @@ public:
     QString                      m_exifGPSAltitude;
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_ELEMENT_H

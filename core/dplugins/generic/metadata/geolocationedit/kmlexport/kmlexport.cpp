@@ -45,7 +45,7 @@
 #include "digikam_debug.h"
 #include "dmessagebox.h"
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 KmlExport::KmlExport(DInfoInterface* const iface)
@@ -626,4 +626,4 @@ QDomElement KmlExport::addKmlHtmlElement(QDomElement& target,
     return kmlElement;
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin

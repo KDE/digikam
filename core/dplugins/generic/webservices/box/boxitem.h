@@ -27,7 +27,7 @@
 
 #include <QString>
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 class BOXPhoto
@@ -52,6 +52,6 @@ public:
     QString title;
 };
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin
 
 #endif // DIGIKAM_BOX_ITEM_H

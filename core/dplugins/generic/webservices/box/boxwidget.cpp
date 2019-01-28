@@ -29,7 +29,7 @@
 
 // Local includes
 
-namespace GenericDigikamBoxPlugin
+namespace DigikamGenericBoxPlugin
 {
 
 BOXWidget::BOXWidget(QWidget* const parent,
@@ -69,4 +69,4 @@ void BOXWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamBoxPlugin
+} // namespace DigikamGenericBoxPlugin

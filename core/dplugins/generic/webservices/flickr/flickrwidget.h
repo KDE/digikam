@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class FlickrWidget : public WSSettingsWidget
@@ -82,6 +82,6 @@ private:
     friend class FlickrWindow;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WIDGET_H

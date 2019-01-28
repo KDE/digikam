@@ -31,7 +31,7 @@
 #include <QByteArray>
 #include <QUrl>
 
-namespace GenericDigikamDScannerPlugin
+namespace DigikamGenericDScannerPlugin
 {
 
 class SaveImgThread : public QThread
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamDScannerPlugin
+} // namespace DigikamGenericDScannerPlugin
 
 #endif // DIGIKAM_SAVE_IMG_THREAD_H

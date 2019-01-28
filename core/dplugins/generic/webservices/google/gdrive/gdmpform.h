@@ -29,7 +29,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 class GDMPForm
@@ -61,6 +61,6 @@ private:
     QString    m_file_size;
 };
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin
 
 #endif // DIGIKAM_GD_MPFORM_H

@@ -29,7 +29,7 @@
 
 // Local includes
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 TwWidget::TwWidget(QWidget* const parent,
@@ -67,4 +67,4 @@ void TwWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin

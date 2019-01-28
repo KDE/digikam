@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 class FTExportWidget: public QWidget
@@ -96,6 +96,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin
 
 #endif // DIGIKAM_FT_EXPORT_WIDGET_H

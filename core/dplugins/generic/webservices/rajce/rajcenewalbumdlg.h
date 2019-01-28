@@ -32,7 +32,7 @@ class QCheckBox;
 
 using namespace Digikam;
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 class RajceNewAlbumDlg : public WSNewAlbumDialog
@@ -53,6 +53,6 @@ private:
     QCheckBox* m_albumVisible;
 };
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin
 
 #endif // DIGIKAM_RAJCE_NEW_ALBUM_DLG_H

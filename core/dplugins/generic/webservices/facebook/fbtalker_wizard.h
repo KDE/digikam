@@ -52,7 +52,7 @@ class QDomElement;
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbTalker : public WSTalker
@@ -111,6 +111,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_TALKER_WIZARD_H

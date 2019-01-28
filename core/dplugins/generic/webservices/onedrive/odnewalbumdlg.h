@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class ODFolder;
@@ -46,6 +46,6 @@ public:
     void getFolderTitle(ODFolder& folder);
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_NEW_ALBUM_DLG_H

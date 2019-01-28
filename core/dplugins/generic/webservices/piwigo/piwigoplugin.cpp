@@ -34,7 +34,7 @@
 
 #include "piwigowindow.h"
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 PiwigoPlugin::PiwigoPlugin(QObject* const parent)
@@ -119,4 +119,4 @@ void PiwigoPlugin::slotPiwigo()
     }
 }
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin

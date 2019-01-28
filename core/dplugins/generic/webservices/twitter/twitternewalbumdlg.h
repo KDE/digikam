@@ -35,7 +35,7 @@ using namespace Digikam;
 
 class QComboBox;
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 class TwAlbum;
@@ -56,6 +56,6 @@ private:
      friend class TwWindow;
 };
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_NEW_ALBUM_DLG_H

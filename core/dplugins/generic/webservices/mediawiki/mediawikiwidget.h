@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 enum MediaWikiDownloadType
@@ -137,6 +137,6 @@ private:
     friend class WmWindow;
 };
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_WIDGET_H

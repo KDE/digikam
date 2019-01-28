@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMediaServerPlugin
+namespace DigikamGenericMediaServerPlugin
 {
 
 class DIGIKAM_EXPORT DMediaServerDlg : public DPluginDialog
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamMediaServerPlugin
+} // namespace DigikamGenericMediaServerPlugin
 
 #endif // DIGIKAM_DMEDIA_SERVER_DLG_H

@@ -28,7 +28,7 @@
 
 #include <QString>
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class ImageShackSession
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_SESSION_H

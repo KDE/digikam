@@ -28,7 +28,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 AdvPrintCustomLayoutDlg::AdvPrintCustomLayoutDlg(QWidget* const parent)
@@ -110,4 +110,4 @@ void AdvPrintCustomLayoutDlg::saveSettings()
     group.writeEntry(QLatin1String("Custom-autorotate"), m_autorotate->isChecked());
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

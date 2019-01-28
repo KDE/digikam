@@ -26,7 +26,7 @@
 
 #include <QFile>
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 AutoCropTask::AutoCropTask(const QString& workDirPath,
@@ -70,4 +70,4 @@ void AutoCropTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("pano_modify"));
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

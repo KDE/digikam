@@ -36,7 +36,7 @@
 
 #include "ui_caltemplate.h"
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 class CalTemplate : public QWidget

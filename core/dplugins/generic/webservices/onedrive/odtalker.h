@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 class ODTalker : public QObject
@@ -98,6 +98,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin
 
 #endif // DIGIKAM_OD_TALKER_H

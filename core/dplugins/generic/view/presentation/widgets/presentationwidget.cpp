@@ -66,7 +66,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class Q_DECL_HIDDEN PresentationWidget::Private
@@ -1557,4 +1557,4 @@ int PresentationWidget::effectBlobs(bool aInit)
     return 10;
 }
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin

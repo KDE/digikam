@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class AutoOptimiserBinary : public DBinaryIface
@@ -56,6 +56,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_AUTO_OPTIMISER_BINARY_H

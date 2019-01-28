@@ -31,7 +31,7 @@
 #include <QImage>
 #include <QUrl>
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_LOADER_H

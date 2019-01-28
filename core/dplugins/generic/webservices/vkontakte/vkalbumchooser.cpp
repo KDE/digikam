@@ -48,7 +48,7 @@
 
 #include "vknewalbumdlg.h"
 
-namespace GenericDigikamVKontaktePlugin
+namespace DigikamGenericVKontaktePlugin
 {
 
 class Q_DECL_HIDDEN VKAlbumChooser::Private
@@ -444,4 +444,4 @@ void VKAlbumChooser::handleVkError(KJob* kjob)
                           kjob == 0 ? i18n("Internal error: Null pointer to KJob instance.") : kjob->errorText());
 }
 
-} // namespace GenericDigikamVKontaktePlugin
+} // namespace DigikamGenericVKontaktePlugin

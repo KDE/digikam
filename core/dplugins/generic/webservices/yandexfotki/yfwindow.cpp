@@ -66,7 +66,7 @@
 #include "dprogresswdg.h"
 #include "dmetadata.h"
 
-namespace GenericDigikamYFPlugin
+namespace DigikamGenericYFPlugin
 {
 
 class Q_DECL_HIDDEN YFWindow::Private
@@ -838,4 +838,4 @@ void YFWindow::slotUpdateAlbumDone()
     d->talker.listAlbums();
 }
 
-} // namespace GenericDigikamYFPlugin
+} // namespace DigikamGenericYFPlugin

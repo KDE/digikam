@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFileTransferPlugin
+namespace DigikamGenericFileTransferPlugin
 {
 
 class FTExportWindow;
@@ -68,6 +68,6 @@ private:
     QPointer<FTImportWindow> m_toolDlgImport;
 };
 
-} // namespace GenericDigikamFileTransferPlugin
+} // namespace DigikamGenericFileTransferPlugin
 
 #endif // DIGIKAM_FT_PLUGIN_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class FPhotoSet;
@@ -48,6 +48,6 @@ public:
     void getFolderProperties(FPhotoSet& folder);
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_NEW_ALBUM_DLG_H

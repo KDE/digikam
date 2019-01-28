@@ -30,7 +30,7 @@
 #include <QList>
 #include <QSharedPointer>
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 class AbstractThemeParameter;
@@ -85,6 +85,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_THEME_H

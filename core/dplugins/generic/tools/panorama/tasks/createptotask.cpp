@@ -31,7 +31,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 CreatePtoTask::CreatePtoTask(const QString& workDirPath, PanoramaFileType fileType,
@@ -220,4 +220,4 @@ void CreatePtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     return;
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

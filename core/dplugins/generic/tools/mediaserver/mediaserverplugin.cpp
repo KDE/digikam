@@ -34,7 +34,7 @@
 
 #include "dmediaserverdlg.h"
 
-namespace GenericDigikamMediaServerPlugin
+namespace DigikamGenericMediaServerPlugin
 {
 
 MediaServerPlugin::MediaServerPlugin(QObject* const parent)
@@ -114,4 +114,4 @@ void MediaServerPlugin::slotMediaServer()
     delete w;
 }
 
-} // namespace GenericDigikamMediaServerPlugin
+} // namespace DigikamGenericMediaServerPlugin

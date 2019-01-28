@@ -34,7 +34,7 @@
 
 #include "pwindow.h"
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 PPlugin::PPlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void PPlugin::slotPinterest()
     }
 }
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin

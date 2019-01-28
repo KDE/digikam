@@ -40,7 +40,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 class TwTalker : public QObject
@@ -103,6 +103,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_TALKER_H

@@ -27,7 +27,7 @@
 
 #include <kio/job.h>
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSTalker : public QObject
@@ -62,6 +62,6 @@ private:
     KIO::Job*       m_job;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_TALKER_H

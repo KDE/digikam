@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGLViewerPlugin
+namespace DigikamGenericGLViewerPlugin
 {
 
 class GLViewerHelpDlg : public DPluginDialog
@@ -42,6 +42,6 @@ public:
     ~GLViewerHelpDlg();
 };
 
-} // namespace GenericDigikamGLViewerPlugin
+} // namespace DigikamGenericGLViewerPlugin
 
 #endif // DIGIKAM_GLVIEWERPLUGIN_GLVIEWERHELPDLG_H

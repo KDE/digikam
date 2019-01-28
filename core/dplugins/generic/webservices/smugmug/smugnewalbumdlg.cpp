@@ -44,7 +44,7 @@
 
 #include "smugitem.h"
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class Q_DECL_HIDDEN SmugNewAlbumDlg::Private
@@ -242,4 +242,4 @@ QGroupBox* SmugNewAlbumDlg::privateGroupBox() const
     return d->privBox;
 }
 
-} // namespace GenericDigikamSmugPlugin
+} // namespace DigikamGenericSmugPlugin

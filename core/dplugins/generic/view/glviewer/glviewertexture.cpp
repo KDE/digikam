@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "glviewertimer.h"
 
-namespace GenericDigikamGLViewerPlugin
+namespace DigikamGenericGLViewerPlugin
 {
 
 class GLViewerTexture::Private
@@ -470,4 +470,4 @@ void GLViewerTexture::zoomToOriginal()
     zoom(zoomfactorToOriginal,QPoint(d->display_x / 2 , d->display_y / 2));
 }
 
-} // namespace GenericDigikamGLViewerPlugin
+} // namespace DigikamGenericGLViewerPlugin

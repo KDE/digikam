@@ -35,7 +35,7 @@
 
 class KConfigGroup;
 
-namespace GenericDigikamSendByMailPlugin
+namespace DigikamGenericSendByMailPlugin
 {
 
 class MailSettings
@@ -117,6 +117,6 @@ public:
     QMap<MailClient, QString> binPaths;  // Map of paths for all mail clients.
 };
 
-} // namespace GenericDigikamSendByMailPlugin
+} // namespace DigikamGenericSendByMailPlugin
 
 #endif // DIGIKAM_MAIL_SETTINGS_H

@@ -49,7 +49,7 @@
 #include "vidslideoutputpage.h"
 #include "vidslidefinalpage.h"
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideWizard::Private
@@ -160,4 +160,4 @@ void VidSlideWizard::slotCurrentIdChanged(int id)
     }
 }
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin

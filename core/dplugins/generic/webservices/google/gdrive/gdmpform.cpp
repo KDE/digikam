@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 GDMPForm::GDMPForm()
@@ -167,4 +167,4 @@ QString GDMPForm::getFileSize() const
     return m_file_size;
 }
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin

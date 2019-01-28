@@ -42,7 +42,7 @@
 #include "panomanager.h"
 #include "dlayoutbox.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class Q_DECL_HIDDEN PanoItemsPage::Private
@@ -122,4 +122,4 @@ void PanoItemsPage::slotImageListChanged()
     emit completeChanged();
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

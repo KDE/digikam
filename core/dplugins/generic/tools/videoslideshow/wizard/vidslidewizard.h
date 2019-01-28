@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class DIGIKAM_EXPORT VidSlideWizard : public DWizardDlg
@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDSLIDE_WIZARD_H

@@ -42,7 +42,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GenericDigikamGoogleServicesPlugin
+namespace DigikamGenericGoogleServicesPlugin
 {
 
 GSWidget::GSWidget(QWidget* const parent,
@@ -142,4 +142,4 @@ void GSWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace GenericDigikamGoogleServicesPlugin
+} // namespace DigikamGenericGoogleServicesPlugin

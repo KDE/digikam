@@ -38,7 +38,7 @@ using namespace Digikam;
 class QCloseEvent;
 class QUrl;
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 class TwAlbum;
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_WINDOW_H

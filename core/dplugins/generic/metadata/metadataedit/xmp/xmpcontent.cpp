@@ -45,7 +45,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN XMPContent::Private
@@ -308,4 +308,4 @@ void XMPContent::slotSyncOptionsEnabled(bool defaultLangAlt)
     d->syncEXIFCommentCheck->setEnabled(cond);
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

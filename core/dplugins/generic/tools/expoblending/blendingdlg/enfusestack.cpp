@@ -46,7 +46,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamExpoBlendingPlugin
+namespace DigikamGenericExpoBlendingPlugin
 {
 
 class Q_DECL_HIDDEN EnfuseStackItem::Private
@@ -412,4 +412,4 @@ void EnfuseStackList::setTemplateFileName(DSaveSettingsWidget::OutputFormat frm,
     }
 }
 
-} // namespace GenericDigikamExpoBlendingPlugin
+} // namespace DigikamGenericExpoBlendingPlugin

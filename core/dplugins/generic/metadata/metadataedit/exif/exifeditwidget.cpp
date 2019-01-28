@@ -49,7 +49,7 @@
 #include "digikam_debug.h"
 #include "dmetadata.h"
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN EXIFEditWidget::Private
@@ -298,4 +298,4 @@ bool EXIFEditWidget::isModified() const
     return d->modified;
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

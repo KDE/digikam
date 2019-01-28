@@ -34,7 +34,7 @@
 
 #include "rajcewindow.h"
 
-namespace GenericDigikamRajcePlugin
+namespace DigikamGenericRajcePlugin
 {
 
 RajcePlugin::RajcePlugin(QObject* const parent)
@@ -108,4 +108,4 @@ void RajcePlugin::slotRajce()
     }
 }
 
-} // namespace GenericDigikamRajcePlugin
+} // namespace DigikamGenericRajcePlugin

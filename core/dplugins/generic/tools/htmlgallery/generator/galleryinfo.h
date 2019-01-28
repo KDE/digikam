@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 /**
@@ -91,6 +91,6 @@ private:
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const GalleryInfo& t);
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin
 
 #endif // DIGIKAM_GALLERY_INFO_H

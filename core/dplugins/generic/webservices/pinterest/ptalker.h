@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 class PTalker : public QObject
@@ -101,6 +101,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin
 
 #endif // DIGIKAM_P_TALKER_H

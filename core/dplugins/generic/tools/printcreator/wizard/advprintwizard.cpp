@@ -66,7 +66,7 @@
 #include "dfiledialog.h"
 #include "dmetadata.h"
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class Q_DECL_HIDDEN AdvPrintWizard::Private
@@ -405,4 +405,4 @@ bool AdvPrintWizard::eventFilter(QObject* o, QEvent* e)
     return QWizard::eventFilter(o, e);
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

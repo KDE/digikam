@@ -54,7 +54,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamMetadataEditPlugin
+namespace DigikamGenericMetadataEditPlugin
 {
 
 class Q_DECL_HIDDEN IPTCOrigin::Private
@@ -712,4 +712,4 @@ void IPTCOrigin::applyMetadata(QByteArray& exifData, QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-} // namespace GenericDigikamMetadataEditPlugin
+} // namespace DigikamGenericMetadataEditPlugin

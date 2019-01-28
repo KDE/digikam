@@ -51,7 +51,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFlickrPlugin
+namespace DigikamGenericFlickrPlugin
 {
 
 class Q_DECL_HIDDEN FlickrWidget::Private
@@ -100,6 +100,6 @@ public:
     FlickrList*             imglst;
 };
 
-} // namespace GenericDigikamFlickrPlugin
+} // namespace DigikamGenericFlickrPlugin
 
 #endif // DIGIKAM_FLICKR_WIDGET_PRIVATE_H

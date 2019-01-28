@@ -27,7 +27,7 @@
 
 #include "ui_presentation_advpage.h"
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 class PresentationContainer;
@@ -58,6 +58,6 @@ private:
     PresentationContainer* m_sharedData;
 };
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin
 
 #endif // DIGIKAM_PRESENTATION_ADV_PAGE_H

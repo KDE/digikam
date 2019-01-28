@@ -43,7 +43,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class KmlExport : public QObject
@@ -186,6 +186,6 @@ private:
     QStringList                 m_logData;
 };
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin
 
 #endif // DIGIKAM_KML_EXPORT_H

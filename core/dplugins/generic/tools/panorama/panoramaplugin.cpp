@@ -34,7 +34,7 @@
 
 #include "panomanager.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 PanoramaPlugin::PanoramaPlugin(QObject* const parent)
@@ -112,4 +112,4 @@ void PanoramaPlugin::slotPanorama()
     PanoManager::instance()->run();
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

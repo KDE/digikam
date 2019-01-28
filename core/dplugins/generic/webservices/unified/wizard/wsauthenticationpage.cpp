@@ -47,7 +47,7 @@
 #include "wswizard.h"
 #include "wssettings.h"
 
-namespace GenericDigikamUnifiedPlugin
+namespace DigikamGenericUnifiedPlugin
 {
 
 #ifdef HAVE_QWEBENGINE
@@ -348,4 +348,4 @@ void WSAuthenticationWizard::slotAuthenticationComplete(bool isLinked)
     emit completeChanged();
 }
 
-} // namespace GenericDigikamUnifiedPlugin
+} // namespace DigikamGenericUnifiedPlugin

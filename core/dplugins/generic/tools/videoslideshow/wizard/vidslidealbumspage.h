@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class VidSlideAlbumsPage : public DWizardPage
@@ -54,6 +54,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin
 
 #endif // DIGIKAM_VIDSLIDE_ALBUMS_PAGE_H

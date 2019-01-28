@@ -27,7 +27,7 @@
 
 #include "commandtask.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 class HuginExecutorTask : public CommandTask
@@ -53,6 +53,6 @@ private:
     const PanoramaFileType fileType;
 };
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin
 
 #endif // DIGIKAM_HUGIN_EXECUTOR_TASK_H

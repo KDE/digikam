@@ -54,7 +54,7 @@
 #include "ui_calevents.h"
 #include "ui_calprogress.h"
 
-namespace GenericDigikamCalendarPlugin
+namespace DigikamGenericCalendarPlugin
 {
 
 class Q_DECL_HIDDEN CalWizard::Private

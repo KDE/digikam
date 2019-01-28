@@ -44,7 +44,7 @@
 #include "o0settingsstore.h"
 #include "o0globals.h"
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 static const QString ipfs_upload_url = QLatin1String("https://api.globalupload.io/transport/add");
@@ -286,4 +286,4 @@ void IpfsTalker::doWork()
     }
 }
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin

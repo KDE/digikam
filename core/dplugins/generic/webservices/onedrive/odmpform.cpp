@@ -30,7 +30,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamOneDrivePlugin
+namespace DigikamGenericOneDrivePlugin
 {
 
 ODMPForm::ODMPForm()
@@ -61,4 +61,4 @@ QByteArray ODMPForm::formData() const
     return m_buffer;
 }
 
-} // namespace GenericDigikamOneDrivePlugin
+} // namespace DigikamGenericOneDrivePlugin

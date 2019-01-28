@@ -47,7 +47,7 @@ namespace KIO
 
 using namespace Digikam;
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSWidget : public QWidget
@@ -95,6 +95,6 @@ private:
     friend class DSWindow;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_WIDGET_H

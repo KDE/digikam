@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamTwitterPlugin
+namespace DigikamGenericTwitterPlugin
 {
 
 class TwitterPlugin : public DPluginGeneric
@@ -64,6 +64,6 @@ private:
     QPointer<DPluginDialog> m_toolDlg;
 };
 
-} // namespace GenericDigikamTwitterPlugin
+} // namespace DigikamGenericTwitterPlugin
 
 #endif // DIGIKAM_TWITTER_PLUGIN_H

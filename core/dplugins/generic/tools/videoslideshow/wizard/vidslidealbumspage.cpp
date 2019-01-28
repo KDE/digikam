@@ -31,7 +31,7 @@
 
 #include "vidslidewizard.h"
 
-namespace GenericDigikamVideoSlideShowPlugin
+namespace DigikamGenericVideoSlideShowPlugin
 {
 
 class Q_DECL_HIDDEN VidSlideAlbumsPage::Private
@@ -110,4 +110,4 @@ bool VidSlideAlbumsPage::isComplete() const
     return (!d->iface->albumChooserItems().isEmpty());
 }
 
-} // namespace GenericDigikamVideoSlideShowPlugin
+} // namespace DigikamGenericVideoSlideShowPlugin

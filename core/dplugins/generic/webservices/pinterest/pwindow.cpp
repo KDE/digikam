@@ -47,7 +47,7 @@
 #include "pnewalbumdlg.h"
 #include "pwidget.h"
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 class Q_DECL_HIDDEN PWindow::Private
@@ -465,4 +465,4 @@ void PWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin

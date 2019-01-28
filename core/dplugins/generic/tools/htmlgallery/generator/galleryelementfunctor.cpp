@@ -48,7 +48,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamHtmlGalleryPlugin
+namespace DigikamGenericHtmlGalleryPlugin
 {
 
 /**
@@ -468,4 +468,4 @@ void GalleryElementFunctor::emitWarning(const QString& message)
     emit (m_generator->logWarningRequested(message));
 }
 
-} // namespace GenericDigikamHtmlGalleryPlugin
+} // namespace DigikamGenericHtmlGalleryPlugin

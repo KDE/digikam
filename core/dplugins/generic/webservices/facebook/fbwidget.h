@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 class FbWidget : public WSSettingsWidget
@@ -65,6 +65,6 @@ private:
     friend class FbWindow;
 };
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin
 
 #endif // DIGIKAM_FB_WIDGET_H

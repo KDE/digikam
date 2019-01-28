@@ -34,7 +34,7 @@
 
 #include "presentationmngr.h"
 
-namespace GenericDigikamPresentationPlugin
+namespace DigikamGenericPresentationPlugin
 {
 
 PresentationPlugin::PresentationPlugin(QObject* const parent)
@@ -114,4 +114,4 @@ void PresentationPlugin::slotPresentation()
     mngr->showConfigDialog();
 }
 
-} // namespace GenericDigikamPresentationPlugin
+} // namespace DigikamGenericPresentationPlugin

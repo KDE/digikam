@@ -39,7 +39,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 class DIGIKAM_EXPORT IpfsWindow : public WSToolDialog
@@ -86,6 +86,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin
 
 #endif // DIGIKAM_IPFS_WINDOW_H

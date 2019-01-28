@@ -66,7 +66,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamFaceBookPlugin
+namespace DigikamGenericFaceBookPlugin
 {
 
 bool operator< (const FbUser& first, const FbUser& second)
@@ -857,4 +857,4 @@ void FbTalker::parseResponseLogoutUser()
     emit signalLoginDone(-1, QString());
 }
 
-} // namespace GenericDigikamFaceBookPlugin
+} // namespace DigikamGenericFaceBookPlugin

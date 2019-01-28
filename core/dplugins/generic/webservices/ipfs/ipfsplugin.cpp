@@ -34,7 +34,7 @@
 
 #include "ipfswindow.h"
 
-namespace GenericDigikamIpfsPlugin
+namespace DigikamGenericIpfsPlugin
 {
 
 IpfsPlugin::IpfsPlugin(QObject* const parent)
@@ -107,4 +107,4 @@ void IpfsPlugin::slotIpfs()
     }
 }
 
-} // namespace GenericDigikamIpfsPlugin
+} // namespace DigikamGenericIpfsPlugin

@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPinterestPlugin
+namespace DigikamGenericPinterestPlugin
 {
 
 class PFolder;
@@ -46,6 +46,6 @@ public:
     void getFolderTitle(PFolder& folder);
 };
 
-} // namespace GenericDigikamPinterestPlugin
+} // namespace DigikamGenericPinterestPlugin
 
 #endif // DIGIKAM_P_NEW_ALBUM_DLG_H

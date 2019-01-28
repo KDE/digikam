@@ -31,7 +31,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 CommandTask::CommandTask(PanoAction action, const QString& workDirPath, const QString& commandPath)
@@ -109,4 +109,4 @@ void CommandTask::printDebug(const QString& binaryName)
                                                                        output.replace(QLatin1Char('\n'), QLatin1String("\n >>\t")));
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

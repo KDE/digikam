@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class ImageShackSession;
@@ -76,6 +76,6 @@ private:
     friend class ImageShackWindow;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WIDGET_H

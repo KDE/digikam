@@ -30,7 +30,7 @@
 
 #include <QString>
 
-namespace GenericDigikamDebianScreenshotsPlugin
+namespace DigikamGenericDebianScreenshotsPlugin
 {
 
 class DSMPForm
@@ -57,6 +57,6 @@ private:
     QByteArray m_boundary;
 };
 
-} // namespace GenericDigikamDebianScreenshotsPlugin
+} // namespace DigikamGenericDebianScreenshotsPlugin
 
 #endif // DIGIKAM_DS_MPFORM_H

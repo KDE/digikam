@@ -26,7 +26,7 @@
 
 #include <QFileInfo>
 
-namespace GenericDigikamPanoramaPlugin
+namespace DigikamGenericPanoramaPlugin
 {
 
 PanoTask::PanoTask(PanoAction action, const QString& workDirPath)
@@ -51,4 +51,4 @@ void PanoTask::requestAbort()
     isAbortedFlag = true;
 }
 
-} // namespace GenericDigikamPanoramaPlugin
+} // namespace DigikamGenericPanoramaPlugin

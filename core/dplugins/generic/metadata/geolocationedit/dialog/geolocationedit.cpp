@@ -92,7 +92,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 struct SaveChangedImagesHelper
@@ -1087,4 +1087,4 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
     }
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin

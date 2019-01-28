@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackSession::Private
@@ -160,4 +160,4 @@ void ImageShackSession::saveSettings()
     config.sync();
 }
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin

@@ -56,7 +56,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 class Q_DECL_HIDDEN ImageShackWidget::Private
@@ -99,6 +99,6 @@ public:
     DProgressWdg*      progressBar;
 };
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin
 
 #endif // DIGIKAM_IMAGE_SHACK_WIDGET_PRIVATE_H

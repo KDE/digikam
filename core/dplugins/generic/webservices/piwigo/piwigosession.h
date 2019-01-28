@@ -31,7 +31,7 @@
 
 #include <QString>
 
-namespace GenericDigikamPiwigoPlugin
+namespace DigikamGenericPiwigoPlugin
 {
 
 class PiwigoSession
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamPiwigoPlugin
+} // namespace DigikamGenericPiwigoPlugin
 
 #endif // DIGIKAM_PIWIGO_SESSION_H

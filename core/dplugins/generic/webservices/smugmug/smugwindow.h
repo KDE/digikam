@@ -42,7 +42,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamSmugPlugin
+namespace DigikamGenericSmugPlugin
 {
 
 class DIGIKAM_EXPORT SmugWindow : public WSToolDialog

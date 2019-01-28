@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 class ImgurImageListViewItem;
@@ -91,6 +91,6 @@ public:
     QString ImgurDeleteUrl() const;
 };
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin
 
 #endif // DIGIKAM_IMGUR_IMAGES_LIST_H

@@ -38,7 +38,7 @@ class KJob;
 
 using namespace Digikam;
 
-namespace GenericDigikamMediaWikiPlugin
+namespace DigikamGenericMediaWikiPlugin
 {
 
 class DIGIKAM_EXPORT MediaWikiWindow : public WSToolDialog
@@ -78,6 +78,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamMediaWikiPlugin
+} // namespace DigikamGenericMediaWikiPlugin
 
 #endif // DIGIKAM_MEDIAWIKI_WINDOW_H

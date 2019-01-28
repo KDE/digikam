@@ -52,7 +52,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamGeolocationEditPlugin
+namespace DigikamGenericGeolocationEditPlugin
 {
 
 class Q_DECL_HIDDEN SearchResultModelHelper::Private
@@ -164,4 +164,4 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     emit(signalUndoCommand(undoCommand));
 }
 
-} // namespace GenericDigikamGeolocationEditPlugin
+} // namespace DigikamGenericGeolocationEditPlugin

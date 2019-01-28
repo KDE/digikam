@@ -37,7 +37,7 @@ using namespace Digikam;
 
 class KConfigGroup;
 
-namespace GenericDigikamJAlbumPlugin
+namespace DigikamGenericJAlbumPlugin
 {
 
 /**
@@ -82,6 +82,6 @@ public:
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const JAlbumSettings& t);
 
-} // namespace GenericDigikamJAlbumPlugin
+} // namespace DigikamGenericJAlbumPlugin
 
 #endif // DIGIKAM_JALBUM_SETTINGS_H

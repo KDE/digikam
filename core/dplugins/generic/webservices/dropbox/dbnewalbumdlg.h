@@ -30,7 +30,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class DBFolder;
@@ -47,6 +47,6 @@ public:
     void getFolderTitle(DBFolder& folder);
 };
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin
 
 #endif // DIGIKAM_DB_NEW_ALBUM_DLG_H

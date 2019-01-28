@@ -34,7 +34,7 @@
 
 #include "imgurwindow.h"
 
-namespace GenericDigikamImgUrPlugin
+namespace DigikamGenericImgUrPlugin
 {
 
 ImgUrPlugin::ImgUrPlugin(QObject* const parent)
@@ -117,4 +117,4 @@ void ImgUrPlugin::slotImgUr()
     }
 }
 
-} // namespace GenericDigikamImgUrPlugin
+} // namespace DigikamGenericImgUrPlugin

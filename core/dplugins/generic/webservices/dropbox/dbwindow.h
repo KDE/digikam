@@ -41,7 +41,7 @@ class QUrl;
 
 using namespace Digikam;
 
-namespace GenericDigikamDropBoxPlugin
+namespace DigikamGenericDropBoxPlugin
 {
 
 class DIGIKAM_EXPORT DBWindow : public WSToolDialog
@@ -95,6 +95,6 @@ private:
     Private* const d;
 };
 
-} // namespace GenericDigikamDropBoxPlugin
+} // namespace DigikamGenericDropBoxPlugin
 
 #endif // DIGIKAM_DB_WINDOW_H

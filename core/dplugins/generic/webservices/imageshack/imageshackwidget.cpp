@@ -23,7 +23,7 @@
 
 #include "imageshackwidget_p.h"
 
-namespace GenericDigikamImageShackPlugin
+namespace DigikamGenericImageShackPlugin
 {
 
 ImageShackWidget::ImageShackWidget(QWidget* const parent,
@@ -113,4 +113,4 @@ void ImageShackWidget::slotReloadGalleries()
     emit signalReloadGalleries();
 }
 
-} // namespace GenericDigikamImageShackPlugin
+} // namespace DigikamGenericImageShackPlugin

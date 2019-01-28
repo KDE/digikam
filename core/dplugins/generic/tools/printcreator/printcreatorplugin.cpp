@@ -34,7 +34,7 @@
 
 #include "advprintwizard.h"
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 PrintCreatorPlugin::PrintCreatorPlugin(QObject* const parent)
@@ -116,4 +116,4 @@ void PrintCreatorPlugin::slotPrintCreator()
     delete wzrd;
 }
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin

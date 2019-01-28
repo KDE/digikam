@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamTimeAdjustPlugin
+namespace DigikamGenericTimeAdjustPlugin
 {
 
 class TimeAdjustPlugin : public DPluginGeneric
@@ -59,6 +59,6 @@ private Q_SLOTS:
     void slotTimeAdjust();
 };
 
-} // namespace GenericDigikamTimeAdjustPlugin
+} // namespace DigikamGenericTimeAdjustPlugin
 
 #endif // DIGIKAM_TIME_ADJUST_PLUGIN_H

@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamVKontaktePlugin
+namespace DigikamGenericVKontaktePlugin
 {
 
 class VKWindow;
@@ -65,6 +65,6 @@ private:
     QPointer<VKWindow> m_toolDlg;
 };
 
-} // namespace GenericDigikamVKontaktePlugin
+} // namespace DigikamGenericVKontaktePlugin
 
 #endif // DIGIKAM_VKONTAKTE_PLUGIN_H

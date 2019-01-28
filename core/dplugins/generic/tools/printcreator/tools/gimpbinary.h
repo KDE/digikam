@@ -29,7 +29,7 @@
 
 using namespace Digikam;
 
-namespace GenericDigikamPrintCreatorPlugin
+namespace DigikamGenericPrintCreatorPlugin
 {
 
 class GimpBinary : public DBinaryIface
@@ -60,6 +60,6 @@ public:
     }
 };
 
-} // namespace GenericDigikamPrintCreatorPlugin
+} // namespace DigikamGenericPrintCreatorPlugin
 
 #endif // GIMP_BINARY_H
