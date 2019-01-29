@@ -60,7 +60,7 @@ public:
         setToolTip(0, m_plugin->details());
 
         DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(plugin);
-        
+
         if (gene)
         {
             // Categories
@@ -70,9 +70,9 @@ public:
             // Number of actions
             setText(2, QString::number(gene->actionCount()));
         }
-        
+
         DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(plugin);
-        
+
         if (edit)
         {
             // Categories

@@ -57,7 +57,7 @@ public:
 
         // Number of actions
         setText(2, QString::number(m_plugin->toolCount()));
-        
+
         // Description
         setText(3, m_plugin->description());
 
