@@ -146,7 +146,7 @@ TwTalker::TwTalker(QWidget* const parent)
 
     d->settings                  = WSToolUtils::getOauthSettings(this);
     O0SettingsStore* const store = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
-    store->setGroupKey(QLatin1String("twitter"));
+    store->setGroupKey(QLatin1String("Twitter"));
     d->o1Twitter->setStore(store);
 
     connect(d->o1Twitter, SIGNAL(linkingFailed()),
