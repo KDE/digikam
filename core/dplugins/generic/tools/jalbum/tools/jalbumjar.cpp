@@ -47,7 +47,7 @@ JalbumJar::JalbumJar()
 {
     setup();
 }
-    
+
 JalbumJar::~JalbumJar()
 {
 }
