@@ -28,3 +28,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(Rajce
     ${CMAKE_CURRENT_SOURCE_DIR}/rajcesession.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rajcewidget.cpp
 )
+
+add_subdirectory(icons)

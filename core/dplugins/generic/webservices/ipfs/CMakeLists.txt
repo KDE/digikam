@@ -23,3 +23,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(IpFs
     ${CMAKE_CURRENT_SOURCE_DIR}/ipfstalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ipfswindow.cpp
 )
+
+add_subdirectory(icons)

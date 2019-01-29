@@ -51,3 +51,5 @@ set(panoramaplugin_SRCS
 DIGIKAM_ADD_GENERIC_PLUGIN(Panorama
                    ${panoramaplugin_SRCS}
 )
+
+add_subdirectory(icons)

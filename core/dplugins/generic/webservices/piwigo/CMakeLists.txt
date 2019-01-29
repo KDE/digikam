@@ -24,3 +24,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(Piwigo
     ${CMAKE_CURRENT_SOURCE_DIR}/piwigotalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/piwigowindow.cpp
 )
+
+add_subdirectory(icons)

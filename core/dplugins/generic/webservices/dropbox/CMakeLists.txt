@@ -25,3 +25,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(DropBox
     ${CMAKE_CURRENT_SOURCE_DIR}/dbwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbwindow.cpp
 )
+
+add_subdirectory(icons)

@@ -26,3 +26,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(Flickr
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrwindow.cpp
 )
+
+add_subdirectory(icons)

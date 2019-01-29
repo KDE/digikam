@@ -25,3 +25,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(OneDrive
     ${CMAKE_CURRENT_SOURCE_DIR}/odwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/odwindow.cpp
 )
+
+add_subdirectory(icons)

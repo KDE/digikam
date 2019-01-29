@@ -23,3 +23,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(ImgUr
     ${CMAKE_CURRENT_SOURCE_DIR}/imgurwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imgurplugin.cpp
 )
+
+add_subdirectory(icons)

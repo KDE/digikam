@@ -26,3 +26,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(ImageShack
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshacksession.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackwidget.cpp
 )
+
+add_subdirectory(icons)

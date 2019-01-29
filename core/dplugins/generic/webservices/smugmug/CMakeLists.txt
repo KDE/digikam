@@ -25,3 +25,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(SmugMug
     ${CMAKE_CURRENT_SOURCE_DIR}/smugwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/smugwindow.cpp
 )
+
+add_subdirectory(icons)

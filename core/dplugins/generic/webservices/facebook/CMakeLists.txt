@@ -26,3 +26,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(FaceBook
     ${CMAKE_CURRENT_SOURCE_DIR}/fbwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
 )
+
+add_subdirectory(icons)

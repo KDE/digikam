@@ -24,3 +24,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(Pinterest
     ${CMAKE_CURRENT_SOURCE_DIR}/pwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pwindow.cpp
 )
+
+add_subdirectory(icons)

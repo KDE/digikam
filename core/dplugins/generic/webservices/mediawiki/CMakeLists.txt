@@ -26,3 +26,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(MediaWiki
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikiwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikiwindow.cpp
 )
+
+add_subdirectory(icons)

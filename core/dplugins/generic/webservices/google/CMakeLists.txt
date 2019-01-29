@@ -29,3 +29,5 @@ DIGIKAM_ADD_GENERIC_PLUGIN(Google
     ${CMAKE_CURRENT_SOURCE_DIR}/gphoto/gpmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gphoto/gptalker.cpp
 )
+
+add_subdirectory(icons)

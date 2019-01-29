@@ -38,3 +38,5 @@ set(expoblendingplugin_SRCS
 DIGIKAM_ADD_GENERIC_PLUGIN(ExpoBlending
                    ${expoblendingplugin_SRCS}
 )
+
+add_subdirectory(icons)
