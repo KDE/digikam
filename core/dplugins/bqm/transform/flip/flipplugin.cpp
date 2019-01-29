@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to crop images.
+ * Description : a BQM plugin to flip images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "cropplugin.h"
+#include "flipplugin.h"
 
 // Qt includes
 
@@ -35,60 +35,60 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "crop.h"
+#include "flip.h"
 
-namespace Digikam
+namespace DigikamBqmFlipPlugin
 {
 
-CropPlugin::CropPlugin(QObject* const parent)
+FlipPlugin::FlipPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-CropPlugin::~CropPlugin()
+FlipPlugin::~FlipPlugin()
 {
 }
 
-QString CropPlugin::name() const
+QString FlipPlugin::name() const
 {
-    return i18n("Crop");
+    return i18n("Flip");
 }
 
-QString CropPlugin::iid() const
+QString FlipPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon CropPlugin::icon() const
+QIcon FlipPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("transform-crop"));
+    return QIcon::fromTheme(QLatin1String("object-flip-vertical"));
 }
 
-QString CropPlugin::description() const
+QString FlipPlugin::description() const
 {
-    return i18n("A tool to crop images to a region");
+    return i18n("A tool to flip images horizontally or vertically");
 }
 
-QString CropPlugin::details() const
+QString FlipPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can crop images to a region.</p>");
+    return i18n("<p>This Batch Queue Manager tool can run user shell script as workflow stage.</p>");
 }
 
-QList<DPluginAuthor> CropPlugin::authors() const
+QList<DPluginAuthor> FlipPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2012-2019"))
+                             QString::fromUtf8("(C) 2009-2019"))
             ;
 }
 
-void CropPlugin::setup(QObject* const parent)
+void FlipPlugin::setup(QObject* const parent)
 {
-    Crop* const tool = new Crop(parent);
+    Flip* const tool = new Flip(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmFlipPlugin

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2012-12-28
- * Description : crop image batch tool.
+ * Date        : 2009-02-17
+ * Description : resize image batch tool.
  *
- * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,40 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_CROP_H
-#define DIGIKAM_BQM_CROP_H
+#ifndef DIGIKAM_BQM_RESIZE_H
+#define DIGIKAM_BQM_RESIZE_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmResizePlugin
 {
 
-class Crop : public BatchTool
+class Resize : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Crop(QObject* const parent = 0);
-    ~Crop();
+    explicit Resize(QObject* const parent = 0);
+    ~Resize();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Crop(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new Resize(parent); };
 
     void registerSettingsWidget();
-
-Q_SIGNALS:
-
-    void signalAutoCrop();
 
 private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
-    void slotDisableParameters(bool);
+    void slotPercentChanged();
 
 private:
 
@@ -66,6 +64,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmResizePlugin
 
-#endif // DIGIKAM_BQM_CROP_H
+#endif // DIGIKAM_BQM_RESIZE_H

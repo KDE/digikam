@@ -42,7 +42,7 @@
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
-namespace Digikam
+namespace DigikamBqmResizePlugin
 {
 
 class Q_DECL_HIDDEN Resize::Private
@@ -267,4 +267,4 @@ bool Resize::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmResizePlugin

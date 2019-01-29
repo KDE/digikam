@@ -41,7 +41,7 @@
 #include "dimgbuiltinfilter.h"
 #include "jpegutils.h"
 
-namespace Digikam
+namespace DigikamBqmFlipPlugin
 {
 
 Flip::Flip(QObject* const parent)
@@ -140,4 +140,4 @@ bool Flip::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmFlipPlugin

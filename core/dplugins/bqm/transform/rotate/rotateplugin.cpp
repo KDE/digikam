@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to flip images.
+ * Description : a BQM plugin to rotate images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "flipplugin.h"
+#include "rotateplugin.h"
 
 // Qt includes
 
@@ -35,46 +35,46 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "flip.h"
+#include "rotate.h"
 
-namespace Digikam
+namespace DigikamBqmRotatePlugin
 {
 
-FlipPlugin::FlipPlugin(QObject* const parent)
+RotatePlugin::RotatePlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-FlipPlugin::~FlipPlugin()
+RotatePlugin::~RotatePlugin()
 {
 }
 
-QString FlipPlugin::name() const
+QString RotatePlugin::name() const
 {
-    return i18n("Flip");
+    return i18n("Rotate");
 }
 
-QString FlipPlugin::iid() const
+QString RotatePlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon FlipPlugin::icon() const
+QIcon RotatePlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("object-flip-vertical"));
+    return QIcon::fromTheme(QLatin1String("object-rotate-right"));
 }
 
-QString FlipPlugin::description() const
+QString RotatePlugin::description() const
 {
-    return i18n("A tool to flip images horizontally or vertically");
+    return i18n("A tool to rotate images");
 }
 
-QString FlipPlugin::details() const
+QString RotatePlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can run user shell script as workflow stage.</p>");
+    return i18n("<p>This Batch Queue Manager tool can rotate images.</p>");
 }
 
-QList<DPluginAuthor> FlipPlugin::authors() const
+QList<DPluginAuthor> RotatePlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
@@ -83,12 +83,12 @@ QList<DPluginAuthor> FlipPlugin::authors() const
             ;
 }
 
-void FlipPlugin::setup(QObject* const parent)
+void RotatePlugin::setup(QObject* const parent)
 {
-    Flip* const tool = new Flip(parent);
+    Rotate* const tool = new Rotate(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmRotatePlugin

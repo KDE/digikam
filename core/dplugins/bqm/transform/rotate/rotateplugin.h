@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to flip images.
+ * Description : a BQM plugin to rotate images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FLIP_PLUGIN_H
-#define DIGIKAM_FLIP_PLUGIN_H
+#ifndef DIGIKAM_ROTATE_PLUGIN_H
+#define DIGIKAM_ROTATE_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Flip"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Rotate"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmRotatePlugin
 {
 
-class FlipPlugin : public DPluginBqm
+class RotatePlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class FlipPlugin : public DPluginBqm
 
 public:
 
-    explicit FlipPlugin(QObject* const parent = 0);
-    ~FlipPlugin();
+    explicit RotatePlugin(QObject* const parent = 0);
+    ~RotatePlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmRotatePlugin
 
-#endif // DIGIKAM_FLIP_PLUGIN_H
+#endif // DIGIKAM_ROTATE_PLUGIN_H

@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2009-02-17
- * Description : resize image batch tool.
+ * Date        : 2009-02-10
+ * Description : rotate image batch tool.
  *
  * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,40 +21,41 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_RESIZE_H
-#define DIGIKAM_BQM_RESIZE_H
+#ifndef DIGIKAM_BQM_ROTATE_H
+#define DIGIKAM_BQM_ROTATE_H
 
 // Local includes
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmRotatePlugin
 {
 
-class Resize : public BatchTool
+class Rotate : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit Resize(QObject* const parent = 0);
-    ~Resize();
+    explicit Rotate(QObject* const parent = 0);
+    ~Rotate();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Resize(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new Rotate(parent); };
 
     void registerSettingsWidget();
+
+private:
+
+    bool toolOperations();
 
 private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
-    void slotPercentChanged();
-
-private:
-
-    bool toolOperations();
 
 private:
 
@@ -62,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmRotatePlugin
 
-#endif // DIGIKAM_BQM_RESIZE_H
+#endif // DIGIKAM_BQM_ROTATE_H

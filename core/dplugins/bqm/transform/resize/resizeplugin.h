@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to crop images.
+ * Description : a BQM plugin to resize images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CROP_PLUGIN_H
-#define DIGIKAM_CROP_PLUGIN_H
+#ifndef DIGIKAM_RESIZE_PLUGIN_H
+#define DIGIKAM_RESIZE_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Crop"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Resize"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmResizePlugin
 {
 
-class CropPlugin : public DPluginBqm
+class ResizePlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class CropPlugin : public DPluginBqm
 
 public:
 
-    explicit CropPlugin(QObject* const parent = 0);
-    ~CropPlugin();
+    explicit ResizePlugin(QObject* const parent = 0);
+    ~ResizePlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmResizePlugin
 
-#endif // DIGIKAM_CROP_PLUGIN_H
+#endif // DIGIKAM_RESIZE_PLUGIN_H

@@ -44,7 +44,7 @@
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 
-namespace Digikam
+namespace DigikamBqmCropPlugin
 {
 
 class Q_DECL_HIDDEN Crop::Private
@@ -242,4 +242,4 @@ bool Crop::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmCropPlugin

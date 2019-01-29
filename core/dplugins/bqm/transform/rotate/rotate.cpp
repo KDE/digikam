@@ -46,7 +46,7 @@
 #include "freerotationsettings.h"
 #include "loadsavethread.h"
 
-namespace Digikam
+namespace DigikamBqmRotatePlugin
 {
 
 class Q_DECL_HIDDEN Rotate::Private
@@ -256,4 +256,4 @@ bool Rotate::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmRotatePlugin

@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to resize images.
+ * Description : a BQM plugin to flip images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RESIZE_PLUGIN_H
-#define DIGIKAM_RESIZE_PLUGIN_H
+#ifndef DIGIKAM_FLIP_PLUGIN_H
+#define DIGIKAM_FLIP_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Resize"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Flip"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmFlipPlugin
 {
 
-class ResizePlugin : public DPluginBqm
+class FlipPlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class ResizePlugin : public DPluginBqm
 
 public:
 
-    explicit ResizePlugin(QObject* const parent = 0);
-    ~ResizePlugin();
+    explicit FlipPlugin(QObject* const parent = 0);
+    ~FlipPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmFlipPlugin
 
-#endif // DIGIKAM_RESIZE_PLUGIN_H
+#endif // DIGIKAM_FLIP_PLUGIN_H

@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "resize.h"
 
-namespace Digikam
+namespace DigikamBqmResizePlugin
 {
 
 ResizePlugin::ResizePlugin(QObject* const parent)
@@ -91,4 +91,4 @@ void ResizePlugin::setup(QObject* const parent)
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmResizePlugin

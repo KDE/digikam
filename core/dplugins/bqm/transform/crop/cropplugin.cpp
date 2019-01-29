@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to rotate images.
+ * Description : a BQM plugin to crop images.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "rotateplugin.h"
+#include "cropplugin.h"
 
 // Qt includes
 
@@ -35,60 +35,60 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "rotate.h"
+#include "crop.h"
 
-namespace Digikam
+namespace DigikamBqmCropPlugin
 {
 
-RotatePlugin::RotatePlugin(QObject* const parent)
+CropPlugin::CropPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-RotatePlugin::~RotatePlugin()
+CropPlugin::~CropPlugin()
 {
 }
 
-QString RotatePlugin::name() const
+QString CropPlugin::name() const
 {
-    return i18n("Rotate");
+    return i18n("Crop");
 }
 
-QString RotatePlugin::iid() const
+QString CropPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon RotatePlugin::icon() const
+QIcon CropPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("object-rotate-right"));
+    return QIcon::fromTheme(QLatin1String("transform-crop"));
 }
 
-QString RotatePlugin::description() const
+QString CropPlugin::description() const
 {
-    return i18n("A tool to rotate images");
+    return i18n("A tool to crop images to a region");
 }
 
-QString RotatePlugin::details() const
+QString CropPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can rotate images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can crop images to a region.</p>");
 }
 
-QList<DPluginAuthor> RotatePlugin::authors() const
+QList<DPluginAuthor> CropPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2009-2019"))
+                             QString::fromUtf8("(C) 2012-2019"))
             ;
 }
 
-void RotatePlugin::setup(QObject* const parent)
+void CropPlugin::setup(QObject* const parent)
 {
-    Rotate* const tool = new Rotate(parent);
+    Crop* const tool = new Crop(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmCropPlugin

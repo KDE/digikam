@@ -30,7 +30,9 @@
 
 class QComboBox;
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmFlipPlugin
 {
 
 class Flip : public BatchTool
@@ -62,6 +64,6 @@ private:
     QComboBox* m_comboBox;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmFlipPlugin
 
 #endif // DIGIKAM_BQM_FLIP_H
