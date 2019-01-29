@@ -59,7 +59,7 @@ QString TwitterPlugin::iid() const
 
 QIcon TwitterPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("dk-twitter"));
+    return QIcon::fromTheme(QLatin1String("internet-web-browser"));
 }
 
 QString TwitterPlugin::description() const
