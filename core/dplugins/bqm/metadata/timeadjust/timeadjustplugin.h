@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to remove metadata
+ * Description : a BQM plugin to adjust time
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_REMOVEMETADATA_PLUGIN_H
-#define DIGIKAM_REMOVEMETADATA_PLUGIN_H
+#ifndef DIGIKAM_TIME_ADJUST_PLUGIN_H
+#define DIGIKAM_TIME_ADJUST_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMRemoveMetadata"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMTimeAdjust"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmTimeAdjustPlugin
 {
 
-class RemoveMetadataPlugin : public DPluginBqm
+class TimeAdjustPlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class RemoveMetadataPlugin : public DPluginBqm
 
 public:
 
-    explicit RemoveMetadataPlugin(QObject* const parent = 0);
-    ~RemoveMetadataPlugin();
+    explicit TimeAdjustPlugin(QObject* const parent = 0);
+    ~TimeAdjustPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmTimeAdjustPlugin
 
-#endif // DIGIKAM_REMOVEMETADATA_PLUGIN_H
+#endif // DIGIKAM_TIME_ADJUST_PLUGIN_H

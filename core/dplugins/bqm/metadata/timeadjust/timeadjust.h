@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2010-09-14
- * Description : remove metadata batch tool.
+ * Date        : 2009-03-04
+ * Description : a tool to adjust date time stamp of images
  *
- * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,35 +21,40 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_REMOVE_METADATA_H
-#define DIGIKAM_BQM_REMOVE_METADATA_H
+#ifndef DIGIKAM_BQM_TIME_ADJUST_H
+#define DIGIKAM_BQM_TIME_ADJUST_H
 
 // Local includes
 
 #include "batchtool.h"
+#include "timeadjustsettings.h"
 
-class QCheckBox;
+using namespace Digikam;
 
-namespace Digikam
+namespace DigikamBqmTimeAdjustPlugin
 {
 
-class RemoveMetadata : public BatchTool
+class TimeAdjust : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit RemoveMetadata(QObject* const parent = 0);
-    virtual ~RemoveMetadata();
+    explicit TimeAdjust(QObject* const parent = 0);
+    virtual ~TimeAdjust();
 
     BatchToolSettings defaultSettings();
 
     BatchTool* clone(QObject* const parent=0) const
     {
-        return new RemoveMetadata(parent);
+        return new TimeAdjust(parent);
     };
 
     void registerSettingsWidget();
+
+private:
+
+    bool toolOperations();
 
 private Q_SLOTS:
 
@@ -58,26 +63,10 @@ private Q_SLOTS:
 
 private:
 
-    enum RemoveAction
-    {
-        Tiny = 0,
-        Small,
-        Medium,
-        Big,
-        Large,
-        Huge
-    };
-
-    QCheckBox* m_removeExif;
-    QCheckBox* m_removeIptc;
-    QCheckBox* m_removeXmp;
-    QCheckBox* m_removeXmpVideo;
-
-private:
-
-    bool toolOperations();
+    TimeAdjustSettings* m_taWidget;
+    int                 m_changeSettings;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmTimeAdjustPlugin
 
-#endif // DIGIKAM_BQM_REMOVE_METADATA_H
+#endif // DIGIKAM_BQM_TIME_ADJUST_H

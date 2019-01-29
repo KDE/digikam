@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2009-03-04
- * Description : a tool to adjust date time stamp of images
+ * Description : assign metadata template batch tool.
  *
  * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,31 +21,34 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_TIME_ADJUST_H
-#define DIGIKAM_BQM_TIME_ADJUST_H
+#ifndef DIGIKAM_BQM_ASSIGN_TEMPLATE_H
+#define DIGIKAM_BQM_ASSIGN_TEMPLATE_H
 
 // Local includes
 
 #include "batchtool.h"
+#include "templateselector.h"
+#include "templateviewer.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmAssignTemplatePlugin
 {
-class TimeAdjustSettings;
 
-class TimeAdjust : public BatchTool
+class AssignTemplate : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit TimeAdjust(QObject* const parent = 0);
-    virtual ~TimeAdjust();
+    explicit AssignTemplate(QObject* const parent = 0);
+    virtual ~AssignTemplate();
 
     BatchToolSettings defaultSettings();
 
     BatchTool* clone(QObject* const parent=0) const
-    {
-        return new TimeAdjust(parent);
+    { 
+        return new AssignTemplate(parent);
     };
 
     void registerSettingsWidget();
@@ -61,10 +64,10 @@ private Q_SLOTS:
 
 private:
 
-    TimeAdjustSettings* m_taWidget;
-    int                 m_changeSettings;
+    TemplateSelector* m_templateSelector;
+    TemplateViewer*   m_templateViewer;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmAssignTemplatePlugin
 
-#endif // DIGIKAM_BQM_TIME_ADJUST_H
+#endif // DIGIKAM_BQM_ASSIGN_TEMPLATE_H

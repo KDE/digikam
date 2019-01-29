@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "removemetadata.h"
 
-namespace Digikam
+namespace DigikamBqmRemoveMetadataPlugin
 {
 
 RemoveMetadataPlugin::RemoveMetadataPlugin(QObject* const parent)
@@ -91,4 +91,4 @@ void RemoveMetadataPlugin::setup(QObject* const parent)
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmRemoveMetadataPlugin

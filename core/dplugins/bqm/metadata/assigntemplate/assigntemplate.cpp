@@ -39,10 +39,8 @@
 #include "dmetadata.h"
 #include "template.h"
 #include "templatemanager.h"
-#include "templateselector.h"
-#include "templateviewer.h"
 
-namespace Digikam
+namespace DigikamBqmAssignTemplatePlugin
 {
 
 AssignTemplate::AssignTemplate(QObject* const parent)
@@ -165,4 +163,4 @@ bool AssignTemplate::toolOperations()
     return ret;
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmAssignTemplatePlugin

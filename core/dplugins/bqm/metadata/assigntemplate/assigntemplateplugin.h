@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to adjust time
+ * Description : a BQM plugin to assign template
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TIMEADJUST_PLUGIN_H
-#define DIGIKAM_TIMEADJUST_PLUGIN_H
+#ifndef DIGIKAM_ASSIGN_TEMPLATE_PLUGIN_H
+#define DIGIKAM_ASSIGN_TEMPLATE_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMTimeAdjust"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMAssignTemplate"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmAssignTemplatePlugin
 {
 
-class TimeAdjustPlugin : public DPluginBqm
+class AssignTemplatePlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class TimeAdjustPlugin : public DPluginBqm
 
 public:
 
-    explicit TimeAdjustPlugin(QObject* const parent = 0);
-    ~TimeAdjustPlugin();
+    explicit AssignTemplatePlugin(QObject* const parent = 0);
+    ~AssignTemplatePlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmAssignTemplatePlugin
 
-#endif // DIGIKAM_TIMEADJUST_PLUGIN_H
+#endif // DIGIKAM_ASSIGN_TEMPLATE_PLUGIN_H

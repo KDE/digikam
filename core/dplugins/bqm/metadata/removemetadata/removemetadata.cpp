@@ -40,7 +40,7 @@
 #include "dimg.h"
 #include "dmetadata.h"
 
-namespace Digikam
+namespace DigikamBqmRemoveMetadataPlugin
 {
 
 RemoveMetadata::RemoveMetadata(QObject* const parent)
@@ -171,4 +171,4 @@ bool RemoveMetadata::toolOperations()
     return ret;
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmRemoveMetadataPlugin

@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to assign template
+ * Description : a BQM plugin to ajust time
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "assigntemplateplugin.h"
+#include "timeadjustplugin.h"
 
 // Qt includes
 
@@ -35,46 +35,46 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "assigntemplate.h"
+#include "timeadjust.h"
 
-namespace Digikam
+namespace DigikamBqmTimeAdjustPlugin
 {
 
-AssignTemplatePlugin::AssignTemplatePlugin(QObject* const parent)
+TimeAdjustPlugin::TimeAdjustPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-AssignTemplatePlugin::~AssignTemplatePlugin()
+TimeAdjustPlugin::~TimeAdjustPlugin()
 {
 }
 
-QString AssignTemplatePlugin::name() const
+QString TimeAdjustPlugin::name() const
 {
-    return i18n("Apply Metadata Template");
+    return i18n("Time Adjust");
 }
 
-QString AssignTemplatePlugin::iid() const
+QString TimeAdjustPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon AssignTemplatePlugin::icon() const
+QIcon TimeAdjustPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("text-xml"));
+    return QIcon::fromTheme(QLatin1String("appointment-new"));
 }
 
-QString AssignTemplatePlugin::description() const
+QString TimeAdjustPlugin::description() const
 {
-    return i18n("A tool to apply metadata template to images");
+    return i18n("A tool to adjust date and time-stamp from images");
 }
 
-QString AssignTemplatePlugin::details() const
+QString TimeAdjustPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can apply metadata template over images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can adjust time in images.</p>");
 }
 
-QList<DPluginAuthor> AssignTemplatePlugin::authors() const
+QList<DPluginAuthor> TimeAdjustPlugin::authors() const
 {
     return QList<DPluginAuthor>()
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
@@ -83,12 +83,12 @@ QList<DPluginAuthor> AssignTemplatePlugin::authors() const
             ;
 }
 
-void AssignTemplatePlugin::setup(QObject* const parent)
+void TimeAdjustPlugin::setup(QObject* const parent)
 {
-    AssignTemplate* const tool = new AssignTemplate(parent);
+    TimeAdjust* const tool = new TimeAdjust(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmTimeAdjustPlugin

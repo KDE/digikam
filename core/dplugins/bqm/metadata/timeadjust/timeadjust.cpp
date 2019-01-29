@@ -46,9 +46,8 @@ extern "C"
 #include "dimg.h"
 #include "dlayoutbox.h"
 #include "dmetadata.h"
-#include "timeadjustsettings.h"
 
-namespace Digikam
+namespace DigikamBqmTimeAdjustPlugin
 {
 
 TimeAdjust::TimeAdjust(QObject* const parent)
@@ -470,4 +469,4 @@ bool TimeAdjust::toolOperations()
     return ret;
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmTimeAdjustPlugin
