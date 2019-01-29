@@ -24,6 +24,7 @@ add_subdirectory(pinterest)
 add_subdirectory(piwigo)
 add_subdirectory(rajce)
 add_subdirectory(smugmug)
+add_subdirectory(twitter)
 add_subdirectory(yandexfotki)
 
 if(KF5Vkontakte_FOUND)
@@ -38,5 +39,4 @@ if(KF5KIO_FOUND)
 endif()
 
 # Not yet finalized
-add_subdirectory(twitter)
 #add_subdirectory(unified)
