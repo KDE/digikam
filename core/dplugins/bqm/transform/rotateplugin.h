@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMRotate"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Rotate"
 
 namespace Digikam
 {

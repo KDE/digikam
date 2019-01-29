@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMResize"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Resize"
 
 namespace Digikam
 {

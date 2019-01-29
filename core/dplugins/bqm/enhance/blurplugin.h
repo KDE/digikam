@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMBlur"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Blur"
 
 namespace Digikam
 {

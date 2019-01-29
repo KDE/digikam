@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMBWConvert"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BWConvert"
 
 namespace Digikam
 {

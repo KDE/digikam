@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMFlip"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Flip"
 
 namespace Digikam
 {

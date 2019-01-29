@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMChannelMixer"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.ChannelMixer"
 
 namespace Digikam
 {

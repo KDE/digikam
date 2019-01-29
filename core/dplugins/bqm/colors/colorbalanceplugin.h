@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMColorBalance"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.ColorBalance"
 
 namespace Digikam
 {

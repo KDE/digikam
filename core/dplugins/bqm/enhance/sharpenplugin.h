@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMSharpen"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Sharpen"
 
 namespace Digikam
 {

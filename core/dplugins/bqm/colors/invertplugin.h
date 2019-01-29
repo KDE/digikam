@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMInvert"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Invert"
 
 namespace Digikam
 {

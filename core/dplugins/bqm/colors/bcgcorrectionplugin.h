@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMBCGCorrection"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BCGCorrection"
 
 namespace Digikam
 {

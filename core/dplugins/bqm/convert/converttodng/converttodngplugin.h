@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMConvertToDng"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.ConvertToDng"
 
 using namespace Digikam;
 

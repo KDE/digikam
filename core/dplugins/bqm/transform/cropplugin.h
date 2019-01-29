@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMCrop"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.Crop"
 
 namespace Digikam
 {

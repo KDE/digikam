@@ -27,7 +27,7 @@
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMWaterMark"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.WaterMark"
 
 using namespace Digikam;
 
