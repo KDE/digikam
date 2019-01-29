@@ -89,6 +89,7 @@ JAlbumSelectionPage::JAlbumSelectionPage(QWizard* const dialog, const QString& t
     d->stack->insertWidget(JAlbumSettings::ALBUMS, d->albumSelector);
 
     d->imageList          = new DItemsList(this);
+    d->imageList->setObjectName(QLatin1String("JAlbum ImagesList"));
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->stack->insertWidget(JAlbumSettings::IMAGES, d->imageList);
 

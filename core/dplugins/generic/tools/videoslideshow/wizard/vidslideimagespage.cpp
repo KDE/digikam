@@ -76,6 +76,7 @@ VidSlideImagesPage::VidSlideImagesPage(QWizard* const dialog, const QString& tit
                        "<p>on the bottom. You can adjust the order of each item.</p>"));
 
     d->imageList       = new DItemsList(vbox);
+    d->imageList->setObjectName(QLatin1String("VideoSlideshow ImagesList"));
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     setPageWidget(vbox);

@@ -79,6 +79,7 @@ DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     // -------------------------------------------------------------------
 
     m_imgList  = new DItemsList(this);
+    m_imgList->setObjectName(QLatin1String("WebService ImagesList"));
     m_imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     m_imgList->setAllowRAW(true);
     m_imgList->setIface(iface);
@@ -189,7 +190,7 @@ void DSWidget::slotCompletePackageName(const QString& tip)
         // No matter what 'limit' we use, s.d.n will always return 30 results
         query.addQueryItem(QLatin1String("limit"), QLatin1String("30"));
         sdnUrl.setQuery(query);
-        
+
         QNetworkRequest request(sdnUrl);
         m_httpManager->get(request);
         m_lastQueryUrl = sdnUrl;
@@ -240,7 +241,7 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
             QModelIndex pkgIdx             = m->index(i, 0);
             QModelIndex descIdx            = m->index(i, 1);
             QList<QByteArray> pkgDescSplit = pkgSuggestions.at(i).split('|');
-            
+
             if (!pkgDescSplit.isEmpty())
             {
                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Package suggestion parsed:" << pkgDescSplit;

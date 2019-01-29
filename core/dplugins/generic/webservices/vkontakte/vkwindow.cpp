@@ -131,6 +131,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     d->mainWidget                 = new QWidget(this);
     QHBoxLayout* const mainLayout = new QHBoxLayout(d->mainWidget);
     d->imgList                    = new DItemsList(this);
+    d->imgList->setObjectName(QLatin1String("WebService ImagesList"));
     d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(false); // TODO: implement conversion
     d->imgList->setIface(d->iface);

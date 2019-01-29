@@ -104,7 +104,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
     // The goal is not mix these settings with other export tools.
     d->iface->setObjectName(QLatin1String("SetupMediaServerIface"));
-    
+
     m_buttons->addButton(QDialogButtonBox::Cancel);
     m_buttons->addButton(QDialogButtonBox::Ok);
     m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -131,6 +131,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     else
     {
         d->listView = new DItemsList(d->page);
+        d->listView->setObjectName(QLatin1String("MediaServer ImagesList"));
         d->listView->setControlButtonsPlacement(DItemsList::ControlButtonsRight);
         d->listView->setIface(d->iface);
 

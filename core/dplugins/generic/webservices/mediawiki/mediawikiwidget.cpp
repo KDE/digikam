@@ -174,6 +174,7 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->headerLbl->setFocusPolicy(Qt::NoFocus);
 
     d->imgList   = new DItemsList(this);
+    d->imgList->setObjectName(QLatin1String("WebService ImagesList"));
     d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
     d->imgList->setIface(d->iface);

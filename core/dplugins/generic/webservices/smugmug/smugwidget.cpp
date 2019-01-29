@@ -61,6 +61,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
     // -------------------------------------------------------------------
 
     m_imgList = new DItemsList(this);
+    m_imgList->setObjectName(QLatin1String("WebService ImagesList"));
     m_imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     m_imgList->setAllowRAW(true);
     m_imgList->setIface(m_iface);
