@@ -76,6 +76,9 @@ QString TwitterPlugin::details() const
 QList<DPluginAuthor> TwitterPlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QString::fromUtf8("Thanh Trung Dinh"),
+                             QString::fromUtf8("dinhthanhtrung1996 at gmail dot com"),
+                             QString::fromUtf8("(C) 2019"))
             << DPluginAuthor(QString::fromUtf8("Tarek Talaat"),
                              QString::fromUtf8("tarektalaat93 at gmail dot com"),
                              QString::fromUtf8("(C) 2018"))

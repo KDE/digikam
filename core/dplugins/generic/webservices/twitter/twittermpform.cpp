@@ -7,6 +7,7 @@
  * Description : a tool to export images to Twitter social network
  *
  * Copyright (C) 2018 by Tarek Talaat <tarektalaat93 at gmail dot com>
+ * Copyright (C) 2019 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
