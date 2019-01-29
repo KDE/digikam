@@ -4,61 +4,14 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
-include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(AntiVignetting
-    ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/antivignetting.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(Blur
-    ${CMAKE_CURRENT_SOURCE_DIR}/blurplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/blur.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(LocalContrast
-    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrastplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/localcontrast.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(NoiseReduction
-    ${CMAKE_CURRENT_SOURCE_DIR}/noisereductionplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/noisereduction.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(RedEyeCorrection
-    ${CMAKE_CURRENT_SOURCE_DIR}/redeyecorrectionplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/redeyecorrection.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(Restoration
-    ${CMAKE_CURRENT_SOURCE_DIR}/restorationplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/restoration.cpp
-)
-
-DIGIKAM_ADD_BQM_PLUGIN(Sharpen
-    ${CMAKE_CURRENT_SOURCE_DIR}/sharpenplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/sharpen.cpp
-)
+add_subdirectory(antivignetting)
+add_subdirectory(blur)
+add_subdirectory(localcontrast)
+add_subdirectory(noisereduction)
+add_subdirectory(redeyecorrection)
+add_subdirectory(restoration)
+add_subdirectory(sharpen)
 
 if(LensFun_FOUND)
-
-   include_directories(${LENSFUN_INCLUDE_DIRS})
-
-   DIGIKAM_ADD_BQM_PLUGIN(LensAutoFix
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
-   )
-
+    add_subdirectory(lensautofix)
 endif()
