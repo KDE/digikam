@@ -34,7 +34,9 @@
 
 #include "batchtool.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmWatermarkPlugin
 {
 
 class WaterMark : public BatchTool
@@ -44,7 +46,7 @@ class WaterMark : public BatchTool
 public:
 
     explicit WaterMark(QObject* const parent = 0);
-    virtual ~WaterMark();
+    ~WaterMark();
 
     BatchToolSettings defaultSettings();
 
@@ -68,6 +70,6 @@ private:
     Private* const d;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmWatermarkPlugin
 
 #endif // DIGIKAM_BQM_WATERMARK_H

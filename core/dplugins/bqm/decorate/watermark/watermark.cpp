@@ -62,7 +62,7 @@
 #include "metaengine.h"
 #include "dcolorselector.h"
 
-namespace Digikam
+namespace DigikamBqmWatermarkPlugin
 {
 
 class Q_DECL_HIDDEN WaterMark::Private
@@ -888,4 +888,4 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
     return 0;
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmWatermarkPlugin

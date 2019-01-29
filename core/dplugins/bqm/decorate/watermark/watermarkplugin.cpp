@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "watermark.h"
 
-namespace Digikam
+namespace DigikamBqmWatermarkPlugin
 {
 
 WaterMarkPlugin::WaterMarkPlugin(QObject* const parent)
@@ -97,4 +97,4 @@ void WaterMarkPlugin::setup(QObject* const parent)
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmWatermarkPlugin

@@ -36,9 +36,8 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "borderfilter.h"
-#include "bordersettings.h"
 
-namespace Digikam
+namespace DigikamBqmBorderPlugin
 {
 
 Border::Border(QObject* const parent)
@@ -168,4 +167,4 @@ bool Border::toolOperations()
     return (savefromDImg());
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmBorderPlugin

@@ -27,11 +27,12 @@
 // Local includes
 
 #include "batchtool.h"
+#include "bordersettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmBorderPlugin
 {
-
-class BorderSettings;
 
 class Border : public BatchTool
 {
@@ -62,6 +63,6 @@ private:
     BorderSettings* m_settingsView;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmBorderPlugin
 
 #endif // DIGIKAM_BQM_BORDER_H

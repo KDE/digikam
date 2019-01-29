@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to add watermark
+ * Description : a BQM plugin to add border
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,19 +20,21 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_WATERMARK_PLUGIN_H
-#define DIGIKAM_WATERMARK_PLUGIN_H
+#ifndef DIGIKAM_BORDER_PLUGIN_H
+#define DIGIKAM_BORDER_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMWaterMark"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMBorder"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmBorderPlugin
 {
 
-class WaterMarkPlugin : public DPluginBqm
+class BorderPlugin : public DPluginBqm
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID DPLUGIN_IID)
@@ -40,8 +42,8 @@ class WaterMarkPlugin : public DPluginBqm
 
 public:
 
-    explicit WaterMarkPlugin(QObject* const parent = 0);
-    ~WaterMarkPlugin();
+    explicit BorderPlugin(QObject* const parent = 0);
+    ~BorderPlugin();
 
     QString name()                 const override;
     QString iid()                  const override;
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmBorderPlugin
 
-#endif // DIGIKAM_WATERMARK_PLUGIN_H
+#endif // DIGIKAM_BORDER_PLUGIN_H

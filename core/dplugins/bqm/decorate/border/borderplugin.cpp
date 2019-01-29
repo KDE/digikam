@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "border.h"
 
-namespace Digikam
+namespace DigikamBqmBorderPlugin
 {
 
 BorderPlugin::BorderPlugin(QObject* const parent)
@@ -91,4 +91,4 @@ void BorderPlugin::setup(QObject* const parent)
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmBorderPlugin
