@@ -1,0 +1,17 @@
+DebianScreenshots web service provide hidden AJAX urls to permit to external plugin to play with remote contents:
+
+In source code, 3 urls are used:
+
+1/ One to get the packages list. The tool wait that user enter the first letters of a possible package. The tool query the web service which respond as alist of possible candidate. The results are process and list in a combobox. Actually the url used for this task is this one :
+
+http://screenshots.debian.net/packages/ajax_autocomplete_packages
+
+2/ One to get the package version. When user found the right package corresponding to new screenshots to upload, it query the web service with a second url :
+
+http://screenshots.debian.net/packages/ajax_get_version_for_package
+
+3/ One to upload files to webservice :
+
+http://screenshots.debian.net/uploadfile
+
+All these urls do not work anymore and must be updated. DebianScreenshots team must be contacted by private mail.
