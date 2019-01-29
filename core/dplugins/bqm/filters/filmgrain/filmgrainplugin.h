@@ -20,16 +20,18 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FILMGRAIN_PLUGIN_H
-#define DIGIKAM_FILMGRAIN_PLUGIN_H
+#ifndef DIGIKAM_FILM_GRAIN_PLUGIN_H
+#define DIGIKAM_FILM_GRAIN_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMFilmGrain"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.FilmGrain"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmFilmGrainPlugin
 {
 
 class FilmGrainPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmFilmGrainPlugin
 
-#endif // DIGIKAM_FILMGRAIN_PLUGIN_H
+#endif // DIGIKAM_FILM_GRAIN_PLUGIN_H

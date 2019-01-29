@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : a BQM plugin to apply film grain
+ * Description : a BQM plugin to apply color effects
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "filmgrainplugin.h"
+#include "colorfxplugin.h"
 
 // Qt includes
 
@@ -35,60 +35,60 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "filmgrain.h"
+#include "colorfx.h"
 
-namespace Digikam
+namespace DigikamBqmColorFXPlugin
 {
 
-FilmGrainPlugin::FilmGrainPlugin(QObject* const parent)
+ColorFXPlugin::ColorFXPlugin(QObject* const parent)
     : DPluginBqm(parent)
 {
 }
 
-FilmGrainPlugin::~FilmGrainPlugin()
+ColorFXPlugin::~ColorFXPlugin()
 {
 }
 
-QString FilmGrainPlugin::name() const
+QString ColorFXPlugin::name() const
 {
-    return i18n("Film Grain");
+    return i18n("Color Effects");
 }
 
-QString FilmGrainPlugin::iid() const
+QString ColorFXPlugin::iid() const
 {
     return QLatin1String(DPLUGIN_IID);
 }
 
-QIcon FilmGrainPlugin::icon() const
+QIcon ColorFXPlugin::icon() const
 {
-    return QIcon::fromTheme(QLatin1String("filmgrain"));
+    return QIcon::fromTheme(QLatin1String("colorfx"));
 }
 
-QString FilmGrainPlugin::description() const
+QString ColorFXPlugin::description() const
 {
-    return i18n("A tool to add film grain");
+    return i18n("A tool to apply color effects");
 }
 
-QString FilmGrainPlugin::details() const
+QString ColorFXPlugin::details() const
 {
-    return i18n("<p>This Batch Queue Manager tool can add film grain over images.</p>");
+    return i18n("<p>This Batch Queue Manager tool can apply color effects over images.</p>");
 }
 
-QList<DPluginAuthor> FilmGrainPlugin::authors() const
+QList<DPluginAuthor> ColorFXPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
-                             QString::fromUtf8("caulier dot gilles at gmail dot com"),
-                             QString::fromUtf8("(C) 2010-2019"))
+            << DPluginAuthor(QString::fromUtf8("Alexander Dymo"),
+                             QString::fromUtf8("adymo at develop dot org"),
+                             QString::fromUtf8("(C) 2012"))
             ;
 }
 
-void FilmGrainPlugin::setup(QObject* const parent)
+void ColorFXPlugin::setup(QObject* const parent)
 {
-    FilmGrain* const tool = new FilmGrain(parent);
+    ColorFX* const tool = new ColorFX(parent);
     tool->setPlugin(this);
 
     addTool(tool);
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmColorFXPlugin

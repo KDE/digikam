@@ -20,16 +20,18 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_COLORFX_PLUGIN_H
-#define DIGIKAM_COLORFX_PLUGIN_H
+#ifndef DIGIKAM_COLOR_FX_PLUGIN_H
+#define DIGIKAM_COLOR_FX_PLUGIN_H
 
 // Local includes
 
 #include "dpluginbqm.h"
 
-#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.BQMColorFX"
+#define DPLUGIN_IID "org.kde.digikam.plugin.bqm.ColorFX"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmColorFXPlugin
 {
 
 class ColorFXPlugin : public DPluginBqm
@@ -53,6 +55,6 @@ public:
     void setup(QObject* const);
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmColorFXPlugin
 
-#endif // DIGIKAM_COLORFX_PLUGIN_H
+#endif // DIGIKAM_COLOR_FX_PLUGIN_H

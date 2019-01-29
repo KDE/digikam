@@ -28,9 +28,8 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "colorfxfilter.h"
-#include "colorfxsettings.h"
 
-namespace Digikam
+namespace DigikamBqmColorFXPlugin
 {
 
 ColorFX::ColorFX(QObject* const parent)
@@ -117,4 +116,4 @@ bool ColorFX::toolOperations()
     return savefromDImg();
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmColorFXPlugin

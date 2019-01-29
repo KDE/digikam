@@ -37,9 +37,8 @@
 
 #include "dimg.h"
 #include "filmgrainfilter.h"
-#include "filmgrainsettings.h"
 
-namespace Digikam
+namespace DigikamBqmFilmGrainPlugin
 {
 
 FilmGrain::FilmGrain(QObject* const parent)
@@ -171,4 +170,4 @@ bool FilmGrain::toolOperations()
     return savefromDImg();
 }
 
-} // namespace Digikam
+} // namespace DigikamBqmFilmGrainPlugin

@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2012-11-08
- * Description : a batch tool to apply color effects to images.
+ * Date        : 2010-05-03
+ * Description : a batch tool to addd film grain to images.
  *
- * Copyright (C) 2012 by Alexander Dymo <adymo at develop dot org>
+ * Copyright (C) 2010-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,28 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BQM_COLOR_FX_H
-#define DIGIKAM_BQM_COLOR_FX_H
+#ifndef DIGIKAM_BQM_FILM_GRAIN_H
+#define DIGIKAM_BQM_FILM_GRAIN_H
+
+// Local includes
 
 #include "batchtool.h"
+#include "filmgrainsettings.h"
 
-namespace Digikam
+using namespace Digikam;
+
+namespace DigikamBqmFilmGrainPlugin
 {
 
-class ColorFXSettings;
-
-class ColorFX : public BatchTool
+class FilmGrain : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit ColorFX(QObject* const parent = 0);
-    ~ColorFX();
+    explicit FilmGrain(QObject* const parent = 0);
+    ~FilmGrain();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ColorFX(parent); };
+    BatchTool* clone(QObject* const parent=0) const { return new FilmGrain(parent); };
 
     void registerSettingsWidget();
 
@@ -57,9 +60,9 @@ private Q_SLOTS:
 
 private:
 
-    ColorFXSettings* m_settingsView;
+    FilmGrainSettings* m_settingsView;
 };
 
-} // namespace Digikam
+} // namespace DigikamBqmFilmGrainPlugin
 
-#endif // DIGIKAM_BQM_COLOR_FX_H/
+#endif // DIGIKAM_BQM_FILM_GRAIN_H
