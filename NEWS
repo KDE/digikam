@@ -692,4 +692,5 @@ BUGFIXES:
 622 ==> 401010 - Simple search on one file name crashes the program if there is more than one hit.
 623 ==> 403569 - Error while uploading image to google picasa/photos.
 624 ==> 403594 - Export to Google - Album List incomplete.
-625 ==> 
+625 ==> 403688 - Make it easier to find "Save workflow" command.
+626 ==> 
