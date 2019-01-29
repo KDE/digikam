@@ -160,6 +160,9 @@ void BatchTool::setPlugin(DPluginBqm* const plugin)
     setToolTitle(d->plugin->name());
     setToolDescription(d->plugin->description());
     setToolIcon(d->plugin->icon());
+
+    connect(d->plugin, SIGNAL(signalVisible(bool)),
+            this, SIGNAL(signalVisible(bool)));
 }
 
 DPluginBqm* BatchTool::plugin() const

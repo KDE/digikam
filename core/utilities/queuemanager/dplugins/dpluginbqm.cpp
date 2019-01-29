@@ -57,9 +57,9 @@ DPluginBqm::~DPluginBqm()
     delete d;
 }
 
-void DPluginBqm::setVisible(bool /*b*/)
+void DPluginBqm::setVisible(bool b)
 {
-    // Not used
+    emit signalVisible(b);
 }
 
 int DPluginBqm::toolCount() const

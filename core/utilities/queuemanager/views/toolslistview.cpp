@@ -189,6 +189,24 @@ void ToolsListView::addTool(BatchTool* const tool)
     if (parent)
     {
         new ToolListViewItem(parent, tool);
+
+        connect(tool, SIGNAL(signalVisible(bool)),
+                this, SLOT(slotToolVisible(bool)));
+    }
+}
+
+void ToolsListView::slotToolVisible(bool b)
+{
+    BatchTool* const tool = dynamic_cast<BatchTool*>(sender());
+
+    if (tool)
+    {
+        ToolListViewItem* const item = findTool(tool);
+        
+        if (item)
+        {
+            item->setHidden(b);
+        }
     }
 }
 
@@ -231,7 +249,12 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
     return 0;
 }
 
-bool ToolsListView::findTool(BatchTool* tool)
+bool ToolsListView::hasTool(BatchTool* const tool)
+{
+    return (findTool(tool) ? true : false);
+}
+
+ToolListViewItem* ToolsListView::findTool(BatchTool* const tool)
 {
     QTreeWidgetItemIterator it(this);
 
@@ -241,13 +264,13 @@ bool ToolsListView::findTool(BatchTool* tool)
 
         if (item && item->tool() == tool)
         {
-            return true;
+            return item;
         }
 
         ++it;
     }
 
-    return false;
+    return 0;
 }
 
 void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)

@@ -47,7 +47,7 @@ class ToolListViewGroup : public QTreeWidgetItem
 public:
 
     ToolListViewGroup(QTreeWidget* const parent, BatchTool::BatchToolGroup group);
-    virtual ~ToolListViewGroup();
+    ~ToolListViewGroup();
 
     BatchTool::BatchToolGroup toolGroup() const;
 
@@ -64,7 +64,7 @@ class ToolListViewItem : public QTreeWidgetItem
 public:
 
     ToolListViewItem(ToolListViewGroup* const parent, BatchTool* const tool);
-    virtual ~ToolListViewItem();
+    ~ToolListViewItem();
 
     BatchTool* tool() const;
 
@@ -82,7 +82,7 @@ class ToolsListView : public QTreeWidget
 public:
 
     explicit ToolsListView(QWidget* const parent);
-    virtual ~ToolsListView();
+    ~ToolsListView();
 
     BatchToolsList toolsList();
 
@@ -97,10 +97,12 @@ private Q_SLOTS:
 
     void slotContextMenu();
     void slotAssignTools();
+    void slotToolVisible(bool);
 
 private:
 
-    bool findTool(BatchTool* const tool);
+    bool hasTool(BatchTool* const tool);
+    ToolListViewItem* findTool(BatchTool* const tool);
     ToolListViewGroup* findToolGroup(BatchTool::BatchToolGroup group);
 
     void startDrag(Qt::DropActions supportedActions);

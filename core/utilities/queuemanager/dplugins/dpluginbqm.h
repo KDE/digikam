@@ -80,6 +80,10 @@ public:
      */
     QStringList batchToolGroup() const;
 
+Q_SIGNALS:
+
+    void signalVisible(bool);
+
 protected:
 
     void addTool(BatchTool* const t);

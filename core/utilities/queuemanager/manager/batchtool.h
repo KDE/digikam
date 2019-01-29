@@ -238,6 +238,7 @@ public:
 Q_SIGNALS:
 
     void signalSettingsChanged(const BatchToolSettings&);
+    void signalVisible(bool);
 
 public Q_SLOTS:
 
