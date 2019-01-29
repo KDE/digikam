@@ -55,3 +55,5 @@ set(htmlgalleryplugin_SRCS
 DIGIKAM_ADD_GENERIC_PLUGIN(HtmlGallery
                    ${htmlgalleryplugin_SRCS}
 )
+
+install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
