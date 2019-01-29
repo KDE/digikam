@@ -30,6 +30,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QByteArray>
+#include <QUrl>
 #include <QUrlQuery>
 #include <QList>
 #include <QPair>
@@ -79,12 +80,12 @@ public:
 
     explicit Private()
     {
-        clientId        = QLatin1String("Kej10Xqld2SzYHpl1zPNXBkdz");
-        clientSecret    = QLatin1String("u7012XOx5Xd4t2oH10UMsffY8NseowtsfrXscoOzi4I0c039MF");
+        clientId        = QLatin1String("lkRgRsucipXsUEvKh0ECblreC");
+        clientSecret    = QLatin1String("6EThTiPQHZTMo7F83iLHrfNO89fkDVvM9hVWaYH9D49xEOyMBe");
         //scope          = QLatin1String("User.Read Files.ReadWrite");
 
-        authUrl         = QLatin1String("https://api.twitter.com/oauth/request_token");
-        requestTokenUrl = QLatin1String("https://api.twitter.com/oauth/authenticate");
+        requestTokenUrl = QLatin1String("https://api.twitter.com/oauth/request_token");
+        authUrl         = QLatin1String("https://api.twitter.com/oauth/authenticate");
         accessTokenUrl  = QLatin1String("https://api.twitter.com/oauth/access_token");
 
         redirectUrl     = QLatin1String("http://127.0.0.1:8000");
@@ -401,6 +402,7 @@ bool TwTalker::addPhoto(const QString& imgPath,
     QUrl url = QUrl(QLatin1String("https://upload.twitter.com/1.1/media/upload.json"));
 
     O1Requestor* const requestor        = new O1Requestor(d->netMngr, d->o1Twitter, this);
+
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
     //These are the parameters passed for the first step in chuncked media upload.
@@ -408,32 +410,16 @@ bool TwTalker::addPhoto(const QString& imgPath,
     //reqParams << O0RequestParameter(QByteArray("media_type"), QByteArray("image/jpeg"));
     //reqParams << O0RequestParameter(QByteArray("total_bytes"), QString::fromLatin1("%1").arg(imageSize).toUtf8());
 
-    reqParams << O0RequestParameter(QByteArray("media"), form.formData());
+    //reqParams << O0RequestParameter(QByteArray("media"), form.formData());
 
-    QByteArray postData = O1::createQueryParameters(reqParams);
+    //QByteArray postData = O1::createQueryParameters(reqParams);
 
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("multipart/form-data"));
-    QNetworkReply* const reply2 = requestor->post(request, reqParams, postData);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
+    QNetworkReply* const reply2 = requestor->post(request, reqParams, form.formData());
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply size:              " << reply2->readBufferSize();  //always returns 0
     QByteArray replyData = reply2->readAll();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData; //always Empty
-
-    //uncomment this to try to post a tweet
-    QUrl url2 = QUrl(QLatin1String("https://api.twitter.com/1.1/statuses/update.json"));
-    reqParams = QList<O0RequestParameter>();
-    reqParams << O0RequestParameter(QByteArray("status"), "Hello");
-    //reqParams << O0RequestParameter(QByteArray("media_ids"), mediaId.toUtf8());
-
-    postData = O1::createQueryParameters(reqParams);
-
-    request.setUrl(url2);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_XFORM));
-
-    QNetworkReply* const reply = requestor->post(request, reqParams, postData);
-
-    connect(reply, SIGNAL(finished()),
-            this, SLOT(slotTweetDone()));
+    //qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData; //always Empty
 
     connect(reply2, SIGNAL(finished()),
             this, SLOT(reply2finish()));
@@ -459,10 +445,27 @@ void TwTalker::reply2finish()
         QJsonDocument doc      = QJsonDocument::fromJson(replyData);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media reply:" << replyData;
         QJsonObject jsonObject = doc.object();
-        mediaId = jsonObject[QLatin1String("media_id")].toString();
+        mediaId = jsonObject[QLatin1String("media_id_string")].toString();
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Media ID:" << mediaId;
+
+    //uncomment this to try to post a tweet
+    QUrl url2 = QUrl(QLatin1String("https://api.twitter.com/1.1/statuses/update.json"));
+    QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
+    reqParams << O0RequestParameter(QByteArray("status"), QByteArray(""));
+    reqParams << O0RequestParameter(QByteArray("media_ids"), mediaId.toUtf8());
+
+    QByteArray  postData = O1::createQueryParameters(reqParams);
+
+    QNetworkRequest request(url2);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_XFORM));
+
+    O1Requestor* const requestor        = new O1Requestor(d->netMngr, d->o1Twitter, this);
+    QNetworkReply* const reply = requestor->post(request, reqParams, postData);
+
+    connect(reply, SIGNAL(finished()),
+            this, SLOT(slotTweetDone()));
 }
 
 void TwTalker::getUserName()
@@ -493,6 +496,7 @@ void TwTalker::slotTweetDone()
     else
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tweet posted successfully!";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Reply:" << reply->readAll();
         emit signalAddPhotoSucceeded();
     }
 }

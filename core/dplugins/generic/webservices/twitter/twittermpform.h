@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QByteArray>
+#include <QString>
 
 namespace DigikamGenericTwitterPlugin
 {
@@ -38,12 +39,16 @@ public:
     explicit TwMPForm();
     ~TwMPForm();
 
+    void reset();
     bool addFile(const QString& imgPath);
+
+    QString contentType() const;
     QByteArray formData() const;
 
 private:
 
     QByteArray m_buffer;
+    QByteArray m_boundary;
 };
 
 } // namespace DigikamGenericTwitterPlugin

@@ -38,5 +38,5 @@ if(KF5KIO_FOUND)
 endif()
 
 # Not yet finalized
-#add_subdirectory(twitter)
+add_subdirectory(twitter)
 #add_subdirectory(unified)

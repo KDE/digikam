@@ -27,20 +27,30 @@
 // Qt includes
 
 #include <QFile>
+#include <QUrl>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "wstoolutils.h"
 
 namespace DigikamGenericTwitterPlugin
 {
 
 TwMPForm::TwMPForm()
 {
+	m_boundary = "00TwDK";
+	m_boundary += Digikam::WSToolUtils::randomString(42 + 13).toLatin1();
+	m_boundary += "KDwT99";
 }
 
 TwMPForm::~TwMPForm()
 {
+}
+
+void TwMPForm::reset()
+{
+	m_buffer.resize(0);
 }
 
 bool TwMPForm::addFile(const QString& imgPath)
@@ -52,10 +62,30 @@ bool TwMPForm::addFile(const QString& imgPath)
         return false;
     }
 
-    m_buffer = file.readAll();
-    file.close();
+	QByteArray data("--");
+	data += m_boundary;
+	data += "\r\n";
+	data += "Content-Disposition: form-data; name=\"media\"; filename=\"";
+	data += QFile::encodeName(QUrl(imgPath).fileName());
+	data += "\"\r\n";
+	data += "Content-Type: application/octet-stream\r\n\r\n";
+	data += file.readAll();
+	file.close();
+	data += "\r\n--";
+	data += m_boundary;
+	data += "--\r\n";
+
+    m_buffer.append(data);
 
     return true;
+}
+
+QString TwMPForm::contentType() const
+{
+	QString type = QString::fromLatin1("multipart/form-data, boundary=\"%1\"").arg(QLatin1String(m_boundary));
+	qCDebug(DIGIKAM_WEBSERVICES_LOG) << type;
+
+	return type;
 }
 
 QByteArray TwMPForm::formData() const

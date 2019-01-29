@@ -87,7 +87,7 @@ void TwitterPlugin::setup(QObject* const parent)
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Export to &Twitter..."));
-    ac->setObjectName(QLatin1String("export-twitter"));
+    ac->setObjectName(QLatin1String("export_twitter"));
     ac->setActionCategory(DPluginAction::GenericExport);
 
     connect(ac, SIGNAL(triggered(bool)),
