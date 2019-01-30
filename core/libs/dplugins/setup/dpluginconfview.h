@@ -64,8 +64,12 @@ public:
 
     /** Return the number of visible plugins in the list.
      */
-    int visible() const;
-
+    int itemsVisible() const;
+    
+    /** Return the number of plugins in the list with visibly properties availalble.
+     */
+    int itemsWithVisiblyProperty() const;
+    
     /** Select all plugins in the list.
      */
     void selectAll() Q_DECL_OVERRIDE;

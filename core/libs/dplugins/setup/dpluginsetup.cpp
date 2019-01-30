@@ -153,6 +153,11 @@ void DPluginSetup::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void DPluginSetup::updateInfo()
 {
+    bool b = (d->pluginsList->itemsWithVisiblyProperty() != 0);
+    d->pluginsNumberActivated->setVisible(b);
+    d->checkAllBtn->setVisible(b);
+    d->clearBtn->setVisible(b);
+        
     if (d->pluginFilter->text().isEmpty())
     {
         // List is not filtered
@@ -173,7 +178,7 @@ void DPluginSetup::updateInfo()
     else
     {
         // List filtering is active
-        int cnt = d->pluginsList->visible();
+        int cnt = d->pluginsList->itemsVisible();
 
         if (cnt > 0)
             d->pluginsNumber->setText(i18np("1 plugin found", "%1 plugins found", cnt));

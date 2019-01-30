@@ -55,6 +55,8 @@ public:
 
 public:
 
+    bool hasVisibilityProperty() const;
+
     /**
      * Holds whether the plugin can be seen in parent view.
      */

@@ -91,4 +91,9 @@ void DPlugin::setShouldLoaded(bool b)
     d->shouldLoaded = b;
 }
 
+bool DPlugin::hasVisibilityProperty() const
+{
+    return true;
+}
+
 } // namespace Digikam

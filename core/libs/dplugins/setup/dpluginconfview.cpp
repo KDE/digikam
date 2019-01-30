@@ -56,7 +56,12 @@ public:
         // Name + Icon + Selector
         setText(0, m_plugin->name());
         setIcon(0, m_plugin->icon());
-        setCheckState(0, m_plugin->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
+
+        if (m_plugin->hasVisibilityProperty())
+        {
+            setCheckState(0, m_plugin->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
+        }
+
         setToolTip(0, m_plugin->details());
 
         // Categories
@@ -172,10 +177,13 @@ void DPluginConfView::apply()
 
         foreach (DPluginCB* const item, d->plugBoxes)
         {
-            bool load = (item->checkState(0) == Qt::Checked);
-            group.writeEntry(item->m_plugin->iid(), load);
-            item->m_plugin->setVisible(load);
-            item->m_plugin->setShouldLoaded(load);
+            if (item->m_plugin->hasVisibilityProperty())
+            {
+                bool load = (item->checkState(0) == Qt::Checked);
+                group.writeEntry(item->m_plugin->iid(), load);
+                item->m_plugin->setVisible(load);
+                item->m_plugin->setShouldLoaded(load);
+            }
         }
 
         config->sync();
@@ -216,7 +224,7 @@ int DPluginConfView::actived() const
     return actived;
 }
 
-int DPluginConfView::visible() const
+int DPluginConfView::itemsVisible() const
 {
     int visible = 0;
 
@@ -227,6 +235,19 @@ int DPluginConfView::visible() const
     }
 
     return visible;
+}
+
+int DPluginConfView::itemsWithVisiblyProperty() const
+{
+    int vp = 0;
+
+    foreach (DPluginCB* const item, d->plugBoxes)
+    {
+        if (!item->isHidden() && item->m_plugin->hasVisibilityProperty())
+            ++vp;
+    }
+
+    return vp;
 }
 
 void DPluginConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)

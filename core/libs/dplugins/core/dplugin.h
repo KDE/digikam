@@ -90,6 +90,12 @@ public:
 public:
 
     /**
+     * Return true if plugin can be configured in setup dialog about the visibility property.
+     * Default implementation return true.
+     */
+    virtual bool hasVisibilityProperty() const;
+
+    /**
      * Holds whether the plugin can be seen in parent view.
      */
     virtual void setVisible(bool b) = 0;
