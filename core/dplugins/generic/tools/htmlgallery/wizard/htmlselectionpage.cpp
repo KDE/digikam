@@ -89,6 +89,7 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
     d->stack->insertWidget(GalleryInfo::ALBUMS, d->albumSelector);
 
     d->imageList          = new DItemsList(this);
+    d->imageList->setObjectName(QLatin1String("HTMLGalleries ImagesList"));
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->stack->insertWidget(GalleryInfo::IMAGES, d->imageList);
 

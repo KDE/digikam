@@ -72,6 +72,7 @@ MailImagesPage::MailImagesPage(QWizard* const dialog, const QString& title)
     desc->setText(i18n("<p>This view list all items to export by mail.</p>"));
 
     d->imageList       = new DItemsList(vbox);
+    d->imageList->setObjectName(QLatin1String("MailImages ImagesList"));
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     setPageWidget(vbox);

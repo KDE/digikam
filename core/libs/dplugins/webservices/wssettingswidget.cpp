@@ -169,6 +169,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
+    d->imgList->setObjectName(QLatin1String("WebService ImagesList"));
     d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
     d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->toolName));

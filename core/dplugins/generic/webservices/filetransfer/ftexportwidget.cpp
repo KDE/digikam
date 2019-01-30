@@ -92,6 +92,7 @@ FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const paren
 
     // setup image list
     d->imageList = new DItemsList(this);
+    d->imageList->setObjectName(QLatin1String("FTExport ImagesList"));
     d->imageList->setIface(iface);
     d->imageList->loadImagesFromCurrentSelection();
     d->imageList->setAllowRAW(true);

@@ -124,6 +124,8 @@ JAlbumIntroPage::JAlbumIntroPage(QWizard* const dialog, const QString& title)
 #else
     d->binSearch->addDirectory(QLatin1String("/usr/share/"));
     d->binSearch->addDirectory(QLatin1String("/usr/share/jAlbum/"));
+    d->binSearch->addDirectory(QLatin1String("/usr/share/jalbum/"));
+    d->binSearch->addDirectory(QLatin1String("/usr/lib/jalbum/"));
 #endif
 
     connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),

@@ -67,6 +67,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
 
     // setup image list
     d->imageList = new DItemsList(this);
+    d->imageList->setObjectName(QLatin1String("FTImport ImagesList"));
     d->imageList->setAllowRAW(true);
     d->imageList->setIface(iface);
     d->imageList->listView()->setColumnEnabled(DItemsListView::Thumbnail, false);
