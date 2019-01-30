@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2007-02-06
- * Description : Config panel for BQM dplugins.
+ * Date        : 2018-12-31
+ * Description : configuration view for external BQM plugin
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,48 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DPLUGIN_BQM_SETUP_H
-#define DIGIKAM_DPLUGIN_BQM_SETUP_H
-
-// Qt includes
-
-#include <QWidget>
+#include "dpluginconfviewbqm.h"
 
 // Local includes
 
-#include "searchtextbar.h"
-
-class QTreeWidgetItem;
+#include "dpluginbqm.h"
+#include "dpluginloader.h"
 
 namespace Digikam
 {
 
-class DPluginBqmSetup : public QWidget
+DPluginConfViewBqm::DPluginConfViewBqm(QWidget* const parent)
+    : DPluginConfView(parent)
 {
-    Q_OBJECT
+    loadPlugins();
+}
 
-public:
+DPluginConfViewBqm::~DPluginConfViewBqm()
+{
+}
 
-    explicit DPluginBqmSetup(QWidget* const parent = 0);
-    ~DPluginBqmSetup();
+void DPluginConfViewBqm::loadPlugins()
+{
+    DPluginLoader* const loader = DPluginLoader::instance();
 
-private Q_SLOTS:
+    if (loader)
+    {
+        foreach (DPlugin* const tool, loader->allPlugins())
+        {
+            DPluginBqm* const bqm = dynamic_cast<DPluginBqm*>(tool);
 
-    void slotSearchTextChanged(const SearchTextSettings& settings);
-    void slotSetFilter(const QString& filter, Qt::CaseSensitivity cs);
-    void slotSearchResult(int found);
-    void slotAboutPlugin(QTreeWidgetItem*);
+            if (bqm)
+            {
+                appendPlugin(bqm);
+            }
+        }
+    }
 
-private:
+    // Sort items by plugin names.
+    sortItems(0, Qt::AscendingOrder);
+}
 
-    void updateInfo();
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-}  // namespace Digikam
-
-#endif // DIGIKAM_DPLUGIN_BQM_SETUP_H
+} // namespace Digikam

@@ -17,8 +17,7 @@ set(libqueuemanager_SRCS
     manager/batchtoolsfactory.cpp
     manager/workflowmanager.cpp
     dplugins/dpluginbqm.cpp
-    dplugins/dpluginbqmsetup.cpp
-    dplugins/dpluginbqmconfview.cpp
+    dplugins/dpluginconfviewbqm.cpp
     views/workflowdlg.cpp
     views/assignedlist.cpp
     views/queuelist.cpp

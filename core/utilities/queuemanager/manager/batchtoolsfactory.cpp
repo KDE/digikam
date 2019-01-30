@@ -75,7 +75,6 @@ BatchToolsFactory::BatchToolsFactory()
         if (bqm)
         {
             bqm->setup(this);
-            bqm->setVisible(p->shouldLoaded());
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "BQM plugin named" << bqm->name()
                                          << "registered to" << this;

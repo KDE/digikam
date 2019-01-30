@@ -39,6 +39,10 @@
 
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "dpluginbqm.h"
+
 namespace Digikam
 {
 
@@ -188,10 +192,12 @@ void ToolsListView::addTool(BatchTool* const tool)
 
     if (parent)
     {
-        new ToolListViewItem(parent, tool);
+        ToolListViewItem* const item = new ToolListViewItem(parent, tool);
 
         connect(tool, SIGNAL(signalVisible(bool)),
                 this, SLOT(slotToolVisible(bool)));
+
+        item->setHidden(!tool->plugin()->shouldLoaded());
     }
 }
 
@@ -202,10 +208,10 @@ void ToolsListView::slotToolVisible(bool b)
     if (tool)
     {
         ToolListViewItem* const item = findTool(tool);
-        
+
         if (item)
         {
-            item->setHidden(b);
+            item->setHidden(!b);
         }
     }
 }

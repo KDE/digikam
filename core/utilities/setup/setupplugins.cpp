@@ -33,10 +33,10 @@
 // Local includes
 
 #include "dpluginsetup.h"
-#include "dpluginbqmsetup.h"
 #include "dpluginaction.h"
 #include "dpluginconfviewgeneric.h"
 #include "dpluginconfvieweditor.h"
+#include "dpluginconfviewbqm.h"
 
 namespace Digikam
 {
@@ -53,11 +53,11 @@ public:
     {
     }
 
-    QTabWidget*          tab;
+    QTabWidget*   tab;
 
-    DPluginSetup*        setupGeneric;
-    DPluginSetup*        setupEditor;
-    DPluginBqmSetup*     setupBqm;
+    DPluginSetup* setupGeneric;
+    DPluginSetup* setupEditor;
+    DPluginSetup* setupBqm;
 };
 
 SetupPlugins::SetupPlugins(QWidget* const parent)
@@ -82,7 +82,8 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     // --------------------
 
-    d->setupBqm = new DPluginBqmSetup(d->tab);
+    d->setupBqm = new DPluginSetup(d->tab);
+    d->setupBqm->setPluginConfView(new DPluginConfViewBqm(d->setupBqm));
     d->tab->insertTab(Bqm, d->setupBqm, i18nc("@title:tab", "Batch Queue Manager"));
 }
 
@@ -95,6 +96,7 @@ void SetupPlugins::applySettings()
 {
     d->setupGeneric->applySettings();
     d->setupEditor->applySettings();
+    d->setupBqm->applySettings();
 }
 
 } // namespace Digikam

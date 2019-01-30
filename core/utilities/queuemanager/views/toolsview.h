@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2009-04-20
- * Description : a view to available tools in tab view.
+ * Description : a view to host all available tools.
  *
  * Copyright (C) 2009-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
