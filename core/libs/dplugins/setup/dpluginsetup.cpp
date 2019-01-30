@@ -121,10 +121,10 @@ void DPluginSetup::setPluginConfView(DPluginConfView* const view)
     d->grid->addWidget(d->pluginsList, 1, 0, 1, 6);
 
     connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotAboutPlugin(QTreeWidgetItem*)));
+            this, SLOT(slotItemClicked()));
 
     connect(d->pluginsList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotAboutPlugin(QTreeWidgetItem*)));
+            this, SLOT(slotAboutPlugin(QTreeWidgetItem*,int)));
 
     connect(d->pluginsList, SIGNAL(signalSearchResult(int)),
             this, SLOT(slotSearchResult(int)));
@@ -137,9 +137,9 @@ void DPluginSetup::applySettings()
     d->pluginsList->apply();
 }
 
-void DPluginSetup::slotAboutPlugin(QTreeWidgetItem* item)
+void DPluginSetup::slotAboutPlugin(QTreeWidgetItem* item, int col)
 {
-    if (!item) return;
+    if (!item || col == 0) return;
 
     QPointer<DPluginAboutDlg> dlg = new DPluginAboutDlg(d->pluginsList->plugin(item));
     dlg->exec();

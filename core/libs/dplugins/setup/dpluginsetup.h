@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 class DPluginConfView;
-    
+
 class DIGIKAM_EXPORT DPluginSetup : public QWidget
 {
     Q_OBJECT
@@ -61,7 +61,7 @@ private Q_SLOTS:
     void slotClearList();
     void slotItemClicked();
     void slotSearchResult(int found);
-    void slotAboutPlugin(QTreeWidgetItem*);
+    void slotAboutPlugin(QTreeWidgetItem*, int);
 
 private:
 
