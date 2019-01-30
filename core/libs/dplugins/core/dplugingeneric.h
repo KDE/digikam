@@ -103,6 +103,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginGeneric, "org.kde.digikam.DPluginGeneric/1.0.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginGeneric, "org.kde.digikam.DPluginGeneric/1.1.0" )
 
 #endif // DIGIKAM_DPLUGIN_GENERIC_H

@@ -98,6 +98,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginEditor, "org.kde.digikam.DPluginEditor/1.0.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginEditor, "org.kde.digikam.DPluginEditor/1.1.0" )
 
 #endif // DIGIKAM_DPLUGIN_EDITOR_H

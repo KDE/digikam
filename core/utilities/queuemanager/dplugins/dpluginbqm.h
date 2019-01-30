@@ -96,6 +96,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginBqm, "org.kde.digikam.DPluginBqm/1.0.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginBqm, "org.kde.digikam.DPluginBqm/1.1.0" )
 
 #endif // DIGIKAM_DPLUGIN_BQM_H
