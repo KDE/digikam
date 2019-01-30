@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-12-31
- * Description : configuration view for external generic plugin
+ * Description : configuration view for external plugin
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -47,7 +47,7 @@ public:
 
     /** Default constructor.
      */
-    explicit DPluginConfView(DPluginAction::ActionType type, QWidget* const parent=0);
+    explicit DPluginConfView(QWidget* const parent=0);
     ~DPluginConfView();
 
     /** Apply all changes about plugins selected to be hosted in host application.
@@ -83,6 +83,12 @@ public:
     QString filter() const;
 
     DPlugin* plugin(QTreeWidgetItem* const item) const;
+
+protected:
+
+    void appendPlugin(DPlugin* const);
+
+    virtual void loadPlugins() = 0;
 
 Q_SIGNALS:
 

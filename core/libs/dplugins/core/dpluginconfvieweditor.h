@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * https://www.digikam.org
  *
- * Date        : 2018-07-30
- * Description : stand alone test application for plugin configuration view.
+ * Date        : 2018-12-31
+ * Description : configuration view for external editor plugin
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,33 +21,33 @@
  *
  * ============================================================ */
 
-// Qt Includes
+#ifndef DIGIKAM_DPLUGIN_CONF_VIEW_EDITOR_H
+#define DIGIKAM_DPLUGIN_CONF_VIEW_EDITOR_H
 
-#include <QApplication>
-#include <QDebug>
+// Qt includes
+
+#include <QString>
 
 // Local includes
 
-#include "dpluginloader.h"
-#include "dpluginsetup.h"
+#include "dpluginconfview.h"
+#include "digikam_export.h"
 
-using namespace Digikam;
-
-int main(int argc, char* argv[])
+namespace Digikam
 {
-    QApplication app(argc, argv);
 
-    DPluginLoader* const dpl = DPluginLoader::instance();
-    dpl->init();
-    dpl->registerGenericPlugins(qApp);
+class DIGIKAM_EXPORT DPluginConfViewEditor : public DPluginConfView
+{
+    Q_OBJECT
 
-    DPluginSetup view;
-    view.show();
-    view.resize(1024, 600);
+public:
 
-    app.exec();
+    explicit DPluginConfViewEditor(QWidget* const parent=0);
+    ~DPluginConfViewEditor();
 
-    view.applySettings();
+    void loadPlugins();
+};
 
-    return 0;
-}
+} // namespace Digikam
+
+#endif // DIGIKAM_DPLUGIN_CONF_VIEW_EDITOR_H

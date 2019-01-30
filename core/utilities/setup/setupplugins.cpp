@@ -35,6 +35,8 @@
 #include "dpluginsetup.h"
 #include "dpluginbqmsetup.h"
 #include "dpluginaction.h"
+#include "dpluginconfviewgeneric.h"
+#include "dpluginconfvieweditor.h"
 
 namespace Digikam
 {
@@ -68,12 +70,14 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     // --------------------
 
-    d->setupGeneric = new DPluginSetup(DPluginAction::Generic, d->tab);
+    d->setupGeneric = new DPluginSetup(d->tab);
+    d->setupGeneric->setPluginConfView(new DPluginConfViewGeneric(d->setupGeneric));
     d->tab->insertTab(Generic, d->setupGeneric, i18nc("@title:tab", "Generic"));
 
     // --------------------
 
-    d->setupEditor = new DPluginSetup(DPluginAction::Editor, d->tab);
+    d->setupEditor = new DPluginSetup(d->tab);
+    d->setupEditor->setPluginConfView(new DPluginConfViewEditor(d->setupEditor));
     d->tab->insertTab(Editor, d->setupEditor, i18nc("@title:tab", "Image Editor"));
 
     // --------------------

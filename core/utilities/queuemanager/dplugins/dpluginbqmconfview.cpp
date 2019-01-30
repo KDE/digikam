@@ -52,11 +52,11 @@ public:
         setToolTip(0, m_plugin->details());
 
         // Categories
-        QStringList list = m_plugin->batchToolGroup();
+        QStringList list = m_plugin->categories();
         setText(1, list.join(QString::fromLatin1(", ")));
 
         // Number of actions
-        setText(2, QString::number(m_plugin->toolCount()));
+        setText(2, QString::number(m_plugin->count()));
 
         // Description
         setText(3, m_plugin->description());

@@ -95,6 +95,16 @@ public:
     virtual void setVisible(bool b) = 0;
 
     /**
+     * Return the amount of tools registered to all parents.
+     */
+    virtual int count() const = 0;
+
+    /**
+     * Return a list of categories as strings registered in this plugin.
+     */
+    virtual QStringList categories() const = 0;
+
+    /**
      * Plugin factory method to create all internal object instances for a given parent.
      */
     virtual void setup(QObject* const parent) = 0;

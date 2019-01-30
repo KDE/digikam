@@ -4,7 +4,7 @@
  * https://www.digikam.org
  *
  * Date        : 2018-12-31
- * Description : configuration view for external generic plugin
+ * Description : configuration view for external plugin
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -32,11 +32,11 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
-#include "dplugingeneric.h"
-#include "dplugineditor.h"
+#include "dplugin.h"
 
 namespace Digikam
 {
@@ -59,29 +59,12 @@ public:
         setCheckState(0, m_plugin->shouldLoaded() ? Qt::Checked : Qt::Unchecked);
         setToolTip(0, m_plugin->details());
 
-        DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(plugin);
+        // Categories
+        QStringList list = m_plugin->categories();
+        setText(1, list.join(QString::fromLatin1(", ")));
 
-        if (gene)
-        {
-            // Categories
-            QStringList list = gene->actionCategories();
-            setText(1, list.join(QString::fromLatin1(", ")));
-
-            // Number of actions
-            setText(2, QString::number(gene->actionCount()));
-        }
-
-        DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(plugin);
-
-        if (edit)
-        {
-            // Categories
-            QStringList list = edit->actionCategories();
-            setText(1, list.join(QString::fromLatin1(", ")));
-
-            // Number of actions
-            setText(2, QString::number(edit->actionCount()));
-        }
+        // Number of tools
+        setText(2, QString::number(m_plugin->count()));
 
         // Description
         setText(3, m_plugin->description());
@@ -117,13 +100,13 @@ public:
 
     explicit Private()
     {
-    };
+    }
 
     QString           filter;
-    QList<DPluginCB*> geneBoxes;
+    QList<DPluginCB*> plugBoxes;
 };
 
-DPluginConfView::DPluginConfView(DPluginAction::ActionType type, QWidget* const parent)
+DPluginConfView::DPluginConfView(QWidget* const parent)
     : QTreeWidget(parent),
       d(new Private)
 {
@@ -141,43 +124,26 @@ DPluginConfView::DPluginConfView(DPluginAction::ActionType type, QWidget* const 
     header()->setSectionResizeMode(4, QHeaderView::Interactive);
     header()->setSortIndicatorShown(true);
 
+    QStringList labels;
+    labels.append(i18n("Name"));
+    labels.append(i18n("Categories"));
+    labels.append(i18n("Tools"));
+    labels.append(i18n("Description"));
+    labels.append(i18n("Authors"));
+    setHeaderLabels(labels);
+
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
-
-    DPluginLoader* const loader = DPluginLoader::instance();
-
-    if (loader)
-    {
-        foreach (DPlugin* const tool, loader->allPlugins())
-        {
-            if (type == DPluginAction::Generic)
-            {
-                DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(tool);
-
-                if (gene)
-                {
-                    d->geneBoxes.append(new DPluginCB(gene, this));
-                }
-            }
-            else
-            {
-                DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(tool);
-
-                if (edit)
-                {
-                    d->geneBoxes.append(new DPluginCB(edit, this));
-                }
-            }
-        }
-    }
-
-    // Sort items by plugin names.
-    sortItems(0, Qt::AscendingOrder);
 }
 
 DPluginConfView::~DPluginConfView()
 {
     delete d;
+}
+
+void DPluginConfView::appendPlugin(DPlugin* const plugin)
+{
+    d->plugBoxes.append(new DPluginCB(plugin, this));
 }
 
 DPlugin* DPluginConfView::plugin(QTreeWidgetItem* const item) const
@@ -204,7 +170,7 @@ void DPluginConfView::apply()
         KSharedConfigPtr config = KSharedConfig::openConfig();
         KConfigGroup group      = config->group(loader->configGroupName());
 
-        foreach (DPluginCB* const item, d->geneBoxes)
+        foreach (DPluginCB* const item, d->plugBoxes)
         {
             bool load = (item->checkState(0) == Qt::Checked);
             group.writeEntry(item->m_plugin->iid(), load);
@@ -218,7 +184,7 @@ void DPluginConfView::apply()
 
 void DPluginConfView::selectAll()
 {
-    foreach (DPluginCB* const item, d->geneBoxes)
+    foreach (DPluginCB* const item, d->plugBoxes)
     {
         item->setCheckState(0, Qt::Checked);
     }
@@ -226,7 +192,7 @@ void DPluginConfView::selectAll()
 
 void DPluginConfView::clearAll()
 {
-    foreach (DPluginCB* const item, d->geneBoxes)
+    foreach (DPluginCB* const item, d->plugBoxes)
     {
         item->setCheckState(0, Qt::Unchecked);
     }
@@ -234,14 +200,14 @@ void DPluginConfView::clearAll()
 
 int DPluginConfView::count() const
 {
-    return d->geneBoxes.count();
+    return d->plugBoxes.count();
 }
 
 int DPluginConfView::actived() const
 {
     int actived = 0;
 
-    foreach (DPluginCB* const item, d->geneBoxes)
+    foreach (DPluginCB* const item, d->plugBoxes)
     {
         if (item->checkState(0) == Qt::Checked)
             ++actived;
@@ -254,7 +220,7 @@ int DPluginConfView::visible() const
 {
     int visible = 0;
 
-    foreach (DPluginCB* const item, d->geneBoxes)
+    foreach (DPluginCB* const item, d->plugBoxes)
     {
         if (!item->isHidden())
             ++visible;
@@ -268,7 +234,7 @@ void DPluginConfView::setFilter(const QString& filter, Qt::CaseSensitivity cs)
     d->filter  = filter;
     bool query = false;
 
-    foreach (DPluginCB* const item, d->geneBoxes)
+    foreach (DPluginCB* const item, d->plugBoxes)
     {
         if (item->contains(filter, cs))
         {

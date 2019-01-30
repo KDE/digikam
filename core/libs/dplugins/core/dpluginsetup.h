@@ -39,15 +39,18 @@ class QTreeWidgetItem;
 namespace Digikam
 {
 
+class DPluginConfView;
+    
 class DIGIKAM_EXPORT DPluginSetup : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit DPluginSetup(DPluginAction::ActionType type, QWidget* const parent = 0);
+    explicit DPluginSetup(QWidget* const parent = 0);
     ~DPluginSetup();
 
+    void setPluginConfView(DPluginConfView* const view);
     void applySettings();
 
 private Q_SLOTS:

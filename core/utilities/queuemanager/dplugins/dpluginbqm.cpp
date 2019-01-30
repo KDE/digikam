@@ -62,7 +62,7 @@ void DPluginBqm::setVisible(bool b)
     emit signalVisible(b);
 }
 
-int DPluginBqm::toolCount() const
+int DPluginBqm::count() const
 {
     return d->tools.count();
 }
@@ -101,7 +101,7 @@ void DPluginBqm::addTool(BatchTool* const t)
     d->tools.append(t);
 }
 
-QStringList DPluginBqm::batchToolGroup() const
+QStringList DPluginBqm::categories() const
 {
     QStringList list;
 

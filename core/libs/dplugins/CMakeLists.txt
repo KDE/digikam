@@ -38,6 +38,8 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugineditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginconfview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginconfviewgeneric.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginconfvieweditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginsetup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugindialog.cpp

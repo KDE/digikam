@@ -30,6 +30,8 @@
 // Local includes
 
 #include "dpluginsetup.h"
+#include "dpluginconfviewgeneric.h"
+#include "dpluginconfvieweditor.h"
 
 namespace ShowFoto
 {
@@ -61,12 +63,14 @@ SetupPlugins::SetupPlugins(QWidget* const parent)
 
     // --------------------
 
-    d->setupGeneric = new Digikam::DPluginSetup(Digikam::DPluginAction::Generic, d->tab);
+    d->setupGeneric = new Digikam::DPluginSetup(d->tab);
+    d->setupGeneric->setPluginConfView(new Digikam::DPluginConfViewGeneric(d->setupGeneric));
     d->tab->insertTab(Generic, d->setupGeneric, i18nc("@title:tab", "Generic"));
 
     // --------------------
 
-    d->setupEditor = new Digikam::DPluginSetup(Digikam::DPluginAction::Editor, d->tab);
+    d->setupEditor = new Digikam::DPluginSetup(d->tab);
+    d->setupEditor->setPluginConfView(new Digikam::DPluginConfViewEditor(d->setupEditor));
     d->tab->insertTab(Editor, d->setupEditor, i18nc("@title:tab", "Image Editor"));
 }
 

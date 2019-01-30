@@ -83,7 +83,7 @@ DInfoInterface* DPluginGeneric::infoIface(QObject* const ac) const
     return 0;
 }
 
-int DPluginGeneric::actionCount() const
+int DPluginGeneric::count() const
 {
     int count       = 0;
     QObject* parent = 0;
@@ -155,7 +155,7 @@ void DPluginGeneric::addAction(DPluginAction* const ac)
     d->actions.append(ac);
 }
 
-QStringList DPluginGeneric::actionCategories() const
+QStringList DPluginGeneric::categories() const
 {
     QStringList list;
 

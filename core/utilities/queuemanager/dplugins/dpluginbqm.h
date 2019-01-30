@@ -68,7 +68,7 @@ public:
     /**
      * Return the amount of tools registered.
      */
-    int toolCount() const;
+    int count() const;
 
     /**
      * Return a plugin tool instance found by name in plugin tools list for a given parent.
@@ -76,9 +76,9 @@ public:
     BatchTool* findToolByName(const QString& name, QObject* const parent) const;
 
     /**
-     * Return a list of batch tool group as strings registered in this plugin.
+     * Return a list of batch tool group categories as strings registered in this plugin.
      */
-    QStringList batchToolGroup() const;
+    QStringList categories() const;
 
 Q_SIGNALS:
 

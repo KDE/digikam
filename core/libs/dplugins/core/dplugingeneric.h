@@ -67,9 +67,9 @@ public:
     QList<DPluginAction*> actions(QObject* const parent) const;
 
     /**
-     * Return the amount of actions registered to all parents.
+     * Return the amount of tools registered to all parents.
      */
-    int actionCount() const;
+    int count() const;
 
     /**
      * Return a plugin action instance found by name in plugin action list for a given parent.
@@ -79,7 +79,7 @@ public:
     /**
      * Return a list of categories as strings registered in this plugin.
      */
-    QStringList actionCategories() const;
+    QStringList categories() const;
 
 protected:
 
