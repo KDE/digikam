@@ -31,6 +31,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QLibraryInfo>
+#include <QMetaProperty>
 
 // KDE includes
 

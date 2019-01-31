@@ -32,6 +32,7 @@
 
 #include "dinfointerface.h"
 #include "dplugin.h"
+#include "dpluginloader.h"
 #include "dpluginaction.h"
 #include "digikam_export.h"
 
@@ -98,6 +99,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginEditor, "org.kde.digikam.DPluginEditor/1.1.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginEditor, DIGIKAM_DPLUGIN_EDITOR_IID)
 
 #endif // DIGIKAM_DPLUGIN_EDITOR_H

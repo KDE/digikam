@@ -31,6 +31,7 @@
 // Local includes
 
 #include "dplugin.h"
+#include "dpluginloader.h"
 #include "batchtool.h"
 #include "digikam_export.h"
 
@@ -98,6 +99,6 @@ private:
 
 } // namespace Digikam
 
-Q_DECLARE_INTERFACE(Digikam::DPluginBqm, "org.kde.digikam.DPluginBqm/1.1.0" )
+Q_DECLARE_INTERFACE(Digikam::DPluginBqm, DIGIKAM_DPLUGIN_BQM_IID)
 
 #endif // DIGIKAM_DPLUGIN_BQM_H
