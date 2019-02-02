@@ -64,6 +64,7 @@ public:
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
     QMap<QString, QString> ParseUrlParameters(const QString& url);
+    void createTweet(const QString& mediaId);
 
 Q_SIGNALS:
 
@@ -86,9 +87,6 @@ private Q_SLOTS:
     void slotLinkingSucceeded();
     void slotOpenBrowser(const QUrl& url);
     void slotFinished(QNetworkReply* reply);
-    void slotTweetDone();
-    //void slotGetMediaId(QNetworkReply* reply);
-    void reply2finish();
 
 private:
 
@@ -96,6 +94,7 @@ private:
     void parseResponseListFolders(const QByteArray& data);
     void parseResponseCreateFolder(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
+    void parseResponseCreateTweet(const QByteArray& data);
 
 private:
 
