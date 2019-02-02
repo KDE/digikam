@@ -242,7 +242,7 @@ void TwTalker::unLink()
 
     d->o1Twitter->unlink();
 
-    d->settings->beginGroup(QLatin1String("Dropbox"));
+    d->settings->beginGroup(QLatin1String("Twitter"));
     d->settings->remove(QString());
     d->settings->endGroup();
 }
