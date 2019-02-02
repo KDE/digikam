@@ -6,7 +6,7 @@
  * Date        : 2018-07-30
  * Description : stand alone test application for plugin configuration view.
  *
- * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
     DPluginSetup view;
     view.show();
-    view.resize(1024, 600);
+    view.resize(1024, 640);
 
     app.exec();
 
