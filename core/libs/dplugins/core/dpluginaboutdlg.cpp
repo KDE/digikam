@@ -66,16 +66,16 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
 
     QLabel* const header    = new QLabel(page);
     header->setWordWrap(true);
-    header->setText(i18n("<font size=\"5\">%1</font>"
-                         "<br/><b>Version %2</b>"
+    header->setText(i18n("<font size=\"5\">%1</font><br/>"
+                         "<b>Version %2</b>"
                          "<p>%3</p>",
                          tool->name(),
                          tool->version(),
                          tool->description()));
 
-    // --------------------------------------------------------
-
     QTabWidget* const tab       = new QTabWidget(page);
+
+    // --------------------------------------------------------
 
     QTextBrowser* const details = new QTextBrowser(tab);
     details->setOpenExternalLinks(true);
@@ -108,6 +108,17 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     authors->setText(alist);
 
     tab->addTab(authors, i18n("Authors"));
+
+    // --------------------------------------------------------
+
+    QTextBrowser* const props = new QTextBrowser(tab);
+    props->setOpenExternalLinks(true);
+    props->setFocusPolicy(Qt::NoFocus);
+    props->setText(i18n("<p>Plugin ID:</p>"
+                        "<p>%1</p>",
+                         tool->iid()));
+
+    tab->addTab(props, i18n("Properties"));
 
     // --------------------------------------------------------
 
