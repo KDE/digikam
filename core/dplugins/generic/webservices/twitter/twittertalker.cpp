@@ -170,7 +170,7 @@ TwTalker::~TwTalker()
         d->reply->abort();
     }
 
-    WSToolUtils::removeTemporaryDir("Twitter");
+    WSToolUtils::removeTemporaryDir("twitter");
 
     delete d;
 }
@@ -349,7 +349,7 @@ bool TwTalker::addPhoto(const QString& imgPath,
         return false;
     }
 
-    QString path = WSToolUtils::makeTemporaryDir("Twitter").filePath(QFileInfo(imgPath)
+    QString path = WSToolUtils::makeTemporaryDir("twitter").filePath(QFileInfo(imgPath)
                                                  .baseName().trimmed() + QLatin1String(".jpg"));
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))
