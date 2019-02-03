@@ -5,6 +5,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include(CMakeParseArguments)
+
+# -------------------------------------------------------------------------
+
 set(PRINT_COMPILE_LENGTH "40")
 
 macro(FILL_WITH_DOTS VAR)

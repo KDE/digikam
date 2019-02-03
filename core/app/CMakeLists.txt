@@ -106,10 +106,6 @@ if(KF5KIO_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(HAVE_OPENGL)
-    include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
 if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
@@ -217,14 +213,6 @@ endif()
 
 if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamcore PUBLIC baloowrap)
-endif()
-
-if(HAVE_OPENGL)
-    target_link_libraries(digikamcore
-                          PUBLIC
-                          Qt5::OpenGL
-                          ${OPENGL_LIBRARIES}
-    )
 endif()
 
 if(KF5Sane_FOUND)
@@ -466,14 +454,6 @@ endif()
 
 if(APPLE)
     target_link_libraries(digikamgui PRIVATE /System/Library/Frameworks/AppKit.framework)
-endif()
-
-if(HAVE_OPENGL)
-    target_link_libraries(digikamgui
-                          PUBLIC
-                          Qt5::OpenGL
-                          ${OPENGL_LIBRARIES}
-    )
 endif()
 
 if(NOT WIN32)
