@@ -215,10 +215,6 @@ if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamcore PUBLIC baloowrap)
 endif()
 
-if(KF5Sane_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::Sane)
-endif()
-
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact)
 endif()
