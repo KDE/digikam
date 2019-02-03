@@ -151,7 +151,7 @@ void TagCompleter::update(const QString& fragment)
     QList<TaggingAction> actions = d->factory.actions();
     QList<QStandardItem*> items;
 
-    foreach(const TaggingAction& action, actions)
+    foreach (const TaggingAction& action, actions)
     {
         QStandardItem* item = new QStandardItem;
 

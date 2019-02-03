@@ -118,7 +118,7 @@ public:
             QWriteLocker locker(&lock);
             nameHash.clear();
 
-            foreach(const TagShortInfo& info, infos)
+            foreach (const TagShortInfo& info, infos)
             {
                 nameHash.insert(info.name, info.id);
             }
@@ -142,7 +142,7 @@ public:
 
             QLatin1String internalProp = TagsCache::propertyNameDigikamInternalTag();
 
-            foreach(const TagProperty& property, tagProperties)
+            foreach (const TagProperty& property, tagProperties)
             {
                 if (property.property == internalProp)
                 {
@@ -353,7 +353,7 @@ QStringList TagsCache::tagNames(const QList<int>& ids, HiddenTagsPolicy hiddenTa
 
     if (!ids.isEmpty())
     {
-        foreach(int id, ids)
+        foreach (int id, ids)
         {
             if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
             {
@@ -407,7 +407,7 @@ QStringList TagsCache::tagPaths(const QList<int>& ids, LeadingSlashPolicy slashP
 
     if (!ids.isEmpty())
     {
-        foreach(int id, ids)
+        foreach (int id, ids)
         {
             if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
             {
@@ -452,7 +452,7 @@ int TagsCache::tagForName(const QString& tagName, int parentId) const
 
     QList<TagShortInfo>::const_iterator tag;
 
-    foreach(int id, d->nameHash.values(tagName))
+    foreach (int id, d->nameHash.values(tagName))
     {
         tag = d->find(id);
 
@@ -531,7 +531,7 @@ int TagsCache::tagForPath(const QString& tagPath) const
     QReadLocker locker(&d->lock);
     // There might be multiple tags with the same name, but in different
     // hierarchies. We must check them all until we find the correct hierarchy
-    foreach(int id, d->nameHash.values(tagName))
+    foreach (int id, d->nameHash.values(tagName))
     {
         tag = d->find(id);
 
@@ -585,7 +585,7 @@ QList<int> TagsCache::tagsForPaths(const QStringList& tagPaths) const
 
     if (!tagPaths.isEmpty())
     {
-        foreach(const QString& tagPath, tagPaths)
+        foreach (const QString& tagPath, tagPaths)
         {
             ids << tagForPath(tagPath);
         }
@@ -616,7 +616,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
         QReadLocker locker(&d->lock);
 
         // Traverse hierarchy from top to bottom
-        foreach(const QString& tagName, tagHierarchy)
+        foreach (const QString& tagName, tagHierarchy)
         {
             tagID = 0;
 
@@ -627,7 +627,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
                 // find the tag with tag name according to tagHierarchy,
                 // and parent ID identical to the ID of the tag we found in
                 // the previous run.
-                foreach(int id, d->nameHash.values(tagName))
+                foreach (int id, d->nameHash.values(tagName))
                 {
                     tag = d->find(id);
 
@@ -664,7 +664,7 @@ int TagsCache::createTag(const QString& tagPathToCreate)
     {
         CoreDbAccess access;
 
-        foreach(const QString& tagName, tagsToCreate)
+        foreach (const QString& tagName, tagsToCreate)
         {
             tagID = access.db()->addTag(parentTagIDForCreation, tagName, QString(), 0);
 
@@ -692,7 +692,7 @@ QList<int> TagsCache::createTags(const QStringList& tagPaths)
 
     if (!tagPaths.isEmpty())
     {
-        foreach(const QString& tagPath, tagPaths)
+        foreach (const QString& tagPath, tagPaths)
         {
             ids << createTag(tagPath);
         }
@@ -707,7 +707,7 @@ QList<int> TagsCache::getOrCreateTags(const QStringList& tagPaths)
 
     if (!tagPaths.isEmpty())
     {
-        foreach(const QString& tagPath, tagPaths)
+        foreach (const QString& tagPath, tagPaths)
         {
             ids << getOrCreateTag(tagPath);
         }
@@ -929,7 +929,7 @@ bool TagsCache::containsPublicTags(const QList<int>& tagIds) const
     d->checkProperties();
     QReadLocker locker(&d->lock);
 
-    foreach(int id, tagIds)
+    foreach (int id, tagIds)
     {
         if (!d->internalTags.contains(id))
         {
@@ -1018,7 +1018,7 @@ int TagsCache::colorLabelFromTags(QList<int> tagIds)
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
 
-    foreach(int tagId, tagIds)
+    foreach (int tagId, tagIds)
     {
         for (int i = FirstColorLabel ; i <= LastColorLabel ; ++i)
         {
@@ -1061,7 +1061,7 @@ int TagsCache::pickLabelFromTags(QList<int> tagIds)
     d->checkLabelTags();
     QReadLocker locker(&d->lock);
 
-    foreach(int tagId, tagIds)
+    foreach (int tagId, tagIds)
     {
         for (int i = FirstPickLabel ; i <= LastPickLabel ; ++i)
         {
@@ -1082,7 +1082,7 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sort
     QList<QVariant> variantIds;
 
     // duplicates tagPath(), but we need the additional list of tag ids
-    foreach(int id, ids)
+    foreach (int id, ids)
     {
         if (hiddenTagsPolicy == IncludeHiddenTags || !isInternalTag(id))
         {
@@ -1094,7 +1094,7 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids, QList<int>* sort
     // The code is needed in libdigikamcore, so it cannot be moved here. TODO: Find a good place
     QStringList shortenedPaths = ItemPropertiesTab::shortenedTagPaths(paths, &variantIds);
 
-    foreach(const QVariant& var, variantIds)
+    foreach (const QVariant& var, variantIds)
     {
         (*sortedIds) << var.toInt();
     }
@@ -1114,7 +1114,7 @@ QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(c
                                                      HiddenTagsPolicy hiddenTagsPolicy)
 {
     checkNameHash();
-    QMultiMap<QString, int> ids;
+    QMultiMap<QString, int> idsMap;
     QMultiHash<QString, int>::const_iterator it;
     const bool excludeHiddenTags = hiddenTagsPolicy == NoHiddenTags;
 
@@ -1129,21 +1129,21 @@ QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(c
     {
         if ((!excludeHiddenTags || !internalTags.contains(it.value())) && (it.key().*stringFunction)(fragment, caseSensitivity))
         {
-            ids.insert(it.key(), it.value());
+            idsMap.insert(it.key(), it.value());
         }
     }
 
-    return ids.values();
+    return idsMap.values();
 }
 
 QList<int> TagsCache::tagsStartingWith(const QString& fragment, Qt::CaseSensitivity caseSensitivity,
-                                      HiddenTagsPolicy hiddenTagsPolicy)
+                                       HiddenTagsPolicy hiddenTagsPolicy)
 {
     return d->tagsForFragment(&QString::startsWith, fragment, caseSensitivity, hiddenTagsPolicy);
 }
 
 QList<int> TagsCache::tagsContaining(const QString& fragment, Qt::CaseSensitivity caseSensitivity,
-                                      HiddenTagsPolicy hiddenTagsPolicy)
+                                     HiddenTagsPolicy hiddenTagsPolicy)
 {
     return d->tagsForFragment(&QString::contains, fragment, caseSensitivity, hiddenTagsPolicy);
 }

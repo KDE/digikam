@@ -205,11 +205,11 @@ QList<TaggingAction> TaggingActionFactory::actions() const
 
     while (recent_iter.hasPrevious())
     {
-        int poz = completionEntries.indexOf(recent_iter.previous());
+        int pos = completionEntries.indexOf(recent_iter.previous());
 
-        if (poz > 0)
+        if (pos > 0)
         {
-            completionEntries.move(poz, 0);
+            completionEntries.move(pos, 0);
             ++d->recentIndex;
         }
     }
@@ -233,7 +233,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
             //a tag is currently selected in the listbox, we have the choice of toplevel and underparent for a new tag
             //the entire text currently written by the user doesn't exist as a tag. However, it might be a part of a tag
 
-            foreach(const TaggingAction& assignAction, assignActions)
+            foreach (const TaggingAction& assignAction, assignActions)
             {
                 actions << assignAction;
             }
@@ -246,7 +246,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
             //Case B
             //no tag is currently selected in the listbox, only toplevel choice for a new tag
             //the entire text currently written by the user doesn't exist as a tag. However, it might be a part of a tag
-            foreach(const TaggingAction& assignAction, assignActions)
+            foreach (const TaggingAction& assignAction, assignActions)
             {
                 actions << assignAction;
             }
