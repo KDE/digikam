@@ -92,6 +92,9 @@ public:
     // Returns the index of the default action in the list returned by generate()
     int indexOfDefaultAction() const;
 
+    // Returns the index of the last recent action in the list returned by actions()
+    int indexOfLastRecentAction() const;
+
     // Returns a string to be used in the UI for the given TaggingAction, interpreted in the context of the current settings
     QString suggestedUIString(const TaggingAction& action) const;
 

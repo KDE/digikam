@@ -59,6 +59,8 @@ public:
     ConstraintInterface* constraintInterface;
 
     int                  defaultIndex;  // use if valid is true
+    int                  recentIndex;   // use if valid is true
+
     QList<TaggingAction> actions;       // use if valid is true
     bool                 valid;
 
@@ -167,6 +169,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
 
     QList<TaggingAction> actions;
     int defaultActionIndex = 0;
+    d->recentIndex         = 0;
 
     // We use this action to find the right entry to select
     TaggingAction defaultAction = defaultTaggingAction();
@@ -207,6 +210,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
         if (poz > 0)
         {
             completionEntries.move(poz, 0);
+            ++d->recentIndex;
         }
     }
 
@@ -285,6 +289,16 @@ int TaggingActionFactory::indexOfDefaultAction() const
     }
 
     return d->defaultIndex;
+}
+
+int TaggingActionFactory::indexOfLastRecentAction() const
+{
+    if (!d->valid)
+    {
+        return 0;
+    }
+
+    return d->recentIndex;
 }
 
 /*

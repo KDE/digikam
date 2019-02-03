@@ -175,6 +175,11 @@ void TagCompleter::update(const QString& fragment)
             if (index.isValid())
             {
                 item->setData(index.data(Qt::DecorationRole), Qt::DecorationRole);
+
+                if (items.count() < d->factory.indexOfLastRecentAction())
+                {
+                    item->setIcon(QIcon::fromTheme(QLatin1String("appointment-new")));
+                }
             }
             else
             {

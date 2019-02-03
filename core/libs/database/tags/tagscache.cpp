@@ -1114,7 +1114,7 @@ QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(c
                                                      HiddenTagsPolicy hiddenTagsPolicy)
 {
     checkNameHash();
-    QList<int> ids;
+    QMultiMap<QString, int> ids;
     QMultiHash<QString, int>::const_iterator it;
     const bool excludeHiddenTags = hiddenTagsPolicy == NoHiddenTags;
 
@@ -1129,11 +1129,11 @@ QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(c
     {
         if ((!excludeHiddenTags || !internalTags.contains(it.value())) && (it.key().*stringFunction)(fragment, caseSensitivity))
         {
-            ids << it.value();
+            ids.insert(it.key(), it.value());
         }
     }
 
-    return ids;
+    return ids.values();
 }
 
 QList<int> TagsCache::tagsStartingWith(const QString& fragment, Qt::CaseSensitivity caseSensitivity,
