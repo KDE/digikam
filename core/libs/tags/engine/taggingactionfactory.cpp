@@ -47,6 +47,7 @@ public:
           nameMatchMode(MatchStartingWithFragment),
           constraintInterface(0),
           defaultIndex(-1),
+          recentIndex(0),
           valid(false)
     {
     }
