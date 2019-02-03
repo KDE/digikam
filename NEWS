@@ -694,5 +694,9 @@ BUGFIXES:
 624 ==> 403594 - Export to Google - Album List incomplete.
 625 ==> 403688 - Make it easier to find "Save workflow" command.
 626 ==> 403456 - Export to Dropbox: New Album in Dropbox not visible.
-627 ==> 
+627 ==> 378253 - Duplicated Icon of digiKam in Gnome shell menu.
+628 ==> 376615 - Missing icon in GNOME shell dock.
+629 ==> 381739 - Icon not shown in Gnome applications.
+630 ==> 375345 - App icon doesn't appear in the Unity Dash.
+631 ==> 
 
