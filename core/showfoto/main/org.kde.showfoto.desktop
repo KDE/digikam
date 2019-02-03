@@ -155,3 +155,4 @@ MimeType=image/gif;image/x-xpixmap;image/x-xbitmap;image/jpeg;image/png;image/ti
 Terminal=false
 Categories=Qt;Graphics;Photography;
 X-DocPath=showfoto/index.html
+StartupWMClass=showfoto
