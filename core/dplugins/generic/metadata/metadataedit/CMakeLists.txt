@@ -4,6 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include(MacroDPlugins)
+
 if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
@@ -55,4 +57,6 @@ set(metadataeditplugin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/exif/exifeditwidget.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/metadataeditplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(MetadataEdit ${metadataeditplugin_SRCS})
+DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    MetadataEdit
+                                    SOURCES ${metadataeditplugin_SRCS}
+)
