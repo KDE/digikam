@@ -114,8 +114,11 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
     QTextBrowser* const props = new QTextBrowser(tab);
     props->setOpenExternalLinks(true);
     props->setFocusPolicy(Qt::NoFocus);
-    props->setText(i18n("<p>Plugin ID:</p>"
-                        "<p>%1</p>",
+    props->setText(i18n("<p>Plugin Interface ID:</p>"
+                        "<p>%1</p>"
+                        "<p>Plugin ID:</p>"
+                        "<p>%2</p>",
+                         tool->ifaceIid(),
                          tool->iid()));
 
     tab->addTab(props, i18n("Properties"));

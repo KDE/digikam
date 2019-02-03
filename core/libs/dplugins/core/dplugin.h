@@ -126,9 +126,21 @@ public:
 
     /**
      * @brief Returns the unique internal identification string of the plugin.
-     *        Must be formated as "org.kde.digikam._NAME_OF_PLUGIN_".
+     *        Must be formated as "org.kde.digikam.plugin._PLUGIN_TYPE_._NAME_OF_PLUGIN_".
+     *        Examples: "org.kde.digikam.plugin.generic.Calendar"
+     *                  "org.kde.digikam.plugin.editor.AdjustCurvesTool"
+     *                  "org.kde.digikam.plugin.bqm.NoiseReduction"
      */
     virtual QString iid() const = 0;
+
+    /**
+     * @brief Returns the unique top level internal identification string of the plugin interface.
+     *        Must be formated as "org.kde.digikam._NAME_OF_INTERFACE_/_VERSION_".
+     *        Examples: "org.kde.digikam.DPluginGeneric/1.1.0"
+     *                  "org.kde.digikam.DPluginEditor/1.1.0"
+     *                  "org.kde.digikam.DPluginBqm/1.1.0"
+     */
+    virtual QString ifaceIid() const = 0;
 
     /**
      * @brief Returns a short description about the plugin.

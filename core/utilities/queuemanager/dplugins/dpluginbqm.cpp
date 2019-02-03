@@ -97,7 +97,8 @@ BatchTool* DPluginBqm::findToolByName(const QString& name, QObject* const parent
 
 void DPluginBqm::addTool(BatchTool* const t)
 {
-    t->setProperty("DPluginIId", iid());
+    t->setProperty("DPluginIId",      iid());
+    t->setProperty("DPluginIfaceIId", ifaceIid());
     d->tools.append(t);
 }
 

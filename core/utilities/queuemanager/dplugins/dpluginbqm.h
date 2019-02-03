@@ -83,6 +83,11 @@ public:
      */
     QStringList categories() const;
 
+    /**
+     * Return the plugin interface identifier.
+     */
+    QString ifaceIid() const { return QLatin1String(DIGIKAM_DPLUGIN_BQM_IID); };
+
 Q_SIGNALS:
 
     void signalVisible(bool);

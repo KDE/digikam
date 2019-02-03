@@ -151,7 +151,8 @@ DPluginAction* DPluginGeneric::findActionByName(const QString& name, QObject* co
 
 void DPluginGeneric::addAction(DPluginAction* const ac)
 {
-    ac->setProperty("DPluginIId", iid());
+    ac->setProperty("DPluginIId",      iid());
+    ac->setProperty("DPluginIfaceIId", ifaceIid());
     d->actions.append(ac);
 }
 

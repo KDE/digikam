@@ -111,10 +111,12 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
     return allFiles;
 }
 
-/** Append obj to the given plugins list.
+/** Append object to the given plugins list.
  */
-bool DPluginLoader::Private::appendPlugin(QObject* const obj, QPluginLoader* const loader,
-                                          QList<DPlugin*>& plist, QList<QPluginLoader*>& llist)
+bool DPluginLoader::Private::appendPlugin(QObject* const obj,
+                                          QPluginLoader* const loader,
+                                          QList<DPlugin*>& plist,
+                                          QList<QPluginLoader*>& llist)
 {
     DPlugin* const plugin = qobject_cast<DPlugin*>(obj);
 

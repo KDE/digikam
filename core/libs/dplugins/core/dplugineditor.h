@@ -82,6 +82,11 @@ public:
      */
     QStringList categories() const;
 
+    /**
+     * Return the plugin interface identifier.
+     */
+    QString ifaceIid() const { return QLatin1String(DIGIKAM_DPLUGIN_EDITOR_IID); };
+
 protected:
 
     void addAction(DPluginAction* const ac);
