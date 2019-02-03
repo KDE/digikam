@@ -223,12 +223,6 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::ThreadWeaver)
 endif()
 
-if(LibXml2_FOUND AND LibXslt_FOUND)
-    target_link_libraries(digikamcore PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
-                                             ${LIBXSLT_LIBRARIES}
-                                             ${LIBXML2_LIBRARIES})
-endif()
-
 if(KF5Vkontakte_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::Vkontakte)
 endif()

@@ -15,7 +15,6 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 
                     ${LIBXSLT_INCLUDE_DIR}
@@ -52,8 +51,11 @@ set(htmlgalleryplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(HtmlGallery
-                   ${htmlgalleryplugin_SRCS}
+DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    HtmlGallery
+                                    SOURCES ${htmlgalleryplugin_SRCS}
+                                    DEPENDS ${LIBXSLT_EXSLT_LIBRARIES}
+                                            ${LIBXSLT_LIBRARIES}
+                                            ${LIBXML2_LIBRARIES}
 )
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
