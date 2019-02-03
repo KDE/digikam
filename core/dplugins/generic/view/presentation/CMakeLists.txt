@@ -80,8 +80,14 @@ ki18n_wrap_ui(presentationplugin_SRCS
 )
 
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Presentation
-                                    SOURCES ${presentationplugin_SRCS}
-                                    DEPENDS Qt5::OpenGL
-                                            ${OPENGL_LIBRARIES}
-)
+if(HAVE_OPENGL)
+    DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Presentation
+                                        SOURCES ${presentationplugin_SRCS}
+                                        DEPENDS Qt5::OpenGL
+                                                ${OPENGL_LIBRARIES}
+    )
+else()
+    DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Presentation
+                                        SOURCES ${presentationplugin_SRCS}
+    )
+endif()

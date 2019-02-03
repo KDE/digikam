@@ -219,10 +219,6 @@ if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact)
 endif()
 
-if(KF5CalendarCore_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::CalendarCore)
-endif()
-
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::ThreadWeaver)
 endif()

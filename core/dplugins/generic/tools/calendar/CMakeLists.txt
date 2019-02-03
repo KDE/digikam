@@ -4,6 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+include(MacroDPlugins)
+
 if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
@@ -39,6 +41,13 @@ ki18n_wrap_ui(calendarplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/calprogress.ui
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(Calendar
-                   ${calendarplugin_SRCS}
-)
+if(KF5CalendarCore_FOUND)
+    DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Calendar
+                                        SOURCES ${calendarplugin_SRCS}
+                                        DEPENDS KF5::CalendarCore
+    )
+else()
+    DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Calendar
+                                        SOURCES ${calendarplugin_SRCS}
+    )
+endif()
