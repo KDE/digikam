@@ -33,6 +33,7 @@
 // Local includes
 
 #include "dmediaserverdlg.h"
+#include "dmediaservermngr.h"
 
 namespace DigikamGenericMediaServerPlugin
 {
@@ -40,10 +41,16 @@ namespace DigikamGenericMediaServerPlugin
 MediaServerPlugin::MediaServerPlugin(QObject* const parent)
     : DPluginGeneric(parent)
 {
+    // Start the Media Server if necessary
+
+    Digikam::DMediaServerMngr::instance()->loadAtStartup();
 }
 
 MediaServerPlugin::~MediaServerPlugin()
 {
+    // Stop the Media Server if necessary
+
+    Digikam::DMediaServerMngr::instance()->saveAtShutdown();
 }
 
 QString MediaServerPlugin::name() const

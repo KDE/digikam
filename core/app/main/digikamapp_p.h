@@ -124,7 +124,6 @@
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
 #include "dfiledialog.h"
-#include "dmediaservermngr.h"
 #include "dpluginloader.h"
 
 #ifdef HAVE_MARBLE

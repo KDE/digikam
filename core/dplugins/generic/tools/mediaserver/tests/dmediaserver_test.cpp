@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     MediaServerMap map;
 
     QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-        
+
     if (argc <= 1)
     {
         QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select Files to Share With Media Server"),
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         if (!DMediaServerMngr::instance()->load())
             return -1;
     }
- 
+
     if (DMediaServerMngr::instance()->startMediaServer())
     {
         QProgressDialog* const pdlg = new QProgressDialog(0);
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
     {
         qDebug() << "Failed to start the Media Server...";
     }
-    
+
     DMediaServerMngr::instance()->save();
     DMediaServerMngr::instance()->cleanUp();
 

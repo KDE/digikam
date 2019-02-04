@@ -240,7 +240,6 @@ DigikamApp::~DigikamApp()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
     DIO::cleanUp();
-    DMediaServerMngr::instance()->saveAtShutdown();
 
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
@@ -325,10 +324,6 @@ void DigikamApp::show()
         DbCleaner* const tool = new DbCleaner(false,false);
         QTimer::singleShot(1000, tool, SLOT(start()));
     }
-
-    // Start the Media Server if necessary
-
-    DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void DigikamApp::restoreSession()

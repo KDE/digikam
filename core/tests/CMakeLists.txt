@@ -23,7 +23,6 @@ add_subdirectory(filters)
 add_subdirectory(timestampupdate)
 add_subdirectory(widgets)
 add_subdirectory(rawengine)
-add_subdirectory(mediaserver)
 add_subdirectory(webservices)
 add_subdirectory(dplugins)
 

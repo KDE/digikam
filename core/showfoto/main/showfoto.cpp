@@ -136,7 +136,6 @@ ShowFoto::~ShowFoto()
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
     Digikam::DPluginLoader::instance()->cleanUp();
-    Digikam::DMediaServerMngr::instance()->saveAtShutdown();
 
     delete d->model;
     delete d->filterModel;
@@ -206,10 +205,6 @@ void ShowFoto::show()
             config->sync();
         }
     }
-
-    // Start the Media Server if necessary
-
-    Digikam::DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void ShowFoto::slotOpenFile()

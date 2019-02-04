@@ -83,7 +83,6 @@ add_subdirectory(rawengine)
 add_subdirectory(album)
 add_subdirectory(tags)
 add_subdirectory(transitionmngr)
-add_subdirectory(mediaserver)
 add_subdirectory(timeadjust)
 
 if(ENABLE_MEDIAPLAYER)
