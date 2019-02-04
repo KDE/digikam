@@ -4,9 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
+include(MacroDPlugins)
 
 include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -17,7 +15,11 @@ include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_BQM_PLUGIN(HslCorrection
+set(hslcorrectionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrectionplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrection.cpp
+)
+
+DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    HslCorrection
+                                SOURCES ${hslcorrectionplugin_SRCS}
 )
