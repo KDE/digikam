@@ -44,7 +44,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:slideshow_src>
             $<TARGET_OBJECTS:imageeditor_src>
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
-            $<TARGET_OBJECTS:mediawiki_src>
             $<TARGET_OBJECTS:mediaserver_src>
             $<TARGET_OBJECTS:timeadjust_src>
 
@@ -83,7 +82,6 @@ include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECT
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>)
@@ -126,7 +124,6 @@ target_link_libraries(digikamcore
                       KF5::Solid
                       KF5::WindowSystem
                       KF5::ConfigGui
-                      KF5::CoreAddons
                       KF5::Service
                       KF5::XmlGui
                       KF5::I18n
