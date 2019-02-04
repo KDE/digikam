@@ -60,7 +60,7 @@ public:
     /**
      * Holds whether the plugin can be seen in parent view.
      */
-    void setVisible(bool b);
+    void setVisible(bool b) override;
 
     /**
      * Return all plugin actions registered in setup() method with addAction() for a given parent.
@@ -70,7 +70,7 @@ public:
     /**
      * Return the amount of tools registered to all parents.
      */
-    int count() const;
+    int count() const override;
 
     /**
      * Return a plugin action instance found by name in plugin action list for a given parent.
@@ -80,12 +80,12 @@ public:
     /**
      * Return a list of categories as strings registered in this plugin.
      */
-    QStringList categories() const;
+    QStringList categories() const override;
 
     /**
      * Return the plugin interface identifier.
      */
-    QString ifaceIid() const { return QLatin1String(DIGIKAM_DPLUGIN_EDITOR_IID); };
+    QString ifaceIid() const override { return QLatin1String(DIGIKAM_DPLUGIN_EDITOR_IID); };
 
 protected:
 
