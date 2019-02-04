@@ -56,12 +56,12 @@ public:
 
 public:
 
-    bool hasVisibilityProperty() const;
+    bool hasVisibilityProperty() const override;
 
     /**
      * Holds whether the plugin can be seen in parent view.
      */
-    void setVisible(bool b);
+    void setVisible(bool b) override;
 
     /**
      * Return all plugin tools registered in setup() method with addTool() for a given parent.
@@ -71,7 +71,7 @@ public:
     /**
      * Return the amount of tools registered.
      */
-    int count() const;
+    int count() const override;
 
     /**
      * Return a plugin tool instance found by name in plugin tools list for a given parent.
@@ -81,12 +81,12 @@ public:
     /**
      * Return a list of batch tool group categories as strings registered in this plugin.
      */
-    QStringList categories() const;
+    QStringList categories() const override;
 
     /**
      * Return the plugin interface identifier.
      */
-    QString ifaceIid() const { return QLatin1String(DIGIKAM_DPLUGIN_BQM_IID); };
+    QString ifaceIid() const override { return QLatin1String(DIGIKAM_DPLUGIN_BQM_IID); };
 
 Q_SIGNALS:
 
