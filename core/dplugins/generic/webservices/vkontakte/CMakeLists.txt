@@ -12,6 +12,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::Vkontakte,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(vkontakteplugin_SRCS
@@ -23,5 +24,6 @@ set(vkontakteplugin_SRCS
 )
 
 DIGIKAM_ADD_GENERIC_PLUGIN(NAME    VKontakte
-                                    SOURCES ${vkontakteplugin_SRCS}
+                           SOURCES ${vkontakteplugin_SRCS}
+                           DEPENDS KF5::Vkontakte
 )

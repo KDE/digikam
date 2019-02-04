@@ -211,10 +211,6 @@ if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact)
 endif()
 
-if(KF5Vkontakte_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::Vkontakte)
-endif()
-
 if(APPLE)
     target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
