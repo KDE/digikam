@@ -5,19 +5,16 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
+include(MacroDPlugins)
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(ImageShack
+set(imageshackplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshacktalker.cpp
@@ -25,6 +22,10 @@ DIGIKAM_ADD_GENERIC_PLUGIN(ImageShack
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshacknewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshacksession.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackwidget.cpp
+)
+
+DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    ImageShack
+                                    SOURCES ${imageshackplugin_SRCS}
 )
 
 add_subdirectory(icons)

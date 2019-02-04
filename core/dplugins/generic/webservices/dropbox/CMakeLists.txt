@@ -5,25 +5,26 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
+include(MacroDPlugins)
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(DropBox
+set(dropboxplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dbmpform.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbnewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbtalker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbwindow.cpp
+)
+
+DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    DropBox
+                                    SOURCES ${dropboxplugin_SRCS}
 )
 
 add_subdirectory(icons)
