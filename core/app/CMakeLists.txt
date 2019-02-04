@@ -73,13 +73,6 @@ if(KF5AkonadiContact_FOUND)
     )
 endif()
 
-if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
-    set(DIGIKAMCORE_OBJECTS
-        ${DIGIKAMCORE_OBJECTS}
-        $<TARGET_OBJECTS:panoparser_src>
-    )
-endif()
-
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
@@ -216,10 +209,6 @@ endif()
 
 if(KF5AkonadiContact_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact)
-endif()
-
-if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::ThreadWeaver)
 endif()
 
 if(KF5Vkontakte_FOUND)
