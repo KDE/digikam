@@ -6,10 +6,6 @@
 
 include(MacroDPlugins)
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 

@@ -7,10 +7,6 @@
 
 include(MacroDPlugins)
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
@@ -38,5 +34,5 @@ set(expoblendingplugin_SRCS
 DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    ExpoBlending
                                     SOURCES ${expoblendingplugin_SRCS}
 )
-    
+
 add_subdirectory(icons)

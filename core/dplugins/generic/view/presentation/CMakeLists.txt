@@ -6,10 +6,6 @@
 
 include(MacroDPlugins)
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 if(HAVE_MEDIAPLAYER)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio)
 endif()
