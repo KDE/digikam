@@ -19,6 +19,6 @@ set(oilpainttoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/oilpainttool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    OilPaintTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    OilPaintTool
                                    SOURCES ${oilpainttoolplugin_SRCS}
 )

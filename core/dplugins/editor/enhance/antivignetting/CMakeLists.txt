@@ -19,6 +19,6 @@ set(antivignettingtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/antivignettingtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    AntivignettingTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    AntivignettingTool
                                    SOURCES ${antivignettingtoolplugin_SRCS}
 )

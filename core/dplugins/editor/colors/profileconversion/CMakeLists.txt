@@ -19,6 +19,6 @@ set(profileconversiontoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/profileconversiontool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    ProfileConversionTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    ProfileConversionTool
                                    SOURCES ${profileconversiontoolplugin_SRCS}
 )

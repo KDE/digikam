@@ -19,6 +19,6 @@ set(bcgtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/bcgtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    BcgTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    BcgTool
                                    SOURCES ${bcgtoolplugin_SRCS}
 )

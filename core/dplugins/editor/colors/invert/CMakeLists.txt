@@ -18,6 +18,6 @@ set(inverttoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/inverttoolplugin.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    InvertTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    InvertTool
                                    SOURCES ${inverttoolplugin_SRCS}
 )

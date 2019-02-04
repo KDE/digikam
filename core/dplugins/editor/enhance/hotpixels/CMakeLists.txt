@@ -23,6 +23,6 @@ set(hotpixelstoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/hotpixelstool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    HotpixelsTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    HotpixelsTool
                                    SOURCES ${hotpixelstoolplugin_SRCS}
 )

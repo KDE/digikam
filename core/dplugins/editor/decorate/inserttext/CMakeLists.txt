@@ -20,7 +20,7 @@ set(inserttexttoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/inserttexttool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    InsertTextTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    InsertTextTool
                                    SOURCES ${inserttexttoolplugin_SRCS}
 )
 

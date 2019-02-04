@@ -19,6 +19,6 @@ set(filmtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/filmtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    FilmTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    FilmTool
                                    SOURCES ${filmtoolplugin_SRCS}
 )

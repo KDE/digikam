@@ -19,6 +19,6 @@ set(adjustlevelstoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/adjustlevelstool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    AdjustLevelsTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    AdjustLevelsTool
                                    SOURCES ${adjustlevelstoolplugin_SRCS}
 )

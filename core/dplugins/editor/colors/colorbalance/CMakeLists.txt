@@ -19,6 +19,6 @@ set(colorbalancetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/cbtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    CBTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    CBTool
                                    SOURCES ${colorbalancetoolplugin_SRCS}
 )

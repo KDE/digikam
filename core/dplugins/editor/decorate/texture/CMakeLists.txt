@@ -19,6 +19,6 @@ set(texturetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/texturetool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    TextureTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    TextureTool
                                    SOURCES ${texturetoolplugin_SRCS}
 )

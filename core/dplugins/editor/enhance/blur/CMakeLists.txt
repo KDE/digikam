@@ -19,6 +19,6 @@ set(blurtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/blurtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    BlurTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    BlurTool
                                    SOURCES ${blurtoolplugin_SRCS}
 )

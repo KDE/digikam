@@ -19,6 +19,6 @@ set(noisereductiontoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereductiontool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    NoiseReductionTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    NoiseReductionTool
                                    SOURCES ${noisereductiontoolplugin_SRCS}
 )

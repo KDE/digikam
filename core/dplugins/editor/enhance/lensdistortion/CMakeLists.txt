@@ -19,6 +19,6 @@ set(lensdistortiontoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/lensdistortiontool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    LensDistortionTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    LensDistortionTool
                                    SOURCES ${lensdistortiontoolplugin_SRCS}
 )

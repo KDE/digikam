@@ -5,8 +5,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-include(CMakeParseArguments)
-
 # -------------------------------------------------------------------------
 
 set(PRINT_COMPILE_LENGTH "40")
@@ -177,21 +175,6 @@ macro(HEADER_DIRECTORIES return_list)
 
     list(REMOVE_DUPLICATES dir_list)
     set(${return_list} ${dir_list})
-
-endmacro()
-
-# -------------------------------------------------------------------------
-
-macro(DIGIKAM_ADD_EDITOR_PLUGIN _target_name)
-
-    set(_src ${ARGN})
-
-    add_library(Editor_${_target_name}_Plugin MODULE ${_src})
-
-    target_link_libraries(Editor_${_target_name}_Plugin ${${_target_name}_LIBS} digikamcore)
-
-    install(TARGETS Editor_${_target_name}_Plugin
-            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/editor)
 
 endmacro()
 

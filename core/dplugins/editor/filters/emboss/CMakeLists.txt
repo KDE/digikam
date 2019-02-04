@@ -19,6 +19,6 @@ set(embosstoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/embosstool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    EmbossTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    EmbossTool
                                    SOURCES ${embosstoolplugin_SRCS}
 )

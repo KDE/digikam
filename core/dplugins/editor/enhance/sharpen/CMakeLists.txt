@@ -19,6 +19,6 @@ set(sharpentoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/sharpentool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    SharpenTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    SharpenTool
                                    SOURCES ${sharpentoolplugin_SRCS}
 )

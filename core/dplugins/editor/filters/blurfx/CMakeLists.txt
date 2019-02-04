@@ -19,6 +19,6 @@ set(blurfxtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/blurfxtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    BlurFxTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    BlurFxTool
                                    SOURCES ${blurfxtoolplugin_SRCS}
 )

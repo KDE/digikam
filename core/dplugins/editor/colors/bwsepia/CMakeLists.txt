@@ -18,6 +18,6 @@ set(bwsepiatoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/bwsepiatool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    BWSepiaTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    BWSepiaTool
                                    SOURCES ${bwsepiatoolplugin_SRCS}
 )

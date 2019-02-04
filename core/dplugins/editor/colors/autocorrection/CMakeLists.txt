@@ -19,6 +19,6 @@ set(autocorrectiontoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/autocorrectiontool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    AutoCorrectionTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    AutoCorrectionTool
                                    SOURCES ${autocorrectiontoolplugin_SRCS}
 )

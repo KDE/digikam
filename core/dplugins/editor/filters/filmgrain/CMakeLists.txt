@@ -19,6 +19,6 @@ set(filmgraintoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/filmgraintool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    FilmGrainTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    FilmGrainTool
                                    SOURCES ${filmgraintoolplugin_SRCS}
 )

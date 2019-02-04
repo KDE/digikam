@@ -19,6 +19,6 @@ set(colorfxtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorfxtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    ColorFxTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    ColorFxTool
                                    SOURCES ${colorfxtoolplugin_SRCS}
 )

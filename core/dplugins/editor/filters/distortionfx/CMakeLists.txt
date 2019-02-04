@@ -19,6 +19,6 @@ set(distortionfxtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/distortionfxtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    DistortionFxTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    DistortionFxTool
                                    SOURCES ${distortionfxtoolplugin_SRCS}
 )

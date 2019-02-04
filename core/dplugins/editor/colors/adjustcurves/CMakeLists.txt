@@ -19,6 +19,6 @@ set(adjustcurvestoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/adjustcurvestool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    AdjustCurvesTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    AdjustCurvesTool
                                    SOURCES ${adjustcurvestoolplugin_SRCS}
 )

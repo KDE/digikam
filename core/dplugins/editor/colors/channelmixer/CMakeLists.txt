@@ -19,6 +19,6 @@ set(channelmixertoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/channelmixertool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    ChannelMixerTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    ChannelMixerTool
                                    SOURCES ${channelmixertoolplugin_SRCS}
 )

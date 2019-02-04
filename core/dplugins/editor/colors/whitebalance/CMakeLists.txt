@@ -19,6 +19,6 @@ set(whitebalancetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/whitebalancetool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    WhiteBalanceTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    WhiteBalanceTool
                                    SOURCES ${whitebalancetoolplugin_SRCS}
 )

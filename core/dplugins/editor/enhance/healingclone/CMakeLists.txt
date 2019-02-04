@@ -20,6 +20,6 @@ set(healingclonetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/healingclonetool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    HealingCloneTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    HealingCloneTool
                                    SOURCES ${healingclonetoolplugin_SRCS}
 )

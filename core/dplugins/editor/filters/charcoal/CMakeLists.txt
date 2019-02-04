@@ -19,6 +19,6 @@ set(charcoaltoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/charcoaltool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    CharcoalTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    CharcoalTool
                                    SOURCES ${charcoaltoolplugin_SRCS}
 )

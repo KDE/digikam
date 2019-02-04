@@ -19,6 +19,6 @@ set(localcontrasttoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/localcontrasttool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    LocalContrastTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    LocalContrastTool
                                    SOURCES ${localcontrasttoolplugin_SRCS}
 )

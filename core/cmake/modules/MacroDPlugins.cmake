@@ -73,9 +73,9 @@ endmacro()
 
 # This macro implement the rules to compile and link an Editor DPlugin with extra arguments.
 #
-# Usage: DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    _plugin_name_
-#                                           SOURCE  _plugin_sources_
-#                                           DEPENDS _plugin_dependencies_)
+# Usage: DIGIKAM_ADD_EDITOR_PLUGIN(NAME    _plugin_name_
+#                                  SOURCE  _plugin_sources_
+#                                  DEPENDS _plugin_dependencies_)
 #
 # With: _plugin_name_ the literal name of the plugin (mandatory).
 #       _plugin_sources_ the list of source codes to compile (mandatory).
@@ -86,7 +86,7 @@ endmacro()
 # This macro will generate a plugin library with this pattern as file name:
 # Bqm_${_pluginname_}_Plugin
 #
-macro(DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED)
+macro(DIGIKAM_ADD_EDITOR_PLUGIN)
 
     set(_OPTIONS_ARGS)
     set(_ONE_VALUE_ARGS)

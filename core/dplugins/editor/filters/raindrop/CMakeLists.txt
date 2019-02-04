@@ -19,6 +19,6 @@ set(raindroptoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/raindroptool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    RainDropTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    RainDropTool
                                    SOURCES ${raindroptoolplugin_SRCS}
 )

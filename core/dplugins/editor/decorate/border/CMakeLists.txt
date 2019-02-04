@@ -19,6 +19,6 @@ set(bordertoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/bordertool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    BorderTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    BorderTool
                                    SOURCES ${bordertoolplugin_SRCS}
 )

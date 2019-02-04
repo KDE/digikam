@@ -25,6 +25,6 @@ ki18n_wrap_ui(printplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/printoptionspage.ui
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    PrintTool
-                                   SOURCES ${printplugin_SRCS}
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    PrintTool
+                          SOURCES ${printplugin_SRCS}
 )

@@ -21,6 +21,6 @@ set(lensautofixtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/lensautofixtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    LensAutoFixTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    LensAutoFixTool
                                    SOURCES ${lensautofixtoolplugin_SRCS}
 )

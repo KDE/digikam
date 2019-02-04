@@ -18,6 +18,6 @@ set(convert8to16toolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/convert8to16toolplugin.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    Convert8To16Tool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    Convert8To16Tool
                                    SOURCES ${convert8to16toolplugin_SRCS}
 )

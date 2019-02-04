@@ -19,6 +19,6 @@ set(restorationtoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/restorationtool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    RestorationTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    RestorationTool
                                    SOURCES ${restorationtoolplugin_SRCS}
 )

@@ -19,6 +19,6 @@ set(redeyetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/redeyetool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    RedEyeTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    RedEyeTool
                                    SOURCES ${redeyetoolplugin_SRCS}
 )

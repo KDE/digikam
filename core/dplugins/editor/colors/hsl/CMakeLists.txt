@@ -19,6 +19,6 @@ set(hsltoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/hsltool.cpp
 )
 
-DIGIKAM_ADD_EDITOR_PLUGIN_ADVANCED(NAME    HSLTool
+DIGIKAM_ADD_EDITOR_PLUGIN(NAME    HSLTool
                                    SOURCES ${hsltoolplugin_SRCS}
 )
