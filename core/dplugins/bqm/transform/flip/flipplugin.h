@@ -52,7 +52,7 @@ public:
     QString description()          const override;
     QList<DPluginAuthor> authors() const override;
 
-    void setup(QObject* const);
+    void setup(QObject* const) override;
 };
 
 } // namespace DigikamBqmFlipPlugin
