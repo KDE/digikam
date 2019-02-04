@@ -182,21 +182,6 @@ endmacro()
 
 # -------------------------------------------------------------------------
 
-macro(DIGIKAM_ADD_GENERIC_PLUGIN _target_name)
-
-    set(_src ${ARGN})
-
-    add_library(Generic_${_target_name}_Plugin MODULE ${_src})
-
-    target_link_libraries(Generic_${_target_name}_Plugin ${${_target_name}_LIBS} digikamcore)
-
-    install(TARGETS Generic_${_target_name}_Plugin
-            DESTINATION ${PLUGIN_INSTALL_DIR}/digikam/generic)
-
-endmacro()
-
-# -------------------------------------------------------------------------
-
 macro(DIGIKAM_ADD_EDITOR_PLUGIN _target_name)
 
     set(_src ${ARGN})

@@ -23,7 +23,7 @@ set(smugplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/smugwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    SmugMug
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    SmugMug
                                     SOURCES ${smugplugin_SRCS}
 )
 

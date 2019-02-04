@@ -20,6 +20,6 @@ set(mediaserverplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/mediaserverplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    MediaServer
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    MediaServer
                                     SOURCES ${mediaserverplugin_SRCS}
 )

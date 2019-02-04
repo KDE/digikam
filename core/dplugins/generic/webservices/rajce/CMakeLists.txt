@@ -26,7 +26,7 @@ set(rajceplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/rajcewidget.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Rajce
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Rajce
                                     SOURCES ${rajceplugin_SRCS}
 )
 

@@ -24,7 +24,7 @@ set(imageshackplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/imageshackwidget.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    ImageShack
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    ImageShack
                                     SOURCES ${imageshackplugin_SRCS}
 )
 

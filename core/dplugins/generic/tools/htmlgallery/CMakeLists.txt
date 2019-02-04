@@ -49,7 +49,7 @@ set(htmlgalleryplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/htmlgalleryplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    HtmlGallery
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    HtmlGallery
                                     SOURCES ${htmlgalleryplugin_SRCS}
                                     DEPENDS ${LIBXSLT_EXSLT_LIBRARIES}
                                             ${LIBXSLT_LIBRARIES}

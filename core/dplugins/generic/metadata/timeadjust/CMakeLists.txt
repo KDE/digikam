@@ -22,6 +22,6 @@ set(timeadjustplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/timeadjustplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    TimeAdjust
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    TimeAdjust
                                     SOURCES ${timeadjustplugin_SRCS}
 )

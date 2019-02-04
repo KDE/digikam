@@ -23,7 +23,7 @@ set(onedriveplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/odwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    OneDrive
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    OneDrive
                                     SOURCES ${onedriveplugin_SRCS}
 )
 

@@ -23,7 +23,7 @@ set(dropboxplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dbwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    DropBox
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    DropBox
                                     SOURCES ${dropboxplugin_SRCS}
 )
 

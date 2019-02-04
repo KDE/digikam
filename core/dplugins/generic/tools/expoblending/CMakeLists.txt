@@ -31,7 +31,7 @@ set(expoblendingplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/expoblendingplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    ExpoBlending
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    ExpoBlending
                                     SOURCES ${expoblendingplugin_SRCS}
 )
 

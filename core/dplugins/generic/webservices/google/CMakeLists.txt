@@ -27,7 +27,7 @@ set(googleplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/gphoto/gptalker.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Google
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Google
                                     SOURCES ${googleplugin_SRCS}
 )
 

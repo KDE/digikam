@@ -22,7 +22,7 @@ set(glviewerplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/glviewerwidget.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    GLViewer
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    GLViewer
                                     SOURCES ${glviewerplugin_SRCS}
                                     DEPENDS Qt5::OpenGL
                                             ${OPENGL_LIBRARIES}

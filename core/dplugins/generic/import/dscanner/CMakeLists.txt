@@ -21,7 +21,7 @@ set(dscannerplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/saveimgthread.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    DigitalScanner
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    DigitalScanner
                                     SOURCES ${dscannerplugin_SRCS}
                                     DEPENDS KF5::Sane
 )

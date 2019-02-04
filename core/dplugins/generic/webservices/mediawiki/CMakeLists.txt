@@ -24,7 +24,7 @@ set(mediawikiplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/mediawikiwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    MediaWiki
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    MediaWiki
                                     SOURCES ${mediawikiplugin_SRCS}
 )
 

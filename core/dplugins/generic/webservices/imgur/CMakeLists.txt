@@ -21,7 +21,7 @@ set(imgurplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/imgurplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    ImgUr
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    ImgUr
                                     SOURCES ${imgurplugin_SRCS}
 )
 

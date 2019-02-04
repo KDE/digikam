@@ -24,7 +24,7 @@ set(flickrplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/flickrwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Flickr
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Flickr
                                     SOURCES ${flickrplugin_SRCS}
 )
 

@@ -22,7 +22,7 @@ set(pinterestplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/pwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Pinterest
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Pinterest
                                     SOURCES ${pinterestplugin_SRCS}
 )
 

@@ -21,7 +21,7 @@ set(ipfsplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/ipfswindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    IpFs
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    IpFs
                                     SOURCES ${ipfsplugin_SRCS}
 )
 

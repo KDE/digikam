@@ -27,7 +27,7 @@ set(debianscreenshotsplugin_SRCS
     ${debianscreenshotsplugin_QRC_SRCS}
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    DebianScreenshots
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    DebianScreenshots
                                     SOURCES ${debianscreenshotsplugin_SRCS}
 )
 

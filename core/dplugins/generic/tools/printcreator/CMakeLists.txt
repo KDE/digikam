@@ -44,7 +44,7 @@ ki18n_wrap_ui(printcreatorplugin_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcustomlayout.ui
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    PrintCreator
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    PrintCreator
                                     SOURCES ${printcreatorplugin_SRCS}
 )
 

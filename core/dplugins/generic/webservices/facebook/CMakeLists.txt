@@ -24,7 +24,7 @@ set(facebookplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    FaceBook
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    FaceBook
                                     SOURCES ${facebookplugin_SRCS}
 )
 

@@ -24,6 +24,6 @@ set(filetransferplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/ftplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    FileTransfer
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    FileTransfer
                                     SOURCES ${filetransferplugin_SRCS}
 )

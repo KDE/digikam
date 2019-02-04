@@ -17,6 +17,6 @@ set(slideshowplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/slideshowplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    SlideShow
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    SlideShow
                                     SOURCES ${slideshowplugin_SRCS}
 )

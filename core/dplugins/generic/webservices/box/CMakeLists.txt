@@ -22,7 +22,7 @@ set(boxplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/boxwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Box
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Box
                                     SOURCES ${boxplugin_SRCS}
 )
 

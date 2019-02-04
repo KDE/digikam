@@ -23,6 +23,6 @@ set(twitterplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/twitterwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Twitter
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Twitter
                                     SOURCES ${twitterplugin_SRCS}
 )

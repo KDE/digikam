@@ -22,6 +22,6 @@ set(vkontakteplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/vkwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    VKontakte
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    VKontakte
                                     SOURCES ${vkontakteplugin_SRCS}
 )

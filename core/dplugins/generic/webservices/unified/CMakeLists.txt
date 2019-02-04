@@ -30,6 +30,6 @@ set(unifiedplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/unifiedplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    Unified
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Unified
                                     SOURCES ${unifiedplugin_SRCS}
 )

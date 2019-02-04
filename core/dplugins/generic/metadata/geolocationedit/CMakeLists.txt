@@ -29,6 +29,6 @@ set(geolocationeditplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/geolocationeditplugin.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN_ADVANCED(NAME    GeolocationEdit
+DIGIKAM_ADD_GENERIC_PLUGIN(NAME    GeolocationEdit
                                     SOURCES ${geolocationeditplugin_SRCS}
 )
