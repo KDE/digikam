@@ -87,6 +87,18 @@ public:
      */
     void setShouldLoaded(bool b);
 
+    /**
+     * @brief Returns the file name of the library for this plugin.
+     *        This string is filled at run-time by plugin loader.
+     */
+    QString libraryFileName() const;
+
+    /**
+     * @brief Sets the file name of the library for this plugin.
+     *        This string is filled at run-time by plugin loader.
+     */
+    void setLibraryFileName(const QString&);
+
 public:
 
     /**
@@ -125,7 +137,7 @@ public:
     virtual QString name() const = 0;
 
     /**
-     * @brief Returns the unique internal identification string of the plugin.
+     * @brief Returns the unique internal identification property of the plugin.
      *        Must be formated as "org.kde.digikam.plugin._PLUGIN_TYPE_._NAME_OF_PLUGIN_".
      *        Examples: "org.kde.digikam.plugin.generic.Calendar"
      *                  "org.kde.digikam.plugin.editor.AdjustCurvesTool"
@@ -134,7 +146,7 @@ public:
     virtual QString iid() const = 0;
 
     /**
-     * @brief Returns the unique top level internal identification string of the plugin interface.
+     * @brief Returns the unique top level internal identification property of the plugin interface.
      *        Must be formated as "org.kde.digikam._NAME_OF_INTERFACE_/_VERSION_".
      *        Examples: "org.kde.digikam.DPluginGeneric/1.1.0"
      *                  "org.kde.digikam.DPluginEditor/1.1.0"

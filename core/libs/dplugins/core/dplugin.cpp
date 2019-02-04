@@ -40,7 +40,8 @@ public:
     {
     }
 
-    bool shouldLoaded;
+    bool    shouldLoaded;
+    QString libraryFileName;
 };
 
 DPlugin::DPlugin(QObject* const parent)
@@ -52,6 +53,16 @@ DPlugin::DPlugin(QObject* const parent)
 DPlugin::~DPlugin()
 {
     delete d;
+}
+
+QString DPlugin::libraryFileName() const
+{
+    return d->libraryFileName;
+}
+
+void DPlugin::setLibraryFileName(const QString& name)
+{
+    d->libraryFileName = name;
 }
 
 QString DPlugin::version() const

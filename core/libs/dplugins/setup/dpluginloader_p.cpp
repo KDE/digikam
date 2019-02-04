@@ -134,6 +134,7 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj,
             KConfigGroup group      = config->group(DPluginLoader::instance()->configGroupName());
 
             plugin->setShouldLoaded(group.readEntry(plugin->iid(), true));
+            plugin->setLibraryFileName(loader->fileName());
 
             plist << plugin;
             llist << loader;

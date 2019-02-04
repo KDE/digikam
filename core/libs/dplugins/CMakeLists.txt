@@ -38,16 +38,16 @@ set(libdpluginsinterface_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugineditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaction.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugindialog.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaboutdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginloader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginloader_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginloader_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginconfview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginconfviewgeneric.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginconfvieweditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginsetup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/dpluginaboutdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/iface/dinfointerface.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/iface/dmetainfoiface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dplugindialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dwizardpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dwizarddlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dsavesettingswidget.cpp

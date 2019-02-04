@@ -36,6 +36,8 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QTreeWidget>
+#include <QHeaderView>
 
 namespace Digikam
 {
@@ -111,15 +113,18 @@ DPluginAboutDlg::DPluginAboutDlg(DPlugin* const tool, QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QTextBrowser* const props = new QTextBrowser(tab);
-    props->setOpenExternalLinks(true);
-    props->setFocusPolicy(Qt::NoFocus);
-    props->setText(i18n("<p>Plugin Interface ID:</p>"
-                        "<p>%1</p>"
-                        "<p>Plugin ID:</p>"
-                        "<p>%2</p>",
-                         tool->ifaceIid(),
-                         tool->iid()));
+    QTreeWidget* const props = new QTreeWidget(tab);
+    props->setSortingEnabled(false);
+    props->setRootIsDecorated(false);
+    props->setSelectionMode(QAbstractItemView::SingleSelection);
+    props->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    props->setAllColumnsShowFocus(true);
+    props->setColumnCount(2);
+    props->setHeaderLabels(QStringList() << i18n("Name") << i18n("Value"));
+
+    new QTreeWidgetItem(props, QStringList() << i18n("Interface ID") << tool->ifaceIid());
+    new QTreeWidgetItem(props, QStringList() << i18n("Tool ID")      << tool->iid());
+    new QTreeWidgetItem(props, QStringList() << i18n("Library")      << tool->libraryFileName());
 
     tab->addTab(props, i18n("Properties"));
 
