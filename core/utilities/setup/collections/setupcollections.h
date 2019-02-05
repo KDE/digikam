@@ -28,10 +28,14 @@
 
 #include <QScrollArea>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class SetupCollections : public QScrollArea
+class DIGIKAM_EXPORT SetupCollections : public QScrollArea
 {
 
 public:

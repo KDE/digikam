@@ -32,6 +32,10 @@
 #include <QHash>
 #include <QList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QWidget;
 class QStyleOptionViewItem;
 
@@ -41,7 +45,7 @@ namespace Digikam
 class DWItemDelegate;
 class DWItemDelegatePoolPrivate;
 
-class DWItemDelegatePool
+class DIGIKAM_EXPORT DWItemDelegatePool
 {
 public:
 

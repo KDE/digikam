@@ -40,11 +40,12 @@
 
 #include "collectionlocation.h"
 #include "dwitemdelegate.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class SetupCollectionModel : public QAbstractItemModel
+class DIGIKAM_EXPORT SetupCollectionModel : public QAbstractItemModel
 {
     Q_OBJECT
 

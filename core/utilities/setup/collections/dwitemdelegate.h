@@ -36,6 +36,7 @@
 // Local includes
 
 #include "dwitemdelegate_p.h"
+#include "digikam_export.h"
 
 class QObject;
 class QPainter;
@@ -49,13 +50,13 @@ namespace Digikam
 
 class DWItemDelegatePool;
 class DWItemDelegatePrivate;
-    
+
 /**
  * This class allows to create item delegates embedding simple widgets to interact
  * with items. For instance you can add push buttons, line edits, etc. to your delegate
  * and use them to modify the state of your model.
  */
-class DWItemDelegate : public QAbstractItemDelegate
+class DIGIKAM_EXPORT DWItemDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 
@@ -147,7 +148,7 @@ private:
 
     friend class DWItemDelegatePool;
     friend class DWItemDelegateEventListener;
-    
+
     DWItemDelegatePrivate* const d;
 
     Q_PRIVATE_SLOT(d, void slotDWRowsInserted(const QModelIndex&,int,int))
