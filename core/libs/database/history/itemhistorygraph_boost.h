@@ -68,6 +68,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_export.h"
 
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };
@@ -113,10 +114,9 @@ enum MeaningOfDirection
     ChildToParent
 };
 
-
 /* the graph base class template */
 template <class VertexProperties, class EdgeProperties>
-class Graph
+class DIGIKAM_DATABASE_EXPORT Graph
 {
 public:
 
