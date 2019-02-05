@@ -95,16 +95,8 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
     }
 
     // remove duplicate entries
+    allFiles.removeDuplicates();
     allFiles.sort();
-
-    for (int i = 1 ; i < allFiles.size() ; ++i)
-    {
-        if (allFiles.at(i) == allFiles.at(i-1))
-        {
-            allFiles.removeAt(i);
-            --i;
-        }
-    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles;
 
