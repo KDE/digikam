@@ -33,8 +33,6 @@
 #include "drawdecoder.h"
 #include "digikam_export.h"
 
-
-
 namespace Digikam
 {
 

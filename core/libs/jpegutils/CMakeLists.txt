@@ -5,10 +5,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
 # decide whether to make dllimport (by default) or dllexport. So, we need to export.
 add_definitions(-Dlibjpeg_EXPORTS)

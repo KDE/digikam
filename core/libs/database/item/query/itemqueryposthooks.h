@@ -29,6 +29,10 @@
 
 #include <QList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
@@ -49,7 +53,7 @@ public:
 
 // --------------------------------------------------------------------
 
-class ItemQueryPostHooks
+class DIGIKAM_DATABASE_EXPORT ItemQueryPostHooks
 {
 public:
 

@@ -26,11 +26,12 @@
 // Local includes
 
 #include "dngwriter_p.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DNGWriterHost : public dng_host
+class DIGIKAM_EXPORT DNGWriterHost : public dng_host
 {
 
 public:

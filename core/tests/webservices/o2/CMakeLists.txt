@@ -7,10 +7,6 @@
 # =======================================================
 # Stand alone version of ExpoBlending tool
 
-if (POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
-endif (POLICY CMP0063)
-
 add_subdirectory(fbdemo)
 add_subdirectory(twdemo)
 
