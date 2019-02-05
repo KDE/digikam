@@ -19,6 +19,6 @@ set(colorfxplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorfx.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ColorFX
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ColorFX
                                 SOURCES ${colorfxplugin_SRCS}
 )

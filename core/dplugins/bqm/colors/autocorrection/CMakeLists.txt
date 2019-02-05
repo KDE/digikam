@@ -19,6 +19,6 @@ set(autocorrectionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/autocorrection.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    AutoCorrection
+DIGIKAM_ADD_BQM_PLUGIN(NAME    AutoCorrection
                                 SOURCES ${autocorrectionplugin_SRCS}
 )

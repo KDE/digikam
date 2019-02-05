@@ -19,6 +19,6 @@ set(iccconvertplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/iccconvert.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    IccConvert
+DIGIKAM_ADD_BQM_PLUGIN(NAME    IccConvert
                                 SOURCES ${iccconvertplugin_SRCS}
 )

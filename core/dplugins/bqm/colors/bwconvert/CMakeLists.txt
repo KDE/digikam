@@ -19,6 +19,6 @@ set(bwconvertplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/bwconvert.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    BWconvert
+DIGIKAM_ADD_BQM_PLUGIN(NAME    BWconvert
                                 SOURCES ${bwconvertplugin_SRCS}
 )

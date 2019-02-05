@@ -19,6 +19,6 @@ set(converttojpegplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/converttojpeg.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToJPEG
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToJPEG
                                 SOURCES ${converttojpegplugin_SRCS}
 )

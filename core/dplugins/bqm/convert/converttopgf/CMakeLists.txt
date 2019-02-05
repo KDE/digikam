@@ -19,6 +19,6 @@ set(converttopgfplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/converttopgf.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToPGF
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToPGF
                                 SOURCES ${converttopgfplugin_SRCS}
 )

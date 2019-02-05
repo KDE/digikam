@@ -19,6 +19,6 @@ set(borderplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/border.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    Border
+DIGIKAM_ADD_BQM_PLUGIN(NAME    Border
                                 SOURCES ${borderplugin_SRCS}
 )

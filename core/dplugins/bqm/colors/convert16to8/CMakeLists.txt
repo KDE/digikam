@@ -19,6 +19,6 @@ set(convert16to8plugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/convert16to8.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    Convert16To8
+DIGIKAM_ADD_BQM_PLUGIN(NAME    Convert16To8
                                 SOURCES ${convert16to8plugin_SRCS}
 )

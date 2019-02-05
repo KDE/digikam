@@ -20,6 +20,6 @@ set(localcontrastplugin_SRCS
 )
 
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    LocalContrast
+DIGIKAM_ADD_BQM_PLUGIN(NAME    LocalContrast
                                 SOURCES ${localcontrastplugin_SRCS}
 )

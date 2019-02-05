@@ -19,7 +19,7 @@ set(watermarkplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/watermark.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    WaterMark
+DIGIKAM_ADD_BQM_PLUGIN(NAME    WaterMark
                                 SOURCES ${watermarkplugin_SRCS}
 )
 

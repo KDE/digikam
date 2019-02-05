@@ -19,6 +19,6 @@ set(converttotiffplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/converttotiff.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToTIFF
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToTIFF
                                 SOURCES ${converttotiffplugin_SRCS}
 )

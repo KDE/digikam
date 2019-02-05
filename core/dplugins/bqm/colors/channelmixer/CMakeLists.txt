@@ -19,6 +19,6 @@ set(channelmixerplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/channelmixer.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ChannelMixer
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ChannelMixer
                                 SOURCES ${channelmixerplugin_SRCS}
 )

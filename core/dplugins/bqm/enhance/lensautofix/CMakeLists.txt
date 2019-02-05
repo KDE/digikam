@@ -21,6 +21,6 @@ set(lensautofixplugin_SRCS
      ${CMAKE_CURRENT_SOURCE_DIR}/lensautofix.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    LensAutoFix
+DIGIKAM_ADD_BQM_PLUGIN(NAME    LensAutoFix
                                 SOURCES ${lensautofixplugin_SRCS}
 )

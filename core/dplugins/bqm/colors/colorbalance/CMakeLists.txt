@@ -19,6 +19,6 @@ set(colorbalanceplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/colorbalance.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ColorBalance
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ColorBalance
                                 SOURCES ${colorbalanceplugin_SRCS}
 )

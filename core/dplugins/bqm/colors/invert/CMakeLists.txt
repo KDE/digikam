@@ -19,6 +19,6 @@ set(invertplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/invert.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    Invert
+DIGIKAM_ADD_BQM_PLUGIN(NAME    Invert
                                 SOURCES ${invertplugin_SRCS}
 )

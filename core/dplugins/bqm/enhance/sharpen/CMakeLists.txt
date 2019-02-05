@@ -19,6 +19,6 @@ set(sharpenplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/sharpen.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    Sharpen
+DIGIKAM_ADD_BQM_PLUGIN(NAME    Sharpen
                                 SOURCES ${sharpenplugin_SRCS}
 )

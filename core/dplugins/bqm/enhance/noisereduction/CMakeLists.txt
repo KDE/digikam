@@ -19,6 +19,6 @@ set(noisereductionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/noisereduction.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    NoiseReduction
+DIGIKAM_ADD_BQM_PLUGIN(NAME    NoiseReduction
                                 SOURCES ${noisereductionplugin_SRCS}
 )

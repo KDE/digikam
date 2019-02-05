@@ -19,6 +19,6 @@ set(bcgcorrectionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/bcgcorrection.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    BcgCorrection
+DIGIKAM_ADD_BQM_PLUGIN(NAME    BcgCorrection
                                 SOURCES ${bcgcorrectionplugin_SRCS}
 )

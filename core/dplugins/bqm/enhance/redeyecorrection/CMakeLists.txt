@@ -19,6 +19,6 @@ set(redeyecorrectionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/redeyecorrection.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    RedEyeCorrection
+DIGIKAM_ADD_BQM_PLUGIN(NAME    RedEyeCorrection
                                 SOURCES ${redeyecorrectionplugin_SRCS}
 )

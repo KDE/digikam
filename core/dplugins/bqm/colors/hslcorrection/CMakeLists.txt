@@ -20,6 +20,6 @@ set(hslcorrectionplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/hslcorrection.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    HslCorrection
+DIGIKAM_ADD_BQM_PLUGIN(NAME    HslCorrection
                                 SOURCES ${hslcorrectionplugin_SRCS}
 )

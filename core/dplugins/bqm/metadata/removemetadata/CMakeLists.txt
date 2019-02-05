@@ -19,6 +19,6 @@ set(removemetadataplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/removemetadata.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    RemoveMetadata
+DIGIKAM_ADD_BQM_PLUGIN(NAME    RemoveMetadata
                                 SOURCES ${removemetadataplugin_SRCS}
 )

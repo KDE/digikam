@@ -19,6 +19,6 @@ set(curvesadjustplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/curvesadjust.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    CurvesAdjust
+DIGIKAM_ADD_BQM_PLUGIN(NAME    CurvesAdjust
                                 SOURCES ${curvesadjustplugin_SRCS}
 )

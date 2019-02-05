@@ -19,6 +19,6 @@ set(converttopngplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/converttopng.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToPNG
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToPNG
                                 SOURCES ${converttopngplugin_SRCS}
 )

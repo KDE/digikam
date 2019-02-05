@@ -19,6 +19,6 @@ set(userscriptplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/userscript.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    UserScript
+DIGIKAM_ADD_BQM_PLUGIN(NAME    UserScript
                                 SOURCES ${userscriptplugin_SRCS}
 )

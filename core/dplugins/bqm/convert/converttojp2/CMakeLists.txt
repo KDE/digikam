@@ -19,6 +19,6 @@ set(converttojp2plugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/converttojp2.cpp
 )
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToJP2lugin
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToJP2lugin
                                 SOURCES ${converttojp2plugin_SRCS}
 )

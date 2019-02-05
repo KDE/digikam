@@ -20,6 +20,6 @@ set(converttodngplugin_SRCS
 )
 
 
-DIGIKAM_ADD_BQM_PLUGIN_ADVANCED(NAME    ConvertToDNG
+DIGIKAM_ADD_BQM_PLUGIN(NAME    ConvertToDNG
                                 SOURCES ${converttodngplugin_SRCS}
 )
