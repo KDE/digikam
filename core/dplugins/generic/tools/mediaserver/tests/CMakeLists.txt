@@ -19,14 +19,15 @@ target_link_libraries(dmediaservertest
 
 ########################################################################
 # CLI test tool from Platinum SDK
-
-set(filemediaserver_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../upnpsdk/Platinum/Source/Tests/FileMediaServer/FileMediaServerTest.cpp
-)
-
-add_executable(filemediaserver ${filemediaserver_SRCS})
-
-target_link_libraries(filemediaserver
-                      digikamcore
-                      mediaserverbackend
-)
+# NOTE : disable due to unexported symbols from UPNP sdk
+#
+#set(filemediaserver_SRCS
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../upnpsdk/Platinum/Source/Tests/FileMediaServer/FileMediaServerTest.cpp
+#)
+#
+#add_executable(filemediaserver ${filemediaserver_SRCS})
+#
+#target_link_libraries(filemediaserver
+#                      digikamcore
+#                      mediaserverbackend
+#)
