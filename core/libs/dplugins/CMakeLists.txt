@@ -88,3 +88,24 @@ if(WIN32)
 endif()
 
 add_subdirectory(webservices)
+
+# -----------------------------------------------------------------------------------
+
+install(FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugin.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginaction.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/dpluginauthor.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugineditor.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/dplugingeneric.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/iface/dinfointerface.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/iface/dmetainfoiface.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/ditemslist.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dplugindialog.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dpreviewimage.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dpreviewmanager.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dsavesettingswidget.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dwizarddlg.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/widgets/dwizardpage.h
+        DESTINATION
+            ${CMAKE_INSTALL_INCLUDEDIR}/digikam
+)
