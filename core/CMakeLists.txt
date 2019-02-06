@@ -729,6 +729,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${LIBKVKONTAKTE_INCLUDES})
 
+    include_directories(${LENSFUN_INCLUDE_DIRS})
+
     # ==========================================================================
     # Common targets parts
 
