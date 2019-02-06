@@ -23,8 +23,22 @@
 
 #include "dpluginauthor.h"
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 namespace Digikam
 {
+
+DPluginAuthor::DPluginAuthor(const QString& n,
+                             const QString& e,
+                             const QString& y)
+    : name(n),
+      email(e),
+      years(y),
+      roles(i18n("Developer"))
+{
+}
 
 DPluginAuthor::DPluginAuthor(const QString& n,
                              const QString& e,

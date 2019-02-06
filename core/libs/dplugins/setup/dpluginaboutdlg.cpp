@@ -39,6 +39,10 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 namespace Digikam
 {
 
