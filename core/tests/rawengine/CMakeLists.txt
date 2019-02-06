@@ -46,7 +46,6 @@ macro(LIBRAW_BUILD_SAMPLES)
                           ${OPENMP_LDFLAGS}
                           ${CMAKE_THREAD_LIBS_INIT}
                           digikamcore
-                          libdng
     )
 
     if(WIN32)

@@ -14,6 +14,4 @@ include_directories($<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(baloowrap_src OBJECT ${baloowrap_SRCS})
-add_library(baloowrap STATIC $<TARGET_OBJECTS:baloowrap_src>)
 
-target_link_libraries(baloowrap PRIVATE KF5::FileMetaData KF5::I18n)

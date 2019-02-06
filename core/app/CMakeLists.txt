@@ -23,11 +23,15 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:dthread_src>
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:kmemoryinfo_src>
-            $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:rawengine_srcs>
             $<TARGET_OBJECTS:digikamfacesengine_src>
             $<TARGET_OBJECTS:dpluginsinterface_src>
             $<TARGET_OBJECTS:libwso2_src>
+
+            $<TARGET_OBJECTS:libmd5_src>
+            $<TARGET_OBJECTS:libxmp_src>
+            $<TARGET_OBJECTS:libdng_src>
+            $<TARGET_OBJECTS:dngwriter_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
@@ -57,6 +61,13 @@ if(Marble_FOUND)
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:geoiface_src>
         $<TARGET_OBJECTS:geomapwrapper_src>
+    )
+endif()
+
+if(KF5FileMetaData_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:baloowrap_src>
     )
 endif()
 
@@ -126,6 +137,7 @@ target_link_libraries(digikamcore
                       # Required by CImg which use pthread internally.
 
                       ${CMAKE_THREAD_LIBS_INIT}
+                      ${EXPAT_LIBRARY}
 
                       ${LCMS2_LIBRARIES} # filters
 
@@ -137,8 +149,6 @@ target_link_libraries(digikamcore
                       ${FFMPEG_LIBRARIES}
 
                       ${OPENMP_LDFLAGS}
-
-                      libdng
 )
 
 if(ENABLE_QWEBENGINE)
@@ -196,7 +206,7 @@ if(OpenCV_FOUND)
 endif()
 
 if(KF5FileMetaData_FOUND)
-    target_link_libraries(digikamcore PUBLIC baloowrap)
+    target_link_libraries(digikamcore PUBLIC KF5::FileMetaData)
 endif()
 
 if(KF5AkonadiContact_FOUND)
@@ -217,7 +227,7 @@ endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
-install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS digikamcore EXPORT digikamcoreConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########################## digiKam GUI sources #############################
 
@@ -444,6 +454,7 @@ endif()
 set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS digikamgui EXPORT digikamguiConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #################### digiKam Executable  ####################################
 
@@ -474,8 +485,6 @@ target_link_libraries(digikam
 
                       digikamcore
                       digikamgui
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -508,6 +517,9 @@ install(FILES
         DESTINATION
             ${CMAKE_INSTALL_INCLUDEDIR}/digikam
 )
+
+install(EXPORT digikamcoreConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
+#install(EXPORT digikamguiConfig  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
 
 # Others Files to install #######################################################
 

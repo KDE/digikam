@@ -4,14 +4,24 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# DNG SDK and XMP SDK use C++ exceptions
+kde_enable_exceptions()
+
 include_directories(
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-)
 
-# DNG SDK and XMP SDK use C++ exceptions
-kde_enable_exceptions()
+    ${EXPAT_INCLUDE_DIR}
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
+    ${CMAKE_CURRENT_SOURCE_DIR}/
+)
 
 #------------------------------------------------------------------------------------
 
@@ -24,7 +34,7 @@ foreach(_currentfile ${libmd5_SRCS})
     endif()
 endforeach()
 
-add_library(libmd5 STATIC ${libmd5_SRCS})
+add_library(libmd5_src OBJECT ${libmd5_SRCS})
 
 #------------------------------------------------------------------------------------
 
@@ -56,25 +66,7 @@ foreach(_currentfile ${libxmp_SRCS})
     endif()
 endforeach()
 
-add_library(libxmp STATIC ${libxmp_SRCS})
-
-target_link_libraries(libxmp
-                      PRIVATE
-                      libmd5
-                      ${EXPAT_LIBRARY}
-)
-
-target_include_directories(libxmp
-                           PRIVATE
-                           ${EXPAT_INCLUDE_DIR}
-                           ${CMAKE_CURRENT_SOURCE_DIR}/
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
-)
+add_library(libxmp_src OBJECT ${libxmp_SRCS})
 
 #------------------------------------------------------------------------------------
 
@@ -153,24 +145,7 @@ foreach(_currentfile ${libdng_SRCS})
     endif()
 endforeach()
 
-add_library(libdng STATIC ${libdng_SRCS})
-
-target_link_libraries(libdng
-                      PRIVATE
-                      libxmp
-                      ${CMAKE_THREAD_LIBS_INIT}
-)
-
-target_include_directories(libdng
-                           PRIVATE
-                           ${CMAKE_CURRENT_SOURCE_DIR}/
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/md5
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/dng_sdk
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/XMPCore
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/common
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include
-                           ${CMAKE_CURRENT_SOURCE_DIR}/extra/xmp_sdk/include/client-glue
-)
+add_library(libdng_src OBJECT ${libdng_SRCS})
 
 #------------------------------------------------------------------------------------
 

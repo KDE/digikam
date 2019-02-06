@@ -236,10 +236,6 @@ if(ENABLE_DBUS)
     target_link_libraries(digikamdatabase PRIVATE Qt5::DBus)
 endif()
 
-if(KF5FileMetaData_FOUND)
-    target_link_libraries(digikamdatabase PRIVATE baloowrap)
-endif()
-
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
