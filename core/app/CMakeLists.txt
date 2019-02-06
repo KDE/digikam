@@ -333,7 +333,6 @@ add_library(digikamgui_src
             ${libdigikamgui_SRCS}
 )
 
-
 ######################### digiKam GUI objects ############################
 
 
@@ -453,8 +452,7 @@ endif()
 
 set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
-install(TARGETS digikamgui ${INSTALL_TARGETS_DEFAULT_ARGS})
-#install(TARGETS digikamgui EXPORT digikamguiConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS digikamgui EXPORT digikamguiConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #################### digiKam Executable  ####################################
 
@@ -509,6 +507,10 @@ endif()
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # -----------------------------------------------------------------------------------
+# Headers and cmake scripts to install
+
+install(EXPORT digikamcoreConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
+install(EXPORT digikamguiConfig  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
 
 install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_core_export.h
@@ -518,10 +520,8 @@ install(FILES
             ${CMAKE_INSTALL_INCLUDEDIR}/digikam
 )
 
-install(EXPORT digikamcoreConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
-#install(EXPORT digikamguiConfig  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
-
-# Others Files to install #######################################################
+# -----------------------------------------------------------------------------------
+# Others Files to install
 
 install(PROGRAMS main/org.kde.digikam.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES    main/org.kde.digikam.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

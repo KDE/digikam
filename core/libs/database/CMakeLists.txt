@@ -238,4 +238,5 @@ endif()
 
 set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
-install(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS digikamdatabase EXPORT digikamdatabaseConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(EXPORT digikamdatabaseConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
