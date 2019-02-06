@@ -102,7 +102,7 @@ macro(DIGIKAM_ADD_EDITOR_PLUGIN)
     if(_parse_results_NAME)
 #        message(STATUS "Editor plugin name=${_parse_results_NAME}")
     else()
-        message(FATAL_ERROR "Bqm plugin name is required.")
+        message(FATAL_ERROR "Editor plugin name is required.")
     endif()
 
     if(_parse_results_SOURCES )
