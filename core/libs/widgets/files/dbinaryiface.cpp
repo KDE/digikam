@@ -367,7 +367,7 @@ bool DBinaryIface::recheckDirectories()
 QString DBinaryIface::goodBaseName(const QString& b)
 {
 #ifdef Q_OS_WIN
-    if (!b.endsWith(QLatin1String(".jar"))
+    if (!b.endsWith(QLatin1String(".jar")))
         // Special case if we check a java archive.
         return b;
     else
