@@ -308,7 +308,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
     if (!fileStorage->load())
     {
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed!";
+        qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed to load calendar file!";
     }
     else
     {
@@ -350,7 +350,11 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Loaded " << counter << " events";
         memCal->close();
-        fileStorage->close();
+
+        if (fileStorage->close())
+        {
+            qCWarning(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Failed to close calendar file!";
+        }
     }
 }
 
