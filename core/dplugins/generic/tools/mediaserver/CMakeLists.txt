@@ -156,6 +156,10 @@ set(libmediaserver_SRCS
 
 add_library(mediaserverbackend STATIC ${libmediaserver_SRCS})
 
+target_link_libraries(mediaserverbackend
+                      digikamcore
+)
+
 # ---------------------------------------------------------------------------------------------------
 
 set(mediaserverplugin_SRCS
