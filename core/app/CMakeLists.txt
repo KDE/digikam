@@ -196,7 +196,6 @@ if(Lqr-1_FOUND)
 endif()
 
 if(LensFun_FOUND)
-    target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
     target_link_libraries(digikamcore PUBLIC ${LENSFUN_LIBRARIES})
 endif()
 

@@ -32,7 +32,6 @@
 
 #include "dinfointerface.h"
 #include "dplugin.h"
-#include "dpluginloader.h"
 #include "dpluginaction.h"
 #include "digikam_export.h"
 

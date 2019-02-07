@@ -76,9 +76,12 @@ QString DBPlugin::details() const
 QList<DPluginAuthor> DBPlugin::authors() const
 {
     return QList<DPluginAuthor>()
-            << DPluginAuthor(QString::fromUtf8("Tarek Talaat"),
-                             QString::fromUtf8("tarektalaat93 at gmail dot com"),
-                             QString::fromUtf8("(C) 2018"))
+            << DPluginAuthor(QString::fromUtf8("Pankaj Kumar"),
+                             QString::fromUtf8("me at panks dot me"),
+                             QString::fromUtf8("(C) 2013"))
+            << DPluginAuthor(QString::fromUtf8("Maik Qualmann"),
+                             QString::fromUtf8("metzpinguin at gmail dot com"),
+                             QString::fromUtf8("(C) 2018-2019"))
             ;
 }
 

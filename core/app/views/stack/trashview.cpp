@@ -379,6 +379,7 @@ void TrashView::slotDataChanged()
     {
         d->undoButton->setEnabled(false);
         d->deleteButton->setEnabled(false);
+        d->restoreButton->setEnabled(false);
         return;
     }
 

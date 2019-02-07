@@ -28,10 +28,6 @@
 
 #include <QString>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_export.h"
@@ -43,10 +39,14 @@ class DIGIKAM_EXPORT DPluginAuthor
 {
 public:
 
-    explicit DPluginAuthor(const QString& n,
-                           const QString& e,
-                           const QString& y,
-                           const QString& r = i18n("Developer"));
+    DPluginAuthor(const QString& n,
+                  const QString& e,
+                  const QString& y);
+
+    DPluginAuthor(const QString& n,
+                  const QString& e,
+                  const QString& y,
+                  const QString& r);
 
     ~DPluginAuthor();
 
