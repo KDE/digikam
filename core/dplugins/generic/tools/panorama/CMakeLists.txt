@@ -45,6 +45,10 @@ set(libpanoparser_SRCS
 
 add_library(panoparser STATIC ${libpanoparser_SRCS})
 
+target_link_libraries(panoparser
+                      digikamcore
+)
+
 # =======================================================
 
 set(panoramaplugin_SRCS
@@ -77,9 +81,9 @@ set(panoramaplugin_SRCS
 )
 
 DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Panorama
-                                    SOURCES ${panoramaplugin_SRCS}
-                                    DEPENDS panoparser
-                                            KF5::ThreadWeaver
+                           SOURCES ${panoramaplugin_SRCS}
+                           DEPENDS panoparser
+                                   KF5::ThreadWeaver
 )
 
 add_subdirectory(icons)
