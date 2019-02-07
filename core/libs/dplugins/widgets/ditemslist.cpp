@@ -80,15 +80,15 @@ public:
         hasThumb = false;
     }
 
-    bool              hasThumb;       // True if thumbnails is a real photo thumbs
+    bool             hasThumb;       // True if thumbnails is a real photo thumbs
 
-    int               rating;         // Image Rating from host.
-    QString           comments;       // Image comments from host.
-    QStringList       tags;           // List of keywords from host.
-    QUrl              url;            // Image url provided by host.
-    QPixmap           thumb;          // Image thumbnail.
+    int              rating;         // Image Rating from host.
+    QString          comments;       // Image comments from host.
+    QStringList      tags;           // List of keywords from host.
+    QUrl             url;            // Image url provided by host.
+    QPixmap          thumb;          // Image thumbnail.
     DItemsListView*  view;
-    State             state;
+    State            state;
 };
 
 DItemsListViewItem::DItemsListViewItem(DItemsListView* const view, const QUrl& url)
@@ -506,7 +506,7 @@ public:
     int                        progressCount;
     QTimer*                    progressTimer;
 
-    DItemsListView*           listView;
+    DItemsListView*            listView;
     ThumbnailLoadThread*       thumbLoadThread;
 
     DInfoInterface*            iface;
