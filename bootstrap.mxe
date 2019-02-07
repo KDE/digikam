@@ -71,15 +71,15 @@ echo "Installing to $MXE_BUILDROOT for target $MXE_BUILD_TARGETS with build mode
 ORIG_PATH="$PATH"
 export PATH=$MXE_BUILDROOT/usr/bin:$MXE_INSTALL_PREFIX/qt5/bin:$PATH
 
-if [ ! -d "build" ]; then
-    mkdir build
+if [ ! -d "build.mxe" ]; then
+    mkdir build.mxe
 fi
 
 if [ -e "./project/mxe/png2ico/png2ico" ]; then
     PNG2ICO_PATH="-DPng2Ico_EXECUTABLE=`pwd`/project/mxe/png2ico/png2ico"
 fi
 
-cd build
+cd build.mxe
 
 ${MXE_BUILD_TARGETS}-cmake -G "Unix Makefiles" . \
                            -DMXE_TOOLCHAIN=${MXE_TOOLCHAIN} \
