@@ -119,7 +119,6 @@ This is fully optional. All the events from this calendar will be printed in gre
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>Digikam::DFileSelector</class>
