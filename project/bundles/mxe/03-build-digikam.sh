@@ -55,7 +55,7 @@ if [ -d "$DK_BUILDTEMP/digikam-$DK_VERSION" ] ; then
     git reset --hard
     git pull
 
-    mkdir -p build
+    mkdir -p build.mxe
 
 else
 
@@ -85,7 +85,7 @@ else
 
     git checkout $DK_VERSION
 
-    mkdir build
+    mkdir build.mxe
 
 fi
 
@@ -108,12 +108,12 @@ if [ $? -ne 0 ]; then
     exit;
 fi
 
-cat ./build/core/app/utils/digikam_version.h | grep "digikam_version\[\]" | awk '{print $6}' | tr -d '";' > $ORIG_WD/data/RELEASEID.txt
+cat ./build.mxe/core/app/utils/digikam_version.h | grep "digikam_version\[\]" | awk '{print $6}' | tr -d '";' > $ORIG_WD/data/RELEASEID.txt
 
 echo -e "\n\n"
 echo "---------- Building digiKam $DK_VERSION"
 
-cd build
+cd build.mxe
 make -j$CPU_CORES
 
 if [ $? -ne 0 ]; then
