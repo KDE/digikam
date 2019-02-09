@@ -121,16 +121,7 @@ elif [[ $1 == "help" ]] ; then
     echo " <showfoto>           : run Showfoto instead digiKam."
     echo " <debug>              : run digiKam into GDB."
     echo " <debug> <showfoto>   : run Showfoto into GDB."
-    echo " <desktopintegration> : run native AppImage script for a desktop integration."
     echo " <help>               : show these information."
-
-elif [[ ($1 == "desktopintegration") ]] ; then
-
-    # Native AppImage CLI options.
-
-    echo "Call native AppImage CLI tools for desktop integration..."
-
-    digikam.wrapper $@
 
 else
 
