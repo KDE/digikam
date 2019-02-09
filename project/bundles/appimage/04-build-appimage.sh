@@ -412,7 +412,8 @@ cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/defaul
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/mimetypes
 cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
 
-get_desktopintegration digikam
+# TODO: this AppImage sdk API is obsolete.
+#get_desktopintegration digikam
 
 mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
