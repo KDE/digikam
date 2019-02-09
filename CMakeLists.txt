@@ -45,14 +45,14 @@ option(DIGIKAMSC_COMPILE_DIGIKAM         "Build digiKam core (default=ON)"      
 
 if(DIGIKAMSC_CHECKOUT_PO OR DIGIKAMSC_CHECKOUT_DOC)
 
-    find_package(Ruby)
-    find_package(Subversion)
+    find_package(Ruby)       # Extraction scripts are written in Ruby.
+    find_package(Subversion) # Translations are hosted in Subversion repositories, not Git.
 
     if(RUBY_EXECUTABLE AND Subversion_FOUND)
 
         if(DIGIKAMSC_CHECKOUT_PO)
 
-            message(STATUS "Extract application translation files from git repositories. Please wait, it can take a while...")
+            message(STATUS "Extract application translation files from Subversion repositories. Please wait, it can take a while...")
             message(STATUS "NOTE: (u) want mean uncomplete translations files, which will be removed from compilation.")
 
             set(CHECKOUT_PO_DIGIKAM "--enable-digikam")
@@ -66,7 +66,7 @@ if(DIGIKAMSC_CHECKOUT_PO OR DIGIKAMSC_CHECKOUT_DOC)
 
         if(DIGIKAMSC_CHECKOUT_DOC)
 
-            message(STATUS "Extract documentation translation files from git repositories. Please wait, it can take a while...")
+            message(STATUS "Extract documentation translation files from Subversion repositories. Please wait, it can take a while...")
             message(STATUS "NOTE: (u) want mean uncomplete translations files, which will be removed from compilation.")
 
             execute_process(COMMAND ${RUBY_EXECUTABLE} "${CMAKE_SOURCE_DIR}/project/release/fetch_l10n_doc.rb"
