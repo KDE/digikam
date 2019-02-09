@@ -5,7 +5,7 @@
 #
 # Copyright (c)      2005, Mark Kretschmann, <kretschmann at kde dot org>
 # Copyright (c)      2014, Nicolas Lécureuil, <kde at nicolaslecureuil dot fr>
-# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -83,8 +83,10 @@ i18nlangs.each_line do |lang|
                     `svn cat svn://anonsvn.kde.org/home/kde/#{branch}/l10n-kf5/#{lang}/messages/extragear-graphics/#{part}.po 2> /dev/null | tee #{part}.po `
                 end
 
-                if FileTest.size( "#{part}.po" ) == 0
+                if (FileTest.size( "#{part}.po" ) == 0)
                     File.delete( "#{part}.po" )
+                    # uncomplete checkout
+                    print("(u) ")
                 end
             end
         end

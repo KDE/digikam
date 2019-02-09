@@ -53,10 +53,9 @@ if(DIGIKAMSC_CHECKOUT_PO OR DIGIKAMSC_CHECKOUT_DOC)
         if(DIGIKAMSC_CHECKOUT_PO)
 
             message(STATUS "Extract application translation files from git repositories. Please wait, it can take a while...")
+            message(STATUS "NOTE: (u) want mean uncomplete translations files, which will be removed from compilation.")
 
-            if(DIGIKAMSC_COMPILE_DIGIKAM)
-                set(CHECKOUT_PO_DIGIKAM "--enable-digikam")
-            endif()
+            set(CHECKOUT_PO_DIGIKAM "--enable-digikam")
 
             execute_process(COMMAND ${RUBY_EXECUTABLE} "${CMAKE_SOURCE_DIR}/project/release/fetch_l10n_po.rb" ${CHECKOUT_PO_DIGIKAM}
                             WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
