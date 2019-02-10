@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 private:
 
-    KSaneIface::KSaneWidget* m_saneWidget;
+    KSaneIface::KSaneWidget* m_saneWidget = nullptr;
 };
 
 } // namespace DigikamGenericDScannerPlugin
