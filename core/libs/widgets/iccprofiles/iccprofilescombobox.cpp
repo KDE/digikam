@@ -86,7 +86,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
     QList<IccProfile> profiles;
     QSet<QString>     filePaths;
 
-    foreach(IccProfile profile, givenProfiles) // krazy:exclude=foreach
+    foreach (IccProfile profile, givenProfiles) // krazy:exclude=foreach
     {
         QString filePath = profile.filePath();
 
@@ -99,7 +99,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
 
     std::sort(profiles.begin(), profiles.end(), iccProfileLessThan);
 
-    foreach(IccProfile profile, profiles) // krazy:exclude=foreach
+    foreach (IccProfile profile, profiles) // krazy:exclude=foreach
     {
         QString description = profileUserString(profile);
 
@@ -119,7 +119,7 @@ void IccProfilesComboBox::addProfilesSqueezed(const QList<IccProfile>& givenProf
     QStringList       userDescription;
     formatProfiles(givenProfiles, &profiles, &userDescription);
 
-    for (int i=0; i<profiles.size(); ++i)
+    for (int i = 0 ; i < profiles.size() ; ++i)
     {
         addSqueezedItem(userDescription.at(i), QVariant::fromValue(profiles.at(i)));
     }
@@ -170,7 +170,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
     const int size = count();
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         if (itemData(i).value<IccProfile>() == profile)
         {
@@ -217,7 +217,7 @@ void IccProfilesMenuAction::addProfiles(const QList<IccProfile>& givenProfiles)
     QStringList userDescription;
     formatProfiles(givenProfiles, &profiles, &userDescription);
 
-    for (int i=0; i<profiles.size(); ++i)
+    for (int i = 0 ; i < profiles.size() ; ++i)
     {
         addProfile(profiles.at(i), userDescription.at(i));
     }
@@ -298,7 +298,7 @@ void IccRenderingIntentComboBox::setIntent(int intent)
 {
     const int size = count();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         if (itemData(i).toInt() == intent)
         {
