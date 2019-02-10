@@ -59,12 +59,18 @@ public:
     void getUserName();
     bool authenticated();
     void cancel();
-    bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
+    bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality, bool chunked=false);
     void listFolders(const QString& path = QString());
     void createFolder(QString& path);
     void setAccessToken(const QString& token);
     QMap<QString, QString> ParseUrlParameters(const QString& url);
     void createTweet(const QString& mediaId);
+
+    bool addPhotoSingleUpload(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
+
+    bool addPhotoInit(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
+    bool addPhotoAppend(const QString& mediaId, int segmentIndex=0);
+    bool addPhotoFinalize(const QString& mediaId);    
 
 Q_SIGNALS:
 
@@ -94,6 +100,9 @@ private:
     void parseResponseListFolders(const QByteArray& data);
     void parseResponseCreateFolder(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
+    void parseResponseAddPhotoInit(const QByteArray& data);
+    void parseResponseAddPhotoAppend(const QByteArray& data, int segmentIndex);
+    void parseResponseAddPhotoFinalize(const QByteArray& data);
     void parseResponseCreateTweet(const QByteArray& data);
 
 private:

@@ -3,4 +3,8 @@ we are using the o2 library which has a class specific for twitter authenticatio
 Posting tweets authenticates and passes using the same library.
 Need to see twitter community response on this problem. ---> RESOLVED
 
-Replace current method for uploading media in twittertalker.cpp by uploading by chunks
+Replace current method for uploading media in twittertalker.cpp by uploading by chunks -> RESOLVED
+
+Since upload media by chunks has been prepared, other types of media (video, gif) can be uploaded to twitter too. 
+	+ It needs a more generic uploader.
+	+ For larger files or when uploading can be used in BQM, each chunks can be uploaded asynchronously, in parallel and resumable (in case of error, retry uploading for only those chunks) -> change in uploader codes to adapt this case.

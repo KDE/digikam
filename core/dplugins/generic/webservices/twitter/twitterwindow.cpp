@@ -335,7 +335,8 @@ void TwWindow::uploadNextPhoto()
                                       temp,
                                       d->widget->getResizeCheckBox()->isChecked(),
                                       d->widget->getDimensionSpB()->value(),
-                                      d->widget->getImgQualitySpB()->value());
+                                      d->widget->getImgQualitySpB()->value(),
+                                      true);
 
     if (!result)
     {

@@ -28,6 +28,9 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QList>
+
+#define MAX_MEDIA_SIZE 1048576
 
 namespace DigikamGenericTwitterPlugin
 {
@@ -41,15 +44,27 @@ public:
     ~TwMPForm();
 
     void reset();
-    bool addFile(const QString& imgPath);
+    QByteArray fileHeader(const QString& imgPath);
+    bool addFile(const QString& imgPath, bool fragmented = false);
+    QByteArray createPair(const QByteArray& name, const QByteArray& value);
+    bool addPair(const QByteArray& pair);
+    void finish();
+    QByteArray border();
 
+    int numberOfChunks() const;
     QString contentType() const;
     QByteArray formData() const;
+    QByteArray getChunk(int index) const;
+
+private:
+
+    void formChunks(const QByteArray& data);
 
 private:
 
     QByteArray m_buffer;
     QByteArray m_boundary;
+    QList<QByteArray> m_chunks;
 };
 
 } // namespace DigikamGenericTwitterPlugin
