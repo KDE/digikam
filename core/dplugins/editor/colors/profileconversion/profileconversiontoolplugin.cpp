@@ -47,8 +47,6 @@ namespace DigikamEditorProfileConversionToolPlugin
 ProfileConversionToolPlugin::ProfileConversionToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
-    m_profileMenuAction   = 0;
-    m_colorSpaceConverter = 0;
 }
 
 ProfileConversionToolPlugin::~ProfileConversionToolPlugin()
