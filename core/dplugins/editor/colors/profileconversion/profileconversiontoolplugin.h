@@ -63,8 +63,8 @@ private Q_SLOTS:
 
 private:
 
-    IccProfilesMenuAction* m_profileMenuAction;
-    QAction*               m_colorSpaceConverter;
+    IccProfilesMenuAction* m_profileMenuAction   = nullptr;
+    QAction*               m_colorSpaceConverter = nullptr;
 };
 
 } // namespace DigikamEditorProfileConversionToolPlugin
