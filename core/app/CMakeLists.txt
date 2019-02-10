@@ -111,6 +111,8 @@ add_library(digikamcore
             ${DIGIKAMCORE_OBJECTS}
 )
 
+set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
+
 add_dependencies(digikamcore digikam-gitversion)
 
 generate_export_header(digikamcore BASE_NAME digikam EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_core_export.h")
@@ -217,16 +219,12 @@ if(APPLE)
 endif()
 
 if(WIN32)
-  target_link_libraries(digikamcore PUBLIC wsock32 ws2_32)
+    target_link_libraries(digikamcore PUBLIC wsock32 ws2_32)
 endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore PUBLIC ${QTAV_LIBRARIES})
 endif()
-
-set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
-
-install(TARGETS digikamcore EXPORT digikamcoreConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########################## digiKam GUI sources #############################
 
@@ -334,7 +332,6 @@ add_library(digikamgui_src
 
 ######################### digiKam GUI objects ############################
 
-
 set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:digikamdatabasemain_src>
             $<TARGET_OBJECTS:digikamfacesenginedatabase_src>
@@ -379,6 +376,12 @@ add_library(digikamgui
             SHARED
             ${DIGIKAM_OBJECTS}
 )
+
+set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
+
+if(WIN32)
+    set_target_properties(digikamgui PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
+endif()
 
 target_link_libraries(digikamgui
                       PUBLIC
@@ -431,10 +434,6 @@ if(NOT WIN32)
     target_link_libraries(digikamgui PUBLIC ${MATH_LIBRARY})
 endif()
 
-if(WIN32)
-    set_target_properties(digikamgui PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
-endif()
-
 if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikamcore PRIVATE ${KVM_LIBRARY})
 endif()
@@ -448,10 +447,6 @@ if(Gphoto2_FOUND)
     target_link_libraries(digikamgui PUBLIC ${GPHOTO2_LIBRARIES})
 
 endif()
-
-set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
-
-install(TARGETS digikamgui EXPORT digikamguiConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #################### digiKam Executable  ####################################
 
@@ -503,13 +498,18 @@ if(KF5KIO_FOUND)
     target_link_libraries(digikam PUBLIC KF5::KIOWidgets)
 endif()
 
-install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
+# -----------------------------------------------------------------------------------
+# Install binaries
+
+install(TARGETS digikamcore EXPORT digikamcoreConfig ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS digikamgui  EXPORT digikamguiConfig  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS digikam                              ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # -----------------------------------------------------------------------------------
 # Headers and cmake scripts to install
 
-install(EXPORT digikamcoreConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
-install(EXPORT digikamguiConfig  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam")
+install(EXPORT digikamcoreConfig DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam" NAMESPACE Digikam::)
+install(EXPORT digikamguiConfig  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/digikam" NAMESPACE Digikam::)
 
 install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/utils/digikam_core_export.h
