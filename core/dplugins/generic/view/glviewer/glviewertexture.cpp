@@ -81,6 +81,11 @@ public:
     int                                rotate_idx;
     PreviewLoadThread*                 previewThread;
     DInfoInterface*                    iface;
+
+private:
+
+    // No copy constructor
+    Private(const Private&);
 };
 
 GLViewerTexture::GLViewerTexture(DInfoInterface* const iface)

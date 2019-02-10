@@ -75,6 +75,9 @@ private:
 
 private:
 
+    // No copy constructor
+    GLViewerTexture(const GLViewerTexture&);
+
     class Private;
     Private* const d;
 };

@@ -44,6 +44,9 @@ public:
 
 private:
 
+    // No copy constructor
+    GLViewerTimer(const GLViewerTimer&);
+
     class Private;
     Private* const d;
 };
