@@ -126,6 +126,11 @@ public:
      */
     void disableIfEmpty();
 
+    /**
+     * Return the parent QObject.
+     */
+    QObject* parentObject() const;
+
 Q_SIGNALS:
 
     void triggered(const IccProfile& profile);

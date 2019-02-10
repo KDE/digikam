@@ -65,7 +65,6 @@ private:
 
     IccProfilesMenuAction* m_profileMenuAction;
     QAction*               m_colorSpaceConverter;
-    QObject*               m_parent;
 };
 
 } // namespace DigikamEditorProfileConversionToolPlugin

@@ -261,6 +261,11 @@ void IccProfilesMenuAction::slotTriggered(QObject* obj)
     }
 }
 
+QObject* IccProfilesMenuAction::parentObject() const
+{
+    return m_parent;
+}
+
 // ------------------------------------------------------------------------------------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* const parent)

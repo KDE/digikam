@@ -47,7 +47,6 @@ namespace DigikamEditorProfileConversionToolPlugin
 ProfileConversionToolPlugin::ProfileConversionToolPlugin(QObject* const parent)
     : DPluginEditor(parent)
 {
-    m_parent              = 0;
     m_profileMenuAction   = 0;
     m_colorSpaceConverter = 0;
 }
@@ -95,7 +94,6 @@ QList<DPluginAuthor> ProfileConversionToolPlugin::authors() const
 
 void ProfileConversionToolPlugin::setup(QObject* const parent)
 {
-    m_parent                = parent;
     DPluginAction* const ac = new DPluginAction(parent);
     m_profileMenuAction     = new IccProfilesMenuAction(icon(), QString(), parent);
 
@@ -148,7 +146,7 @@ void ProfileConversionToolPlugin::slotUpdateColorSpaceMenu()
 {
     m_profileMenuAction->clear();
 
-    EditorWindow* const editor = dynamic_cast<EditorWindow*>(m_parent);
+    EditorWindow* const editor = dynamic_cast<EditorWindow*>(m_profileMenuAction->parentObject());
 
     if (!IccSettings::instance()->isEnabled())
     {
