@@ -60,11 +60,12 @@ private Q_SLOTS:
     void slotConvertToColorSpace(const IccProfile& profile);
     void slotUpdateColorSpaceMenu();
     void slotProfileConversionTool();
-    
+
 private:
-    
+
     IccProfilesMenuAction* m_profileMenuAction;
     QAction*               m_colorSpaceConverter;
+    QObject*               m_parent;
 };
 
 } // namespace DigikamEditorProfileConversionToolPlugin
