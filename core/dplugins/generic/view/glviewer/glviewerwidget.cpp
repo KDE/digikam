@@ -210,7 +210,7 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     if ( d->files.isEmpty() )
         return;
 
-    showFullScreen();
+    showFullScreen(); // krazy:exclude=qmethods
 
     // let the cursor dissapear after 2sec of inactivity
     connect(&d->timerMouseMove, SIGNAL(timeout()),
