@@ -40,7 +40,8 @@ namespace Digikam
 
 typedef QSharedDataPointer<ItemTagPairPriv> ItemTagPairPrivSharedPointer;
 
-class Q_DECL_HIDDEN ItemTagPairPriv : public QSharedData
+// NOTE: do not use Q_DECL_HIDDEN hidden here to prevent export symbols warnings under Windows.
+class ItemTagPairPriv : public QSharedData
 {
 
 public:
@@ -60,7 +61,7 @@ public:
 
 public:
 
-    ItemInfo                   info;
+    ItemInfo                    info;
     int                         tagId;
     bool                        isAssigned;
     bool                        propertiesLoaded;
