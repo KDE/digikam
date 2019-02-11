@@ -68,7 +68,7 @@ QString CalendarPlugin::description() const
 
 QString CalendarPlugin::details() const
 {
-    return i18n("<p>This tool permit to compose items and create a calendar with you prefered photos.</p>"
+    return i18n("<p>This tool permit to compose items and create a calendar with your best photos.</p>"
                 "<p>Different calendar layout are avaialble and you can integrate a list of dates from ICS format to highlight holidays time.</p>"
                 "<p>Finaly, the tool will propose to export the result to your printer or in a PDF file.</p>");
 }
