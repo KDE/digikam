@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_PRINTTOOL_PLUGIN_H
-#define DIGIKAM_PRINTTOOL_PLUGIN_H
+#ifndef DIGIKAM_PRINT_PLUGIN_H
+#define DIGIKAM_PRINT_PLUGIN_H
 
 // Local includes
 
@@ -61,4 +61,4 @@ private Q_SLOTS:
 
 } // namespace DigikamEditorPrintToolPlugin
 
-#endif // DIGIKAM_PRINTTOOL_PLUGIN_H
+#endif // DIGIKAM_PRINT_PLUGIN_H
