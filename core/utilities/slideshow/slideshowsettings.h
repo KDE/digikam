@@ -35,7 +35,6 @@
 
 #include "digikam_export.h"
 #include "previewsettings.h"
-#include "previewsettings.h"
 #include "dinfointerface.h"
 
 namespace Digikam
