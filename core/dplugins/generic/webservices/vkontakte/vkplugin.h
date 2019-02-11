@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_VKONTAKTE_PLUGIN_H
-#define DIGIKAM_VKONTAKTE_PLUGIN_H
+#ifndef DIGIKAM_VK_PLUGIN_H
+#define DIGIKAM_VK_PLUGIN_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace DigikamGenericVKontaktePlugin
 
-#endif // DIGIKAM_VKONTAKTE_PLUGIN_H
+#endif // DIGIKAM_VK_PLUGIN_H
