@@ -40,7 +40,7 @@
 // QtAV includes
 
 #include <QtAVWidgets/WidgetRenderer.h>   // krazy:exclude=includes
-#include <QtAV/version.h>                 // krazy:exclude=include
+#include <QtAV/version.h>                 // krazy:exclude=includes
 
 // KDE includes
 
