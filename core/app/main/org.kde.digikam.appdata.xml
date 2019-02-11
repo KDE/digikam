@@ -22,6 +22,7 @@
   <name xml:lang="ko">digiKam</name>
   <name xml:lang="nl">digiKam</name>
   <name xml:lang="nn">digiKam</name>
+  <name xml:lang="pa">ਡਿਜਿਕੈਮ</name>
   <name xml:lang="pl">digiKam</name>
   <name xml:lang="pt">digiKam</name>
   <name xml:lang="pt-BR">digiKam</name>
@@ -49,6 +50,7 @@
   <summary xml:lang="it">Programma di gestione delle foto</summary>
   <summary xml:lang="nl">Fotobeheerprogramma</summary>
   <summary xml:lang="nn">Fotohandsamingsprogram</summary>
+  <summary xml:lang="pa">ਫੋਟੋ ਇੰਤਜ਼ਾਮ ਲਈ ਪਰੋਗਰਾਮ</summary>
   <summary xml:lang="pl">Zarządzanie zdjęciami</summary>
   <summary xml:lang="pt">Programa de Gestão de Fotografias</summary>
   <summary xml:lang="pt-BR">Programa de gerenciamento de fotos</summary>
@@ -112,6 +114,7 @@
     <p xml:lang="ko">기능:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="nn">Funksjonar:</p>
+    <p xml:lang="pa">ਫੀਚਰ:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
@@ -412,6 +415,7 @@
       <caption xml:lang="id">Pengelolaan foto dalam digiKam</caption>
       <caption xml:lang="it">Gestione delle foto in digiKam</caption>
       <caption xml:lang="nl">Fotobeheer in digiKam</caption>
+      <caption xml:lang="pa">ਡਿਜਿਕੈਮ ਵਿੱਚ ਫੋਟੋ ਇੰਤਜ਼ਾਮ</caption>
       <caption xml:lang="pl">Zarządzanie zdjęciami w digiKam</caption>
       <caption xml:lang="pt">Gestão de Fotografias no digiKam</caption>
       <caption xml:lang="pt-BR">Gerenciamento de fotos no digiKam</caption>
@@ -442,6 +446,7 @@
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="nn">digiKam-prosjektet</developer_name>
+  <developer_name xml:lang="pa">ਡਿਜਿਕੈਮ ਪਰੋਜੈੱਕਟ</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
