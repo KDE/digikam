@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_DPLUGIN_LOADER_P_H
+#define DIGIKAM_DPLUGIN_LOADER_P_H
+
 #include "dpluginloader.h"
 
 // Qt includes
@@ -58,3 +61,5 @@ public:
 };
 
 } // namepace Digikam
+
+#endif // DIGIKAM_DPLUGIN_LOADER_P_H
