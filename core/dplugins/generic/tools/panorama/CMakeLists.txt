@@ -28,7 +28,8 @@ BISON_TARGET(PTOParser panoparser/ptoparser/panoParser.y  ${CMAKE_CURRENT_BINARY
 ADD_FLEX_BISON_DEPENDENCY(PTOScanner PTOParser)
 
 if(NOT MSVC)
-    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/panoScanner.c PROPERTIES COMPILE_FLAGS "-Wno-unused-function")
+    set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/panoScanner.c
+                                PROPERTIES COMPILE_FLAGS "-Wno-unused-function -Wno-sign-compare")
 endif()
 
 set_property(SOURCE panoParser.h PROPERTY SKIP_AUTOMOC ON)
