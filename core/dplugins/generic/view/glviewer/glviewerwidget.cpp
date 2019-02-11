@@ -486,8 +486,8 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 
         //key is not bound to any action, therefore show help dialog to enlighten the user
         default:
-            GLViewerHelpDlg help(d->plugin);
-            help.exec();
+            QPointer<GLViewerHelpDlg> help = new GLViewerHelpDlg(d->plugin);
+            help->exec();
             break;
     }
 }
