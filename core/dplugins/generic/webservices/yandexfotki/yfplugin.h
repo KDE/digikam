@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_YANDEXFOTKI_PLUGIN_H
-#define DIGIKAM_YANDEXFOTKI_PLUGIN_H
+#ifndef DIGIKAM_YF_PLUGIN_H
+#define DIGIKAM_YF_PLUGIN_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace DigikamGenericYFPlugin
 
-#endif // DIGIKAM_YANDEXFOTKI_PLUGIN_H
+#endif // DIGIKAM_YF_PLUGIN_H
