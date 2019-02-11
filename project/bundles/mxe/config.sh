@@ -19,7 +19,7 @@ BUILDING_DIR="`pwd`/temp.build"
 
 #------------
 # IMPORTANT: Target Windows architecture to build installer. Possible values: 32 or 64 bits.
-MXE_ARCHBITS=64
+MXE_ARCHBITS=32
 #------------
 
 if [[ $MXE_ARCHBITS == 32 ]]; then
@@ -59,8 +59,8 @@ DK_BUILDTEMP=~/dktemp
 # The list of tags can be listed with this url: https://quickgit.kde.org/?p=digikam.git&a=tags
 # If you want to package current implemntation from git, use "master" as tag.
 #DK_VERSION=v6.0.0-beta2
-DK_VERSION=master
-#DK_VERSION=development/dplugins
+#DK_VERSION=master
+DK_VERSION=development/dplugins
 
 # Installer sub version to differentiates newer updates of the installer itself, even if the underlying application hasn’t changed.
 #DK_EPOCH="-01"
