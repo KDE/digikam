@@ -84,7 +84,7 @@ public:
 
     /**
      * Return the should loaded property.
-     * If it's true, the plugin must be loaded in appliction GUI at startup by plugin loader.
+     * If it's true, the plugin must be loaded in application GUI at startup by plugin loader.
      */
     bool shouldLoaded() const;
 
