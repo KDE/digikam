@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_OD_PLUGIN_H
-#define DIGIKAM_OD_PLUGIN_H
+#ifndef DIGIKAM_P_PLUGIN_H
+#define DIGIKAM_P_PLUGIN_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace DigikamGenericPinterestPlugin
 
-#endif // DIGIKAM_OD_PLUGIN_H
+#endif // DIGIKAM_P_PLUGIN_H
