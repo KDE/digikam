@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RESTORETOOL_PLUGIN_H
-#define DIGIKAM_RESTORETOOL_PLUGIN_H
+#ifndef DIGIKAM_RESTORATION_TOOL_PLUGIN_H
+#define DIGIKAM_RESTORATION_TOOL_PLUGIN_H
 
 // Local includes
 
@@ -61,4 +61,4 @@ private Q_SLOTS:
 
 } // namespace DigikamEditorRestorationToolPlugin
 
-#endif // DIGIKAM_RESTORETOOL_PLUGIN_H
+#endif // DIGIKAM_RESTORATION_TOOL_PLUGIN_H
