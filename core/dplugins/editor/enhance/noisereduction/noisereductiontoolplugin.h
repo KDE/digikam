@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_NOISEREDUCTIONTTOOL_PLUGIN_H
-#define DIGIKAM_NOISEREDUCTIONTTOOL_PLUGIN_H
+#ifndef DIGIKAM_NOISE_REDUCTION_TOOL_PLUGIN_H
+#define DIGIKAM_NOISE_REDUCTION_TOOL_PLUGIN_H
 
 // Local includes
 
@@ -61,4 +61,4 @@ private Q_SLOTS:
 
 } // namespace DigikamEditorNoiseReductionToolPlugin
 
-#endif // DIGIKAM_NOISEREDUCTIONTTOOL_PLUGIN_H
+#endif // DIGIKAM_NOISE_REDUCTION_TOOL_PLUGIN_H
