@@ -70,7 +70,7 @@ public:
 
     bool addPhotoInit(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
     bool addPhotoAppend(const QString& mediaId, int segmentIndex=0);
-    bool addPhotoFinalize(const QString& mediaId);    
+    bool addPhotoFinalize(const QString& mediaId);
 
 Q_SIGNALS:
 

@@ -74,7 +74,7 @@ public:
         TW_USERNAME = 0,
         TW_LISTFOLDERS,
         TW_CREATEFOLDER,
-        TW_ADDPHOTO, 
+        TW_ADDPHOTO,
         TW_CREATETWEET,
         TW_UPLOADINIT,
         TW_UPLOADAPPEND,
@@ -427,7 +427,7 @@ bool TwTalker::addPhotoSingleUpload(const QString& imgPath,
 }
 
 bool TwTalker::addPhotoInit(const QString& imgPath,
-                            const QString& uploadFolder,
+                            const QString& /*uploadFolder*/,
                             bool rescale,
                             int maxDim,
                             int imageQuality)
@@ -492,17 +492,17 @@ bool TwTalker::addPhotoInit(const QString& imgPath,
     request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     d->reply = d->requestor->post(request, reqParams, form.formData());
 
-    d->mediaUploadedPath = path;    
+    d->mediaUploadedPath = path;
 
     d->state = Private::TW_UPLOADINIT;
-    
+
     return true;
 }
 
 bool TwTalker::addPhotoAppend(const QString& mediaId, int segmentIndex)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "addPhotoAppend: ";
-    
+
     static TwMPForm form;
 
     if(segmentIndex == 0)
@@ -519,7 +519,7 @@ bool TwTalker::addPhotoAppend(const QString& mediaId, int segmentIndex)
 
     QUrl url(d->uploadUrl);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
-    
+
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     d->reply = d->requestor->post(request, reqParams, data);
@@ -531,7 +531,7 @@ bool TwTalker::addPhotoAppend(const QString& mediaId, int segmentIndex)
     {
         form.reset();
     }
-    
+
     return true;
 }
 
@@ -540,7 +540,7 @@ bool TwTalker::addPhotoFinalize(const QString& mediaId)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "addPhotoFinalize: ";
 
     TwMPForm form;
-    
+
     form.addPair(form.createPair("command", "FINALIZE"));
     form.addPair(form.createPair("media_id", mediaId.toLatin1()));
     form.finish();
@@ -550,13 +550,13 @@ bool TwTalker::addPhotoFinalize(const QString& mediaId)
     QUrl url(d->uploadUrl);
 
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
-    
+
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     d->reply = d->requestor->post(request, reqParams, form.formData());
 
     d->state = Private::TW_FINALIZE;
-    
+
     return true;
 }
 
@@ -573,14 +573,14 @@ void TwTalker::getUserName()
 
     d->reply = d->requestor->get(request, reqParams);
     d->state = Private::TW_USERNAME;
-    
+
     emit signalBusy(true);
 }
 
 void TwTalker::createTweet(const QString& mediaId)
 {
     QUrl url = QUrl(QLatin1String("https://api.twitter.com/1.1/statuses/update.json"));
-    
+
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
     reqParams << O0RequestParameter(QByteArray("status"), QByteArray(""));
     reqParams << O0RequestParameter(QByteArray("media_ids"), mediaId.toUtf8());
@@ -647,7 +647,7 @@ void TwTalker::slotFinished(QNetworkReply* reply)
             parseResponseCreateTweet(buffer);
             break;
         case Private::TW_UPLOADINIT:
-            segmentIndex = 0;       
+            segmentIndex = 0;
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In TW_UPLOADINIT";
             parseResponseAddPhotoInit(buffer);
             break;
@@ -684,7 +684,7 @@ void TwTalker::parseResponseAddPhoto(const QByteArray& data)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "media id: " << mediaId;
 
     // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
-    createTweet(mediaId); 
+    createTweet(mediaId);
 }
 
 void TwTalker::parseResponseAddPhotoInit(const QByteArray& data)
@@ -705,16 +705,16 @@ void TwTalker::parseResponseAddPhotoInit(const QByteArray& data)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "media id: " << d->mediaId;
 
     // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
-    addPhotoAppend(d->mediaId); 
+    addPhotoAppend(d->mediaId);
 }
 
-void TwTalker::parseResponseAddPhotoAppend(const QByteArray& data, int segmentIndex)
+void TwTalker::parseResponseAddPhotoAppend(const QByteArray& /*data*/, int segmentIndex)
 {
     /* (Fev. 2019)
      * Currently, we don't parse data of response from addPhotoAppend, since the response is with HTTP 204
      * This is indeed an expected response code, because the response should be with an empty body.
      * However, in order to keep a compatible prototype of parseResponse methodes and reserve for future change,
-     * we should keep argument const QByteArray& data. 
+     * we should keep argument const QByteArray& data.
      */
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoAppend: ";
 
@@ -742,7 +742,7 @@ void TwTalker::parseResponseAddPhotoFinalize(const QByteArray& data)
     }
 
     // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
-    createTweet(d->mediaId); 
+    createTweet(d->mediaId);
 }
 
 void TwTalker::parseResponseUserName(const QByteArray& data)
@@ -762,7 +762,7 @@ void TwTalker::parseResponseUserName(const QByteArray& data)
     QString screenName  = obj[QLatin1String("screen_name")].toString();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "user full name: "<<name;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "user screen name: @" << screenName;
-    
+
     emit signalBusy(false);
     emit signalSetUserName(QString::fromLatin1("%1 (@%2)").arg(name).arg(screenName));
 }
@@ -780,7 +780,7 @@ void TwTalker::parseResponseCreateTweet(const QByteArray& data)
         return;
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tweet posted successfully!";    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tweet posted successfully!";
     emit signalBusy(false);
     emit signalAddPhotoSucceeded();
 }
