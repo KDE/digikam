@@ -19,7 +19,7 @@ BUILDING_DIR="`pwd`/temp.build"
 
 #------------
 # IMPORTANT: Target Windows architecture to build installer. Possible values: 32 or 64 bits.
-MXE_ARCHBITS=32
+MXE_ARCHBITS=64
 #------------
 
 if [[ $MXE_ARCHBITS == 32 ]]; then
@@ -74,6 +74,6 @@ DK_DEBUG=1
 DK_SIGN=0
 
 # Upload automatically bundle to files.kde.org (pre-release only).
-DK_UPLOAD=0
+DK_UPLOAD=1
 DK_UPLOADURL="digikam@racnoss.kde.org"
 DK_UPLOADDIR="/srv/archives/files/digikam/"
