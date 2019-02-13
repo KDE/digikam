@@ -82,20 +82,15 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
 
-    QDirIterator           it(path, QDirIterator::Subdirectories);
+    QDirIterator           it(path, QDir::Files |
+                                    QDir::NoDotAndDotDot,
+                                    QDirIterator::Subdirectories);
     QMap<QString, QString> allFiles;
 
     while (it.hasNext())
     {
         QFileInfo inf(it.next());
-
-        if (!inf.baseName().isEmpty()             &&
-            inf.baseName() != QLatin1String(".")  &&
-            inf.baseName() != QLatin1String("..") &&
-            inf.isFile())
-        {
-            allFiles.insert(inf.baseName(), inf.filePath());
-        }
+        allFiles.insert(inf.baseName(), inf.filePath());
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.count();
