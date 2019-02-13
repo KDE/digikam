@@ -57,20 +57,30 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   simpletrainingdataprovider.cpp
+
+                                  # Eigen Faces recognition module based on OpenCV
                                   recognition/opencv-eigenfaces/eigenfacemodel.cpp
                                   recognition/opencv-eigenfaces/opencveigenfacerecognizer.cpp
                                   recognition/opencv-eigenfaces/facerec_eigenborrowed.cpp
+
+                                  # Fisher Faces recognition module based on OpenCV
                                   recognition/opencv-fisherfaces/fisherfacemodel.cpp
                                   recognition/opencv-fisherfaces/opencvfisherfacerecognizer.cpp
                                   recognition/opencv-fisherfaces/facerec_fisherborrowed.cpp
+
+                                  # Neural NetWork Faces recognition module based on Dlib
                                   recognition/dlib-dnn/dnnfacemodel.cpp
                                   recognition/dlib-dnn/opencvdnnfacerecognizer.cpp
                                   recognition/dlib-dnn/facerec_dnnborrowed.cpp
+
+                                  # Lpbh Faces recognition module based on OpenCV
                                   recognition/opencv-lbph/lbphfacemodel.cpp
                                   recognition/opencv-lbph/opencvlbphfacerecognizer.cpp
                                   recognition/opencv-lbph/opencvmatdata.cpp
                                   recognition/opencv-lbph/facerec_borrowed.cpp
+
                                   alignment/congealing/funnelreal.cpp
+
                                   facedb/facedbaccess.cpp
                                   facedb/facedbbackend.cpp
                                   facedb/facedboperationgroup.cpp
