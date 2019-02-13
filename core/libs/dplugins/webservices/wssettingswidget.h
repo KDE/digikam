@@ -67,7 +67,7 @@ public:
     void              addWidgetToSettingsBox(QWidget* const widget);
 
     QString           getDestinationPath()   const;
-    DItemsList*      imagesList()           const;
+    DItemsList*       imagesList()           const;
     DProgressWdg*     progressBar()          const;
 
     QWidget*          getSettingsBox()       const;
