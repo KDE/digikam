@@ -47,8 +47,8 @@ public:
 
     /** Stage to load plugins in memory
     */
-    bool        appendPlugin(QObject* const obj, QPluginLoader* const loader,
-                             QList<DPlugin*>& plist, QList<QPluginLoader*>& llist);
+    bool        appendPlugin(QObject* const obj,
+                             QPluginLoader* const loader);
     void        loadPlugins();
 
 public:

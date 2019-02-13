@@ -106,9 +106,7 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 /** Append object to the given plugins list.
  */
 bool DPluginLoader::Private::appendPlugin(QObject* const obj,
-                                          QPluginLoader* const loader,
-                                          QList<DPlugin*>& plist,
-                                          QList<QPluginLoader*>& llist)
+                                          QPluginLoader* const loader)
 {
     DPlugin* const plugin = qobject_cast<DPlugin*>(obj);
 
@@ -128,8 +126,8 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj,
             plugin->setShouldLoaded(group.readEntry(plugin->iid(), true));
             plugin->setLibraryFileName(loader->fileName());
 
-            plist << plugin;
-            llist << loader;
+            allPlugins << plugin;
+            allLoaders << loader;
         }
 
         return true;
@@ -151,7 +149,7 @@ void DPluginLoader::Private::loadPlugins()
 
     QStringList toolFileNameList = pluginEntriesList();
 
-    Q_ASSERT(allPlugins.isEmpty());
+    Q_ASSERT(allPlugins.isEmpty() && allLoaders.isEmpty());
 
     bool foundPlugin = false;
 
@@ -178,7 +176,7 @@ void DPluginLoader::Private::loadPlugins()
 
         if (obj)
         {
-            bool isPlugin = appendPlugin(obj, loader, allPlugins, allLoaders);
+            bool isPlugin = appendPlugin(obj, loader);
 
             if (!isPlugin)
             {
