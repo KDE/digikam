@@ -89,15 +89,6 @@ BatchToolsFactory::BatchToolsFactory()
 
 BatchToolsFactory::~BatchToolsFactory()
 {
-    for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
-    {
-        if (*it)
-        {
-            delete *it;
-            it = d->toolsList.erase(it);
-        }
-    }
-
     delete d;
 }
 
