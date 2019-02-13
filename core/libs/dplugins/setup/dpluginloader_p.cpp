@@ -77,7 +77,7 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
     else
     {
         path = QLibraryInfo::location(QLibraryInfo::PluginsPath);
-        path.append(QDir::separator() + QLatin1String("digikam") + QDir::separator());
+        path.append(QLatin1String("/digikam/"));
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
