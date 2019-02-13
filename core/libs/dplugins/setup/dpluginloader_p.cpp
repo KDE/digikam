@@ -60,7 +60,7 @@ DPluginLoader::Private::~Private()
 {
 }
 
-QStringList DPluginLoader::Private::pluginEntriesList() const
+QMap<QString, QString> DPluginLoader::Private::pluginEntriesMap() const
 {
     QString     path;
 
@@ -95,7 +95,7 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.count();
 
-    return QStringList(allFiles.values());
+    return allFiles;
 }
 
 /** Append object to the given plugins list.
@@ -142,30 +142,27 @@ void DPluginLoader::Private::loadPlugins()
     t.start();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Starting to load external tools.";
 
-    QStringList toolFileNameList = pluginEntriesList();
-
     Q_ASSERT(allPlugins.isEmpty() && allLoaders.isEmpty());
 
-    bool foundPlugin = false;
+    QMap<QString, QString> toolFileNameMap    = pluginEntriesMap();
+    QMap<QString, QString>::const_iterator it = toolFileNameMap.constBegin();
 
-    for (const QString& fileName : toolFileNameList)
+    for ( ; it != toolFileNameMap.constEnd() ; ++it)
     {
-        QString const baseName = QFileInfo(fileName).baseName();
-
-        if (!whitelist.isEmpty() && !whitelist.contains(baseName))
+        if (!whitelist.isEmpty() && !whitelist.contains(it.key()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring non-whitelisted plugin" << fileName;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring non-whitelisted plugin" << it.value();
             continue;
         }
 
-        if (blacklist.contains(baseName))
+        if (blacklist.contains(it.key()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring blacklisted plugin" << fileName;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring blacklisted plugin" << it.value();
             continue;
         }
 
         // qCDebug(DIGIKAM_GENERAL_LOG) << fileName << " - " << pluginPath(fileName);
-        QString const path          = QDir(fileName).canonicalPath();
+        QString const path          = QDir(it.value()).canonicalPath();
         QPluginLoader* const loader = new QPluginLoader(path, DPluginLoader::instance());
         QObject* const obj          = loader->instance();
 
@@ -184,10 +181,6 @@ void DPluginLoader::Private::loadPlugins()
                                              << "an old version of digiKam. Ignoring it.";
                 delete loader;
             }
-            else
-            {
-                foundPlugin = true;
-            }
         }
         else
         {
@@ -198,7 +191,7 @@ void DPluginLoader::Private::loadPlugins()
         }
     }
 
-    if (!foundPlugin)
+    if (allPlugins.isEmpty())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "No plugins loaded. Please check if the plugins were installed in the correct path,"
                                        << "or if any errors occurred while loading plugins.";
