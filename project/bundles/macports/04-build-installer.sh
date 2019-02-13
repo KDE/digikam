@@ -100,6 +100,9 @@ OTHER_APPS="\
 Applications/KF5/digikam.app/Contents/MacOS/digikam \
 Applications/KF5/showfoto.app/Contents/MacOS/showfoto \
 lib/plugins/imageformats/*.so \
+lib/plugins/digikam/bqm/*.so \
+lib/plugins/digikam/generic/*.so \
+lib/plugins/digikam/editor/*.so \
 lib/sane/*.so \
 lib/mariadb/bin/mysql \
 lib/mariadb/bin/mysqld \
@@ -132,8 +135,6 @@ share/mariadb \
 etc/xdg \
 etc/sane.d \
 "
-
-#lib/sane \
 
 # Additional Data Directories - to be copied recursively
 OTHER_DATA="\
@@ -290,9 +291,9 @@ done
 #################################################################################################
 # Copy non-binary files and directories, creating parent directories if needed
 
-echo "---------- Copying non-binary files and directories..."
+echo "---------- Copying binary files..."
 
-for path in $OTHER_APPS $OTHER_DIRS ; do
+for path in $OTHER_APPS ; do
     dir="${path%/*}"
 
     if [ ! -d "$TEMPROOT/$dir" ] ; then
@@ -300,17 +301,34 @@ for path in $OTHER_APPS $OTHER_DIRS ; do
         mkdir -p "$TEMPROOT/$dir"
     fi
 
-    echo "  $path"
+    echo "  Copying $path"
     cp -a "$INSTALL_PREFIX/$path" "$TEMPROOT/$dir/"
 done
+
+echo "---------- Copying directory contents..."
+
+for path in $OTHER_DIRS ; do
+    dir="${path%/*}"
+
+    if [ ! -d "$TEMPROOT/$dir" ] ; then
+        echo "  Creating $TEMPROOT/$dir"
+        mkdir -p "$TEMPROOT/$dir"
+    fi
+
+    echo "   Copying $path"
+    cp -a "$INSTALL_PREFIX/$path" "$TEMPROOT/$dir/"
+done
+
+echo "---------- Copying data files..."
 
 # Special case with data dirs. QStandardPaths::GenericDataLocation was patched everywhere
 # in source code by QStandardPaths::AppDataLocation
 for path in $OTHER_DATA ; do
+    echo "   Copying $path"
     cp -a "$INSTALL_PREFIX/$path" "$TEMPROOT/Applications/KF5/digikam.app/Contents/Resources/"
 done
 
-# copy i18n
+echo "---------- Copying i18n..."
 
 i18nprefix=$INSTALL_PREFIX/share/
 cd $i18nprefix
@@ -337,9 +355,9 @@ ln -s "$INSTALL_PREFIX/Applications/KF5/digikam.app/Contents/Resources" "$TEMPRO
 cd "$ORIG_WD"
 
 #################################################################################################
-# Move KF5 run-time plugins to the right place
+# Move digiKam and KF5 run-time plugins to the right place
 
-find  $TEMPROOT/lib/plugins -name "*.so" -type f -maxdepth 1 -exec mv {} $TEMPROOT/libexec/qt5/plugins/ \;
+cp -a $TEMPROOT/lib/plugins $TEMPROOT/libexec/qt5/
 rm -rf $TEMPROOT/lib/plugins
 
 #################################################################################################
