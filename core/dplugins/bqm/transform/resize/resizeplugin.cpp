@@ -77,6 +77,9 @@ QString ResizePlugin::details() const
 QList<DPluginAuthor> ResizePlugin::authors() const
 {
     return QList<DPluginAuthor>()
+            << DPluginAuthor(QString::fromUtf8("Sambhav Dusad"),
+                             QString::fromUtf8("sambhavdusad24 at gmail dot com"),
+                             QString::fromUtf8("(C) 2019"))
             << DPluginAuthor(QString::fromUtf8("Gilles Caulier"),
                              QString::fromUtf8("caulier dot gilles at gmail dot com"),
                              QString::fromUtf8("(C) 2009-2019"))
