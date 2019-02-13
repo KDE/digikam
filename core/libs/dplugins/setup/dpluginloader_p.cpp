@@ -82,9 +82,9 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
 
-    QDirIterator it(path, QDirIterator::Subdirectories);
-    QString      dir;
-    QStringList  allFiles;
+    QDirIterator           it(path, QDirIterator::Subdirectories);
+    QMap<QString, QString> allFiles;
+    QString                dir;
 
     while (it.hasNext())
     {
@@ -95,16 +95,13 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
             inf.baseName() != QLatin1String("..") &&
             inf.isFile())
         {
-            allFiles << inf.filePath();
+            allFiles.insert(inf.baseName(), inf.filePath());
         }
     }
 
-    // remove duplicate entries
-    allFiles.removeDuplicates();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.values();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles;
-
-    return allFiles;
+    return QStringList(allFiles.values());
 }
 
 /** Append object to the given plugins list.
