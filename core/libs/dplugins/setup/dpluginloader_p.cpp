@@ -84,7 +84,6 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
 
     QDirIterator           it(path, QDirIterator::Subdirectories);
     QMap<QString, QString> allFiles;
-    QString                dir;
 
     while (it.hasNext())
     {
@@ -99,7 +98,7 @@ QStringList DPluginLoader::Private::pluginEntriesList() const
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.values();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.count();
 
     return QStringList(allFiles.values());
 }
