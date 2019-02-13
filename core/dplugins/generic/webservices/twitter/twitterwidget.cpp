@@ -39,6 +39,11 @@ TwWidget::TwWidget(QWidget* const parent,
 {
     getUploadBox()->hide();
     getSizeBox()->hide();
+
+    /* (Feb 2019)
+     * Temporarily hide album box because Twitter API has no functionality for albums
+     */
+    getAlbumBox()->hide();
 }
 
 TwWidget::~TwWidget()
