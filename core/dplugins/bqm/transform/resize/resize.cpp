@@ -26,7 +26,9 @@
 
 // Qt includes
 
+#include <QGridLayout>
 #include <QCheckBox>
+#include <QRadioButton>
 #include <QLabel>
 #include <QSize>
 #include <QWidget>
@@ -68,6 +70,7 @@ public:
     explicit Private()
       : labelPreset(0),
         useCustom(0),
+        usePixel(0),
         usePercent(0),
         useCM(0),
         useInches(0),
@@ -82,18 +85,21 @@ public:
 
 public:
 
-    QLabel*       labelPreset;
+    QLabel*          labelPreset;
 
-    QCheckBox*    useCustom;
-    QCheckBox*    usePercent;
-    QCheckBox*    useCM;
-    QCheckBox*    useInches;
+    QWidget*         vbox;
+    QCheckBox*       useCustom;
+    QCheckBox*       preserveRatioBox;
+    QRadioButton*    usePixel;
+    QRadioButton*    usePercent;
+    QRadioButton*    useCM;
+    QRadioButton*    useInches;
 
-    DIntNumInput* customLength;
+    DIntNumInput*    customLength;
 
-    QComboBox*    presetCBox;
+    QComboBox*       presetCBox;
 
-    bool          changeSettings;
+    bool             changeSettings;
 };
 
 QPair<int, int> Resize::Private::presetLengthValue(WidthPreset preset)
@@ -153,7 +159,7 @@ QPair<int, int> Resize::Private::presetLengthValue(WidthPreset preset)
 
 int Resize::Private::widthOrheight(QPair<int, int> dimension, int index)
 {
-    if(index == 0)
+    if (index == 0)
         return dimension.first;
     else
         return dimension.second;
@@ -174,9 +180,10 @@ Resize::~Resize()
 
 void Resize::registerSettingsWidget()
 {
-    DVBox* const vbox   = new DVBox;
-    d->labelPreset      = new QLabel(i18n("Preset Resolutions:"), vbox);
-    d->presetCBox       = new QComboBox(vbox);
+    d->vbox                 = new QWidget();
+    QGridLayout* const grid = new QGridLayout(d->vbox);
+    d->labelPreset          = new QLabel(i18n("Preset Resolutions:"), d->vbox);
+    d->presetCBox           = new QComboBox(d->vbox);
     d->presetCBox->insertItem(Private::Tiny,    i18np("Tiny (1 pixel)",     "Tiny (%1*%2 pixels)",     d->widthOrheight(d->presetLengthValue(Private::Tiny),0),     d->widthOrheight(d->presetLengthValue(Private::Tiny),1)));
     d->presetCBox->insertItem(Private::Small,   i18np("Small (1 pixel)",    "Small (%1*%2 pixels)",    d->widthOrheight(d->presetLengthValue(Private::Small),0),    d->widthOrheight(d->presetLengthValue(Private::Small),1)));
     d->presetCBox->insertItem(Private::Medium,  i18np("Medium (1 pixel)",   "Medium (%1*%2 pixels)",   d->widthOrheight(d->presetLengthValue(Private::Medium),0),   d->widthOrheight(d->presetLengthValue(Private::Medium),1)));
@@ -187,19 +194,31 @@ void Resize::registerSettingsWidget()
     d->presetCBox->insertItem(Private::QHD,     i18np("QHD (1 pixel)",      "QHD (%1*%2 pixels)",      d->widthOrheight(d->presetLengthValue(Private::QHD),0),      d->widthOrheight(d->presetLengthValue(Private::QHD),1)));
     d->presetCBox->insertItem(Private::Profile, i18np("Profile (1 pixel)",  "Profile (%1*%2 pixels)",  d->widthOrheight(d->presetLengthValue(Private::Profile),0),  d->widthOrheight(d->presetLengthValue(Private::Profile),1)));
 
-    d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
-    d->usePercent       = new QCheckBox(i18n("Use Percentage"),    vbox);
-    d->useCM            = new QCheckBox(i18n("Use Centimetres"),   vbox);
-    d->useInches        = new QCheckBox(i18n("Use Inches"),        vbox);
-    d->customLength     = new DIntNumInput(vbox);
+    d->useCustom            = new QCheckBox(i18n("Use Custom Length"),      d->vbox);
+    d->preserveRatioBox     = new QCheckBox(i18n("Maintain aspect ratio"),  d->vbox);
+    d->usePixel             = new QRadioButton(i18n("Use Pixels"),          d->vbox);
+    d->usePercent           = new QRadioButton(i18n("Use Percentage"),      d->vbox);
+    d->useCM                = new QRadioButton(i18n("Use Centimetres"),     d->vbox);
+    d->useInches            = new QRadioButton(i18n("Use Inches"),          d->vbox);
+    QLabel* const label1    = new QLabel(i18n("Width:"), d->vbox);
+    d->customLength         = new DIntNumInput(d->vbox);
     d->customLength->setSuffix(i18n(" Pixels"));
     d->customLength->setRange(10, 10000, 1);
     d->customLength->setDefaultValue(1024);
 
-    QLabel* const space = new QLabel(vbox);
-    vbox->setStretchFactor(space, 10);
+    m_settingsWidget        = d->vbox;
 
-    m_settingsWidget    = vbox;
+    grid->addWidget(d->labelPreset,        0, 0, 1, 3);
+    grid->addWidget(d->presetCBox,         1, 0, 1, 4);
+    grid->addWidget(d->useCustom,          2, 0, 1, 4);
+    grid->addWidget(d->usePixel,           3, 0, 1, 4);
+    grid->addWidget(d->usePercent,         4, 0, 1, 4);
+    grid->addWidget(d->useCM,              5, 0, 1, 4);
+    grid->addWidget(d->useInches,          6, 0, 1, 4);
+    grid->addWidget(d->preserveRatioBox,   7, 0, 1, 3);
+    grid->addWidget(label1,                8, 0, 1, 1);
+    grid->addWidget(d->customLength,       8, 1, 1, 3);
+    grid->setRowStretch(9, 10);
 
     connect(d->presetCBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
@@ -209,6 +228,9 @@ void Resize::registerSettingsWidget()
 
     connect(d->useCustom, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
+
+    connect(d->usePixel, SIGNAL(toggled(bool)),
+            this, SLOT(slotPercentChanged()));
 
     connect(d->usePercent, SIGNAL(toggled(bool)),
             this, SLOT(slotPercentChanged()));
@@ -225,12 +247,14 @@ void Resize::registerSettingsWidget()
 BatchToolSettings Resize::defaultSettings()
 {
     BatchToolSettings settings;
-    settings.insert(QLatin1String("UseCustom"),    false);
-    settings.insert(QLatin1String("UsePercent"),   false);
-    settings.insert(QLatin1String("UseCM"),        false);
-    settings.insert(QLatin1String("UseInches"),    false);
-    settings.insert(QLatin1String("LengthCustom"), 1024);
-    settings.insert(QLatin1String("LengthPreset"), Private::Medium);
+    settings.insert(QLatin1String("UseCustom"),         false);
+    settings.insert(QLatin1String("PreserveRatioBox"),  false);
+    settings.insert(QLatin1String("UsePixel"),          false);
+    settings.insert(QLatin1String("UsePercent"),        false);
+    settings.insert(QLatin1String("UseCM"),             false);
+    settings.insert(QLatin1String("UseInches"),         false);
+    settings.insert(QLatin1String("LengthCustom"),      1024);
+    settings.insert(QLatin1String("LengthPreset"),      Private::Medium);
     return settings;
 }
 
@@ -238,6 +262,8 @@ void Resize::slotAssignSettings2Widget()
 {
     d->changeSettings = false;
     d->useCustom->setChecked(settings()[QLatin1String("UseCustom")].toBool());
+    d->preserveRatioBox->setChecked(true);
+    d->usePixel->setChecked(true);
     d->usePercent->setChecked(settings()[QLatin1String("UsePercent")].toBool());
     d->useCM->setChecked(settings()[QLatin1String("UseCM")].toBool());
     d->useInches->setChecked(settings()[QLatin1String("UseInches")].toBool());
@@ -250,29 +276,24 @@ void Resize::slotSettingsChanged()
 {
     d->labelPreset->setEnabled(!d->useCustom->isChecked());
     d->customLength->setEnabled(d->useCustom->isChecked());
+    d->preserveRatioBox->setEnabled(d->useCustom->isChecked());
     d->presetCBox->setEnabled(!d->useCustom->isChecked());
+    d->usePixel->setEnabled(d->useCustom->isChecked());
     d->usePercent->setEnabled(d->useCustom->isChecked());
     d->useCM->setEnabled(d->useCustom->isChecked());
     d->useInches->setEnabled(d->useCustom->isChecked());
 
-    d->useCM->setEnabled(!d->usePercent->isChecked());
-    d->useInches->setEnabled(!d->usePercent->isChecked());
-
-    d->usePercent->setEnabled(!d->useCM->isChecked());
-    d->useInches->setEnabled(!d->useCM->isChecked());
-
-    d->usePercent->setEnabled(!d->useInches->isChecked());
-    d->useCM->setEnabled(!d->useInches->isChecked());
-
     if (d->changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert(QLatin1String("UseCustom"),    d->useCustom->isChecked());
-        settings.insert(QLatin1String("UsePercent"),   d->usePercent->isChecked());
-        settings.insert(QLatin1String("UseCM"),        d->useCM->isChecked());
-        settings.insert(QLatin1String("UseInches"),    d->useInches->isChecked());
-        settings.insert(QLatin1String("LengthCustom"), d->customLength->value());
-        settings.insert(QLatin1String("LengthPreset"), d->presetCBox->currentIndex());
+        settings.insert(QLatin1String("UseCustom"),           d->useCustom->isChecked());
+        settings.insert(QLatin1String("PreserveRatioBox"),    d->preserveRatioBox->isChecked());
+        settings.insert(QLatin1String("UsePixel"),            d->usePixel->isChecked());
+        settings.insert(QLatin1String("UsePercent"),          d->usePercent->isChecked());
+        settings.insert(QLatin1String("UseCM"),               d->useCM->isChecked());
+        settings.insert(QLatin1String("UseInches"),           d->useInches->isChecked());
+        settings.insert(QLatin1String("LengthCustom"),        d->customLength->value());
+        settings.insert(QLatin1String("LengthPreset"),        d->presetCBox->currentIndex());
         BatchTool::slotSettingsChanged(settings);
     }
 }
@@ -286,14 +307,14 @@ void Resize::slotPercentChanged()
         d->customLength->setDefaultValue(100);
         d->customLength->setValue(100);
     }
-    else if(d->useCM->isChecked())
+    else if (d->useCM->isChecked())
     {
         d->customLength->setSuffix(QLatin1String(" cm"));
         d->customLength->setRange(1, 500, 1);
         d->customLength->setDefaultValue(100);
         d->customLength->setValue(100);
     }
-    else if(d->useInches->isChecked())
+    else if (d->useInches->isChecked())
     {
         d->customLength->setSuffix(QLatin1String(" Inches"));
         d->customLength->setRange(1, 200, 1);
@@ -314,12 +335,14 @@ void Resize::slotPercentChanged()
 bool Resize::toolOperations()
 {
     bool useCustom              = settings()[QLatin1String("UseCustom")].toBool();
+    bool preserveRatioBox       = settings()[QLatin1String("PreserveRatioBox")].toBool();
     bool usePercent             = settings()[QLatin1String("UsePercent")].toBool();
     bool useCM                  = settings()[QLatin1String("UseCM")].toBool();
     bool useInches              = settings()[QLatin1String("UseInches")].toBool();
     int length                  = settings()[QLatin1String("LengthCustom")].toInt();
     Private::WidthPreset preset = (Private::WidthPreset)(settings()[QLatin1String("LengthPreset")].toInt());
-    int width, height;
+    int width                   = 0;
+    int height                  = 0;
 
     if (!loadToDImg())
     {
@@ -328,14 +351,14 @@ bool Resize::toolOperations()
 
     if(useCustom)
     {
-        width = image().width();
+        width  = image().width();
         height = image().height();
     }
     if (!useCustom)
     {
         QPair<int, int> dimension = d->presetLengthValue(preset);
-        width  = dimension.first;
-        height = dimension.second;
+        width                     = dimension.first;
+        height                    = dimension.second;
     }
     else if (usePercent)
     {
@@ -351,7 +374,8 @@ bool Resize::toolOperations()
     }
 
     QSize newSize(image().size());
-    if(!useCustom)
+
+    if (!preserveRatioBox)
     {
         newSize.scale(QSize(width, height), Qt::IgnoreAspectRatio);
     }
