@@ -52,7 +52,7 @@ private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
-    void slotPercentChanged();
+    void slotUnitsChanged();
 
 private:
 
