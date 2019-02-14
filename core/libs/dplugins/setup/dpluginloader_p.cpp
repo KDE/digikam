@@ -86,11 +86,17 @@ QFileInfoList DPluginLoader::Private::pluginEntriesList() const
                            QDir::NoDotAndDotDot,
                            QDirIterator::Subdirectories);
     QFileInfoList allFiles;
+    QStringList   dupFiles;
 
     while (it.hasNext())
     {
         QFileInfo info(it.next());
-        allFiles << info;
+
+        if (!dupFiles.contains(info.baseName()))
+        {
+            dupFiles << info.baseName();
+            allFiles << info;
+        }
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.count();
