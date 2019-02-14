@@ -29,5 +29,5 @@ macro(DPLUGINS_BUILD_TOOL)
 
 endmacro()
 
-DPLUGINS_BUILD_TOOL(loadandrun.cpp)
+DPLUGINS_BUILD_TOOL(loadandrun_generic.cpp)
 DPLUGINS_BUILD_TOOL(confview.cpp)

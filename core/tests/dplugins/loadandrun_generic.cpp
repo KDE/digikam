@@ -4,7 +4,8 @@
  * https://www.digikam.org
  *
  * Date        : 2018-07-30
- * Description : stand alone test application for plugin loader.
+ * Description : stand alone test application for plugin
+ *               loader and generic tools.
  *
  * Copyright (C) 2018-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
