@@ -3,10 +3,17 @@ digiKam 6.1.0 - Release date: 2019-03-10
 *****************************************************************************************************
 NEW FEATURES:
 
+General     : New plugins interface for digiKam and Showfoto named dplugins.
+General     : All export tools become generic plugins and are shared with Showfoto.
 BQM         : Add new advanced settings in resize tool.
+BQM         : All Batch Queue Manager tools become Bqm plugins.
+Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.
+
 
 *****************************************************************************************************
 BUGFIXES:
 
 001 ==> 279216 - "Resize image" feature is missing some useful options [patch].
-002 ==> 
+002 ==> 368779 - Missing translations to Plugin Categories columns in setup page.
+003 ==> 
+
