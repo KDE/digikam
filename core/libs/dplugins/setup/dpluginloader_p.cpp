@@ -60,7 +60,7 @@ DPluginLoader::Private::~Private()
 {
 }
 
-QMap<QString, QString> DPluginLoader::Private::pluginEntriesMap() const
+QFileInfoList DPluginLoader::Private::pluginEntriesList() const
 {
     QString     path;
 
@@ -82,15 +82,15 @@ QMap<QString, QString> DPluginLoader::Private::pluginEntriesMap() const
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing plugins from" << path;
 
-    QDirIterator           it(path, QDir::Files |
-                                    QDir::NoDotAndDotDot,
-                                    QDirIterator::Subdirectories);
-    QMap<QString, QString> allFiles;
+    QDirIterator  it(path, QDir::Files |
+                           QDir::NoDotAndDotDot,
+                           QDirIterator::Subdirectories);
+    QFileInfoList allFiles;
 
     while (it.hasNext())
     {
-        QFileInfo inf(it.next());
-        allFiles.insert(inf.baseName(), inf.filePath());
+        QFileInfo info(it.next());
+        allFiles << info;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Plugins found:" << allFiles.count();
@@ -144,25 +144,22 @@ void DPluginLoader::Private::loadPlugins()
 
     Q_ASSERT(allPlugins.isEmpty() && allLoaders.isEmpty());
 
-    QMap<QString, QString> toolFileNameMap    = pluginEntriesMap();
-    QMap<QString, QString>::const_iterator it = toolFileNameMap.constBegin();
-
-    for ( ; it != toolFileNameMap.constEnd() ; ++it)
+    for (const QFileInfo& info : pluginEntriesList())
     {
-        if (!whitelist.isEmpty() && !whitelist.contains(it.key()))
+        if (!whitelist.isEmpty() && !whitelist.contains(info.baseName()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring non-whitelisted plugin" << it.value();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring non-whitelisted plugin" << info.filePath();
             continue;
         }
 
-        if (blacklist.contains(it.key()))
+        if (blacklist.contains(info.baseName()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring blacklisted plugin" << it.value();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Ignoring blacklisted plugin" << info.filePath();
             continue;
         }
 
         // qCDebug(DIGIKAM_GENERAL_LOG) << fileName << " - " << pluginPath(fileName);
-        const QString path          = QDir(it.value()).canonicalPath();
+        const QString path          = info.canonicalFilePath();
         QPluginLoader* const loader = new QPluginLoader(path, DPluginLoader::instance());
         QObject* const obj          = loader->instance();
 

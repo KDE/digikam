@@ -43,7 +43,7 @@ public:
 
     /** Try to find plugin files from Qt5 plugins install dir:
      */
-    QMap<QString, QString> pluginEntriesMap() const;
+    QFileInfoList pluginEntriesList() const;
 
     /** Stage to load plugins in memory
     */
