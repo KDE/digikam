@@ -32,12 +32,12 @@ if (MINGW)
         ALWAYS 0
     )
 
-    ExternalProject_Add_step(ext_lensfun before_download
-
-        # Note : under MXE, curl is not compiled with https support. We cannot use the tarball as under Linux/MacOS.
-        COMMAND wget -N http://downloads.sourceforge.net/project/lensfun/0.3.2/lensfun-0.3.2.tar.gz -O ${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
-        DEPENDERS download
-    )
+#    ExternalProject_Add_step(ext_lensfun before_download
+#
+#        # Note : under MXE, curl is not compiled with https support. We cannot use the tarball as under Linux/MacOS.
+#        COMMAND wget -N http://downloads.sourceforge.net/project/lensfun/0.3.2/lensfun-0.3.2.tar.gz -O ${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
+#        DEPENDERS download
+#    )
 
 else()
 
