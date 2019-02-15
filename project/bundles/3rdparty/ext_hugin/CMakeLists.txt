@@ -32,9 +32,9 @@ if(MINGW)
 
         CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
 
-        BUILD_COMMAND cd <SOURCE_DIR>/build && make -j
+        BUILD_COMMAND cd <SOURCE_DIR>/build.mxe && make -j
 
-        INSTALL_COMMAND cd <SOURCE_DIR>/build && make install/fast
+        INSTALL_COMMAND cd <SOURCE_DIR>/build.mxe && make install/fast
 
         BUILD_IN_SOURCE 1
 

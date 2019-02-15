@@ -60,9 +60,9 @@ if(MINGW)
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
 
-        BUILD_COMMAND cd <SOURCE_DIR>/build && $(MAKE) -j
+        BUILD_COMMAND cd <SOURCE_DIR>/build.mxe && $(MAKE) -j
 
-        INSTALL_COMMAND cd <SOURCE_DIR>/build && $(MAKE) install/fast
+        INSTALL_COMMAND cd <SOURCE_DIR>/build.mxe && $(MAKE) install/fast
 
         BUILD_IN_SOURCE 1
 
