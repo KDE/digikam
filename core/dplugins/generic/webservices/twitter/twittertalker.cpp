@@ -65,6 +65,8 @@
 namespace DigikamGenericTwitterPlugin
 {
 
+QStringList imageFormat(QString::fromLatin1("jpg,png,gif,webp").split(QLatin1Char(',')));
+
 class Q_DECL_HIDDEN TwTalker::Private
 {
 public:
@@ -78,7 +80,8 @@ public:
         TW_CREATETWEET,
         TW_UPLOADINIT,
         TW_UPLOADAPPEND,
-        TW_FINALIZE
+        TW_UPLOADSTATUSCHECK,
+        TW_UPLOADFINALIZE
     };
 
 public:
@@ -339,69 +342,80 @@ void TwTalker::cancel()
 }
 
 bool TwTalker::addPhoto(const QString& imgPath,
-                        const QString& uploadFolder,
+                        const QString& /* uploadFolder */,
                         bool rescale,
                         int maxDim,
-                        int imageQuality,
-                        bool chunked)
+                        int imageQuality)
 {
-    if(chunked)
+
+    QFileInfo imgFileInfo(imgPath);
+    QString path;
+    bool chunked = false;
+
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << imgFileInfo.suffix();
+
+    if (imgFileInfo.suffix() != QLatin1String("gif") && 
+        imgFileInfo.suffix() != QLatin1String("mp4"))
     {
-        return addPhotoInit(imgPath, uploadFolder, rescale, maxDim, imageQuality);
+        QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
+        qint64 imageSize = QFileInfo(imgPath).size();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SIZE of image using qfileinfo:   " << imageSize;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << " ";
+
+        if (image.isNull())
+        {
+            emit signalBusy(false);
+            return false;
+        }
+
+
+        path = WSToolUtils::makeTemporaryDir("twitter").filePath(imgFileInfo.baseName().trimmed() + QLatin1String(".jpg"));
+
+        if (rescale && (image.width() > maxDim || image.height() > maxDim))
+        {
+            image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+
+        image.save(path, "JPEG", imageQuality);
+
+        if (d->meta.load(imgPath))
+        {
+            d->meta.setItemDimensions(image.size());
+            d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
+            d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
+            d->meta.save(path, true);
+        }
     }
     else
     {
-        return addPhotoSingleUpload(imgPath, uploadFolder, rescale, maxDim, imageQuality);
+        path = imgPath;
+        chunked = true;
+    }
+
+    if(chunked)
+    {
+        return addPhotoInit(path);
+    }
+    else
+    {
+        return addPhotoSingleUpload(path);
     }
 }
 
-bool TwTalker::addPhotoSingleUpload(const QString& imgPath,
-                                    const QString& uploadFolder,
-                                    bool rescale,
-                                    int maxDim,
-                                    int imageQuality)
+bool TwTalker::addPhotoSingleUpload(const QString& imgPath)
 {
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "addPhotoSingleUpload";
     emit signalBusy(true);
 
     TwMPForm form;
-    QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-    qint64 imageSize = QFileInfo(imgPath).size();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SIZE of image using qfileinfo:   " << imageSize;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << " ";
 
-    if (image.isNull())
-    {
-        emit signalBusy(false);
-        return false;
-    }
-
-    QString path = WSToolUtils::makeTemporaryDir("twitter").filePath(QFileInfo(imgPath)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
-
-    if (rescale && (image.width() > maxDim || image.height() > maxDim))
-    {
-        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-
-    image.save(path, "JPEG", imageQuality);
-
-    if (d->meta.load(imgPath))
-    {
-        d->meta.setItemDimensions(image.size());
-        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-        d->meta.save(path, true);
-    }
-
-    if (!form.addFile(path))
+    if (!form.addFile(imgPath))
     {
         emit signalBusy(false);
         return false;
     }
 
     form.finish();
-
-    QString uploadPath = uploadFolder + QUrl(QUrl::fromLocalFile(imgPath)).fileName();
 
     if (form.formData().isEmpty())
     {
@@ -426,60 +440,72 @@ bool TwTalker::addPhotoSingleUpload(const QString& imgPath,
     return true;
 }
 
-bool TwTalker::addPhotoInit(const QString& imgPath,
-                            const QString& /*uploadFolder*/,
-                            bool rescale,
-                            int maxDim,
-                            int imageQuality)
+bool TwTalker::addPhotoInit(const QString& imgPath)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "addPhotoInit";
     emit signalBusy(true);
 
     TwMPForm form;
-    QImage image     = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-    qint64 imageSize = QFileInfo(imgPath).size();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SIZE of image using qfileinfo:   " << imageSize;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << " ";
-
-    if (image.isNull())
-    {
-        emit signalBusy(false);
-        return false;
-    }
-
-    /* (Doc Twitter access 02/02/2019)
-     * Image size <= 5 MB
-     * Animated GIF size <= 15 MB
-     * Video size < 512 MB
-     */
-    if(imageSize > 5*MAX_MEDIA_SIZE)
-    {
-        emit signalBusy(false);
-        emit signalAddPhotoFailed(i18n("Image size is too big (should be less than 5MB)"));
-        return false;
-    }
-
-    QString path = WSToolUtils::makeTemporaryDir("Twitter").filePath(QFileInfo(imgPath)
-                                                 .baseName().trimmed() + QLatin1String(".jpg"));
-
-    if (rescale && (image.width() > maxDim || image.height() > maxDim))
-    {
-        image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-
-    image.save(path, "JPEG", imageQuality);
-
-    if (d->meta.load(imgPath))
-    {
-        d->meta.setItemDimensions(image.size());
-        d->meta.setItemOrientation(DMetadata::ORIENTATION_NORMAL);
-        d->meta.setMetadataWritingMode((int)DMetadata::WRITE_TO_FILE_ONLY);
-        d->meta.save(path, true);
-    }
+    QByteArray mediaType, mediaCategory;
+    QFileInfo fileInfo(imgPath);
+    QString fileFormat(fileInfo.suffix());
 
     form.addPair(form.createPair("command", "INIT"));
-    form.addPair(form.createPair("total_bytes", QString::number(QFileInfo(path).size()).toLatin1()));
-    form.addPair(form.createPair("media_type", "image/jpeg"));
+    form.addPair(form.createPair("total_bytes", QString::number(QFileInfo(imgPath).size()).toLatin1()));
+
+    /* (Feb 2019)
+     * Image file must be <= 5MB
+     * Gif must be <= 15MB
+     * Video must be <= 512MB
+     */
+
+    if (imageFormat.indexOf(fileFormat) != -1)
+    {
+        mediaType = "image/jpeg";
+        if (fileFormat == QLatin1String("gif"))
+        {
+
+            if(fileInfo.size() > 15728640)
+            {
+                emit signalBusy(false);
+                emit signalAddPhotoFailed(i18n("File too big to upload"));
+                return false;
+            }
+
+            mediaCategory = "TWEET_GIF";
+        }
+        else
+        {
+            if(fileInfo.size() > 5242880)
+            {
+                emit signalBusy(false);
+                emit signalAddPhotoFailed(i18n("File too big to upload"));
+                return false;
+            }
+            mediaCategory = "TWEET_IMAGE";
+        }
+    }
+    else if (fileFormat == QLatin1String("mp4"))
+    {
+        if(fileInfo.size() > 536870912)
+        {
+            emit signalBusy(false);
+            emit signalAddPhotoFailed(i18n("File too big to upload"));
+            return false;
+        }
+
+        mediaType = "video/mp4";
+        mediaCategory = "TWEET_VIDEO";
+    }
+    else
+    {
+        emit signalBusy(false);
+        emit signalAddPhotoFailed(i18n("Media format is not supported yet"));
+        return false;
+    }
+
+    form.addPair(form.createPair("media_type", mediaType));
+    form.addPair(form.createPair("media_category", mediaCategory));
     form.finish();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << form.formData();
@@ -492,7 +518,7 @@ bool TwTalker::addPhotoInit(const QString& imgPath,
     request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     d->reply = d->requestor->post(request, reqParams, form.formData());
 
-    d->mediaUploadedPath = path;
+    d->mediaUploadedPath = imgPath;
 
     d->state = Private::TW_UPLOADINIT;
 
@@ -555,7 +581,7 @@ bool TwTalker::addPhotoFinalize(const QString& mediaId)
     request.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     d->reply = d->requestor->post(request, reqParams, form.formData());
 
-    d->state = Private::TW_FINALIZE;
+    d->state = Private::TW_UPLOADFINALIZE;
 
     return true;
 }
@@ -591,6 +617,26 @@ void TwTalker::createTweet(const QString& mediaId)
     d->reply = d->requestor->post(request, reqParams, postData);
 
     d->state = Private::TW_CREATETWEET;
+}
+
+void TwTalker::slotCheckUploadStatus()
+{
+    QUrl url = QUrl(d->uploadUrl);
+
+    QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
+    reqParams << O0RequestParameter(QByteArray("command"), QByteArray("STATUS"));
+    reqParams << O0RequestParameter(QByteArray("media_id"), d->mediaId.toUtf8());
+
+    QUrlQuery query;
+    query.addQueryItem(QLatin1String("command"), QLatin1String("STATUS"));
+    query.addQueryItem(QLatin1String("media_id"), d->mediaId);
+
+    url.setQuery(query);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << url.toString();
+
+    QNetworkRequest request(url);
+    d->reply = d->requestor->get(request, reqParams);
+    d->state = Private::TW_UPLOADSTATUSCHECK;
 }
 
 void TwTalker::slotFinished(QNetworkReply* reply)
@@ -656,9 +702,14 @@ void TwTalker::slotFinished(QNetworkReply* reply)
             segmentIndex++;
             parseResponseAddPhotoAppend(buffer, segmentIndex);
             break;
-        case Private::TW_FINALIZE:
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In TW_FINALIZE";
+        case Private::TW_UPLOADSTATUSCHECK:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In TW_UPLOADSTATUSCHECK";
+            parseCheckUploadStatus(buffer);
+            break;
+        case Private::TW_UPLOADFINALIZE:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In TW_UPLOADFINALIZE";
             parseResponseAddPhotoFinalize(buffer);
+            break;
         default:
             break;
     }
@@ -741,8 +792,64 @@ void TwTalker::parseResponseAddPhotoFinalize(const QByteArray& data)
         return;
     }
 
-    // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
-    createTweet(d->mediaId);
+    QJsonObject jsonObject = doc.object();
+    QJsonValue processingInfo = jsonObject[QLatin1String("processing_info")];
+
+    if (processingInfo != QJsonValue::Undefined)
+    {
+        QString state = processingInfo.toObject()[QLatin1String("state")].toString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "state: " << state;
+
+        if (state == QLatin1String("pending"))
+        {
+            QTimer::singleShot(processingInfo.toObject()[QLatin1String("check_after_secs")].toInt()*1000 /*msec*/, 
+                               this, SLOT(slotCheckUploadStatus()));
+        }
+    }
+    else
+    {
+        // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
+        createTweet(d->mediaId);
+    }
+}
+
+void TwTalker::parseCheckUploadStatus(const QByteArray& data)
+{
+    QJsonParseError err;
+    QJsonDocument doc      = QJsonDocument::fromJson(data, &err);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseCheckUploadStatus: " << doc;
+
+    if(err.error != QJsonParseError::NoError)
+    {
+        emit signalBusy(false);
+        emit signalAddPhotoFailed(i18n("Failed to upload photo"));
+        return;
+    }
+
+    QJsonObject jsonObject = doc.object();
+    QJsonObject processingInfo = jsonObject[QLatin1String("processing_info")].toObject();
+    QString state = processingInfo[QLatin1String("state")].toString();
+
+    if (state == QLatin1String("in_progress"))
+    {
+        QTimer::singleShot(processingInfo[QLatin1String("check_after_secs")].toInt()*1000 /*msec*/, this, SLOT(slotCheckUploadStatus()));
+    }
+    else if (state == QLatin1String("failed"))
+    {
+        QJsonObject error = processingInfo[QLatin1String("error")].toObject();
+        emit signalBusy(false);
+        emit signalAddPhotoFailed(i18n("Failed to upload photo\n"
+                                       "Code: %1, name: %2, message: %3", 
+                                       QString::number(error[QLatin1String("code")].toInt()), 
+                                       error[QLatin1String("name")].toString(), 
+                                       error[QLatin1String("message")].toString()));
+        return;
+    }
+    else // succeeded
+    {
+        // We haven't emit signalAddPhotoSucceeded() here yet, since we need to update the status first
+        createTweet(d->mediaId);
+    }
 }
 
 void TwTalker::parseResponseUserName(const QByteArray& data)

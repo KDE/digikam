@@ -6,5 +6,16 @@ Need to see twitter community response on this problem. ---> RESOLVED
 Replace current method for uploading media in twittertalker.cpp by uploading by chunks -> RESOLVED
 
 Since upload media by chunks has been prepared, other types of media (video, gif) can be uploaded to twitter too. 
-	+ It needs a more generic uploader.
-	+ For larger files or when uploading can be used in BQM, each chunks can be uploaded asynchronously, in parallel and resumable (in case of error, retry uploading for only those chunks) -> change in uploader codes to adapt this case.
+	+ It needs a more generic uploader -> RESOLVED
+	+ For larger files or when uploading can be used in BQM, each chunks can be uploaded asynchronously, in parallel and resumable (in case of error, retry uploading for only those chunks) 
+		-> add "media_category" for async handling of media upload -> RESOLVED
+		-> add get status to handle upload properly before creating associate tweet -> RESOLVED
+ ---------------------------------------------------------------------------------------
+
+- Now, each media is uploaded to twitter in single tweet, with empty "message" (i.e. caption). However, twitter supports the possibility of up to 4 medias in a tweet, and of course with message.
+	+ Add possibility to choose which images (gifs) in a tweet (up to maximum 4)
+	+ Add possibility to write message for that tweet.
+
+- Media library (https://developer.twitter.com/en/docs/ads/creatives/guides/media-library) seems to be an alternative for album (which is currently deactivated in twitter uploader). Look in more details to see if it can be implemented as alternative for album (creation, add images to album, etc.)
+
+- Add the possibility to modify metadata, without reuploading images
