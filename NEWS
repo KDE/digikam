@@ -15,5 +15,6 @@ BUGFIXES:
 
 001 ==> 279216 - "Resize image" feature is missing some useful options [patch].
 002 ==> 368779 - Missing translations to Plugin Categories columns in setup page.
-003 ==> 
+003 ==> 165852 - Google Youtube video uploader.
+004 ==> 
 
