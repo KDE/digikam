@@ -23,7 +23,10 @@ BUILDING_DIR="`pwd`/temp.build"
 #
 # Uncompress the archive to /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
 # and adjust the property "MinimumSDKVersion" from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
-
+# sudo /usr/libexec/PlistBuddy /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
+# > Set MinimumSDKVersion 10.8
+# > quit
+#
 # Possible values:
 # 10.13 : High Sierra  : tested   : Qt                          5.10
 # 10.12 : Sierra       : tested   : Qt                5.8, 5.9, 5.10
