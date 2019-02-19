@@ -177,6 +177,11 @@ function(InstallKF5Component
                             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                             URL http://download.kde.org/stable/frameworks/${version}/${name}-${version}.0.tar.xz
                             URL_MD5 ${md5sm}
+
+                            PATCH_COMMAND ${patch}
+                                          cp ${CMAKE_CURRENT_SOURCE_DIR}/fixqtminimumversion.sh <SOURCE_DIR>/. &&
+                                          <SOURCE_DIR>/fixqtminimumversion.sh
+
                             INSTALL_DIR ${EXTPREFIX_frameworks}
                             CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                                        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
@@ -185,7 +190,6 @@ function(InstallKF5Component
                                        -DBUILD_TESTING=OFF
                                        "${argoptions}"
                                        -Wno-dev
-                            PATCH_COMMAND ${patch}
                             UPDATE_COMMAND ""
                             ALWAYS 0
         )
