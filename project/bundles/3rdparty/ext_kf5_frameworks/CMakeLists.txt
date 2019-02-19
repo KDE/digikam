@@ -179,8 +179,6 @@ function(InstallKF5Component
                             URL_MD5 ${md5sm}
 
                             PATCH_COMMAND ${patch}
-                                          cp ${CMAKE_CURRENT_SOURCE_DIR}/fixqtminimumversion.sh <SOURCE_DIR>/. &&
-                                          <SOURCE_DIR>/fixqtminimumversion.sh
 
                             INSTALL_DIR ${EXTPREFIX_frameworks}
                             CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -198,7 +196,13 @@ function(InstallKF5Component
 
 endfunction()
 
-set(KF5_VERSION 5.55)
+if(MINGW)
+    set(KF5_VERSION 5.55) # we have Qt 5.12 available
+elseif(APPLE)
+    set(KF5_VERSION 5.53) # we have Qt 5.9.7 available for backward compatibily with older MacOS
+else()
+    set(KF5_VERSION 5.53) # we have Qt 5.9.7 available for the moment. Plan to update to 5.12 LTS.
+endif
 
 if(APPLE)
     set(MacosThreadWeaverPatch threadweaver-macports.patch)
