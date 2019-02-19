@@ -202,7 +202,7 @@ elseif(APPLE)
     set(KF5_VERSION 5.53) # we have Qt 5.9.7 available for backward compatibily with older MacOS
 else()
     set(KF5_VERSION 5.53) # we have Qt 5.9.7 available for the moment. Plan to update to 5.12 LTS.
-endif
+endif()
 
 if(APPLE)
     set(MacosThreadWeaverPatch threadweaver-macports.patch)
