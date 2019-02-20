@@ -139,7 +139,7 @@ ssh-add -l > /dev/null || ssh-add
 Note: the bundle can be signed with GPG. You must setup your private and public keys before
 and put your passphare to a text file (~/.gnupg/dkorg-gpg-pwd.txt) 
 
-4/ Re-login as root to setup password.
+4/ Re-login as root to setup password using "su -".
 
 Source : https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
 
