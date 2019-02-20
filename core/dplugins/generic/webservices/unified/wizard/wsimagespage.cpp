@@ -99,7 +99,7 @@ WSImagesPage::WSImagesPage(QWizard* const dialog, const QString& title)
     descImage->setText(i18n("<h3>This view lists all items to export.</h3>"));
 
     d->imageList            = new DItemsList(vboxImage);
-    d->imgList->setObjectName(QLatin1String("WebService ImagesList"));
+    d->imageList->setObjectName(QLatin1String("WebService ImagesList"));
     d->imageList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
