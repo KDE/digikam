@@ -936,19 +936,18 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
      * Google Photo API now does not support title for image, so we use creation time for image name instead
      */
     QString itemName(item.title);
+    QString suffix(item.mimeType.section(QLatin1Char('/'), -1));
 
     if (item.title.isEmpty())
     {
         itemName = QString::fromLatin1("image-%1").arg(item.creationTime);
+        // Replace colon for Windows file systems
+        itemName.replace(QLatin1Char(':'), QLatin1Char('-'));
     }
 
-    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + itemName));
-
-    if (item.mimeType == QLatin1String("video/mpeg4"))
-    {
-        tmpUrl = tmpUrl.adjusted(QUrl::RemoveFilename);
-        tmpUrl.setPath(tmpUrl.path() + item.title + QLatin1String(".mp4"));
-    }
+    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + itemName +
+                                               QLatin1Char('.') +
+                                               suffix));
 
     if (errCode == 1)
     {
@@ -1035,6 +1034,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 
     QUrl newUrl = QUrl::fromLocalFile(QString::fromLatin1("%1/%2").arg(d->widget->getDestinationPath())
                                                                   .arg(tmpUrl.fileName()));
+
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl.url();
 
     QFileInfo targetInfo(newUrl.toLocalFile());

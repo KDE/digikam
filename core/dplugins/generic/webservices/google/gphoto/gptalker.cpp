@@ -666,7 +666,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             break;
         case (Private::GP_GETPHOTO):
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
+            // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), buffer);
             break;
