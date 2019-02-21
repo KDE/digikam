@@ -174,7 +174,7 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     }
 
     // populate QStringList::d->files
-    for (QList<QUrl>::Iterator it = myfiles.begin(); it != myfiles.end(); ++it)
+    for (QList<QUrl>::Iterator it = myfiles.begin() ; it != myfiles.end() ; ++it)
     {
         // find selected image in album in order to determine the first displayed image
         // in case one image was selected and the entire album was loaded
@@ -317,11 +317,11 @@ void GLViewerWidget::resizeGL(int w, int h)
     if (h>w)
     {
         d->ratio_view_x = 1.0;
-        d->ratio_view_y = h/float(w);
+        d->ratio_view_y = h / float(w);
     }
     else
     {
-        d->ratio_view_x = w/float(h);
+        d->ratio_view_x = w / float(h);
         d->ratio_view_y = 1.0;
     }
 
@@ -334,7 +334,7 @@ void GLViewerWidget::resizeGL(int w, int h)
 
     if (d->firstImage)
     {
-        d->texture->setViewport(w,h);
+        d->texture->setViewport(w, h);
     }
 }
 
@@ -408,12 +408,12 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
             if (isFullScreen())
             {
                 d->texture->reset();
-                showNormal();
+                showNormal();     // krazy:exclude=qmethods
             }
             else
             {
                 d->texture->reset();
-                showFullScreen();
+                showFullScreen(); // krazy:exclude=qmethods
             }
             break;
 
@@ -425,13 +425,13 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // toggle permanent between "show next image" and "zoom" on mousewheel change
         case Qt::Key_C:
-            if (d->wheelAction==GLViewerWidget::Private::zoomImage)
-                d->wheelAction=GLViewerWidget::Private::changeImage;
+            if (d->wheelAction == GLViewerWidget::Private::zoomImage)
+                d->wheelAction = GLViewerWidget::Private::changeImage;
             else
-                d->wheelAction=GLViewerWidget::Private::zoomImage;
+                d->wheelAction = GLViewerWidget::Private::zoomImage;
             break;
 
-        // zoom	in
+        // zoom in
         case Qt::Key_Plus:
             middlepoint = QPoint(width()/2,height()/2);
 
@@ -556,9 +556,9 @@ void GLViewerWidget::downloadTexture(GLViewerTexture* const tex)
  */
 GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
 {
-    int imod = file_index%CACHESIZE; //index for cache
+    int imod = file_index % CACHESIZE; //index for cache
 
-    if (d->cache[imod].file_index==file_index)
+    if (d->cache[imod].file_index == file_index)
     {
         //image is already cached
         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "image " << file_index << " is already in cache@" << imod ;
@@ -567,7 +567,7 @@ GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
     else
     {
         // image is net yet loaded
-        QString f = d->files[file_index];
+        QString f                 = d->files[file_index];
         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "loading image " << f << "(idx=" << file_index << ") to cache@" << imod ;
         d->cache[imod].file_index = file_index;
 
@@ -623,7 +623,7 @@ void GLViewerWidget::mousePressEvent(QMouseEvent* e)
 {
     // begin zoom
     // scale down d->texture  for fast zooming
-    // d->texture	 will be set to original size on mouse up
+    // d->texture will be set to original size on mouse up
     if (d->texture->setSize( d->zoomsize ))
     {
         //load downsampled image
@@ -652,7 +652,7 @@ void GLViewerWidget::mouseMoveEvent(QMouseEvent* e)
     {
         //panning
         setCursor(d->moveCursor);
-        QPoint diff = e->pos()-d->startdrag;
+        QPoint diff  = e->pos()-d->startdrag;
         d->texture->move(diff);
         updateGL();
         d->startdrag = e->pos();
@@ -820,7 +820,7 @@ void GLViewerWidget::nextImage()
  */
 void GLViewerWidget::zoom(int mdelta, const QPoint& pos, float factor)
 {
-    if (mdelta==0)
+    if (mdelta == 0)
     {
         //do nothing
         return;
