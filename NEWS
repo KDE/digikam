@@ -20,4 +20,5 @@ BUGFIXES:
 005 ==> 402069 - FAQ link on Support page is broken.
 006 ==> 404503 - There is a typo in support section of website.
 007 ==> 404621 - I can not import the album Google Photo.
-008 ==> 
+008 ==> 404642 - digiKam flatpak: Please include mysql driver (for using an external mysql db).
+009 ==> 
