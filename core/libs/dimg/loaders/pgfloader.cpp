@@ -135,13 +135,15 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 #ifdef Q_OS_WIN32
 #ifdef UNICODE
-    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFileW((LPCWSTR)filePath.utf16(), GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, 0);
 #else
-    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, 0);
 #endif
 
     if (fd == INVALID_HANDLE_VALUE)
     {
+        qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Error: Could not open source file.";
+        qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Last error code:" << GetLastError();
         loadingFailed();
         return false;
     }
@@ -368,14 +370,17 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
 #ifdef Q_OS_WIN32
 #ifdef UNICODE
-    HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFileW((LPCWSTR)filePath.utf16(), GENERIC_READ | GENERIC_WRITE, 0,
+                            NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 #else
-    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ | GENERIC_WRITE, 0,
+                           NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 #endif
 
     if (fd == INVALID_HANDLE_VALUE)
     {
         qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Error: Could not open destination file.";
+        qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Last error code:" << GetLastError();
         return false;
     }
 
