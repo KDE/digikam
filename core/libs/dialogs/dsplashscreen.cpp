@@ -90,18 +90,7 @@ DSplashScreen::DSplashScreen()
         splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/splash-showfoto.png"));
     }
 
-    // Under Linux, only test versions has Beta stage.
-
-    // cppcheck-suppress redundantAssignment
-    bool isBeta = !QString::fromUtf8(digikam_version_suffix).isEmpty();
-
-#if defined Q_OS_WIN
-    isBeta = true;   // Windows version is always beta for the moment.
-#elif defined Q_OS_OSX
-    isBeta = true;   // MAC version is always beta for the moment.
-#endif
-
-    if (isBeta)
+    if (!QString::fromUtf8(digikam_version_suffix).isEmpty())
     {
         QPainter p(&splash);
         p.drawPixmap(380, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-beta.png")));
