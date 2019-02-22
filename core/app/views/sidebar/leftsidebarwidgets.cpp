@@ -98,6 +98,8 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F1);
     d->albumModificationHelper = albumModificationHelper;
 
+    const int spacing          = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout  = new QVBoxLayout(this);
     d->albumFolderView         = new AlbumSelectionTreeView(this, model, d->albumModificationHelper);
     d->albumFolderView->setObjectName(QLatin1String("AlbumFolderView"));
@@ -111,7 +113,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
 
     layout->addWidget(d->albumFolderView);
     layout->addWidget(d->searchTextBar);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 
     // setup connection
     connect(d->albumFolderView, SIGNAL(signalFindDuplicates(PAlbum*)),
@@ -225,6 +227,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     setObjectName(QLatin1String("TagView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F2);
 
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
@@ -252,7 +256,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     layout->addWidget(d->tagsBtn);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 
     connect(d->openTagMngr, SIGNAL(clicked()),
             this,SLOT(slotOpenTagManager()));
@@ -449,13 +453,15 @@ LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
     setObjectName(QLatin1String("Labels Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F3);
 
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->labelsTree = new LabelsTreeView(this);
     d->labelsTree->setConfigGroup(getConfigGroup());
 
     layout->addWidget(d->labelsTree);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 }
 
 LabelsSideBarWidget::~LabelsSideBarWidget()
@@ -533,6 +539,8 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
     setObjectName(QLatin1String("DateFolderView Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F4);
 
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->dateFolderView         = new DateFolderView(this, model);
@@ -540,7 +548,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
     d->dateFolderView->setItemModel(imageFilterModel);
 
     layout->addWidget(d->dateFolderView);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 }
 
 DateFolderViewSideBarWidget::~DateFolderViewSideBarWidget()
@@ -780,7 +788,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent,
     vlay->addWidget(d->timeLineFolderView);
     vlay->addItem(new QSpacerItem(spacing, spacing, QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchDateBar);
-    vlay->setContentsMargins(QMargins());
+    vlay->setContentsMargins(0, 0, spacing, 0);
     vlay->setSpacing(0);
 
     // ---------------------------------------------------------------
@@ -1101,6 +1109,8 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent,
     setObjectName(QLatin1String("Search Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F6);
 
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
@@ -1118,7 +1128,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent,
     layout->addWidget(d->searchTreeView);
     layout->setStretchFactor(d->searchTreeView, 1);
     layout->addWidget(d->searchSearchBar);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 
     connect(d->searchTreeView, SIGNAL(newSearch()),
             d->searchTabHeader, SLOT(newAdvancedSearch()));
@@ -1210,13 +1220,15 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent,
     setObjectName(QLatin1String("Fuzzy Search Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F7);
 
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->fuzzySearchView        = new FuzzySearchView(searchModel, searchModificationHelper, this);
     d->fuzzySearchView->setConfigGroup(getConfigGroup());
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 }
 
 FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
@@ -1321,11 +1333,13 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent,
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
+    const int spacing             = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     QScrollArea* const scrollArea = new QScrollArea(this);
     QVBoxLayout* const layout     = new QVBoxLayout(this);
 
     layout->addWidget(scrollArea);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
     scrollArea->setWidget(d->gpsSearchView);
     scrollArea->setWidgetResizable(true);
 
@@ -1404,6 +1418,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
     setObjectName(QLatin1String("People Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F9);
 
+    const int spacing           = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->searchModificationHelper = searchModificationHelper;
     QVBoxLayout* const layout   = new QVBoxLayout;
     QHBoxLayout* const hlay     = new QHBoxLayout;
@@ -1437,7 +1453,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
     layout->addWidget(d->rescanButton);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(0, 0, spacing, 0);
 
     setLayout(layout);
 

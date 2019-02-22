@@ -279,7 +279,7 @@ ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelColl
 
     // The dock area where the thumbnail bar is allowed to go.
     d->dockArea    = new QMainWindow(this, Qt::Widget);
-    d->dockArea->setContentsMargins(spacing, 0, 0, 0);
+    d->dockArea->setContentsMargins(QMargins());
     d->splitter->addWidget(d->dockArea);
     d->stackedview = new StackedView(d->dockArea);
     d->dockArea->setCentralWidget(d->stackedview);
