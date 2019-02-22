@@ -267,9 +267,9 @@ ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelColl
     const int spacing           = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     d->splitter    = new SidebarSplitter;
-    d->splitter->setFrameStyle( QFrame::NoFrame );
-    d->splitter->setFrameShadow( QFrame::Plain );
-    d->splitter->setFrameShape( QFrame::NoFrame );
+    d->splitter->setFrameStyle(QFrame::NoFrame);
+    d->splitter->setFrameShadow(QFrame::Plain);
+    d->splitter->setFrameShape(QFrame::NoFrame);
     d->splitter->setOpaqueResize(false);
 
     d->leftSideBar = new Sidebar(this, d->splitter, Qt::LeftEdge);
@@ -643,7 +643,7 @@ void ItemIconView::setupConnections()
             this, SLOT(slotDispatchImageSelected()));
 
     connect(d->thumbSizeTimer, SIGNAL(timeout()),
-            this, SLOT(slotThumbSizeEffect()) );
+            this, SLOT(slotThumbSizeEffect()));
 
     // -- Album Settings ----------------
 
@@ -1160,7 +1160,7 @@ void ItemIconView::slotGotoTagAndItem(int tagID)
 {
     // FIXME: Arnd: don't know yet how to get the iconItem passed through ...
     //  then we would know how to use the following ...
-    //  KURL url( iconItem->imageInfo()->kurl() );
+    //  KURL url(iconItem->imageInfo()->kurl());
     //  url.cleanPath();
 
     emit signalNoCurrentItem();
@@ -1700,7 +1700,7 @@ void ItemIconView::slotTogglePreviewMode(const ItemInfo& info)
     else
     {
         // go back to either AlbumViewMode or MapWidgetMode
-        d->stackedview->setViewMode( d->lastViewMode );
+        d->stackedview->setViewMode(d->lastViewMode);
     }
 
     // make sure the next/previous buttons are updated
@@ -2564,7 +2564,7 @@ void ItemIconView::slotShowContextMenu(QContextMenuEvent* event,
 
     if (!album          ||
         album->isRoot() ||
-        (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
+        (album->type() != Album::PHYSICAL && album->type() != Album::TAG))
     {
         return;
     }
