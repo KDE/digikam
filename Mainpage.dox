@@ -55,7 +55,6 @@
 |│   ├── cmake                                                | Extra Cmake scripts will be hosted here                                 |
 |│   │   ├── modules                                          | Cmake scripts to find extra dependencies                                |
 |│   │   └── templates                                        | Cmake template files used at configuration time                         |
-|│   ├── data                                                 | Data files will be hosted here                                          |
 |│   │   ├── about                                            | Welcome page files (HTML + CSS)                                         |
 |│   │   ├── colorschemes                                     | GUI Color scheme files                                                  |
 |│   │   ├── database                                         | Database XML configuration files                                        |
@@ -70,6 +69,29 @@
 |│   │   ├── printcreator                                     | Print Creator tool data files                                           |
 |│   │   ├── profiles                                         | Basis open source ICC color profiles                                    |
 |│   │   └── scripts                                          | Miscs maintenance scripts                                               |
+|│   ├── dplugins                                             | All digiKam plugins will be hosted in this directory                    |
+|│   │   ├── bqm                                              | All Batch Queue Manager plugins                                         |
+|│   │   │   ├── colors                                       | All color adjustments plugins                                           |
+|│   │   │   ├── convert                                      | All file convert plugins                                                |
+|│   │   │   ├── custom                                       | All user-custom processing plugins                                      |
+|│   │   │   ├── decorate                                     | All decorate item plugins                                               |
+|│   │   │   ├── enhance                                      | All enhance item plugins                                                |
+|│   │   │   ├── filters                                      | All filter item plugins                                                 |
+|│   │   │   ├── metadata                                     | All metadata edit plugins                                               |
+|│   │   │   └── transform                                    | All tranform item plugins                                               |
+|│   │   ├── editor                                           | All Image Editor plugins                                                |
+|│   │   │   ├── colors                                       | All color adjustments plugins                                           |
+|│   │   │   ├── decorate                                     | All decorate item plugins                                               |
+|│   │   │   ├── enhance                                      | All enhance item plugins                                                |
+|│   │   │   ├── file                                         | All file processing plugins                                             |
+|│   │   │   ├── filters                                      | All filter item plugins                                                 |
+|│   │   │   └── transform                                    | All tranform item plugins                                               |
+|│   │   └── generic                                          | All generic plugins                                                     |
+|│   │       ├── import                                       | Tools to import items                                                   |
+|│   │       ├── metadata                                     | Plugins to change items metadata                                        |
+|│   │       ├── tools                                        | Plugins hosted in Tools main menu                                       |
+|│   │       ├── view                                         | Plugins to display items                                                |
+|│   │       └── webservices                                  | All plugins to import and export items to remote web-services           |
 |│   ├── libs                                                 | digiKam core sub-components (few are shared with Showfoto)              |
 |│   │   ├── album                                            | All classes use to manage digiKam albums operations and properties      |
 |│   │   ├── database                                         | All low level database interface is here                                |
@@ -114,6 +136,12 @@
 |│   │   ├── metadataengine                                   | The metadata wrapper based on Exiv2 for image and FFMpeg for video      |
 |│   │   ├── dngwriter                                        | Qt classes to convert RAW files to DNG format                           |
 |│   │   │   └── extra                                        | DNG and XMP sdks from Adobe                                             |
+|│   │   ├── dplugins                                         | All shared dplugins classes are hosted here                             |
+|│   │   │   ├── core                                         | Low level classes for plugins definitions                               |
+|│   │   │   ├── iface                                        | Low level classes for host interface definitions                        |
+|│   │   │   ├── setup                                        | Classes to setup plugins in configuration pannel                        |
+|│   │   │   ├── webservices                                  | Common classes for Webservices tools                                    |
+|│   │   │   └── widgets                                      | Common widget sfor plugins                                              |
 |│   │   ├── dtrash                                           | digiKam trash manager full independant of desktop trash                 |
 |│   │   ├── facesengine                                      | Face detection and recognition engine + Faces database implementations  |
 |│   │   │   ├── alignment-congealing                         | Face alignment based on congealing method                               |
@@ -147,8 +175,10 @@
 |│   │   ├── template                                         | Metadata template support                                               |
 |│   │   ├── threadimageio                                    | Classes to process thumbs and preview extraction including video support|
 |│   │   ├── threads                                          | Classes to manage and chain threads using multi-core                    |
+|│   │   ├── timeadjust                                       | Common classes time adjustements tools                                  |
 |│   │   ├── transitionmngr                                   | Frames transitions manager                                              |
 |│   │   ├── versionmanager                                   | Classes to manage versionning operations                                |
+|│   │   ├── video                                            | Classes to play with video contents                                     |
 |│   │   └── widgets                                          | To host plenty of widgets used everywhere                               |
 |│   │       ├── colors                                       | Colors relevant views                                                   |
 |│   │       ├── combo                                        | Combo-box helper classes                                                |
@@ -170,38 +200,9 @@
 |│   ├── tests                                                | Unit tests                                                              |
 |│   └── utilities                                            | digiKam utilities and advanced tools (few are shared with showfoto)     |
 |│       ├── advancedrename                                   | Advance rename tool                                                     |
-|│       ├── assistants                                       | All tools based on assistants dialog are hosted here                    |
-|│       │   ├── calendar                                     | Tool to export items as calendar                                        |
-|│       │   ├── common                                       | Common classes used by assistants                                       |
-|│       │   ├── expoblending                                 | Tool to merge items together to create HDR images                       |
-|│       │   ├── firstrun                                     | First-run assistant to configure lead digiKam settings                  |
-|│       │   ├── htmlgallery                                  | Tool to create html gallery from items                                  |
-|│       │   ├── panorama                                     | Tool to create panorama from items                                      |
-|│       │   ├── printcreator                                 | Tool to print items                                                     |
-|│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
-|│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
-|│       │   └── webservices                                  | All tools to import and export items to remote web-services             |
-|│       │       ├── box                                      | Tool to export items with Box                                           |
-|│       │       ├── common                                   | Common classes used by web-services tools                               |
-|│       │       ├── dropbox                                  | Tool to export items with Dropbox                                       |
-|│       │       ├── facebook                                 | Tool to export items with Facebook                                      |
-|│       │       ├── filetransfer                             | Tool to export items with a remote computer                             |
-|│       │       ├── flickr                                   | Tool to export items with Flickr                                        |
-|│       │       ├── google                                   | Tool to export items with Google                                        |
-|│       │       ├── imageshack                               | Tool to export items with ImageShack                                    |
-|│       │       ├── imgur                                    | Tool to export items with ImgUr                                         |
-|│       │       ├── ipfs                                     | Tool to export items with Ipfs                                          |
-|│       │       ├── mediawiki                                | Tool to export items with Mediawiki                                     |
-|│       │       ├── onedrive                                 | Tool to export items with OneDrive                                      |
-|│       │       ├── pinterest                                | Tool to export items with Pinterest                                     |
-|│       │       ├── piwigo                                   | Tool to export items with Piwigo                                        |
-|│       │       ├── rajce                                    | Tool to export items with Rajce                                         |
-|│       │       ├── smugmug                                  | Tool to export items with Smugmug                                       |
-|│       │       ├── twitter                                  | Tool to export items with Twitter                                       |
-|│       │       ├── vkontakte                                | Tool to export items with Vkontakte                                     |
-|│       │       └── yandexfotki                              | Tool to export items with Yandexfotki                                   |
 |│       ├── extrasupport                                     | Extra desktop features support as Baloo search engine                   |
 |│       ├── facemanagement                                   | Face management classes and tools                                       |
+|│       ├── firstrun                                         | First-run assistant to configure lead digiKam settings                  |
 |│       ├── fuzzysearch                                      | Similarity search tools                                                 |
 |│       ├── geolocation                                      | All geo-location tools are located here                                 |
 |│       │   ├── editor                                       | Tool to edit items geo-location                                         |
@@ -213,14 +214,11 @@
 |│       │   ├── dialogs                                      | Image editor dialogs                                                    |
 |│       │   ├── editor                                       | The core image editors classes                                          |
 |│       │   ├── main                                         | The main digiKam image editor view, not shared with Showfoto            |
-|│       │   ├── printiface                                   | The print interface                                                     |
 |│       │   ├── rawimport                                    | The Raw import tool                                                     |
-|│       │   ├── tools                                        | All Image editor tools                                                  |
 |│       │   └── widgets                                      | All common widgets                                                      |
 |│       ├── import                                           | The import tools, including USB MAss Storage, Gphoto2, and Sane support |
 |│       │   ├── backend                                      | Camera backends                                                         |
 |│       │   ├── dialogs                                      | Import tools dialogs                                                    |
-|│       │   ├── dscanner                                     | Digital scanners import tool                                            |
 |│       │   ├── items                                        | Import item classes                                                     |
 |│       │   ├── main                                         | Import tool main view                                                   |
 |│       │   ├── models                                       | Import model classes                                                    |
@@ -228,10 +226,6 @@
 |│       │   └── widgets                                      | Import common widgets                                                   |
 |│       ├── lighttable                                       | The Light-table tool to compare images side by side                     |
 |│       ├── maintenance                                      | The digiKam tool to maintain the database contents                      |
-|│       ├── mediaserver                                      | The DLNA/UPNP sharing tool                                              |
-|│       │   └── upnpsdk                                      | Internal Upnp SDK based on Neptune and Platinum frameworks              |
-|│       ├── metadataedit                                     | The metadata editor tool                                                |
-|│       ├── presentation                                     | The presentation tool with OpenGL effects                               |
 |│       ├── queuemanager                                     | The famous Batch Queue Manager tool                                     |
 |│       │   ├── main                                         | The main BQM view                                                       |
 |│       │   ├── manager                                      | The multi-core manager to run tools in background                       |
