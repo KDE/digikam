@@ -16,22 +16,22 @@ preload_shared_library ()
     if [[ "$(arch)" = "x86_64" ]] ; then
         # 64 bits system
 
-        if [ -f "/usr/lib64/$FILE" ] ; then
+        if [[ -f "/usr/lib64/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/$FILE
-        elif [ -f "/usr/lib/x86_64-linux-gnu/$FILE" ] ; then
+        elif [[ -f "/usr/lib/x86_64-linux-gnu/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/usr/lib/x86_64-linux-gnu/$FILE
-        elif [ -f "/lib/x86_64-linux-gnu/$FILE" ] ; then
+        elif [[ -f "/lib/x86_64-linux-gnu/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/lib/x86_64-linux-gnu/$FILE
         fi
 
     else
         # 32 bits system
 
-        if [ -f "/usr/lib/$FILE" ] ; then
+        if [[ -f "/usr/lib/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/usr/lib/$FILE
-        elif [ -f "/usr/lib/i386-linux-gnu/$FILE" ] ; then
+        elif [[ -f "/usr/lib/i386-linux-gnu/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/usr/lib/i386-linux-gnu/$FILE
-        elif [ -f "/lib/i386-linux-gnu/$FILE" ] ; then
+        elif [[ -f "/lib/i386-linux-gnu/$FILE" ]] ; then
             export LD_PRELOAD=$LD_PRELOAD:/lib/i386-linux-gnu/$FILE
         fi
 
