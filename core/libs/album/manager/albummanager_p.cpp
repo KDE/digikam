@@ -65,6 +65,7 @@ AlbumManager::Private::Private()
       hasPriorizedDbPath(false),
       dbFakeConnection(false),
       showOnlyAvailableAlbums(false),
+      longTimeMessageBoxResult(-1),
       albumListJob(0),
       dateListJob(0),
       tagListJob(0),

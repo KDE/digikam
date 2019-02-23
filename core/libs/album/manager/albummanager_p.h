@@ -65,6 +65,7 @@ extern "C"
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QCheckBox>
 #include <QSet>
 
 // KDE includes
@@ -151,6 +152,8 @@ public:
     bool                        dbFakeConnection;
 
     bool                        showOnlyAvailableAlbums;
+
+    int                         longTimeMessageBoxResult;
 
     AlbumsDBJobsThread*         albumListJob;
     DatesDBJobsThread*          dateListJob;
