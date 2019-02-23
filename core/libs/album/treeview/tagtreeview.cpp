@@ -115,22 +115,22 @@ TagPropertiesFilterModel* TagTreeView::filteredModel() const
 
 TAlbum* TagTreeView::currentAlbum() const
 {
-    return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
+    return dynamic_cast<TAlbum*>(m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
 QList<Album*> TagTreeView::selectedTags()
 {
-    return selectedAlbums<Album>(selectionModel(),m_filteredModel);
+    return selectedAlbums<Album>(selectionModel(), m_filteredModel);
 }
 
 QList<TAlbum*> TagTreeView::selectedTagAlbums()
 {
-    return selectedAlbums<TAlbum>(selectionModel(),m_filteredModel);
+    return selectedAlbums<TAlbum>(selectionModel(), m_filteredModel);
 }
 
 TAlbum* TagTreeView::albumForIndex(const QModelIndex& index) const
 {
-    return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(index));
+    return dynamic_cast<TAlbum*>(m_albumFilterModel->albumForIndex(index));
 }
 
 TagModificationHelper* TagTreeView::tagModificationHelper() const

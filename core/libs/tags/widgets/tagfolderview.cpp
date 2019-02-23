@@ -106,7 +106,7 @@ QString TagFolderView::contextMenuTitle() const
 
 void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
-    TAlbum* const tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* const tag = dynamic_cast<TAlbum*>(album);
 
     if (!tag)
     {
