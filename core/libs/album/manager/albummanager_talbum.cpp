@@ -982,16 +982,29 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
 
     if (imageIds.count() > 100)
     {
-        QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                 qApp->applicationName(),
-                 i18n("This operation can take a long time in the background.\n"
-                      "Do you want to write the metadata to %1 files now?",
-                      imageIds.count()),
-                 QMessageBox::Yes | QMessageBox::No,
-                 qApp->activeWindow());
+        int result = d->longTimeMessageBoxResult;
 
-        int result = msgBox->exec();
-        delete msgBox;
+        if (result == -1)
+        {
+            QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
+                     qApp->applicationName(),
+                     i18n("This operation can take a long time in the background.\n"
+                          "Do you want to write the metadata to %1 files now?",
+                          imageIds.count()),
+                     QMessageBox::Yes | QMessageBox::No,
+                     qApp->activeWindow());
+            QCheckBox* const chkBox      = new QCheckBox(i18n("Do not ask again for this session"), msgBox);
+            msgBox->setCheckBox(chkBox);
+
+            result = msgBox->exec();
+
+            if (chkBox->isChecked())
+            {
+                d->longTimeMessageBoxResult = result;
+            }
+
+            delete msgBox;
+        }
 
         if (result != QMessageBox::Yes)
         {
