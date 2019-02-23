@@ -126,6 +126,8 @@ protected:
      */
     virtual void setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums);
 
+    virtual void keyPressEvent(QKeyEvent* event);
+
 private Q_SLOTS:
 
     void slotTagNewFromABCMenu(const QString& personName);

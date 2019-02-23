@@ -387,4 +387,22 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     handleCustomContextMenuAction(choice, albumPointer);
 }
 
+void TagFolderView::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Return &&
+        event->modifiers() == Qt::AltModifier)
+    {
+        QList<TAlbum*> selected = selectedTagAlbums();
+
+        if (selected.count() == 1)
+        {
+            tagModificationHelper()->slotTagEdit(selected.first());
+        }
+
+        return;
+    }
+
+    TagTreeView::keyPressEvent(event);
+}
+
 } // namespace Digikam

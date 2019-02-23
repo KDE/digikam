@@ -421,6 +421,8 @@ void ContextMenuHelper::addActionTagsToFaceTags(TagModificationHelper* helper, Q
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* const editTagAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18nc("Edit Tag Properties", "Properties..."), this);
+    // This is only for the user to give a hint for the shortcut key
+    editTagAction->setShortcut(Qt::ALT + Qt::Key_Return);
     addAction(editTagAction);
     helper->bindTag(editTagAction, tag);
 

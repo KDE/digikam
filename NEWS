@@ -24,4 +24,5 @@ BUGFIXES:
 009 ==> 404690 - There is an unwanted bar in the left screen edge in full screen view.
 010 ==> 404736 - Merging tags keeps popping up confirmation dialogs every second.
 011 ==> 404737 - digiKam does not compile with opencv 3.4.1.
-012 ==> 
+012 ==> 404735 - F2 should edit tag name when tag name has focus.
+013 ==> 
