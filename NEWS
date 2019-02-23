@@ -23,4 +23,5 @@ BUGFIXES:
 008 ==> 404642 - digiKam flatpak: Please include mysql driver (for using an external mysql db).
 009 ==> 404690 - There is an unwanted bar in the left screen edge in full screen view.
 010 ==> 404736 - Merging tags keeps popping up confirmation dialogs every second.
-011 ==> 
+011 ==> 404737 - digiKam does not compile with opencv 3.4.1.
+012 ==> 
