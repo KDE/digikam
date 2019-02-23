@@ -25,7 +25,7 @@ additional explanation for how they work.
 BUNDLE CONTENTS
 ---------------
 
-Note : the bundle is rellocable.
+Note : the bundle is relocatable.
 
 .
 └── usr

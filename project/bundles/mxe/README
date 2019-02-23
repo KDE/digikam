@@ -32,7 +32,7 @@ inject a virus in the binary installer.
 BUNDLE CONTENTS
 ---------------
 
-Note: the bundle is rellocable.
+Note: the bundle is relocatable.
 
 |                                                    Executable, shared dlls, KDE plugins dlls, qt.conf
 |--- data
