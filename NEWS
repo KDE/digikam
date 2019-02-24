@@ -28,4 +28,5 @@ BUGFIXES:
 013 ==> 404748 - Default Album rename dialog should be larger (or save its size when changed).
 014 ==> 304811 - Offer a "stretch histogram" functionality to automatically adjust brightness & gamma.
 015 ==> 374464 - Can start print wizzard.
-016 ==> 
+016 ==> 316687 - ImageMagick-6.8.3.9 could not be found.
+017 ==> 
