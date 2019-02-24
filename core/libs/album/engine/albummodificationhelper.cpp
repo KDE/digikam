@@ -222,19 +222,23 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
     }
 
     QString oldTitle(album->title());
-    bool    ok;
 
-    QString title = QInputDialog::getText(d->dialogParent,
-                                          i18n("Rename Album (%1)", oldTitle),
-                                          i18n("Enter new album name:"),
-                                          QLineEdit::Normal,
-                                          oldTitle,
-                                          &ok);
+    QPointer<QInputDialog> textDlg = new QInputDialog(d->dialogParent);
+    textDlg->setWindowTitle(i18n("Rename Album (%1)", oldTitle));
+    textDlg->setLabelText(i18n("Enter new album name:"));
+    textDlg->resize(450, textDlg->sizeHint().height());
+    textDlg->setInputMode(QInputDialog::TextInput);
+    textDlg->setTextEchoMode(QLineEdit::Normal);
+    textDlg->setTextValue(oldTitle);
 
-    if (!ok)
+    if (textDlg->exec() != QDialog::Accepted)
     {
+        delete textDlg;
         return;
     }
+
+    QString title = textDlg->textValue();
+    delete textDlg;
 
     if (title != oldTitle)
     {
