@@ -27,4 +27,5 @@ BUGFIXES:
 012 ==> 404735 - F2 should edit tag name when tag name has focus.
 013 ==> 404748 - Default Album rename dialog should be larger (or save its size when changed).
 014 ==> 304811 - Offer a "stretch histogram" functionality to automatically adjust brightness & gamma.
-015 ==> 
+015 ==> 374464 - Can start print wizzard.
+016 ==> 
