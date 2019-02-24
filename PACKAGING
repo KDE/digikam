@@ -43,7 +43,7 @@ Notice to make release tarballs from GIT
 
 8/  Upload tarball and signature to the pre-release files repository available at url:
 
-    ssh://digikam@racnoss.kde.org/srv/archives/files/digikam/
+    ssh://digikam@milonia.kde.org/srv/archives/files/digikam/
 
     Note that you will need a valid developer account with ssh keys).
     Post a message on digikam-users@kde.org mailing list to have a feedback
