@@ -37,7 +37,7 @@ BUILDING_DIR="`pwd`/temp.build"
 # 10.7  : Lion         : untested : Qt 5.5, 5.6
 # 10.6  : SnowLeopard  : untested : ???
 # Older values cannot be set as it do no support x86_64.
-OSX_MIN_TARGET="10.8"
+OSX_MIN_TARGET="10.14"
 
 # Directory where not relocable bundle will be built, and where it will be installed by packaging script
 INSTALL_PREFIX="/opt/digikam"
