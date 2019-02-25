@@ -38,11 +38,12 @@
 // @param levels The number of levels (>= 0)
 // @param data Input data of subband LL at level 0
 CWaveletTransform::CWaveletTransform(UINT32 width, UINT32 height, int levels, DataT* data) 
-: m_nLevels(levels + 1) // m_nLevels in CPGFImage determines the number of FWT steps; this.m_nLevels determines the number subband-planes
-, m_subband(nullptr)
+: 
 #ifdef __PGFROISUPPORT__
-, m_indices(nullptr)
+  m_indices(nullptr),
 #endif
+  m_nLevels(levels + 1) // m_nLevels in CPGFImage determines the number of FWT steps; this.m_nLevels determines the number subband-planes
+, m_subband(nullptr)
 {
 	ASSERT(m_nLevels > 0 && m_nLevels <= MaxLevel + 1);
 	InitSubbands(width, height, data);
