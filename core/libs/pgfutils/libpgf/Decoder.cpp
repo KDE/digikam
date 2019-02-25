@@ -31,6 +31,16 @@
 	#include <stdio.h>
 #endif
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wextra"
+#endif
+
+#if defined(__APPLE__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra"
+#endif
+
 //////////////////////////////////////////////////////
 // PGF: file structure
 //
@@ -1033,4 +1043,13 @@ void CDecoder::DumpBuffer() {
 	//	printf("%d", m_value[i]);
 	//}
 }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__)
+#pragma clang diagnostic pop
+#endif
+
 #endif //TRACE
