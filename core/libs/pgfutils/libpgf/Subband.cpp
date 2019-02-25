@@ -38,8 +38,8 @@ CSubband::CSubband()
 , m_size(0)
 , m_level(0)
 , m_orientation(LL)
-, m_data(0)
 , m_dataPos(0)
+, m_data(0)
 #ifdef __PGFROISUPPORT__
 , m_nTiles(0)
 #endif
@@ -186,7 +186,7 @@ void CSubband::ExtractTile(CEncoder& encoder, bool tile /*= false*/, UINT32 tile
 	} else 
 #endif
 	{
-		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
+		(void)tileX; (void)tileY; (void)tile; // prevents from unreferenced formal parameter warning
 		// write values into buffer using partitiong scheme
 		encoder.Partition(this, m_width, m_height, 0, m_width);
 	}
@@ -226,7 +226,7 @@ void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*
 	} else 
 #endif
 	{
-		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
+		(void)tileX; (void)tileY; (void)tile; // prevents from unreferenced formal parameter warning
 		// read values into buffer using partitiong scheme
 		decoder.Partition(this, quantParam, m_width, m_height, 0, m_width);
 	}
