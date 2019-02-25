@@ -59,7 +59,7 @@ extern "C"
 
 // Libpgf includes
 
-#include <PGFimage.h>
+#include "PGFimage.h"
 
 // Local includes
 
@@ -76,7 +76,7 @@ static bool CallbackForLibPGF(double percent, bool escapeAllowed, void* data)
 {
     if (data)
     {
-        PGFLoader* d = static_cast<PGFLoader*>(data);
+        PGFLoader* const d = static_cast<PGFLoader*>(data);
 
         if (d)
         {
@@ -100,7 +100,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     m_observer = observer;
     readMetadata(filePath, DImg::PGF);
 
-    FILE* file = fopen(QFile::encodeName(filePath).constData(), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {
@@ -273,8 +273,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     height = h;
                     level  = i;
                     qCDebug(DIGIKAM_DIMG_LOG_PGF) << "Loading PGF scaled version at level " << i
-                                      << " (" << w << " x " << h << ") for size "
-                                      << scaledLoadingSize;
+                                                  << " (" << w << " x " << h << ") for size "
+                                                  << scaledLoadingSize;
                 }
             }
 
@@ -515,6 +515,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
         return false;
     }
+
     return true;
 }
 

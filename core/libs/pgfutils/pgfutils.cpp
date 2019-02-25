@@ -48,7 +48,7 @@ extern "C"
 
 // LibPGF includes
 
-#include <PGFimage.h>
+#include "PGFimage.h"
 
 // Local includes
 
