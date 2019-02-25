@@ -524,6 +524,7 @@ void DigikamApp::setupActions()
     QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
     QAction* const sortByPathAction        = d->imageSortAction->addAction(i18n("By Path"));
     QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Date"));
+    QAction* const sortByModDateAction     = d->imageSortAction->addAction(i18n("By Modification Date"));
     QAction* const sortByFileSizeAction    = d->imageSortAction->addAction(i18n("By File Size"));
     QAction* const sortByRatingAction      = d->imageSortAction->addAction(i18n("By Rating"));
     QAction* const sortByImageSizeAction   = d->imageSortAction->addAction(i18n("By Image Size"));
@@ -538,6 +539,7 @@ void DigikamApp::setupActions()
     connect(sortByNameAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByPathAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDateAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByModDateAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByFileSizeAction,    SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByRatingAction,      SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByImageSizeAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
@@ -548,6 +550,7 @@ void DigikamApp::setupActions()
     imageSortMapper->setMapping(sortByNameAction,        (int)ItemSortSettings::SortByFileName);
     imageSortMapper->setMapping(sortByPathAction,        (int)ItemSortSettings::SortByFilePath);
     imageSortMapper->setMapping(sortByDateAction,        (int)ItemSortSettings::SortByCreationDate);
+    imageSortMapper->setMapping(sortByModDateAction,     (int)ItemSortSettings::SortByModificationDate);
     imageSortMapper->setMapping(sortByFileSizeAction,    (int)ItemSortSettings::SortByFileSize);
     imageSortMapper->setMapping(sortByRatingAction,      (int)ItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByImageSizeAction,   (int)ItemSortSettings::SortByImageSize);

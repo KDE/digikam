@@ -266,10 +266,10 @@ int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortR
                                   currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:
             return compareByOrder(left.fileSize(), right.fileSize(), currentSortOrder);
-        case SortByModificationDate:
-            return compareByOrder(left.modDateTime(), right.modDateTime(), currentSortOrder);
         case SortByCreationDate:
             return compareByOrder(left.dateTime(), right.dateTime(), currentSortOrder);
+        case SortByModificationDate:
+            return compareByOrder(left.modDateTime(), right.modDateTime(), currentSortOrder);
         case SortByRating:
             // I have the feeling that inverting the sort order for rating is the natural order
             return - compareByOrder(left.rating(), right.rating(), currentSortOrder);
