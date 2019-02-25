@@ -1,0 +1,114 @@
+The Progressive Graphics File
+=============================
+ 
+For more information see http://www.libpgf.org. There you can find some
+documents concerning this progressive graphic file codec.
+ 
+This project is hosted on the Sourceforge.net platform. For support and
+questions, please use the installed mailing list and forums there. 
+The Sourceforge URL of our project is: http://sourceforge.net/projects/libpgf
+ 
+=============================
+Release Notes
+
+Version 7.19.3, (Tue, 15 Jan 2019)
+------------------------------------
+
+1. The new version is a minor update of version 7.15.25.
+
+2. This version fixes a compilation bug seen when ROI support is disabled.
+
+
+Version 7.15.32, (Thu, 6 Aug 2015)
+------------------------------------
+
+1. The new version is a minor update of version 7.15.25.
+
+2. This version improves the reuse of CPGFImage objects for several decoding operations. 
+   It clarifies the usage of CPGFImage::Close() and CPGFImage::Destroy() by deletion of 
+   Close(). Several reading operations can be performed in the following way:
+   Open(), Read(), GetBitmap(), ResetStreamPos(), Read(), GetBitmap(), ResetStreamPos(), ...
+   Calling Destroy() frees all allocated ressources and reinitializes the object to the 
+   same state as the constructor does. This allows the reuse of the CPGFImage object for 
+   encoding and decoding: 
+   SetHeader(), ImportBitmap(), Write(), ResetStreamPos(), Destroy(), Open(), Read(), GetBitmap() 
+    
+3. Caching or skipping of user data (meta data) while opening a PGF image can be controlled
+   by a new UserdataPolicy in ConfigureDecoder().
+ 
+
+Version 7.15.25, (Sat, 20 June 2015)
+------------------------------------
+
+1. This new version is a replacement of version 6.14.12. 
+   In case you use the ROI decoding, we strongly encourage using version 6.15.25 instead of an older version.
+
+2. This version fixes some decoder bugs only seen in ROI decoding.
+   ROI decoding is now also supported for Bitmap and RGB12 image modes.
+
+3. This version introduces a new and more efficient data format for binary images (bitmaps). 
+   The new format allows ROI decoding.
+   The decoder supports both the old and the new format, but ROI decoding works only with the new format.
+
+4. The two reserverd bytes in PGFHeader are now used for a more detailled PGF version number.
+
+5. The Visual Studio project files are in the VS12 format.
+
+ 
+Version 6.14.12, (Wed, 9 April 2014)  
+------------------------------------
+ 
+1. The new version is a minor update of version 6.12.24. 
+
+2. It mainly contains some fixes of memory leaks in the OpenMP part and some improvements suggested by cppcheck and Coverity.
+
+3. The Visual Studio project files are in the VS11 format.
+
+
+Version 6.12.24, (Thu, 14 June 2012) 
+------------------------------------ 
+ 
+1. The new version is a replacement of version 6.11.42. 
+   In case you use the ROI encoding scheme, we strongly encourage using version 6.12.24 instead of version 6.11.42.
+ 
+2. This version fixes some decoder bugs, sometimes seen in ROI decoding.
+ 
+3. This version allows a simpler user-data handling, especially for uncached metadata. The following two methods
+   in the class PGFimage are designed for this purpose:
+
+	GetUserDataPos() returns in an opened PGF image the stream position of the user data area.								
+
+	WriteImage() encodes and writes the image at the current stream position. This method is called after
+	WriteHeader(). In case you want to write uncached metadata into the stream, then do that after WriteHeader() 
+	and just before WriteImage(). If you are not interested in writing uncached metadata, then you usually use
+	Write() instead of WriteImage(). WriteHeader() and WriteImage() are called inside of Write(). 
+
+
+Version 6.11.42, (Sun, 23 Oct 2011) 
+----------------------------------- 
+ 
+1. The new version is a replacement of version 6.11.24. 
+   We strongly encourage using version 6.11.42 instead of version 6.11.24.
+ 
+2. This version fixes some decoder bugs, only seen in lossless compression of 
+   large images.
+ 
+3. The rarely used, but sometimes misused, background information (3 Bytes) 
+   in the PGFHeader has been replaced by
+
+     UINT8 usedBitsPerChannel;    // number of used bits per channel 
+                                  // in 16- and 32-bit per channel modes
+     UINT8 reserved1, reserved2;  // not used
+
+The value usedBitsPerChannel is helpful in case you have more than 8 (16) but 
+less than 16 (32) significant bits per channel, stored in the most 
+significant bits of a pixel. For example, you have a grayscale image with 14 
+bit significant data per pixel stored in the ImageModeGray16 pixel format. In 
+case you have left shifted the 14 bits to be the most significant 14 bits, 
+then you should set usedBitsPerChannel=14. This will increase the compression 
+ratio without any drawbacks, because the 14 bits are internally right shifted. 
+On the other side, if the 14 bits are the least significant bits in 
+your 16 bit pixel format, then you shoulden’t set usedBitsPerChannel. It will 
+be automatically set to 16, but this is no problem, since the not used most 
+significant bits per pixel are never coded at all. So, in both cases the same 
+compression ratio will result.

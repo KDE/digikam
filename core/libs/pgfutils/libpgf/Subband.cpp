@@ -1,27 +1,25 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- *
+ * 
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- *
+ * 
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
-#define UNUSED(x) (void)(x)
 
 //////////////////////////////////////////////////////////////////////
 /// @file Subband.cpp
@@ -34,14 +32,14 @@
 
 /////////////////////////////////////////////////////////////////////
 // Default constructor
-CSubband::CSubband()
+CSubband::CSubband() 
 : m_width(0)
 , m_height(0)
 , m_size(0)
 , m_level(0)
 , m_orientation(LL)
-, m_dataPos(0)
 , m_data(0)
+, m_dataPos(0)
 #ifdef __PGFROISUPPORT__
 , m_nTiles(0)
 #endif
@@ -185,14 +183,10 @@ void CSubband::ExtractTile(CEncoder& encoder, bool tile /*= false*/, UINT32 tile
 
 		// write values into buffer using partitiong scheme
 		encoder.Partition(this, w, h, xPos + yPos*m_width, m_width);
-	} else
+	} else 
 #endif
 	{
-        // prevents from unreferenced formal parameter warning
-        UNUSED(tileX);
-        UNUSED(tileY);
-        UNUSED(tile);
-
+		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
 		// write values into buffer using partitiong scheme
 		encoder.Partition(this, m_width, m_height, 0, m_width);
 	}
@@ -226,17 +220,13 @@ void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*
 
 		// compute tile position and size
 		TilePosition(tileX, tileY, xPos, yPos, w, h);
-
+		
 		ASSERT(xPos >= m_ROI.left && yPos >= m_ROI.top);
 		decoder.Partition(this, quantParam, w, h, (xPos - m_ROI.left) + (yPos - m_ROI.top)*BufferWidth(), BufferWidth());
-	} else
+	} else 
 #endif
 	{
-        // prevents from unreferenced formal parameter warning
-        UNUSED(tileX);
-        UNUSED(tileY);
-        UNUSED(tile);
-
+		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
 		// read values into buffer using partitiong scheme
 		decoder.Partition(this, quantParam, m_width, m_height, 0, m_width);
 	}
@@ -248,11 +238,11 @@ void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*
 //////////////////////////////////////////////////////////////////////
 /// Set ROI
 void CSubband::SetAlignedROI(const PGFRect& roi) {
-	ASSERT(roi.left <= m_width);
-	ASSERT(roi.top <= m_height);
-
-	m_ROI = roi;
-	if (m_ROI.right > m_width) m_ROI.right = m_width;
+	ASSERT(roi.left <= m_width); 
+	ASSERT(roi.top <= m_height); 
+	
+	m_ROI = roi; 
+	if (m_ROI.right > m_width) m_ROI.right = m_width; 
 	if (m_ROI.bottom > m_height) m_ROI.bottom = m_height;
 }
 
@@ -270,7 +260,7 @@ void CSubband::TilePosition(UINT32 tileX, UINT32 tileY, UINT32& xPos, UINT32& yP
 	// band = HH, w = 30, ldTiles = 2 -> 4 tiles in a row/column
 	// --> tile widths
 	// 8 7 8 7
-	//
+	// 
 	// tile partitioning scheme
 	// 0 1 2 3
 	// 4 5 6 7

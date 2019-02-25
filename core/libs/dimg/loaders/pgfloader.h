@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PGF_LOADER_H
-#define PGF_LOADER_H
+#ifndef DIGIKAM_PGF_LOADER_H
+#define DIGIKAM_PGF_LOADER_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PGF_LOADER_H
+#endif // DIGIKAM_PGF_LOADER_H
