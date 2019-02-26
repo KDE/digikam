@@ -9,6 +9,7 @@ General     : Update internal libpgf to last 07193.
 BQM         : Add new advanced settings in resize tool.
 BQM         : All Batch Queue Manager tools become Bqm plugins.
 Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.
+Item View   : Add sort items by modification date.
 
 
 *****************************************************************************************************

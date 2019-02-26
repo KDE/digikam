@@ -117,13 +117,13 @@ public:
         SortByFileName,
         SortByFilePath,
         SortByCreationDate,
+        SortByModificationDate,
         SortByFileSize,
         SortByRating,
         SortByImageSize,            // pixel number
         SortByAspectRatio,          // width / height * 100000
         SortBySimilarity,
-        SortByManualOrder,
-        SortByModificationDate      // currently not used in the icon view
+        SortByManualOrder
     };
 
     SortRole                sortRole;
