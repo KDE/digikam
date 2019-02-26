@@ -23,7 +23,7 @@ BUILDING_DIR="`pwd`/temp.build"
 #
 # Uncompress the archive to /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
 # and adjust the property "MinimumSDKVersion" from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
-# sudo /usr/libexec/PlistBuddy -c "Set MinimumSDKVersion 10.10" /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
+# sudo /usr/libexec/PlistBuddy -c "Set MinimumSDKVersion 10.11" /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
 #
 # Possible values:
 # 10.13 : High Sierra  : tested   : Qt                          5.10
@@ -35,7 +35,7 @@ BUILDING_DIR="`pwd`/temp.build"
 # 10.7  : Lion         : untested : Qt 5.5, 5.6
 # 10.6  : SnowLeopard  : untested : ???
 # Older values cannot be set as it do no support x86_64.
-OSX_MIN_TARGET="10.10"
+OSX_MIN_TARGET="10.11"
 
 # Directory where not relocable bundle will be built, and where it will be installed by packaging script
 INSTALL_PREFIX="/opt/digikam"

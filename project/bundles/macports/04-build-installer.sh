@@ -103,7 +103,6 @@ lib/plugins/imageformats/*.so \
 lib/plugins/digikam/bqm/*.so \
 lib/plugins/digikam/generic/*.so \
 lib/plugins/digikam/editor/*.so \
-lib/sane/*.so \
 lib/mariadb/bin/mysql \
 lib/mariadb/bin/mysqld \
 lib/mariadb/bin/my_print_defaults \
@@ -123,6 +122,8 @@ libexec/qt5/plugins/position/*.dylib \
 libexec/qt5/plugins/geoservices/*.dylib \
 "
 
+#lib/sane/*.so \
+
 binaries="$OTHER_APPS"
 
 # Additional Files/Directories - to be copied recursively but not checked for dependencies
@@ -133,8 +134,9 @@ lib/libgphoto2_port \
 lib/mariadb \
 share/mariadb \
 etc/xdg \
-etc/sane.d \
 "
+
+#etc/sane.d \
 
 # Additional Data Directories - to be copied recursively
 OTHER_DATA="\

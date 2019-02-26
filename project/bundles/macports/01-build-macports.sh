@@ -245,15 +245,16 @@ port install \
              libical \
              lensfun \
              bison \
-             sane-backends \
              ffmpeg \
-             qt58 \
-             qt58-qtimageformats \
-             qt58-qtwebkit \
-             qt58-sqlite-plugin \
-             qt58-mysql-plugin \
-             qt58-qtscript \
+             qt59 \
+             qt59-qtimageformats \
+             qt59-qtwebkit \
+             qt59-sqlite-plugin \
+             qt59-mysql-plugin \
+             qt59-qtscript \
              wget +ssl
+
+#             sane-backends \
 
 echo -e "\n"
 
