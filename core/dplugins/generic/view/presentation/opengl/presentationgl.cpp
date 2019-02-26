@@ -153,20 +153,22 @@ public:
 };
 
 PresentationGL::PresentationGL(PresentationContainer* const sharedData)
-    : QGLWidget(0, 0, Qt::WindowStaysOnTopHint | Qt::Popup | Qt::X11BypassWindowManagerHint),
+    : QGLWidget(),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    QRect deskRect = QApplication::desktop()->screenGeometry( QApplication::activeWindow() );
-    d->deskX        = deskRect.x();
-    d->deskY        = deskRect.y();
-    d->deskWidth    = deskRect.width();
-    d->deskHeight   = deskRect.height();
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
+
+    QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
+    d->deskX       = deskRect.x();
+    d->deskY       = deskRect.y();
+    d->deskWidth   = deskRect.width();
+    d->deskHeight  = deskRect.height();
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
 
-    d->sharedData   = sharedData;
+    d->sharedData  = sharedData;
 
     d->slideCtrlWidget = new PresentationCtrlWidget(this);
     d->slideCtrlWidget->hide();

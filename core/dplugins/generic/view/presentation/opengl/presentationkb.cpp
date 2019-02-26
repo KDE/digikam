@@ -217,7 +217,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QRect deskRect = QApplication::desktop()->screenGeometry( QApplication::activeWindow() );
+    QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
