@@ -523,7 +523,7 @@ void DigikamApp::setupActions()
     // map to ItemSortSettings enum
     QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
     QAction* const sortByPathAction        = d->imageSortAction->addAction(i18n("By Path"));
-    QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Date"));
+    QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Creation Date"));
     QAction* const sortByModDateAction     = d->imageSortAction->addAction(i18n("By Modification Date"));
     QAction* const sortByFileSizeAction    = d->imageSortAction->addAction(i18n("By File Size"));
     QAction* const sortByRatingAction      = d->imageSortAction->addAction(i18n("By Rating"));
