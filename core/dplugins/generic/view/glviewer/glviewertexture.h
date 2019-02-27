@@ -26,7 +26,8 @@
 
 // Qt includes
 
-#include <QGLWidget>
+#include <QOpenGLTexture>
+#include <QOpenGLWidget>
 #include <QImage>
 #include <QString>
 
@@ -39,7 +40,7 @@ using namespace Digikam;
 namespace DigikamGenericGLViewerPlugin
 {
 
-class GLViewerTexture
+class GLViewerTexture : public QOpenGLTexture
 {
 
 public:
@@ -47,14 +48,9 @@ public:
     explicit GLViewerTexture(DInfoInterface* const iface);
     ~GLViewerTexture();
 
-    int  height() const;
-    int  width()  const;
+    bool load(const QString& fn, const QSize& size);
+    bool load(const QImage& im, const QSize& size);
 
-    bool load(const QString& fn, const QSize& size, GLuint tn);
-    bool load(const QImage& im, const QSize& size, GLuint tn);
-
-    GLvoid* data()          const;
-    GLuint  texnr()         const;
     GLfloat vertex_bottom() const;
     GLfloat vertex_top()    const;
     GLfloat vertex_left()   const;
@@ -64,7 +60,7 @@ public:
     void zoom(float delta, const QPoint& mousepos);
     void reset();
     void move(const QPoint& diff);
-    bool setSize(QSize size);
+    bool setNewSize(QSize size);
     void rotate();
     void zoomToOriginal();
 

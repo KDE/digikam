@@ -120,7 +120,6 @@ public:
         plugin        = 0;
     }
 
-    GLuint           tex[3];
     QStringList      files;
     unsigned int     file_idx;
     Cache            cache[CACHESIZE];
@@ -141,7 +140,8 @@ public:
 };
 
 GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const iface)
-    : d(new Private)
+    : QOpenGLWidget(),
+      d(new Private)
 {
     d->plugin = plugin;
     d->iface  = iface;
@@ -158,18 +158,18 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
 
     if (selection.count() == 0)
     {
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "no image selected, load entire album" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "no image selected, load entire album";
         myfiles = d->iface->currentAlbumItems();
     }
     else if (selection.count() == 1)
     {
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "one image selected, load entire album and start with selected image" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "one image selected, load entire album and start with selected image";
         selectedImage = selection.first().toLocalFile();
         myfiles       = d->iface->currentAlbumItems();
     }
     else if (selection.count() > 1)
     {
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "load " << selection.count() << " selected images" ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "load" << selection.count() << "selected images";
         myfiles = selection;
     }
 
@@ -180,9 +180,9 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
         // in case one image was selected and the entire album was loaded
         QString s = it->toLocalFile();
 
-        if ( s == selectedImage )
+        if (s == selectedImage)
         {
-            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "selected img  " << selectedImage << " has idx=" << foundNumber ;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "selected img" << selectedImage << "has idx=" << foundNumber;
             d->file_idx = foundNumber;
         }
 
@@ -190,15 +190,15 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
         QString mimeTypeName = QMimeDatabase().mimeTypeForUrl(QUrl::fromLocalFile(s)).name();
         bool isImage         = mimeTypeName.contains(QString::fromLatin1("image"), Qt::CaseInsensitive);
 
-        if ( isImage )
+        if (isImage)
         {
             d->files.append(s);
             foundNumber++;  //counter for searching the start image in case one image is selected
-            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << s << " type=" << mimeTypeName;
+            qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << s << "type=" << mimeTypeName;
         }
     }
 
-    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << d->files.count() << "images loaded" ;
+    qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << d->files.count() << "images loaded";
 
     // initialize cache
     for(int i = 0 ; i < CACHESIZE ; ++i)
@@ -207,7 +207,7 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
         d->cache[i].texture    = new GLViewerTexture(d->iface);
     }
 
-    if ( d->files.isEmpty() )
+    if (d->files.isEmpty())
         return;
 
     showFullScreen(); // krazy:exclude=qmethods
@@ -225,8 +225,6 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
 
 GLViewerWidget::~GLViewerWidget()
 {
-    glDeleteTextures(1, d->tex);
-
     for(int i = 0 ; i < CACHESIZE ; ++i)
     {
         d->cache[i].file_index = EMPTY;
@@ -250,8 +248,6 @@ void GLViewerWidget::initializeGL()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Enable perspective vision
     glClearDepth(1.0f);
-    // Generate d->texture
-    glGenTextures(1, d->tex);
     //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
 }
 
@@ -281,12 +277,11 @@ void GLViewerWidget::paintGL()
         //trigger a redraw NOW. the user wants to see a picture as soon as possible
         // only load the second image after the first is displayed
         glFlush();
-        swapBuffers(); //TODO: this is probably not the right way to force a redraw
 
         //preload the 2nd image
         if (d->firstImage)
         {
-            if (d->file_idx < (unsigned int)(d->files.count()-1))
+            if (d->file_idx < (unsigned int)(d->files.count() - 1))
             {
                 loadImage(d->file_idx+1);
             }
@@ -314,7 +309,7 @@ void GLViewerWidget::resizeGL(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    if (h>w)
+    if (h > w)
     {
         d->ratio_view_x = 1.0;
         d->ratio_view_y = h / float(w);
@@ -325,8 +320,8 @@ void GLViewerWidget::resizeGL(int w, int h)
         d->ratio_view_y = 1.0;
     }
 
-    glFrustum( -d->ratio_view_x, d->ratio_view_x, -d->ratio_view_y, d->ratio_view_y,5, 5000.0 );
-    glMatrixMode( GL_MODELVIEW );
+    glFrustum(-d->ratio_view_x, d->ratio_view_x, -d->ratio_view_y, d->ratio_view_y, 5, 5000.0);
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     if (d->texture == 0)
@@ -343,8 +338,9 @@ void GLViewerWidget::resizeGL(int w, int h)
  */
 void GLViewerWidget::drawImage(GLViewerTexture* const tex)
 {
-    // cout << "enter drawImage: target=" << d->texture->texnr() << " dim=" << d->texture->height() << " " << d->texture->width();
-    glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->texnr());
+    // qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "enter drawImage: target=" << d->texture->textureId()
+    //                                      << "dim=" << d->texture->height() << d->texture->width();
+    glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->textureId());
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
     glVertex3f(tex->vertex_left(), tex->vertex_bottom(), 0);
@@ -364,11 +360,11 @@ void GLViewerWidget::drawImage(GLViewerTexture* const tex)
     Handle all keyboard events. All events which are not handled trigger
     a help window.
  */
-void GLViewerWidget::keyPressEvent(QKeyEvent* k)
+void GLViewerWidget::keyPressEvent(QKeyEvent* e)
 {
     QPoint middlepoint;
 
-    switch (k->key())
+    switch (e->key())
     {
         // next image
         case Qt::Key_N:
@@ -391,7 +387,7 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
         case Qt::Key_R:
             d->texture->rotate();
             downloadTexture(d->texture);
-            updateGL();
+            update();
             break;
 
         // terminate image viewer
@@ -420,7 +416,7 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
         // reset size and redraw
         case Qt::Key_Z:
             d->texture->reset();
-            updateGL();
+            update();
             break;
 
         // toggle permanent between "show next image" and "zoom" on mousewheel change
@@ -433,9 +429,9 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // zoom in
         case Qt::Key_Plus:
-            middlepoint = QPoint(width()/2,height()/2);
+            middlepoint = QPoint(width() / 2, height() / 2);
 
-            if (d->texture->setSize( d->zoomsize ))
+            if (d->texture->setNewSize(d->zoomsize))
                 downloadTexture(d->texture); //load full resolution image
 
             zoom(-1, middlepoint, d->zoomfactor_keyboard);
@@ -443,9 +439,9 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // zoom out
         case Qt::Key_Minus:
-            middlepoint = QPoint(width()/2,height()/2);
+            middlepoint = QPoint(width() / 2, height() / 2);
 
-            if (d->texture->setSize(d->zoomsize))
+            if (d->texture->setNewSize(d->zoomsize))
             {
                 downloadTexture(d->texture); //load full resolution image
             }
@@ -455,13 +451,13 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* k)
 
         // zoom to original size
         case Qt::Key_O:
-            if (d->texture->setSize(QSize(0, 0)))
+            if (d->texture->setNewSize(QSize(0, 0)))
             {
                 downloadTexture(d->texture); //load full resolution image
             }
 
             d->texture->zoomToOriginal();
-            updateGL();
+            update();
             break;
 
         // toggle temorarily between "show next image" and "zoom" on mousewheel change
@@ -502,12 +498,12 @@ void GLViewerWidget::keyReleaseEvent(QKeyEvent* e)
             {
                 unsetCursor();
 
-                if (d->texture->setSize(QSize(0, 0)))
+                if (d->texture->setNewSize(QSize(0, 0)))
                 {
                     downloadTexture(d->texture); //load full resolution image
                 }
 
-                updateGL();
+                update();
             }
             else
             {
@@ -539,15 +535,15 @@ void GLViewerWidget::keyReleaseEvent(QKeyEvent* e)
  */
 void GLViewerWidget::downloadTexture(GLViewerTexture* const tex)
 {
-    glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->texnr());
+    glBindTexture(GL_TEXTURE_RECTANGLE_NV, tex->textureId());
     // glTexParameterf(GL_TEXTURE_RECTANGLE_NV, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER_ARB);
     // glTexParameterf(GL_TEXTURE_RECTANGLE_NV, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER_ARB);
 
     // uncomment the following line to enable flat shading of texels -> debugging
     // glTexParameterf(GL_TEXTURE_RECTANGLE_NV, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_RECTANGLE_NV, 0, GL_RGBA, tex->width(), tex->height(), 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, tex->data());
+    // glTexImage2D(GL_TEXTURE_RECTANGLE_NV, 0, GL_RGBA, tex->width(), tex->height(), 0,
+    //              GL_RGBA, GL_UNSIGNED_BYTE, tex->data());
 }
 
 /**
@@ -561,14 +557,14 @@ GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
     if (d->cache[imod].file_index == file_index)
     {
         //image is already cached
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "image " << file_index << " is already in cache@" << imod ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "image" << file_index << "is already in cache@" << imod;
         return d->cache[imod].texture;
     }
     else
     {
         // image is net yet loaded
         QString f                 = d->files[file_index];
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "loading image " << f << "(idx=" << file_index << ") to cache@" << imod ;
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "loading image" << f << "(idx=" << file_index << ") to cache@" << imod;
         d->cache[imod].file_index = file_index;
 
         //when loadImage is called the first time, the frame is not yet fullscreen
@@ -584,14 +580,14 @@ GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
         }
         else
         {
-            size = QSize(width(),height());
+            size = QSize(width(), height());
             //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "next image:size=" << size.width();
         }
 
         // handle non-loadable images
-        if (!d->cache[imod].texture->load(f, size, d->tex[0]))
+        if (!d->cache[imod].texture->load(f, size))
         {
-            d->cache[imod].texture->load(d->nullImage.toImage(), size, d->tex[0]);
+            d->cache[imod].texture->load(d->nullImage.toImage(), size);
         }
 
         d->cache[imod].texture->setViewport(size.width(), size.height());
@@ -624,7 +620,7 @@ void GLViewerWidget::mousePressEvent(QMouseEvent* e)
     // begin zoom
     // scale down d->texture  for fast zooming
     // d->texture will be set to original size on mouse up
-    if (d->texture->setSize( d->zoomsize ))
+    if (d->texture->setNewSize(d->zoomsize))
     {
         //load downsampled image
         downloadTexture(d->texture);
@@ -632,12 +628,12 @@ void GLViewerWidget::mousePressEvent(QMouseEvent* e)
 
     d->timerMouseMove.stop(); //user is something up to, therefore keep the cursor
 
-    if ( e->button() == Qt::LeftButton )
+    if (e->button() == Qt::LeftButton)
     {
         setCursor(d->moveCursor);
     }
 
-    if ( e->button() == Qt::RightButton )
+    if (e->button() == Qt::RightButton)
     {
         setCursor(d->zoomCursor);
     }
@@ -648,16 +644,16 @@ void GLViewerWidget::mousePressEvent(QMouseEvent* e)
 
 void GLViewerWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if ( e->buttons() == Qt::LeftButton )
+    if (e->buttons() == Qt::LeftButton)
     {
         //panning
         setCursor(d->moveCursor);
         QPoint diff  = e->pos()-d->startdrag;
         d->texture->move(diff);
-        updateGL();
+        update();
         d->startdrag = e->pos();
     }
-    else if ( e->buttons() == Qt::RightButton )
+    else if (e->buttons() == Qt::RightButton)
     {
         int mdelta = 0;
 
@@ -665,9 +661,9 @@ void GLViewerWidget::mouseMoveEvent(QMouseEvent* e)
         //
         //if mouse pointer reached upper or lower boder, special treatment in order
         //to keep zooming enabled in that special case
-        if ( d->previous_pos.y() == e->y() )
+        if (d->previous_pos.y() == e->y())
         {
-            if ( e->y() == 0 )
+            if (e->y() == 0)
             {
                 // mouse pointer is at upper edge, therefore assume zoom in
                 mdelta = 1;
@@ -681,7 +677,7 @@ void GLViewerWidget::mouseMoveEvent(QMouseEvent* e)
         else
         {
             // mouse pointer is in the middle of the screen, normal operation
-            mdelta = d->previous_pos.y()-e->y();
+            mdelta = d->previous_pos.y() - e->y();
         }
 
         setCursor(d->zoomCursor);
@@ -708,13 +704,13 @@ void GLViewerWidget::mouseReleaseEvent(QMouseEvent*)
     d->timerMouseMove.start(2000);
     unsetCursor();
 
-    if (d->texture->setSize(QSize(0,0)))
+    if (d->texture->setNewSize(QSize(0, 0)))
     {
         //load full resolution image
         downloadTexture(d->texture);
     }
 
-    updateGL();
+    update();
 }
 
 /**
@@ -723,7 +719,7 @@ void GLViewerWidget::mouseReleaseEvent(QMouseEvent*)
 void GLViewerWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
     d->texture->reset();
-    updateGL();
+    update();
 }
 
 void GLViewerWidget::prevImage()
@@ -732,7 +728,7 @@ void GLViewerWidget::prevImage()
     GLViewerTimer timer;
 #endif
 
-    if (d->file_idx>0)
+    if (d->file_idx > 0)
         d->file_idx--;
     else
         return;
@@ -754,15 +750,15 @@ void GLViewerWidget::prevImage()
     timer.at("downloadTexture");
 #endif
 
-    updateGL();
+    update();
 
 #ifdef PERFORMANCE_ANALYSIS
-    timer.at("updateGL");
+    timer.at("update");
 #endif
 
     //image preloading
-    if (d->file_idx>0)
-        loadImage(d->file_idx-1);
+    if (d->file_idx > 0)
+        loadImage(d->file_idx - 1);
 }
 
 void GLViewerWidget::nextImage()
@@ -771,7 +767,7 @@ void GLViewerWidget::nextImage()
     GLViewerTimer timer;
 #endif
 
-    if (d->file_idx < (unsigned int)(d->files.count()-1))
+    if (d->file_idx < (unsigned int)(d->files.count() - 1))
         d->file_idx++;
     else
         return;
@@ -793,16 +789,16 @@ void GLViewerWidget::nextImage()
     timer.at("downloadTexture");
 #endif
 
-    updateGL();
+    update();
 
 #ifdef PERFORMANCE_ANALYSIS
     timer.at("updateGL");
 #endif
 
     //image preloading
-    if (d->file_idx < ((unsigned int)d->files.count()-1))
+    if (d->file_idx < ((unsigned int)d->files.count() - 1))
     {
-        loadImage(d->file_idx+1);
+        loadImage(d->file_idx + 1);
 
 #ifdef PERFORMANCE_ANALYSIS
         timer.at("preloading");
@@ -835,11 +831,11 @@ void GLViewerWidget::zoom(int mdelta, const QPoint& pos, float factor)
     if (mdelta < 0)
     {
         //multiplicator for zooming out
-        d->delta = 2.0-factor;
+        d->delta = 2.0 - factor;
     }
 
-    d->texture->zoom(d->delta,pos);
-    updateGL();
+    d->texture->zoom(d->delta, pos);
+    update();
 }
 
 /**
@@ -860,7 +856,7 @@ void GLViewerWidget::slotTimeoutMouseMove()
 OGLstate GLViewerWidget::getOGLstate() const
 {
     //no OpenGL context is found. Are the drivers ok?
-    if ( !isValid() )
+    if (!isValid())
     {
         return oglNoContext;
     }

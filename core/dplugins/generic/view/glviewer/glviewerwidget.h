@@ -46,7 +46,7 @@ using namespace Digikam;
 namespace DigikamGenericGLViewerPlugin
 {
 
-class GLViewerWidget : public QGLWidget
+class GLViewerWidget : public QOpenGLWidget
 {
     Q_OBJECT
 
@@ -69,7 +69,7 @@ private:
 
     bool isReallyFullScreen() const;
 
-    void keyPressEvent(QKeyEvent* k);
+    void keyPressEvent(QKeyEvent* e);
     void keyReleaseEvent(QKeyEvent* e);
     void wheelEvent(QWheelEvent* e);
     void mouseMoveEvent(QMouseEvent* e);

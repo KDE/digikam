@@ -25,9 +25,7 @@
 
 // Qt includes
 
-#include <QFileInfo>
 #include <QUrl>
-#include <QPointer>
 
 // Local includes
 
@@ -59,7 +57,6 @@ public:
         vright         = 0.0;
         display_x      = 0;
         display_y      = 0;
-        texnr          = 0;
         rotate_idx     = 0;
         rotate_list[0] = DMetadata::ORIENTATION_ROT_90;
         rotate_list[1] = DMetadata::ORIENTATION_ROT_180;
@@ -72,10 +69,8 @@ public:
     float                              rdx, rdy, z, ux, uy, rtx, rty;
     float                              vtop, vbottom, vleft, vright;
     int                                display_x, display_y;
-    GLuint                             texnr;
     QString                            filename;
     QImage                             qimage;
-    QImage                             glimage;
     QSize                              initial_size;
     DMetadata::ImageOrientation        rotate_list[4];
     int                                rotate_idx;
@@ -89,7 +84,8 @@ private:
 };
 
 GLViewerTexture::GLViewerTexture(DInfoInterface* const iface)
-    : d(new Private)
+    : QOpenGLTexture(QOpenGLTexture::TargetRectangle),
+      d(new Private)
 {
     d->iface = iface;
     reset();
@@ -97,23 +93,8 @@ GLViewerTexture::GLViewerTexture(DInfoInterface* const iface)
 
 GLViewerTexture::~GLViewerTexture()
 {
+    delete d->previewThread;
     delete d;
-}
-
-/*!
-    \fn GLViewerTexture::height()
- */
-int GLViewerTexture::height() const
-{
-    return d->glimage.height();
-}
-
-/*!
-    \fn GLViewerTexture::width()
- */
-int GLViewerTexture::width() const
-{
-    return d->glimage.width();
 }
 
 /*!
@@ -125,10 +106,9 @@ int GLViewerTexture::width() const
     if "size" is set to image size, scaling is only performed by the GPU but not
     by the CPU, however the AGP usage to texture memory is increased (20MB for a 5mp image)
  */
-bool GLViewerTexture::load(const QString& fn, const QSize& size, GLuint tn)
+bool GLViewerTexture::load(const QString& fn, const QSize& size)
 {
     d->filename     = fn;
-    d->texnr        = tn;
     d->initial_size = size;
     d->qimage       = d->previewThread->loadFastSynchronously(d->filename, qMax(size.width(), size.height())).copyQImage();
 
@@ -162,11 +142,10 @@ bool GLViewerTexture::load(const QString& fn, const QSize& size, GLuint tn)
     if "size" is set to image size, scaling is only performed by the GPU but not
     by the CPU, however the AGP usage to texture memory is increased (20MB for a 5mp image)
  */
-bool GLViewerTexture::load(const QImage& im, const QSize& size, GLuint tn)
+bool GLViewerTexture::load(const QImage& im, const QSize& size)
 {
     d->qimage       = im;
     d->initial_size = size;
-    d->texnr        = tn;
     loadInternal();
     reset();
     d->rotate_idx   = 0;
@@ -183,46 +162,32 @@ bool GLViewerTexture::loadInternal()
     int w = d->initial_size.width();
     int h = d->initial_size.height();
 
+    destroy();
+
     if (w == 0 || w > d->qimage.width() || h > d->qimage.height())
     {
-        d->glimage = QGLWidget::convertToGLFormat(d->qimage);
+        setData(d->qimage.mirrored());
     }
     else
     {
-        d->glimage = QGLWidget::convertToGLFormat(d->qimage.scaled(w,h,Qt::KeepAspectRatio,Qt::FastTransformation));
+        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio, Qt::FastTransformation).mirrored());
     }
 
-    w = d->glimage.width();
-    h = d->glimage.height();
+    w = width();
+    h = height();
 
     if (h < w)
     {
         d->rtx = 1;
-        d->rty = float(h)/float(w);
+        d->rty = float(h) / float(w);
     }
     else
     {
-        d->rtx = float(w)/float(h);
+        d->rtx = float(w) / float(h);
         d->rty = 1;
     }
 
     return true;
-}
-
-/*!
-    \fn GLViewerTexture::data() const
- */
-GLvoid* GLViewerTexture::data() const
-{
-    return d->glimage.bits();
-}
-
-/*!
-    \fn GLViewerTexture::texnr() const
- */
-GLuint GLViewerTexture::texnr() const
-{
-    return d->texnr;
 }
 
 /*!
@@ -233,27 +198,27 @@ GLuint GLViewerTexture::texnr() const
     \TODO rename mousepos to something more generic
 */
 void GLViewerTexture::zoom(float delta, const QPoint& mousepos)
-//u: start in texture, u=[0..1], u=0 is begin, u=1 is end of texture
-//z=[0..1], z=1 -> no zoom
-//l: length of tex in glFrustum coordinate system
-//rt: ratio of tex, rt<=1, see loadInternal() for definition
-//rd: ratio of display, rd>=1
-//m: mouse pos normalized, cd=[0..rd]
-//c:  mouse pos normalized to zoom*l, c=[0..1]
+// u: start in texture, u = [0..1], u = 0 is begin, u = 1 is end of texture
+// z = [0..1], z = 1 -> no zoom
+// l: length of tex in glFrustum coordinate system
+// rt: ratio of tex, rt <= 1, see loadInternal() for definition
+// rd: ratio of display, rd >= 1
+// m: mouse pos normalized, cd = [0..rd]
+// c: mouse pos normalized to zoom * l, c = [0..1]
 {
     d->z    *= delta;
-    delta    =  d->z*(1.0/delta-1.0); //convert to real delta=z_old-z_new
+    delta    =  d->z * (1.0 / delta - 1.0); //convert to real delta = z_old - z_new
 
-    float mx = mousepos.x()/(float)d->display_x*d->rdx;
-    float cx = (mx-d->rdx/2.0+d->rtx/2.0)/d->rtx;
-    float vx = d->ux+cx*d->z;
-    d->ux    = d->ux+(vx-d->ux)*delta/d->z;
+    float mx = mousepos.x() / (float)d->display_x * d->rdx;
+    float cx = (mx-d->rdx / 2.0 + d->rtx / 2.0) / d->rtx;
+    float vx = d->ux + cx * d->z;
+    d->ux    = d->ux + (vx - d->ux) * delta / d->z;
 
-    float my = mousepos.y()/(float)d->display_y*d->rdy;
-    float cy = (my-d->rdy/2.0+d->rty/2.0)/d->rty;
-    cy       = 1-cy;
-    float vy = d->uy+cy*d->z;
-    d->uy    = d->uy+(vy-d->uy)*delta/d->z;
+    float my = mousepos.y() / (float)d->display_y * d->rdy;
+    float cy = (my-d->rdy / 2.0 + d->rty / 2.0) / d->rty;
+    cy       = 1 - cy;
+    float vy = d->uy + cy * d->z;
+    d->uy    = d->uy + (vy - d->uy) * delta / d->z;
 
     calcVertex();
 }
@@ -264,30 +229,30 @@ void GLViewerTexture::zoom(float delta, const QPoint& mousepos)
     z, ux, uy are calculated in GLViewerTexture::zoom()
  */
 void GLViewerTexture::calcVertex()
-// rt: ratio of tex, rt<=1, see loadInternal() for definition
-// u: start in texture, u=[0..1], u=0 is begin, u=1 is end of texture
+// rt: ratio of tex, rt <= 1, see loadInternal() for definition
+// u: start in texture, u = [0..1], u=0 is begin, u=1 is end of texture
 // l: length of tex in glFrustum coordinate system
 // halftexel: the color of a texel is determined by a corner of the texel and not its center point
-//                  this seems to introduce a visible jump on changing the tex-size.
+//            this seems to introduce a visible jump on changing the tex-size.
 //
-// the glFrustum coord-sys is visible in [-rdx..rdx] ([-1..1] for square screen) for z=1 (no zoom)
+// the glFrustum coord-sys is visible in [-rdx..rdx] ([-1..1] for square screen) for z = 1 (no zoom)
 // the tex coord-sys goes from [-rtx..rtx] ([-1..1] for square texture)
 {
     // x part
-    float lx          = 2*d->rtx/d->z;  //length of tex
-    float tsx         = lx/(float)d->glimage.width(); //texelsize in glFrustum coordinates
-    float halftexel_x = tsx/2.0;
-    float wx          = lx*(1-d->ux-d->z);
-    d->vleft          = -d->rtx-d->ux*lx - halftexel_x;  //left
-    d->vright         = d->rtx+wx - halftexel_x;      //right
+    float lx          = 2 * d->rtx / d->z;   //length of tex
+    float tsx         = lx / (float)width(); //texelsize in glFrustum coordinates
+    float halftexel_x = tsx / 2.0;
+    float wx          = lx * (1 - d->ux - d->z);
+    d->vleft          = -d->rtx - d->ux * lx - halftexel_x; //left
+    d->vright         = d->rtx + wx - halftexel_x;          //right
 
     // y part
-    float ly          = 2*d->rty/d->z;
-    float tsy         = ly/(float)d->glimage.height(); //texelsize in glFrustum coordinates
-    float halftexel_y = tsy/2.0;
-    float wy          = ly*(1-d->uy-d->z);
-    d->vbottom        = -d->rty - d->uy*ly + halftexel_y; //bottom
-    d->vtop           = d->rty + wy + halftexel_y;     //top
+    float ly          = 2 * d->rty / d->z;
+    float tsy         = ly / (float)height(); //texelsize in glFrustum coordinates
+    float halftexel_y = tsy / 2.0;
+    float wy          = ly * (1 - d->uy - d->z);
+    d->vbottom        = -d->rty - d->uy * ly + halftexel_y; //bottom
+    d->vtop           = d->rty + wy + halftexel_y;          //top
 }
 
 /*!
@@ -351,8 +316,8 @@ void GLViewerTexture::setViewport(int w, int h)
  */
 void GLViewerTexture::move(const QPoint& diff)
 {
-    d->ux = d->ux - diff.x() / float(d->display_x)*d->z*d->rdx / d->rtx;
-    d->uy = d->uy + diff.y() / float(d->display_y)*d->z*d->rdy / d->rty;
+    d->ux = d->ux - diff.x() / float(d->display_x) * d->z * d->rdx / d->rtx;
+    d->uy = d->uy + diff.y() / float(d->display_y) * d->z * d->rdy / d->rty;
     calcVertex();
 }
 
@@ -368,22 +333,22 @@ void GLViewerTexture::reset()
 
     if ((d->rtx < d->rty) && (d->rdx < d->rdy) && (d->rtx / d->rty < d->rdx / d->rdy))
     {
-        zoomdelta = d->z-d->rdx / d->rdy;
+        zoomdelta = d->z - d->rdx / d->rdy;
     }
 
     if ((d->rtx < d->rty) && (d->rtx / d->rty > d->rdx / d->rdy))
     {
-        zoomdelta = d->z-d->rtx;
+        zoomdelta = d->z - d->rtx;
     }
 
     if ((d->rtx >= d->rty) && (d->rdy < d->rdx) && (d->rty / d->rtx < d->rdy / d->rdx))
     {
-        zoomdelta = d->z-d->rdy / d->rdx;
+        zoomdelta = d->z - d->rdy / d->rdx;
     }
 
     if ((d->rtx >= d->rty) && (d->rty / d->rtx > d->rdy / d->rdx))
     {
-        zoomdelta = d->z-d->rty;
+        zoomdelta = d->z - d->rty;
     }
 
     QPoint p = QPoint(d->display_x / 2, d->display_y / 2);
@@ -393,18 +358,18 @@ void GLViewerTexture::reset()
 }
 
 /*!
-    \fn GLViewerTexture::setSize(QSize size)
+    \fn GLViewerTexture::setNewSize(QSize size)
     \param size desired texture size. QSize(0,0) will take the full image
     \return true if size has changed, false otherwise
     set new texture size in order to reduce AGP bandwidth
  */
-bool GLViewerTexture::setSize(QSize size)
+bool GLViewerTexture::setNewSize(QSize size)
 {
-    //don't allow larger textures than the original image. the image will be upsampled by
-    //OpenGL if necessary and not by QImage::scale
+    // don't allow larger textures than the original image. the image will be upsampled by
+    // OpenGL if necessary and not by QImage::scale
     size = size.boundedTo(d->qimage.size());
 
-    if (d->glimage.width() == size.width())
+    if (width() == size.width())
     {
         return false;
     }
@@ -412,16 +377,18 @@ bool GLViewerTexture::setSize(QSize size)
     int w = size.width();
     int h = size.height();
 
+    destroy();
+
     if (w == 0)
     {
-        d->glimage = QGLWidget::convertToGLFormat(d->qimage);
+        setData(d->qimage.mirrored());
     }
     else
     {
-        d->glimage = QGLWidget::convertToGLFormat(d->qimage.scaled(w, h, Qt::KeepAspectRatio, Qt::FastTransformation));
+        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio, Qt::FastTransformation).mirrored());
     }
 
-    //recalculate half-texel offset
+    // recalculate half-texel offset
     calcVertex();
 
     return true;
@@ -472,7 +439,7 @@ void GLViewerTexture::zoomToOriginal()
         zoomfactorToOriginal = float(d->display_y) / d->qimage.height();
     }
 
-    zoom(zoomfactorToOriginal,QPoint(d->display_x / 2 , d->display_y / 2));
+    zoom(zoomfactorToOriginal, QPoint(d->display_x / 2, d->display_y / 2));
 }
 
 } // namespace DigikamGenericGLViewerPlugin
