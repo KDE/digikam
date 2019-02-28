@@ -37,6 +37,5 @@ BUGFIXES:
 020 ==> 368262 - Google services tool does not use kaccounts.
 021 ==> 376913 - Can't create a new album in picasa/googlephoto.
 022 ==> 404896 - Vertical video are displayed horizontally.
-023 ==> 
-
-
+023 ==> 404859 - Using Batch Queue Manager to make a JPG copy of the images on completion the "arw" images are no longer visible in the originating album.
+024 ==> 
