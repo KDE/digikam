@@ -29,7 +29,6 @@
 #include <solid/camera.h>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
-#include <solid/devicenotifier.h>
 #include <solid/predicate.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
@@ -354,12 +353,6 @@ void DigikamApp::fillSolidMenus()
 
     updateCameraMenu();
     updateQuickImportAction();
-
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
-            this, SLOT(slotSolidDeviceChanged(QString)));
-
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
-            this, SLOT(slotSolidDeviceChanged(QString)));
 }
 
 bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)

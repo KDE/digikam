@@ -24,9 +24,13 @@
 #include "digikamapp.h"
 #include "digikamapp_p.h"
 
+// Solid includes
+
+#include <solid/devicenotifier.h>
+
 namespace Digikam
 {
-    
+
 void DigikamApp::autoDetect()
 {
     // Called from main if command line option is set, or via DBus
@@ -106,6 +110,12 @@ void DigikamApp::loadCameras()
     // -- scan Solid devices -------------------------------------------
 
     fillSolidMenus();
+
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)));
+
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)));
 
     // -- queued connections -------------------------------------------
 
