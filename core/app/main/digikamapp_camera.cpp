@@ -132,17 +132,17 @@ void DigikamApp::updateCameraMenu()
 {
     d->cameraMenu->clear();
 
-    foreach(QAction* const action, d->solidCameraActionGroup->actions())
+    foreach (QAction* const action, d->solidCameraActionGroup->actions())
     {
         d->cameraMenu->addAction(action);
     }
 
     d->cameraMenu->addSeparator();
 
-    foreach(QAction* const action, d->manualCameraActionGroup->actions())
+    foreach (QAction* const action, d->manualCameraActionGroup->actions())
     {
         // remove duplicate entries, prefer manually added cameras
-        foreach(QAction* const actionSolid, d->solidCameraActionGroup->actions())
+        foreach (QAction* const actionSolid, d->solidCameraActionGroup->actions())
         {
             if (CameraNameHelper::sameDevices(actionSolid->iconText(), action->iconText()))
             {
