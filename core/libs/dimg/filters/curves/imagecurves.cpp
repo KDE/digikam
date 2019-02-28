@@ -1067,10 +1067,10 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
 
 void ImageCurves::unsetCurvePoint(int channel, int point)
 {
-    if (d->curves                                 &&
-        channel >= 0                              &&
-        channel < NUM_CHANNELS                    &&
-        point >= 0                                &&
+    if (d->curves              &&
+        channel >= 0           &&
+        channel < NUM_CHANNELS &&
+        point >= 0             &&
         point < NUM_POINTS)
     {
         d->curves->points[channel][point][0] = -1;
@@ -1129,7 +1129,7 @@ void ImageCurves::setCurvePointX(int channel, int point, int x)
         point >= 0             &&
         point < NUM_POINTS     &&
         x >= -1                &&
-         x <= d->segmentMax) // x can be equal to -1 if the current point is disable !!!
+        x <= d->segmentMax) // x can be equal to -1 if the current point is disable !!!
     {
         d->dirty = true;
         d->curves->points[channel][point][0] = x;

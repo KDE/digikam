@@ -142,7 +142,7 @@ public:
 
         closestPoint = 0;
 
-        for (int i = 0; i < ImageCurves::NUM_POINTS; ++i)
+        for (int i = 0 ; i < ImageCurves::NUM_POINTS ; ++i)
         {
             int xcurvepoint = curves->getCurvePointX(channelType, i);
 
@@ -224,7 +224,7 @@ public:
         QPainterPath curvePath;
         curvePath.moveTo(0, wHeight);
 
-        for (int x = 0 ; x < wWidth; ++x)
+        for (int x = 0 ; x < wWidth ; ++x)
         {
 
             // TODO duplicate code...
@@ -379,13 +379,13 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 {
     qCDebug(DIGIKAM_DIMG_LOG) << "Storing curves";
 
-    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
+    for (int channel = 0 ; channel < ImageCurves::NUM_CHANNELS ; ++channel)
     {
 
         group.writeEntry(Private::getChannelTypeOption(prefix, channel),
                          (int) curves()->getCurveType(channel));
 
-        for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
+        for (int point = 0 ; point <= ImageCurves::NUM_POINTS ; ++point)
         {
             QPoint p = curves()->getCurvePoint(channel, point);
 
@@ -409,14 +409,14 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 
     qCDebug(DIGIKAM_DIMG_LOG) << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
 
-    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
+    for (int channel = 0 ; channel < ImageCurves::NUM_CHANNELS ; ++channel)
     {
 
         curves()->setCurveType(channel, (ImageCurves::CurveType) group.readEntry(
                                    Private::getChannelTypeOption(
                                        prefix, channel), 0));
 
-        for (int point = 0; point <= ImageCurves::NUM_POINTS; ++point)
+        for (int point = 0 ; point <= ImageCurves::NUM_POINTS ; ++point)
         {
             QPoint p = group.readEntry(Private::getPointOption(prefix,
                                                                         channel, point), ImageCurves::getDisabledValue());
@@ -531,7 +531,7 @@ void CurvesWidget::curveTypeChanged()
             //  pick representative points from the curve and make them control points
             int index;
 
-            for (int i = 0; i <= 16; ++i)
+            for (int i = 0 ; i <= 16 ; ++i)
             {
                 index = CLAMP(i * d->imageHistogram->getHistogramSegments() / 16, 0, d->imageHistogram->getMaxSegmentIndex());
                 d->curves->setCurvePoint(d->channelType, i, QPoint(index, d->curves->getCurveValue(d->channelType, index)));
@@ -670,7 +670,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
 
             d->leftMost = -1;
 
-            for (int i = closest_point - 1; i >= 0; --i)
+            for (int i = closest_point - 1 ; i >= 0 ; --i)
             {
                 if (d->curves->getCurvePointX(d->channelType, i) != -1)
                 {
@@ -681,7 +681,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
 
             d->rightMost = d->imageHistogram->getHistogramSegments();
 
-            for (int i = closest_point + 1; i < ImageCurves::NUM_POINTS; ++i)
+            for (int i = closest_point + 1 ; i < ImageCurves::NUM_POINTS ; ++i)
             {
                 if (d->curves->getCurvePointX(d->channelType, i) != -1)
                 {
@@ -692,22 +692,22 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
 
             d->grabPoint = closest_point;
 
-            if(e->button() == Qt::LeftButton)
-            {   
+            if (e->button() == Qt::LeftButton)
+            {
                 d->curves->setCurvePoint(d->channelType, d->grabPoint,
-                                     QPoint(x, d->imageHistogram->getHistogramSegments() - y));
+                                         QPoint(x, d->imageHistogram->getHistogramSegments() - y));
 
             }
             else if (e->button() == Qt::RightButton)
             {
                 int interval = x - d->curves->getCurvePointX(d->channelType, closest_point);
-                
-                if(interval <= 3 && interval >= -3)
+
+                if (interval <= 3 && interval >= -3)
                 {
                     d->curves->unsetCurvePoint(d->channelType, closest_point);
                 }
             }
-            
+
             break;
         }
 
@@ -732,7 +732,9 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    if ((e->button() == Qt::LeftButton && e->button() == Qt::RightButton) || d->clearFlag == Private::HistogramStarted)
+    if ((e->button() == Qt::LeftButton          &&
+         e->button() == Qt::RightButton)        ||
+        d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
@@ -748,7 +750,8 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (e->buttons() == Qt::RightButton || d->clearFlag == Private::HistogramStarted)
+    if (e->buttons() == Qt::RightButton ||
+        d->clearFlag == Private::HistogramStarted)
     {
         return;
     }

@@ -110,6 +110,7 @@ public:
     void   setCurveValues(int channel, const QPolygon& vals);
 
     void   unsetCurvePoint(int channel, int point);
+
     // Properties.
 
     bool   isDirty()                                     const;
