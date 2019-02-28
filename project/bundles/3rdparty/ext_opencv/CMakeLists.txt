@@ -17,6 +17,7 @@ set(Opencv_Conf -DBUILD_EXAMPLES=OFF
                 -DBUILD_opencv_java=OFF
                 -DBUILD_opencv_python2=OFF
                 -DBUILD_opencv_python3=OFF
+                -DBUILD_opencv_videoio=OFF
                 -DOPENCV_BUILD_3RDPARTY_LIBS=OFF
                 -DINSTALL_C_EXAMPLES=OFF
                 -DINSTALL_PYTHON_EXAMPLES=OFF
@@ -49,8 +50,10 @@ set(Opencv_Conf -DBUILD_EXAMPLES=OFF
                 -DWITH_VIDEOINPUT=OFF
                 -DWITH_XINE=OFF
                 -DWITH_OPENCL=OFF
+                -DWITH_OPENCLAMDFFT=OFF
+                -DWITH_OPENCLAMDBLAS=OFF
+                -DWITH_VA_INTEL=OFF
                 -DWITH_GPHOTO2=OFF
-                -DBUILD_opencv_videoio=OFF
 )
 
 JoinListAsString("${Opencv_Conf}" " " BASH_OPTIONS)
