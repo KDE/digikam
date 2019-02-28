@@ -92,7 +92,7 @@ public:
         moveCursor = QCursor(Qt::PointingHandCursor);
 
         // get path of nullImage in case QImage can't load the image
-        nullImage  = QIcon::fromTheme(QLatin1String("image-missing")).pixmap(256);
+        nullImage  = QIcon::fromTheme(QLatin1String("image-jpeg")).pixmap(256);
 
         // while zooming is performed, the image is downsampled to d->zoomsize. This seems to
         // be the optimal way for a PentiumM 1.4G, Nvidia FX5200. For a faster setup, this might
