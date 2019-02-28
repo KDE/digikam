@@ -143,6 +143,8 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     : QOpenGLWidget(),
       d(new Private)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     d->plugin = plugin;
     d->iface  = iface;
 
