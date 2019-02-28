@@ -112,10 +112,12 @@ void DigikamApp::loadCameras()
     fillSolidMenus();
 
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
-            this, SLOT(slotSolidDeviceChanged(QString)));
+            this, SLOT(slotSolidDeviceChanged(QString)),
+            Qt::QueuedConnection);
 
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
-            this, SLOT(slotSolidDeviceChanged(QString)));
+            this, SLOT(slotSolidDeviceChanged(QString)),
+            Qt::QueuedConnection);
 
     // -- queued connections -------------------------------------------
 
