@@ -39,4 +39,5 @@ BUGFIXES:
 022 ==> 404896 - Vertical video are displayed horizontally.
 023 ==> 404859 - Using Batch Queue Manager to make a JPG copy of the images on completion the "arw" images are no longer visible in the originating album.
 024 ==> 404893 - Digikam::DigikamApp::slotSolidDeviceChanged: slotSolidDeviceChanged: messages referring to directory that digikam should not care about.
-025 ==> 
+025 ==> 264296 - Lack of right-click delete of points in Curves [patch].
+026 ==> 

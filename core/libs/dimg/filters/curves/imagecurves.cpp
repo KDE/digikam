@@ -1065,6 +1065,19 @@ void ImageCurves::setCurvePoint(int channel, int point, const QPoint& val)
     }
 }
 
+void ImageCurves::unsetCurvePoint(int channel, int point)
+{
+    if (d->curves                                 &&
+        channel >= 0                              &&
+        channel < NUM_CHANNELS                    &&
+        point >= 0                                &&
+        point < NUM_POINTS)
+    {
+        d->curves->points[channel][point][0] = -1;
+        d->curves->points[channel][point][1] = -1;
+    }
+}
+
 void ImageCurves::setCurvePoints(int channel, const QPolygon& vals)
 {
     if (d->curves    &&

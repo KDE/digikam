@@ -652,7 +652,7 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
         return;
     }
 
-    if (e->button() != Qt::LeftButton || d->clearFlag == Private::HistogramStarted)
+    if (d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
@@ -691,9 +691,23 @@ void CurvesWidget::mousePressEvent(QMouseEvent* e)
             }
 
             d->grabPoint = closest_point;
-            d->curves->setCurvePoint(d->channelType, d->grabPoint,
+
+            if(e->button() == Qt::LeftButton)
+            {   
+                d->curves->setCurvePoint(d->channelType, d->grabPoint,
                                      QPoint(x, d->imageHistogram->getHistogramSegments() - y));
 
+            }
+            else if (e->button() == Qt::RightButton)
+            {
+                int interval = x - d->curves->getCurvePointX(d->channelType, closest_point);
+                
+                if(interval <= 3 && interval >= -3)
+                {
+                    d->curves->unsetCurvePoint(d->channelType, closest_point);
+                }
+            }
+            
             break;
         }
 
@@ -718,7 +732,7 @@ void CurvesWidget::mouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    if (e->button() != Qt::LeftButton || d->clearFlag == Private::HistogramStarted)
+    if ((e->button() == Qt::LeftButton && e->button() == Qt::RightButton) || d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
@@ -734,7 +748,7 @@ void CurvesWidget::mouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (d->clearFlag == Private::HistogramStarted)
+    if (e->buttons() == Qt::RightButton || d->clearFlag == Private::HistogramStarted)
     {
         return;
     }
