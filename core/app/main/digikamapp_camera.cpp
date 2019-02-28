@@ -94,7 +94,7 @@ void DigikamApp::loadCameras()
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     ac->addAction(QLatin1String("import_addImages"), d->addImagesAction);
-    ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL+Qt::ALT+Qt::Key_I);
+    ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL + Qt::ALT + Qt::Key_I);
 
     // -----------------------------------------------------------------
 
