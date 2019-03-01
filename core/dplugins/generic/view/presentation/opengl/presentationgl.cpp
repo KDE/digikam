@@ -175,10 +175,6 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
     d->slideCtrlWidget = new PresentationCtrlWidget(this);
     d->slideCtrlWidget->hide();
 
-    d->texture[0]      = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    d->texture[1]      = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    d->texture[2]      = new QOpenGLTexture(QOpenGLTexture::Target2D); // end screen texture
-
     if (!d->sharedData->loop)
     {
         d->slideCtrlWidget->setEnabledPrev(false);
@@ -306,11 +302,15 @@ void PresentationGL::initializeGL()
     d->width  = QApplication::desktop()->width();
     d->height = QApplication::desktop()->height();
 
-    d->width  = 1 << (int)ceil(log((float)d->width) / log((float)2)) ;
+    d->width  = 1 << (int)ceil(log((float)d->width)  / log((float)2)) ;
     d->height = 1 << (int)ceil(log((float)d->height) / log((float)2));
 
-    d->width  = qMin( maxTexVal, d->width );
-    d->height = qMin( maxTexVal, d->height );
+    d->width  = qMin(maxTexVal, d->width);
+    d->height = qMin(maxTexVal, d->height);
+
+    d->texture[0] = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    d->texture[1] = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    d->texture[2] = new QOpenGLTexture(QOpenGLTexture::Target2D); // end screen texture
 }
 
 void PresentationGL::paintGL()

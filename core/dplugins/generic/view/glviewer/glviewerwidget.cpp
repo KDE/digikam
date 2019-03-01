@@ -202,13 +202,6 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
 
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << d->files.count() << "images loaded";
 
-    // initialize cache
-    for(int i = 0 ; i < CACHESIZE ; ++i)
-    {
-        d->cache[i].file_index = EMPTY;
-        d->cache[i].texture    = new GLViewerTexture(d->iface);
-    }
-
     if (d->files.isEmpty())
         return;
 
@@ -242,15 +235,25 @@ GLViewerWidget::~GLViewerWidget()
 void GLViewerWidget::initializeGL()
 {
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
+
     // Clear The Background Color
     glClearColor(0.0, 0.0, 0.0, 1.0f);
+
     // Turn Blending On
     glEnable(GL_BLEND);
+
     // Blending Function For Translucency Based On Source Alpha Value
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Enable perspective vision
     glClearDepth(1.0f);
-    //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "width=" << width();
+
+    // initialize cache
+    for(int i = 0 ; i < CACHESIZE ; ++i)
+    {
+        d->cache[i].file_index = EMPTY;
+        d->cache[i].texture    = new GLViewerTexture(d->iface);
+    }
 }
 
 bool GLViewerWidget::listOfFilesIsEmpty() const
