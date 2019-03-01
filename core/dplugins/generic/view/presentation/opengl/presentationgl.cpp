@@ -47,6 +47,7 @@
 #include <QTimer>
 #include <QWheelEvent>
 #include <QApplication>
+#include <QOpenGLTexture>
 
 // KDE includes
 
@@ -83,6 +84,7 @@ public:
         imageLoader         = 0;
         texture[0]          = 0;
         texture[1]          = 0;
+        texture[2]          = 0;
         curr                = 0;
         width               = 0;
         height              = 0;
@@ -116,7 +118,7 @@ public:
     int                               fileIndex;
 
     PresentationLoader*               imageLoader;
-    GLuint                            texture[2];
+    QOpenGLTexture*                   texture[3];
     bool                              tex1First;
     int                               curr;
 
@@ -153,7 +155,7 @@ public:
 };
 
 PresentationGL::PresentationGL(PresentationContainer* const sharedData)
-    : QGLWidget(),
+    : QOpenGLWidget(),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -172,6 +174,10 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
     d->slideCtrlWidget = new PresentationCtrlWidget(this);
     d->slideCtrlWidget->hide();
+
+    d->texture[0]      = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    d->texture[1]      = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    d->texture[2]      = new QOpenGLTexture(QOpenGLTexture::Target2D); // end screen texture
 
     if (!d->sharedData->loop)
     {
@@ -251,7 +257,7 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
     // -- hide cursor when not moved --------------------
 
-    d->mouseMoveTimer = new QTimer;
+    d->mouseMoveTimer = new QTimer(this);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -262,15 +268,14 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
 PresentationGL::~PresentationGL()
 {
+    d->texture[0]->destroy();
+    d->texture[1]->destroy();
+    d->texture[2]->destroy();
 
-    if (d->texture[0])
-        glDeleteTextures(1, &d->texture[0]);
-
-    if (d->texture[1])
-        glDeleteTextures(1, &d->texture[1]);
-
+    delete d->texture[0];
+    delete d->texture[1];
+    delete d->texture[2];
     delete d->imageLoader;
-    delete d->mouseMoveTimer;
     delete d;
 }
 
@@ -568,26 +573,20 @@ void PresentationGL::previousFrame()
 void PresentationGL::loadImage()
 {
     QImage image = d->imageLoader->getCurrent();
+    int a        = d->tex1First ? 0 : 1;
 
     if (!image.isNull())
     {
-        int a       = d->tex1First ? 0 : 1;
-        GLuint& tex = d->texture[a];
-
-        if (tex)
-            glDeleteTextures(1, &tex);
-
         QImage black(width(), height(), QImage::Format_RGB32);
 
         black.fill(QColor(0, 0, 0).rgb());
 
-        /*        image = image.smoothScale(width(), height(),
-                                          Qt::ScaleMin);*/
         montage(image, black);
 
         if (!d->sharedData->openGlFullScale)
         {
-            black = black.scaled(d->width, d->height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            black = black.scaled(d->width, d->height,
+                                 Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
 
         if (d->sharedData->printFileName)
@@ -599,20 +598,17 @@ void PresentationGL::loadImage()
         if (d->sharedData->printFileComments)
             printComments(black);
 
-        QImage t = convertToGLFormat(black);
-
         /* create the texture */
-        glGenTextures(1, &tex);
+        d->texture[a]->destroy();
+        d->texture[a]->setData(black.mirrored());
+        d->texture[a]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        d->texture[a]->setMagnificationFilter(QOpenGLTexture::Linear);
+        GLuint tex = d->texture[a]->textureId();
 
         glBindTexture(GL_TEXTURE_2D, tex);
 
-        /* actually generate the texture */
-        glTexImage2D( GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0,
-                      GL_RGBA, GL_UNSIGNED_BYTE, t.bits() );
-
         /* enable linear filtering  */
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
 }
@@ -627,9 +623,11 @@ void PresentationGL::montage(QImage& top, QImage& bot)
     if (tw > bw || th > bh)
         qFatal("Top Image should be smaller or same size as Bottom Image");
 
-    if (top.depth() != 32) top = top.convertToFormat(QImage::Format_RGB32);
+    if (top.depth() != 32)
+        top = top.convertToFormat(QImage::Format_RGB32);
 
-    if (bot.depth() != 32) bot = bot.convertToFormat(QImage::Format_RGB32);
+    if (bot.depth() != 32)
+        bot = bot.convertToFormat(QImage::Format_RGB32);
 
     int sw = bw / 2 - tw / 2; //int ew = bw/2 + tw/2;
     int sh = bh / 2 - th / 2;
@@ -638,11 +636,11 @@ void PresentationGL::montage(QImage& top, QImage& bot)
     unsigned int* tdata = reinterpret_cast<unsigned int*>(top.scanLine(0));
     unsigned int* bdata = 0;
 
-    for (int y = sh; y < eh; ++y)
+    for (int y = sh ; y < eh ; ++y)
     {
         bdata = reinterpret_cast<unsigned int*>(bot.scanLine(y)) + sw;
 
-        for (int x = 0; x < tw; ++x)
+        for (int x = 0 ; x < tw ; ++x)
         {
             *(bdata++) = *(tdata++);
         }
@@ -699,7 +697,7 @@ void PresentationGL::printComments(QImage& layer)
 
         int commentsLinesLengthLocal = d->sharedData->commentsLinesLength;
 
-        for (currIndex = commentsIndex; currIndex < (uint) comments.length() && !breakLine; ++currIndex)
+        for (currIndex = commentsIndex ; currIndex < (uint)comments.length() && !breakLine ; ++currIndex)
         {
             if (comments[currIndex] == QLatin1Char('\n') || comments[currIndex].isSpace())
             {
@@ -712,8 +710,8 @@ void PresentationGL::printComments(QImage& layer)
 
         breakLine = false;
 
-        for ( currIndex = commentsIndex; currIndex <= commentsIndex + commentsLinesLengthLocal &&
-                currIndex < (uint) comments.length() && !breakLine; ++currIndex )
+        for ( currIndex = commentsIndex ; currIndex <= commentsIndex + commentsLinesLengthLocal &&
+                currIndex < (uint)comments.length() && !breakLine ; ++currIndex )
         {
             breakLine = (comments[currIndex] == QLatin1Char('\n')) ? true : false;
 
@@ -745,7 +743,7 @@ void PresentationGL::printComments(QImage& layer)
     bool   drawTextOutline = d->sharedData->commentsDrawOutline;
     int    opacity = d->sharedData->bgOpacity;
 
-    for ( int lineNumber = 0; lineNumber < (int)commentsByLines.count(); ++lineNumber )
+    for ( int lineNumber = 0 ; lineNumber < (int)commentsByLines.count() ; ++lineNumber )
     {
         QPixmap pix = generateCustomOutlinedTextPixmap(commentsByLines[lineNumber],
                                                        font, fgColor, bgColor, opacity, drawTextOutline);
@@ -785,17 +783,16 @@ void PresentationGL::showEndOfShow()
     p.end();
 
     QImage image(pix.toImage());
-    QImage t = convertToGLFormat(image);
-
-    GLuint tex;
 
     /* create the texture */
-    glGenTextures(1, &tex);
+    d->texture[2]->destroy();
+    d->texture[2]->setData(image.mirrored());
+    d->texture[2]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    d->texture[2]->setMagnificationFilter(QOpenGLTexture::Linear);
+    GLuint tex = d->texture[2]->textureId();
+
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    /* actually generate the texture */
-    glTexImage2D( GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0,
-                  GL_RGBA, GL_UNSIGNED_BYTE, t.bits() );
     /* enable linear filtering  */
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -845,7 +842,7 @@ void PresentationGL::slotTimeOut()
             // effect was running and is complete now
             // run timer while showing current image
             d->timeout = d->sharedData->delay;
-            d->i     = 0;
+            d->i       = 0;
         }
         else
         {
@@ -859,7 +856,7 @@ void PresentationGL::slotTimeOut()
 
             if (d->endOfShow)
             {
-                updateGL();
+                update();
                 return;
             }
 
@@ -872,10 +869,7 @@ void PresentationGL::slotTimeOut()
         }
     }
 
-    updateGL();
-
-    if (d->timeout < 0)
-        d->timeout = 0;
+    update();
 
     d->timer->setSingleShot(true);
     d->timer->start(d->timeout);
@@ -896,7 +890,7 @@ void PresentationGL::paintTexture()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    GLuint& tex = d->texture[d->curr];
+    GLuint tex = d->texture[d->curr]->textureId();
     glBindTexture(GL_TEXTURE_2D, tex);
 
     glBegin(GL_QUADS);
@@ -922,7 +916,7 @@ void PresentationGL::effectNone()
 {
     paintTexture();
     d->effectRunning = false;
-    d->timeout = -1;
+    d->timeout       = 0;
     return;
 }
 
@@ -932,15 +926,15 @@ void PresentationGL::effectBlend()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
     int a = (d->curr == 0) ? 1 : 0;
     int b =  d->curr;
 
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
 
     glBindTexture(GL_TEXTURE_2D, ta);
 
@@ -990,7 +984,7 @@ void PresentationGL::effectFade()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1008,7 +1002,7 @@ void PresentationGL::effectFade()
         a = d->curr;
     }
 
-    GLuint& ta = d->texture[a];
+    GLuint ta = d->texture[a]->textureId();
     glBindTexture(GL_TEXTURE_2D, ta);
 
     glBegin(GL_QUADS);
@@ -1039,7 +1033,7 @@ void PresentationGL::effectRotate()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1049,8 +1043,8 @@ void PresentationGL::effectRotate()
     int a = (d->curr == 0) ? 1 : 0;
     int b =  d->curr;
 
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
     glBindTexture(GL_TEXTURE_2D, tb);
 
     glBegin(GL_QUADS);
@@ -1106,7 +1100,7 @@ void PresentationGL::effectBend()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1116,8 +1110,8 @@ void PresentationGL::effectBend()
     int a = (d->curr == 0) ? 1 : 0;
     int b =  d->curr;
 
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
     glBindTexture(GL_TEXTURE_2D, tb);
 
     glBegin(GL_QUADS);
@@ -1175,7 +1169,7 @@ void PresentationGL::effectInOut()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout       = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1198,7 +1192,7 @@ void PresentationGL::effectInOut()
         out = 0;
     }
 
-    GLuint& ta = d->texture[a];
+    GLuint ta = d->texture[a]->textureId();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     float t    = out ? 1.0 / 50.0 * (50.0 - d->i) : 1.0 / 50.0 * (d->i - 50.0);
@@ -1239,7 +1233,7 @@ void PresentationGL::effectSlide()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1248,8 +1242,8 @@ void PresentationGL::effectSlide()
 
     int a      = (d->curr == 0) ? 1 : 0;
     int b      =  d->curr;
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
     glBindTexture(GL_TEXTURE_2D, tb);
 
     glBegin(GL_QUADS);
@@ -1309,20 +1303,20 @@ void PresentationGL::effectFlutter()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout = -1;
+        d->timeout       = 0;
         return;
     }
 
     int a      = (d->curr == 0) ? 1 : 0;
     int b      =  d->curr;
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
 
     if (d->i == 0)
     {
-        for (int x = 0; x < 40; ++x)
+        for (int x = 0 ; x < 40 ; ++x)
         {
-            for (int y = 0; y < 40; ++y)
+            for (int y = 0 ; y < 40 ; ++y)
             {
                 d->points[x][y][0] = (float) (x / 20.0f - 1.0f);
                 d->points[x][y][1] = (float) (y / 20.0f - 1.0f);
@@ -1367,9 +1361,9 @@ void PresentationGL::effectFlutter()
         float float_x, float_y, float_xb, float_yb;
         int x, y;
 
-        for (x = 0; x < 39; ++x)
+        for (x = 0 ; x < 39 ; ++x)
         {
-            for (y = 0; y < 39; ++y)
+            for (y = 0 ; y < 39 ; ++y)
             {
                 float_x  = (float) x / 40.0f;
                 float_y  = (float) y / 40.0f;
@@ -1397,11 +1391,11 @@ void PresentationGL::effectFlutter()
         float hold;
         int x, y;
 
-        for (y = 0; y < 40; ++y)
+        for (y = 0 ; y < 40 ; ++y)
         {
             hold = d->points[0][y][2];
 
-            for (x = 0; x < 39; ++x)
+            for (x = 0 ; x < 39 ; ++x)
             {
                 d->points[x][y][2] = d->points[x + 1][y][2];
             }
@@ -1422,7 +1416,7 @@ void PresentationGL::effectCube()
     {
         paintTexture();
         d->effectRunning = false;
-        d->timeout       = -1;
+        d->timeout       = 0;
         return;
     }
 
@@ -1433,8 +1427,8 @@ void PresentationGL::effectCube()
 
     int a      = (d->curr == 0) ? 1 : 0;
     int b      =  d->curr;
-    GLuint& ta = d->texture[a];
-    GLuint& tb = d->texture[b];
+    GLuint ta = d->texture[a]->textureId();
+    GLuint tb = d->texture[b]->textureId();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -1621,14 +1615,14 @@ void PresentationGL::slotPrev()
 
     if (d->endOfShow)
     {
-        updateGL();
+        update();
         return;
     }
 
     d->effectRunning = false;
 
     loadImage();
-    updateGL();
+    update();
 }
 
 void PresentationGL::slotNext()
@@ -1637,14 +1631,14 @@ void PresentationGL::slotNext()
 
     if (d->endOfShow)
     {
-        updateGL();
+        update();
         return;
     }
 
     d->effectRunning = false;
 
     loadImage();
-    updateGL();
+    update();
 }
 
 void PresentationGL::slotClose()

@@ -32,7 +32,7 @@
 
 // Qt includes
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QKeyEvent>
 #include <QList>
 #include <QMap>
@@ -47,7 +47,7 @@ namespace DigikamGenericPresentationPlugin
 
 class PresentationContainer;
 
-class PresentationGL : public QGLWidget
+class PresentationGL : public QOpenGLWidget
 {
     Q_OBJECT
 
