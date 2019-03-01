@@ -220,7 +220,7 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------------------------------------------------------
 
     d->mysqlCmdBox = new DVBox(dbConfigBox);
-    d->mysqlCmdBox->layout()->setMargin(0);
+    d->mysqlCmdBox->layout()->setContentsMargins(0, 0, 0, 0);
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
     QLabel* const mysqlBinariesLabel  = new QLabel(i18n("<p>Here you can configure locations where MySQL binary tools are located. "

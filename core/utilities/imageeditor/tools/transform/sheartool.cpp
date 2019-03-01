@@ -313,7 +313,7 @@ void ShearTool::setPreviewImage()
     DImg imTemp             = filter()->getTargetImage().smoothScale(w, h, Qt::KeepAspectRatio);
     DImg imDest( w, h, filter()->getTargetImage().sixteenBit(), filter()->getTargetImage().hasAlpha() );
 
-    imDest.fill( DColor(d->previewWidget->palette().color(QPalette::Background).rgb(),
+    imDest.fill( DColor(d->previewWidget->palette().color(QPalette::Window).rgb(),
                         filter()->getTargetImage().sixteenBit()) );
     imDest.bitBltImage(&imTemp, (w-imTemp.width())/2, (h-imTemp.height())/2);
 

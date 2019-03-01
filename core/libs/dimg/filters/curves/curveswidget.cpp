@@ -179,8 +179,8 @@ public:
         // ... and we render busy text.
 
         QPainter p1(q);
-        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Window));
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
         p1.drawRect(0, 0, q->width() - 1, q->height() - 1);
         p1.drawPixmap(q->width() / 2 - anim.width() / 2, anim.height(), anim);
         p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
@@ -202,8 +202,8 @@ public:
     void renderHistogramFailed()
     {
         QPainter p1(q);
-        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Background));
-        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+        p1.fillRect(0, 0, q->width(), q->height(), q->palette().color(QPalette::Active, QPalette::Window));
+        p1.setPen(QPen(q->palette().color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
         p1.drawRect(0, 0, q->width() - 1, q->height() - 1);
         p1.setPen(q->palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, q->width(), q->height(), Qt::AlignCenter,
@@ -316,7 +316,7 @@ public:
         p1.begin(&pm);
         p1.initFrom(q);
         p1.setPen(QPen(q->palette().color(QPalette::Active,
-                                          QPalette::Foreground), 1, Qt::SolidLine));
+                                          QPalette::WindowText), 1, Qt::SolidLine));
         p1.drawRect(0, 0, pm.width() - 1, pm.height() - 1);
     }
 

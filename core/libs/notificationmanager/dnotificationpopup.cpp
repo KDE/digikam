@@ -360,7 +360,7 @@ QWidget* DNotificationPopup::standardView(const QString& caption,
 {
     QWidget* const top    = new QWidget(parent ? parent : this);
     QVBoxLayout* const vb = new QVBoxLayout(top);
-    vb->setMargin(0);
+    vb->setContentsMargins(0, 0, 0, 0);
     top->setLayout(vb);
 
     QHBoxLayout* hb = 0;
@@ -368,7 +368,7 @@ QWidget* DNotificationPopup::standardView(const QString& caption,
     if (!icon.isNull())
     {
         hb         = new QHBoxLayout(top);
-        hb->setMargin(0);
+        hb->setContentsMargins(0, 0, 0, 0);
         vb->addLayout(hb);
         d->ttlIcon = new QLabel(top);
         d->ttlIcon->setPixmap(icon);

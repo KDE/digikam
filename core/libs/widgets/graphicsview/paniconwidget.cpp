@@ -343,7 +343,7 @@ void PanIconWidget::setImage(const QImage& scaledPreviewImage, const QSize& full
     d->zoomedOrgWidth  = fullImageSize.width();
     d->zoomedOrgHeight = fullImageSize.height();
     d->pixmap          = QPixmap(d->width, d->height);
-    d->pixmap.fill(palette().color(QPalette::Background));
+    d->pixmap.fill(palette().color(QPalette::Window));
     QPainter p(&d->pixmap);
     p.drawImage(0, 0, scaledPreviewImage);
 

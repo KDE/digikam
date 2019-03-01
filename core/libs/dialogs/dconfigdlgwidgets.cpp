@@ -109,7 +109,7 @@ DConfigDlgWdgItem* DConfigDlgWdg::addPage(QWidget* widget, const QString& name)
     // force layout margin to zero so that it aligns well with title widget
     if (widget->layout())
     {
-        widget->layout()->setMargin(0);
+        widget->layout()->setContentsMargins(0, 0, 0, 0);
     }
 
     return d_func()->model()->addPage(widget, name);
@@ -208,7 +208,7 @@ DConfigDlgTitle::DConfigDlgTitle(QWidget* const parent)
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(titleFrame);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 }
 
