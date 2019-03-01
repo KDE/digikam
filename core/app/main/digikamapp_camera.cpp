@@ -24,9 +24,13 @@
 #include "digikamapp.h"
 #include "digikamapp_p.h"
 
+// Solid includes
+
+#include <solid/devicenotifier.h>
+
 namespace Digikam
 {
-    
+
 void DigikamApp::autoDetect()
 {
     // Called from main if command line option is set, or via DBus
@@ -90,7 +94,7 @@ void DigikamApp::loadCameras()
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     ac->addAction(QLatin1String("import_addImages"), d->addImagesAction);
-    ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL+Qt::ALT+Qt::Key_I);
+    ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL + Qt::ALT + Qt::Key_I);
 
     // -----------------------------------------------------------------
 
@@ -107,6 +111,14 @@ void DigikamApp::loadCameras()
 
     fillSolidMenus();
 
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)),
+            Qt::QueuedConnection);
+
+    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
+            this, SLOT(slotSolidDeviceChanged(QString)),
+            Qt::QueuedConnection);
+
     // -- queued connections -------------------------------------------
 
     connect(this, SIGNAL(queuedOpenCameraUiFromPath(QString)),
@@ -122,17 +134,17 @@ void DigikamApp::updateCameraMenu()
 {
     d->cameraMenu->clear();
 
-    foreach(QAction* const action, d->solidCameraActionGroup->actions())
+    foreach (QAction* const action, d->solidCameraActionGroup->actions())
     {
         d->cameraMenu->addAction(action);
     }
 
     d->cameraMenu->addSeparator();
 
-    foreach(QAction* const action, d->manualCameraActionGroup->actions())
+    foreach (QAction* const action, d->manualCameraActionGroup->actions())
     {
         // remove duplicate entries, prefer manually added cameras
-        foreach(QAction* const actionSolid, d->solidCameraActionGroup->actions())
+        foreach (QAction* const actionSolid, d->solidCameraActionGroup->actions())
         {
             if (CameraNameHelper::sameDevices(actionSolid->iconText(), action->iconText()))
             {

@@ -142,7 +142,7 @@ void DigikamApp::setupActions()
     d->backwardActionMenu = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("go-previous")), i18n("&Back"), this);
     d->backwardActionMenu->setEnabled(false);
     ac->addAction(QLatin1String("album_back"), d->backwardActionMenu);
-    ac->setDefaultShortcut(d->backwardActionMenu, Qt::ALT+Qt::Key_Left);
+    ac->setDefaultShortcut(d->backwardActionMenu, Qt::ALT + Qt::Key_Left);
 
     connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
@@ -166,7 +166,7 @@ void DigikamApp::setupActions()
     d->forwardActionMenu = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("go-next")), i18n("Forward"), this);
     d->forwardActionMenu->setEnabled(false);
     ac->addAction(QLatin1String("album_forward"), d->forwardActionMenu);
-    ac->setDefaultShortcut(d->forwardActionMenu, Qt::ALT+Qt::Key_Right);
+    ac->setDefaultShortcut(d->forwardActionMenu, Qt::ALT + Qt::Key_Right);
 
     connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowForwardMenu()));
@@ -368,13 +368,13 @@ void DigikamApp::setupActions()
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     ac->addAction(QLatin1String("image_lighttable"), d->imageLightTableAction);
-    ac->setDefaultShortcut(d->imageLightTableAction, Qt::CTRL+Qt::Key_L);
+    ac->setDefaultShortcut(d->imageLightTableAction, Qt::CTRL + Qt::Key_L);
 
     d->imageAddLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), i18n("Add to Light Table"), this);
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
     ac->addAction(QLatin1String("image_add_to_lighttable"), d->imageAddLightTableAction);
-    ac->setDefaultShortcut(d->imageAddLightTableAction, Qt::SHIFT+Qt::CTRL+Qt::Key_L);
+    ac->setDefaultShortcut(d->imageAddLightTableAction, Qt::SHIFT + Qt::CTRL + Qt::Key_L);
 
     // -----------------------------------------------------------
 
@@ -387,13 +387,13 @@ void DigikamApp::setupActions()
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
     ac->addAction(QLatin1String("image_add_to_current_queue"), d->imageAddCurrentQueueAction);
-    ac->setDefaultShortcut(d->imageAddCurrentQueueAction, Qt::CTRL+Qt::Key_B);
+    ac->setDefaultShortcut(d->imageAddCurrentQueueAction, Qt::CTRL + Qt::Key_B);
 
     d->imageAddNewQueueAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), i18n("Add to New Queue"), this);
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     ac->addAction(QLatin1String("image_add_to_new_queue"), d->imageAddNewQueueAction);
-    ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::SHIFT+Qt::CTRL+Qt::Key_B);
+    ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::SHIFT + Qt::CTRL + Qt::Key_B);
 
     // -----------------------------------------------------------------
 
@@ -462,7 +462,7 @@ void DigikamApp::setupActions()
     d->imageDeletePermanentlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Permanently"), this);
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
     ac->addAction(QLatin1String("image_delete_permanently"), d->imageDeletePermanentlyAction);
-    ac->setDefaultShortcut(d->imageDeletePermanentlyAction, Qt::SHIFT+Qt::Key_Delete);
+    ac->setDefaultShortcut(d->imageDeletePermanentlyAction, Qt::SHIFT + Qt::Key_Delete);
 
     // -----------------------------------------------------------
 
@@ -626,21 +626,21 @@ void DigikamApp::setupActions()
     d->selectAllAction = new QAction(i18n("Select All"), this);
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     ac->addAction(QLatin1String("selectAll"), d->selectAllAction);
-    ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL+Qt::Key_A);
+    ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL + Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new QAction(i18n("Select None"), this);
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     ac->addAction(QLatin1String("selectNone"), d->selectNoneAction);
-    ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL+Qt::SHIFT+Qt::Key_A);
+    ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL + Qt::SHIFT + Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new QAction(i18n("Invert Selection"), this);
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     ac->addAction(QLatin1String("selectInvert"), d->selectInvertAction);
-    ac->setDefaultShortcut(d->selectInvertAction, Qt::CTRL+Qt::Key_I);
+    ac->setDefaultShortcut(d->selectInvertAction, Qt::CTRL + Qt::Key_I);
 
     // -----------------------------------------------------------
 
@@ -648,7 +648,7 @@ void DigikamApp::setupActions()
     d->showBarAction->setCheckable(true);
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     ac->addAction(QLatin1String("showthumbs"), d->showBarAction);
-    ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
+    ac->setDefaultShortcut(d->showBarAction, Qt::CTRL + Qt::Key_T);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -703,13 +703,13 @@ void DigikamApp::setupActions()
     d->slideShowSelectionAction = new QAction(i18n("Selection"), this);
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
     ac->addAction(QLatin1String("slideshow_selected"), d->slideShowSelectionAction);
-    ac->setDefaultShortcut(d->slideShowSelectionAction, Qt::ALT+Qt::Key_F9);
+    ac->setDefaultShortcut(d->slideShowSelectionAction, Qt::ALT + Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), this);
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
     ac->addAction(QLatin1String("slideshow_recursive"), d->slideShowRecursiveAction);
-    ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
+    ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT + Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
     // -----------------------------------------------------------
@@ -734,21 +734,21 @@ void DigikamApp::setupActions()
     QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Search..."), this);
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     ac->addAction(QLatin1String("search_quick"), findAction);
-    ac->setDefaultShortcut(findAction, Qt::CTRL+Qt::Key_F);
+    ac->setDefaultShortcut(findAction, Qt::CTRL + Qt::Key_F);
 
     // -----------------------------------------------------------
 
     d->advSearchAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Advanced Search..."), this);
     connect(d->advSearchAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
     ac->addAction(QLatin1String("search_advanced"), d->advSearchAction);
-    ac->setDefaultShortcut(d->advSearchAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
+    ac->setDefaultShortcut(d->advSearchAction, Qt::CTRL + Qt::ALT + Qt::Key_F);
 
     // -----------------------------------------------------------
 
     QAction* const duplicatesAction = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Duplicates..."), this);
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
     ac->addAction(QLatin1String("find_duplicates"), duplicatesAction);
-    ac->setDefaultShortcut(duplicatesAction, Qt::CTRL+Qt::Key_D);
+    ac->setDefaultShortcut(duplicatesAction, Qt::CTRL + Qt::Key_D);
 
     // -----------------------------------------------------------
 
@@ -823,7 +823,7 @@ void DigikamApp::setupAccelerators()
     QAction* const previousImageAction = new QAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
     ac->addAction(QLatin1String("previous_image"), previousImageAction);
-    ac->setDefaultShortcuts(previousImageAction, QList<QKeySequence>() << Qt::Key_Backspace << Qt::SHIFT+Qt::Key_Space);
+    ac->setDefaultShortcuts(previousImageAction, QList<QKeySequence>() << Qt::Key_Backspace << Qt::SHIFT + Qt::Key_Space);
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
     QAction* const firstImageAction = new QAction(i18n("First Image"), this);
@@ -970,14 +970,14 @@ void DigikamApp::setupImageTransformActions()
 
     QAction* const left = ac->addAction(QLatin1String("rotate_ccw"));
     left->setText(i18nc("rotate image left", "Left"));
-    ac->setDefaultShortcut(left, Qt::SHIFT+Qt::CTRL+Qt::Key_Left);
+    ac->setDefaultShortcut(left, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
     connect(left, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(left);
 
     QAction* const right = ac->addAction(QLatin1String("rotate_cw"));
     right->setText(i18nc("rotate image right", "Right"));
-    ac->setDefaultShortcut(right, Qt::SHIFT+Qt::CTRL+Qt::Key_Right);
+    ac->setDefaultShortcut(right, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     connect(right, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(right);
@@ -991,14 +991,14 @@ void DigikamApp::setupImageTransformActions()
 
     QAction* const hori = ac->addAction(QLatin1String("flip_horizontal"));
     hori->setText(i18n("Horizontally"));
-    ac->setDefaultShortcut(hori, Qt::CTRL+Qt::Key_Asterisk);
+    ac->setDefaultShortcut(hori, Qt::CTRL + Qt::Key_Asterisk);
     connect(hori, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(hori);
 
     QAction* const verti = ac->addAction(QLatin1String("flip_vertical"));
     verti->setText(i18n("Vertically"));
-    ac->setDefaultShortcut(verti, Qt::CTRL+Qt::Key_Slash);
+    ac->setDefaultShortcut(verti, Qt::CTRL + Qt::Key_Slash);
     connect(verti, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(verti);
