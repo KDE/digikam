@@ -33,4 +33,5 @@ BUGFIXES:
 016 ==> 316687 - ImageMagick-6.8.3.9 could not be found.
 017 ==> 305137 - wish for integrated(?) clip-generator.
 018 ==> 404821 - Presentation offset from full screen when OpenGL transitions selected.
-019 ==> 
+019 ==> 404954 - Places, Devices, and Removable Devices no longer show in "Select Target Location".
+020 ==> 
