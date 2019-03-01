@@ -510,6 +510,7 @@ void ODTalker::parseResponseListFolders(const QByteArray& data)
 
             path        = folderPath.section(QLatin1String("root:"), -1, -1) +
                                              QLatin1Char('/') + folderName;
+            path        = QUrl(path).toString(QUrl::FullyDecoded);
             listName    = path.section(QLatin1Char('/'), 1);
 
             d->folderList.append(qMakePair(path, listName));
