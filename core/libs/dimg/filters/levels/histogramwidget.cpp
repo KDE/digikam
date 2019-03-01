@@ -458,10 +458,10 @@ void HistogramWidget::paintEvent(QPaintEvent*)
        )
     {
         QPainter p1(this);
-        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Window));
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
+        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Disabled, QPalette::Background));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width() - 1, height() - 1);
-        QPen pen(palette().color(QPalette::Disabled, QPalette::WindowText));
+        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
 
@@ -485,8 +485,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
         // ... and we render busy text.
 
         QPainter p1(this);
-        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
+        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width() - 1, height() - 1);
         p1.drawPixmap(width() / 2 - anim.width() / 2, anim.height(), anim);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
@@ -509,8 +509,8 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     {
         // Histogram computation failed, we draw a message.
         QPainter p1(this);
-        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
-        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
+        p1.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p1.setPen(QPen(palette().color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
         p1.drawRect(0, 0, width() - 1, height() - 1);
         p1.setPen(palette().color(QPalette::Active, QPalette::Text));
         p1.drawText(0, 0, width(), height(), Qt::AlignCenter,

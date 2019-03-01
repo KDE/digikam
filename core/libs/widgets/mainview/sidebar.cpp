@@ -79,7 +79,7 @@ DMultiTabBarFrame::DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos)
     d->mainLayout->setSpacing(0);
     d->mainLayout->addStretch();
     setFrameStyle(NoFrame);
-    setBackgroundRole(QPalette::Window);
+    setBackgroundRole(QPalette::Background);
 }
 
 DMultiTabBarFrame::~DMultiTabBarFrame()

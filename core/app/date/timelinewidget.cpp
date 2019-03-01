@@ -1038,10 +1038,10 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
         else
         {
-            dateColor = palette().color(QPalette::WindowText);
+            dateColor = palette().color(QPalette::Foreground);
         }
 
-        p.setPen(palette().color(QPalette::WindowText));
+        p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(qApp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
@@ -1058,7 +1058,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             }
             else
             {
-                subDateColor = palette().color(QPalette::Active, QPalette::WindowText);
+                subDateColor = palette().color(QPalette::Active, QPalette::Foreground);
             }
         }
         else
@@ -1123,10 +1123,10 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
         else
         {
-            dateColor = palette().color(QPalette::WindowText);
+            dateColor = palette().color(QPalette::Foreground);
         }
 
-        p.setPen(palette().color(QPalette::WindowText));
+        p.setPen(palette().color(QPalette::Foreground));
         p.fillRect(barRect, QBrush(qApp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
@@ -1143,7 +1143,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
             }
             else
             {
-                subDateColor = palette().color(QPalette::Active, QPalette::WindowText);
+                subDateColor = palette().color(QPalette::Active, QPalette::Foreground);
             }
         }
         else

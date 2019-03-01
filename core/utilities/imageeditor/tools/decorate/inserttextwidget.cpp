@@ -97,7 +97,7 @@ InsertTextWidget::InsertTextWidget(int w, int h, QWidget* const parent)
       d(new Private)
 {
     d->currentMoving   = false;
-    d->bgColor         = palette().color(QPalette::Window);
+    d->bgColor         = palette().color(QPalette::Background);
     d->backgroundColor = QColor(0xCC, 0xCC, 0xCC);
     d->transparency    = 210;
 

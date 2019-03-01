@@ -163,7 +163,7 @@ ImageSelectionWidget::ImageSelectionWidget(int w, int h, QWidget* const parent)
       d(new Private)
 {
     d->isDrawingSelection = true;
-    d->bgColor            = palette().color(QPalette::Window);
+    d->bgColor            = palette().color(QPalette::Background);
     setup(w, h);
 }
 

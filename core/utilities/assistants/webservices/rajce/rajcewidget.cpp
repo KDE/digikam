@@ -256,7 +256,7 @@ void RajceWidget::updateLabels(const QString&, const QString&)
         }
 
         QPalette palette = d->progressBar->palette();
-        palette.setColor(QPalette::Active, QPalette::Window, Qt::darkRed);
+        palette.setColor(QPalette::Active, QPalette::Background, Qt::darkRed);
         d->progressBar->setPalette(palette);
     }
 }

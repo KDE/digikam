@@ -95,15 +95,15 @@ void ColorGradientWidget::paintEvent(QPaintEvent*)
     if (!isEnabled())
     {
         // Widget is disable : drawing grayed frame.
-        color1 = palette().color(QPalette::Disabled, QPalette::WindowText);
-        color2 = palette().color(QPalette::Disabled, QPalette::Window);
-        colorf = palette().color(QPalette::Disabled, QPalette::WindowText);
+        color1 = palette().color(QPalette::Disabled, QPalette::Foreground);
+        color2 = palette().color(QPalette::Disabled, QPalette::Background);
+        colorf = palette().color(QPalette::Disabled, QPalette::Foreground);
     }
     else
     {
         color1 = d->color1;
         color2 = d->color2;
-        colorf = palette().color(QPalette::Active, QPalette::WindowText);
+        colorf = palette().color(QPalette::Active, QPalette::Foreground);
     }
 
     int redDiff   = color2.red()   - color1.red();

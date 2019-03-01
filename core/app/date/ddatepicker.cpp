@@ -69,11 +69,11 @@ void DDatePicker::initWidget(const QDate& dt)
     const int spacingHint       = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QBoxLayout* const topLayout = new QVBoxLayout(this);
     topLayout->setSpacing(0);
-    topLayout->setContentsMargins(0, 0, 0, 0);
+    topLayout->setMargin(0);
 
     d->navigationLayout = new QHBoxLayout();
     d->navigationLayout->setSpacing(0);
-    d->navigationLayout->setContentsMargins(0, 0, 0, 0);
+    d->navigationLayout->setMargin(0);
     topLayout->addLayout(d->navigationLayout);
     d->navigationLayout->addStretch();
     d->yearBackward     = new QToolButton(this);
@@ -186,7 +186,7 @@ void DDatePicker::initWidget(const QDate& dt)
     topLayout->addWidget(d->table);
 
     QBoxLayout* const bottomLayout = new QHBoxLayout();
-    bottomLayout->setContentsMargins(0, 0, 0, 0);
+    bottomLayout->setMargin(0);
     bottomLayout->setSpacing(0);
     topLayout->addLayout(bottomLayout);
 

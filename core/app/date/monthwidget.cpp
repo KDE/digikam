@@ -187,7 +187,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
     fnOrig.setBold(false);
 
     QPainter p(&pix);
-    p.fillRect(0, 0, cr.width(), cr.height(), palette().color(QPalette::Window));
+    p.fillRect(0, 0, cr.width(), cr.height(), palette().color(QPalette::Background));
 
     QRect r(0, 0, d->currw, d->currh);
     QRect rsmall;

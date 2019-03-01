@@ -321,7 +321,7 @@ void ImageGuideWidget::updatePixmap()
         }
 
         // Drawing information and others stuff.
-        p.fillRect(d->rect.right(), 0, width(), height(), palette().color(QPalette::Window));
+        p.fillRect(d->rect.right(), 0, width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x() + d->rect.width() / 2 - 1, d->rect.y(),
@@ -354,7 +354,7 @@ void ImageGuideWidget::updatePixmap()
                          0, 0, d->rect.width(), d->rect.height() / 2);
         }
 
-        p.fillRect(0, d->rect.bottom(), width(), height(), palette().color(QPalette::Window));
+        p.fillRect(0, d->rect.bottom(), width(), height(), palette().color(QPalette::Background));
 
         p.setPen(QPen(Qt::white, 2, Qt::SolidLine));
         p.drawLine(d->rect.x(),

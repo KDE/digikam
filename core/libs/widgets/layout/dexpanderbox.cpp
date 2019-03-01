@@ -364,7 +364,7 @@ void DArrowClickLabel::paintEvent(QPaintEvent*)
     opt.midLineWidth = 0;
 
     /*
-    p.fillRect( rect(), palette().brush( QPalette::Window ) );
+    p.fillRect( rect(), palette().brush( QPalette::Background ) );
     style()->drawPrimitive( QStyle::PE_Frame, &opt, &p, this);
     */
 
