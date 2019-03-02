@@ -586,7 +586,8 @@ void PresentationGL::loadImage()
         if (!d->sharedData->openGlFullScale)
         {
             black = black.scaled(d->width, d->height,
-                                 Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                                 Qt::IgnoreAspectRatio,
+                                 Qt::SmoothTransformation);
         }
 
         if (d->sharedData->printFileName)
@@ -603,13 +604,7 @@ void PresentationGL::loadImage()
         d->texture[a]->setData(black.mirrored());
         d->texture[a]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
         d->texture[a]->setMagnificationFilter(QOpenGLTexture::Linear);
-        GLuint tex = d->texture[a]->textureId();
-
-        glBindTexture(GL_TEXTURE_2D, tex);
-
-        /* enable linear filtering  */
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        d->texture[a]->bind();
     }
 }
 
@@ -663,7 +658,8 @@ void PresentationGL::printFilename(QImage& layer)
 
 void PresentationGL::printProgress(QImage& layer)
 {
-    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') + QString::number(d->sharedData->urlList.count()));
+    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') +
+                                     QString::number(d->sharedData->urlList.count()));
 
     QPixmap pix = generateOutlinedTextPixmap(progress);
 
@@ -789,20 +785,12 @@ void PresentationGL::showEndOfShow()
     d->texture[2]->setData(image.mirrored());
     d->texture[2]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     d->texture[2]->setMagnificationFilter(QOpenGLTexture::Linear);
-    GLuint tex = d->texture[2]->textureId();
-
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    /* enable linear filtering  */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    d->texture[2]->bind();
 
     /* paint the texture */
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    glBindTexture(GL_TEXTURE_2D, tex);
 
     glBegin(GL_QUADS);
     {
@@ -1679,7 +1667,8 @@ QPixmap PresentationGL::generateCustomOutlinedTextPixmap(const QString& text, QF
         pbg.setBrush(bgColor);
         pbg.setPen(bgColor);
         pbg.setOpacity(opacity / 10.0);
-        pbg.drawRoundedRect(0, 0, (int)pix.width(), (int)pix.height(), (int)pix.height()/3, (int)pix.height()/3);
+        pbg.drawRoundedRect(0, 0, (int)pix.width(), (int)pix.height(),
+                            (int)pix.height() / 3, (int)pix.height() / 3);
     }
 
     QPainter p(&pix);

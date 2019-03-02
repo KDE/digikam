@@ -170,8 +170,12 @@ bool GLViewerTexture::loadInternal()
     }
     else
     {
-        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio, Qt::FastTransformation).mirrored());
+        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio,
+                                 Qt::FastTransformation).mirrored());
     }
+
+    setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    setMagnificationFilter(QOpenGLTexture::Linear);
 
     w = width();
     h = height();
@@ -385,8 +389,12 @@ bool GLViewerTexture::setNewSize(QSize size)
     }
     else
     {
-        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio, Qt::FastTransformation).mirrored());
+        setData(d->qimage.scaled(w, h, Qt::KeepAspectRatio,
+                                 Qt::FastTransformation).mirrored());
     }
+
+    setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    setMagnificationFilter(QOpenGLTexture::Linear);
 
     // recalculate half-texel offset
     calcVertex();
