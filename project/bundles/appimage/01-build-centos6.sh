@@ -90,7 +90,6 @@ yum -y install wget \
                glibc-headers \
                mysql-devel \
                eigen3-devel \
-               openssl-devel \
                cppunit-devel \
                libstdc++-devel \
                freetype-devel \
@@ -195,7 +194,7 @@ yum -y install libass-devel \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel
+yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel openssl-devel
 
 #################################################################################################
 
@@ -242,6 +241,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_tiff       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libgphoto2 -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_sane       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_boost      -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_openssl    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qt         -- -j$CPU_CORES
