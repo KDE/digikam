@@ -27,7 +27,11 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_DOCS=OFF \
                       -DBUILD_PERF_TESTS=OFF \
                       -DBUILD_NEW_PYTHON_SUPPORT=OFF \
-                      -BUILD_ZLIB=OFF \
+                      -DBUILD_ZLIB=OFF \
+                      -DBUILD_opencv_java=OFF \
+                      -DBUILD_opencv_python2=OFF \
+                      -DBUILD_opencv_python3=OFF \
+                      -DBUILD_opencv_videoio=OFF \
                       -DOPENCV_BUILD_3RDPARTY_LIBS=OFF \
                       -DINSTALL_C_EXAMPLES=OFF \
                       -DINSTALL_PYTHON_EXAMPLES=OFF \
@@ -60,8 +64,10 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DWITH_VIDEOINPUT=OFF \
                       -DWITH_XINE=OFF \
                       -DWITH_OPENCL=OFF \
-                      -DWITH_GPHOTO2=OFF \
-                      -DBUILD_opencv_videoio=OFF'
+                      -DWITH_OPENCLAMDFFT=OFF \
+                      -DWITH_OPENCLAMDBLAS=OFF \
+                      -DWITH_VA_INTEL=OFF \
+                      -DWITH_GPHOTO2=OFF'
 
 cmake -G "$MAKEFILES_TYPE" . \
       -DCMAKE_INSTALL_PREFIX=/usr \
