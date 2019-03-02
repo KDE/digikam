@@ -42,4 +42,7 @@ BUGFIXES:
 025 ==> 264296 - Lack of right-click delete of points in Curves [patch].
 026 ==> 404954 - Places, Devices, and Removable Devices no longer show in "Select Target Location".
 027 ==> 404962 - List of subfolders: incorrect encoding (spaces -> %20, accents).
-028 ==> 
+028 ==> 402724 - digiKam Settings/Configuration: missing section "Plugins" in Windows/6.0.0B3.
+029 ==> 404987 - Ability to select which import/export options are included in menu.
+030 ==> 
+
