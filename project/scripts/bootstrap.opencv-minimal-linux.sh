@@ -37,6 +37,7 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_opencv_objdetect=ON \
                       -DBUILD_opencv_calib3d=ON \
                       -DBUILD_opencv_features2d=ON \
+                      -DBUILD_opencv_photo=ON \
                       -DBUILD_opencv_java=OFF \
                       -DBUILD_opencv_java_bindings_generator=OFF \
                       -DBUILD_opencv_js=ON \
@@ -44,7 +45,6 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_opencv_python3=OFF \
                       -DBUILD_opencv_python_bindings_generator=OFF \
                       -DBUILD_opencv_ml=OFF \
-                      -DBUILD_opencv_photo=OFF \
                       -DBUILD_opencv_shape=OFF \
                       -DBUILD_opencv_highgui=OFF \
                       -DBUILD_opencv_superres=OFF \
