@@ -399,6 +399,17 @@ void AssignNameWidget::Private::updateVisualStyle()
         return;
     }
 
+    QFont appFont = ApplicationSettings::instance()->getApplicationFont();
+
+    if (appFont.pixelSize() == -1)
+    {
+        appFont.setPointSize(appFont.pointSize() - 1);
+    }
+    else
+    {
+        appFont.setPixelSize(appFont.pixelSize() - 1);
+    }
+
     switch (visualStyle)
     {
         case InvalidVisualStyle:
@@ -459,7 +470,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QLabel { "
                     "  color: white; background-color: transparent; border: none; "
                     "}"
-                ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
+                ).arg(styleSheetFontDescriptor(appFont))
                  .arg((mode == ConfirmedMode) ? QLatin1String("8") : QLatin1String("4"))
             );
             break;
@@ -481,7 +492,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "  border: none; "
                     "  border-radius: 8px; "
                     "}"
-                ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
+                ).arg(styleSheetFontDescriptor(appFont))
                  .arg(bg.red())
                  .arg(bg.green())
                  .arg(bg.blue())
