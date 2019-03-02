@@ -30,7 +30,6 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QIcon>
-#include <QFontDatabase>
 
 // Local includes
 
@@ -401,13 +400,13 @@ void AssignNameWidget::Private::updateVisualStyle()
 
     QFont appFont = ApplicationSettings::instance()->getApplicationFont();
 
-    if (appFont.pixelSize() == -1)
+    if (appFont.pointSize() == -1)
     {
-        appFont.setPointSize(appFont.pointSize() - 1);
+        appFont.setPixelSize(appFont.pixelSize() - 1);
     }
     else
     {
-        appFont.setPixelSize(appFont.pixelSize() - 1);
+        appFont.setPointSize(appFont.pointSize() - 1);
     }
 
     switch (visualStyle)
