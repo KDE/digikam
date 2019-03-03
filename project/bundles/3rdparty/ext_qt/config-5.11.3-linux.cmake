@@ -14,7 +14,8 @@ LIST(APPEND QT_CONFIG
             -opensource                       # Build open-source framework edition
             -confirm-license                  # Silency ack the license
             -opengl desktop                   # Enable OpenGL support from Desktop
-            -fontconfig                       # Enable Fontconfig support
+#            -fontconfig                       # Enable Fontconfig support
+            -qt-freetype                      # Use freetype library from Qt
             -openssl                          # Use SSL from system
             -sql-sqlite                       # Enable Sqlite plugin support
 
