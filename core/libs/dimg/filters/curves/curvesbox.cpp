@@ -106,7 +106,8 @@ public:
 };
 
 CurvesBox::CurvesBox(int w, int h, QWidget* const parent, bool readOnly)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->curvesWidget = new CurvesWidget(w, h, this, readOnly);
     setup();
@@ -125,15 +126,15 @@ CurvesBox::CurvesBox(int w, int h, const DImg& img, QWidget* const parent, bool 
 
 void CurvesBox::setup()
 {
-    QWidget* curveBox = new QWidget();
+    QWidget* const curveBox           = new QWidget();
 
-    d->vGradient = new ColorGradientWidget(Qt::Vertical, 10);
+    d->vGradient                      = new ColorGradientWidget(Qt::Vertical, 10);
     d->vGradient->setColors(QColor("white"), QColor("black"));
 
-    d->hGradient = new ColorGradientWidget(Qt::Horizontal, 10);
+    d->hGradient                      = new ColorGradientWidget(Qt::Horizontal, 10);
     d->hGradient->setColors(QColor("black"), QColor("white"));
 
-    QGridLayout* curveBoxLayout = new QGridLayout;
+    QGridLayout* const curveBoxLayout = new QGridLayout;
     curveBoxLayout->addWidget(d->vGradient,    0, 0, 1, 1);
     curveBoxLayout->addWidget(d->curvesWidget, 0, 2, 1, 1);
     curveBoxLayout->addWidget(d->hGradient,    2, 2, 1, 1);
@@ -145,30 +146,30 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    QWidget* typeBox = new QWidget();
+    QWidget* const typeBox          = new QWidget();
 
-    d->curveFree = new QToolButton;
+    d->curveFree                    = new QToolButton;
     d->curveFree->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/curvefree.png"))));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
     d->curveFree->setWhatsThis(i18n("With this button, you can draw your curve free-hand "
                                     "with the mouse."));
 
-    d->curveSmooth = new QToolButton;
+    d->curveSmooth                  = new QToolButton;
     d->curveSmooth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/curvemooth.png"))));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
     d->curveSmooth->setWhatsThis(i18n("With this button, the curve type is constrained to "
                                       "be a smooth line with tension."));
 
-    d->curveType = new QButtonGroup(typeBox);
+    d->curveType                     = new QButtonGroup(typeBox);
     d->curveType->addButton(d->curveFree,   FreeDrawing);
     d->curveType->addButton(d->curveSmooth, SmoothDrawing);
 
     d->curveType->setExclusive(true);
     d->curveSmooth->setChecked(true);
 
-    QHBoxLayout* typeBoxLayout = new QHBoxLayout;
+    QHBoxLayout* const typeBoxLayout = new QHBoxLayout;
     typeBoxLayout->addWidget(d->curveFree);
     typeBoxLayout->addWidget(d->curveSmooth);
     typeBoxLayout->setContentsMargins(QMargins());
@@ -177,9 +178,9 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    d->pickerBox = new QWidget();
+    d->pickerBox                       = new QWidget();
 
-    d->pickBlack = new QToolButton;
+    d->pickBlack                       = new QToolButton;
     d->pickBlack->setIcon(QIcon::fromTheme(QLatin1String("color-picker-black")));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip(i18n("All channels shadow tone color picker"));
@@ -187,7 +188,7 @@ void CurvesBox::setup()
                                     "image used to set <b>Shadow Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    d->pickGray = new QToolButton;
+    d->pickGray                        = new QToolButton;
     d->pickGray->setIcon(QIcon::fromTheme(QLatin1String("color-picker-grey")));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip(i18n("All channels middle tone color picker"));
@@ -195,7 +196,7 @@ void CurvesBox::setup()
                                    "image used to set <b>Middle Tone</b> "
                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    d->pickWhite = new QToolButton;
+    d->pickWhite                       = new QToolButton;
     d->pickWhite->setIcon(QIcon::fromTheme(QLatin1String("color-picker-white")));
     d->pickWhite->setCheckable(true);
     d->pickWhite->setToolTip(i18n("All channels highlight tone color picker"));
@@ -203,7 +204,7 @@ void CurvesBox::setup()
                                     "image used to set <b>Highlight Tone</b> "
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
-    d->pickerType = new QButtonGroup(d->pickerBox);
+    d->pickerType                      = new QButtonGroup(d->pickerBox);
     d->pickerType->addButton(d->pickBlack, BlackTonal);
     d->pickerType->addButton(d->pickGray,  GrayTonal);
     d->pickerType->addButton(d->pickWhite, WhiteTonal);
@@ -220,31 +221,32 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    QMenu* resetMenu = new QMenu(QLatin1String("&Reset"), d->resetButton);
-    d->resetChannelAction = new QAction(QLatin1String("&Reset Channel"));
-    d->resetChannelsAction = new QAction(QLatin1String("&Reset All"));
-    resetMenu->addAction(d->resetChannelAction);
-    resetMenu->addAction(d->resetChannelsAction);
-
-    d->resetButton = new QPushButton(i18n("&Reset"));
+    d->resetButton            = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->resetButton->setToolTip(i18n("Resets channel/channels curves' values."));
     d->resetButton->setWhatsThis(i18n("If you press this button, custom menu will appear: "
-                                      "First option will reset current channel."
+                                      "First option will reset current channel. "
                                       "Second option will reset all channels."));
+
+    QMenu* const resetMenu    = new QMenu(i18n("&Reset"), d->resetButton);
+    d->resetChannelAction     = new QAction(i18n("Reset &Channel"));
+    d->resetChannelsAction    = new QAction(i18n("Reset &All"));
+    resetMenu->addAction(d->resetChannelAction);
+    resetMenu->addAction(d->resetChannelsAction);
+
     d->resetButton->setMenu(resetMenu);
 
-    QHBoxLayout* const l3 = new QHBoxLayout();
+    QHBoxLayout* const l3     = new QHBoxLayout();
     l3->addWidget(typeBox);
     l3->addWidget(d->pickerBox);
-    l3->addStretch(10); 
+    l3->addStretch(10);
     l3->addWidget(d->resetButton);
 
     // -------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(curveBox,  0, 0, 1, 1);
-    mainLayout->addLayout(l3,        1, 0, 1, 1);
+    mainLayout->addWidget(curveBox, 0, 0, 1, 1);
+    mainLayout->addLayout(l3,       1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
     mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -418,7 +420,7 @@ void CurvesBox::slotResetChannels()
 
 void CurvesBox::resetChannels()
 {
-    for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
+    for (int channel = 0 ; channel < ImageCurves::NUM_CHANNELS ; ++channel)
     {
         resetChannel(channel);
     }
