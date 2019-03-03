@@ -10,8 +10,8 @@ SET(EXTPREFIX_openssl "${EXTPREFIX}")
 
 ExternalProject_Add(ext_openssl
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/openssl/openssl/archive/OpenSSL_1_1_1b.tar.gz
-    URL_MD5 bfa09d75407ea860f22ddc0312e1cc49
+    URL https://github.com/janbar/openssl-cmake/archive/1.1.1.tar.gz
+    URL_MD5 214a26666f61d12e0dffafb22b5fc26a
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_openssl}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
