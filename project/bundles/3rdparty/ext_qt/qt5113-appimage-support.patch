@@ -1,7 +1,7 @@
-diff --git a/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+diff --git a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 index cb1e367b9f..f798cc0c62 100644
---- a/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-+++ b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+--- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
++++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 @@ -164,7 +164,30 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
