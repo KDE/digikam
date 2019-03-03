@@ -49,6 +49,26 @@ ELSEIF(${QT_VERSION} STREQUAL "5.9.7")
         ALWAYS 0
     )
 
+ELSEIF(${QT_VERSION} STREQUAL "5.11.3")
+
+    INCLUDE("config-5.11.3-linux.cmake")
+
+    ExternalProject_Add(ext_qt
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://download.qt.io/official_releases/qt/5.11/5.11.3/single/qt-everywhere-src-5.11.3.tar.xz
+        URL_MD5 02b353bfe7a40a8dc4274e1d17226d2b
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt597-appimage-support.patch
+
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
+
+        BUILD_COMMAND make -j
+
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+        ALWAYS 0
+    )
+
 ELSE()
 
     MESSAGE(FATAL_ERROR "Qt version to install not supported !")
