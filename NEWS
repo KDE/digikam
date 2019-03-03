@@ -46,4 +46,5 @@ BUGFIXES:
 029 ==> 404987 - Ability to select which import/export options are included in menu.
 030 ==> 404999 - Inconsistency in facetag font size.
 031 ==> 244259 - Last image is displayed twice when Advanced Slideshow with KenBurns effect is run more than once.
-032 ==> 
+032 ==> 405043 - Add volume control to video playback.
+033 ==> 

@@ -173,6 +173,7 @@ public:
     AVPlayer*            player;
 
     QSlider*             slider;
+    QSlider*             volume;
     QLabel*              tlabel;
     QUrl                 currentItem;
 
@@ -217,7 +218,12 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider->setStyle(new VideoStyle(d->slider->style()));
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
-    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
+    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00  "));
+    QLabel* const spk = new QLabel(hbox);
+    spk->setPixmap(QIcon::fromTheme(QLatin1String("audio-volume-high")).pixmap(22, 22));
+    d->volume         = new QSlider(Qt::Horizontal, hbox);
+    d->volume->setRange(0, 100);
+    d->volume->setValue(50);
     hbox->setContentsMargins(0, spacing, 0, 0);
     hbox->setStretchFactor(d->slider, 10);
 
@@ -266,6 +272,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->slider, SIGNAL(valueChanged(int)),
             this, SLOT(slotPosition(int)));
 
+    connect(d->volume, SIGNAL(valueChanged(int)),
+            this, SLOT(slotVolumeChanged(int)));
+
     connect(d->player, SIGNAL(stateChanged(QtAV::AVPlayer::State)),
             this, SLOT(slotPlayerStateChanged(QtAV::AVPlayer::State)));
 
@@ -281,7 +290,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->player, SIGNAL(error(QtAV::AVError)),
             this, SLOT(slotHandlePlayerError(QtAV::AVError)));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AudioOutput backends:" << d->player->audio()->backendsAvailable();
+    slotVolumeChanged(d->volume->value());
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AudioOutput backends:"
+                                 << d->player->audio()->backendsAvailable();
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -488,9 +499,14 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
         d->slider->blockSignals(false);
     }
 
-    d->tlabel->setText(QString::fromLatin1("%1 / %2")
+    d->tlabel->setText(QString::fromLatin1("%1 / %2  ")
                        .arg(QTime(0, 0, 0).addMSecs(position).toString(QLatin1String("HH:mm:ss")))
                        .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QLatin1String("HH:mm:ss"))));
+}
+
+void MediaPlayerView::slotVolumeChanged(int volume)
+{
+    d->player->audio()->setVolume((qreal)volume / 100.0);
 }
 
 void MediaPlayerView::slotDurationChanged(qint64 duration)
