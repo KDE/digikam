@@ -36,6 +36,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
+#include <QMenu>
 
 // KDE includes
 
@@ -72,6 +73,8 @@ public:
         pickerType(0),
         pickerBox(0),
         resetButton(0),
+        resetChannelAction(0),
+        resetChannelsAction(0),
         curvesWidget(0),
         hGradient(0),
         vGradient(0)
@@ -93,6 +96,9 @@ public:
     QWidget*             pickerBox;
 
     QPushButton*         resetButton;
+
+    QAction*             resetChannelAction;
+    QAction*             resetChannelsAction;
 
     CurvesWidget*        curvesWidget;
     ColorGradientWidget* hGradient;
@@ -214,24 +220,31 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
+    QMenu* resetMenu = new QMenu(QLatin1String("&Reset"), d->resetButton);
+    d->resetChannelAction = new QAction(QLatin1String("&Reset Channel"));
+    d->resetChannelsAction = new QAction(QLatin1String("&Reset All"));
+    resetMenu->addAction(d->resetChannelAction);
+    resetMenu->addAction(d->resetChannelsAction);
+
     d->resetButton = new QPushButton(i18n("&Reset"));
     d->resetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
-    d->resetButton->setToolTip(i18n("Reset current channel curves' values."));
-    d->resetButton->setWhatsThis(i18n("If you press this button, all curves' values "
-                                      "from the currently selected channel "
-                                      "will be reset to the default values."));
+    d->resetButton->setToolTip(i18n("Resets channel/channels curves' values."));
+    d->resetButton->setWhatsThis(i18n("If you press this button, custom menu will appear: "
+                                      "First option will reset current channel."
+                                      "Second option will reset all channels."));
+    d->resetButton->setMenu(resetMenu);
 
     QHBoxLayout* const l3 = new QHBoxLayout();
     l3->addWidget(typeBox);
     l3->addWidget(d->pickerBox);
-    l3->addStretch(10);
+    l3->addStretch(10); 
     l3->addWidget(d->resetButton);
 
     // -------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(curveBox, 0, 0, 1, 1);
-    mainLayout->addLayout(l3,       1, 0, 1, 1);
+    mainLayout->addWidget(curveBox,  0, 0, 1, 1);
+    mainLayout->addLayout(l3,        1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
     mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -250,11 +263,14 @@ void CurvesBox::setup()
     connect(d->pickerType, SIGNAL(buttonReleased(int)),
             this, SIGNAL(signalPickerChanged(int)));
 
-    connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotResetChannel()));
-
     connect(d->curveType, SIGNAL(buttonClicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
+
+    connect(d->resetChannelAction, SIGNAL(triggered()), 
+            this, SLOT(slotResetChannel()));
+
+    connect(d->resetChannelsAction, SIGNAL(triggered()), 
+            this, SLOT(slotResetChannels()));
 }
 
 CurvesBox::~CurvesBox()
@@ -397,15 +413,17 @@ void CurvesBox::slotResetChannel()
 void CurvesBox::slotResetChannels()
 {
     resetChannels();
+    resetPickers();
 }
 
 void CurvesBox::resetChannels()
 {
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
-        d->curvesWidget->curves()->curvesChannelReset(channel);
+        resetChannel(channel);
     }
 
+    emit signalChannelReset(d->channel);
     reset();
 }
 
