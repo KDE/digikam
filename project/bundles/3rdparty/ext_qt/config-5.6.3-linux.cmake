@@ -62,7 +62,7 @@ LIST(APPEND QT_CONFIG
 
 #           -skip qtwebchannel                # Do not disable QtWebChannel support ==> need for QWebEngine !
 #           -skip qtquickcontrols             # Do not disable QtQuick support ==> need for QWebEngine !
-#           -skip qtdeclarative               # Do not disable QML support ==> need for QWebEngine !                          
+#           -skip qtdeclarative               # Do not disable QML support ==> need for QWebEngine !
 )
 
 MESSAGE(STATUS "Use Linux ${QT_VERSION} configuration:")
