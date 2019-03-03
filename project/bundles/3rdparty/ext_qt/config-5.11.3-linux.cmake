@@ -24,7 +24,6 @@ LIST(APPEND QT_CONFIG
             -nomake examples                  # Do not build basis example codes
             -no-compile-examples              # Do not build extra example codes
             -no-icu                           # Do not support ICU: https://wiki.qt.io/Qt_5_ICU
-            -no-qml-debug                     # Do not support debug with QML
             -no-mtdev                         # Do not support multi-touch
             -no-libproxy                      # Do not support network proxy
             -no-pch                           # Do not support pre-compiled header
@@ -46,6 +45,7 @@ LIST(APPEND QT_CONFIG
             -skip qt3d                        # 3D core
             -skip qtactiveqt                  # No need ActiveX support
             -skip qtandroidextras             # For embeded devices only
+            -skip qtwinextras                 # For Windows devices only
             -skip qtmacextras                 # For MacOS devices only
             -skip qtcanvas3d                  # 3D extensions
             -skip qtcharts                    # No need data models charts support
@@ -59,6 +59,7 @@ LIST(APPEND QT_CONFIG
             -skip qtlocation                  # No need geolocation
             -skip qtquickcontrols2            # QtQuick support for QML
             -skip qtmultimedia                # No need multimedia support (replaced by QtAV+ffmpeg)
+            -skip qtnetworkauth               # No need network authentification support.
             -skip qtpurchasing                # No need in-app purchase of products support
             -skip qtremoteobjects             # No need sharing QObject properties between processes support
             -skip qtserialport                # No need serial port support
@@ -71,6 +72,7 @@ LIST(APPEND QT_CONFIG
             -skip qtwebsockets                # No need websocket support
             -skip qtwebchannel                # No need sharing QObject properties with JS
             -skip qtwebview                   # QML extension for QWebEngine
+            -skip qtwebglplugin               # No need browser OpenGL extention support
 
             -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
             -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency  
