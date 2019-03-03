@@ -45,4 +45,5 @@ BUGFIXES:
 028 ==> 402724 - digiKam Settings/Configuration: missing section "Plugins" in Windows/6.0.0B3.
 029 ==> 404987 - Ability to select which import/export options are included in menu.
 030 ==> 404999 - Inconsistency in facetag font size.
-031 ==> 
+031 ==> 244259 - Last image is displayed twice when Advanced Slideshow with KenBurns effect is run more than once.
+032 ==> 

@@ -60,10 +60,6 @@ public:
     const QImage& image()       const;
     float         imageAspect() const;
 
-Q_SIGNALS:
-
-    void signalEndOfShow();
-
 protected:
 
     void run();

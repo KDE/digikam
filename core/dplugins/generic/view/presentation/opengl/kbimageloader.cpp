@@ -107,7 +107,7 @@ void KBImageLoader::requestNewImage()
 {
     QMutexLocker locker(&d->condLock);
 
-    if ( !d->needImage)
+    if (!d->needImage)
     {
         d->needImage = true;
         d->imageRequest.wakeOne();
@@ -128,7 +128,7 @@ void KBImageLoader::run()
 
         if (d->needImage)
         {
-            if ( d->fileIndex == (int)d->sharedData->urlList.count() )
+            if (d->fileIndex == (int)d->sharedData->urlList.count())
             {
                 if (d->sharedData->loop)
                 {
@@ -136,8 +136,8 @@ void KBImageLoader::run()
                 }
                 else
                 {
-                    d->needImage = false;
-                    emit(signalEndOfShow());
+                    d->needImage  = false;
+                    d->haveImages = false;
                     continue;
                 }
             }
@@ -150,15 +150,13 @@ void KBImageLoader::run()
             {
                 ok = loadImage();
 
-                if ( !ok)
+                if (!ok)
                     invalidateCurrentImageName();
             }
-            while ( !ok && d->fileIndex < (int)d->sharedData->urlList.count());
+            while (!ok && d->fileIndex < (int)d->sharedData->urlList.count());
 
-            if ( d->fileIndex == (int)d->sharedData->urlList.count() )
+            if (d->fileIndex == (int)d->sharedData->urlList.count())
             {
-
-                emit(signalEndOfShow());
                 d->condLock.lock();
                 continue;
             }
@@ -174,7 +172,7 @@ void KBImageLoader::run()
 
             d->fileIndex++;
 
-            if ( !d->initialized)
+            if (!d->initialized)
             {
                 d->haveImages  = ok;
                 d->initialized = true;

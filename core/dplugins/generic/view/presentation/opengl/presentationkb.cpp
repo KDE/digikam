@@ -267,9 +267,6 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(moveSlot()));
 
-    connect(d->imageLoadThread, SIGNAL(signalEndOfShow()),
-            this, SLOT(slotEndOfShow()));
-
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer;
@@ -365,6 +362,7 @@ void PresentationKB::moveSlot()
         {
             setNewKBEffect();
             d->imageLoadThread->requestNewImage();
+            d->endOfShow = !d->haveImages;
         }
 
         d->effect->advanceTime(d->step);
@@ -470,7 +468,7 @@ void PresentationKB::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (d->endOfShow && d->image[0]->m_paint && d->image[1]->m_paint)
+    if (d->endOfShow)
     {
         endOfShow();
         d->timer->stop();
@@ -680,11 +678,6 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
 #else
     Q_UNUSED(e);
 #endif
-}
-
-void PresentationKB::slotEndOfShow()
-{
-    d->endOfShow = true;
 }
 
 void PresentationKB::slotMouseMoveTimeOut()

@@ -149,7 +149,6 @@ protected:
 private Q_SLOTS:
 
     void moveSlot();
-    void slotEndOfShow();
     void slotMouseMoveTimeOut();
     void slotClose();
 
