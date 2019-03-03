@@ -153,6 +153,7 @@ public:
         videoWidget(0),
         player(0),
         slider(0),
+        volume(0),
         tlabel(0),
         videoOrientation(0)
     {
