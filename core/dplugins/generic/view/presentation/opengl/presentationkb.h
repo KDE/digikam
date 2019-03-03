@@ -46,7 +46,8 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
-#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLTexture>
 
 namespace DigikamGenericPresentationPlugin
 {
@@ -98,17 +99,17 @@ public:
 
 public:
 
-    KBViewTrans* m_viewTrans;
-    float        m_aspect;
-    float        m_pos;
-    float        m_opacity;
-    bool         m_paint;
-    GLuint       m_texture;
+    KBViewTrans*    m_viewTrans;
+    float           m_aspect;
+    float           m_pos;
+    float           m_opacity;
+    bool            m_paint;
+    QOpenGLTexture* m_texture;
 };
 
 // -------------------------------------------------------------------------
 
-class PresentationKB : public QGLWidget
+class PresentationKB : public QOpenGLWidget
 {
     Q_OBJECT
 
