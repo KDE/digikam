@@ -238,6 +238,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     {
         int rate = 25;
 
+        winId();
         QWindow* const handle = windowHandle();
 
         if (handle)
