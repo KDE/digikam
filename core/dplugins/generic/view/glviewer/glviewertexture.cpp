@@ -174,7 +174,7 @@ bool GLViewerTexture::loadInternal()
                                  Qt::FastTransformation).mirrored());
     }
 
-    setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    setMinificationFilter(QOpenGLTexture::Linear);
     setMagnificationFilter(QOpenGLTexture::Linear);
 
     w = width();
@@ -393,7 +393,7 @@ bool GLViewerTexture::setNewSize(QSize size)
                                  Qt::FastTransformation).mirrored());
     }
 
-    setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    setMinificationFilter(QOpenGLTexture::Linear);
     setMagnificationFilter(QOpenGLTexture::Linear);
 
     // recalculate half-texel offset
