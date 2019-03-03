@@ -30,7 +30,6 @@
 
 // C++ includes
 
-#include <cassert>
 #include <cmath>
 
 // Qt includes
@@ -192,29 +191,30 @@ double KBViewTrans::rndSign() const
 
 KBImage::KBImage(KBViewTrans* const viewTrans, float aspect)
 {
-    this->m_viewTrans = viewTrans;
-    this->m_aspect    = aspect;
-    this->m_pos       = 0.0;
-    this->m_opacity   = 0.0;
-    this->m_paint     = (m_viewTrans) ? true : false;
-    this->m_texture   = 0;
+    m_viewTrans = viewTrans;
+    m_aspect    = aspect;
+    m_pos       = 0.0;
+    m_opacity   = 0.0;
+    m_paint     = (m_viewTrans) ? true : false;
+    m_texture   = new QOpenGLTexture(QOpenGLTexture::Target2D);
 }
 
 KBImage::~KBImage()
 {
-    delete m_viewTrans;
+    m_texture->destroy();
 
-    if (glIsTexture(m_texture))
-        glDeleteTextures(1, &m_texture);
+    delete m_viewTrans;
+    delete m_texture;
 }
 
 // -------------------------------------------------------------------------
 
 PresentationKB::PresentationKB(PresentationContainer* const sharedData)
-    : QGLWidget(),
+    : QOpenGLWidget(),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
     QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
@@ -261,15 +261,16 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     d->image[0]        = new KBImage(0);
     d->image[1]        = new KBImage(0);
     d->step            = 1.0 / ((float) (d->delay * frameRate));
+    d->endTexture      = new QOpenGLTexture(QOpenGLTexture::Target2D);
     d->imageLoadThread = new KBImageLoader(d->sharedData, width(), height());
-    d->timer           = new QTimer;
+    d->timer           = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(moveSlot()));
 
     // -- hide cursor when not moved --------------------
 
-    d->mouseMoveTimer = new QTimer;
+    d->mouseMoveTimer = new QTimer(this);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -300,19 +301,19 @@ PresentationKB::~PresentationKB()
     delete d->image[0];
     delete d->image[1];
 
+    d->endTexture->destroy();
+    delete d->endTexture;
+
     d->imageLoadThread->quit();
     bool terminated = d->imageLoadThread->wait(10000);
 
     if (!terminated)
     {
         d->imageLoadThread->terminate();
-        terminated = d->imageLoadThread->wait(3000);
-        (void)terminated; // Remove clang warnings.
+        d->imageLoadThread->wait(3000);
     }
 
     delete d->imageLoadThread;
-    delete d->mouseMoveTimer;
-    delete d->timer;
     delete d;
 }
 
@@ -368,12 +369,12 @@ void PresentationKB::moveSlot()
         d->effect->advanceTime(d->step);
     }
 
-    updateGL();
+    update();
 }
 
 bool PresentationKB::setupNewImage(int idx)
 {
-    assert(idx >= 0 && idx < 2);
+    Q_ASSERT(idx >= 0 && idx < 2);
 
     if (!d->haveImages)
         return false;
@@ -493,15 +494,10 @@ void PresentationKB::resizeGL(int w, int h)
 void PresentationKB::applyTexture(KBImage* const img, const QImage &texture)
 {
     /* create the texture */
-    glGenTextures(1, &img->m_texture);
-    glBindTexture(GL_TEXTURE_2D, img->m_texture);
-
-    /* actually generate the texture */
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, texture.width(), texture.height(), 0,GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
-
-    /* enable linear filtering  */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    img->m_texture->setData(texture.mirrored());
+    img->m_texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    img->m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    img->m_texture->bind();
 }
 
 void PresentationKB::paintTexture(KBImage* const img)
@@ -515,7 +511,7 @@ void PresentationKB::paintTexture(KBImage* const img)
     glTranslatef(img->m_viewTrans->transX(img->m_pos) * 2.0, img->m_viewTrans->transY(img->m_pos) * 2.0, 0.0);
     glScalef(img->m_viewTrans->scale(img->m_pos), img->m_viewTrans->scale(img->m_pos), 0.0);
 
-    GLuint& tex = img->m_texture;
+    GLuint tex = img->m_texture->textureId();
 
     glBindTexture(GL_TEXTURE_2D, tex);
 
@@ -571,27 +567,16 @@ void PresentationKB::endOfShow()
     p.drawText(20, 100, i18n("Click to Exit..."));
     p.end();
 
-    QImage image = pix.toImage();
-    QImage t     = convertToGLFormat(image);
-
-    GLuint tex;
-
     /* create the texture */
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    /* actually generate the texture */
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
-
-    /* enable linear filtering  */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    d->endTexture->setData(pix.toImage().mirrored());
+    d->endTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    d->endTexture->setMagnificationFilter(QOpenGLTexture::Linear);
+    d->endTexture->bind();
 
     /* paint the texture */
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, tex);
 
     glBegin(GL_QUADS);
     {

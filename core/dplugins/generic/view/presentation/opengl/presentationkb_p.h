@@ -66,6 +66,7 @@ public:
         deskY               = 0;
         deskWidth           = 0;
         deskHeight          = 0;
+        endTexture          = 0;
         imageLoadThread     = 0;
         mouseMoveTimer      = 0;
         timer               = 0;
@@ -86,6 +87,7 @@ public:
     int                      deskWidth;
     int                      deskHeight;
 
+    QOpenGLTexture*          endTexture;
     KBImageLoader*           imageLoadThread;
     QTimer*                  mouseMoveTimer;
     QTimer*                  timer;

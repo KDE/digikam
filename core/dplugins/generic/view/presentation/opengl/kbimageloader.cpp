@@ -202,16 +202,11 @@ bool KBImageLoader::loadImage()
         return false;
     }
 
-    float aspect = (float)image.width() / (float)image.height();
-    image        = image.scaled(d->width, d->height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
     d->imageLock.lock();
 
-    d->textureAspect = aspect;
-
-    // this is the critical moment, when we make the new texture and
-    // aspect available to the consumer
-    d->texture       = QGLWidget::convertToGLFormat(image);
+    d->textureAspect = (float)image.width() / (float)image.height();
+    d->texture       = image.scaled(d->width, d->height,
+                                    Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     d->imageLock.unlock();
 

@@ -36,6 +36,7 @@
 #include <QPair>
 #include <QStringList>
 #include <QAction>
+#include <QWindow>
 #include <QApplication>
 #include <QMessageBox>
 
@@ -135,23 +136,36 @@ void PresentationMngr::slotSlideShow()
     else
     {
 #ifdef HAVE_OPENGL
-        if (!QGLFormat::hasOpenGL())
+        bool supportsOpenGL = true;
+
+        if (wantKB)
         {
-            QMessageBox::critical(QApplication::activeWindow(), QString(),
-                                  i18n("OpenGL support is not available on your system."));
+            PresentationKB* const slide = new PresentationKB(m_sharedData);
+            slide->show();
+
+            if (!slide->windowHandle() || !slide->windowHandle()->supportsOpenGL())
+            {
+                supportsOpenGL = false;
+                slide->close();
+            }
+
         }
         else
         {
-            if (wantKB)
+            PresentationGL* const slide = new PresentationGL(m_sharedData);
+            slide->show();
+
+            if (!slide->windowHandle() || !slide->windowHandle()->supportsOpenGL())
             {
-                PresentationKB* const slide = new PresentationKB(m_sharedData);
-                slide->show();
+                supportsOpenGL = false;
+                slide->close();
             }
-            else
-            {
-                PresentationGL* const slide = new PresentationGL(m_sharedData);
-                slide->show();
-            }
+        }
+
+        if (!supportsOpenGL)
+        {
+            QMessageBox::critical(QApplication::activeWindow(), QString(),
+                                  i18n("OpenGL support is not available on your system."));
         }
 #else
         Q_UNUSED(wantKB);
