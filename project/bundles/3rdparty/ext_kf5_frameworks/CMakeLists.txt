@@ -201,7 +201,7 @@ if(MINGW)
 elseif(APPLE)
     set(KF5_VERSION 5.54) # we have Qt 5.9.7 available for backward compatibily with older MacOS
 else()
-    set(KF5_VERSION 5.54) # we have Qt 5.9.7 available for the moment. Plan to update to 5.12 LTS.
+    set(KF5_VERSION 5.55) # we have Qt 5.11.3 available.
 endif()
 
 if(APPLE)
