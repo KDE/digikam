@@ -196,12 +196,13 @@ KBImage::KBImage(KBViewTrans* const viewTrans, float aspect)
     m_pos       = 0.0;
     m_opacity   = 0.0;
     m_paint     = (m_viewTrans) ? true : false;
-    m_texture   = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    m_texture   = 0;
 }
 
 KBImage::~KBImage()
 {
-    m_texture->destroy();
+    if (m_texture)
+        m_texture->destroy();
 
     delete m_viewTrans;
     delete m_texture;
@@ -261,7 +262,6 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     d->image[0]        = new KBImage(0);
     d->image[1]        = new KBImage(0);
     d->step            = 1.0 / ((float) (d->delay * frameRate));
-    d->endTexture      = new QOpenGLTexture(QOpenGLTexture::Target2D);
     d->imageLoadThread = new KBImageLoader(d->sharedData, width(), height());
     d->timer           = new QTimer(this);
 
@@ -301,7 +301,9 @@ PresentationKB::~PresentationKB()
     delete d->image[0];
     delete d->image[1];
 
-    d->endTexture->destroy();
+    if (d->endTexture)
+        d->endTexture->destroy();
+
     delete d->endTexture;
 
     d->imageLoadThread->quit();
@@ -494,6 +496,7 @@ void PresentationKB::resizeGL(int w, int h)
 void PresentationKB::applyTexture(KBImage* const img, const QImage &texture)
 {
     /* create the texture */
+    img->m_texture = new QOpenGLTexture(QOpenGLTexture::Target2D);
     img->m_texture->setData(texture.mirrored());
     img->m_texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     img->m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
@@ -568,6 +571,7 @@ void PresentationKB::endOfShow()
     p.end();
 
     /* create the texture */
+    d->endTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
     d->endTexture->setData(pix.toImage().mirrored());
     d->endTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     d->endTexture->setMagnificationFilter(QOpenGLTexture::Linear);
