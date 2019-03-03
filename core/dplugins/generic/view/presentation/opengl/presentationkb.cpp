@@ -238,7 +238,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     {
         int rate = 25;
 
-        QWindow* const handle = windowHandle();
+        QWindow* const handle = QApplication::desktop()->windowHandle();
 
         if (handle)
         {
@@ -261,7 +261,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
 
     d->image[0]        = new KBImage(0);
     d->image[1]        = new KBImage(0);
-    d->step            = 1.0 / ((float) (d->delay * frameRate));
+    d->step            = 1.0 / ((float)(d->delay * frameRate));
     d->imageLoadThread = new KBImageLoader(d->sharedData, width(), height());
     d->timer           = new QTimer(this);
 
@@ -438,8 +438,8 @@ void PresentationKB::initializeGL()
     // Clear The Background Color
     glClearColor(0.0, 0.0, 0.0, 1.0f);
 
-    glEnable (GL_TEXTURE_2D);
-    glShadeModel (GL_SMOOTH);
+    glEnable(GL_TEXTURE_2D);
+    glShadeModel(GL_SMOOTH);
 
     // Turn Blending On
     glEnable(GL_BLEND);
@@ -490,7 +490,7 @@ void PresentationKB::paintGL()
 
 void PresentationKB::resizeGL(int w, int h)
 {
-    glViewport(0, 0, (GLint) w, (GLint) h);
+    glViewport(0, 0, (GLint)w, (GLint)h);
 }
 
 void PresentationKB::applyTexture(KBImage* const img, const QImage &texture)
@@ -498,7 +498,7 @@ void PresentationKB::applyTexture(KBImage* const img, const QImage &texture)
     /* create the texture */
     img->m_texture = new QOpenGLTexture(QOpenGLTexture::Target2D);
     img->m_texture->setData(texture.mirrored());
-    img->m_texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    img->m_texture->setMinificationFilter(QOpenGLTexture::Linear);
     img->m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
     img->m_texture->bind();
 }
@@ -514,9 +514,7 @@ void PresentationKB::paintTexture(KBImage* const img)
     glTranslatef(img->m_viewTrans->transX(img->m_pos) * 2.0, img->m_viewTrans->transY(img->m_pos) * 2.0, 0.0);
     glScalef(img->m_viewTrans->scale(img->m_pos), img->m_viewTrans->scale(img->m_pos), 0.0);
 
-    GLuint tex = img->m_texture->textureId();
-
-    glBindTexture(GL_TEXTURE_2D, tex);
+    img->m_texture->bind();
 
     glBegin(GL_QUADS);
     {
@@ -573,7 +571,7 @@ void PresentationKB::endOfShow()
     /* create the texture */
     d->endTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
     d->endTexture->setData(pix.toImage().mirrored());
-    d->endTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    d->endTexture->setMinificationFilter(QOpenGLTexture::Linear);
     d->endTexture->setMagnificationFilter(QOpenGLTexture::Linear);
     d->endTexture->bind();
 
