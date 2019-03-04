@@ -728,9 +728,9 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
     if ( !isEnabled() )
     {
         p.fillRect(0, 0, width(), height(),
-                   palette().color(QPalette::Disabled, QPalette::Background));
+                   palette().color(QPalette::Disabled, QPalette::Window));
 
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        QPen pen(palette().color(QPalette::Disabled, QPalette::WindowText));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
 
@@ -756,7 +756,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
         // ... and we render busy text.
 
-        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
         p.drawPixmap(width()/2 - anim.width() /2, anim.height(), anim);
         QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
@@ -774,7 +774,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     if (!d->profileDataAvailable || (!d->loadingImageMode && !d->loadingImageSucess))
     {
-        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
         QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);

@@ -243,7 +243,7 @@ public:
         curvePath.lineTo(1,          wHeight - 1);
         curvePath.closeSubpath();
 
-        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
+        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Window));
 
         QColor pColor;
         QColor bColor;
@@ -266,8 +266,8 @@ public:
                 break;
 
             default:
-                pColor = palette.color(QPalette::Active,   QPalette::Foreground);
-                bColor = palette.color(QPalette::Inactive, QPalette::Foreground);
+                pColor = palette.color(QPalette::Active,   QPalette::WindowText);
+                bColor = palette.color(QPalette::Inactive, QPalette::WindowText);
                 break;
         }
 
@@ -281,8 +281,8 @@ public:
                            (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight);
             p2.fillRect((int)(selectionMin * wWidth), 0,
                         (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
-                        QBrush(palette.color(QPalette::Active, QPalette::Foreground), Qt::SolidPattern));
-            p2.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Background), Qt::SolidPattern));
+                        QBrush(palette.color(QPalette::Active, QPalette::WindowText), Qt::SolidPattern));
+            p2.fillPath(curvePath, QBrush(palette.color(QPalette::Active, QPalette::Window), Qt::SolidPattern));
         }
 
         p2.end();
@@ -355,7 +355,7 @@ public:
         curveBlue.lineTo(1, wHeight - 1);
         curveBlue.closeSubpath();
 
-        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Background));
+        p2.fillRect(0, 0, wWidth, wHeight, palette.color(QPalette::Active, QPalette::Window));
         p2.fillPath(curveBlue,  QBrush(Qt::black, Qt::SolidPattern));
         p2.fillPath(curveRed,   QBrush(Qt::black, Qt::SolidPattern));
         p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
@@ -379,7 +379,7 @@ public:
             p2.setCompositionMode(QPainter::CompositionMode_Source);
             p2.fillRect((int)(selectionMin * wWidth), 0,
                         (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
-                        palette.color(QPalette::Active, QPalette::Foreground));
+                        palette.color(QPalette::Active, QPalette::WindowText));
             p2.fillPath(curveBlue, QBrush(Qt::black,  Qt::SolidPattern));
             p2.fillPath(curveRed, QBrush(Qt::black,   Qt::SolidPattern));
             p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
@@ -603,7 +603,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
     }
 
     // clear background
-    d->painter.fillRect(0, 0, wWidth, wHeight, d->palette.color(QPalette::Active, QPalette::Background));
+    d->painter.fillRect(0, 0, wWidth, wHeight, d->palette.color(QPalette::Active, QPalette::Window));
 
     // decide how to render the line
     if (d->channelType == ColorChannels)
@@ -626,7 +626,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
     }
 
     // draw a final border around everything
-    d->painter.setPen(QPen(d->palette.color(QPalette::Active, QPalette::Foreground), 1, Qt::SolidLine));
+    d->painter.setPen(QPen(d->palette.color(QPalette::Active, QPalette::WindowText), 1, Qt::SolidLine));
     d->painter.drawRect(0, 0, wWidth - 1, wHeight - 1);
     d->painter.end();
 }

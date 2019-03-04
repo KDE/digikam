@@ -103,7 +103,7 @@ DConfigDlg::DConfigDlg(QWidget* const parent, Qt::WindowFlags flags)
 {
     Q_D(DConfigDlg);
     d->mPageWidget = new DConfigDlgWdg(this);
-    d->mPageWidget->layout()->setMargin(0);
+    d->mPageWidget->layout()->setContentsMargins(0, 0, 0, 0);
 
     d->mButtonBox = new QDialogButtonBox(this);
     d->mButtonBox->setObjectName(QLatin1String("buttonbox"));

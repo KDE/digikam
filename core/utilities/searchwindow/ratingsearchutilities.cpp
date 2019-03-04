@@ -331,8 +331,8 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
             p.setRenderHint(QPainter::Antialiasing, true);
             //pen.setJoinStyle(Qt::MiterJoin);
 
-            QColor foreground = palette().color(QPalette::Active, QPalette::Foreground);
-            QColor background = palette().color(QPalette::Active, QPalette::Background);
+            QColor foreground = palette().color(QPalette::Active, QPalette::WindowText);
+            QColor background = palette().color(QPalette::Active, QPalette::Window);
             foreground.setAlphaF(foreground.alphaF() * 0.5);
             background.setAlphaF(background.alphaF() * 0.5);
             QColor foregroundEnd(foreground), backgroundEnd(background);
