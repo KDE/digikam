@@ -7,7 +7,7 @@
 #
 
 SET(EXTPREFIX_qt "${EXTPREFIX}")
-SET(QT_VERSION 5.11.3)
+SET(QT_VERSION 5.10.1)
 
 IF (${QT_VERSION} STREQUAL "5.6.3")
 
@@ -49,6 +49,26 @@ ELSEIF(${QT_VERSION} STREQUAL "5.9.7")
         ALWAYS 0
     )
 
+ELSEIF(${QT_VERSION} STREQUAL "5.10.1")
+
+    INCLUDE("config-5.10.1-linux.cmake")
+
+    ExternalProject_Add(ext_qt
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://download.qt.io/official_releases/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz
+        URL_MD5 7e167b9617e7bd64012daaacb85477af
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5101-appimage-support.patch
+
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
+
+        BUILD_COMMAND make -j
+
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+        ALWAYS 0
+    )
+
 ELSEIF(${QT_VERSION} STREQUAL "5.11.3")
 
     INCLUDE("config-5.11.3-linux.cmake")
@@ -59,6 +79,26 @@ ELSEIF(${QT_VERSION} STREQUAL "5.11.3")
         URL_MD5 02b353bfe7a40a8dc4274e1d17226d2b
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5113-appimage-support.patch
+
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
+
+        BUILD_COMMAND make -j
+
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
+        ALWAYS 0
+    )
+
+ELSEIF(${QT_VERSION} STREQUAL "5.12.1")
+
+    INCLUDE("config-5.12.1-linux.cmake")
+
+    ExternalProject_Add(ext_qt
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz
+        URL_MD5 6a37466c8c40e87d4a19c3f286ec2542
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5121-appimage-support.patch
 
         CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
 
