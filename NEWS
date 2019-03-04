@@ -47,4 +47,5 @@ BUGFIXES:
 030 ==> 404999 - Inconsistency in facetag font size.
 031 ==> 244259 - Last image is displayed twice when Advanced Slideshow with KenBurns effect is run more than once.
 032 ==> 405043 - Add volume control to video playback.
-033 ==> 
+033 ==> 401253 - Face detect crashes every time.
+034 ==> 
