@@ -69,9 +69,9 @@ QString GeolocationEditPlugin::description() const
 QString GeolocationEditPlugin::details() const
 {
     return i18n("<p>This tool permit to changes geolocation information from items.</p>"
-                "<p>This tool can edit GPS data, manualy or over a map. Reverse geo-coding is also available through web services.</p>"
+                "<p>This tool can edit GPS data, manually or over a map. Reverse geo-coding is also available through web services.</p>"
                 "<p>This tool as also an export function to KML to store map traces in Google format.</p>"
-                "<p>Finaly, this tool is able to read a GPS trace from a device to synchronize geo-location of items if you camera do not have an embedded GPS device.</p>");
+                "<p>Finally, this tool is able to read a GPS trace from a device to synchronize geo-location of items if you camera do not have an embedded GPS device.</p>");
 }
 
 QList<DPluginAuthor> GeolocationEditPlugin::authors() const
