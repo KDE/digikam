@@ -727,10 +727,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${OpenCV_INCLUDE_DIRS})
 
-    include_directories(${LIBKVKONTAKTE_INCLUDES})
+    if(KF5Vkontakte_FOUND)
+        include_directories(${LIBKVKONTAKTE_INCLUDES})
+    endif()
 
-    include_directories(${LENSFUN_INCLUDE_DIRS})
-
+    if(LensFun_FOUND)
+        include_directories(${LENSFUN_INCLUDE_DIRS})
+    endif()
+    
     # ==========================================================================
     # Common targets parts
 
