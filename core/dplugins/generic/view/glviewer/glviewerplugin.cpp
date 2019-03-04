@@ -70,7 +70,7 @@ QString GLViewerPlugin::description() const
 
 QString GLViewerPlugin::details() const
 {
-    return i18n("<p>This tool preview a serie of items using OpenGL effects.</p>");
+    return i18n("<p>This tool preview a series of items using OpenGL effects.</p>");
 }
 
 QList<DPluginAuthor> GLViewerPlugin::authors() const

@@ -70,7 +70,7 @@ QString MetadataEditPlugin::details() const
 {
     return i18n("<p>This tool permit to changes plenty of metadata from items.</p>"
                 "<p>Most common Exif, Iptc, and Xmp tags used in photography are listed for editing with standardized values.</p>"
-                "<p>For photo agencies, pre-configured subjects canb eused to describe the items contents based on Iptc reference codes.</p>");
+                "<p>For photo agencies, pre-configured subjects can be used to describe the items contents based on Iptc reference codes.</p>");
 }
 
 QList<DPluginAuthor> MetadataEditPlugin::authors() const
