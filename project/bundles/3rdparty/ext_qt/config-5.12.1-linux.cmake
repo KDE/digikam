@@ -15,8 +15,6 @@ LIST(APPEND QT_CONFIG
             -confirm-license                  # Silency ack the license
             -opengl desktop                   # Enable OpenGL support from Desktop
             -fontconfig                       # Enable Fontconfig support
-            -system-freetype
-#            -qt-freetype                      # Use freetype library from Qt
             -openssl                          # Use SSL from system
             -sql-sqlite                       # Enable Sqlite plugin support
             -qpa xcb                          # Plat-form Architecture plugin to use: xcb
