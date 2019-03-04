@@ -75,7 +75,7 @@ QString ProfileConversionToolPlugin::description() const
 
 QString ProfileConversionToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can can convert image to a different color space.</p>");
+    return i18n("<p>This Image Editor tool can convert image to a different color space.</p>");
 }
 
 QList<DPluginAuthor> ProfileConversionToolPlugin::authors() const

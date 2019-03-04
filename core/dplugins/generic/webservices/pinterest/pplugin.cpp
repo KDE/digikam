@@ -70,7 +70,7 @@ QString PPlugin::description() const
 QString PPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to Pinterest web-service.</p>"
-                "<p>See Box web site for details: <a href='https://www.pinterest.com/'>https://www.pinterest.com/</a></p>");
+                "<p>See Pinterest web site for details: <a href='https://www.pinterest.com/'>https://www.pinterest.com/</a></p>");
 }
 
 QList<DPluginAuthor> PPlugin::authors() const

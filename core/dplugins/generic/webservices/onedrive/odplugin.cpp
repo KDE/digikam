@@ -70,7 +70,7 @@ QString ODPlugin::description() const
 QString ODPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to OneDrive web-service.</p>"
-                "<p>See Box web site for details: <a href='https://onedrive.live.com/'>https://onedrive.live.com/</a></p>");
+                "<p>See OneDrive web site for details: <a href='https://onedrive.live.com/'>https://onedrive.live.com/</a></p>");
 }
 
 QList<DPluginAuthor> ODPlugin::authors() const
