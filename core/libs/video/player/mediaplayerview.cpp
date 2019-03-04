@@ -29,6 +29,7 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QProxyStyle>
+#include <QPushButton>
 #include <QToolBar>
 #include <QAction>
 #include <QSlider>
@@ -148,6 +149,7 @@ public:
         prevAction(0),
         nextAction(0),
         playAction(0),
+        loopPlay(0),
         toolBar(0),
         iface(0),
         videoWidget(0),
@@ -165,6 +167,8 @@ public:
     QAction*             prevAction;
     QAction*             nextAction;
     QAction*             playAction;
+
+    QPushButton*         loopPlay;
 
     QToolBar*            toolBar;
 
@@ -219,7 +223,13 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider->setStyle(new VideoStyle(d->slider->style()));
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
-    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00  "));
+    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
+    d->loopPlay       = new QPushButton(hbox);
+    d->loopPlay->setIcon(QIcon::fromTheme(QLatin1String("media-playlist-repeat")));
+    d->loopPlay->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    d->loopPlay->setFocusPolicy(Qt::NoFocus);
+    d->loopPlay->setMinimumSize(22, 22);
+    d->loopPlay->setCheckable(true);
     QLabel* const spk = new QLabel(hbox);
     spk->setPixmap(QIcon::fromTheme(QLatin1String("audio-volume-high")).pixmap(22, 22));
     d->volume         = new QSlider(Qt::Horizontal, hbox);
@@ -227,6 +237,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->volume->setValue(50);
     hbox->setContentsMargins(0, spacing, 0, 0);
     hbox->setStretchFactor(d->slider, 10);
+    hbox->setSpacing(4);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->videoWidget->setMouseTracking(true);
@@ -275,6 +286,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->volume, SIGNAL(valueChanged(int)),
             this, SLOT(slotVolumeChanged(int)));
+
+    connect(d->loopPlay, SIGNAL(toggled(bool)),
+            this, SLOT(slotLoopToggled(bool)));
 
     connect(d->player, SIGNAL(stateChanged(QtAV::AVPlayer::State)),
             this, SLOT(slotPlayerStateChanged(QtAV::AVPlayer::State)));
@@ -500,7 +514,7 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
         d->slider->blockSignals(false);
     }
 
-    d->tlabel->setText(QString::fromLatin1("%1 / %2  ")
+    d->tlabel->setText(QString::fromLatin1("%1 / %2")
                        .arg(QTime(0, 0, 0).addMSecs(position).toString(QLatin1String("HH:mm:ss")))
                        .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QLatin1String("HH:mm:ss"))));
 }
@@ -508,6 +522,18 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
 void MediaPlayerView::slotVolumeChanged(int volume)
 {
     d->player->audio()->setVolume((qreal)volume / 100.0);
+}
+
+void MediaPlayerView::slotLoopToggled(bool loop)
+{
+    if (loop)
+    {
+        d->player->setRepeat(-1);
+    }
+    else
+    {
+        d->player->setRepeat(0);
+    }
 }
 
 void MediaPlayerView::slotDurationChanged(qint64 duration)

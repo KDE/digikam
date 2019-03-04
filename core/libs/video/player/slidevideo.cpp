@@ -124,7 +124,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->slider->setRange(0, 0);
     d->slider->setAutoFillBackground(true);
     d->tlabel         = new QLabel(d->indicator);
-    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00  "));
+    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
     d->tlabel->setAutoFillBackground(true);
     QLabel* const spk = new QLabel(d->indicator);
     spk->setPixmap(QIcon::fromTheme(QLatin1String("audio-volume-high")).pixmap(22, 22));
@@ -133,6 +133,8 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->volume->setValue(50);
     d->indicator->setStretchFactor(d->slider, 10);
     d->indicator->setAutoFillBackground(true);
+    d->indicator->setSpacing(4);
+
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->addWidget(d->videoWidget, 0, 0, 2, 1);
@@ -303,7 +305,7 @@ void SlideVideo::slotPositionChanged(qint64 position)
         d->slider->blockSignals(false);
     }
 
-    d->tlabel->setText(QString::fromLatin1("%1 / %2  ")
+    d->tlabel->setText(QString::fromLatin1("%1 / %2")
                        .arg(QTime(0, 0, 0).addMSecs(position).toString(QLatin1String("HH:mm:ss")))
                        .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QLatin1String("HH:mm:ss"))));
 
