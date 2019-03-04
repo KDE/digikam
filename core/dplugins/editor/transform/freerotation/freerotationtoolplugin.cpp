@@ -69,7 +69,7 @@ QString FreeRotationToolPlugin::description() const
 
 QString FreeRotationToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can rotate an image with an abitrary angle.</p>");
+    return i18n("<p>This Image Editor tool can rotate an image with an arbitrary angle.</p>");
 }
 
 QList<DPluginAuthor> FreeRotationToolPlugin::authors() const

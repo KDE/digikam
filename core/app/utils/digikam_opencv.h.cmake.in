@@ -49,47 +49,27 @@
 #define OPENCV_VERSION                         OPENCV_MAKE_VERSION(CV_MAJOR_VERSION,CV_MINOR_VERSION,CV_SUBMINOR_VERSION)
 #define OPENCV_TEST_VERSION(major,minor,patch) ( OPENCV_VERSION < OPENCV_MAKE_VERSION(major,minor,patch) )
 
-#if OPENCV_TEST_VERSION(2,5,0)
-#   include <opencv2/opencv.hpp>
-#   include <opencv2/legacy/compat.hpp>
-#   include <opencv/cvaux.h>
-#   include <opencv2/imgproc/imgproc.hpp>
-#elif OPENCV_TEST_VERSION(4,0,0)
-#   include <opencv/cv.h>
-#   include <opencv/cvaux.h>
-#   include <opencv/cxcore.h>
-#   include <opencv2/imgproc.hpp>
-#else
-#   include <opencv2/imgproc.hpp>
-#   include <opencv2/core/core_c.h>
-#   include <opencv2/core/types_c.h>
-#   include <opencv2/imgproc/types_c.h>
-#endif
+// Core module headers
 
-#if OPENCV_TEST_VERSION(3,0,0)
-#   include <opencv2/core/core.hpp>
-#   include <opencv2/core/internal.hpp>
-#   include <opencv2/contrib/contrib.hpp>
-#elif OPENCV_TEST_VERSION(4,0,0)
-#   include <opencv2/objdetect.hpp>
-#   include <opencv2/core.hpp>
-#   include <opencv2/core/utility.hpp>
-#   include <opencv2/core/persistence.hpp>
-#   include <opencv2/imgcodecs.hpp>
-#   include <opencv2/imgcodecs/imgcodecs_c.h>
-#else
-#   include <opencv2/objdetect.hpp>
-#   include <opencv2/core.hpp>
-#   include <opencv2/core/utility.hpp>
-#   include <opencv2/core/persistence.hpp>
-#   include <opencv2/imgcodecs.hpp>
-#   include <opencv2/imgcodecs/legacy/constants_c.h>
-#endif
+#include <opencv2/core.hpp>
+#include <opencv2/core/utility.hpp>
+#include <opencv2/core/persistence.hpp>
+#include <opencv2/core/core_c.h>
+#include <opencv2/core/types_c.h>
 
-// for old-style code
-#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
-#   include <opencv2/legacy/compat.hpp>
-#endif
+// Object detection module headers
+
+#include <opencv2/objdetect.hpp>
+
+// Image codecs module headers
+
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgcodecs/imgcodecs_c.h>
+
+// Image processing module headers
+
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgproc/types_c.h>
 
 // Restore warnings
 #if !defined(__APPLE__) && defined(__GNUC__)

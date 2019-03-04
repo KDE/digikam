@@ -70,7 +70,7 @@ QString MediaWikiPlugin::description() const
 QString MediaWikiPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to MediaWiki web-service.</p>"
-                "<p>See MediaWiki web site for details: <a href='https://www.mediawiki.org/'>hhttps://www.mediawiki.org/</a></p>");
+                "<p>See MediaWiki web site for details: <a href='https://www.mediawiki.org/'>https://www.mediawiki.org/</a></p>");
 }
 
 QList<DPluginAuthor> MediaWikiPlugin::authors() const

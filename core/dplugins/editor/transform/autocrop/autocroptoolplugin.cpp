@@ -69,7 +69,7 @@ QString AutoCropToolPlugin::description() const
 
 QString AutoCropToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can crop automatically an image by detection of inner black border,"
+    return i18n("<p>This Image Editor tool can crop automatically an image by detection of inner black border, "
                 "generated while panorama stitching for example.</p>");
 }
 

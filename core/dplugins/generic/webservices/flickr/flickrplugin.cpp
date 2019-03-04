@@ -70,7 +70,7 @@ QString FlickrPlugin::description() const
 QString FlickrPlugin::details() const
 {
     return i18n("<p>This tool permit to export items to Flickr web-service.</p>"
-                "<p>See Flickr web site for details: <a href='https://box.com/'>https://box.com/</a></p>");
+                "<p>See Flickr web site for details: <a href='https://www.flickr.com/'>https://www.flickr.com/</a></p>");
 }
 
 QList<DPluginAuthor> FlickrPlugin::authors() const

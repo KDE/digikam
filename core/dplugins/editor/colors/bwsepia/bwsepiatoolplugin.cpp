@@ -69,7 +69,7 @@ QString BWSepiaToolPlugin::description() const
 
 QString BWSepiaToolPlugin::details() const
 {
-    return i18n("<p>This Image Editor tool can can convert image to black and white.</p>");
+    return i18n("<p>This Image Editor tool can convert image to black and white.</p>");
 }
 
 QList<DPluginAuthor> BWSepiaToolPlugin::authors() const

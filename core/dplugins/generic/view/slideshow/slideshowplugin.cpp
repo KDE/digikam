@@ -69,7 +69,7 @@ QString SlideShowPlugin::description() const
 
 QString SlideShowPlugin::details() const
 {
-    return i18n("<p>This tool render a serie of items as a simple slide-show.</p>"
+    return i18n("<p>This tool render a series of items as a simple slide-show.</p>"
                 "<p>Plenty of items properties can be displayed as overlay while running.</p>"
                 "<p>This tool can play album contents in recursive mode with children albums if any.</p>");
 }
