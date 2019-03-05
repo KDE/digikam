@@ -113,7 +113,6 @@ yum -y install wget \
                xz-devel \
                lz4-devel \
                inotify-tools-devel \
-               openssl-devel \
                cups-devel \
                openal-soft-devel \
                libical-devel
@@ -192,7 +191,20 @@ yum -y install libass-devel \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel openssl-devel freetype-devel fontconfig-devel
+yum -y erase qt-devel \
+             boost-devel \
+             libgphoto2 \
+             sane-backends \
+             libjpeg-devel \
+             jasper-devel \
+             libpng-devel \
+             libtiff-devel \
+             ffmpeg \
+             ffmpeg-devel \
+             ant \
+             pulseaudio-libs-devel \
+             freetype-devel \
+             fontconfig-devel
 
 #################################################################################################
 
