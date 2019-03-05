@@ -104,6 +104,7 @@ yum -y install wget \
                xcb-util-devel \
                glibc-devel \
                libudev-devel \
+               libuuid-devel \
                libicu-devel \
                sqlite-devel \
                libusb-devel \
@@ -202,9 +203,7 @@ yum -y erase qt-devel \
              ffmpeg \
              ffmpeg-devel \
              ant \
-             pulseaudio-libs-devel \
-             freetype-devel \
-             fontconfig-devel
+             pulseaudio-libs-devel
 
 #################################################################################################
 
