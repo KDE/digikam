@@ -10,8 +10,8 @@ SET(PREFIX_ext_fontconfig "${EXTPREFIX}")
 
 ExternalProject_Add(ext_fontconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.bz2
-    URL_MD5 36cdea1058ef13cbbfdabe6cb019dc1c
+    URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.0.tar.bz2
+    URL_MD5 f0313daaec6dce8471a2e57ac08c9fda
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_fontconfig} --disable-docs
 
