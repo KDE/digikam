@@ -11,28 +11,15 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
-# we ship our own version of FindOpenCV.cmake. But that does not work on all systems.
-# Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
-# add our FindOpenCV.cmake to the search path and search again.
 
 macro(DETECT_OPENCV OPENCV_MIN_VERSION)
 
     # Reset to avoid picking up extra libraries
     set(OpenCV_LIBS)
 
-    set(OPENCV_REQUIRED_COMPONENTS "${ARGN}" )
+    set(OPENCV_REQUIRED_COMPONENTS "${ARGN}")
 
-    message(STATUS "First try at finding OpenCV...")
     find_package(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
-
-    if(NOT OpenCV_FOUND)
-
-        message(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
-        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-        find_package(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
-
-    endif()
 
     if(OpenCV_FOUND)
 
