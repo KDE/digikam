@@ -120,7 +120,6 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj,
             qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin of type" << obj->metaObject()->superClass()->className()
                                          << "loaded from"    << loader->fileName();
 
-
             KSharedConfigPtr config = KSharedConfig::openConfig();
             KConfigGroup group      = config->group(DPluginLoader::instance()->configGroupName());
 
@@ -129,9 +128,9 @@ bool DPluginLoader::Private::appendPlugin(QObject* const obj,
 
             allPlugins << plugin;
             allLoaders << loader;
-        }
 
-        return true;
+            return true;
+        }
     }
 
     return false;
