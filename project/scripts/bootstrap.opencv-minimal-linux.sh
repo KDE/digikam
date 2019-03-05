@@ -70,6 +70,7 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DWITH_MATLAB=OFF \
                       -DWITH_OPENEXR=OFF \
                       -DWITH_OPENNI=OFF \
+                      -DWITH_OPENMP=OFF \
                       -DWITH_PNG=OFF \
                       -DWITH_PVAPI=OFF \
                       -DWITH_WIN32UI=OFF \
