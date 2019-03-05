@@ -179,12 +179,13 @@ public:
 };
 
 PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
-    : QWidget(0, Qt::WindowStaysOnTopHint | Qt::Popup | Qt::X11BypassWindowManagerHint),
+    : QWidget(),
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->sharedData   = sharedData;
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
+
     QRect deskRect  = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
     d->deskX        = deskRect.x();
     d->deskY        = deskRect.y();
@@ -193,6 +194,8 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
+
+    d->sharedData   = sharedData;
 
     d->slideCtrlWidget = new PresentationCtrlWidget(this);
     d->slideCtrlWidget->hide();
@@ -288,7 +291,7 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
     // -- hide cursor when not moved --------------------
 
-    d->mouseMoveTimer = new QTimer;
+    d->mouseMoveTimer = new QTimer(this);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -300,9 +303,7 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 PresentationWidget::~PresentationWidget()
 {
     d->timer->stop();
-    delete d->timer;
     d->mouseMoveTimer->stop();
-    delete d->mouseMoveTimer;
 
     if (d->intArray)
         delete [] d->intArray;
