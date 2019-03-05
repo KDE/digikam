@@ -13,7 +13,7 @@ ExternalProject_Add(ext_fontconfig
     URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.0.tar.bz2
     URL_MD5 f0313daaec6dce8471a2e57ac08c9fda
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_fontconfig}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_fontconfig} --disable-docs
 
     UPDATE_COMMAND ""
     ALWAYS 0
