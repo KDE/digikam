@@ -225,7 +225,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->tlabel         = new QLabel(hbox);
     d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
     d->loopPlay       = new QPushButton(hbox);
-    d->loopPlay->setIcon(QIcon::fromTheme(QLatin1String("media-playlist-repeat")));
+    d->loopPlay->setIcon(QIcon::fromTheme(QLatin1String("media-playlist-normal")));
     d->loopPlay->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->loopPlay->setFocusPolicy(Qt::NoFocus);
     d->loopPlay->setMinimumSize(22, 22);
@@ -528,10 +528,12 @@ void MediaPlayerView::slotLoopToggled(bool loop)
 {
     if (loop)
     {
+        d->loopPlay->setIcon(QIcon::fromTheme(QLatin1String("media-playlist-repeat")));
         d->player->setRepeat(-1);
     }
     else
     {
+        d->loopPlay->setIcon(QIcon::fromTheme(QLatin1String("media-playlist-normal")));
         d->player->setRepeat(0);
     }
 }
