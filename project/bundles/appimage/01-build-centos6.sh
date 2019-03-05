@@ -92,8 +92,6 @@ yum -y install wget \
                eigen3-devel \
                cppunit-devel \
                libstdc++-devel \
-               freetype-devel \
-               fontconfig-devel \
                libxml2-devel \
                libstdc++-devel \
                libXrender-devel \
@@ -194,7 +192,7 @@ yum -y install libass-devel \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel openssl-devel
+yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel openssl-devel freetype-devel fontconfig-devel
 
 #################################################################################################
 
@@ -244,6 +242,8 @@ cmake3 --build . --config RelWithDebInfo --target ext_boost      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_openssl    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_freetype   -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_fontconfig -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qt         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit   -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_exiv2      -- -j$CPU_CORES
