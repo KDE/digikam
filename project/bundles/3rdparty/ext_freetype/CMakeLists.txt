@@ -10,8 +10,8 @@ SET(PREFIX_ext_freetype "${EXTPREFIX}")
 
 ExternalProject_Add(ext_freetype
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://downloads.sourceforge.net/project/freetype/freetype2/2.6.5/freetype-2.6.5.tar.bz2
-    URL_MD5 6a386964e18ba28cb93370e57a19031b
+    URL https://downloads.sourceforge.net/project/freetype/freetype2/2.6.5/freetype-2.9.1.tar.bz2
+    URL_MD5 60ef7d8160cd4bf8cb118ee9d65367ca
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_freetype}
 
