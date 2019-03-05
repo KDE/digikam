@@ -163,8 +163,8 @@ void DPluginLoader::Private::loadPlugins()
             continue;
         }
 
-        // qCDebug(DIGIKAM_GENERAL_LOG) << fileName << " - " << pluginPath(fileName);
-        const QString path          = info.canonicalFilePath();
+        // qCDebug(DIGIKAM_GENERAL_LOG) << info.baseName() << "-" << info.canonicalPath();
+        const QString path          = info.canonicalPath() + QLatin1Char('/') + info.baseName();
         QPluginLoader* const loader = new QPluginLoader(path, DPluginLoader::instance());
         QObject* const obj          = loader->instance();
 
