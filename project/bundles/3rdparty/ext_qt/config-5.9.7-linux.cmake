@@ -19,7 +19,6 @@ LIST(APPEND QT_CONFIG
             -sql-sqlite                       # Enable Sqlite plugin support
 
             # Compilation rules to disable.
-            -optimized-qmake                  # not documented
             -nomake tests                     # Do not build test codes
             -nomake examples                  # Do not build basis example codes
             -no-compile-examples              # Do not build extra example codes

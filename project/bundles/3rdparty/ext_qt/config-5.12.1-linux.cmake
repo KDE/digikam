@@ -20,7 +20,6 @@ LIST(APPEND QT_CONFIG
             -qpa xcb                          # Plat-form Architecture plugin to use: xcb
 
             # Compilation rules to disable.
-            -optimized-qmake                  # not documented
             -nomake tests                     # Do not build test codes
             -nomake examples                  # Do not build basis example codes
             -no-compile-examples              # Do not build extra example codes
@@ -38,9 +37,9 @@ LIST(APPEND QT_CONFIG
             -qt-zlib                          # Use internal Z compression lib
             -qt-pcre                          # Use internal regular expression lib https://doc.qt.io/archives/qt-5.8/qtcore-attribution-pcre.html
             -qt-harfbuzz                      # Use internal OpenType lib
-            -qt-freetype                      # Use internal font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
+            -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
             -qt-xcb                           # Use internal X11 lib http://doc.qt.io/qt-5/linux-requirements.html
-            -xkbcommon                        # Use internal X11 keyboard lib https://doc.qt.io/qt-5/qtgui-attribution-xkbcommon.html
+#            -xkbcommon                        # Use internal X11 keyboard lib https://doc.qt.io/qt-5/qtgui-attribution-xkbcommon.html
 
             # Qt5 Framework components to disable.
             -skip qt3d                        # 3D core
