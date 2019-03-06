@@ -49,4 +49,6 @@ BUGFIXES:
 032 ==> 405043 - Add volume control to video playback.
 033 ==> 401253 - Face detect crashes every time.
 034 ==> 405042 - Ability to loop video playback.
-035 ==> 
+035 ==> 405138 - Can not disable webservice plugin.
+036 ==> 
+
