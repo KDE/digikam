@@ -268,6 +268,16 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(moveSlot()));
 
+    // -- playback widget -------------------------------
+
+#ifdef HAVE_MEDIAPLAYER
+
+    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
+    d->playbackWidget->hide();
+    d->playbackWidget->move(d->deskX, d->deskY);
+
+#endif
+
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer(this);
@@ -278,16 +288,6 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     setMouseTracking(true);
 
     slotMouseMoveTimeOut();
-
-    // -- playback widget -------------------------------
-
-#ifdef HAVE_MEDIAPLAYER
-
-    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
-    d->playbackWidget->hide();
-    d->playbackWidget->move(d->deskX, d->deskY);
-
-#endif
 
     // -- load image and let's start
 
@@ -671,7 +671,12 @@ void PresentationKB::slotMouseMoveTimeOut()
 {
     QPoint pos(QCursor::pos());
 
-    if ((pos.y() < (d->deskY + 20)) || (pos.y() > (d->deskY + d->deskHeight - 20 - 1)))
+    if ((pos.y() < (d->deskY + 20)) ||
+        (pos.y() > (d->deskY + d->deskHeight - 20 - 1))
+#ifdef HAVE_MEDIAPLAYER
+        || d->playbackWidget->underMouse()
+#endif
+       )
         return;
 
     setCursor(QCursor(Qt::BlankCursor));

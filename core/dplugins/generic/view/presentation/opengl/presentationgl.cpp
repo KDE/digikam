@@ -868,8 +868,13 @@ void PresentationGL::slotMouseMoveTimeOut()
 {
     QPoint pos(QCursor::pos());
 
-    if ((pos.y() < (d->deskY + 20)) ||
-            (pos.y() > (d->deskY + d->deskHeight - 20 - 1)))
+    if ((pos.y() < (d->deskY + 20))                     ||
+        (pos.y() > (d->deskY + d->deskHeight - 20 - 1)) ||
+        d->slideCtrlWidget->underMouse()
+#ifdef HAVE_MEDIAPLAYER
+        || d->playbackWidget->underMouse()
+#endif
+       )
         return;
 
     setCursor(QCursor(Qt::BlankCursor));
