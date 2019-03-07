@@ -293,10 +293,18 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
 
     d->imageLoadThread->start();
     d->timer->start(1000 / frameRate);
+
+#ifdef HAVE_MEDIAPLAYER
+    d->playbackWidget->slotPlay();
+#endif
 }
 
 PresentationKB::~PresentationKB()
 {
+#ifdef HAVE_MEDIAPLAYER
+    d->playbackWidget->slotStop();
+#endif
+
     delete d->effect;
     delete d->image[0];
     delete d->image[1];
@@ -654,10 +662,14 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
     if ((pos.y() > (d->deskY + 20)) && (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
         if (d->playbackWidget->isHidden())
+        {
             return;
+        }
         else
+        {
             d->playbackWidget->hide();
-
+            setFocus();
+        }
         return;
     }
 
