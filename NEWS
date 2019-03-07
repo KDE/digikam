@@ -51,4 +51,5 @@ BUGFIXES:
 034 ==> 405042 - Ability to loop video playback.
 035 ==> 405138 - Can not disable webservice plugin.
 036 ==> 405137 - Original items visible in Thumbnails view.
-037 ==> 
+037 ==> 400606 - Dead space above thumbnails.
+038 ==> 
