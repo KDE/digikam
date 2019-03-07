@@ -339,9 +339,6 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 
     // See Bug #380065 for details.
 
-    // This variable set "Verb" from presented system registry.
-    const uint SEE_MASK_INVOKEIDLIST = 12;
-
     if (d->selectedItems.length() == 1)
     {
         SHELLEXECUTEINFO sei = { sizeof(sei) };
@@ -353,7 +350,6 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas:" << path;
 
         sei.lpFile           = path.toStdWString().c_str();
-        sei.lfmask           = SEE_MASK_INVOKEIDLIST;
         ShellExecuteEx(&sei);
     }
 
