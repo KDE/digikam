@@ -456,6 +456,8 @@ void GLViewerWidget::keyPressEvent(QKeyEvent* e)
 
         // zoom to original size
         case Qt::Key_O:
+            d->texture->loadFullSize();
+
             if (d->texture->setNewSize(QSize(0, 0)))
             {
                 downloadTexture(d->texture); //load full resolution image
