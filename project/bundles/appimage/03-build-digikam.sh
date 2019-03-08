@@ -101,7 +101,7 @@ echo "---------- Configure digiKam $DK_VERSION"
 
 cmake3 -G "Unix Makefiles" .. \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
       -DBUILD_TESTING=OFF \
       -DDIGIKAMSC_CHECKOUT_PO=ON \
       -DDIGIKAMSC_CHECKOUT_DOC=OFF \
