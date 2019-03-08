@@ -345,11 +345,11 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         sei.fMask            = SEE_MASK_NOASYNC;
         sei.nShow            = SW_SHOWNORMAL;
         sei.lpVerb           = _T("openas");
-        QString path         = QDir::toNativeSeparators(d->selectedItems.first().toLocalFile());
+        QString path         = d->selectedItems.first().toLocalFile();
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas:" << path;
 
-        sei.lpFile           = path.toStdWString().c_str();
+        sei.lpFile           = (LPCWSTR)path.utf16();
         ShellExecuteEx(&sei);
     }
 
