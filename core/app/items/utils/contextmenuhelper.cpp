@@ -342,7 +342,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     if (d->selectedItems.length() == 1)
     {
         SHELLEXECUTEINFO sei = { sizeof(sei) };
-        sei.fMask            = SEE_MASK_NOASYNC;
+        sei.fMask            = SEE_MASK_INVOKEIDLIST | SEE_MASK_NOASYNC;
         sei.nShow            = SW_SHOWNORMAL;
         sei.lpVerb           = _T("openas");
         QString path         = d->selectedItems.first().toLocalFile();
