@@ -246,11 +246,11 @@ for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
 done
 
-#FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/plugins/imageformats/*.so)
-#
-#for FILE in $FILES ; do
-#    CopyReccursiveDependencies $INSTALL_DIR/plugins/imageformats/*.so ./usr/lib
-#done
+FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/plugins/imageformats/*.so)
+
+for FILE in $FILES ; do
+    CopyReccursiveDependencies $INSTALL_DIR/plugins/imageformats/*.so ./usr/lib
+done
 
 # Copy in the indirect dependencies
 FILES=$(find . -type f -executable)
