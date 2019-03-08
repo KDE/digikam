@@ -116,7 +116,8 @@ yum -y install wget \
                inotify-tools-devel \
                cups-devel \
                openal-soft-devel \
-               libical-devel
+               libical-devel \
+               patchelf
 
 #################################################################################################
 
