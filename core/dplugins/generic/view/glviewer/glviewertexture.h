@@ -50,6 +50,7 @@ public:
 
     bool load(const QString& fn, const QSize& size);
     bool load(const QImage& im, const QSize& size);
+    bool loadFullSize();
 
     GLfloat vertex_bottom() const;
     GLfloat vertex_top()    const;
