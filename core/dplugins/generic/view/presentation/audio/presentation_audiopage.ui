@@ -332,7 +332,7 @@
         <item>
          <widget class="QCheckBox" name="m_playCheckBox">
           <property name="text">
-           <string>&amp;Auto play at start</string>
+           <string>&amp;Auto play</string>
           </property>
          </widget>
         </item>
