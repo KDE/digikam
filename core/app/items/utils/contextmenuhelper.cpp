@@ -266,6 +266,8 @@ void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids) {
 
 void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
+    setSelectedItems(selectedItems);
+
 #ifdef Q_OS_WIN
 
     if (selectedItems.length() == 1)
@@ -278,8 +280,6 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
     }
 
 #else // Q_OS_WIN
-
-    setSelectedItems(selectedItems);
 
     KService::List offers = DFileOperations::servicesForOpenWith(selectedItems);
 
