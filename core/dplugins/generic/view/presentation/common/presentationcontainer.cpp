@@ -57,6 +57,7 @@ PresentationContainer::PresentationContainer()
     captionFont                   = 0;
 
     soundtrackLoop                = false;
+    soundtrackPlay                = false;
     soundtrackRememberPlaylist    = false;
     soundtrackPlayListNeedsUpdate = false;
 

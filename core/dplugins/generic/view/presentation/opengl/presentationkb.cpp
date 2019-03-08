@@ -295,7 +295,10 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     d->timer->start(1000 / frameRate);
 
 #ifdef HAVE_MEDIAPLAYER
-    d->playbackWidget->slotPlay();
+
+    if (d->sharedData->soundtrackPlay)
+        d->playbackWidget->slotPlay();
+
 #endif
 }
 

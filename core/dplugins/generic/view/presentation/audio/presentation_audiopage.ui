@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>536</width>
-    <height>618</height>
+    <height>638</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -326,6 +326,13 @@
          <widget class="QCheckBox" name="m_loopCheckBox">
           <property name="text">
            <string>&amp;Loop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_playCheckBox">
+          <property name="text">
+           <string>&amp;Auto play at start</string>
           </property>
          </widget>
         </item>

@@ -263,7 +263,10 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
     slotMouseMoveTimeOut();
 
 #ifdef HAVE_MEDIAPLAYER
-    d->playbackWidget->slotPlay();
+
+    if (d->sharedData->soundtrackPlay)
+        d->playbackWidget->slotPlay();
+
 #endif
 }
 
