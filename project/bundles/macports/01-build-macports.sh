@@ -246,16 +246,14 @@ port install \
              lensfun \
              bison \
              ffmpeg \
-             qt59 \
-             qt59-qtimageformats \
-             qt59-qtwebkit \
-             qt59-sqlite-plugin \
-             qt59-mysql-plugin \
-             qt59-qtscript \
-             wget +ssl
-
-#             sane-backends \
-
+             qt511 \
+             qt511-qtimageformats \
+             qt511-qtwebkit \
+             qt511-sqlite-plugin \
+             qt511-mysql-plugin \
+             qt511-qtscript \
+             wget +ssl \
+             sane-backends
 echo -e "\n"
 
 echo -e "---------- Compilation logs of Macports packages with suspicious installation\n"

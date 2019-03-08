@@ -261,10 +261,21 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
     setMouseTracking(true);
     slotMouseMoveTimeOut();
+
+#ifdef HAVE_MEDIAPLAYER
+
+    if (d->sharedData->soundtrackPlay)
+        d->playbackWidget->slotPlay();
+
+#endif
 }
 
 PresentationGL::~PresentationGL()
 {
+#ifdef HAVE_MEDIAPLAYER
+    d->playbackWidget->slotStop();
+#endif
+
     d->texture[0]->destroy();
     d->texture[1]->destroy();
     d->texture[2]->destroy();
@@ -409,6 +420,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
 #ifdef HAVE_MEDIAPLAYER
             d->playbackWidget->hide();
 #endif
+            setFocus();
         }
 
         return;

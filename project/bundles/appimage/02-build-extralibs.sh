@@ -45,8 +45,8 @@ cd $BUILDING_DIR
 rm -rf $BUILDING_DIR/* || true
 
 cmake3 $ORIG_WD/../3rdparty \
-       -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-       -DINSTALL_ROOT=/usr \
+       -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
+       -DINSTALL_ROOT=$INSTALL_DIR \
        -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
 
 # NOTE: The order to compile each component here is very important.

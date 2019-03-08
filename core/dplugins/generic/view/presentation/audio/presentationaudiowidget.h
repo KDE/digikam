@@ -59,6 +59,11 @@ public:
     void setPaused(bool);
     void keyPressEvent(QKeyEvent*);
 
+public Q_SLOTS:
+
+    void slotPlay();
+    void slotStop();
+
 Q_SIGNALS:
 
     void signalPlay();
@@ -66,8 +71,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotPlay();
-    void slotStop();
     void slotPrev();
     void slotNext();
     void slotTimeUpdaterTimeout();
