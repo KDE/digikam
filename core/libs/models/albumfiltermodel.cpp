@@ -686,6 +686,8 @@ void TagPropertiesFilterModel::tagPropertiesChanged(TAlbum*)
     if (isFiltering())
     {
         invalidateFilter();
+        // Sort new when tag properties change.
+        invalidate();
     }
 }
 
