@@ -16,6 +16,9 @@ BUILDING_DIR="/digikam.appimage/build"
 # Absolute path where are installed all software components
 INSTALL_DIR="/digikam.appimage/install"
 
+# Absolute path where are bundled all software components
+APP_IMG_DIR="/digikam.appimage/appdir"
+
 # Setup variables needed to help everything find what we build
 
 export PATH=$INSTALL_DIR/bin:$PATH
