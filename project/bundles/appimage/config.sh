@@ -16,7 +16,12 @@ BUILDING_DIR="/digikam.appimage/build"
 # Absolute path where are installed all software components
 INSTALL_DIR="/digikam.appimage/install"
 
+# Setup variables needed to help everything find what we build
+
 export PATH=$INSTALL_DIR/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=$INSTALL_DIR/share/pkgconfig:$INSTALL_DIR/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$INSTALL_DIR:$CMAKE_PREFIX_PATH
 
 ########################################################################
 
