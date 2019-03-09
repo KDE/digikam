@@ -50,5 +50,6 @@ BUGFIXES:
 033 ==> 401253 - Face detect crashes every time.
 034 ==> 405042 - Ability to loop video playback.
 035 ==> 405138 - Can not disable webservice plugin.
-036 ==> 
+036 ==> 405250 - Menus gone missing.
+037 ==> 
 
