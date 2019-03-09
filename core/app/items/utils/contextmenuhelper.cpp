@@ -266,6 +266,8 @@ void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids) {
 
 void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
+    setSelectedItems(selectedItems);
+
 #ifdef Q_OS_WIN
 
     if (selectedItems.length() == 1)
@@ -278,8 +280,6 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
     }
 
 #else // Q_OS_WIN
-
-    setSelectedItems(selectedItems);
 
     KService::List offers = DFileOperations::servicesForOpenWith(selectedItems);
 
@@ -342,14 +342,14 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     if (d->selectedItems.length() == 1)
     {
         SHELLEXECUTEINFO sei = { sizeof(sei) };
-        sei.fMask            = SEE_MASK_NOASYNC;
+        sei.fMask            = SEE_MASK_INVOKEIDLIST | SEE_MASK_NOASYNC;
         sei.nShow            = SW_SHOWNORMAL;
         sei.lpVerb           = _T("openas");
-        QString path         = QDir::toNativeSeparators(d->selectedItems.first().toLocalFile());
+        QString path         = d->selectedItems.first().toLocalFile();
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas:" << path;
 
-        sei.lpFile           = path.toStdWString().c_str();
+        sei.lpFile           = (LPCWSTR)path.utf16();
         ShellExecuteEx(&sei);
     }
 

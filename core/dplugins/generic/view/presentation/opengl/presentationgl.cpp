@@ -159,7 +159,6 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowState(windowState() | Qt::WindowFullScreen);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
     QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
