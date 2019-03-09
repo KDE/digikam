@@ -52,4 +52,6 @@ BUGFIXES:
 035 ==> 405138 - Can not disable webservice plugin.
 036 ==> 405137 - Original items visible in Thumbnails view.
 037 ==> 400606 - Dead space above thumbnails.
-038 ==> 
+038 ==> 380434 - 5.6.0-pre pkg does not detect filesystem changes.
+039 ==> 
+
