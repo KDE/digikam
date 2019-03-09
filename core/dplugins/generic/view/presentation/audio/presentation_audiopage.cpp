@@ -182,6 +182,7 @@ void PresentationAudioPage::readSettings()
 {
     m_rememberSoundtrack->setChecked(d->sharedData->soundtrackRememberPlaylist);
     m_loopCheckBox->setChecked(d->sharedData->soundtrackLoop);
+    m_playCheckBox->setChecked(d->sharedData->soundtrackPlay);
 
     connect( d->sharedData->mainPage, SIGNAL(signalTotalTimeChanged(QTime)),
              this, SLOT(slotImageTotalTimeChanged(QTime)) );
@@ -198,6 +199,7 @@ void PresentationAudioPage::saveSettings()
 {
     d->sharedData->soundtrackRememberPlaylist = m_rememberSoundtrack->isChecked();
     d->sharedData->soundtrackLoop             = m_loopCheckBox->isChecked();
+    d->sharedData->soundtrackPlay             = m_playCheckBox->isChecked();
     d->sharedData->soundtrackUrls             = d->urlList;
 }
 

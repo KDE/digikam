@@ -197,9 +197,9 @@ function(InstallKF5Component
 endfunction()
 
 if(MINGW)
-    set(KF5_VERSION 5.55) # we have Qt 5.12 available
+    set(KF5_VERSION 5.55) # we have Qt 5.12 available.
 elseif(APPLE)
-    set(KF5_VERSION 5.54) # we have Qt 5.9.7 available for backward compatibily with older MacOS
+    set(KF5_VERSION 5.55) # we have Qt 5.11.3 available.
 else()
     set(KF5_VERSION 5.55) # we have Qt 5.11.3 available.
 endif()

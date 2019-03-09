@@ -27,15 +27,16 @@
 // Qt includes
 
 #include <QAction>
+#include <QApplication>
 #include <QClipboard>
+#include <QDir>
+#include <QIcon>
 #include <QMap>
+#include <QMenu>
 #include <QMimeData>
 #include <QPointer>
 #include <QString>
 #include <QTimer>
-#include <QMenu>
-#include <QApplication>
-#include <QIcon>
 
 // KDE includes
 
@@ -74,6 +75,12 @@
 
 #ifdef HAVE_AKONADICONTACT
 #   include "akonadiiface.h"
+#endif
+
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#   include <shellapi.h>
+#   include <tchar.h>
 #endif
 
 namespace Digikam
@@ -261,6 +268,19 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
     setSelectedItems(selectedItems);
 
+#ifdef Q_OS_WIN
+
+    if (selectedItems.length() == 1)
+    {
+        QAction* const openWith = new QAction(i18n("Open With"), this);
+        addAction(openWith);
+
+        connect(openWith, SIGNAL(triggered()),
+                this, SLOT(slotOpenWith()));
+    }
+
+#else // Q_OS_WIN
+
     KService::List offers = DFileOperations::servicesForOpenWith(selectedItems);
 
     if (!offers.isEmpty())
@@ -280,7 +300,8 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
             d->servicesMap[name]  = service;
         }
 
-#ifdef HAVE_KIO
+#   ifdef HAVE_KIO
+
         servicesMenu->addSeparator();
         servicesMenu->addAction(i18n("Other..."));
 
@@ -296,8 +317,12 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
         connect(serviceAction, SIGNAL(triggered()),
                 this, SLOT(slotOpenWith()));
-#endif // HAVE_KIO
+
+#   endif // HAVE_KIO
+
     }
+
+#endif // Q_OS_WIN
 }
 
 void ContextMenuHelper::slotOpenWith()
@@ -308,11 +333,34 @@ void ContextMenuHelper::slotOpenWith()
 
 void ContextMenuHelper::slotOpenWith(QAction* action)
 {
+#ifdef Q_OS_WIN
+
+    Q_UNUSED(action);
+
+    // See Bug #380065 for details.
+
+    if (d->selectedItems.length() == 1)
+    {
+        SHELLEXECUTEINFO sei = { sizeof(sei) };
+        sei.fMask            = SEE_MASK_INVOKEIDLIST | SEE_MASK_NOASYNC;
+        sei.nShow            = SW_SHOWNORMAL;
+        sei.lpVerb           = _T("openas");
+        QString path         = d->selectedItems.first().toLocalFile();
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas:" << path;
+
+        sei.lpFile           = (LPCWSTR)path.utf16();
+        ShellExecuteEx(&sei);
+    }
+
+#else // Q_OS_WIN
+
     KService::Ptr service;
     QList<QUrl> list = d->selectedItems;
     QString name     = action ? action->data().toString() : QString();
 
-#ifdef HAVE_KIO
+#   ifdef HAVE_KIO
+
     if (name.isEmpty())
     {
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
@@ -340,12 +388,16 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         delete dlg;
     }
     else
-#endif // HAVE_KIO
+
+#   endif // HAVE_KIO
+
     {
         service = d->servicesMap[name];
     }
 
     DFileOperations::runFiles(service.data(), list);
+
+#endif // Q_OS_WIN
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

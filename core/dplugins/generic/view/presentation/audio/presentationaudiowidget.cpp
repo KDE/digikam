@@ -252,6 +252,9 @@ void PresentationAudioWidget::keyPressEvent(QKeyEvent* event)
 
 void PresentationAudioWidget::slotPlay()
 {
+    if (!d->mediaObject)
+        return;
+
     if (!d->mediaObject->isPlaying() || d->mediaObject->isPaused())
     {
         if (!d->mediaObject->isPlaying())
@@ -278,6 +281,9 @@ void PresentationAudioWidget::slotPlay()
 
 void PresentationAudioWidget::slotStop()
 {
+    if (!d->mediaObject)
+        return;
+
     d->playingNext = false;
     d->mediaObject->stop();
     d->currIndex  = 0;

@@ -97,6 +97,7 @@ public:
 
     // --> Soundtrack page
     bool                     soundtrackLoop;
+    bool                     soundtrackPlay;
     bool                     soundtrackRememberPlaylist;
     bool                     soundtrackPlayListNeedsUpdate;
     QUrl                     soundtrackPath;

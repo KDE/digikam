@@ -63,6 +63,12 @@
 #include "applicationsettings.h"
 #include "similaritydbaccess.h"
 
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#   include <shellapi.h>
+#   include <objbase.h>
+#endif
+
 using namespace Digikam;
 
 int main(int argc, char* argv[])
@@ -246,6 +252,11 @@ int main(int argc, char* argv[])
         QIcon::setThemeName(iconTheme);
     }
 
+#ifdef Q_OS_WIN
+    // Necessary to open native open with dialog on windows
+    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+#endif
+
     // create main window
     DigikamApp* const digikam = new DigikamApp();
 
@@ -294,6 +305,11 @@ int main(int argc, char* argv[])
     FaceDbAccess::cleanUpDatabase();
     SimilarityDbAccess::cleanUpDatabase();
     MetaEngine::cleanupExiv2();
+
+#ifdef Q_OS_WIN
+    // Necessary to open native open with dialog on windows
+    CoUninitialize();
+#endif
 
     return ret;
 }

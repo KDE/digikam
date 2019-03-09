@@ -215,8 +215,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-
-    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::Popup);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
     QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
     d->deskX       = deskRect.x();
@@ -268,6 +267,16 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(moveSlot()));
 
+    // -- playback widget -------------------------------
+
+#ifdef HAVE_MEDIAPLAYER
+
+    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
+    d->playbackWidget->hide();
+    d->playbackWidget->move(d->deskX, d->deskY);
+
+#endif
+
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer(this);
@@ -279,24 +288,25 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
 
     slotMouseMoveTimeOut();
 
-    // -- playback widget -------------------------------
-
-#ifdef HAVE_MEDIAPLAYER
-
-    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
-    d->playbackWidget->hide();
-    d->playbackWidget->move(d->deskX, d->deskY);
-
-#endif
-
     // -- load image and let's start
 
     d->imageLoadThread->start();
     d->timer->start(1000 / frameRate);
+
+#ifdef HAVE_MEDIAPLAYER
+
+    if (d->sharedData->soundtrackPlay)
+        d->playbackWidget->slotPlay();
+
+#endif
 }
 
 PresentationKB::~PresentationKB()
 {
+#ifdef HAVE_MEDIAPLAYER
+    d->playbackWidget->slotStop();
+#endif
+
     delete d->effect;
     delete d->image[0];
     delete d->image[1];
@@ -654,10 +664,14 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
     if ((pos.y() > (d->deskY + 20)) && (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
         if (d->playbackWidget->isHidden())
+        {
             return;
+        }
         else
+        {
             d->playbackWidget->hide();
-
+            setFocus();
+        }
         return;
     }
 
@@ -671,7 +685,12 @@ void PresentationKB::slotMouseMoveTimeOut()
 {
     QPoint pos(QCursor::pos());
 
-    if ((pos.y() < (d->deskY + 20)) || (pos.y() > (d->deskY + d->deskHeight - 20 - 1)))
+    if ((pos.y() < (d->deskY + 20)) ||
+        (pos.y() > (d->deskY + d->deskHeight - 20 - 1))
+#ifdef HAVE_MEDIAPLAYER
+        || d->playbackWidget->underMouse()
+#endif
+       )
         return;
 
     setCursor(QCursor(Qt::BlankCursor));

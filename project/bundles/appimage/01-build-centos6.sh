@@ -116,7 +116,8 @@ yum -y install wget \
                inotify-tools-devel \
                cups-devel \
                openal-soft-devel \
-               libical-devel
+               libical-devel \
+               patchelf
 
 #################################################################################################
 
@@ -220,12 +221,16 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd /
 
-# Create the build dir for the 3rdparty deps
+# Create the working directories.
+
 if [ ! -d $BUILDING_DIR ] ; then
-    mkdir $BUILDING_DIR
+    mkdir -p $BUILDING_DIR
 fi
 if [ ! -d $DOWNLOAD_DIR ] ; then
-    mkdir $DOWNLOAD_DIR
+    mkdir -p $DOWNLOAD_DIR
+fi
+if [ ! -d $INSTALL_DIR ] ; then
+    mkdir -p $INSTALL_DIR
 fi
 
 # enable new compiler
@@ -238,8 +243,8 @@ cd $BUILDING_DIR
 rm -rf $BUILDING_DIR/* || true
 
 cmake3 $ORIG_WD/../3rdparty \
-       -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-       -DINSTALL_ROOT=/usr \
+       -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
+       -DINSTALL_ROOT=$INSTALL_DIR \
        -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
 
 # Low level libraries and Qt5 dependencies
@@ -255,6 +260,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_boost      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_openssl    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_liblqr     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_freetype   -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_libass     -- -j$CPU_CORES    # depend of fontconfig
