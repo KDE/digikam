@@ -80,7 +80,6 @@
 #ifdef Q_OS_WIN
 #   include <windows.h>
 #   include <shellapi.h>
-#   include <tchar.h>
 #endif
 
 namespace Digikam
@@ -341,16 +340,15 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 
     if (d->selectedItems.length() == 1)
     {
-        SHELLEXECUTEINFO sei = { sizeof(sei) };
+        SHELLEXECUTEINFO sei = {};
+        sei.cbSize           = sizeof(sei);
         sei.fMask            = SEE_MASK_INVOKEIDLIST | SEE_MASK_NOASYNC;
         sei.nShow            = SW_SHOWNORMAL;
-        sei.lpVerb           = _T("openas");
-        QString path         = d->selectedItems.first().toLocalFile();
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas:" << path;
-
-        sei.lpFile           = (LPCWSTR)path.utf16();
+        sei.lpVerb           = (LPCWSTR)QString::fromLatin1("openas").utf16();
+        sei.lpFile           = (LPCWSTR)d->selectedItems.first().toLocalFile().utf16();
         ShellExecuteEx(&sei);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ShellExecuteEx::openas called";
     }
 
 #else // Q_OS_WIN
