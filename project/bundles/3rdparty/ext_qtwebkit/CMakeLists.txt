@@ -10,8 +10,8 @@ SET(EXTPREFIX_qtwebkit "${EXTPREFIX}")
 
 ExternalProject_Add(ext_qtwebkit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz
-    URL_MD5 c7a5eb579c2476ff54f8cff2111b0910
+    URL https://download.qt.io/snapshots/ci/qtwebkit/5.212/latest/src/submodules/qtwebkit-everywhere-src-5.212.tar.xz
+    URL_MD5 48b9afcf920ff8077a7b05316851c38c
     INSTALL_DIR ${EXTPREFIX_qtwebkit}
 
     CONFIGURE_COMMAND qmake PREFIX=${EXTPREFIX_qtwebkit}
