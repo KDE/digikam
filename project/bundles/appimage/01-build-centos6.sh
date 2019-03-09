@@ -221,12 +221,16 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd /
 
-# Create the build dir for the 3rdparty deps
+# Create the working directories.
+
 if [ ! -d $BUILDING_DIR ] ; then
-    mkdir $BUILDING_DIR
+    mkdir -p $BUILDING_DIR
 fi
 if [ ! -d $DOWNLOAD_DIR ] ; then
-    mkdir $DOWNLOAD_DIR
+    mkdir -p $DOWNLOAD_DIR
+fi
+if [ ! -d $INSTALL_DIR ] ; then
+    mkdir -p $INSTALL_DIR
 fi
 
 # enable new compiler

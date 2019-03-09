@@ -8,13 +8,13 @@
 ########################################################################
 
 # Absolute path where are downloaded all tarballs to compile.
-DOWNLOAD_DIR="/d"
+DOWNLOAD_DIR="/digikam.appimage/download"
 
 # Absolute path where are compiled all tarballs
-BUILDING_DIR="/b"
+BUILDING_DIR="/digikam.appimage/build"
 
 # Absolute path where are installed all software components
-INSTALL_DIR="/usr"
+INSTALL_DIR="/digikam.appimage/install"
 
 ########################################################################
 
