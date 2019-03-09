@@ -55,5 +55,6 @@ BUGFIXES:
 038 ==> 380434 - 5.6.0-pre pkg does not detect filesystem changes.
 039 ==> 405250 - Menus gone missing.
 040 ==> 388198 - Menu Help -> What's this is not used.
-041 ==> 
+041 ==> 392570 - Missing Option to display complete filename.
+042 ==> 
 
