@@ -57,4 +57,5 @@ BUGFIXES:
 040 ==> 388198 - Menu Help -> What's this is not used.
 041 ==> 392570 - Missing Option to display complete filename.
 042 ==> 375474 - Renaming People Tag Causes Unpredictable Sort Order In People Menu.
-043 ==> 
+043 ==> 398868 - Video upside down in Preview (Thumbnail ok).
+044 ==> 
