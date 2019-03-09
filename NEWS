@@ -59,4 +59,5 @@ BUGFIXES:
 042 ==> 375474 - Renaming People Tag Causes Unpredictable Sort Order In People Menu.
 043 ==> 398868 - Video upside down in Preview (Thumbnail ok).
 044 ==> 380065 - "Open with" menu entry missing [patch].
-045 ==> 
+045 ==> 405258 - Provide an OpenWith... function to get a specific ImageEditor.
+046 ==> 
