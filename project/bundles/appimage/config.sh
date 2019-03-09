@@ -16,6 +16,8 @@ BUILDING_DIR="/digikam.appimage/build"
 # Absolute path where are installed all software components
 INSTALL_DIR="/digikam.appimage/install"
 
+export PATH=$INSTALL_DIR/bin:$PATH
+
 ########################################################################
 
 # URL to git repository to checkout digiKam source code
