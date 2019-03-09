@@ -31,7 +31,7 @@ function(InstallKF5Component
         )
 
         if(NOT ${wgetresult} MATCHES 0)
-            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+#            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
         endif()
 
         message(STATUS "--------------------------------")
@@ -48,7 +48,8 @@ function(InstallKF5Component
         ExternalProject_Add(ext_${name}
                             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                             URL file://${EXTERNALS_DOWNLOAD_DIR}/${name}-${version}.0.tar.xz
-                            URL_MD5 ${md5sm}
+#                            URL_MD5 ${md5sm}
+
                             INSTALL_DIR ${EXTPREFIX_frameworks}
 
                             CMAKE_ARGS -DMXE_TOOLCHAIN=${MXE_TOOLCHAIN}
@@ -105,7 +106,7 @@ function(InstallKF5Component
         )
 
         if(NOT ${wgetresult} MATCHES 0)
-            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+#            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
         endif()
 
         message(STATUS "--------------------------------")
@@ -122,7 +123,7 @@ function(InstallKF5Component
         ExternalProject_Add(ext_${name}
                             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                             URL http://download.kde.org/stable/frameworks/${version}/${name}-${version}.0.tar.xz
-                            URL_MD5 ${md5sm}
+#                            URL_MD5 ${md5sm}
 
                             PATCH_COMMAND ${patch}
                                           cp ${CMAKE_CURRENT_SOURCE_DIR}/../../macports/fixbundledatapath.sh <SOURCE_DIR>/. &&
@@ -159,7 +160,7 @@ function(InstallKF5Component
         )
 
         if(NOT ${wgetresult} MATCHES 0)
-            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
+#            message(FATAL_ERROR "Cannot download MD5 sum for ${name}!")
         endif()
 
         message(STATUS "--------------------------------")
@@ -176,7 +177,7 @@ function(InstallKF5Component
         ExternalProject_Add(ext_${name}
                             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                             URL http://download.kde.org/stable/frameworks/${version}/${name}-${version}.0.tar.xz
-                            URL_MD5 ${md5sm}
+#                            URL_MD5 ${md5sm}
 
                             PATCH_COMMAND ${patch}
 
