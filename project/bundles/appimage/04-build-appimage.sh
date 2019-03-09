@@ -232,141 +232,141 @@ cp $INSTALL_DIR/bin/qdbus                   ./usr/share/digikam/utils
 sed -i "/Exec=/c\Exec=digikam-camera downloadFromUdi %i" ./usr/share/solid/actions/digikam-opencamera.desktop
 
 #################################################################################################
-
-echo -e "---------- Scan dependencies recurssively\n"
-
-CopyReccursiveDependencies $INSTALL_DIR/bin/digikam                  ./usr/lib
-CopyReccursiveDependencies $INSTALL_DIR/bin/showfoto                 ./usr/lib
-CopyReccursiveDependencies $INSTALL_DIR/plugins/platforms/libqxcb.so ./usr/lib
-
-FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/libdigikam*.so)
-
-for FILE in $FILES ; do
-    CopyReccursiveDependencies ${FILE} ./usr/lib
-done
-
-FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/plugins/imageformats/*.so)
-
-for FILE in $FILES ; do
-    CopyReccursiveDependencies $INSTALL_DIR/plugins/imageformats/*.so ./usr/lib
-done
-
-# Copy in the indirect dependencies
-FILES=$(find . -type f -executable)
-
-for FILE in $FILES ; do
-    CopyReccursiveDependencies ${FILE} ./usr/lib
-done
-
-#################################################################################################
-
-echo -e "---------- Clean-up Bundle Directory Contents\n"
-
-ln -s libssl.so.10 usr/lib/libssl.so || true
-
-# The following are assumed to be part of the base system
-rm -f usr/lib/libcom_err.so.2 || true
-rm -f usr/lib/libcrypt.so.1 || true
-rm -f usr/lib/libdl.so.2 || true
-rm -f usr/lib/libexpat.so.1 || true
-rm -f usr/lib/libgcc_s.so.1 || true
-rm -f usr/lib/libglib-2.0.so.0 || true
-rm -f usr/lib/libgpg-error.so.0 || true
-rm -f usr/lib/libgssapi_krb5.so.2 || true
-rm -f usr/lib/libgssapi.so.3 || true
-rm -f usr/lib/libhcrypto.so.4 || true
-rm -f usr/lib/libheimbase.so.1 || true
-rm -f usr/lib/libheimntlm.so.0 || true
-rm -f usr/lib/libhx509.so.5 || true
-rm -f usr/lib/libICE.so.6 || true
-rm -f usr/lib/libidn.so.11 || true
-rm -f usr/lib/libk5crypto.so.3 || true
-rm -f usr/lib/libkeyutils.so.1 || true
-rm -f usr/lib/libkrb5.so.26 || true
-rm -f usr/lib/libkrb5.so.3 || true
-rm -f usr/lib/libkrb5support.so.0 || true
-# rm -f usr/lib/liblber-2.4.so.2 || true # needed for debian wheezy
-# rm -f usr/lib/libldap_r-2.4.so.2 || true # needed for debian wheezy
-rm -f usr/lib/libm.so.6 || true
-rm -f usr/lib/libp11-kit.so.0 || true
-rm -f usr/lib/libpcre.so.3 || true
-rm -f usr/lib/libpthread.so.0 || true
-rm -f usr/lib/libresolv.so.2 || true
-rm -f usr/lib/libroken.so.18 || true
-rm -f usr/lib/librt.so.1 || true
-rm -f usr/lib/libsasl2.so.2 || true
-rm -f usr/lib/libSM.so.6 || true
-rm -f usr/lib/libusb-1.0.so.0 || true
-rm -f usr/lib/libuuid.so.1 || true
-rm -f usr/lib/libwind.so.0 || true
-rm -f usr/lib/libfontconfig.so.* || true
-# Remove this library, else appimage cannot be started properly (Bug #390162)
-rm -f usr/lib/libopenal.so.1 || true
-
-# Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
-rm -f usr/lib/libGL.so.* || true
-rm -f usr/lib/libdrm.so.* || true
-rm -f usr/lib/libX11.so.* || true
-rm -f usr/lib/libz.so.1 || true
-
-# These seem to be available on most systems but not Ubuntu 11.04
-# rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
-
-# Delete potentially dangerous libraries
-rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
-rm -f usr/lib/libxcb.so.1
-
-# Do NOT delete libX* because otherwise on Ubuntu 11.04:
-# loaded library "Xcursor" malloc.c:3096: sYSMALLOc: Assertion (...) Aborted
-
-# We don't bundle the developer stuff
-rm -rf usr/include || true
-rm -rf usr/lib/cmake3 || true
-rm -rf usr/lib/pkgconfig || true
-rm -rf usr/share/ECM/ || true
-rm -rf usr/share/gettext || true
-rm -rf usr/share/pkgconfig || true
-
-#################################################################################################
-
-echo -e "---------- Strip Binaries Files \n"
-
-if [[ $DK_DEBUG = 1 ]] ; then
-    FILES=$(find . -type f -executable | grep -Ev '(digikam|showfoto|exiv2)')
-else
-    FILES=$(find . -type f -executable)
-fi
-
-for FILE in $FILES ; do
-    echo -e "Strip symbols in: $FILE"
-    strip ${FILE} 2>/dev/null || true
-done
-
-#################################################################################################
-
-echo -e "---------- Strip Configuration Files \n"
-
-# Since we set $APP_IMG_DIR as the prefix, we need to patch it away too (FIXME)
-# Probably it would be better to use /app as a prefix because it has the same length for all apps
-cd usr/ ; find . -type f -exec sed -i -e 's|$APP_IMG_DIR/usr/|./././././././././|g' {} \; ; cd  ..
-
-# On openSUSE Qt is picking up the wrong libqxcb.so
-# (the one from the system when in fact it should use the bundled one) - is this a Qt bug?
-# Also, Krita has a hardcoded $INSTALL_DIR which we patch away
-cd usr/ ; find . -type f -exec sed -i -e 's|$INSTALL_DIR|././|g' {} \; ; cd ..
-
-# We do not bundle this, so let's not search that inside the AppImage.
-# Fixes "Qt: Failed to create XKB context!" and lets us enter text
-sed -i -e 's|././/share/X11/|$INSTALL_DIR/share/X11/|g' ./usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
-sed -i -e 's|././/share/X11/|$INSTALL_DIR/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
-
-# Workaround for:
-# D-Bus library appears to be incorrectly set up;
-# failed to read machine uuid: Failed to open
-# The file is more commonly in /etc/machine-id
-# sed -i -e 's|/var/lib/dbus/machine-id|//././././etc/machine-id|g' ./usr/lib/libdbus-1.so.3
-# or
-rm -f ./usr/lib/libdbus-1.so.3 || true
+# 
+# echo -e "---------- Scan dependencies recurssively\n"
+# 
+# CopyReccursiveDependencies $INSTALL_DIR/bin/digikam                  ./usr/lib
+# CopyReccursiveDependencies $INSTALL_DIR/bin/showfoto                 ./usr/lib
+# CopyReccursiveDependencies $INSTALL_DIR/plugins/platforms/libqxcb.so ./usr/lib
+# 
+# FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/libdigikam*.so)
+# 
+# for FILE in $FILES ; do
+#     CopyReccursiveDependencies ${FILE} ./usr/lib
+# done
+# 
+# FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/plugins/imageformats/*.so)
+# 
+# for FILE in $FILES ; do
+#     CopyReccursiveDependencies $INSTALL_DIR/plugins/imageformats/*.so ./usr/lib
+# done
+# 
+# # Copy in the indirect dependencies
+# FILES=$(find . -type f -executable)
+# 
+# for FILE in $FILES ; do
+#     CopyReccursiveDependencies ${FILE} ./usr/lib
+# done
+# 
+# #################################################################################################
+# 
+# echo -e "---------- Clean-up Bundle Directory Contents\n"
+# 
+# ln -s libssl.so.10 usr/lib/libssl.so || true
+# 
+# # The following are assumed to be part of the base system
+# rm -f usr/lib/libcom_err.so.2 || true
+# rm -f usr/lib/libcrypt.so.1 || true
+# rm -f usr/lib/libdl.so.2 || true
+# rm -f usr/lib/libexpat.so.1 || true
+# rm -f usr/lib/libgcc_s.so.1 || true
+# rm -f usr/lib/libglib-2.0.so.0 || true
+# rm -f usr/lib/libgpg-error.so.0 || true
+# rm -f usr/lib/libgssapi_krb5.so.2 || true
+# rm -f usr/lib/libgssapi.so.3 || true
+# rm -f usr/lib/libhcrypto.so.4 || true
+# rm -f usr/lib/libheimbase.so.1 || true
+# rm -f usr/lib/libheimntlm.so.0 || true
+# rm -f usr/lib/libhx509.so.5 || true
+# rm -f usr/lib/libICE.so.6 || true
+# rm -f usr/lib/libidn.so.11 || true
+# rm -f usr/lib/libk5crypto.so.3 || true
+# rm -f usr/lib/libkeyutils.so.1 || true
+# rm -f usr/lib/libkrb5.so.26 || true
+# rm -f usr/lib/libkrb5.so.3 || true
+# rm -f usr/lib/libkrb5support.so.0 || true
+# # rm -f usr/lib/liblber-2.4.so.2 || true # needed for debian wheezy
+# # rm -f usr/lib/libldap_r-2.4.so.2 || true # needed for debian wheezy
+# rm -f usr/lib/libm.so.6 || true
+# rm -f usr/lib/libp11-kit.so.0 || true
+# rm -f usr/lib/libpcre.so.3 || true
+# rm -f usr/lib/libpthread.so.0 || true
+# rm -f usr/lib/libresolv.so.2 || true
+# rm -f usr/lib/libroken.so.18 || true
+# rm -f usr/lib/librt.so.1 || true
+# rm -f usr/lib/libsasl2.so.2 || true
+# rm -f usr/lib/libSM.so.6 || true
+# rm -f usr/lib/libusb-1.0.so.0 || true
+# rm -f usr/lib/libuuid.so.1 || true
+# rm -f usr/lib/libwind.so.0 || true
+# rm -f usr/lib/libfontconfig.so.* || true
+# # Remove this library, else appimage cannot be started properly (Bug #390162)
+# rm -f usr/lib/libopenal.so.1 || true
+# 
+# # Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
+# rm -f usr/lib/libGL.so.* || true
+# rm -f usr/lib/libdrm.so.* || true
+# rm -f usr/lib/libX11.so.* || true
+# rm -f usr/lib/libz.so.1 || true
+# 
+# # These seem to be available on most systems but not Ubuntu 11.04
+# # rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
+# 
+# # Delete potentially dangerous libraries
+# rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
+# rm -f usr/lib/libxcb.so.1
+# 
+# # Do NOT delete libX* because otherwise on Ubuntu 11.04:
+# # loaded library "Xcursor" malloc.c:3096: sYSMALLOc: Assertion (...) Aborted
+# 
+# # We don't bundle the developer stuff
+# rm -rf usr/include || true
+# rm -rf usr/lib/cmake3 || true
+# rm -rf usr/lib/pkgconfig || true
+# rm -rf usr/share/ECM/ || true
+# rm -rf usr/share/gettext || true
+# rm -rf usr/share/pkgconfig || true
+# 
+# #################################################################################################
+# 
+# echo -e "---------- Strip Binaries Files \n"
+# 
+# if [[ $DK_DEBUG = 1 ]] ; then
+#     FILES=$(find . -type f -executable | grep -Ev '(digikam|showfoto|exiv2)')
+# else
+#     FILES=$(find . -type f -executable)
+# fi
+# 
+# for FILE in $FILES ; do
+#     echo -e "Strip symbols in: $FILE"
+#     strip ${FILE} 2>/dev/null || true
+# done
+# 
+# #################################################################################################
+# 
+# echo -e "---------- Strip Configuration Files \n"
+# 
+# # Since we set $APP_IMG_DIR as the prefix, we need to patch it away too (FIXME)
+# # Probably it would be better to use /app as a prefix because it has the same length for all apps
+# cd usr/ ; find . -type f -exec sed -i -e 's|$APP_IMG_DIR/usr/|./././././././././|g' {} \; ; cd  ..
+# 
+# # On openSUSE Qt is picking up the wrong libqxcb.so
+# # (the one from the system when in fact it should use the bundled one) - is this a Qt bug?
+# # Also, Krita has a hardcoded $INSTALL_DIR which we patch away
+# cd usr/ ; find . -type f -exec sed -i -e 's|$INSTALL_DIR|././|g' {} \; ; cd ..
+# 
+# # We do not bundle this, so let's not search that inside the AppImage.
+# # Fixes "Qt: Failed to create XKB context!" and lets us enter text
+# sed -i -e 's|././/share/X11/|$INSTALL_DIR/share/X11/|g' ./usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
+# sed -i -e 's|././/share/X11/|$INSTALL_DIR/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
+# 
+# # Workaround for:
+# # D-Bus library appears to be incorrectly set up;
+# # failed to read machine uuid: Failed to open
+# # The file is more commonly in /etc/machine-id
+# # sed -i -e 's|/var/lib/dbus/machine-id|//././././etc/machine-id|g' ./usr/lib/libdbus-1.so.3
+# # or
+# rm -f ./usr/lib/libdbus-1.so.3 || true
 
 #################################################################################################
 
@@ -387,18 +387,18 @@ fi
 echo -e "---------- Create Bundle with AppImage SDK stage1\n"
 
 # Source functions
-
-if [[ ! -s ./functions.sh ]] ; then
-    wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
-fi
-
-. ./functions.sh
+# 
+# if [[ ! -s ./functions.sh ]] ; then
+#     wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
+# fi
+# 
+# . ./functions.sh
 
 # Install desktopintegration in usr/bin/digikam.wrapper
 cd $APP_IMG_DIR
 
 # We will use a dedicated bash script to run inside the AppImage to be sure that XDG_* variable are set for Qt5
-cp ${ORIG_WD}/data/AppRun ./
+# cp ${ORIG_WD}/data/AppRun ./
 
 # desktop integration rules
 
@@ -411,9 +411,6 @@ cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icon
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/mimetypes
 cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
 
-# TODO: this AppImage sdk API is obsolete.
-#get_desktopintegration digikam
-
 mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
 
@@ -424,18 +421,29 @@ cd /
 # Get right version of Appimage toolkit.
 
 if [[ "$ARCH" = "x86_64" ]] ; then
-    APPIMGBIN=AppImageTool-x86_64.AppImage
+    APPIMGBIN=linuxdeployqt-continuous-x86_64.AppImage
 elif [[ "$ARCH" = "i686" ]] ; then
-    APPIMGBIN=AppImageTool-i686.AppImage
+    APPIMGBIN=linuxdeployqt-continuous-i686.AppImage
 fi
 
 if [[ ! -s ./$APPIMGBIN ]] ; then
-    wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/$APPIMGBIN -O ./$APPIMGBIN
+    wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/$APPIMGBIN -O ./$APPIMGBIN
 fi
 
 chmod a+x ./$APPIMGBIN
 
-./$APPIMGBIN $APP_IMG_DIR/ $ORIG_WD/bundle/$APPIMAGE
+#./$APPIMGBIN $APP_IMG_DIR/ $ORIG_WD/bundle/$APPIMAGE
+
+./$APPIMGBIN $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
+  -executable=$APPDIR/usr/bin/digikam \
+  -verbose=2 \
+  -show-exclude-libs \
+  -bundle-non-qt-libs \
+  -extra-plugins= $APPDIR/usr/plugins
+  -appimage 
+
+exit
+  
 chmod a+rwx $ORIG_WD/bundle/$APPIMAGE
 
 #################################################################################################
