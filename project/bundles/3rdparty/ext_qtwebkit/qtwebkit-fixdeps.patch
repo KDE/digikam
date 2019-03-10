@@ -1,5 +1,5 @@
 diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
-index 003fdca41..560a80c27 100644
+index 003fdca41..f0db91f77 100644
 --- a/Source/cmake/OptionsQt.cmake
 +++ b/Source/cmake/OptionsQt.cmake
 @@ -501,7 +501,7 @@ if (MACOS_FORCE_SYSTEM_XML_LIBRARIES)
@@ -11,6 +11,15 @@ index 003fdca41..560a80c27 100644
      if (ENABLE_XSLT)
          find_package(LibXslt 1.1.7 REQUIRED)
      endif ()
+@@ -919,7 +919,7 @@ if (MSVC)
+     endif ()
+ endif ()
+ 
+-if (NOT RUBY_FOUND AND RUBY_EXECUTABLE AND NOT RUBY_VERSION VERSION_LESS 1.9)
++if (NOT RUBY_FOUND AND RUBY_EXECUTABLE AND NOT RUBY_VERSION VERSION_LESS 1.8)
+     get_property(_packages_found GLOBAL PROPERTY PACKAGES_FOUND)
+     list(APPEND _packages_found Ruby)
+     set_property(GLOBAL PROPERTY PACKAGES_FOUND ${_packages_found})
 diff --git a/Source/cmake/WebKitCommon.cmake b/Source/cmake/WebKitCommon.cmake
 index 1f7b4ccdf..cd2f42fec 100644
 --- a/Source/cmake/WebKitCommon.cmake
