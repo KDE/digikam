@@ -34,9 +34,11 @@
 // Local includes
 
 #include "dimg.h"
+#include "iccsettings.h"
 #include "digikam_debug.h"
 #include "presentationkb.h"
 #include "previewloadthread.h"
+#include "iccsettingscontainer.h"
 #include "presentationcontainer.h"
 
 using namespace Digikam;
@@ -79,6 +81,8 @@ public:
 
     float                  textureAspect;
     QImage                 texture;
+
+    IccProfile             iccProfile;
 };
 
 KBImageLoader::KBImageLoader(PresentationContainer* const sharedData, int width, int height)
@@ -88,6 +92,13 @@ KBImageLoader::KBImageLoader(PresentationContainer* const sharedData, int width,
     d->sharedData = sharedData;
     d->width      = width;
     d->height     = height;
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    if (settings.enableCM && settings.useManagedPreviews)
+    {
+        d->iccProfile = IccProfile(settings.monitorProfile);
+    }
 }
 
 KBImageLoader::~KBImageLoader()
@@ -189,7 +200,9 @@ void KBImageLoader::run()
 bool KBImageLoader::loadImage()
 {
     QString path  = d->sharedData->urlList[d->fileIndex].toLocalFile();
-    QImage  image = PreviewLoadThread::loadHighQualitySynchronously(path).copyQImage();
+    QImage  image = PreviewLoadThread::loadHighQualitySynchronously(path,
+                                                                    PreviewSettings::RawPreviewAutomatic,
+                                                                    d->iccProfile).copyQImage();
 
     if (image.isNull())
     {

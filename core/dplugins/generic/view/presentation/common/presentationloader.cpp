@@ -37,8 +37,10 @@
 // Local includes
 
 #include "dimg.h"
+#include "iccsettings.h"
 #include "digikam_debug.h"
 #include "previewloadthread.h"
+#include "iccsettingscontainer.h"
 #include "presentationcontainer.h"
 
 using namespace Digikam;
@@ -73,7 +75,20 @@ protected:
     {
         QImage newImage;
 
-        newImage = PreviewLoadThread::loadHighQualitySynchronously(m_path.toLocalFile()).copyQImage();
+        ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+        if (settings.enableCM && settings.useManagedPreviews)
+        {
+            IccProfile profile(settings.monitorProfile);
+
+            newImage = PreviewLoadThread::loadHighQualitySynchronously(m_path.toLocalFile(),
+                                                                       PreviewSettings::RawPreviewAutomatic,
+                                                                       profile).copyQImage();
+        }
+        else
+        {
+            newImage = PreviewLoadThread::loadHighQualitySynchronously(m_path.toLocalFile()).copyQImage();
+        }
 
         m_imageLock->lock();
         m_loadedImages->insert(m_path, newImage.scaled(m_swidth,
