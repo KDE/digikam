@@ -61,4 +61,6 @@ BUGFIXES:
 044 ==> 380065 - "Open with" menu entry missing [patch].
 045 ==> 405258 - Provide an OpenWith... function to get a specific ImageEditor.
 046 ==> 402807 - Progress manager doesn't seem to be involved in the fingerprint scanning (v6.0 beta 3).
-047 ==> 
+047 ==> 278935 - Please make XMP Sidecar filename configurable [patch].
+048 ==> 
+
