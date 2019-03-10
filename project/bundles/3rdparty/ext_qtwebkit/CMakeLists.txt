@@ -21,6 +21,7 @@ ExternalProject_Add(ext_qtwebkit
                ${GLOBAL_PROFILE}
                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX_qtwebkit}
                -DENABLE_GEOLOCATION=OFF
+               -DENABLE_DEVICE_ORIENTATION=OFF
                -DENABLE_MEDIA_SOURCE=ON
                -DENABLE_VIDEO=OFF
                -DENABLE_WEB_AUDIO=OFF
