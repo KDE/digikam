@@ -133,7 +133,7 @@ fi
 
 if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
 
-    echo -e "---------- Install New Python Tools Set\n"
+    echo -e "---------- Install New Python Interpreter\n"
 
     cd /etc/yum.repos.d
     wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
