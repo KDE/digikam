@@ -26,9 +26,14 @@ ExternalProject_Add(ext_qtwebkit
                -DENABLE_MEDIA_SOURCE=ON
                -DENABLE_VIDEO=OFF
                -DENABLE_WEB_AUDIO=OFF
+               -DENABLE_PRINT_SUPPORT=OFF
+               -DENABLE_QT_GESTURE_EVENTS=OFF
+               -DENABLE_INSPECTOR_UI=OFF
                -DUSE_GSTREAMER=OFF
                -DUSE_MEDIA_FOUNDATION=OFF
+               -DUSE_LIBHYPHEN=OFF
                -DUSE_QT_MULTIMEDIA=OFF
+               -DUSE_WOFF2=OFF
                -DPORT=Qt
                -Wno-dev
 
