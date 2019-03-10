@@ -14,7 +14,19 @@ ExternalProject_Add(ext_qtwebkit
     URL_MD5 48b9afcf920ff8077a7b05316851c38c
     INSTALL_DIR ${EXTPREFIX_qtwebkit}
 
-    CONFIGURE_COMMAND qmake PREFIX=${EXTPREFIX_qtwebkit}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_qtwebkit}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               ${GLOBAL_PROFILE}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX_qtwebkit}
+               -DENABLE_GEOLOCATION=OFF
+               -DENABLE_MEDIA_SOURCE=ON
+               -DENABLE_VIDEO=OFF
+               -DENABLE_WEB_AUDIO=OFF
+               -DUSE_GSTREAMER=OFF
+               -DUSE_MEDIA_FOUNDATION=OFF
+               -DUSE_QT_MULTIMEDIA=OFF
+               -Wno-dev
+
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
     ALWAYS 0
