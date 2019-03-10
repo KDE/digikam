@@ -120,11 +120,12 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
     appendJobs(collection);
 }
 
-void MaintenanceThread::generateFingerprints(const QStringList& paths)
+void MaintenanceThread::generateFingerprints(const QList<qlonglong>& itemIds, bool rebuildAll)
 {
     ActionJobCollection collection;
 
-    data->setImagePaths(paths);
+    data->setImageIds(itemIds);
+    data->setRebuildAllFingerprints(rebuildAll);
 
     for (int i = 1 ; i <= (maximumNumberOfThreads()) ; ++i)
     {
@@ -137,7 +138,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
 
         collection.insert(t, 0);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a fingerprints task for generating fingerprints";// for items with a chunk size of " << chunk.size();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a fingerprints task for generating fingerprints";
     }
 
     appendJobs(collection);

@@ -43,8 +43,6 @@
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "maintenancethread.h"
-#include "similaritydb.h"
-#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -60,8 +58,6 @@ public:
     }
 
     bool               rebuildAll;
-
-    QStringList        allPicturesPath;
 
     AlbumList          albumList;
 
@@ -113,60 +109,34 @@ void FingerPrintsGenerator::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
-    // Get all image infos for images (category 1) that are visible (status 1)
-    QList<ItemInfo> imageInfos;
-    QList<qlonglong> imageIds = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Visible, DatabaseItem::Category::Image);
+    // Get all item IDs from albums.
 
-    foreach (const qlonglong& id, imageIds)
-    {
-        imageInfos << ItemInfo(id);
-    }
-
-    QStringList dirty = SimilarityDbAccess().db()->getDirtyOrMissingFingerprintURLs(imageInfos);
-
-    // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
+    QList<qlonglong> itemIds;
 
     for (AlbumList::ConstIterator it = d->albumList.constBegin() ;
          !canceled() && (it != d->albumList.constEnd()) ; ++it)
     {
-        QStringList aPaths;
-
         if ((*it)->type() == Album::PHYSICAL)
         {
-            aPaths = CoreDbAccess().db()->getItemURLsInAlbum((*it)->id());
+            itemIds << CoreDbAccess().db()->getItemIDsInAlbum((*it)->id());
         }
         else if ((*it)->type() == Album::TAG)
         {
-            aPaths = CoreDbAccess().db()->getItemURLsInTag((*it)->id());
-        }
-
-        if (!d->rebuildAll)
-        {
-            foreach (const QString& path, aPaths)
-            {
-                if (dirty.contains(path))
-                {
-                    d->allPicturesPath += path;
-                }
-            }
-        }
-        else
-        {
-            d->allPicturesPath += aPaths;
+            itemIds << CoreDbAccess().db()->getItemIDsInTag((*it)->id());
         }
     }
 
     QApplication::restoreOverrideCursor();
 
-    if (d->allPicturesPath.isEmpty())
+    if (itemIds.isEmpty())
     {
         slotDone();
         return;
     }
 
-    setTotalItems(d->allPicturesPath.count());
+    setTotalItems(itemIds.count());
 
-    d->thread->generateFingerprints(d->allPicturesPath);
+    d->thread->generateFingerprints(itemIds, d->rebuildAll);
     d->thread->start();
 }
 

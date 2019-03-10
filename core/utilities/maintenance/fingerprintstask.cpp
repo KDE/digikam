@@ -25,6 +25,7 @@
 
 // Qt includes
 #include <QQueue>
+#include <QIcon>
 
 // Local includes
 
@@ -34,6 +35,8 @@
 #include "haariface.h"
 #include "previewloadthread.h"
 #include "maintenancedata.h"
+#include "similaritydb.h"
+#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -48,6 +51,7 @@ public:
     }
 
     MaintenanceData* data;
+    QImage           okImage;
 };
 
 // -------------------------------------------------------
@@ -56,6 +60,8 @@ FingerprintsTask::FingerprintsTask()
     : ActionJob(),
       d(new Private)
 {
+    QPixmap okPix = QIcon::fromTheme(QLatin1String("dialog-ok")).pixmap(22, 22);
+    d->okImage    = okPix.toImage();
 }
 
 FingerprintsTask::~FingerprintsTask()
@@ -79,26 +85,38 @@ void FingerprintsTask::run()
             return;
         }
 
-        QString path = d->data->getImagePath();
+        qlonglong id = d->data->getImageId();
 
-        if (path.isEmpty())
+        if (id == -1)
         {
             break;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Updating fingerprints for file: " << path ;
+        ItemInfo info(id);
 
-        DImg dimg = PreviewLoadThread::loadFastSynchronously(path, HaarIface::preferredSize());
-
-        if (!dimg.isNull())
+        if ((info.isVisible() && info.category() == DatabaseItem::Category::Image) &&
+            (d->data->getRebuildAllFingerprints()                                  ||
+             SimilarityDbAccess().db()->hasDirtyOrMissingFingerprint(info)))
         {
-            // compute Haar fingerprint and store it to DB
-            HaarIface haarIface;
-            haarIface.indexImage(path, dimg);
-        }
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Updating fingerprints for file:" << info.filePath();
 
-        QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
-        emit signalFinished(qimg);
+            DImg dimg = PreviewLoadThread::loadFastSynchronously(info.filePath(),
+                                                                 HaarIface::preferredSize());
+
+            if (!dimg.isNull())
+            {
+                // compute Haar fingerprint and store it to DB
+                HaarIface haarIface;
+                haarIface.indexImage(info.filePath(), dimg);
+            }
+
+            QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
+            emit signalFinished(qimg);
+        }
+        else
+        {
+            emit signalFinished(d->okImage);
+        }
     }
 
     emit signalDone();

@@ -48,12 +48,16 @@ public:
     void      setIdentities(const QList<Identity>& identities);
     void      setSimilarityImageIds(const QList<qlonglong>& ids);
 
-    qlonglong getImageId()           const;
-    int       getThumbnailId()       const;
-    QString   getImagePath()         const;
-    ItemInfo getItemInfo()         const;
-    Identity  getIdentity()          const;
-    qlonglong getSimilarityImageId() const;
+    void      setRebuildAllFingerprints(bool b);
+
+    qlonglong getImageId()                 const;
+    int       getThumbnailId()             const;
+    QString   getImagePath()               const;
+    ItemInfo getItemInfo()                 const;
+    Identity  getIdentity()                const;
+    qlonglong getSimilarityImageId()       const;
+
+    bool      getRebuildAllFingerprints() const;
 
 private:
 

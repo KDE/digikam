@@ -53,7 +53,7 @@ public:
 
     void syncMetadata(const ItemInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly);
     void generateThumbs(const QStringList& paths);
-    void generateFingerprints(const QStringList& paths);
+    void generateFingerprints(const QList<qlonglong>& itemIds, bool rebuildAll);
     void sortByImageQuality(const QStringList& paths, const ImageQualityContainer& quality);
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false, bool similarityDb=false);

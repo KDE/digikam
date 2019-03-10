@@ -40,14 +40,17 @@ public:
 
     explicit Private()
     {
+        rebuildAllFingerprints = true;
     }
 
     QList<qlonglong>              imageIdList;
     QList<int>                    thumbnailIdList;
     QList<QString>                imagePathList;
-    QList<ItemInfo>              imageInfoList;
+    QList<ItemInfo>               imageInfoList;
     QList<Identity>               identitiesList;
     QList<qlonglong>              similarityImageIdList;
+
+    bool                          rebuildAllFingerprints;
 
     QMutex                        mutex;
 };
@@ -90,6 +93,11 @@ void MaintenanceData::setSimilarityImageIds(const QList<qlonglong>& ids)
 void MaintenanceData::setIdentities(const QList<Identity>& identities)
 {
     d->identitiesList = identities;
+}
+
+void MaintenanceData::setRebuildAllFingerprints(bool b)
+{
+    d->rebuildAllFingerprints = b;
 }
 
 qlonglong MaintenanceData::getImageId() const
@@ -174,6 +182,11 @@ qlonglong MaintenanceData::getSimilarityImageId() const
 
     d->mutex.unlock();
     return id;
+}
+
+bool MaintenanceData::getRebuildAllFingerprints() const
+{
+    return d->rebuildAllFingerprints;
 }
 
 } // namespace Digikam
