@@ -418,23 +418,9 @@ echo -e "---------- Create Bundle with AppImage SDK stage2\n"
 
 cd /
 
-# Get right version of Appimage toolkit.
-
-if [[ "$ARCH" = "x86_64" ]] ; then
-    APPIMGBIN=linuxdeployqt-continuous-x86_64.AppImage
-elif [[ "$ARCH" = "i686" ]] ; then
-    APPIMGBIN=linuxdeployqt-continuous-i686.AppImage
-fi
-
-if [[ ! -s ./$APPIMGBIN ]] ; then
-    wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/$APPIMGBIN -O ./$APPIMGBIN
-fi
-
-chmod a+x ./$APPIMGBIN
-
 #./$APPIMGBIN $APP_IMG_DIR/ $ORIG_WD/bundle/$APPIMAGE
 
-./$APPIMGBIN $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
+./$INSTALL_DIR/bin/linuxdeployqt $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
   -executable=$APPDIR/usr/bin/digikam \
   -verbose=2 \
   -show-exclude-libs \
