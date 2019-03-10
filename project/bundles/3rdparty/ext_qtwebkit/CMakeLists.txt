@@ -14,7 +14,7 @@ ExternalProject_Add(ext_qtwebkit
     URL_MD5 48b9afcf920ff8077a7b05316851c38c
     INSTALL_DIR ${EXTPREFIX_qtwebkit}
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit-ruby18.patch
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit-deps.patch
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_qtwebkit}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

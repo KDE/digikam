@@ -1,3 +1,16 @@
+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+index 003fdca41..560a80c27 100644
+--- a/Source/cmake/OptionsQt.cmake
++++ b/Source/cmake/OptionsQt.cmake
+@@ -501,7 +501,7 @@ if (MACOS_FORCE_SYSTEM_XML_LIBRARIES)
+         set(LIBXSLT_LIBRARIES xslt)
+     endif ()
+ else ()
+-    find_package(LibXml2 2.8.0 REQUIRED)
++    find_package(LibXml2 2.7.0 REQUIRED)
+     if (ENABLE_XSLT)
+         find_package(LibXslt 1.1.7 REQUIRED)
+     endif ()
 diff --git a/Source/cmake/WebKitCommon.cmake b/Source/cmake/WebKitCommon.cmake
 index 1f7b4ccdf..cd2f42fec 100644
 --- a/Source/cmake/WebKitCommon.cmake
