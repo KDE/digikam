@@ -199,9 +199,9 @@ cp -r $INSTALL_DIR/$LIB_PATH_ALT/marble/plugins/ ./usr/bin/
 cp -r $INSTALL_DIR/share/marble/data             ./usr/bin/
 
 # otherwise segfaults!?
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+#cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
+#cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
+#cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # Fedora 23 seemed to be missing SOMETHING from the Centos 6.7. The only message was:
 # This application failed to start because it could not find or load the Qt platform plugin "xcb".
@@ -211,13 +211,13 @@ cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">"
 # Which means that we have to copy libEGL.so.1 in too
 
 # Otherwise F23 cannot load the Qt platform plugin "xcb"
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+#cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # let's not copy xcb itself, that breaks on dri3 systems https://bugs.kde.org/show_bug.cgi?id=360552
 #cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # For Fedora 20
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
+#cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 cp $INSTALL_DIR/bin/digikam                 ./usr/bin
 cp $INSTALL_DIR/bin/showfoto                ./usr/bin
