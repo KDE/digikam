@@ -7,56 +7,24 @@
 #
 
 set(PREFIX_ext_drmingw "${EXTPREFIX}")
-set(DRMINGW_VERSION 0.9.1)
 
-if (MINGW)
+ExternalProject_Add(ext_drmingw
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/jrfonseca/drmingw/archive/0.9.1.tar.gz
+    URL_MD5 fdafc515b83adcca765dc5cae05f3828
 
-    # Rules to extract and install DrMingw runtime and DbgHelp binaries dependencies from official DrMingw binaries tarball.
+    INSTALL_DIR ${EXTPREFIX_drmingw}
 
-    if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/drmingw-coreonly.patch
 
-        # 64 bits system
+    CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
+                      <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo -DBUILD_TESTING=OFF
 
-        ExternalProject_Add(ext_drmingw
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/jrfonseca/drmingw/releases/download/${DRMINGW_VERSION}/drmingw-${DRMINGW_VERSION}-win64.7z
-            URL_MD5 979c32f1a5190fc20adc04dbd8b9743a
+    BUILD_COMMAND cd <SOURCE_DIR>/build.mxe && $(MAKE)
 
-            INSTALL_DIR ${PREFIX_ext_drmingw}
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Dr. Mingw runtime 64-bits and DbgHelp dependencies
+    INSTALL_COMMAND cd <SOURCE_DIR>/build.mxe && make install/fast
 
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/dbghelp.dll ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.dll  ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.yes  ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/exchndl.dll ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/mgwhelp.dll ${PREFIX_ext_drmingw}/bin/
-
-            UPDATE_COMMAND ""
-        )
-
-    else()
-
-        # 32 bits system
-
-        ExternalProject_Add(ext_drmingw
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/jrfonseca/drmingw/releases/download/${DRMINGW_VERSION}/drmingw-${DRMINGW_VERSION}-win32.7z
-            URL_MD5 1de4e89429a3a6a9debd3c6bb2bd3ea1
-
-            INSTALL_DIR ${PREFIX_ext_drmingw}
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Dr. Mingw runtime 32-bits and DbgHelp dependencies
-
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/dbghelp.dll ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.dll  ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/symsrv.yes  ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/exchndl.dll ${PREFIX_ext_drmingw}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin/mgwhelp.dll ${PREFIX_ext_drmingw}/bin/
-
-            UPDATE_COMMAND ""
-        )
-
-    endif()
-
-endif()
+    UPDATE_COMMAND ""
+    BUILD_IN_SOURCE 1
+    ALWAYS 0
+)

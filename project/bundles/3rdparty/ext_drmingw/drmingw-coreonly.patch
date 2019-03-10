@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b2bdb35..733bc95 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -157,8 +157,8 @@ set (MGWHELP_IMPLIB ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/libmgwhelp.a)
+ set (EXCHNDL_IMPLIB ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/libexchndl.a)
+ 
+ add_subdirectory (src)
+-add_subdirectory (sample)
+-add_subdirectory (tests)
++#add_subdirectory (sample)
++#add_subdirectory (tests)
+ 
+ 
+ ##############################################################################
