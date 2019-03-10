@@ -141,8 +141,14 @@ if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
 
 fi
 
-yum -y install centos-release-scl-rh centos-release-scl
-yum -y --nogpgcheck install rh-ruby24
+if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+
+    echo -e "---------- Install New Ruby Interpreter\n"
+
+    yum -y install centos-release-scl-rh centos-release-scl
+    yum -y --nogpgcheck install rh-ruby24
+
+fi
 
 #################################################################################################
 
@@ -229,6 +235,9 @@ fi
 
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
+
+# enable new Ruby interpreter
+. /opt/rh/rh-ruby24/enable
 
 #################################################################################################
 
