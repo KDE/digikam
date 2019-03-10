@@ -141,6 +141,9 @@ if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
 
 fi
 
+yum -y install centos-release-scl-rh centos-release-scl
+yum -y --nogpgcheck install rh-ruby24
+
 #################################################################################################
 
 # Install new repo to get ffmpeg dependencies
