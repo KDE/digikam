@@ -138,6 +138,10 @@ if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
         yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
         rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
 
+        wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
+        yum -y --nogpgcheck install python2.7
+        rm -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo
+
     else
 
         # Newer compiler for CentOS 6 32 bits
@@ -145,6 +149,10 @@ if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
         wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
         yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
         rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+
+        wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
+        yum -y --nogpgcheck install python2.7
+        rm -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo
 
     fi
 
@@ -235,6 +243,9 @@ fi
 
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
+
+# enable new Python for QtWebkit
+. /opt/rh/python2.7/enable
 
 #################################################################################################
 
