@@ -23,12 +23,14 @@ ExternalProject_Add(ext_qtwebkit
                -DENABLE_GEOLOCATION=OFF
                -DENABLE_DEVICE_ORIENTATION=OFF
                -DENABLE_QT_WEBCHANNEL=OFF
-               -DENABLE_MEDIA_SOURCE=ON
+               -DENABLE_MEDIA_SOURCE=OFF
                -DENABLE_VIDEO=OFF
                -DENABLE_WEB_AUDIO=OFF
                -DENABLE_PRINT_SUPPORT=OFF
                -DENABLE_QT_GESTURE_EVENTS=OFF
                -DENABLE_INSPECTOR_UI=OFF
+               -DENABLE_API_TESTS=OFF
+               -DENABLE_TOOLS=OFF
                -DUSE_GSTREAMER=OFF
                -DUSE_MEDIA_FOUNDATION=OFF
                -DUSE_LIBHYPHEN=OFF
