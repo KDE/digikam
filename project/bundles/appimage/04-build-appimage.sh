@@ -19,16 +19,6 @@ if [ "root" != "$USER" ]; then
     exit
 fi
 
-if [[ "$(arch)" = "x86_64" ]] ; then
-
-    LIB_PATH_ALT=lib64
-
-else
-
-    LIB_PATH_ALT=lib
-
-fi
-
 #################################################################################################
 # Manage script traces to log file
 
@@ -57,6 +47,11 @@ CentOS6Adjustments
 ORIG_WD="`pwd`"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
+
+mv $INSTALL_DIR/lib64/* $INSTALL_DIR/lib/
+rm -rf $INSTALL_DIR/lib64/
+
+LIB_PATH_ALT=lib
 
 #################################################################################################
 
