@@ -7,7 +7,7 @@
 #
 
 set(PREFIX_ext_drmingw "${EXTPREFIX}")
-set(DRMINGW_VERSION 0.8.2)
+set(DRMINGW_VERSION 0.9.1)
 
 if (MINGW)
 
@@ -20,7 +20,7 @@ if (MINGW)
         ExternalProject_Add(ext_drmingw
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://github.com/jrfonseca/drmingw/releases/download/${DRMINGW_VERSION}/drmingw-${DRMINGW_VERSION}-win64.7z
-            URL_MD5 f7ac261908ad9caffdb6da36098b938e
+            URL_MD5 979c32f1a5190fc20adc04dbd8b9743a
 
             INSTALL_DIR ${PREFIX_ext_drmingw}
             CONFIGURE_COMMAND ""
@@ -42,7 +42,7 @@ if (MINGW)
         ExternalProject_Add(ext_drmingw
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://github.com/jrfonseca/drmingw/releases/download/${DRMINGW_VERSION}/drmingw-${DRMINGW_VERSION}-win32.7z
-            URL_MD5 34310caf57020357abfacf5002beacc9
+            URL_MD5 1de4e89429a3a6a9debd3c6bb2bd3ea1
 
             INSTALL_DIR ${PREFIX_ext_drmingw}
             CONFIGURE_COMMAND ""
