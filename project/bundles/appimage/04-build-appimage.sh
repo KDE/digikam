@@ -171,26 +171,30 @@ if [[ -e $INSTALL_DIR/translations ]]; then
 
 fi
 
+cd $INSTALL_DIR
+
 # KF5 translations files
-FILES=$(cat $ORIG_WD/logs/build-extralibs.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-extralibs.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3 | cut -d '/' -f4-)
 
 for FILE in $FILES ; do
-    cp --parents $FILE ./
+    cp --parents $FILE $APP_IMG_DIR/usr
 done
 
 # digiKam translations files
-FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3 | cut -d '/' -f4-)
 
 for FILE in $FILES ; do
-    cp --parents $FILE ./
+    cp --parents $FILE $APP_IMG_DIR/usr
 done
 
 # digiKam icons files
-FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/icons/ | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/icons/ | cut -d' ' -f3 | cut -d '/' -f4-)
 
 for FILE in $FILES ; do
-    cp --parents $FILE ./
+    cp --parents $FILE $APP_IMG_DIR/usr
 done
+
+cd $APP_IMG_DIR
 
 # Marble data and plugins files
 
@@ -402,8 +406,11 @@ cd $APP_IMG_DIR
 
 # desktop integration rules
 
-cp $INSTALL_DIR/share/applications/org.kde.digikam.desktop ./digikam.desktop
-cp $INSTALL_DIR/share/icons/hicolor/64x64/apps/digikam.png ./digikam.png
+mkdir -p $APP_IMG_DIR/usr/share/applications
+cp -r $INSTALL_DIR/share/applications/org.kde.digikam.desktop ./usr/share/applications/org.kde.digikam.desktop
+
+mkdir -p $APP_IMG_DIR/usr/share/icons/hicolor/64x64/apps
+cp -r $INSTALL_DIR/share/icons/hicolor/64x64/apps/digikam.png ./usr/share/icons/hicolor/64x64/apps/digikam.png
 
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/apps
 cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/apps/digikam.png
@@ -416,20 +423,21 @@ rm -f $ORIG_WD/bundle/* || true
 
 echo -e "---------- Create Bundle with AppImage SDK stage2\n"
 
-cd /
+cd $BUILDING_DIR
 
 #./$APPIMGBIN $APP_IMG_DIR/ $ORIG_WD/bundle/$APPIMAGE
 
-./$INSTALL_DIR/bin/linuxdeployqt $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
-  -executable=$APPDIR/usr/bin/digikam \
-  -verbose=2 \
-  -show-exclude-libs \
-  -bundle-non-qt-libs \
-  -extra-plugins= $APPDIR/usr/plugins
-  -appimage 
+$INSTALL_DIR/bin/linuxdeployqt \
+    $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
+    -executable=$APP_IMG_DIR/usr/bin/digikam \
+    -verbose=2 \
+    -bundle-non-qt-libs \
+    -extra-plugins=$APP_IMG_DIR/usr/plugins \
+    -qmake=$INSTALL_DIR/bin/qmake \
+    -appimage
 
 exit
-  
+
 chmod a+rwx $ORIG_WD/bundle/$APPIMAGE
 
 #################################################################################################
