@@ -25,6 +25,7 @@ ExternalProject_Add(ext_qtwebkit
                -DUSE_GSTREAMER=OFF
                -DUSE_MEDIA_FOUNDATION=OFF
                -DUSE_QT_MULTIMEDIA=OFF
+               -DPORT=Qt
                -Wno-dev
 
     UPDATE_COMMAND ""
