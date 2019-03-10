@@ -30,6 +30,8 @@
 // Local includes
 
 #include "dimg.h"
+#include "iccsettings.h"
+#include "iccsettingscontainer.h"
 #include "previewloadthread.h"
 #include "dmetadata.h"
 #include "digikam_debug.h"
@@ -62,7 +64,6 @@ public:
         rotate_list[1] = DMetadata::ORIENTATION_ROT_180;
         rotate_list[2] = DMetadata::ORIENTATION_ROT_270;
         rotate_list[3] = DMetadata::ORIENTATION_ROT_180;
-        previewThread  = new PreviewLoadThread();
         iface          = 0;
     }
 
@@ -74,7 +75,7 @@ public:
     QSize                              initial_size;
     DMetadata::ImageOrientation        rotate_list[4];
     int                                rotate_idx;
-    PreviewLoadThread*                 previewThread;
+    IccProfile                         iccProfile;
     DInfoInterface*                    iface;
 
 private:
@@ -88,12 +89,19 @@ GLViewerTexture::GLViewerTexture(DInfoInterface* const iface)
       d(new Private)
 {
     d->iface = iface;
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    if (settings.enableCM && settings.useManagedPreviews)
+    {
+        d->iccProfile = IccProfile(settings.monitorProfile);
+    }
+
     reset();
 }
 
 GLViewerTexture::~GLViewerTexture()
 {
-    delete d->previewThread;
     delete d;
 }
 
@@ -109,7 +117,9 @@ bool GLViewerTexture::load(const QString& fn, const QSize& size)
 {
     d->filename     = fn;
     d->initial_size = size;
-    d->qimage       = d->previewThread->loadFastSynchronously(d->filename, qMax(size.width(), size.height())).copyQImage();
+    d->qimage       = PreviewLoadThread::loadFastSynchronously(d->filename,
+                                                               qMax(size.width(), size.height()),
+                                                               d->iccProfile).copyQImage();
 
     // handle rotation
 
@@ -155,8 +165,12 @@ bool GLViewerTexture::load(const QImage& im, const QSize& size)
  */
 bool GLViewerTexture::loadFullSize()
 {
-    d->qimage       = d->previewThread->loadHighQualitySynchronously(d->filename).copyQImage();
+    d->qimage       = PreviewLoadThread::loadHighQualitySynchronously(d->filename,
+                                                                      PreviewSettings::RawPreviewAutomatic,
+                                                                      d->iccProfile).copyQImage();
+
     d->initial_size = d->qimage.size();
+
     // handle rotation
 
     DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(d->filename)));
