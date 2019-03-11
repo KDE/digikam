@@ -105,7 +105,6 @@ yum -y install wget \
                glibc-devel \
                libudev-devel \
                libuuid-devel \
-               libicu-devel \
                sqlite-devel \
                libusb-devel \
                libexif-devel \
@@ -263,6 +262,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
