@@ -11,3 +11,22 @@ index 003fdca41..f0db91f77 100644
      if (ENABLE_XSLT)
          find_package(LibXslt 1.1.7 REQUIRED)
      endif ()
+diff --git a/Source/WTF/wtf/PlatformQt.cmake b/Source/WTF/wtf/PlatformQt.cmake
+index 684119455b3..0b9de24c895 100644
+--- a/Source/WTF/wtf/PlatformQt.cmake
++++ b/Source/WTF/wtf/PlatformQt.cmake
+@@ -77,3 +77,14 @@ if (APPLE)
+         ${COREFOUNDATION_LIBRARY}
+     )
+ endif ()
++
++if (UNIX)
++    check_function_exists(clock_gettime CLOCK_GETTIME_EXISTS)
++    if (NOT CLOCK_GETTIME_EXISTS)
++        set(CMAKE_REQUIRED_LIBRARIES rt)
++        check_function_exists(clock_gettime CLOCK_GETTIME_REQUIRES_LIBRT)
++        if (CLOCK_GETTIME_REQUIRES_LIBRT)
++            list(APPEND WTF_LIBRARIES rt)
++        endif ()
++    endif ()
++endif ()
