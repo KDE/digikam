@@ -63,4 +63,5 @@ BUGFIXES:
 046 ==> 402807 - Progress manager doesn't seem to be involved in the fingerprint scanning (v6.0 beta 3).
 047 ==> 278935 - Please make XMP Sidecar filename configurable [patch].
 048 ==> 405231 - Monitor Color Profile is not applied in "Presentation".
-049 ==> 
+049 ==> 405347 - Selecting by aspect ratio: abs function in sqlite lowercase, in mariadb uppercase.
+050 ==> 
