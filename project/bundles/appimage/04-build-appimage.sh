@@ -317,15 +317,15 @@ sed -i "/Exec=/c\Exec=digikam-camera downloadFromUdi %i" ./usr/share/solid/actio
 # 
 # # Do NOT delete libX* because otherwise on Ubuntu 11.04:
 # # loaded library "Xcursor" malloc.c:3096: sYSMALLOc: Assertion (...) Aborted
-# 
+ 
 # # We don't bundle the developer stuff
-# rm -rf usr/include || true
-# rm -rf usr/lib/cmake3 || true
-# rm -rf usr/lib/pkgconfig || true
-# rm -rf usr/share/ECM/ || true
-# rm -rf usr/share/gettext || true
-# rm -rf usr/share/pkgconfig || true
-# 
+rm -rf usr/include || true
+rm -rf usr/lib/cmake3 || true
+rm -rf usr/lib/pkgconfig || true
+rm -rf usr/share/ECM/ || true
+rm -rf usr/share/gettext || true
+rm -rf usr/share/pkgconfig || true
+
 # #################################################################################################
 # 
 # echo -e "---------- Strip Binaries Files \n"
@@ -397,7 +397,7 @@ echo -e "---------- Create Bundle with AppImage SDK stage1\n"
 cd $APP_IMG_DIR
 
 # We will use a dedicated bash script to run inside the AppImage to be sure that XDG_* variable are set for Qt5
-# cp ${ORIG_WD}/data/AppRun ./
+cp ${ORIG_WD}/data/AppRun ./
 
 # desktop integration rules
 
@@ -417,6 +417,22 @@ mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
 
 echo -e "---------- Create Bundle with AppImage SDK stage2\n"
+
+cd $INSTALL_DIR/bin
+
+# Get right version of Appimage toolkit.
+
+if [[ "$ARCH" = "x86_64" ]] ; then
+    APPIMGBIN=AppImageTool-x86_64.AppImage
+elif [[ "$ARCH" = "i686" ]] ; then
+    APPIMGBIN=AppImageTool-i686.AppImage
+fi
+
+if [[ ! -s ./$APPIMGBIN ]] ; then
+    wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/$APPIMGBIN -O ./$APPIMGBIN
+fi
+
+chmod a+x ./$APPIMGBIN
 
 cd $BUILDING_DIR
 
