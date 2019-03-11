@@ -14,7 +14,12 @@ ExternalProject_Add(ext_libicu
     URL_MD5 9e40f6055294284df958200e308bce50
 
     INSTALL_DIR ${EXTPREFIX_libicu}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_libicu}
+
+    CONFIGURE_COMMAND cd <SOURCE_DIR>/source && ./configure -prefix ${EXTPREFIX_libicu} --enable-tests=no --enable-samples=no
+
+    BUILD_COMMAND cd <SOURCE_DIR>/source && $(MAKE)
+
+    INSTALL_COMMAND cd <SOURCE_DIR>/source && $(MAKE) install
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
