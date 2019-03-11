@@ -12,6 +12,7 @@ ExternalProject_Add(ext_linuxdeployqt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
     GIT_REPOSITORY https://github.com/probonopd/linuxdeployqt.git
+    GIT_TAG 6
 
     INSTALL_DIR ${EXTPREFIX_linuxdeployqt}
     CONFIGURE_COMMAND qmake PREFIX=${EXTPREFIX_linuxdeployqt}
