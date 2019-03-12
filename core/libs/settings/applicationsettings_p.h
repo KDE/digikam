@@ -135,7 +135,6 @@ public:
     static const QString configPreviewRawUseEmbeddedPreview;
     static const QString configPreviewRawUseHalfSizeData;
     static const QString configPreviewConvertToEightBitEntry;
-    static const QString configPreviewZoomOrgSizeEntry;
     static const QString configPreviewShowIconsEntry;
     static const QString configShowThumbbarEntry;
     static const QString configShowFolderTreeViewItemsCountEntry;

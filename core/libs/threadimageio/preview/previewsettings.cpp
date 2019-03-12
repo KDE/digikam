@@ -29,7 +29,6 @@ namespace Digikam
 PreviewSettings::PreviewSettings(Quality quality, RawLoading rawLoading)
     : quality(quality),
       rawLoading(rawLoading),
-      zoomOrgSize(true),
       convertToEightBit(true)
 {
 }
@@ -38,7 +37,6 @@ bool PreviewSettings::operator==(const PreviewSettings& other) const
 {
     return (quality           == other.quality     &&
             rawLoading        == other.rawLoading  &&
-            zoomOrgSize       == other.zoomOrgSize &&
             convertToEightBit == other.convertToEightBit);
 }
 

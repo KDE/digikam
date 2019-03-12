@@ -75,7 +75,6 @@ public:
 
     Quality    quality;
     RawLoading rawLoading;
-    bool       zoomOrgSize;
     bool       convertToEightBit;
 };
 
