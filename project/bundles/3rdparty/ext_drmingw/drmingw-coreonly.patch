@@ -13,3 +13,16 @@ index b2bdb35..733bc95 100644
  
  
  ##############################################################################
+diff --git a/thirdparty/zlib/CMakeLists.txt b/thirdparty/zlib/CMakeLists.txt
+index bf66809..c2f3ccf 100644
+--- a/thirdparty/zlib/CMakeLists.txt
++++ b/thirdparty/zlib/CMakeLists.txt
+@@ -5,7 +5,7 @@ else ()
+     add_definitions (-DHAVE_UNISTD_H)
+ endif ()
+ 
+-add_library (z EXCLUDE_FROM_ALL
++add_library (z STATIC
+     adler32.c
+     compress.c
+     crc32.c
