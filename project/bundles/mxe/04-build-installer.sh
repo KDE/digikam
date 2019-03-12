@@ -162,9 +162,14 @@ for app in $EXE_FILES ; do
 done
 
 DLL_FILES="\
-`find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/||'`     \
-`find  $MXE_INSTALL_PREFIX/qt5/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/||'`     \
-`find  $MXE_INSTALL_PREFIX/plugins     -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/plugins/||'` \
+`find  $MXE_INSTALL_PREFIX/lib/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/libs/plugins||'` \
+`find  $MXE_INSTALL_PREFIX/qt5/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/plugins||'`  \
+`find  $MXE_INSTALL_PREFIX/plugins     -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/plugins/||'`     \
+$MXE_INSTALL_PREFIX/bin/OpenAL32.dll \
+$MXE_INSTALL_PREFIX/bin/dbghelp.dll  \
+$MXE_INSTALL_PREFIX/bin/symsrv.dll   \
+$MXE_INSTALL_PREFIX/bin/exchndl.dll  \
+$MXE_INSTALL_PREFIX/bin/mgwhelp.dll  \
 "
 
 for app in $DLL_FILES ; do
