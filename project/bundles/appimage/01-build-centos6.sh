@@ -130,24 +130,6 @@ if [[ ! -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo ]] ; then
 
 fi
 
-if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
-
-    echo -e "---------- Install New Python Interpreter\n"
-
-    cd /etc/yum.repos.d
-    wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
-    yum -y --nogpgcheck install python2.7
-
-fi
-
-if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
-
-    echo -e "---------- Install New Ruby Interpreter\n"
-
-    yum -y install centos-release-scl-rh centos-release-scl
-    yum -y --nogpgcheck install rh-ruby24
-
-fi
 
 #################################################################################################
 
@@ -235,9 +217,6 @@ fi
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
 
-# enable new Ruby interpreter
-. /opt/rh/rh-ruby24/enable
-
 #################################################################################################
 
 cd $BUILDING_DIR
@@ -267,12 +246,37 @@ cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, openssl, libtiff, libjpeg, libpng
-cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt
 cmake3 --build . --config RelWithDebInfo --target ext_exiv2         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
+cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, openssl, libtiff, libjpeg, libpng
 cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
-cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
+
+# new dependencies for QtWebkit
+
+if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
+
+    echo -e "---------- Install New Python Interpreter\n"
+
+    cd /etc/yum.repos.d
+    wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
+    yum -y --nogpgcheck install python2.7
+
+fi
+
+if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+
+    echo -e "---------- Install New Ruby Interpreter\n"
+
+    yum -y install centos-release-scl-rh centos-release-scl
+    yum -y --nogpgcheck install rh-ruby24
+
+fi
+
+# enable new Ruby interpreter
+. /opt/rh/rh-ruby24/enable
+
+cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt
 
 #################################################################################################
 
