@@ -371,12 +371,11 @@ void PreviewLoadingTask::execute()
                                            !LoadSaveThread::wasExifRotated(m_img);
         const bool needImageScale        = needToScale();
         const bool needPostProcess       = needsPostProcessing();
-        const bool needzoomOrgSize       = !m_loadingDescription.previewParameters.previewSettings.zoomOrgSize;
         const bool needConvertToEightBit = m_loadingDescription.previewParameters.previewSettings.convertToEightBit;
 
         if (accessMode() == LoadSaveThread::AccessModeReadWrite  ||
             needExifRotate  || needImageScale || needPostProcess ||
-            needzoomOrgSize || needConvertToEightBit)
+            needConvertToEightBit)
         {
             m_img.detach();
         }
@@ -388,13 +387,6 @@ void PreviewLoadingTask::execute()
                              m_loadingDescription.previewParameters.size,
                              Qt::KeepAspectRatio);
             m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
-        }
-
-        // Set originalSize attribute to the m_img size, to disable zoom to the original image size
-
-        if (needzoomOrgSize)
-        {
-            m_img.setAttribute(QLatin1String("originalSize"), m_img.size());
         }
 
         if (needConvertToEightBit)
