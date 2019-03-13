@@ -140,7 +140,7 @@ QString CollectionManager::album(const QString& filePath)
 
         QString firstPart = filePath.left(absolutePath.length());
 
-        if (firstPart == absolutePath)
+        if (firstPart == absolutePath && filePath.mid(absolutePath.length(), 1) == QLatin1String("/"))
         {
             if (filePath == absolutePath ||
                 (filePath.length() == absolutePath.length() + 1 && filePath.right(1) == QLatin1String("/")))
