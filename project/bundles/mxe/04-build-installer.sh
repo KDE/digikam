@@ -137,9 +137,6 @@ echo -e "\n---------- OpenAL for QtAV"
 cp -r $MXE_INSTALL_PREFIX/bin/OpenAL32.dll                              $BUNDLEDIR/             2>/dev/null
 
 echo -e "\n---------- DrMinGw run-time"
-cp -r $MXE_INSTALL_PREFIX/bin/dbghelp.dll                               $BUNDLEDIR/             2>/dev/null
-cp -r $MXE_INSTALL_PREFIX/bin/symsrv.dll                                $BUNDLEDIR/             2>/dev/null
-cp -r $MXE_INSTALL_PREFIX/bin/symsrv.yes                                $BUNDLEDIR/             2>/dev/null
 cp -r $MXE_INSTALL_PREFIX/bin/exchndl.dll                               $BUNDLEDIR/             2>/dev/null
 cp -r $MXE_INSTALL_PREFIX/bin/mgwhelp.dll                               $BUNDLEDIR/             2>/dev/null
 
@@ -166,8 +163,6 @@ DLL_FILES="\
 `find  $MXE_INSTALL_PREFIX/qt5/plugins -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/qt5/plugins||'`  \
 `find  $MXE_INSTALL_PREFIX/plugins     -name "*.dll" -type f | sed 's|$MXE_INSTALL_PREFIX/plugins/||'`     \
 $MXE_INSTALL_PREFIX/bin/OpenAL32.dll \
-$MXE_INSTALL_PREFIX/bin/dbghelp.dll  \
-$MXE_INSTALL_PREFIX/bin/symsrv.dll   \
 $MXE_INSTALL_PREFIX/bin/exchndl.dll  \
 $MXE_INSTALL_PREFIX/bin/mgwhelp.dll  \
 "
