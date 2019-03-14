@@ -31,7 +31,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
     CoreDbAccess access;
     QStringList list;
 
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
         {
@@ -82,7 +82,7 @@ QString CollectionManager::albumRootPath(const QString& givenPath)
 {
     CoreDbAccess access;
 
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         QString rootPath = location->albumRootPath();
         QString filePath = QDir::fromNativeSeparators(givenPath);
@@ -109,7 +109,7 @@ bool CollectionManager::isAlbumRoot(const QString& filePath)
 {
     CoreDbAccess access;
 
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         if (filePath == location->albumRootPath())
         {
@@ -129,7 +129,7 @@ QString CollectionManager::album(const QString& filePath)
 {
     CoreDbAccess access;
 
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         QString rootPath = location->albumRootPath();
 
@@ -198,7 +198,7 @@ QString CollectionManager::oneAlbumRootPath()
 {
     CoreDbAccess access;
 
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         if (location->status() == CollectionLocation::LocationAvailable)
         {
@@ -235,7 +235,7 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
                 {
                     QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
 
-                    foreach(const AlbumRootInfo& info, infos)
+                    foreach (const AlbumRootInfo& info, infos)
                     {
                         if (info.id == location->id())
                         {
