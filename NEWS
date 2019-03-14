@@ -68,4 +68,5 @@ BUGFIXES:
 051 ==> 405234 - Refresh does no work.
 052 ==> 403649 - Filesystem changes are not visible in album view [patch].
 053 ==> 400768 - Many different trash cans hard & slow to use.
-054 ==> 
+054 ==> 296864 - SETUP : Create interface for changing physical location or path of album.
+055 ==> 
