@@ -173,6 +173,10 @@ for app in $DLL_FILES ; do
 
 done
 
+# Remove this dll as it require the Microsoft debug SDK. Even if this dll is redistributable we won't be be relevant of this stuff.
+# This will not breal DrMinGw as backtraces will generated in a text file from home directory instead into a crash-course dialog.
+rm -f $BUNDLEDIR/dbghelp.dll
+
 #################################################################################################
 # Cleanup symbols in binary files to free space.
 
