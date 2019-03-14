@@ -131,33 +131,27 @@ QString CollectionManager::album(const QString& filePath)
 
     foreach(AlbumRootLocation* const location, d->locations)
     {
-        QString absolutePath = location->albumRootPath();
+        QString rootPath = location->albumRootPath();
 
-        if (absolutePath.isEmpty())
+        if (rootPath.isEmpty() || !filePath.startsWith(rootPath))
         {
             continue;
         }
 
-        QString firstPart = filePath.left(absolutePath.length());
+        QString album = filePath.mid(rootPath.length());
 
-        if (firstPart == absolutePath && filePath.mid(absolutePath.length(), 1) == QLatin1String("/"))
+        if (album.isEmpty() || album == QLatin1String("/"))
         {
-            if (filePath == absolutePath ||
-                (filePath.length() == absolutePath.length() + 1 && filePath.right(1) == QLatin1String("/")))
+            return QLatin1String("/");
+        }
+        else if (album.startsWith(QLatin1Char('/')))
+        {
+            if (album.endsWith(QLatin1Char('/')))
             {
-                return QLatin1String("/");
+                album.chop(1);
             }
-            else
-            {
-                QString album = filePath.mid(absolutePath.length());
 
-                if (album.endsWith(QLatin1Char('/')))
-                {
-                    album.chop(1);
-                }
-
-                return album;
-            }
+            return album;
         }
     }
 
