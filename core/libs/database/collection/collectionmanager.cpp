@@ -132,7 +132,7 @@ void CollectionManager::clear_locked()
 {
     // Internal method: Called with mutex locked
     // Cave: Difficult recursions with CoreDbAccess constructor and setParameters
-    foreach(AlbumRootLocation* const location, d->locations)
+    foreach (AlbumRootLocation* const location, d->locations)
     {
         CollectionLocation::Status oldStatus = location->status();
         location->setStatus(CollectionLocation::LocationDeleted);
