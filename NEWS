@@ -69,4 +69,5 @@ BUGFIXES:
 052 ==> 403649 - Filesystem changes are not visible in album view [patch].
 053 ==> 400768 - Many different trash cans hard & slow to use.
 054 ==> 296864 - SETUP : Create interface for changing physical location or path of album.
-055 ==> 
+055 ==> 397189 - digikam is crashing when adding this photo.
+056 ==> 
