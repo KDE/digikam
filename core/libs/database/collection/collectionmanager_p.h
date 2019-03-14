@@ -76,7 +76,15 @@ public:
         qCDebug(DIGIKAM_DATABASE_LOG) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
-        specificPath = info.specificPath;
+        QString path = info.specificPath;
+
+        if (path != QLatin1String("/") &&
+            path.endsWith(QLatin1Char('/')))
+        {
+            path.chop(1);
+        }
+
+        specificPath = path;
         identifier   = info.identifier;
         m_label      = info.label;
 

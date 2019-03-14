@@ -66,4 +66,5 @@ BUGFIXES:
 049 ==> 405347 - Selecting by aspect ratio: abs function in sqlite lowercase, in mariadb uppercase.
 050 ==> 405327 - Position and size of faces display depends on configuration setting.
 051 ==> 405234 - Refresh does no work.
-052 ==> 
+052 ==> 403649 - Filesystem changes are not visible in album view [patch].
+053 ==> 
