@@ -240,11 +240,14 @@ def main():
 
         for dep in all_deps:
             target = os.path.join(args.odir, os.path.basename(dep))
-            #print("Copying '%s' to '%s'" % (dep, target))
-            shutil.copy(dep, args.odir)
 
-            if args.upx:
-                subprocess.call(["upx", target])
+            # Only copy target file to bundle only if it do not exists yet.
+            if not os.path.exists(target):
+                print("Copying '%s' to '%s'" % (dep, target))
+                shutil.copy(dep, args.odir)
+
+                if args.upx:
+                    subprocess.call(["upx", target])
 
 # -----------------------------------------------
 
