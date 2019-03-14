@@ -70,4 +70,6 @@ BUGFIXES:
 053 ==> 400768 - Many different trash cans hard & slow to use.
 054 ==> 296864 - SETUP : Create interface for changing physical location or path of album.
 055 ==> 397189 - digikam is crashing when adding this photo.
-056 ==> 
+056 ==> 405378 - Missing libz.dll on launch.
+057 ==> 
+
