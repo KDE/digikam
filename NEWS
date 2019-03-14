@@ -67,4 +67,5 @@ BUGFIXES:
 050 ==> 405327 - Position and size of faces display depends on configuration setting.
 051 ==> 405234 - Refresh does no work.
 052 ==> 403649 - Filesystem changes are not visible in album view [patch].
-053 ==> 
+053 ==> 400768 - Many different trash cans hard & slow to use.
+054 ==> 
