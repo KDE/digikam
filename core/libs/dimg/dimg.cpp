@@ -2287,7 +2287,7 @@ void DImg::rotate(ANGLE angle)
 
             if (sixteenBit())
             {
-                ullong* newData = DImgLoader::new_failureTolerant<ullong>(w, h, 8);
+                ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
                 ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
                 ullong* to      = 0;
 
@@ -2309,7 +2309,7 @@ void DImg::rotate(ANGLE angle)
             }
             else
             {
-                uint* newData = DImgLoader::new_failureTolerant<uint>(w, h, 4);
+                uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
                 uint* from    = reinterpret_cast<uint*>(m_priv->data);
                 uint* to      = 0;
 
@@ -2417,7 +2417,7 @@ void DImg::rotate(ANGLE angle)
 
             if (sixteenBit())
             {
-                ullong* newData = DImgLoader::new_failureTolerant<ullong>(w, h, 8);
+                ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
                 ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
                 ullong* to      = 0;
 
@@ -2439,7 +2439,7 @@ void DImg::rotate(ANGLE angle)
             }
             else
             {
-                uint* newData = DImgLoader::new_failureTolerant<uint>(w, h, 4);
+                uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
                 uint* from    = reinterpret_cast<uint*>(m_priv->data);
                 uint* to      = 0;
 
