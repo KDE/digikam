@@ -65,6 +65,10 @@
 
 #include <opencv2/imgcodecs.hpp>
 
+#if OPENCV_TEST_VERSION(4,0,0)
+#   include <opencv2/imgcodecs/imgcodecs_c.h>
+#endif
+
 // Image processing module headers
 
 #include <opencv2/imgproc.hpp>
