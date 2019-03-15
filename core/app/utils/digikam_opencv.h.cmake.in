@@ -64,7 +64,6 @@
 // Image codecs module headers
 
 #include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgcodecs/imgcodecs_c.h>
 
 // Image processing module headers
 
