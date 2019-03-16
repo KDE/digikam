@@ -115,6 +115,7 @@ yum -y install wget \
                inotify-tools-devel \
                cups-devel \
                openal-soft-devel \
+               openssl-devel \
                libical-devel \
                patchelf
 
@@ -238,7 +239,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_libgphoto2    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_sane          -- -j$CPU_CORES    # depend of libgphoto2
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
