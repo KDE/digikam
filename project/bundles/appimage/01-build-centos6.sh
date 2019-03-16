@@ -219,6 +219,8 @@ fi
 . /opt/rh/devtoolset-4/enable
 
 #################################################################################################
+# Low level libraries dependencies
+# NOTE: The order to compile each component here is very important.
 
 cd $BUILDING_DIR
 
@@ -229,8 +231,7 @@ cmake3 $ORIG_WD/../3rdparty \
        -DINSTALL_ROOT=$INSTALL_DIR \
        -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
 
-# Low level libraries and Qt5 dependencies
-# NOTE: The order to compile each component here is very important.
+# --- digiKam dependencies stage1 -------------
 
 cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
@@ -240,19 +241,8 @@ cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
-cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt and libicu
-cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
-cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
-cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
-cmake3 --build . --config RelWithDebInfo --target ext_libgphoto2    -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_sane          -- -j$CPU_CORES    # depend of libgphoto2
-cmake3 --build . --config RelWithDebInfo --target ext_exiv2         -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
+
+# --- Install QtWebkit ------------------------
 
 # new dependencies for QtWebkit
 
@@ -278,7 +268,22 @@ fi
 # enable new Ruby interpreter
 . /opt/rh/rh-ruby24/enable
 
-cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt
+cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt and libicu
+
+# --- digiKam dependencies stage2 -------------
+
+cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
+cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
+cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
+cmake3 --build . --config RelWithDebInfo --target ext_libgphoto2    -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_sane          -- -j$CPU_CORES    # depend of libgphoto2
+cmake3 --build . --config RelWithDebInfo --target ext_exiv2         -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
 
 #################################################################################################
 
