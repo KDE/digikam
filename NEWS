@@ -75,5 +75,5 @@ BUGFIXES:
 057 ==> 401306 - digikam-git r41326 doesn't compile with OpenCV 4
 058 ==> 379049 - IPTC and XMP metadata not always read when adding a new album.
 059 ==> 404939 - AppImage package: integration with the OS with AppImageLauncher.
-060 ==> 
-
+060 ==> 405514 - Configure Shortcuts : Shortcuts file contains space in assigned_tags.
+061 ==> 

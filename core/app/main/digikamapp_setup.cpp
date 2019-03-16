@@ -865,7 +865,7 @@ void DigikamApp::setupAccelerators()
     connect(editComments, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateComments()));
 
     QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
-    ac->addAction(QLatin1String("assigned _tags"), assignedTags);
+    ac->addAction(QLatin1String("assigned_tags"), assignedTags);
     ac->setDefaultShortcut(assignedTags, Qt::META + Qt::Key_A);
     connect(assignedTags, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateAssignedTags()));
 }

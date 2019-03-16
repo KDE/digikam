@@ -244,12 +244,12 @@ void LightTableWindow::setupActions()
     connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
 
     QAction* const assignedTagsRight = new QAction(i18n("Show Assigned Tags on the Right"), this);
-    ac->addAction(QLatin1String("assigned _tags_right"), assignedTagsRight);
+    ac->addAction(QLatin1String("assigned_tags_right"), assignedTagsRight);
     ac->setDefaultShortcut(assignedTagsRight, Qt::META + Qt::Key_A);
     connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 
     QAction* const assignedTagsLeft = new QAction(i18n("Show Assigned Tags on the Left"), this);
-    ac->addAction(QLatin1String("assigned _tags_left"), assignedTagsLeft);
+    ac->addAction(QLatin1String("assigned_tags_left"), assignedTagsLeft);
     ac->setDefaultShortcut(assignedTagsLeft, Qt::SHIFT + Qt::META + Qt::Key_A);
     connect(assignedTagsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateAssignedTags()));
 
