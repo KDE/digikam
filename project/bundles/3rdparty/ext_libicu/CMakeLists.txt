@@ -15,11 +15,11 @@ ExternalProject_Add(ext_libicu
 
     INSTALL_DIR ${EXTPREFIX_libicu}
 
-    CONFIGURE_COMMAND cd <SOURCE_DIR>/source && ./configure -prefix ${EXTPREFIX_libicu} --enable-tests=no --enable-samples=no
+    CONFIGURE_COMMAND cd <SOURCE_DIR>/icu4c/source && ./configure -prefix ${EXTPREFIX_libicu} --enable-tests=no --enable-samples=no
 
-    BUILD_COMMAND cd <SOURCE_DIR>/source && $(MAKE)
+    BUILD_COMMAND cd <SOURCE_DIR>/icu4c/source && $(MAKE)
 
-    INSTALL_COMMAND cd <SOURCE_DIR>/source && $(MAKE) install
+    INSTALL_COMMAND cd <SOURCE_DIR>/icu4c/source && $(MAKE) install
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
