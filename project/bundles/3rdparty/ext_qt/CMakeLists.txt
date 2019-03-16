@@ -89,16 +89,16 @@ ELSEIF(${QT_VERSION} STREQUAL "5.11.3")
         ALWAYS 0
     )
 
-ELSEIF(${QT_VERSION} STREQUAL "5.12.1")
+ELSEIF(${QT_VERSION} STREQUAL "5.12.2")
 
-    INCLUDE("config-5.12.1-linux.cmake")
+    INCLUDE("config-5.12.2-linux.cmake")
 
     ExternalProject_Add(ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz
-        URL_MD5 6a37466c8c40e87d4a19c3f286ec2542
+        URL https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
+        URL_MD5 99c2eb46e533371798b4ca2d1458e065
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5121-appimage-support.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5122-appimage-support.patch
 
         CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
 
