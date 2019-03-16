@@ -73,4 +73,6 @@ BUGFIXES:
 055 ==> 397189 - digikam is crashing when adding this photo.
 056 ==> 405378 - Missing libz.dll on launch.
 057 ==> 401306 - digikam-git r41326 doesn't compile with OpenCV 4
-058 ==> 
+058 ==> 379049 - IPTC and XMP metadata not always read when adding a new album.
+059 ==> 
+
