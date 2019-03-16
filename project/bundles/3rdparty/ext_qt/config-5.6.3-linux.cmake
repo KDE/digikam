@@ -11,7 +11,7 @@ LIST(APPEND QT_CONFIG
             -prefix ${EXTPREFIX_qt}
 
             # Compilation rules to enable.
-            -release                          # no debug symbols
+            -verbose                          # Print details while configuration
             -opensource                       # Build open-source framework edition
             -confirm-license                  # Silency ack the license
             -opengl desktop                   # Enable OpenGL support from Desktop

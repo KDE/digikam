@@ -11,11 +11,12 @@ LIST(APPEND QT_CONFIG
             -prefix ${EXTPREFIX_qt}
 
             # Compilation rules to enable.
+            -verbose                          # Print details while configuration
             -opensource                       # Build open-source framework edition
             -confirm-license                  # Silency ack the license
             -opengl desktop                   # Enable OpenGL support from Desktop
             -fontconfig                       # Enable Fontconfig support
-            -openssl                          # Use SSL from system
+            -openssl-linked                   # Use SSL from system and link
             -sql-sqlite                       # Enable Sqlite plugin support
             -I ${EXTPREFIX_qt}/include
             -L ${EXTPREFIX_qt}/lib
