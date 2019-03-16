@@ -146,8 +146,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         ~CleanupData()
         {
-            free(data);
-            free(dest);
+            delete [] data;
+            delete [] dest;
 
             if (file)
             {
@@ -182,7 +182,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         void deleteData()
         {
-            free(data);
+            delete [] data;
             data = 0;
         }
 

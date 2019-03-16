@@ -84,7 +84,7 @@ public:
 
     ~Private()
     {
-        free(data);
+        delete [] data;
         delete [] lanczos_func;
     }
 

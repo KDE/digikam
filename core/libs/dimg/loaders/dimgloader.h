@@ -174,11 +174,16 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
             break;
     }
 
-    Type* reserved = (Type*)malloc(size * sizeof(Type));
+    Type* reserved = 0;
 
-    if (!reserved)
+    try
     {
-        qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size * sizeof(Type);
+        reserved = new Type[size];
+    }
+    catch (std::bad_alloc& ex)
+    {
+        qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size << ex.what();
+        reserved = 0;
     }
 
     return reserved;

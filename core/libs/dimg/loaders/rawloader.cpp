@@ -176,7 +176,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
                 if (!observer->continueQuery(m_image))
                 {
-                    free(image);
+                    delete [] image;
                     return false;
                 }
 
@@ -232,7 +232,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
                 if (!observer->continueQuery(m_image))
                 {
-                    free(image);
+                    delete [] image;
                     return false;
                 }
 

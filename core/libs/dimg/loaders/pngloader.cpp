@@ -168,7 +168,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         ~CleanupData()
         {
-            free(data);
+            delete [] data;
             freeLines();
 
             if (f)
@@ -672,7 +672,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
         ~CleanupData()
         {
-            free(data);
+            delete [] data;
 
             if (f)
             {
