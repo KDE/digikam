@@ -238,12 +238,11 @@ cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
-cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt
+cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt and libicu
 cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
 cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
 cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
@@ -252,6 +251,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_sane          -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_exiv2         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
 
 # new dependencies for QtWebkit
