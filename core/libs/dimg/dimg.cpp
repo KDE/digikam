@@ -422,6 +422,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (JPEG):
         {
+/*
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : JPEG file identified";
             JPEGLoader loader(this);
             loader.setLoadFlags(loadFlags);
@@ -434,7 +435,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
                 setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
                 return true;
             }
-
+*/
             break;
         }
 
