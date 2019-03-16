@@ -227,7 +227,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     setImageData(true, width, height, sixteenBit, alpha);
 
     // replace data
-    delete [] m_priv->data;
+    free(m_priv->data);
 
     if (null)
     {
@@ -261,7 +261,7 @@ void DImg::putImageData(uchar* const data, bool copyData)
 {
     if (!data)
     {
-        delete [] m_priv->data;
+        free(m_priv->data);
         m_priv->data = 0;
         m_priv->null = true;
     }
@@ -2247,7 +2247,7 @@ void DImg::resize(int w, int h)
 
     DImg image = smoothScale(w, h);
 
-    delete [] m_priv->data;
+    free(m_priv->data);
     m_priv->data = image.stripImageData();
     setImageDimension(w, h);
 }
@@ -2304,7 +2304,7 @@ void DImg::rotate(ANGLE angle)
 
                 switchDims = true;
 
-                delete [] m_priv->data;
+                free(m_priv->data);
                 m_priv->data = (uchar*)newData;
             }
             else
@@ -2326,7 +2326,7 @@ void DImg::rotate(ANGLE angle)
 
                 switchDims = true;
 
-                delete [] m_priv->data;
+                free(m_priv->data);
                 m_priv->data = (uchar*)newData;
             }
 
@@ -2434,7 +2434,7 @@ void DImg::rotate(ANGLE angle)
 
                 switchDims = true;
 
-                delete [] m_priv->data;
+                free(m_priv->data);
                 m_priv->data = (uchar*)newData;
             }
             else
@@ -2456,7 +2456,7 @@ void DImg::rotate(ANGLE angle)
 
                 switchDims = true;
 
-                delete [] m_priv->data;
+                free(m_priv->data);
                 m_priv->data = (uchar*)newData;
             }
 
@@ -2801,7 +2801,7 @@ void DImg::convertDepth(int depth)
             *dptr++ = (*sptr++ * 256UL) / 65536UL;
         }
 
-        delete [] m_priv->data;
+        free(m_priv->data);
         m_priv->data = data;
         m_priv->sixteenBit = false;
     }
@@ -2833,7 +2833,7 @@ void DImg::convertDepth(int depth)
             *dptr++ = (*sptr++ * 65536ULL) / 256ULL + noise;
         }
 
-        delete [] m_priv->data;
+        free(m_priv->data);
         m_priv->data       = data;
         m_priv->sixteenBit = true;
     }

@@ -153,7 +153,7 @@ void DImgLoader::loadingFailed()
 {
     if (m_image->m_priv->data)
     {
-        delete [] m_image->m_priv->data;
+        free(m_image->m_priv->data);
     }
 
     m_image->m_priv->data   = 0;

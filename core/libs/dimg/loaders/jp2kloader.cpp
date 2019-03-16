@@ -336,17 +336,17 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Get image data.
 
-    QScopedArrayPointer<uchar> data;
+    uchar* data = 0;
 
     if (m_loadFlags & LoadImageData)
     {
         if (m_sixteenBit)          // 16 bits image.
         {
-            data.reset(new_failureTolerant(imageWidth(), imageHeight(), 8));
+            data = new_failureTolerant(imageWidth(), imageHeight(), 8);
         }
         else
         {
-            data.reset(new_failureTolerant(imageWidth(), imageHeight(), 4));
+            data = new_failureTolerant(imageWidth(), imageHeight(), 4);
         }
 
         if (!data)
@@ -365,8 +365,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
 
         uint   checkPoint     = 0;
-        uchar* dst            = data.data();
-        unsigned short* dst16 = reinterpret_cast<unsigned short*>(data.data());
+        uchar* dst            = data;
+        unsigned short* dst16 = reinterpret_cast<unsigned short*>(data);
 
         for (y = 0 ; y < (long)imageHeight() ; ++y)
         {
@@ -387,6 +387,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         jas_matrix_destroy(pixels[i]);
                     }
 
+                    free(data);
                     jas_cleanup();
                     loadingFailed();
                     return false;
@@ -516,8 +517,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         jas_matrix_destroy(pixels[i]);
                     }
 
+                    free(data);
                     jas_cleanup();
-
                     loadingFailed();
                     return false;
                 }
@@ -575,7 +576,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageData() = data.take();
+    imageData() = data;
     imageSetAttribute(QLatin1String("format"),             QLatin1String("JP2"));
     imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
     imageSetAttribute(QLatin1String("originalBitDepth"),   maximum_component_depth);

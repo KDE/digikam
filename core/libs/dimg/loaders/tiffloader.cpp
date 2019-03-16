@@ -150,7 +150,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0 || rows_per_strip == 0)
     {
         qCWarning(DIGIKAM_DIMG_LOG_TIFF)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
-                   << filePath;
+                                          << filePath;
         TIFFClose(tif);
         loadingFailed();
         return false;
@@ -284,7 +284,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Get image data.
 
-    QScopedArrayPointer<uchar> data;
+    uchar* data  = 0;
+    uchar* strip = 0;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -298,12 +299,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         if (bits_per_sample == 16)          // 16 bits image.
         {
-            data.reset(new_failureTolerant(w, h, 8));
-            QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
+            data  = new_failureTolerant(w, h, 8);
+            strip = new_failureTolerant(strip_size);
 
-            if (!data || strip.isNull())
+            if (!data || !strip)
             {
                 qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to allocate memory for TIFF image" << filePath;
+                free(data);
+                free(strip);
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -321,6 +324,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                     if (!observer->continueQuery(m_image))
                     {
+                        free(data);
+                        free(strip);
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
@@ -329,11 +334,13 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     observer->progressInfo(m_image, 0.1 + (0.8 * (((float)st) / ((float)num_of_strips))));
                 }
 
-                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
 
                 if (bytesRead == -1)
                 {
                     qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read strip";
+                    free(data);
+                    free(strip);
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -345,8 +352,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     offset = 0;
                 }
 
-                ushort* stripPtr = reinterpret_cast<ushort*>(strip.data());
-                ushort* dataPtr  = reinterpret_cast<ushort*>(data.data() + offset);
+                ushort* stripPtr = reinterpret_cast<ushort*>(strip);
+                ushort* dataPtr  = reinterpret_cast<ushort*>(data + offset);
                 ushort* p;
 
                 // tiff data is read as BGR or ABGR or Greyscale
@@ -461,12 +468,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
         else if (bits_per_sample == 32)          // 32 bits image.
         {
-            data.reset(new_failureTolerant(w, h, 8));
-            QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
+            data  = new_failureTolerant(w, h, 8);
+            strip = new_failureTolerant(strip_size);
 
-            if (!data || strip.isNull())
+            if (!data || !strip)
             {
                 qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to allocate memory for TIFF image" << filePath;
+                free(data);
+                free(strip);
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -481,22 +490,26 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             {
                 if (observer && !observer->continueQuery(m_image))
                 {
+                    free(data);
+                    free(strip);
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
                 }
 
-                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
 
                 if (bytesRead == -1)
                 {
                     qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read strip";
+                    free(data);
+                    free(strip);
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
                 }
 
-                float* stripPtr = reinterpret_cast<float*>(strip.data());
+                float* stripPtr = reinterpret_cast<float*>(strip);
 
                 for (int i = 0 ; i < bytesRead / 4 ; ++i)
                 {
@@ -520,6 +533,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                     if (!observer->continueQuery(m_image))
                     {
+                        free(data);
+                        free(strip);
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
@@ -528,11 +543,13 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     observer->progressInfo(m_image, 0.1 + (0.8 * (((float)st) / ((float)num_of_strips))));
                 }
 
-                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip, strip_size);
 
                 if (bytesRead == -1)
                 {
                     qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read strip";
+                    free(data);
+                    free(strip);
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -544,8 +561,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     offset = 0;
                 }
 
-                float*  stripPtr = reinterpret_cast<float*>(strip.data());
-                ushort* dataPtr  = reinterpret_cast<ushort*>(data.data() + offset);
+                float*  stripPtr = reinterpret_cast<float*>(strip);
+                ushort* dataPtr  = reinterpret_cast<ushort*>(data + offset);
                 ushort* p;
 
                 if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_CONTIG))
@@ -641,12 +658,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
         else       // Non 16 or 32 bits images ==> get it on BGRA 8 bits.
         {
-            data.reset(new_failureTolerant(w, h, 4));
-            QScopedArrayPointer<uchar> strip(new_failureTolerant(w, rows_per_strip, 4));
+            data  = new_failureTolerant(w, h, 4);
+            strip = new_failureTolerant(w, rows_per_strip, 4);
 
-            if (!data || strip.isNull())
+            if (!data || !strip)
             {
                 qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to allocate memory for TIFF image" << filePath;
+                free(data);
+                free(strip);
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -668,6 +687,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             {
                 qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to set up RGBA reading of image, filename "
                                                  << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
+                free(data);
+                free(strip);
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -686,6 +707,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                     if (!observer->continueQuery(m_image))
                     {
+                        free(data);
+                        free(strip);
                         TIFFClose(tif);
                         loadingFailed();
                         return false;
@@ -708,9 +731,11 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 // Read data
 
-                if (TIFFRGBAImageGet(&img, reinterpret_cast<uint32*>(strip.data()), img.width, rows_to_read) == -1)
+                if (TIFFRGBAImageGet(&img, reinterpret_cast<uint32*>(strip), img.width, rows_to_read) == -1)
                 {
                     qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read image data";
+                    free(data);
+                    free(strip);
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -718,8 +743,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 pixelsRead = rows_to_read * img.width;
 
-                uchar* stripPtr = (uchar*)(strip.data());
-                uchar* dataPtr  = (uchar*)(data.data() + offset);
+                uchar* stripPtr = (uchar*)(strip);
+                uchar* dataPtr  = (uchar*)(data + offset);
                 uchar* p;
 
                 // Reverse red and blue
@@ -745,6 +770,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     // -------------------------------------------------------------------
 
+    free(strip);
     TIFFClose(tif);
 
     if (observer)
@@ -754,7 +780,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     imageWidth()  = w;
     imageHeight() = h;
-    imageData()   = data.take();
+    imageData()   = data;
     imageSetAttribute(QLatin1String("format"),             QLatin1String("TIFF"));
     imageSetAttribute(QLatin1String("originalColorModel"), colorModel);
     imageSetAttribute(QLatin1String("originalBitDepth"),   bits_per_sample);
