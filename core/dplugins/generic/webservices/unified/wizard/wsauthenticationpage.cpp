@@ -129,9 +129,12 @@ WSAuthenticationPageView::WSAuthenticationPageView(QWidget* const parent,
 
 {
     adjustSize();
-    setMinimumSize(QSize(850,800));
+    setMinimumSize(QSize(850, 800));
 
 #ifdef HAVE_QWEBENGINE
+
+    settings()->setAttribute(QWebEngineSettings::WebGLEnabled, false);
+    settings()->setAttribute(QWebEngineSettings::Accelerated2dCanvasEnabled, false);
 
     WSAuthenticationPage* const wpage = new WSAuthenticationPage(this, new QWebEngineProfile, callbackUrl);
 

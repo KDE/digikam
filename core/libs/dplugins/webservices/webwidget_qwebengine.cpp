@@ -51,7 +51,8 @@ WebWidget::WebWidget(QWidget* const parent)
       d(new Private())
 {
     d->parent = parent;
-
+    settings()->setAttribute(QWebEngineSettings::WebGLEnabled, false);
+    settings()->setAttribute(QWebEngineSettings::Accelerated2dCanvasEnabled, false);
 }
 
 void WebWidget::closeEvent(QCloseEvent* event)

@@ -29,6 +29,7 @@
 #include <QWebEngineView>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
+#include <QWebEngineSettings>
 #include <QWebEngineCookieStore>
 
 // Local includes

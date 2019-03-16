@@ -90,6 +90,9 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     setContentsMargins(QMargins());
 
 #ifdef HAVE_QWEBENGINE
+    settings()->setAttribute(QWebEngineSettings::WebGLEnabled, false);
+    settings()->setAttribute(QWebEngineSettings::Accelerated2dCanvasEnabled, false);
+
     WelcomePageViewPage* const wpage = new WelcomePageViewPage(this);
     setPage(wpage);
 #endif
