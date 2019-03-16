@@ -218,32 +218,6 @@ fi
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
 
-#################################################################################################
-# Low level libraries dependencies
-# NOTE: The order to compile each component here is very important.
-
-cd $BUILDING_DIR
-
-rm -rf $BUILDING_DIR/* || true
-
-cmake3 $ORIG_WD/../3rdparty \
-       -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
-       -DINSTALL_ROOT=$INSTALL_DIR \
-       -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
-
-# --- digiKam dependencies stage1 -------------
-
-cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
-
-# --- Install QtWebkit ------------------------
-
 # new dependencies for QtWebkit
 
 if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
@@ -268,6 +242,29 @@ fi
 # enable new Ruby interpreter
 . /opt/rh/rh-ruby24/enable
 
+#################################################################################################
+# Low level libraries dependencies
+# NOTE: The order to compile each component here is very important.
+
+cd $BUILDING_DIR
+
+rm -rf $BUILDING_DIR/* || true
+
+cmake3 $ORIG_WD/../3rdparty \
+       -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_DIR \
+       -DINSTALL_ROOT=$INSTALL_DIR \
+       -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
+
+# --- digiKam dependencies stage1 -------------
+
+cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
+cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES    # depend of qt and libicu
 
