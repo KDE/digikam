@@ -76,4 +76,5 @@ BUGFIXES:
 058 ==> 379049 - IPTC and XMP metadata not always read when adding a new album.
 059 ==> 404939 - AppImage package: integration with the OS with AppImageLauncher.
 060 ==> 405514 - Configure Shortcuts : Shortcuts file contains space in assigned_tags.
-061 ==> 
+061 ==> 405149 - The "File Name" in the thumbnail view is not visible.
+062 ==> 
