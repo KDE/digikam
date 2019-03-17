@@ -95,7 +95,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
       d(new Private)
 {
     setObjectName(QLatin1String("AlbumFolderView Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F1);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F1);
     d->albumModificationHelper = albumModificationHelper;
 
     const int spacing          = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -225,7 +225,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
       d(new Private)
 {
     setObjectName(QLatin1String("TagView Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F2);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F2);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -451,7 +451,7 @@ LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
       d(new Private)
 {
     setObjectName(QLatin1String("Labels Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F3);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F3);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -537,7 +537,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("DateFolderView Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F4);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F4);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -660,7 +660,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("TimeLine Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F5);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F5);
 
     d->searchModificationHelper = searchModificationHelper;
     d->timer                    = new QTimer(this);
@@ -1107,7 +1107,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("Search Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F6);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F6);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -1218,7 +1218,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("Fuzzy Search Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F7);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F7);
 
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -1328,7 +1328,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("GPS Search Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F8);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F8);
 
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
@@ -1416,7 +1416,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
       d(new Private)
 {
     setObjectName(QLatin1String("People Sidebar"));
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F9);
+    setProperty("Shortcut", Qt::CTRL + Qt::SHIFT + Qt::Key_F9);
 
     const int spacing           = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 

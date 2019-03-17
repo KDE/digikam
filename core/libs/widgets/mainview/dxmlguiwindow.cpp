@@ -310,32 +310,32 @@ void DXmlGuiWindow::createSidebarActions()
     QAction* const tlsb         = new QAction(i18n("Toggle Left Side-bar"), this);
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
     ac->addAction(QLatin1String("toggle-left-sidebar"), tlsb);
-    ac->setDefaultShortcut(tlsb, Qt::CTRL + Qt::META + Qt::Key_Left);
+    ac->setDefaultShortcut(tlsb, Qt::CTRL + Qt::ALT + Qt::Key_Left);
 
     QAction* const trsb = new QAction(i18n("Toggle Right Side-bar"), this);
     connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
     ac->addAction(QLatin1String("toggle-right-sidebar"), trsb);
-    ac->setDefaultShortcut(trsb, Qt::CTRL + Qt::META + Qt::Key_Right);
+    ac->setDefaultShortcut(trsb, Qt::CTRL + Qt::ALT + Qt::Key_Right);
 
     QAction* const plsb = new QAction(i18n("Previous Left Side-bar Tab"), this);
     connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
     ac->addAction(QLatin1String("previous-left-sidebar-tab"), plsb);
-    ac->setDefaultShortcut(plsb, Qt::CTRL + Qt::META + Qt::Key_Home);
+    ac->setDefaultShortcut(plsb, Qt::CTRL + Qt::ALT + Qt::Key_Home);
 
     QAction* const nlsb = new QAction(i18n("Next Left Side-bar Tab"), this);
     connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
     ac->addAction(QLatin1String("next-left-sidebar-tab"), nlsb);
-    ac->setDefaultShortcut(nlsb, Qt::CTRL + Qt::META + Qt::Key_End);
+    ac->setDefaultShortcut(nlsb, Qt::CTRL + Qt::ALT + Qt::Key_End);
 
     QAction* const prsb = new QAction(i18n("Previous Right Side-bar Tab"), this);
     connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
     ac->addAction(QLatin1String("previous-right-sidebar-tab"), prsb);
-    ac->setDefaultShortcut(prsb, Qt::CTRL + Qt::META + Qt::Key_PageUp);
+    ac->setDefaultShortcut(prsb, Qt::CTRL + Qt::ALT + Qt::Key_PageUp);
 
     QAction* const nrsb = new QAction(i18n("Next Right Side-bar Tab"), this);
     connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
     ac->addAction(QLatin1String("next-right-sidebar-tab"), nrsb);
-    ac->setDefaultShortcut(nrsb, Qt::CTRL + Qt::META + Qt::Key_PageDown);
+    ac->setDefaultShortcut(nrsb, Qt::CTRL + Qt::ALT + Qt::Key_PageDown);
 }
 
 void DXmlGuiWindow::createSettingsActions()

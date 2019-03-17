@@ -99,7 +99,7 @@ void SmugPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to &SmugMug..."));
     ac->setObjectName(QLatin1String("export_smugmug"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_S);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_S);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotSmugMugExport()));
@@ -111,7 +111,7 @@ void SmugPlugin::setup(QObject* const parent)
     ac2->setText(i18nc("@action", "Import from &SmugMug..."));
     ac2->setObjectName(QLatin1String("import_smugmug"));
     ac2->setActionCategory(DPluginAction::GenericImport);
-    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
+    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_S);
 
     connect(ac2, SIGNAL(triggered(bool)),
             this, SLOT(slotSmugMugImport()));

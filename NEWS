@@ -77,4 +77,5 @@ BUGFIXES:
 059 ==> 404939 - AppImage package: integration with the OS with AppImageLauncher.
 060 ==> 405514 - Configure Shortcuts : Shortcuts file contains space in assigned_tags.
 061 ==> 405149 - The "File Name" in the thumbnail view is not visible.
-062 ==> 
+062 ==> 405512 - Meta Key Not Useful For Key Modifier In Windows.
+063 ==> 

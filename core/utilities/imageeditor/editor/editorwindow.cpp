@@ -412,7 +412,7 @@ void EditorWindow::setupStandardActions()
     d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
-    ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
+    ac->setDefaultShortcut(d->openWithAction, Qt::CTRL + Qt::Key_F4);
     d->openWithAction->setEnabled(false);
 
     m_fileDeleteAction = new QAction(QIcon::fromTheme(QLatin1String("user-trash-full")), i18nc("Non-pluralized", "Move to Trash"), this);

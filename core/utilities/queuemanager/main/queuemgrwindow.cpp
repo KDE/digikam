@@ -335,7 +335,7 @@ void QueueMgrWindow::setupActions()
     d->runAllAction->setEnabled(false);
     connect(d->runAllAction, SIGNAL(triggered()), this, SLOT(slotRunAll()));
     ac->addAction(QLatin1String("queuemgr_run_all"), d->runAllAction);
-    ac->setDefaultShortcut(d->runAllAction, Qt::ALT + Qt::CTRL + Qt::Key_P);
+    ac->setDefaultShortcut(d->runAllAction, Qt::CTRL + Qt::ALT + Qt::Key_P);
 
     d->stopAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-stop")), i18n("Stop"), this);
     d->stopAction->setEnabled(false);
