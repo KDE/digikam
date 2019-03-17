@@ -19,6 +19,16 @@ if [ "root" != "$USER" ]; then
     exit
 fi
 
+if [[ "$(arch)" = "x86_64" ]] ; then
+
+    LIB_PATH_ALT=lib64
+
+else
+
+    LIB_PATH_ALT=lib
+
+fi
+
 #################################################################################################
 # Manage script traces to log file
 
@@ -47,7 +57,6 @@ CentOS6Adjustments
 ORIG_WD="`pwd`"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
-LIB_PATH_ALT=lib
 
 #################################################################################################
 
@@ -113,7 +122,7 @@ ln -s ../digikam/breeze.rcc               breeze.rcc
 ln -s ../digikam/breeze-dark.rcc          breeze-dark.rcc
 
 cd $APP_IMG_DIR
-cp $ORIG_WD/data/qt.conf                  ./usr/bin
+cp $ORIG_WD/data/qt.conf                          ./usr/bin
 cp -r $INSTALL_DIR/share/lensfun                  ./usr/share
 cp -r $INSTALL_DIR/share/knotifications5          ./usr/share
 cp -r $INSTALL_DIR/share/kservices5               ./usr/share
@@ -124,7 +133,7 @@ cp -r $INSTALL_DIR/share/solid                    ./usr/share
 cp -r $INSTALL_DIR/share/OpenCV                   ./usr/share
 cp -r $INSTALL_DIR/share/dbus-1/interfaces/kf5*   ./usr/share/dbus-1/interfaces/
 cp -r $INSTALL_DIR/share/dbus-1/services/*kde*    ./usr/share/dbus-1/services/
-cp -r $INSTALL_DIR/$LIB_PATH_ALT/libexec/kf5      ./usr/lib/libexec/
+cp -r $INSTALL_DIR/lib/libexec/kf5                ./usr/lib/libexec/
 
 # AppImage stream data file
 cp -r $INSTALL_DIR/share/metainfo/org.kde.digikam.appdata.xml   ./usr/share/metainfo/digikam.appdata.xml
@@ -185,14 +194,14 @@ done
 
 # Marble data and plugins files
 
-cp -r $INSTALL_DIR/$LIB_PATH_ALT/marble/plugins/ ./usr/bin/
+cp -r $INSTALL_DIR/lib/marble/plugins/ ./usr/bin/
 
 cp -r $INSTALL_DIR/share/marble/data             ./usr/bin/
 
 # otherwise segfaults!?
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # Fedora 23 seemed to be missing SOMETHING from the Centos 6.7. The only message was:
 # This application failed to start because it could not find or load the Qt platform plugin "xcb".
@@ -202,13 +211,13 @@ cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">"
 # Which means that we have to copy libEGL.so.1 in too
 
 # Otherwise F23 cannot load the Qt platform plugin "xcb"
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # let's not copy xcb itself, that breaks on dri3 systems https://bugs.kde.org/show_bug.cgi?id=360552
 #cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # For Fedora 20
-cp $(ldconfig -p | grep $INSTALL_DIR/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
+#######cp $(ldconfig -p | grep $INSTALL_DIR/lib/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 cp $INSTALL_DIR/bin/digikam                 ./usr/bin
 cp $INSTALL_DIR/bin/showfoto                ./usr/bin
@@ -230,13 +239,13 @@ CopyReccursiveDependencies $INSTALL_DIR/bin/digikam                  ./usr/lib
 CopyReccursiveDependencies $INSTALL_DIR/bin/showfoto                 ./usr/lib
 CopyReccursiveDependencies $INSTALL_DIR/plugins/platforms/libqxcb.so ./usr/lib
 
-FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/libdigikam*.so)
+FILES=$(ls $INSTALL_DIR/lib/libdigikam*.so)
 
 for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
 done
 
-FILES=$(ls $INSTALL_DIR/$LIB_PATH_ALT/plugins/imageformats/*.so)
+FILES=$(ls $INSTALL_DIR/plugins/imageformats/*.so)
 
 for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
