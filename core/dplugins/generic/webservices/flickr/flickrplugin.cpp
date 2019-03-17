@@ -101,7 +101,7 @@ void FlickrPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to &Flickr..."));
     ac->setObjectName(QLatin1String("export_flickr"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_R);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_R);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotFlickr()));

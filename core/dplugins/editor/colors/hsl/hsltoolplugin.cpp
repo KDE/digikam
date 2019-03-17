@@ -88,7 +88,7 @@ void HSLToolPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Hue/Saturation/Lightness..."));
     ac->setObjectName(QLatin1String("editorwindow_color_hsl"));
     // NOTE: Photoshop 7 use CTRL+U.
-    ac->setShortcut(Qt::CTRL+Qt::Key_U);
+    ac->setShortcut(Qt::CTRL + Qt::Key_U);
     ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),

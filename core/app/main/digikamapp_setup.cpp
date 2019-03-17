@@ -374,7 +374,7 @@ void DigikamApp::setupActions()
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
     ac->addAction(QLatin1String("image_add_to_lighttable"), d->imageAddLightTableAction);
-    ac->setDefaultShortcut(d->imageAddLightTableAction, Qt::SHIFT + Qt::CTRL + Qt::Key_L);
+    ac->setDefaultShortcut(d->imageAddLightTableAction, Qt::CTRL + Qt::SHIFT + Qt::Key_L);
 
     // -----------------------------------------------------------
 
@@ -393,7 +393,7 @@ void DigikamApp::setupActions()
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     ac->addAction(QLatin1String("image_add_to_new_queue"), d->imageAddNewQueueAction);
-    ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::SHIFT + Qt::CTRL + Qt::Key_B);
+    ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::CTRL + Qt::SHIFT + Qt::Key_B);
 
     // -----------------------------------------------------------------
 
@@ -970,14 +970,14 @@ void DigikamApp::setupImageTransformActions()
 
     QAction* const left = ac->addAction(QLatin1String("rotate_ccw"));
     left->setText(i18nc("rotate image left", "Left"));
-    ac->setDefaultShortcut(left, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
+    ac->setDefaultShortcut(left, Qt::CTRL + Qt::SHIFT + Qt::Key_Left);
     connect(left, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(left);
 
     QAction* const right = ac->addAction(QLatin1String("rotate_cw"));
     right->setText(i18nc("rotate image right", "Right"));
-    ac->setDefaultShortcut(right, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
+    ac->setDefaultShortcut(right, Qt::CTRL + Qt::SHIFT + Qt::Key_Right);
     connect(right, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(right);

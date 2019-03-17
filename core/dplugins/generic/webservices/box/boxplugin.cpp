@@ -89,7 +89,7 @@ void BoxPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to &Box..."));
     ac->setObjectName(QLatin1String("export_box"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_B);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_B);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotBox()));

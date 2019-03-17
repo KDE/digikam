@@ -180,12 +180,12 @@ void LightTableWindow::setupActions()
     d->rightZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
     ac->addAction(QLatin1String("lighttable_zoomto100percents_right"), d->rightZoomTo100percents);
-    ac->setDefaultShortcut(d->rightZoomTo100percents, Qt::SHIFT + Qt::CTRL + Qt::Key_Period);
+    ac->setDefaultShortcut(d->rightZoomTo100percents, Qt::CTRL + Qt::SHIFT + Qt::Key_Period);
 
     d->rightZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     ac->addAction(QLatin1String("lighttable_zoomfit2window_right"), d->rightZoomFitToWindowAction);
-    ac->setDefaultShortcut(d->rightZoomFitToWindowAction, Qt::SHIFT + Qt::CTRL + Qt::Key_E);
+    ac->setDefaultShortcut(d->rightZoomFitToWindowAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E);
 
     // -----------------------------------------------------------
 

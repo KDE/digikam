@@ -114,7 +114,7 @@ void SlideShowPlugin::setup(QObject* const parent)
 
         QCation* const slideShowSelectionAction = new QAction(i18n("Selection"), parent);
         slideShowSelectionAction->setObjectName(QLatin1String("slideshow_selected"));
-        slideShowSelectionAction->setShortcut(Qt::ALT+Qt::Key_F9);
+        slideShowSelectionAction->setShortcut(Qt::ALT + Qt::Key_F9);
         slideShowAction->addAction(d->slideShowSelectionAction);
 
         connect(slideShowSelectionAction, SIGNAL(triggered()),
@@ -122,7 +122,7 @@ void SlideShowPlugin::setup(QObject* const parent)
 
         QAction* const slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), parent);
         slideShowRecursiveAction->setObjectName(QLatin1String("slideshow_recursive"));
-        slideShowRecursiveAction->setShortcut(Qt::SHIFT+Qt::Key_F9);
+        slideShowRecursiveAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
         slideShowAction->addAction(d->slideShowRecursiveAction);
 
         connect(slideShowRecursiveAction, SIGNAL(triggered()),

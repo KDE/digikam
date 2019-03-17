@@ -89,7 +89,7 @@ void RajcePlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to &Rajce..."));
     ac->setObjectName(QLatin1String("export_rajce"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_J);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_J);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotRajce()));
