@@ -96,7 +96,7 @@ void HtmlGalleryPlugin::setup(QObject* const parent)
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Create Html gallery..."));
     ac->setObjectName(QLatin1String("htmlgallery"));
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_H);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_H);
     ac->setActionCategory(DPluginAction::GenericTool);
 
     connect(ac, SIGNAL(triggered(bool)),

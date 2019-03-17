@@ -97,7 +97,7 @@ void FTPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to remote storage..."));
     ac->setObjectName(QLatin1String("export_filetransfer"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_K);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_K);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotFileTransferExport()));
@@ -109,7 +109,7 @@ void FTPlugin::setup(QObject* const parent)
     ac2->setText(i18nc("@action", "Import from remote storage..."));
     ac2->setObjectName(QLatin1String("import_filetransfer"));
     ac2->setActionCategory(DPluginAction::GenericImport);
-    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_I);
+    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_K);
 
     connect(ac2, SIGNAL(triggered(bool)),
             this, SLOT(slotFileTransferImport()));

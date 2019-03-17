@@ -78,7 +78,7 @@ void LightTableWindow::setupActions()
     openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
-    ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
+    ac->setDefaultShortcut(openWithAction, Qt::CTRL + Qt::Key_F4);
 
     d->removeItemAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setEnabled(false);
@@ -163,7 +163,7 @@ void LightTableWindow::setupActions()
     d->leftZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->leftZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotLeftFitToWindow()));
     ac->addAction(QLatin1String("lighttable_zoomfit2window_left"), d->leftZoomFitToWindowAction);
-    ac->setDefaultShortcut(d->leftZoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
+    ac->setDefaultShortcut(d->leftZoomFitToWindowAction, Qt::CTRL + Qt::ALT + Qt::Key_E);
 
     // Right Panel Zoom Actions
 
@@ -225,32 +225,32 @@ void LightTableWindow::setupActions()
 
     QAction* const editTitlesRight = new QAction(i18n("Edit Titles on the Right"), this);
     ac->addAction(QLatin1String("edit_titles_right"), editTitlesRight);
-    ac->setDefaultShortcut(editTitlesRight, Qt::META + Qt::Key_T);
+    ac->setDefaultShortcut(editTitlesRight, Qt::ALT + Qt::SHIFT + Qt::Key_T);
     connect(editTitlesRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
     QAction* const editCommentsRight = new QAction(i18n("Edit Comments on the Right"), this);
     ac->addAction(QLatin1String("edit_comments_right"), editCommentsRight);
-    ac->setDefaultShortcut(editCommentsRight, Qt::META + Qt::Key_C);
+    ac->setDefaultShortcut(editCommentsRight, Qt::ALT + Qt::SHIFT + Qt::Key_C);
     connect(editCommentsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
+
+    QAction* const assignedTagsRight = new QAction(i18n("Show Assigned Tags on the Right"), this);
+    ac->addAction(QLatin1String("assigned_tags_right"), assignedTagsRight);
+    ac->setDefaultShortcut(assignedTagsRight, Qt::ALT + Qt::SHIFT + Qt::Key_A);
+    connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 
     QAction* const editTitlesLeft = new QAction(i18n("Edit Titles on the Left"), this);
     ac->addAction(QLatin1String("edit_titles_left"), editTitlesLeft);
-    ac->setDefaultShortcut(editTitlesLeft, Qt::SHIFT + Qt::META + Qt::Key_T);
+    ac->setDefaultShortcut(editTitlesLeft, Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_T);
     connect(editTitlesLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateTitles()));
 
     QAction* const editCommentsLeft = new QAction(i18n("Edit Comments on the Left"), this);
     ac->addAction(QLatin1String("edit_comments_left"), editCommentsLeft);
-    ac->setDefaultShortcut(editCommentsLeft, Qt::SHIFT + Qt::META + Qt::Key_C);
+    ac->setDefaultShortcut(editCommentsLeft, Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_C);
     connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
-
-    QAction* const assignedTagsRight = new QAction(i18n("Show Assigned Tags on the Right"), this);
-    ac->addAction(QLatin1String("assigned_tags_right"), assignedTagsRight);
-    ac->setDefaultShortcut(assignedTagsRight, Qt::META + Qt::Key_A);
-    connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 
     QAction* const assignedTagsLeft = new QAction(i18n("Show Assigned Tags on the Left"), this);
     ac->addAction(QLatin1String("assigned_tags_left"), assignedTagsLeft);
-    ac->setDefaultShortcut(assignedTagsLeft, Qt::SHIFT + Qt::META + Qt::Key_A);
+    ac->setDefaultShortcut(assignedTagsLeft, Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_A);
     connect(assignedTagsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateAssignedTags()));
 
     // ---------------------------------------------------------------------------------

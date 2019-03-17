@@ -101,7 +101,7 @@ void GSPlugin::setup(QObject* const parent)
     ac1->setText(i18nc("@action", "Export to &Google Photos..."));
     ac1->setObjectName(QLatin1String("export_googlephoto"));
     ac1->setActionCategory(DPluginAction::GenericExport);
-    ac1->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_P);
+    ac1->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_P);
 
     connect(ac1, SIGNAL(triggered(bool)),
             this, SLOT(slotExportGphoto()));
@@ -113,7 +113,7 @@ void GSPlugin::setup(QObject* const parent)
     ac2->setText(i18nc("@action", "Import from &Google Photos..."));
     ac2->setObjectName(QLatin1String("import_googlephoto"));
     ac2->setActionCategory(DPluginAction::GenericImport);
-    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
+    ac2->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_P);
 
     connect(ac2, SIGNAL(triggered(bool)),
             this, SLOT(slotImportGphoto()));
@@ -125,7 +125,7 @@ void GSPlugin::setup(QObject* const parent)
     ac3->setText(i18nc("@action", "Export to &Google Drive..."));
     ac3->setObjectName(QLatin1String("export_googledrive"));
     ac3->setActionCategory(DPluginAction::GenericExport);
-    ac3->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
+    ac3->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_G);
 
     connect(ac3, SIGNAL(triggered(bool)),
             this, SLOT(slotExportGdrive()));

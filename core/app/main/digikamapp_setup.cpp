@@ -350,7 +350,7 @@ void DigikamApp::setupActions()
     d->openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
     connect(d->openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
-    ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
+    ac->setDefaultShortcut(d->openWithAction, Qt::CTRL + Qt::Key_F4);
 
     d->ieAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Image Editor"), this);
     d->ieAction->setWhatsThis(i18n("Open the image editor."));
@@ -681,7 +681,7 @@ void DigikamApp::setupActions()
     d->zoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     ac->addAction(QLatin1String("album_zoomfit2window"), d->zoomFitToWindowAction);
-    ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
+    ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::CTRL + Qt::ALT + Qt::Key_E);
 
     // -----------------------------------------------------------
 
@@ -856,17 +856,17 @@ void DigikamApp::setupAccelerators()
 
     QAction* const editTitles = new QAction(i18n("Edit Titles"), this);
     ac->addAction(QLatin1String("edit_titles"), editTitles);
-    ac->setDefaultShortcut(editTitles, Qt::META + Qt::Key_T);
+    ac->setDefaultShortcut(editTitles, Qt::ALT + Qt::SHIFT + Qt::Key_T);
     connect(editTitles, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateTitles()));
 
     QAction* const editComments = new QAction(i18n("Edit Comments"), this);
     ac->addAction(QLatin1String("edit_comments"), editComments);
-    ac->setDefaultShortcut(editComments, Qt::META + Qt::Key_C);
+    ac->setDefaultShortcut(editComments, Qt::ALT + Qt::SHIFT + Qt::Key_C);
     connect(editComments, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateComments()));
 
     QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
     ac->addAction(QLatin1String("assigned_tags"), assignedTags);
-    ac->setDefaultShortcut(assignedTags, Qt::META + Qt::Key_A);
+    ac->setDefaultShortcut(assignedTags, Qt::ALT + Qt::SHIFT + Qt::Key_A);
     connect(assignedTags, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
