@@ -862,13 +862,13 @@ void GLViewerWidget::slotTimeoutMouseMove()
  */
 OGLstate GLViewerWidget::getOGLstate() const
 {
-    //no OpenGL context is found. Are the drivers ok?
+    // No OpenGL context is found. Are the drivers ok?
     if (!isValid())
     {
         return oglNoContext;
     }
 
-    //GL_ARB_texture_rectangle is not supported
+    // GL_ARB_texture_rectangle is not supported
     QString s = QString::fromLatin1(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS)));
 
     if (!s.contains(QString::fromLatin1("GL_ARB_texture_rectangle"), Qt::CaseInsensitive))
@@ -876,7 +876,7 @@ OGLstate GLViewerWidget::getOGLstate() const
         return oglNoRectangularTexture;
     }
 
-    //everything is ok!
+    // Everything is ok!
     return oglOK;
 }
 

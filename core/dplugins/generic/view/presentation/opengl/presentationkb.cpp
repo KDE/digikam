@@ -696,6 +696,26 @@ void PresentationKB::slotMouseMoveTimeOut()
     setCursor(QCursor(Qt::BlankCursor));
 }
 
+bool PresentationKB::checkOpenGL() const
+{
+    // No OpenGL context is found. Are the drivers ok?
+    if (!isValid())
+    {
+        return false;
+    }
+
+    // GL_EXT_texture3D is not supported
+    QString s = QString::fromLatin1(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS)));
+
+    if (!s.contains(QString::fromLatin1("GL_EXT_texture3D"), Qt::CaseInsensitive))
+    {
+        return false;
+    }
+
+    // Everything is ok!
+    return true;
+}
+
 void PresentationKB::slotClose()
 {
     close();

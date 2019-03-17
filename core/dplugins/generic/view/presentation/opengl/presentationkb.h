@@ -122,6 +122,8 @@ public:
     static QStringList            effectNames();
     static QMap<QString, QString> effectNamesI18N();
 
+    bool checkOpenGL() const;
+
 private:
 
     float    aspect() const;
