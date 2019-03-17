@@ -119,6 +119,7 @@ yum -y install wget \
                libical-devel \
                libcap-devel \
                libXScrnSaver-devel \
+               mesa-libEGL-devel \
                patchelf \
                dpkg
 
