@@ -411,7 +411,7 @@ cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icon
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/mimetypes
 cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
 
-OCmkdir -p $ORIG_WD/bundle
+mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
 
 echo -e "---------- Create Bundle with AppImage SDK stage2\n"

@@ -93,7 +93,7 @@ FILES=$(ldd $1 | grep "=>" | awk '{print $3}')
 
 for FILE in $FILES ; do
     if [ -f "$FILE" ] ; then
-        cp $FILE $2 2> /dev/null || true
+        cp -u $FILE $2 2> /dev/null || true
 #        echo "   ==> $FILE"
     fi
 done

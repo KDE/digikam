@@ -55,6 +55,6 @@ DK_DEBUG=1
 DK_SIGN=0
 
 # Upload automatically bundle to files.kde.org (pre-release only).
-DK_UPLOAD=1
+DK_UPLOAD=0
 DK_UPLOADURL="digikam@milonia.kde.org"
 DK_UPLOADDIR="/srv/archives/files/digikam/"
