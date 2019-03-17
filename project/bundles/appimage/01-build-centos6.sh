@@ -281,7 +281,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_exiv2         -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_opencv        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_lensfun       -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_liblqr        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
+#cmake3 --build . --config RelWithDebInfo --target ext_linuxdeployqt -- -j$CPU_CORES    # depend of qt
 
 #################################################################################################
 
