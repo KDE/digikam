@@ -118,6 +118,7 @@ yum -y install wget \
                openssl-devel \
                libical-devel \
                libcap-devel \
+               libXScrnSaver-devel \
                patchelf \
                dpkg
 
