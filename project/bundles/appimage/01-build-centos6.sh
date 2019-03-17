@@ -117,7 +117,8 @@ yum -y install wget \
                openal-soft-devel \
                openssl-devel \
                libical-devel \
-               patchelf
+               patchelf \
+               dpkg
 
 #################################################################################################
 

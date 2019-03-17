@@ -48,8 +48,8 @@ ORIG_WD="`pwd`"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
 
-mv $INSTALL_DIR/lib64/* $INSTALL_DIR/lib/
-rm -rf $INSTALL_DIR/lib64/
+#mv $INSTALL_DIR/lib64/* $INSTALL_DIR/lib/
+#rm -rf $INSTALL_DIR/lib64/
 
 LIB_PATH_ALT=lib
 
