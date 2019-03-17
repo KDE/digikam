@@ -121,6 +121,11 @@ bool GLViewerTexture::load(const QString& fn, const QSize& size)
                                                                qMax(size.width(), size.height()),
                                                                d->iccProfile).copyQImage();
 
+    if (d->qimage.isNull())
+    {
+        return false;
+    }
+
     // handle rotation
 
     DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(d->filename)));
@@ -168,6 +173,11 @@ bool GLViewerTexture::loadFullSize()
     d->qimage       = PreviewLoadThread::loadHighQualitySynchronously(d->filename,
                                                                       PreviewSettings::RawPreviewAutomatic,
                                                                       d->iccProfile).copyQImage();
+
+    if (d->qimage.isNull())
+    {
+        return false;
+    }
 
     d->initial_size = d->qimage.size();
 

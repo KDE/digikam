@@ -91,10 +91,19 @@ protected:
         }
 
         m_imageLock->lock();
-        m_loadedImages->insert(m_path, newImage.scaled(m_swidth,
-                                                       m_sheight,
-                                                       Qt::KeepAspectRatio,
-                                                       Qt::SmoothTransformation));
+
+        if (newImage.isNull())
+        {
+            m_loadedImages->insert(m_path, newImage);
+        }
+        else
+        {
+            m_loadedImages->insert(m_path, newImage.scaled(m_swidth,
+                                                           m_sheight,
+                                                           Qt::KeepAspectRatio,
+                                                           Qt::SmoothTransformation));
+        }
+
         m_imageLock->unlock();
     }
 
