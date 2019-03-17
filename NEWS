@@ -78,4 +78,5 @@ BUGFIXES:
 060 ==> 405514 - Configure Shortcuts : Shortcuts file contains space in assigned_tags.
 061 ==> 405149 - The "File Name" in the thumbnail view is not visible.
 062 ==> 405512 - Meta Key Not Useful For Key Modifier In Windows.
-063 ==> 
+063 ==> 405513 - Configure Shortcuts : Defaults Button Does Not Apply To New Schemes.
+064 ==> 
