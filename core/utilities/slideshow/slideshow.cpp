@@ -371,19 +371,10 @@ void SlideShow::slotImageLoaded(bool loaded)
             {
                 d->osd->pause(false);
             }
-
-            preloadNextItem();
         }
     }
-    else
-    {
-#ifdef HAVE_MEDIAPLAYER
-        // Try to load item as video
-        d->videoView->setCurrentUrl(currentItem());
-#else
-        slotVideoLoaded(false);
-#endif
-    }
+
+    preloadNextItem();
 }
 
 void SlideShow::slotVideoLoaded(bool loaded)
