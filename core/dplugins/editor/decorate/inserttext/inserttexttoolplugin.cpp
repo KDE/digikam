@@ -90,7 +90,7 @@ void InsertTextToolPlugin::setup(QObject* const parent)
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Insert Text..."));
     ac->setObjectName(QLatin1String("editorwindow_decorate_inserttext"));
-    ac->setShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T);
+    ac->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_T);
     ac->setActionCategory(DPluginAction::EditorDecorate);
 
     connect(ac, SIGNAL(triggered(bool)),

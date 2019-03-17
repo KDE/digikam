@@ -87,7 +87,7 @@ void FilmToolPlugin::setup(QObject* const parent)
     ac->setIcon(icon());
     ac->setText(i18nc("@action", "Color Negative..."));
     ac->setObjectName(QLatin1String("editorwindow_color_film"));
-    ac->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+    ac->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_I);
     ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),

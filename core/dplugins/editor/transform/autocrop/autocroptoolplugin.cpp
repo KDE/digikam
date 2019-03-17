@@ -92,7 +92,7 @@ void AutoCropToolPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "&Auto-Crop"));
     ac->setObjectName(QLatin1String("editorwindow_transform_autocrop"));
     ac->setWhatsThis(i18n("This option can be used to crop automatically the image."));
-    ac->setShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_X);
+    ac->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_X);
     ac->setActionCategory(DPluginAction::EditorTransform);
 
     connect(ac, SIGNAL(triggered(bool)),

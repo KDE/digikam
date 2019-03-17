@@ -88,7 +88,7 @@ void AdjustLevelsToolPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Levels Adjust..."));
     ac->setObjectName(QLatin1String("editorwindow_color_adjustlevels"));
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
-    ac->setShortcut(Qt::CTRL+Qt::Key_L);
+    ac->setShortcut(Qt::CTRL + Qt::Key_L);
     ac->setActionCategory(DPluginAction::EditorColors);
 
     connect(ac, SIGNAL(triggered(bool)),

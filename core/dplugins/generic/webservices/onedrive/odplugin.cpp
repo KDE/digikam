@@ -89,7 +89,7 @@ void ODPlugin::setup(QObject* const parent)
     ac->setText(i18nc("@action", "Export to &Onedrive..."));
     ac->setObjectName(QLatin1String("export_onedrive"));
     ac->setActionCategory(DPluginAction::GenericExport);
-    ac->setShortcut(Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_O);
+    ac->setShortcut(Qt::CTRL + Qt::ALT + Qt::SHIFT + Qt::Key_O);
 
     connect(ac, SIGNAL(triggered(bool)),
             this, SLOT(slotOneDrive()));

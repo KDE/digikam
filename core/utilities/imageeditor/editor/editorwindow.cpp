@@ -593,14 +593,14 @@ void EditorWindow::setupStandardActions()
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
     connect(d->rotateLeftAction, SIGNAL(triggered()), this, SLOT(slotRotateLeftIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateleft"), d->rotateLeftAction);
-    ac->setDefaultShortcut(d->rotateLeftAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
+    ac->setDefaultShortcut(d->rotateLeftAction, Qt::CTRL + Qt::SHIFT + Qt::Key_Left);
     d->rotateLeftAction->setEnabled(false);
 
     d->rotateRightAction = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-right")), i18n("Rotate Right"), this);
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
     connect(d->rotateRightAction, SIGNAL(triggered()), this, SLOT(slotRotateRightIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateright"), d->rotateRightAction);
-    ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
+    ac->setDefaultShortcut(d->rotateRightAction, Qt::CTRL + Qt::SHIFT + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
 
     m_showBarAction = thumbBar()->getToggleAction(this);
