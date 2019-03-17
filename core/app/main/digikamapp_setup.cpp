@@ -362,7 +362,7 @@ void DigikamApp::setupActions()
     d->ltAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Light Table"), this);
     connect(d->ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     ac->addAction(QLatin1String("light_table"), d->ltAction);
-    ac->setDefaultShortcut(d->ltAction, Qt::Key_L);
+    ac->setDefaultShortcut(d->ltAction, Qt::SHIFT + Qt::Key_L);
 
     d->imageLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
@@ -381,7 +381,7 @@ void DigikamApp::setupActions()
     d->bqmAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Batch Queue Manager"), this);
     connect(d->bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
     ac->addAction(QLatin1String("queue_manager"), d->bqmAction);
-    ac->setDefaultShortcut(d->bqmAction, Qt::Key_B);
+    ac->setDefaultShortcut(d->bqmAction, Qt::SHIFT + Qt::Key_B);
 
     d->imageAddCurrentQueueAction = new QAction(QIcon::fromTheme(QLatin1String("go-up")), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
