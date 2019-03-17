@@ -378,10 +378,16 @@ void SlideShow::slotImageLoaded(bool loaded)
     else
     {
 #ifdef HAVE_MEDIAPLAYER
-        // Try to load item as video
-        d->videoView->setCurrentUrl(currentItem());
+        // Try to load only GIF Images
+        QMimeDatabase mimeDB;
+
+        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
+                                   .name() == QLatin1String("image/gif"))
+        {
+            d->videoView->setCurrentUrl(currentItem());
+        }
 #else
-        slotVideoLoaded(false);
+        preloadNextItem();
 #endif
     }
 }

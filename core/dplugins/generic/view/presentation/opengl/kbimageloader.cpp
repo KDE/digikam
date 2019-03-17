@@ -206,12 +206,6 @@ bool KBImageLoader::loadImage()
 
     if (image.isNull())
     {
-        // use the standard loader
-        image = QImage(path);
-    }
-
-    if (image.isNull())
-    {
         return false;
     }
 

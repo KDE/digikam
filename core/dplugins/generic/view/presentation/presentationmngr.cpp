@@ -143,7 +143,7 @@ void PresentationMngr::slotSlideShow()
             PresentationKB* const slide = new PresentationKB(m_sharedData);
             slide->show();
 
-            if (!slide->windowHandle() || !slide->windowHandle()->supportsOpenGL())
+            if (!slide->checkOpenGL())
             {
                 supportsOpenGL = false;
                 slide->close();
@@ -155,7 +155,7 @@ void PresentationMngr::slotSlideShow()
             PresentationGL* const slide = new PresentationGL(m_sharedData);
             slide->show();
 
-            if (!slide->windowHandle() || !slide->windowHandle()->supportsOpenGL())
+            if (!slide->checkOpenGL())
             {
                 supportsOpenGL = false;
                 slide->close();
