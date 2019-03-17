@@ -48,9 +48,6 @@ ORIG_WD="`pwd`"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
 
-#mv $INSTALL_DIR/lib64/* $INSTALL_DIR/lib/
-#rm -rf $INSTALL_DIR/lib64/
-
 LIB_PATH_ALT=lib
 
 #################################################################################################
@@ -441,6 +438,7 @@ cd $BUILDING_DIR
 $INSTALL_DIR/bin/linuxdeployqt \
     $APP_IMG_DIR/usr/share/applications/org.kde.digikam.desktop \
     -executable=$APP_IMG_DIR/usr/bin/digikam \
+    -exclude-libs=libXext.so.6 \
     -verbose=2 \
     -bundle-non-qt-libs \
     -extra-plugins=$APP_IMG_DIR/usr/plugins \
