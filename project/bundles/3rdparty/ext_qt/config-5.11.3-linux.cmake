@@ -21,7 +21,6 @@ LIST(APPEND QT_CONFIG
             -sql-sqlite                       # Enable Sqlite plugin support
             -I ${EXTPREFIX_qt}/include
             -L ${EXTPREFIX_qt}/lib
-            -L ${EXTPREFIX_qt}/lib64
 
             # Compilation rules to disable.
             -nomake tests                     # Do not build test codes
@@ -78,9 +77,9 @@ LIST(APPEND QT_CONFIG
             -skip qtwebview                   # QML extension for QWebEngine
             -skip qtwebglplugin               # No need browser OpenGL extention support
 
-            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
-            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
-            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
+#            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
+#            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
+#            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
 )
 
 MESSAGE(STATUS "Use Linux ${QT_VERSION} configuration:")
