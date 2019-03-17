@@ -76,7 +76,13 @@ yum -y install wget \
                gcc-c++ \
                patch \
                libxcb \
+               libxcb-devel \
                xcb-util \
+               xcb-util-keysyms-devel \
+               xcb-util-devel \
+               xcb-util-image-devel \
+               xcb-util-renderutil-devel \
+               xcb-util-wm-devel \
                xkeyboard-config \
                gperf \
                ruby \
@@ -96,12 +102,9 @@ yum -y install wget \
                libstdc++-devel \
                libXrender-devel \
                lcms2-devel \
-               xcb-util-keysyms-devel \
                libXi-devel \
                mesa-libGL-devel \
                mesa-libGLU-devel \
-               libxcb-devel \
-               xcb-util-devel \
                glibc-devel \
                libudev-devel \
                libuuid-devel \
