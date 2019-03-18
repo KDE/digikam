@@ -74,9 +74,9 @@ LIST(APPEND QT_CONFIG
             -skip qtwebview                   # QML extension for QWebEngine
             -skip qtwebglplugin               # No need browser OpenGL extention support
 
-#            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
-#            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
-#            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
+            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
+            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
+            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
 )
 
 MESSAGE(STATUS "Use Linux ${QT_VERSION} configuration:")

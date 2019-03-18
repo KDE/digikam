@@ -55,7 +55,6 @@ CentOS6Adjustments
 
 # Working directory
 ORIG_WD="`pwd`"
-APP_IMG_DIR="/digikam.appdir"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
 
@@ -67,7 +66,7 @@ cd $ORIG_WD/icon-rcc
 
 rm -f CMakeCache.txt > /dev/null
 
-cmake3 -DCMAKE_INSTALL_PREFIX="/usr" \
+cmake3 -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
        -DCMAKE_BUILD_TYPE=debug \
        -DCMAKE_COLOR_MAKEFILE=ON \
        -Wno-dev \
@@ -107,14 +106,14 @@ echo -e "---------- Copy Files in bundle\n"
 cd $APP_IMG_DIR
 
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
-cp -r /usr/plugins ./usr/
+cp -r $INSTALL_DIR/plugins ./usr/
 rm -fr ./usr/plugins/ktexteditor
 rm -fr ./usr/plugins/kf5/parts
 rm -fr ./usr/plugins/konsolepart.so
 
 # copy runtime data files
-cp -r /usr/share/digikam                  ./usr/share
-cp -r /usr/share/showfoto                 ./usr/share
+cp -r $INSTALL_DIR/share/digikam                  ./usr/share
+cp -r $INSTALL_DIR/share/showfoto                 ./usr/share
 cp $ORIG_WD/icon-rcc/breeze.rcc           ./usr/share/digikam
 cp $ORIG_WD/icon-rcc/breeze-dark.rcc      ./usr/share/digikam
 
@@ -123,41 +122,41 @@ ln -s ../digikam/breeze.rcc               breeze.rcc
 ln -s ../digikam/breeze-dark.rcc          breeze-dark.rcc
 
 cd $APP_IMG_DIR
-cp $ORIG_WD/data/qt.conf                  ./usr/bin
-cp -r /usr/share/lensfun                  ./usr/share
-cp -r /usr/share/knotifications5          ./usr/share
-cp -r /usr/share/kservices5               ./usr/share
-cp -r /usr/share/kservicetypes5           ./usr/share
-cp -r /usr/share/kxmlgui5                 ./usr/share
-cp -r /usr/share/kf5                      ./usr/share
-cp -r /usr/share/solid                    ./usr/share
-cp -r /usr/share/OpenCV                   ./usr/share
-cp -r /usr/share/dbus-1/interfaces/kf5*   ./usr/share/dbus-1/interfaces/
-cp -r /usr/share/dbus-1/services/*kde*    ./usr/share/dbus-1/services/
-cp -r /usr/$LIB_PATH_ALT/libexec/kf5      ./usr/lib/libexec/
+cp $ORIG_WD/data/qt.conf                          ./usr/bin
+cp -r $INSTALL_DIR/share/lensfun                  ./usr/share
+cp -r $INSTALL_DIR/share/knotifications5          ./usr/share
+cp -r $INSTALL_DIR/share/kservices5               ./usr/share
+cp -r $INSTALL_DIR/share/kservicetypes5           ./usr/share
+cp -r $INSTALL_DIR/share/kxmlgui5                 ./usr/share
+cp -r $INSTALL_DIR/share/kf5                      ./usr/share
+cp -r $INSTALL_DIR/share/solid                    ./usr/share
+cp -r $INSTALL_DIR/share/OpenCV                   ./usr/share
+cp -r $INSTALL_DIR/share/dbus-1/interfaces/kf5*   ./usr/share/dbus-1/interfaces/
+cp -r $INSTALL_DIR/share/dbus-1/services/*kde*    ./usr/share/dbus-1/services/
+cp -r $INSTALL_DIR/lib/libexec/kf5                ./usr/lib/libexec/
 
 # AppImage stream data file
-cp -r /usr/share/metainfo/org.kde.digikam.appdata.xml   ./usr/share/metainfo/digikam.appdata.xml
-cp -r /usr/share/metainfo/org.kde.showfoto.appdata.xml  ./usr/share/metainfo/showfoto.appdata.xml
+cp -r $INSTALL_DIR/share/metainfo/org.kde.digikam.appdata.xml   ./usr/share/metainfo/digikam.appdata.xml
+cp -r $INSTALL_DIR/share/metainfo/org.kde.showfoto.appdata.xml  ./usr/share/metainfo/showfoto.appdata.xml
 
 # QWebEngine bin data files.
-[[ -e /usr/ressources ]] && cp -r /usr/resources ./usr/
+[[ -e $INSTALL_DIR/ressources ]] && cp -r $INSTALL_DIR/resources ./usr/
 
 # copy libgphoto2 drivers
-find  /usr/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
-find  /usr/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
+find  $INSTALL_DIR/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
+find  $INSTALL_DIR/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
 
 # copy sane backends
 
-cp -r /usr/lib/sane                       ./usr/lib
-cp -r /usr/etc/sane.d                     ./usr/etc
+cp -r $INSTALL_DIR/lib/sane                       ./usr/lib
+cp -r $INSTALL_DIR/etc/sane.d                     ./usr/etc
 
 # copy i18n
 
 # Qt translations files
-if [[ -e /usr/translations ]]; then
+if [[ -e $INSTALL_DIR/translations ]]; then
 
-    cp -r /usr/translations ./usr
+    cp -r $INSTALL_DIR/translations ./usr
     # optimizations
     rm ./usr/translations/assistant*
     rm ./usr/translations/designer*
@@ -173,21 +172,21 @@ if [[ -e /usr/translations ]]; then
 fi
 
 # KF5 translations files
-FILES=$(cat $ORIG_WD/logs/build-extralibs.full.log | grep /usr/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-extralibs.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
 
 for FILE in $FILES ; do
     cp --parents $FILE ./
 done
 
 # digiKam translations files
-FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep /usr/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/locale | grep -e .qm -e .mo | cut -d' ' -f3)
 
 for FILE in $FILES ; do
     cp --parents $FILE ./
 done
 
 # digiKam icons files
-FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep /usr/share/icons/ | cut -d' ' -f3)
+FILES=$(cat $ORIG_WD/logs/build-digikam.full.log | grep $INSTALL_DIR/share/icons/ | cut -d' ' -f3)
 
 for FILE in $FILES ; do
     cp --parents $FILE ./
@@ -195,9 +194,9 @@ done
 
 # Marble data and plugins files
 
-cp -r /usr/$LIB_PATH_ALT/marble/plugins/ ./usr/bin/
+cp -r $INSTALL_DIR/lib/marble/plugins/ ./usr/bin/
 
-cp -r /usr/share/marble/data             ./usr/bin/
+cp -r $INSTALL_DIR/share/marble/data             ./usr/bin/
 
 # otherwise segfaults!?
 cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
@@ -218,39 +217,39 @@ cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | 
 #cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # For Fedora 20
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
+#######cp $(ldconfig -p | grep $INSTALL_DIR/lib/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
-cp /usr/bin/digikam                 ./usr/bin
-cp /usr/bin/showfoto                ./usr/bin
-cp /usr/bin/kbuildsycoca5           ./usr/bin
-cp /usr/bin/solid-hardware5         ./usr/bin
+cp $INSTALL_DIR/bin/digikam                 ./usr/bin
+cp $INSTALL_DIR/bin/showfoto                ./usr/bin
+cp $INSTALL_DIR/bin/kbuildsycoca5           ./usr/bin
+cp $INSTALL_DIR/bin/solid-hardware5         ./usr/bin
 
 # QWebEngine runtime process
-[[ -e /usr/libexec/QtWebEngineProcess ]] && cp /usr/libexec/QtWebEngineProcess ./usr/bin
+[[ -e $INSTALL_DIR/libexec/QtWebEngineProcess ]] && cp $INSTALL_DIR/libexec/QtWebEngineProcess ./usr/bin
 
 # For Solid action when camera is connected to computer
-cp /usr/bin/qdbus                   ./usr/share/digikam/utils
+cp $INSTALL_DIR/bin/qdbus                   ./usr/share/digikam/utils
 sed -i "/Exec=/c\Exec=digikam-camera downloadFromUdi %i" ./usr/share/solid/actions/digikam-opencamera.desktop
 
 #################################################################################################
 
 echo -e "---------- Scan dependencies recurssively\n"
 
-CopyReccursiveDependencies /usr/bin/digikam                  ./usr/lib
-CopyReccursiveDependencies /usr/bin/showfoto                 ./usr/lib
-CopyReccursiveDependencies /usr/plugins/platforms/libqxcb.so ./usr/lib
+CopyReccursiveDependencies $INSTALL_DIR/bin/digikam                  ./usr/lib
+CopyReccursiveDependencies $INSTALL_DIR/bin/showfoto                 ./usr/lib
+CopyReccursiveDependencies $INSTALL_DIR/plugins/platforms/libqxcb.so ./usr/lib
 
-FILES=$(ls /usr/$LIB_PATH_ALT/libdigikam*.so)
+FILES=$(ls $INSTALL_DIR/lib/libdigikam*.so)
 
 for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
 done
 
-#FILES=$(ls /usr/$LIB_PATH_ALT/plugins/imageformats/*.so)
-#
-#for FILE in $FILES ; do
-#    CopyReccursiveDependencies /usr/plugins/imageformats/*.so ./usr/lib
-#done
+FILES=$(ls $INSTALL_DIR/plugins/imageformats/*.so)
+
+for FILE in $FILES ; do
+    CopyReccursiveDependencies ${FILE} ./usr/lib
+done
 
 # Copy in the indirect dependencies
 FILES=$(find . -type f -executable)
@@ -403,17 +402,14 @@ cp ${ORIG_WD}/data/AppRun ./
 
 # desktop integration rules
 
-cp /usr/share/applications/org.kde.digikam.desktop ./digikam.desktop
-cp /usr/share/icons/hicolor/64x64/apps/digikam.png ./digikam.png
+cp $INSTALL_DIR/share/applications/org.kde.digikam.desktop ./digikam.desktop
+cp $INSTALL_DIR/share/icons/hicolor/64x64/apps/digikam.png ./digikam.png
 
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/apps
-cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/apps/digikam.png
+cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/apps/digikam.png
 
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/mimetypes
-cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
-
-# TODO: this AppImage sdk API is obsolete.
-#get_desktopintegration digikam
+cp -r $INSTALL_DIR/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
 
 mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
