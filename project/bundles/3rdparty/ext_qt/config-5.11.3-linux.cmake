@@ -17,6 +17,7 @@ LIST(APPEND QT_CONFIG
             -confirm-license                  # Silency ack the license
             -opengl desktop                   # Enable OpenGL support from Desktop
             -fontconfig                       # Enable Fontconfig support
+            -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
             -openssl-linked                   # Use SSL from system and link
             -sql-sqlite                       # Enable Sqlite plugin support
 
@@ -24,7 +25,6 @@ LIST(APPEND QT_CONFIG
             -nomake tests                     # Do not build test codes
             -nomake examples                  # Do not build basis example codes
             -no-compile-examples              # Do not build extra example codes
-#            -no-icu                           # Do not support ICU: https://wiki.qt.io/Qt_5_ICU
             -no-mtdev                         # Do not support multi-touch
             -no-libproxy                      # Do not support network proxy
             -no-pch                           # Do not support pre-compiled header
@@ -38,7 +38,6 @@ LIST(APPEND QT_CONFIG
             -qt-zlib                          # Use internal Z compression lib
             -qt-pcre                          # Use internal regular expression lib https://doc.qt.io/archives/qt-5.8/qtcore-attribution-pcre.html
             -qt-harfbuzz                      # Use internal OpenType lib
-            -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
             -qt-xcb                           # Use internal X11 lib http://doc.qt.io/qt-5/linux-requirements.html
             -qt-xkbcommon-x11                 # Use internal X11 keyboard lib https://doc.qt.io/qt-5/qtgui-attribution-xkbcommon.html
 
