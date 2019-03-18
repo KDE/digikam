@@ -120,7 +120,6 @@ yum -y install wget \
                openssl-devel \
                libical-devel \
                libcap-devel \
-               libicu-devel \
                libXScrnSaver-devel \
                mesa-libEGL-devel \
                patchelf \
