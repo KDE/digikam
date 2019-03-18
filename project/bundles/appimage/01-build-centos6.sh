@@ -261,10 +261,10 @@ cmake3 $ORIG_WD/../3rdparty \
 
 # --- digiKam dependencies stage1 -------------
 
-cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
