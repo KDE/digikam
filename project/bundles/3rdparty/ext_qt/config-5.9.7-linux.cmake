@@ -70,12 +70,11 @@ LIST(APPEND QT_CONFIG
             -skip qtvirtualkeyboard           # No need virtual keyboard support
             -skip qtwayland                   # Specific to Linux
             -skip qtwebsockets                # No need websocket support
-            -skip qtwebchannel                # No need sharing QObject properties with JS
             -skip qtwebview                   # QML extension for QWebEngine
 
-            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
-            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
-            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
+#            -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
+#            -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
+#            -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
 )
 
 MESSAGE(STATUS "Use Linux ${QT_VERSION} configuration:")
