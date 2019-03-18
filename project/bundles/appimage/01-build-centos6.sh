@@ -85,7 +85,6 @@ yum -y install wget \
                xcb-util-wm-devel \
                xkeyboard-config \
                gperf \
-               ruby \
                bison \
                flex \
                zlib-devel \
