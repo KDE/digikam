@@ -123,14 +123,12 @@ yum -y install wget \
 
 #################################################################################################
 
-if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
+yum -y --nogpgcheck install centos-release-scl
+
+if [[ ! -f /opt/rh/python27/enable ]] ; then
 
     echo -e "---------- Install New Python Interpreter\n"
-
-    cd /etc/yum.repos.d
-    wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
-    yum -y --nogpgcheck install python2.7
-    rm -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo
+    yum -y --nogpgcheck install python27
 
 fi
 
@@ -138,11 +136,7 @@ fi
 if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
-
-    cd /etc/yum.repos.d
-    wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
     yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
-    rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
 
 fi
 
@@ -214,6 +208,9 @@ fi
 
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
+
+# enable new Python
+. /opt/rh/python27/enable
 
 #################################################################################################
 
