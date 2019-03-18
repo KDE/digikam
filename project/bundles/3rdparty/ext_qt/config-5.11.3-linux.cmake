@@ -19,12 +19,13 @@ LIST(APPEND QT_CONFIG
             -fontconfig                       # Enable Fontconfig support
             -openssl-linked                   # Use SSL from system and link
             -sql-sqlite                       # Enable Sqlite plugin support
+            -c++std -C++1z
 
             # Compilation rules to disable.
             -nomake tests                     # Do not build test codes
             -nomake examples                  # Do not build basis example codes
             -no-compile-examples              # Do not build extra example codes
-            -no-icu                           # Do not support ICU: https://wiki.qt.io/Qt_5_ICU
+#            -no-icu                           # Do not support ICU: https://wiki.qt.io/Qt_5_ICU
             -no-mtdev                         # Do not support multi-touch
             -no-libproxy                      # Do not support network proxy
             -no-pch                           # Do not support pre-compiled header

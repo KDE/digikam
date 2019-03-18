@@ -120,12 +120,14 @@ yum -y install wget \
                openssl-devel \
                libical-devel \
                libcap-devel \
+               libicu-devel \
                libXScrnSaver-devel \
                mesa-libEGL-devel \
                patchelf \
                dpkg
 
 #################################################################################################
+if [ ] ; then
 
 if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
 
@@ -145,7 +147,7 @@ if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
     yum -y --nogpgcheck install rh-ruby24
 
 fi
-
+fi
 if [[ ! -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
@@ -210,9 +212,7 @@ yum -y erase qt-devel \
              ffmpeg \
              ffmpeg-devel \
              ant \
-             pulseaudio-libs-devel \
-             fontconfig-devel \
-             freetype-devel
+             pulseaudio-libs-devel
 
 #################################################################################################
 
@@ -244,7 +244,7 @@ fi
 . /opt/rh/devtoolset-4/enable
 
 # enable new Ruby interpreter
-. /opt/rh/rh-ruby24/enable
+#. /opt/rh/rh-ruby24/enable
 
 #################################################################################################
 # Low level libraries dependencies
@@ -266,8 +266,8 @@ cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
 #cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
+#cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 #cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
 
