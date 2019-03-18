@@ -101,7 +101,8 @@ echo "---------- Configure digiKam $DK_VERSION"
 
 cmake3 -G "Unix Makefiles" .. \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+      -DCMAKE_LIBRARY_PATH=$INSTALL_DIR/lib \
       -DBUILD_TESTING=OFF \
       -DDIGIKAMSC_CHECKOUT_PO=ON \
       -DDIGIKAMSC_CHECKOUT_DOC=OFF \
@@ -127,10 +128,6 @@ if [ $? -ne 0 ]; then
     echo "---------- Cannot configure digiKam $DK_VERSION."
     echo "---------- Aborting..."
     exit;
-fi
-
-if [ -d ./extra/libmediawiki/src ]; then
-    ln -sf src ./extra/libmediawiki/MediaWiki
 fi
 
 cat ../build/core/app/utils/digikam_version.h | grep "digikam_version\[\]" | awk '{print $6}' | tr -d '";' > $ORIG_WD/data/RELEASEID.txt
