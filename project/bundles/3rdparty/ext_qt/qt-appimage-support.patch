@@ -1,8 +1,8 @@
-diff --git a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-index cdb5d33859..5a2bd5f724 100644
+diff --git a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
+index cb1e367b9f..f798cc0c62 100644
 --- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 +++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-@@ -146,7 +146,23 @@ static inline bool launch(const QString &launcher, const QUrl &url)
+@@ -164,7 +164,30 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
  #else
@@ -17,13 +17,20 @@ index cdb5d33859..5a2bd5f724 100644
 +    {
 +        qDebug() << "Adjusting environment variables for AppImage bundle";
 +
-+        setenv("LD_LIBRARY_PATH", env.value(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")).toLatin1().data(), 1);
-+        setenv("QT_PLUGIN_PATH",  env.value(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH")).toLatin1().data(),  1);
-+        setenv("XDG_DATA_DIRS",   env.value(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS")).toLatin1().data(),   1);
-+        setenv("PATH",            env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")).toLatin1().data(),            1);
++        env.insert(QLatin1String("LD_LIBRARY_PATH"),
++                   env.value(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")));
++        env.insert(QLatin1String("QT_PLUGIN_PATH"),
++                   env.value(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH")));
++        env.insert(QLatin1String("XDG_DATA_DIRS"),
++                   env.value(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS")));
++        env.insert(QLatin1String("PATH"),
++                   env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")));
 +    }
 +
-+    const bool ok = QProcess::startDetached(command);
++    QProcess process;
++    process.setProcessEnvironment(env);
++    process.setProgram(command);
++    const bool ok = process.startDetached();
  #endif
      if (!ok)
          qWarning("Launch failed (%s)", qPrintable(command));
