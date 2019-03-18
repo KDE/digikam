@@ -127,6 +127,25 @@ yum -y install wget \
 
 #################################################################################################
 
+if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
+
+    echo -e "---------- Install New Python Interpreter\n"
+
+    cd /etc/yum.repos.d
+    wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
+    yum -y --nogpgcheck install python2.7
+
+fi
+
+if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+
+    echo -e "---------- Install New Ruby Interpreter\n"
+
+    yum -y install centos-release-scl-rh centos-release-scl
+    yum -y --nogpgcheck install rh-ruby24
+
+fi
+
 if [[ ! -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
@@ -136,7 +155,6 @@ if [[ ! -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo ]] ; then
     yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
 
 fi
-
 
 #################################################################################################
 
@@ -194,8 +212,7 @@ yum -y erase qt-devel \
              ant \
              pulseaudio-libs-devel \
              fontconfig-devel \
-             freetype-devel \
-             ruby
+             freetype-devel
 
 #################################################################################################
 
@@ -222,29 +239,9 @@ if [ ! -d $INSTALL_DIR ] ; then
     mkdir -p $INSTALL_DIR
 fi
 
+
 # enable new compiler
 . /opt/rh/devtoolset-4/enable
-
-# new dependencies for QtWebkit
-
-if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
-
-    echo -e "---------- Install New Python Interpreter\n"
-
-    cd /etc/yum.repos.d
-    wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
-    yum -y --nogpgcheck install python2.7
-
-fi
-
-if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
-
-    echo -e "---------- Install New Ruby Interpreter\n"
-
-    yum -y install centos-release-scl-rh centos-release-scl
-    yum -y --nogpgcheck install rh-ruby24
-
-fi
 
 # enable new Ruby interpreter
 . /opt/rh/rh-ruby24/enable
