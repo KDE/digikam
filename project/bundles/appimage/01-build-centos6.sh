@@ -271,8 +271,8 @@ cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CO
 #cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
-cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng, libicu
+#cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, libtiff, libjpeg, libpng
 
 # --- digiKam dependencies stage2 -------------
 
