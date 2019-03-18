@@ -73,7 +73,6 @@ LIST(APPEND QT_CONFIG
             -skip qtvirtualkeyboard           # No need virtual keyboard support
             -skip qtwayland                   # Specific to Linux
             -skip qtwebsockets                # No need websocket support
-            -skip qtwebchannel                # No need sharing QObject properties with JS
             -skip qtwebview                   # QML extension for QWebEngine
             -skip qtwebglplugin               # No need browser OpenGL extention support
 
