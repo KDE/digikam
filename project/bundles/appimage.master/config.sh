@@ -8,10 +8,23 @@
 ########################################################################
 
 # Absolute path where are downloaded all tarballs to compile.
-DOWNLOAD_DIR="/d"
+DOWNLOAD_DIR="/digikam.appimage/download"
 
 # Absolute path where are compiled all tarballs
-BUILDING_DIR="/b"
+BUILDING_DIR="/digikam.appimage/build"
+
+# Absolute path where are installed all software components
+INSTALL_DIR="/usr"
+
+# Absolute path where are bundled all software components
+APP_IMG_DIR="/digikam.appimage/appdir"
+
+# Setup variables needed to help everything find what we build
+
+#export PATH=$INSTALL_DIR/bin:$PATH
+#export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$INSTALL_DIR/lib64:$LD_LIBRARY_PATH
+#export PKG_CONFIG_PATH=$INSTALL_DIR/share/pkgconfig:$INSTALL_DIR/lib/pkgconfig::$INSTALL_DIR/lib64/pkgconfig/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+#export CMAKE_PREFIX_PATH=$INSTALL_DIR:$CMAKE_PREFIX_PATH
 
 ########################################################################
 
@@ -26,9 +39,9 @@ DK_BUILDTEMP=$BUILDING_DIR/dktemp
 # digiKam tag version from git. Official tarball do not include extra shared libraries.
 # The list of tags can be listed with this url: https://quickgit.kde.org/?p=digikam.git&a=tags
 # If you want to package current implemntation from git, use "master" as tag.
-#DK_VERSION=v5.5.0
+#DK_VERSION=v6.0.0
 DK_VERSION=master
-#DK_VERSION=gsoc18-exporttools-o2
+#DK_VERSION=development/dplugins
 
 # Installer sub version to differentiates newer updates of the installer itself, even if the underlying application hasn’t changed.
 #DK_EPOCH="-01"
@@ -42,6 +55,6 @@ DK_DEBUG=1
 DK_SIGN=0
 
 # Upload automatically bundle to files.kde.org (pre-release only).
-DK_UPLOAD=1
-DK_UPLOADURL="digikam@racnoss.kde.org"
+DK_UPLOAD=0
+DK_UPLOADURL="digikam@milonia.kde.org"
 DK_UPLOADDIR="/srv/archives/files/digikam/"

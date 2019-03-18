@@ -7,110 +7,62 @@
 #
 
 SET(EXTPREFIX_qt "${EXTPREFIX}")
-SET(QT_VERSION 5.11.3)
 
-IF (${QT_VERSION} STREQUAL "5.6.3")
+ExternalProject_Add(ext_qt
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://download.qt.io/official_releases/qt/5.11/5.11.3/single/qt-everywhere-src-5.11.3.tar.xz
+    URL_MD5 02b353bfe7a40a8dc4274e1d17226d2b
 
-    INCLUDE("config-5.6.3-linux.cmake")
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-appimage-support.patch
 
-    ExternalProject_Add(ext_qt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.6/5.6.3/single/qt-everywhere-opensource-src-5.6.3.tar.xz
-        URL_MD5 010342d515b62ee1c0e709254f4ef9ab
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+                  -prefix ${EXTPREFIX_qt}
+                  -opensource
+                  -confirm-license
+                  -nomake examples
+                  -sql-sqlite
+                  -fontconfig
+                  -openssl
+                  -optimized-qmake
+                  -no-qml-debug
+                  -no-mtdev
+                  -no-journald
+                  -no-syslog
+                  -no-tslib
+                  -no-directfb
+                  -no-linuxfb
+                  -no-libproxy
+                  -no-pch
+                  -no-compile-examples
+                  -qt-zlib
+                  -qt-pcre
+                  -qt-harfbuzz
+                  -qt-xcb
+                  -qt-xkbcommon-x11
+                  -skip qt3d
+                  -skip qtactiveqt
+                  -skip qtandroidextras
+                  -skip qtcanvas3d
+                  -skip qtcharts
+                  -skip qtconnectivity
+                  -skip qtdatavis3d
+                  -skip qtdoc
+                  -skip qtgamepad
+                  -skip qtgraphicaleffects
+                  -skip qtlocation
+                  -skip qtmultimedia
+                  -skip qtpurchasing
+                  -skip qtremoteobjects
+                  -skip qtserialport
+                  -skip qtscxml
+                  -skip qtsensors
+                  -skip qtspeech
+                  -skip qttranslations
+                  -skip qtvirtualkeyboard
+                  -skip qtwayland
+                  -skip qtwebsockets
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt563-appimage-support.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
-
-        BUILD_COMMAND make -j
-
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE 1
-        ALWAYS 0
-    )
-
-ELSEIF(${QT_VERSION} STREQUAL "5.9.7")
-
-    INCLUDE("config-5.9.7-linux.cmake")
-
-    ExternalProject_Add(ext_qt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz
-        URL_MD5 70e617aeb1f9bbf84a12b8cf09b01ece
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt597-appimage-support.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
-
-        BUILD_COMMAND make -j
-
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE 1
-        ALWAYS 0
-    )
-
-ELSEIF(${QT_VERSION} STREQUAL "5.10.1")
-
-    INCLUDE("config-5.10.1-linux.cmake")
-
-    ExternalProject_Add(ext_qt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz
-        URL_MD5 7e167b9617e7bd64012daaacb85477af
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5101-appimage-support.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
-
-        BUILD_COMMAND make -j
-
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE 1
-        ALWAYS 0
-    )
-
-ELSEIF(${QT_VERSION} STREQUAL "5.11.3")
-
-    INCLUDE("config-5.11.3-linux.cmake")
-
-    ExternalProject_Add(ext_qt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.11/5.11.3/single/qt-everywhere-src-5.11.3.tar.xz
-        URL_MD5 02b353bfe7a40a8dc4274e1d17226d2b
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5113-appimage-support.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
-
-        BUILD_COMMAND make -j
-
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE 1
-        ALWAYS 0
-    )
-
-ELSEIF(${QT_VERSION} STREQUAL "5.12.2")
-
-    INCLUDE("config-5.12.2-linux.cmake")
-
-    ExternalProject_Add(ext_qt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
-        URL_MD5 99c2eb46e533371798b4ca2d1458e065
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt5122-appimage-support.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure ${QT_CONFIG}
-
-        BUILD_COMMAND make -j
-
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE 1
-        ALWAYS 0
-    )
-
-ELSE()
-
-    MESSAGE(FATAL_ERROR "Qt version to install not supported !")
-
-ENDIF()
+    UPDATE_COMMAND ""
+    BUILD_IN_SOURCE 1
+    ALWAYS 0
+)
