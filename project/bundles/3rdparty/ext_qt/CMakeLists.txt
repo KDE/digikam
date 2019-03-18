@@ -22,7 +22,7 @@ ExternalProject_Add(ext_qt
                   -nomake examples
                   -sql-sqlite
                   -fontconfig
-                  -openssl
+                  -openssl-linked
                   -optimized-qmake
                   -no-qml-debug
                   -no-mtdev
