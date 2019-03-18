@@ -298,9 +298,11 @@ void SlideShow::slotLoadNextItem()
 
 #ifdef HAVE_MEDIAPLAYER
         QMimeDatabase mimeDB;
+        QString fileType = mimeDB.mimeTypeForFile(currentItem()
+                                 .toLocalFile()).name();
 
-        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name().startsWith(QLatin1String("video/")))
+        if (fileType.startsWith(QLatin1String("video/")) ||
+            fileType == QLatin1String("image/gif"))
         {
             d->videoView->setCurrentUrl(currentItem());
             return;
@@ -342,9 +344,11 @@ void SlideShow::slotLoadPrevItem()
 
 #ifdef HAVE_MEDIAPLAYER
         QMimeDatabase mimeDB;
+        QString fileType = mimeDB.mimeTypeForFile(currentItem()
+                                 .toLocalFile()).name();
 
-        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name().startsWith(QLatin1String("video/")))
+        if (fileType.startsWith(QLatin1String("video/")) ||
+            fileType == QLatin1String("image/gif"))
         {
             d->videoView->setCurrentUrl(currentItem());
             return;
@@ -371,25 +375,10 @@ void SlideShow::slotImageLoaded(bool loaded)
             {
                 d->osd->pause(false);
             }
-
-            preloadNextItem();
         }
     }
-    else
-    {
-#ifdef HAVE_MEDIAPLAYER
-        // Try to load only GIF Images
-        QMimeDatabase mimeDB;
 
-        if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name() == QLatin1String("image/gif"))
-        {
-            d->videoView->setCurrentUrl(currentItem());
-        }
-#else
-        preloadNextItem();
-#endif
-    }
+    preloadNextItem();
 }
 
 void SlideShow::slotVideoLoaded(bool loaded)
@@ -452,9 +441,11 @@ void SlideShow::preloadNextItem()
 
 #ifdef HAVE_MEDIAPLAYER
         QMimeDatabase mimeDB;
+        QString fileType = mimeDB.mimeTypeForFile(currentItem()
+                                 .toLocalFile()).name();
 
-        if (mimeDB.mimeTypeForFile(nextItem.toLocalFile())
-                                   .name().startsWith(QLatin1String("video/")))
+        if (fileType.startsWith(QLatin1String("video/")) ||
+            fileType == QLatin1String("image/gif"))
         {
             return;
         }
