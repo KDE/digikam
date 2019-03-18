@@ -23,6 +23,10 @@
 
 #include "slideshowsettings.h"
 
+// Qt includes
+
+#include <QFontDatabase>
+
 // KDE includes
 
 #include <kconfiggroup.h>
@@ -51,6 +55,7 @@ const QString SlideShowSettings::configSlideShowPrintTagsEntry(QLatin1String("Sl
 const QString SlideShowSettings::configSlideShowPrintLabelsEntry(QLatin1String("SlideShowPrintLabels"));
 const QString SlideShowSettings::configSlideShowPrintRatingEntry(QLatin1String("SlideShowPrintRating"));
 const QString SlideShowSettings::configSlideShowProgressIndicatorEntry(QLatin1String("SlideShowProgressIndicator"));
+const QString SlideShowSettings::configSlideShowCaptionFontEntry(QLatin1String("SlideShowCaptionFont"));
 const QString SlideShowSettings::configSlideScreenEntry(QLatin1String("SlideScreen"));
 
 SlideShowSettings::SlideShowSettings()
@@ -73,6 +78,7 @@ SlideShowSettings::SlideShowSettings()
     showProgressIndicator = true;
     slideScreen           = -2;
     autoPlayEnabled       = true;
+    captionFont           = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     iface                 = 0;
 }
 
@@ -100,6 +106,8 @@ void SlideShowSettings::readFromConfig()
     printLabels               = group.readEntry(configSlideShowPrintLabelsEntry,          false);
     printRating               = group.readEntry(configSlideShowPrintRatingEntry,          false);
     showProgressIndicator     = group.readEntry(configSlideShowProgressIndicatorEntry,    true);
+    captionFont               = group.readEntry(configSlideShowCaptionFontEntry,
+                                                QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     slideScreen               = group.readEntry(configSlideScreenEntry,                   -2);
     exifRotate                = MetaEngineSettings::instance()->settings().exifRotate;
 }
@@ -124,6 +132,7 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
     group.writeEntry(configSlideShowPrintRatingEntry,          printRating);
     group.writeEntry(configSlideShowProgressIndicatorEntry,    showProgressIndicator);
+    group.writeEntry(configSlideShowCaptionFontEntry,          captionFont);
     group.writeEntry(configSlideScreenEntry,                   slideScreen);
     group.sync();
 }

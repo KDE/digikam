@@ -264,6 +264,7 @@ void SlideProperties::printInfoText(QPainter& p, int& offset, const QString& str
 {
     if (!str.isEmpty())
     {
+        p.setFont(d->settings.captionFont);
         offset += QFontMetrics(p.font()).lineSpacing();
         p.setPen(Qt::black);
 

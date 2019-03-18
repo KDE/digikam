@@ -42,6 +42,7 @@
 
 #include "dlayoutbox.h"
 #include "dnuminput.h"
+#include "dfontselect.h"
 #include "digikam_debug.h"
 #include "slideshowsettings.h"
 
@@ -68,6 +69,7 @@ public:
         showCapIfNoTitle(0),
         showProgress(0),
         screenPlacement(0),
+        captionFont(0),
         delayInput(0)
     {
     }
@@ -88,6 +90,8 @@ public:
     QCheckBox*    showProgress;
 
     QComboBox*    screenPlacement;
+
+    DFontSelect*  captionFont;
     DIntNumInput* delayInput;
 };
 
@@ -159,6 +163,9 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showRating          = new QCheckBox(i18n("Show image rating"), panel);
     d->showRating->setWhatsThis(i18n("Show the digiKam image rating at the bottom of the screen."));
 
+    d->captionFont         = new DFontSelect(i18n("Caption font:"), panel);
+    d->captionFont->setToolTip(i18n("Select here the font used to display text in the slideshow."));
+
     DHBox* const screenSelectBox = new DHBox(panel);
     new QLabel(i18n("Screen placement:"), screenSelectBox);
     d->screenPlacement           = new QComboBox(screenSelectBox);
@@ -207,6 +214,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->showTags);
     layout->addWidget(d->showLabels);
     layout->addWidget(d->showRating);
+    layout->addWidget(d->captionFont);
     layout->addWidget(screenSelectBox);
     layout->addStretch();
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -244,6 +252,7 @@ void SetupSlideShow::applySettings()
     settings.printLabels           = d->showLabels->isChecked();
     settings.printRating           = d->showRating->isChecked();
     settings.showProgressIndicator = d->showProgress->isChecked();
+    settings.captionFont           = d->captionFont->font();
     settings.slideScreen           = d->screenPlacement->currentIndex() - 2;
     settings.writeToConfig();
 }
@@ -268,6 +277,7 @@ void SetupSlideShow::readSettings()
     d->showLabels->setChecked(settings.printLabels);
     d->showRating->setChecked(settings.printRating);
     d->showProgress->setChecked(settings.showProgressIndicator);
+    d->captionFont->setFont(settings.captionFont);
 
     const int screen = settings.slideScreen;
 

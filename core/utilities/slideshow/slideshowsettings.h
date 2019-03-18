@@ -29,6 +29,7 @@
 #include <QMap>
 #include <QColor>
 #include <QString>
+#include <QFont>
 #include <QUrl>
 
 // Local includes
@@ -143,7 +144,11 @@ public:
     /** URL of the first image to show if requested
      */
     QUrl                         imageUrl;
-    
+
+    /** Font for the display of caption text
+     */
+    QFont                        captionFont;
+
     /** Interface to access to host application data
      */
     DInfoInterface*              iface;
@@ -166,6 +171,7 @@ private:
     static const QString         configSlideShowPrintLabelsEntry;
     static const QString         configSlideShowPrintRatingEntry;
     static const QString         configSlideShowProgressIndicatorEntry;
+    static const QString         configSlideShowCaptionFontEntry;
     static const QString         configSlideScreenEntry;
 };
 
