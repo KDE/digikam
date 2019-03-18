@@ -19,8 +19,6 @@ LIST(APPEND QT_CONFIG
             -fontconfig                       # Enable Fontconfig support
             -openssl-linked                   # Use SSL from system and link
             -sql-sqlite                       # Enable Sqlite plugin support
-            -I ${EXTPREFIX_qt}/include
-            -L ${EXTPREFIX_qt}/lib
 
             # Compilation rules to disable.
             -nomake tests                     # Do not build test codes
