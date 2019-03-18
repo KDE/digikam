@@ -300,7 +300,7 @@ void SlideShow::slotLoadNextItem()
         QMimeDatabase mimeDB;
 
         if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name().startsWith(QLatin1String("video/")))
+                                  .name().startsWith(QLatin1String("video/")))
         {
             d->videoView->setCurrentUrl(currentItem());
             return;
@@ -344,7 +344,7 @@ void SlideShow::slotLoadPrevItem()
         QMimeDatabase mimeDB;
 
         if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name().startsWith(QLatin1String("video/")))
+                                  .name().startsWith(QLatin1String("video/")))
         {
             d->videoView->setCurrentUrl(currentItem());
             return;
@@ -382,7 +382,7 @@ void SlideShow::slotImageLoaded(bool loaded)
         QMimeDatabase mimeDB;
 
         if (mimeDB.mimeTypeForFile(currentItem().toLocalFile())
-                                   .name() == QLatin1String("image/gif"))
+                                  .name() == QLatin1String("image/gif"))
         {
             d->videoView->setCurrentUrl(currentItem());
         }
