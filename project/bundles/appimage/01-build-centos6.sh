@@ -132,6 +132,12 @@ if [[ ! -f /opt/rh/python27/enable ]] ; then
 
 fi
 
+if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+
+    echo -e "---------- Install New Ruby Interpreter\n"
+    yum -y --nogpgcheck install rh-ruby24
+
+fi
 
 if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
 
@@ -212,6 +218,9 @@ fi
 # enable new Python
 . /opt/rh/python27/enable
 
+# enable new Ruby
+. /opt/rh/rh-ruby24/enable
+
 #################################################################################################
 
 cd $BUILDING_DIR
@@ -231,6 +240,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_jasper     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_png        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_tiff       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qt         -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit   -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libgphoto2 -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_sane       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_boost      -- -j$CPU_CORES

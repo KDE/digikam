@@ -69,6 +69,9 @@ ExternalProject_Add(ext_qt
                   -skip qtwebsockets                # No need websocket support
                   -skip qtwebview                   # QML extension for QWebEngine
                   -skip qtwebglplugin               # No need browser OpenGL extention support
+                  -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
+                  -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
+                  -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
