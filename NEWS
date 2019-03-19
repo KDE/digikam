@@ -84,4 +84,5 @@ BUGFIXES:
 066 ==> 405342 - Increase slideshow caption font size and keyboard shortcut or button to display/hide it.
 067 ==> 405636 - When importing picture not all people tags are present.
 068 ==> 379916 - Some people tags are missing.
-069 ==> 
+069 ==> 386967 - Digikam with Adobe Bridge keywords under Windows.
+070 ==> 
