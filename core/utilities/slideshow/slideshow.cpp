@@ -518,6 +518,12 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
         return;
     }
 
+    if (e->key() == Qt::Key_F4)
+    {
+        d->osd->toggleProperties();
+        return;
+    }
+
     d->osd->toolBar()->keyPressEvent(e);
 }
 

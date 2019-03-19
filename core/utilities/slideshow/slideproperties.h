@@ -45,6 +45,7 @@ public:
     ~SlideProperties();
 
     void setCurrentUrl(const QUrl& url);
+    void togglePaintEnabled();
 
 private:
 

@@ -365,4 +365,9 @@ bool SlideOSD::isUnderMouse() const
             d->toolBar->underMouse());
 }
 
+void SlideOSD::toggleProperties()
+{
+    d->slideProps->togglePaintEnabled();
+}
+
 } // namespace Digikam

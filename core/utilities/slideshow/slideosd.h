@@ -56,6 +56,7 @@ public:
     void video(bool b);
     bool isPaused() const;
     bool isUnderMouse() const;
+    void toggleProperties();
 
     SlideToolBar* toolBar() const;
 
