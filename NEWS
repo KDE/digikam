@@ -82,4 +82,6 @@ BUGFIXES:
 064 ==> 388334 - Auto Filter In People Tag List Confused With Shortcut Keys.
 065 ==> 405518 - digiKam can not be added to the Gnome Dash as favorite.
 066 ==> 405342 - Increase slideshow caption font size and keyboard shortcut or button to display/hide it.
-067 ==> 
+067 ==> 405636 - When importing picture not all people tags are present.
+068 ==> 379916 - Some people tags are missing.
+069 ==> 

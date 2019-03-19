@@ -475,23 +475,32 @@ void ItemScanner::commitFaces()
         QString name = it.key();
         QRectF rect  = it.value().toRectF();
 
-        if (name.isEmpty() || !rect.isValid())
+        if (!rect.isValid())
         {
             continue;
         }
 
-        int tagId = FaceTags::getOrCreateTagForPerson(name);
-
-        if (!tagId)
-        {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Failed to create a person tag for name" << name;
-        }
-
+        FaceTagsEditor editor;
         TagRegion region(TagRegion::relativeToAbsolute(rect, size));
 
-        FaceTagsEditor editor;
+        if (name.isEmpty())
+        {
+            int tagId = FaceTags::unknownPersonTagId();
+            FaceTagsIface face(FaceTagsIface::UnknownName, d->scanInfo.id, tagId, region);
 
-        editor.add(d->scanInfo.id, tagId, region, false);
+            editor.addManually(face);
+        }
+        else
+        {
+            int tagId = FaceTags::getOrCreateTagForPerson(name);
+
+            if (!tagId)
+            {
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Failed to create a person tag for name" << name;
+            }
+
+            editor.add(d->scanInfo.id, tagId, region, false);
+        }
     }
 }
 
