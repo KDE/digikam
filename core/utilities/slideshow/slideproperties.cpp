@@ -69,7 +69,7 @@ SlideProperties::SlideProperties(const SlideShowSettings& settings, QWidget* con
       d(new Private)
 {
     d->settings = settings;
-    setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size()/2);
+    setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size() / 1.5);
     setMouseTracking(true);
 }
 
