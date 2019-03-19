@@ -168,6 +168,7 @@ fi
 
 yum -y install fdk-aac-devel \
                faac-devel \
+               libfribidi-devel \
                lame-devel \
                opencore-amr-devel \
                opus-devel \
