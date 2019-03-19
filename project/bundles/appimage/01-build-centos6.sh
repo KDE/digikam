@@ -105,11 +105,9 @@ yum -y install wget \
                xcb-util-devel \
                glibc-devel \
                libudev-devel \
-               libicu-devel \
                sqlite-devel \
                libusb-devel \
                libexif-devel \
-               libical-devel \
                libxslt-devel \
                xz-devel \
                lz4-devel \
@@ -168,6 +166,7 @@ fi
 
 yum -y install fdk-aac-devel \
                faac-devel \
+               libfribidi-devel \
                lame-devel \
                opencore-amr-devel \
                opus-devel \
