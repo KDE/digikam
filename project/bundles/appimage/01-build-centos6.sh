@@ -93,8 +93,6 @@ yum -y install wget \
                openssl-devel \
                cppunit-devel \
                libstdc++-devel \
-               freetype-devel \
-               fontconfig-devel \
                libxml2-devel \
                libstdc++-devel \
                libXrender-devel \
@@ -168,8 +166,7 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
 fi
 
-yum -y install libass-devel \
-               fdk-aac-devel \
+yum -y install fdk-aac-devel \
                faac-devel \
                lame-devel \
                opencore-amr-devel \
@@ -189,7 +186,20 @@ yum -y install libass-devel \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-yum -y erase qt-devel boost-devel libgphoto2 sane-backends libjpeg-devel jasper-devel libpng-devel libtiff-devel ffmpeg ffmpeg-devel ant pulseaudio-libs-devel
+yum -y erase qt-devel \
+             boost-devel \
+             libgphoto2 \
+             sane-backends \
+             libjpeg-devel \
+             jasper-devel \
+             libpng-devel \
+             libtiff-devel \
+             ffmpeg \
+             ffmpeg-devel \
+             ant \
+             pulseaudio-libs-devel \
+             fontconfig-devel \
+             freetype-devel
 
 #################################################################################################
 
@@ -235,14 +245,14 @@ cmake3 $ORIG_WD/../3rdparty \
 # Low level libraries and Qt5 dependencies
 # NOTE: The order to compile each component here is very important.
 
-cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
-cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
+##cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
+#cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES
