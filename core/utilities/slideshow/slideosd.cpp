@@ -99,7 +99,8 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    Qt::WindowFlags flags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint |
+    Qt::WindowFlags flags = Qt::FramelessWindowHint  |
+                            Qt::WindowStaysOnTopHint |
                             Qt::X11BypassWindowManagerHint;
 
     setWindowFlags(flags);
