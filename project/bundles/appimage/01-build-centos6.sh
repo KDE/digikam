@@ -199,7 +199,8 @@ yum -y erase qt-devel \
              ant \
              pulseaudio-libs-devel \
              fontconfig-devel \
-             freetype-devel
+             freetype-devel \
+             libicu-devel
 
 #################################################################################################
 
