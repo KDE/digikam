@@ -133,10 +133,10 @@ if [[ ! -f /opt/rh/python27/enable ]] ; then
 fi
 
 
-if [[ ! -f /opt/rh/devtoolset-7/enable ]] ; then
+if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
-    yum -y --nogpgcheck install devtoolset-7
+    yum -y --nogpgcheck install devtoolset-6
 
 fi
 
@@ -207,7 +207,7 @@ if [ ! -d $DOWNLOAD_DIR ] ; then
 fi
 
 # enable new compiler
-. /opt/rh/devtoolset-7/enable
+. /opt/rh/devtoolset-6/enable
 
 # enable new Python
 . /opt/rh/python27/enable
