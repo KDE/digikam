@@ -65,7 +65,8 @@ public:
 };
 
 SlideProperties::SlideProperties(const SlideShowSettings& settings, QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->settings = settings;
     setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size()/2);
@@ -91,6 +92,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
     }
 
     QPainter p(this);
+    p.setFont(d->settings.captionFont);
 
     DInfoInterface::DInfoMap info = d->settings.iface->itemInfo(d->url);
     DItemInfo item(info);
@@ -177,7 +179,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
     if (d->settings.printExpoSensitivity)
     {
         str.clear();
-        
+
         QString exposureTime = item.exposureTime();
         QString sensitivity  = item.sensitivity();
 
@@ -271,7 +273,6 @@ void SlideProperties::printInfoText(QPainter& p, int& offset, const QString& str
 {
     if (!str.isEmpty())
     {
-        p.setFont(d->settings.captionFont);
         offset += QFontMetrics(p.font()).lineSpacing();
         p.setPen(Qt::black);
 
