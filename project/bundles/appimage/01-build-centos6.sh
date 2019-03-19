@@ -136,7 +136,7 @@ fi
 if [[ ! -f /opt/rh/devtoolset-7/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
-    yum -y --nogpgcheck install devtoolset-7-gcc devtoolset-7-gcc-c++
+    yum -y --nogpgcheck install devtoolset-7
 
 fi
 
