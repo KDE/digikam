@@ -17,13 +17,17 @@ ExternalProject_Add(ext_qt
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                   -prefix ${EXTPREFIX_qt}
+                  -verbose
+                  -release
                   -opensource
                   -confirm-license
-                  -nomake examples
                   -sql-sqlite
                   -fontconfig
+                  -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
                   -openssl-linked
-                  -optimized-qmake
+                  -nomake tests                     # Do not build test codes
+                  -nomake examples                  # Do not build basis example codes
+                  -no-compile-examples              # Do not build extra example codes
                   -no-qml-debug
                   -no-mtdev
                   -no-journald
@@ -33,7 +37,6 @@ ExternalProject_Add(ext_qt
                   -no-linuxfb
                   -no-libproxy
                   -no-pch
-                  -no-compile-examples
                   -qt-zlib
                   -qt-pcre
                   -qt-harfbuzz
