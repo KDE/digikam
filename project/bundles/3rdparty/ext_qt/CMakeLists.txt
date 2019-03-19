@@ -8,6 +8,12 @@
 
 SET(EXTPREFIX_qt "${EXTPREFIX}")
 
+if (${MXE_ARCHBITS} MATCHES "64")
+    set(LIB_DIR "lib64")
+else()
+    set(LIB_DIR "lib")
+endif()
+
 ExternalProject_Add(ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.qt.io/official_releases/qt/5.11/5.11.3/single/qt-everywhere-src-5.11.3.tar.xz
@@ -17,6 +23,8 @@ ExternalProject_Add(ext_qt
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                   -prefix ${EXTPREFIX_qt}
+                  -I ${EXTPREFIX_qt}/include
+                  -L ${EXTPREFIX_qt}/${LIB_DIR}
                   -verbose
                   -release
                   -opensource
