@@ -39,28 +39,36 @@ ExternalProject_Add(ext_qt
                   -qt-harfbuzz
                   -qt-xcb
                   -qt-xkbcommon-x11
-                  -skip qt3d
-                  -skip qtactiveqt
-                  -skip qtandroidextras
-                  -skip qtcanvas3d
-                  -skip qtcharts
-                  -skip qtconnectivity
-                  -skip qtdatavis3d
-                  -skip qtdoc
-                  -skip qtgamepad
-                  -skip qtgraphicaleffects
-                  -skip qtlocation
-                  -skip qtmultimedia
-                  -skip qtpurchasing
-                  -skip qtremoteobjects
-                  -skip qtserialport
-                  -skip qtscxml
-                  -skip qtsensors
-                  -skip qtspeech
-                  -skip qttranslations
-                  -skip qtvirtualkeyboard
-                  -skip qtwayland
-                  -skip qtwebsockets
+                  -skip qt3d                        # 3D core
+                  -skip qtactiveqt                  # No need ActiveX support
+                  -skip qtandroidextras             # For embeded devices only
+                  -skip qtwinextras                 # For Windows devices only
+                  -skip qtmacextras                 # For MacOS devices only
+                  -skip qtcanvas3d                  # 3D extensions
+                  -skip qtcharts                    # No need data models charts support
+                  -skip qtconnectivity              # For embeded devices only
+                  -skip qtscript                    # No need scripting (deprecated)
+                  -skip qtdatavis3d                 # no need 3D data visualizations support
+                  -skip qtdoc                       # No need documentation
+                  -skip qtenginio                   # No need backend-as-service support
+                  -skip qtgamepad                   # No need gamepad hardware support.
+                  -skip qtgraphicaleffects          # Advanced graphical effects in GUI
+                  -skip qtlocation                  # No need geolocation
+                  -skip qtquickcontrols2            # QtQuick support for QML
+                  -skip qtmultimedia                # No need multimedia support (replaced by QtAV+ffmpeg)
+                  -skip qtnetworkauth               # No need network authentification support.
+                  -skip qtpurchasing                # No need in-app purchase of products support
+                  -skip qtremoteobjects             # No need sharing QObject properties between processes support
+                  -skip qtserialport                # No need serial port support
+                  -skip qtscxml                     # No need SCXML state machines support
+                  -skip qtsensors                   # For embeded devices only
+                  -skip qtspeech                    # No need speech synthesis support
+                  -skip qttranslations              # No need translation tools.
+                  -skip qtvirtualkeyboard           # No need virtual keyboard support
+                  -skip qtwayland                   # Specific to Linux
+                  -skip qtwebsockets                # No need websocket support
+                  -skip qtwebview                   # QML extension for QWebEngine
+                  -skip qtwebglplugin               # No need browser OpenGL extention support
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
