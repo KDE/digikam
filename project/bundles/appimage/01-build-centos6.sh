@@ -166,7 +166,7 @@ else
 #
 #   fi
 
-    if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
+    if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
 
         echo -e "---------- Install New Compiler Tools Set\n"
         cd /etc/yum.repos.d
@@ -259,13 +259,19 @@ if [ ! -d $DOWNLOAD_DIR ] ; then
 fi
 
 # enable new compiler
-. /opt/rh/devtoolset-6/enable
+if [[ -f /opt/rh/devtoolset-6/enable ]] ; then
+    . /opt/rh/devtoolset-6/enable
+fi
 
 # enable new Python
-. /opt/rh/python27/enable
+if [[ -f /opt/rh/python27/enable ]] ; then
+    . /opt/rh/python27/enable
+fi
 
 # enable new Ruby
-. /opt/rh/rh-ruby24/enable
+if [[ -f /opt/rh/rh-ruby24/enable ]] ; then
+    . /opt/rh/rh-ruby24/enable
+fi
 
 #################################################################################################
 
