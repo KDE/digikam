@@ -88,4 +88,7 @@ BUGFIXES:
 069 ==> 386967 - digiKam with Adobe Bridge keywords under Windows.
 070 ==> 402433 - Google Maps Doesn't Zoom With Mouse Wheel.
 071 ==> 396920 - EXIF info not written when files from some cameras (Pentax K3) are edited and saved.
-072 ==> 
+072 ==> 375468 - Cannot turn on Menubar.
+073 ==> 387253 - No more menu bar in the Gnome desktop environment.
+074 ==> 
+
