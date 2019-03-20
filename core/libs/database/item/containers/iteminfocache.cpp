@@ -341,14 +341,15 @@ void ItemInfoCache::slotImageChanged(const ImageChangeset& changeset)
 
             if (changes & DatabaseFields::ImageRelations)
             {
-                (*it)->groupImageCached    = false;
-                m_needUpdateGrouped        = true;
+                (*it)->groupImageCached = false;
+                m_needUpdateGrouped     = true;
             }
 
             if (changes.hasFieldsFromVideoMetadata())
             {
                 const DatabaseFields::VideoMetadata changedVideoMetadata = changes.getVideoMetadata();
-                (*it)->videoMetadataCached&=~changedVideoMetadata;
+                (*it)->videoMetadataCached                              &= ~changedVideoMetadata;
+                (*it)->hasVideoMetadata                                  = true;
 
                 (*it)->databaseFieldsHashRaw.removeAllFields(changedVideoMetadata);
             }
@@ -356,7 +357,8 @@ void ItemInfoCache::slotImageChanged(const ImageChangeset& changeset)
             if (changes.hasFieldsFromImageMetadata())
             {
                 const DatabaseFields::ImageMetadata changedImageMetadata = changes.getImageMetadata();
-                (*it)->imageMetadataCached&=~changedImageMetadata;
+                (*it)->imageMetadataCached                              &= ~changedImageMetadata;
+                (*it)->hasImageMetadata                                  = true;
 
                 (*it)->databaseFieldsHashRaw.removeAllFields(changedImageMetadata);
             }
