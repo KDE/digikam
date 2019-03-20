@@ -7,8 +7,8 @@
 #
 
 set(PREFIX_ext_qtav "${EXTPREFIX}")
-set(QTAV_VERSION v1.12.0)
-#set(QTAV_VERSION master)
+#set(QTAV_VERSION v1.12.0)
+set(QTAV_VERSION master)
 
 if(MINGW)
 
@@ -86,7 +86,7 @@ elseif(APPLE)
 
 else() #Linux
 
-    set(LIB_DIR "lib_linux_")
+    set(LIB_DIR "lib")
 
     ExternalProject_Add(ext_qtav
 
@@ -108,22 +108,24 @@ else() #Linux
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAVWidgets.so.1 &&
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAVWidgets.so.1.12 &&
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAVWidgets.so.1.12.0 &&
-                          mkdir build && cd build && qmake ..
+                          cd <SOURCE_DIR> && mkdir build && cd build &&
+                          $(CMAKE_COMMAND) .. -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_qtav}
+                                              -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+                                              ${GLOBAL_PROFILE}
+                                              -DBUILD_EXAMPLES=OFF
+                                              -DBUILD_TESTS=OFF
+                                              -DBUILD_QT5OPENGL=ON
 
-        BUILD_COMMAND cd build && $(MAKE)
+        BUILD_COMMAND cd <SOURCE_DIR>/build && $(MAKE)
 
         INSTALL_COMMAND cp -rfv <SOURCE_DIR>/src/QtAV ${INSTALL_ROOT}/include/ &&
                         cp -rfv <SOURCE_DIR>/widgets/QtAVWidgets ${INSTALL_ROOT}/include/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAV.so ${INSTALL_ROOT}/lib/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAV.so.1 ${INSTALL_ROOT}/lib/ &&
-                        cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAV.so.1.12 ${INSTALL_ROOT}/lib/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAV.so.1.12.0 ${INSTALL_ROOT}/lib/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAVWidgets.so ${INSTALL_ROOT}/lib/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAVWidgets.so.1 ${INSTALL_ROOT}/lib/ &&
-                        cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAVWidgets.so.1.12 ${INSTALL_ROOT}/lib/ &&
                         cp -fv  <SOURCE_DIR>/build/${LIB_DIR}/libQtAVWidgets.so.1.12.0 ${INSTALL_ROOT}/lib/
-
-        BUILD_IN_SOURCE 1
 
         UPDATE_COMMAND ""
         ALWAYS 0
