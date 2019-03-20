@@ -87,3 +87,5 @@ BUGFIXES:
 068 ==> 379916 - Some people tags are missing.
 069 ==> 386967 - digiKam with Adobe Bridge keywords under Windows.
 070 ==> 402433 - Google Maps Doesn't Zoom With Mouse Wheel.
+071 ==> 396920 - EXIF info not written when files from some cameras (Pentax K3) are edited and saved.
+072 ==> 
