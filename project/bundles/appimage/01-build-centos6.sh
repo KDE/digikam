@@ -119,26 +119,62 @@ yum -y install wget \
 
 #################################################################################################
 
-yum -y --nogpgcheck install centos-release-scl
+if [[ "$(arch)" = "x86_64" ]] ; then
 
-if [[ ! -f /opt/rh/python27/enable ]] ; then
+    yum -y --nogpgcheck install centos-release-scl
 
-    echo -e "---------- Install New Python Interpreter\n"
-    yum -y --nogpgcheck install python27
+    if [[ ! -f /opt/rh/python27/enable ]] ; then
 
-fi
+        echo -e "---------- Install New Python Interpreter\n"
+        yum -y --nogpgcheck install python27
 
-if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+    fi
 
-    echo -e "---------- Install New Ruby Interpreter\n"
-    yum -y --nogpgcheck install rh-ruby24
+    if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
 
-fi
+        echo -e "---------- Install New Ruby Interpreter\n"
+        yum -y --nogpgcheck install rh-ruby24
 
-if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
+    fi
 
-    echo -e "---------- Install New Compiler Tools Set\n"
-    yum -y --nogpgcheck install devtoolset-6
+    if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
+
+        echo -e "---------- Install New Compiler Tools Set\n"
+        yum -y --nogpgcheck install devtoolset-6
+
+    fi
+
+else
+
+    if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
+
+        echo -e "---------- Install New Python Interpreter\n"
+
+        cd /etc/yum.repos.d
+        wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
+        yum -y --nogpgcheck install python2.7
+        rm -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo
+
+    fi
+
+#   if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
+#
+#       echo -e "---------- Install New Ruby Interpreter\n"
+#
+#       yum -y install centos-release-scl-rh centos-release-scl
+#       yum -y --nogpgcheck install rh-ruby24
+#
+#   fi
+
+    if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
+
+        echo -e "---------- Install New Compiler Tools Set\n"
+        cd /etc/yum.repos.d
+        wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
+        yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
+        rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+
+    fi
 
 fi
 
