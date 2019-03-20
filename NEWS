@@ -96,4 +96,5 @@ BUGFIXES:
 077 ==> 388533 - UpdateSchemaFromV7ToV9 fails.
 078 ==> 281493 - digiKam fails to install on Windows XP.
 079 ==> 405537 - Strange behavior with tag in attached file.
-080 ==> 
+080 ==> 405233 - digikam: symbol lookup error: /tmp/.mount_digika5N9rGH/usr/lib/libQt5XcbQpa.so.5: undefined symbol: FT_Property_Set.
+081 ==> 
