@@ -92,4 +92,5 @@ BUGFIXES:
 073 ==> 387253 - No more menu bar in the Gnome desktop environment.
 074 ==> 397405 - Large empty space in Digikams main icon view since ~20180707 appimage.
 075 ==> 399237 - Thumbnails view shows an empty dock for thumbnails.
-076 ==> 
+076 ==> 393935 - Segmentation fault during face detection.
+077 ==> 
