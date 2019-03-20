@@ -170,9 +170,9 @@ else
 
         echo -e "---------- Install New Compiler Tools Set\n"
         cd /etc/yum.repos.d
-        wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
-        yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
-        rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+        wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6/repo/epel-6/mlampe-devtoolset-6-epel-6.repo
+        yum -y --nogpgcheck install devtoolset-6-gcc devtoolset-6-gcc-c++
+        rm -f /etc/yum.repos.d/mlampe-devtoolset-6-epel-6.repo
 
     fi
 
