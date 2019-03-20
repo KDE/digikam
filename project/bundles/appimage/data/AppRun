@@ -38,6 +38,7 @@ preload_shared_library ()
     fi
 }
 
+preload_shared_library libfontconfig.so
 preload_shared_library libfreetype.so
 preload_shared_library libudev.so
 

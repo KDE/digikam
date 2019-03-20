@@ -301,6 +301,7 @@ rm -f usr/lib/libusb-1.0.so.0 || true
 rm -f usr/lib/libuuid.so.1 || true
 rm -f usr/lib/libwind.so.0 || true
 rm -f usr/lib/libfontconfig.so.* || true
+rm -f usr/lib/libfreetype.so.* || true
 # Remove this library, else appimage cannot be started properly (Bug #390162)
 rm -f usr/lib/libopenal.so.1 || true
 
@@ -393,15 +394,13 @@ if [[ ! -s ./functions.sh ]] ; then
     wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
 fi
 
-. ./functions.sh
-
 # Install desktopintegration in usr/bin/digikam.wrapper
 cd $APP_IMG_DIR
 
 # We will use a dedicated bash script to run inside the AppImage to be sure that XDG_* variable are set for Qt5
 cp ${ORIG_WD}/data/AppRun ./
 
-# desktop integration rules
+# desktop integration files
 
 cp /usr/share/applications/org.kde.digikam.desktop ./digikam.desktop
 cp /usr/share/icons/hicolor/64x64/apps/digikam.png ./digikam.png
@@ -411,9 +410,6 @@ cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/defaul
 
 mkdir -p $APP_IMG_DIR/usr/share/icons/default/128x128/mimetypes
 cp -r /usr/share/icons/hicolor/128x128/apps/digikam.png ./usr/share/icons/default/128x128/mimetypes/application-vnd.digikam.png
-
-# TODO: this AppImage sdk API is obsolete.
-#get_desktopintegration digikam
 
 mkdir -p $ORIG_WD/bundle
 rm -f $ORIG_WD/bundle/* || true
