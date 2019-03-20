@@ -157,14 +157,22 @@ else
 
     fi
 
-#   if [[ ! -f /opt/rh/rh-ruby24/enable ]] ; then
-#
-#       echo -e "---------- Install New Ruby Interpreter\n"
-#
-#       yum -y install centos-release-scl-rh centos-release-scl
-#       yum -y --nogpgcheck install rh-ruby24
-#
-#   fi
+    if [[ ! -f /etc/profile.d/rvm.sh ]] ; then
+
+        echo -e "---------- Install New Ruby Interpreter\n"
+
+        # Based this tutorial: https://tecadmin.net/install-ruby-latest-stable-centos/
+
+        curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+        curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
+        curl -L get.rvm.io | bash -s stable
+        source /etc/profile.d/rvm.sh
+        rvm reload
+        rvm requirements run
+        rvm install 2.4
+        rvm use 2.4 --default
+
+    fi
 
     if [[ ! -f /opt/rh/devtoolset-6/enable ]] ; then
 
