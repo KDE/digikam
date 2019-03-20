@@ -146,14 +146,14 @@ if [[ "$(arch)" = "x86_64" ]] ; then
 
 else
 
-    if [[ ! -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo ]] ; then
+    if [[ ! -f /etc/yum.repos.d/ewdurbin-pythons-el6-epel-6.repo ]] ; then
 
         echo -e "---------- Install New Python Interpreter\n"
 
         cd /etc/yum.repos.d
-        wget https://copr.fedorainfracloud.org/coprs/g/python/python2.7_epel6/repo/epel-6/mlampe-python2.7_epel6.repo
-        yum -y --nogpgcheck install python2.7
-        rm -f /etc/yum.repos.d/mlampe-python2.7_epel6.repo
+        wget https://copr.fedorainfracloud.org/coprs/ewdurbin/pythons-el6/repo/epel-6/ewdurbin-pythons-el6-epel-6.repo
+        yum -y --nogpgcheck install python27
+        rm -f /etc/yum.repos.d/ewdurbin-pythons-el6-epel-6.repo
 
     fi
 
