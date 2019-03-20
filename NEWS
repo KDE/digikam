@@ -93,4 +93,5 @@ BUGFIXES:
 074 ==> 397405 - Large empty space in Digikams main icon view since ~20180707 appimage.
 075 ==> 399237 - Thumbnails view shows an empty dock for thumbnails.
 076 ==> 393935 - Segmentation fault during face detection.
-077 ==> 
+077 ==> 388533 - UpdateSchemaFromV7ToV9 fails.
+078 ==> 
