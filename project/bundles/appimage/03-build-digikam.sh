@@ -119,6 +119,7 @@ cmake3 -G "Unix Makefiles" .. \
       -DENABLE_DBUS=ON \
       -DENABLE_APPSTYLES=ON \
       -DENABLE_QWEBENGINE=OFF \
+      -DENABLE_FACESENGINE_DNN=ON \
       -DENABLE_KIO=OFF \
       -DENABLE_LEGACY=OFF \
       -Wno-dev
