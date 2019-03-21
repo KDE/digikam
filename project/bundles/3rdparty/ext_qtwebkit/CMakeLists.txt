@@ -17,7 +17,7 @@ ExternalProject_Add(ext_qtwebkit
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit-fixdeps.patch
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_qtwebkit}
-               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               -DCMAKE_BUILD_TYPE=MinSizeRel
                ${GLOBAL_PROFILE}
                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX_qtwebkit}
                -DENABLE_GEOLOCATION=OFF
