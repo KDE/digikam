@@ -112,7 +112,7 @@
 #cmakedefine HAVE_QWEBENGINE 1
 
 /* Define to 1 if FaceEngine DNN is enabled */
-#cmakedefine HAVE_FACEENGINE_DNN 1
+#cmakedefine HAVE_FACESENGINE_DNN 1
 
 /* Defines to 1 if the Dr. Mingw crash handler should be used */
 #cmakedefine HAVE_DRMINGW 1
