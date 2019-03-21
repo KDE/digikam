@@ -71,10 +71,10 @@ yum -y install wget \
                which \
                fuse \
                automake \
-               mesa-libEGL \
                cmake3 \
                gcc-c++ \
                patch \
+               libdrm-devel \
                libxcb \
                libxcb-devel \
                xcb-util \
@@ -82,9 +82,17 @@ yum -y install wget \
                xcb-util-devel \
                xkeyboard-config \
                libXi-devel \
+               libXtst-devel \
+               libXrandr-devel \
+               libXi-devel \
+               libXcursor-devel \
+               libXcomposite-devel \
+               libXrender-devel \
                mesa-libGL-devel \
                mesa-libGLU-devel \
-               libXrender-devel \
+               mesa-libEGL-devel \
+               mesa-libEGL \
+               xscreensaver \
                gperf \
                ruby \
                bison \
@@ -116,6 +124,7 @@ yum -y install wget \
                cups-devel \
                openal-soft-devel \
                libical-devel \
+               libcap-devel \
                patchelf \
                dpkg
 
