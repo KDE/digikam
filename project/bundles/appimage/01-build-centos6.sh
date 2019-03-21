@@ -148,7 +148,7 @@ if [[ "$(arch)" = "x86_64" ]] ; then
 
 else
 
-    if [[ ! -f /etc/yum.repos.d/ewdurbin-pythons-el6-epel-6.repo ]] ; then
+    if [[ ! -f /usr/bin/python2.6 ]] ; then
 
         echo -e "---------- Install New Python Interpreter\n"
 
