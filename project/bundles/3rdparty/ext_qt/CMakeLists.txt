@@ -28,7 +28,6 @@ ExternalProject_Add(ext_qt
                   -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
                   -openssl-linked                   # hard link ssl libraries
                   -nomake demos                     # Do not build demo codes
-                  -nomake docs                      # Do not build documentations
                   -nomake tests                     # Do not build test codes
                   -nomake examples                  # Do not build basis example codes
                   -no-compile-examples              # Do not build extra example codes
