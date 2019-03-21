@@ -76,7 +76,7 @@ public:
         LBP,
         EigenFace,
         FisherFace,
-        DNN             // Default one as it must be the best and the most advanced : Deep Neural Networks.
+        DNN             // Deep Neural Networks.
     };
 
 public:

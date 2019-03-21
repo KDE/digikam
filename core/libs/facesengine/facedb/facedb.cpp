@@ -21,36 +21,40 @@
  *
  * ============================================================ */
 
+#include "digikam_config.h"
+
 // OpenCV includes need to show up before Qt includes
 
-#include "tensor.h"
-#include "input.h"
-#include "layers.h"
-#include "loss.h"
-#include "core.h"
-#include "solvers.h"
-#include "cpu_dlib.h"
-#include "tensor_tools.h"
-#include "utilities.h"
-#include "validation.h"
-#include "serialize.h"
-#include "matrix.h"
-#include "matrix_utilities.h"
-#include "matrix_subexp.h"
-#include "matrix_math_functions.h"
-#include "matrix_generic_image.h"
-#include "cv_image.h"
-#include "assign_image.h"
-#include "interpolation.h"
-#include "frontal_face_detector.h"
+#ifdef HAVE_FACESENGINE_DNN
+#   include "tensor.h"
+#   include "input.h"
+#   include "layers.h"
+#   include "loss.h"
+#   include "core.h"
+#   include "solvers.h"
+#   include "cpu_dlib.h"
+#   include "tensor_tools.h"
+#   include "utilities.h"
+#   include "validation.h"
+#   include "serialize.h"
+#   include "matrix.h"
+#   include "matrix_utilities.h"
+#   include "matrix_subexp.h"
+#   include "matrix_math_functions.h"
+#   include "matrix_generic_image.h"
+#   include "assign_image.h"
+#   include "interpolation.h"
+#   include "frontal_face_detector.h"
+#   include "cv_image.h"
+#   include "dnnfacemodel.h"
+#   include "dnn_face.h"
+#endif
 
 // Local includes
 
 #include "eigenfacemodel.h"
 #include "fisherfacemodel.h"
 #include "lbphfacemodel.h"
-#include "dnnfacemodel.h"
-#include "dnn_face.h"
 #include "facedb.h"                    // krazy:exclude=includes
 #include "digikam_debug.h"
 
@@ -417,11 +421,13 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
     }
 }
 
+#ifdef HAVE_FACESENGINE_DNN
 void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 {
     DNNFaceKernel dnnFaceKernel;
     dnnFaceKernel.getFaceVector(data, vecdata);
 }
+#endif
 
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb)
 {
@@ -454,7 +460,11 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
             {
                 QByteArray compressed = qCompress(data.data);
                 std::vector<float> vecdata;
+
+                // FIXME !!! Why the Eigen face use DNN code here ???
+#ifdef HAVE_FACESENGINE_DNN
                 this->getFaceVector(mat_rgb, vecdata);
+#endif
                 qCDebug(DIGIKAM_FACEDB_LOG) << "vecdata: " << vecdata[vecdata.size()-2]
                                                            << vecdata[vecdata.size()-1];
 
@@ -617,6 +627,7 @@ FisherFaceModel FaceDb::fisherFaceModel() const
     return model;
 }
 
+#ifdef HAVE_FACESENGINE_DNN
 void FaceDb::updateDNNFaceModel(DNNFaceModel& model)
 {
     QList<DNNFaceVecMetadata> metadataList = model.vecMetadata();
@@ -723,6 +734,7 @@ DNNFaceModel FaceDb::dnnFaceModel() const
 
     return model;
 }
+#endif
 
 void FaceDb::clearEIGENTraining(const QString& context)
 {

@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "identity.h"
 #include "facedbbackend.h"
 #include "opencvmatdata.h"
@@ -47,7 +48,10 @@ namespace Digikam
 class LBPHFaceModel;
 class EigenFaceModel;
 class FisherFaceModel;
+
+#ifdef HAVE_FACESENGINE_DNN
 class DNNFaceModel;
+#endif
 
 class FaceDb
 {
@@ -84,10 +88,12 @@ public:
     /// OpenCV FISHER
     FisherFaceModel fisherFaceModel() const;
 
+#ifdef HAVE_FACESENGINE_DNN
     /// DNN
     void updateDNNFaceModel(DNNFaceModel& model);
     void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     DNNFaceModel dnnFaceModel() const;
+#endif
 
     // ----------- Database shrinking methods ----------
 

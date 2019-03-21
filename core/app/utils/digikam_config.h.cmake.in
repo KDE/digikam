@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CONFIG__H
-#define DIGIKAM_CONFIG__H
+#ifndef DIGIKAM_CONFIG_H
+#define DIGIKAM_CONFIG_H
 
 /* Define to 1 if you have KDEPIM shared library installed */
 #cmakedefine HAVE_AKONADICONTACT 1
@@ -111,6 +111,9 @@
 /* Define to 1 if system use QWebEngine instead of QWebKit */
 #cmakedefine HAVE_QWEBENGINE 1
 
+/* Define to 1 if FaceEngine DNN is enabled */
+#cmakedefine HAVE_FACEENGINE_DNN 1
+
 /* Defines to 1 if the Dr. Mingw crash handler should be used */
 #cmakedefine HAVE_DRMINGW 1
 
@@ -128,4 +131,4 @@
 #pragma warning(disable : 4181)
 #endif
 
-#endif // DIGIKAM_CONFIG__H
+#endif // DIGIKAM_CONFIG_H

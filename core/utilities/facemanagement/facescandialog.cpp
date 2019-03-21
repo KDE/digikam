@@ -49,6 +49,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "dlayoutbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
@@ -365,7 +366,9 @@ void FaceScanDialog::setupUi()
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           RecognitionDatabase::RecognizeAlgorithm::LBP);
     //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
     //d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
+#ifdef HAVE_FACESENGINE_DNN
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
+#endif
     d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::LBP);
 
     d->retrainAllButton = new QCheckBox(advancedTab);

@@ -43,6 +43,7 @@ cmake -G "Unix Makefiles" . \
       -DENABLE_DBUS=OFF \
       -DENABLE_APPSTYLES=OFF \
       -DENABLE_QWEBENGINE=OFF \
+      -DENABLE_FACESENGINE_DNN=OFF \
       -Wno-dev \
       .. || exit 1
 

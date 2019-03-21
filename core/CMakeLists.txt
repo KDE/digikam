@@ -104,6 +104,7 @@ option(ENABLE_MEDIAPLAYER                "Build digiKam with Media Player suppor
 option(ENABLE_DBUS                       "Build digiKam with DBUS support (default=ON)"                                       ON)
 option(ENABLE_APPSTYLES                  "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
 option(ENABLE_QWEBENGINE                 "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     OFF)
+option(ENABLE_FACESENGINE_DNN            "Build digiKam with Neural Network faces engine module (default=ON)"                 ON)
 
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT               "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
@@ -530,6 +531,7 @@ MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER      HAVE_MEDIAPLAYER)
 MACRO_BOOL_TO_01(ENABLE_DBUS             HAVE_DBUS)
 MACRO_BOOL_TO_01(ENABLE_APPSTYLES        HAVE_APPSTYLE_SUPPORT)
 MACRO_BOOL_TO_01(ENABLE_QWEBENGINE       HAVE_QWEBENGINE)
+MACRO_BOOL_TO_01(ENABLE_FACESENGINE_DNN  HAVE_FACESENGINE_DNN)
 MACRO_BOOL_TO_01(ENABLE_DRMINGW          HAVE_DRMINGW)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
@@ -552,11 +554,12 @@ message(STATUS "----------------------------------------------------------------
 message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <https://www.digikam.org>")
 message(STATUS "")
 
-PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
-PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support" ENABLE_INTERNALMYSQL)
-PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"           ENABLE_DBUS)
-PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"     ENABLE_APPSTYLES)
-PRINT_COMPONENT_COMPILE_STATUS("QWebEngine Support"     ENABLE_QWEBENGINE)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support"  ENABLE_MYSQLSUPPORT)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support"  ENABLE_INTERNALMYSQL)
+PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"            ENABLE_DBUS)
+PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"      ENABLE_APPSTYLES)
+PRINT_COMPONENT_COMPILE_STATUS("QWebEngine Support"      ENABLE_QWEBENGINE)
+PRINT_COMPONENT_COMPILE_STATUS("FacesEngine DNN Support" ENABLE_FACESENGINE_DNN)
 
 # ==============================================================================
 

@@ -8,6 +8,7 @@ General     : All export tools become generic plugins and are shared with Showfo
 General     : Update internal libpgf to last 07193.
 General     : Add compatiblity with OpenCV version 4.
 General     : MacOS and AppImage bundles are now published with Qt 5.11.3.
+General     : Add new optional configuration option to compile with Faces Engine Neural Network.
 BQM         : Add new advanced settings in resize tool.
 BQM         : All Batch Queue Manager tools become Bqm plugins.
 Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.
@@ -97,4 +98,6 @@ BUGFIXES:
 078 ==> 281493 - digiKam fails to install on Windows XP.
 079 ==> 405537 - Strange behavior with tag in attached file.
 080 ==> 405233 - digikam: symbol lookup error: /tmp/.mount_digika5N9rGH/usr/lib/libQt5XcbQpa.so.5: undefined symbol: FT_Property_Set.
-081 ==> 
+081 ==> 404853 - digikam-6.0.0 faces engine fails to compile on PowerPC.
+082 ==> 405625 - digiKam 6.0.0 faces engine fails to compile on PowerPC with AltiVec enabled.
+083 ==> 

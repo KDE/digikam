@@ -463,6 +463,8 @@ There are two configuration sections : the top level and the core.
   - \b ENABLE_DBUS                           : Build digiKam with DBUS support (default=ON).
   - \b ENABLE_APPSTYLES                      : Build digiKam with support for changing the widget application style (default=OFF).
   - \b ENABLE_QWEBENGINE                     : Build digiKam with QWebEngine instead of QWebKit (default=OFF).
+  - \b ENABLE_FACESENGINE_DNN                : Build digiKam with Faces Engine Neural Network support (default=ON).
+
 
  - Experimental support options
 
