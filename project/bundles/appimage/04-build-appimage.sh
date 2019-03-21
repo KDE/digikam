@@ -55,7 +55,6 @@ CentOS6Adjustments
 
 # Working directory
 ORIG_WD="`pwd`"
-APP_IMG_DIR="/digikam.appdir"
 
 DK_RELEASEID=`cat $ORIG_WD/data/RELEASEID.txt`
 

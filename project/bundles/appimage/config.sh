@@ -13,6 +13,12 @@ DOWNLOAD_DIR="/d"
 # Absolute path where are compiled all tarballs
 BUILDING_DIR="/b"
 
+# Absolute path where are installed all software components
+INSTALL_DIR="/usr"
+
+# Absolute path where are bundled all software components
+APP_IMG_DIR="/digikam.appdir"
+
 ########################################################################
 
 # URL to git repository to checkout digiKam source code
