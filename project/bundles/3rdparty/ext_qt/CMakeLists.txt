@@ -21,10 +21,13 @@ ExternalProject_Add(ext_qt
                   -release
                   -opensource
                   -confirm-license
-                  -sql-sqlite
+                  -sql-sqlite                       # Compile Sqlite SQL plugin
+                  -sql-mysql                        # Compile Mysql SQL plugin
                   -fontconfig
                   -system-freetype                  # Use system font rendering lib https://doc.qt.io/qt-5/qtgui-attribution-freetype.html
-                  -openssl-linked
+                  -openssl-linked                   # hard link ssl libraries
+                  -nomake demos                     # Do not build demo codes
+                  -nomake docs                      # Do not build documentations
                   -nomake tests                     # Do not build test codes
                   -nomake examples                  # Do not build basis example codes
                   -no-compile-examples              # Do not build extra example codes
@@ -74,7 +77,7 @@ ExternalProject_Add(ext_qt
                   -skip qtwebglplugin               # No need browser OpenGL extention support
                   -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
                   -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
-                  -skip qtquickcontrols             # QtQuick support ==> QWebEngine dependency
+                  -skip qtquickcontrols             # QtQuick support      ==> QWebEngine dependency
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
