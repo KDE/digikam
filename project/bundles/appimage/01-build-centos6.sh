@@ -76,8 +76,15 @@ yum -y install wget \
                gcc-c++ \
                patch \
                libxcb \
+               libxcb-devel \
                xcb-util \
+               xcb-util-keysyms-devel \
+               xcb-util-devel \
                xkeyboard-config \
+               libXi-devel \
+               mesa-libGL-devel \
+               mesa-libGLU-devel \
+               libXrender-devel \
                gperf \
                ruby \
                bison \
@@ -95,14 +102,7 @@ yum -y install wget \
                libstdc++-devel \
                libxml2-devel \
                libstdc++-devel \
-               libXrender-devel \
                lcms2-devel \
-               xcb-util-keysyms-devel \
-               libXi-devel \
-               mesa-libGL-devel \
-               mesa-libGLU-devel \
-               libxcb-devel \
-               xcb-util-devel \
                glibc-devel \
                libudev-devel \
                sqlite-devel \
