@@ -665,8 +665,8 @@ void LensFunCameraSelector::populateDeviceCombos()
         ++it;
     }
 
-    d->make->model()->sort(0,  Qt::AscendingOrder);
-    d->model->model()->sort(0, Qt::AscendingOrder);
+    //d->make->model()->sort(0,  Qt::AscendingOrder);
+    //d->model->model()->sort(0, Qt::AscendingOrder);
 
     d->make->blockSignals(false);
     d->model->blockSignals(false);
@@ -712,7 +712,7 @@ void LensFunCameraSelector::populateLensCombo()
         ++lenses;
     }
 
-    d->lens->model()->sort(0, Qt::AscendingOrder);
+    //d->lens->model()->sort(0, Qt::AscendingOrder);
     d->lens->blockSignals(false);
 }
 
