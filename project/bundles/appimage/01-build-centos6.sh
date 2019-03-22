@@ -316,7 +316,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES
+#cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES
 
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
