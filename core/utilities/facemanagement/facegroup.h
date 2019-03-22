@@ -138,6 +138,7 @@ protected Q_SLOTS:
 private:
 
     FaceGroup(); // Disable
+    QRect convertItemRectToFaceRect(const QRect& rect) const;
 
     class Private;
     Private* const d;

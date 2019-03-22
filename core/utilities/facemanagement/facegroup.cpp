@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "metaenginesettings.h"
 #include "addtagscombobox.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
@@ -369,7 +370,7 @@ void FaceGroup::aboutToSetInfo(const ItemInfo& info)
         return;
     }
 
-    applyItemGeometryChanges();
+    //applyItemGeometryChanges();
     clear();
 }
 
@@ -527,7 +528,54 @@ FaceItem* FaceGroup::Private::createItem(const FaceTagsIface& face)
 {
     FaceItem* const item = new FaceItem(view->previewItem());
     item->setFace(face);
-    item->setOriginalRect(face.region().toRect());
+
+    QRect faceRect = face.region().toRect();
+
+    if (MetaEngineSettings::instance()->settings().exifRotate)
+    {
+        QSize imgSize = info.dimensions();
+
+        switch (info.orientation())
+        {
+            case MetaEngine::ORIENTATION_HFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_180:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_VFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_270:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    item->setOriginalRect(faceRect);
     item->setVisible(false);
 
     return item;
@@ -701,7 +749,8 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ItemInfo&, const
 {
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
     FaceTagsIface face      = item->face();
-    TagRegion currentRegion = TagRegion(item->originalRect());
+    QRect faceRect          = convertItemRectToFaceRect(item->originalRect());
+    TagRegion currentRegion = TagRegion(faceRect);
 
     if (!face.isConfirmedName() || face.region() != currentRegion ||
         action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
@@ -808,8 +857,9 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
-        FaceTagsIface face   = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
-                                                           TagRegion(d->manuallyAddedItem->originalRect()));
+        QRect faceRect     = convertItemRectToFaceRect(d->manuallyAddedItem->originalRect());
+        FaceTagsIface face = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+                                                         TagRegion(faceRect));
         FaceItem* const item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
         item->switchMode(AssignNameWidget::UnconfirmedEditMode);
@@ -848,6 +898,59 @@ void FaceGroup::applyItemGeometryChanges()
             d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
         }
     }
+}
+
+QRect FaceGroup::convertItemRectToFaceRect(const QRect& rect) const
+{
+    QRect faceRect = rect;
+
+    if (MetaEngineSettings::instance()->settings().exifRotate)
+    {
+        QSize imgSize = d->info.dimensions();
+
+        switch (d->info.orientation())
+        {
+            case MetaEngine::ORIENTATION_HFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_180:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_VFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90:
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_270:
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return faceRect;
 }
 
 /*

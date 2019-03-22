@@ -206,8 +206,6 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
             }
         }
 
-        ajustFaceRectangles(info, action);
-
         MetaEngineRotation matrix;
         matrix                                        *= currentOrientation;
         matrix                                        *= (MetaEngineRotation::TransformationAction)action;
@@ -270,6 +268,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
 
         if (rotatedPixels)
         {
+            ajustFaceRectangles(info, finalOrientation);
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
@@ -308,7 +307,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int action)
+void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int orientation)
 {
     /**
      *  Get all faces from database and rotate them
@@ -324,35 +323,50 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int act
 
     foreach (const FaceTagsIface& dface, facesList)
     {
-        QString name  = FaceTags::faceNameForTag(dface.tagId());
-        QRect oldrect = dface.region().toRect();
-        QRect newRect;
+        QString name   = FaceTags::faceNameForTag(dface.tagId());
+        QRect faceRect = dface.region().toRect();
+        QSize imgSize  = info.dimensions();
 
-        switch (action)
+        switch (orientation)
         {
+            case MetaEngine::ORIENTATION_HFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_180:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_VFLIP:
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
+                imgSize.transpose();
+                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
+                break;
+
+            case MetaEngine::ORIENTATION_ROT_270:
+                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
+                break;
+
             default:
-            case MetaEngineRotation::NoTransformation:
-                newRect = oldrect;
-                break;
-            case MetaEngineRotation::Rotate90:
-                newRect = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 0);
-                break;
-            case MetaEngineRotation::Rotate180:
-                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 0);
-                newRect = TagRegion::ajustToFlippedImg(newRect, info.dimensions(), 1);
-                break;
-            case MetaEngineRotation::Rotate270:
-                newRect = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 1);
-                break;
-            case MetaEngineRotation::FlipHorizontal:
-                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 0);
-                break;
-            case MetaEngineRotation::FlipVertical:
-                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 1);
                 break;
         }
 
-        ajustedFaces.insertMulti(name, newRect);
+        ajustedFaces.insertMulti(name, faceRect);
     }
 
     /**
@@ -362,7 +376,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int act
 
     QMap<QString, QRect>::ConstIterator it = ajustedFaces.constBegin();
 
-    for (; it != ajustedFaces.constEnd() ; ++it)
+    for ( ; it != ajustedFaces.constEnd() ; ++it)
     {
         int tagId = FaceTags::getOrCreateTagForPerson(it.key());
 
