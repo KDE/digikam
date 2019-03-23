@@ -241,54 +241,30 @@ QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
                   (qreal)region.height() / (qreal)fullSize.height());
 }
 
-QRect TagRegion::adjustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation)
+void TagRegion::adjustToRotatedImg(QRect& region, const QSize& fullSize, int rotation)
 {
-    int x, y, w, h;
-    region.getRect(&x, &y, &w, &h);
-    int newx, newy, neww, newh;
-
     if (rotation == 0) // Rotate right 90 degrees
     {
-       newx = fullSize.height() - y - h;
-       newy = x;
-       neww = h;
-       newh = w;
-
+        region.moveTo(fullSize.height() - region.y() - region.height(), region.x());
+        region.setSize(region.size().transposed());
     }
     else               // Rotate left 90 degrees
     {
-        newx = y;
-        newy = fullSize.width() - x - w;
-        neww = h;
-        newh = w;
+        region.moveTo(region.y(), fullSize.width() - region.x() - region.width());
+        region.setSize(region.size().transposed());
     }
-
-    return QRect(newx, newy, neww, newh);
 }
 
-QRect TagRegion::adjustToFlippedImg(const QRect& region, const QSize& fullSize, int flip)
+void TagRegion::adjustToFlippedImg(QRect& region, const QSize& fullSize, int flip)
 {
-    int x, y, w, h;
-    region.getRect(&x, &y, &w, &h);
-    int newx, newy, neww, newh;
-
     if (flip == 0) // Flip horizontally
     {
-       newx = fullSize.width() - x - w;
-       newy = y;
-       neww = w;
-       newh = h;
-
+        region.moveTo(fullSize.width() - region.x() - region.width(), region.y());
     }
     else           // Flip vertically
     {
-        newx = x;
-        newy = fullSize.height() - y - h;
-        neww = w;
-        newh = h;
+        region.moveTo(region.x(), fullSize.height() - region.y() - region.height());
     }
-
-    return QRect(newx, newy, neww, newh);
 }
 
 void TagRegion::adjustToOrientation(QRect& region, int orientation, const QSize& fullSize)
@@ -298,36 +274,36 @@ void TagRegion::adjustToOrientation(QRect& region, int orientation, const QSize&
     switch (orientation)
     {
         case MetaEngine::ORIENTATION_HFLIP:
-            region = TagRegion::adjustToFlippedImg(region, size, 0);
+            TagRegion::adjustToFlippedImg(region, size, 0);
             break;
 
         case MetaEngine::ORIENTATION_ROT_180:
-            region = TagRegion::adjustToFlippedImg(region, size, 0);
-            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            TagRegion::adjustToFlippedImg(region, size, 0);
+            TagRegion::adjustToFlippedImg(region, size, 1);
             break;
 
         case MetaEngine::ORIENTATION_VFLIP:
-            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            TagRegion::adjustToFlippedImg(region, size, 1);
             break;
 
         case MetaEngine::ORIENTATION_ROT_90_HFLIP:
-            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            TagRegion::adjustToRotatedImg(region, size, 0);
             size.transpose();
-            region = TagRegion::adjustToFlippedImg(region, size, 0);
+            TagRegion::adjustToFlippedImg(region, size, 0);
             break;
 
         case MetaEngine::ORIENTATION_ROT_90:
-            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            TagRegion::adjustToRotatedImg(region, size, 0);
             break;
 
         case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            TagRegion::adjustToRotatedImg(region, size, 0);
             size.transpose();
-            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            TagRegion::adjustToFlippedImg(region, size, 1);
             break;
 
         case MetaEngine::ORIENTATION_ROT_270:
-            region = TagRegion::adjustToRotatedImg(region, size, 1);
+            TagRegion::adjustToRotatedImg(region, size, 1);
             break;
 
         default:

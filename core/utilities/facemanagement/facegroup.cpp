@@ -874,38 +874,38 @@ QRect FaceGroup::convertItemRectToFaceRect(const QRect& rect) const
         switch (d->info.orientation())
         {
             case MetaEngine::ORIENTATION_HFLIP:
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
                 break;
 
             case MetaEngine::ORIENTATION_ROT_180:
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
                 break;
 
             case MetaEngine::ORIENTATION_VFLIP:
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
                 break;
 
             case MetaEngine::ORIENTATION_ROT_90_HFLIP:
                 imgSize.transpose();
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
-                faceRect = TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 0);
+                TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
                 break;
 
             case MetaEngine::ORIENTATION_ROT_90:
                 imgSize.transpose();
-                faceRect = TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
                 break;
 
             case MetaEngine::ORIENTATION_ROT_90_VFLIP:
                 imgSize.transpose();
-                faceRect = TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
-                faceRect = TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToFlippedImg(faceRect, imgSize, 1);
+                TagRegion::adjustToRotatedImg(faceRect, imgSize, 1);
                 break;
 
             case MetaEngine::ORIENTATION_ROT_270:
                 imgSize.transpose();
-                faceRect = TagRegion::adjustToRotatedImg(faceRect, imgSize, 0);
+                TagRegion::adjustToRotatedImg(faceRect, imgSize, 0);
                 break;
 
             default:
