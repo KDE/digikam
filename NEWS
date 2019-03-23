@@ -102,5 +102,9 @@ BUGFIXES:
 082 ==> 405625 - digiKam 6.0.0 faces engine fails to compile on PowerPC with AltiVec enabled.
 083 ==> 372340 - Tagged face areas on portait (vertical) oriented images are mispositioned.
 084 ==> 405743 - Customise Tool tab in editor.
-085 ==> 
+085 ==> 376014 - Moving grouped photos from one folder to another breaks the group.
+086 ==> 377782 - Group is lost when moved to another album.
+087 ==> 385147 - Moving grouped images into another album removes groups.
+088 ==> 
+
 
