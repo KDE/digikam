@@ -115,4 +115,5 @@ BUGFIXES:
 095 ==> 208201 - Icons appears and disappears.
 096 ==> 396933 - Tooltips of thumbnails and albums not readable in light designs.
 097 ==> 393777 - Item Tool Tips are unreadable in Windows 10 (white on yellow).
-098 ==> 
+098 ==> 240237 - Not possible to rotate the image.
+099 ==> 
