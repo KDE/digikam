@@ -55,7 +55,7 @@ void ApplyTagsTest::testApplyTagsToMetadata()
         applyTags(m_originalImageFolder + QLatin1String("20160821035715.jpg"),
                   QStringList() << QLatin1String("test"),
                   settings,
-                  true,       // NOTE: image is corrupted => no expected crash
+                  false,       // NOTE: image is corrupted => no expected crash
                   false);
     }
 }
