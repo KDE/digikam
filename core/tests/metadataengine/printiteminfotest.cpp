@@ -32,24 +32,24 @@ QTEST_MAIN(PrintItemInfoTest)
 
 void PrintItemInfoTest::testPrintItemInfo()
 {
-    //                                                 Expected tags to found in Comments,    Titles,
-    //                                                                           IptcContact, IptcLocation, IptcSubjects,
-    //                                                                           PhotoInfo,   VideoInfo,
-    //                                                                           XmpKeywords, XmpSubjects,  XmpSubCategories
-    printItemInfo(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),      false,       false,
-                                                                                 false,       false,        false,
-                                                                                 true,        true,
-                                                                                 true,        false,        false);
+    //                                                   Expected tags to found in Comments,    Titles,
+    //                                                                             IptcContact, IptcLocation, IptcSubjects,
+    //                                                                             PhotoInfo,   VideoInfo,
+    //                                                                             XmpKeywords, XmpSubjects,  XmpSubCategories, expectedRead
+    printItemInfo(m_originalImageFolder + QLatin1String("nikon-e2100.jpg"),        false,       false,
+                                                                                   false,       false,        false,
+                                                                                   true,        true,
+                                                                                   true,        false,        false,            true);
 
-    printItemInfo(m_originalImageFolder + QLatin1String("_27A1417.CR2"),         false,       false,
-                                                                                 false,       false,        false,
-                                                                                 true,        true,
-                                                                                 false,       false,        false);
+    printItemInfo(m_originalImageFolder + QLatin1String("_27A1417.CR2"),           false,       false,
+                                                                                   false,       false,        false,
+                                                                                   true,        true,
+                                                                                   false,       false,        false,            true);
 
-    printItemInfo(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"), false,       false,
-                                                                                 false,       false,        false,
-                                                                                 true,        false,
-                                                                                 false,       false,        false);
+    printItemInfo(m_originalImageFolder + QLatin1String("2015-07-22_00001.JPG"),   false,       false,
+                                                                                   false,       false,        false,
+                                                                                   true,        false,
+                                                                                   false,       false,        false,            true);
 
     // The file cannot be loaded with Exiv2-0.26, only test the newer versions
 
@@ -57,10 +57,10 @@ void PrintItemInfoTest::testPrintItemInfo()
 
     if ((MetaEngine::Exiv2Version().section(QLatin1Char('.'), 0, 1).toDouble(&ok) > 0.26) && ok)
     {
-        printItemInfo(m_originalImageFolder + QLatin1String("20160821035715.jpg"),   false,       false,
-                                                                                     false,       false,        false,
-                                                                                     false,       true,
-                                                                                     false,       false,        false);
+        printItemInfo(m_originalImageFolder + QLatin1String("20160821035715.jpg"), false,       false,
+                                                                                   false,       false,        false,
+                                                                                   false,       false,
+                                                                                   false,       false,        false,            false);
     }
 }
 
@@ -68,13 +68,14 @@ void PrintItemInfoTest::printItemInfo(const QString& filePath,
                                       bool com, bool ttl,            // Comments and titles
                                       bool cnt, bool loc, bool isb,  // Iptc
                                       bool pho, bool vid,            // Media
-                                      bool key, bool xsb, bool cat   // Xmp
+                                      bool key, bool xsb, bool cat,  // Xmp
+                                      bool expectedRead
                                      )
 {
     DMetadata meta;
 
     bool ret = meta.load(filePath);
-    QVERIFY(ret);
+    QCOMPARE(ret, expectedRead);
 
     // Comments and titles
     printComments(meta,         com);

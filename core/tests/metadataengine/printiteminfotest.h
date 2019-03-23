@@ -42,7 +42,8 @@ private:
                        bool com, bool ttl,            // Comments and titles
                        bool cnt, bool loc, bool isb,  // Iptc
                        bool pho, bool vid,            // Media
-                       bool key, bool xsb, bool cat   // Xmp
+                       bool key, bool xsb, bool cat,  // Xmp
+                       bool expectedRead
                       );
 
     /// NOTE: 'expected' paramareters want mean that we expect a info container non empty
