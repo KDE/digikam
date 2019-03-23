@@ -125,15 +125,20 @@ public:
 
     /**
      * When images is rotated, rectangles are off-position, adjust them using
-     * image's current size and rotation(left,right supported only)
+     * image's current size and rotation(left, right supported only)
      */
-    static QRect ajustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation);
+    static QRect adjustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation);
 
     /**
      * When images is flipped, rectangles are off-position, adjust them using
-     * image's current size and flip(horizon,vertical supported only)
+     * image's current size and flip(horizon, vertical supported only)
      */
-    static QRect ajustToFlippedImg(const QRect& region, const QSize& fullSize, int flip);
+    static QRect adjustToFlippedImg(const QRect& region, const QSize& fullSize, int flip);
+
+    /**
+     * Rotate and flip region to MetaEngine::ImageOrientation
+     */
+    static void adjustToOrientation(QRect& region, int orientation, const QSize& fullSize);
 
 protected:
 

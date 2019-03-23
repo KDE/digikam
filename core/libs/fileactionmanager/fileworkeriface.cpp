@@ -325,46 +325,10 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
     {
         QString name   = FaceTags::faceNameForTag(dface.tagId());
         QRect faceRect = dface.region().toRect();
-        QSize imgSize  = info.dimensions();
 
-        switch (orientation)
-        {
-            case MetaEngine::ORIENTATION_HFLIP:
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_180:
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
-                break;
-
-            case MetaEngine::ORIENTATION_VFLIP:
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
-                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
-                imgSize.transpose();
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 0);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_90:
-                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 0);
-                imgSize.transpose();
-                faceRect = TagRegion::ajustToFlippedImg(faceRect, imgSize, 1);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_270:
-                faceRect = TagRegion::ajustToRotatedImg(faceRect, imgSize, 1);
-                break;
-
-            default:
-                break;
-        }
+        TagRegion::adjustToOrientation(faceRect,
+                                       orientation,
+                                       info.dimensions());
 
         ajustedFaces.insertMulti(name, faceRect);
     }

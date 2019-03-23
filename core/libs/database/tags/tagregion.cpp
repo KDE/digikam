@@ -31,6 +31,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "metaengine.h"
 
 namespace Digikam
 {
@@ -240,7 +241,7 @@ QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
                   (qreal)region.height() / (qreal)fullSize.height());
 }
 
-QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, int rotation)
+QRect TagRegion::adjustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation)
 {
     int x, y, w, h;
     region.getRect(&x, &y, &w, &h);
@@ -248,16 +249,16 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
 
     if (rotation == 0) // Rotate right 90 degrees
     {
-       newx = fullSize.height() - y -h;
+       newx = fullSize.height() - y - h;
        newy = x;
        neww = h;
        newh = w;
 
     }
-    else             // Rotate left 90 degrees
+    else               // Rotate left 90 degrees
     {
         newx = y;
-        newy = fullSize.width() - x -w;
+        newy = fullSize.width() - x - w;
         neww = h;
         newh = w;
     }
@@ -265,7 +266,7 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
     return QRect(newx, newy, neww, newh);
 }
 
-QRect TagRegion::ajustToFlippedImg(const QRect& region, const QSize& fullSize, int flip)
+QRect TagRegion::adjustToFlippedImg(const QRect& region, const QSize& fullSize, int flip)
 {
     int x, y, w, h;
     region.getRect(&x, &y, &w, &h);
@@ -273,21 +274,65 @@ QRect TagRegion::ajustToFlippedImg(const QRect& region, const QSize& fullSize, i
 
     if (flip == 0) // Flip horizontally
     {
-       newx = fullSize.width() - x -w;
+       newx = fullSize.width() - x - w;
        newy = y;
        neww = w;
        newh = h;
 
     }
-    else             // Flip vertically
+    else           // Flip vertically
     {
         newx = x;
-        newy = fullSize.height() - y -h;
+        newy = fullSize.height() - y - h;
         neww = w;
         newh = h;
     }
 
     return QRect(newx, newy, neww, newh);
+}
+
+void TagRegion::adjustToOrientation(QRect& region, int orientation, const QSize& fullSize)
+{
+    QSize size = fullSize;
+
+    switch (orientation)
+    {
+        case MetaEngine::ORIENTATION_HFLIP:
+            region = TagRegion::adjustToFlippedImg(region, size, 0);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_180:
+            region = TagRegion::adjustToFlippedImg(region, size, 0);
+            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            break;
+
+        case MetaEngine::ORIENTATION_VFLIP:
+            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            size.transpose();
+            region = TagRegion::adjustToFlippedImg(region, size, 0);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_90:
+            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+            region = TagRegion::adjustToRotatedImg(region, size, 0);
+            size.transpose();
+            region = TagRegion::adjustToFlippedImg(region, size, 1);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_270:
+            region = TagRegion::adjustToRotatedImg(region, size, 1);
+            break;
+
+        default:
+            break;
+    }
 }
 
 QDebug operator<<(QDebug dbg, const TagRegion& r)
