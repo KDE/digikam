@@ -105,6 +105,8 @@ BUGFIXES:
 085 ==> 376014 - Moving grouped photos from one folder to another breaks the group.
 086 ==> 377782 - Group is lost when moved to another album.
 087 ==> 385147 - Moving grouped images into another album removes groups.
-088 ==> 
+088 ==> 342017 - Reverse Geocoding doesn't work.
+089 ==> 
+
 
 
