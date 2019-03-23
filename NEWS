@@ -101,4 +101,6 @@ BUGFIXES:
 081 ==> 404853 - digikam-6.0.0 faces engine fails to compile on PowerPC.
 082 ==> 405625 - digiKam 6.0.0 faces engine fails to compile on PowerPC with AltiVec enabled.
 083 ==> 372340 - Tagged face areas on portait (vertical) oriented images are mispositioned.
-084 ==> 
+084 ==> 405743 - Customise Tool tab in editor.
+085 ==> 
+
