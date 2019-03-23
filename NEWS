@@ -110,4 +110,6 @@ BUGFIXES:
 090 ==> 399285 - Would it be possible to drop kio for a better 'open with' functionality across all platforms?
 091 ==> 383079 - Open the photo in GIMP under windows.
 092 ==> 374356 - "Show item in file explorer" as well as "open with".
-093 ==> 
+093 ==> 208201 - Icons appears and disappears.
+094 ==> 202955 - thumbnails in album view are flickering with high frequency.
+095 ==> 
