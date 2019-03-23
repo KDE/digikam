@@ -241,73 +241,40 @@ QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
                   (qreal)region.height() / (qreal)fullSize.height());
 }
 
-void TagRegion::adjustToRotatedImg(QRect& region, const QSize& fullSize, int rotation)
-{
-    if (rotation == 0) // Rotate right 90 degrees
-    {
-        region.moveTo(fullSize.height() - region.y() - region.height(), region.x());
-        region.setSize(region.size().transposed());
-    }
-    else               // Rotate left 90 degrees
-    {
-        region.moveTo(region.y(), fullSize.width() - region.x() - region.width());
-        region.setSize(region.size().transposed());
-    }
-}
-
-void TagRegion::adjustToFlippedImg(QRect& region, const QSize& fullSize, int flip)
-{
-    if (flip == 0) // Flip horizontally
-    {
-        region.moveTo(fullSize.width() - region.x() - region.width(), region.y());
-    }
-    else           // Flip vertically
-    {
-        region.moveTo(region.x(), fullSize.height() - region.y() - region.height());
-    }
-}
-
-void TagRegion::adjustToOrientation(QRect& region, int orientation, const QSize& fullSize)
+void TagRegion::adjustToOrientation(QRect& region, int rotation, const QSize& fullSize)
 {
     QSize size = fullSize;
 
-    switch (orientation)
+    if (rotation == MetaEngine::ORIENTATION_ROT_90       ||
+        rotation == MetaEngine::ORIENTATION_ROT_90_HFLIP ||
+        rotation == MetaEngine::ORIENTATION_ROT_90_VFLIP)
     {
-        case MetaEngine::ORIENTATION_HFLIP:
-            TagRegion::adjustToFlippedImg(region, size, 0);
-            break;
+        region.moveTo(size.height() - region.y() - region.height(), region.x());
+        region.setSize(region.size().transposed());
+        size.transpose();
+    }
+    else if (rotation == MetaEngine::ORIENTATION_ROT_180)
+    {
+        region.moveTo(size.width()  - region.x() - region.width(),
+                      size.height() - region.y() - region.height());
 
-        case MetaEngine::ORIENTATION_ROT_180:
-            TagRegion::adjustToFlippedImg(region, size, 0);
-            TagRegion::adjustToFlippedImg(region, size, 1);
-            break;
+    }
+    else if (rotation == MetaEngine::ORIENTATION_ROT_270)
+    {
+        region.moveTo(region.y(), size.width() - region.x() - region.width());
+        region.setSize(region.size().transposed());
+        size.transpose();
+    }
 
-        case MetaEngine::ORIENTATION_VFLIP:
-            TagRegion::adjustToFlippedImg(region, size, 1);
-            break;
-
-        case MetaEngine::ORIENTATION_ROT_90_HFLIP:
-            TagRegion::adjustToRotatedImg(region, size, 0);
-            size.transpose();
-            TagRegion::adjustToFlippedImg(region, size, 0);
-            break;
-
-        case MetaEngine::ORIENTATION_ROT_90:
-            TagRegion::adjustToRotatedImg(region, size, 0);
-            break;
-
-        case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-            TagRegion::adjustToRotatedImg(region, size, 0);
-            size.transpose();
-            TagRegion::adjustToFlippedImg(region, size, 1);
-            break;
-
-        case MetaEngine::ORIENTATION_ROT_270:
-            TagRegion::adjustToRotatedImg(region, size, 1);
-            break;
-
-        default:
-            break;
+    if (rotation == MetaEngine::ORIENTATION_HFLIP ||
+        rotation == MetaEngine::ORIENTATION_ROT_90_HFLIP)
+    {
+        region.moveTo(size.width() - region.x() - region.width(), region.y());
+    }
+    else if (rotation == MetaEngine::ORIENTATION_VFLIP ||
+             rotation == MetaEngine::ORIENTATION_ROT_90_VFLIP)
+    {
+        region.moveTo(region.x(), size.height() - region.y() - region.height());
     }
 }
 
