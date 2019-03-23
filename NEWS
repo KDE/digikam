@@ -113,4 +113,6 @@ BUGFIXES:
 093 ==> 208201 - Icons appears and disappears.
 094 ==> 202955 - thumbnails in album view are flickering with high frequency.
 095 ==> 208201 - Icons appears and disappears.
-096 ==> 
+096 ==> 396933 - Tooltips of thumbnails and albums not readable in light designs.
+097 ==> 393777 - Item Tool Tips are unreadable in Windows 10 (white on yellow).
+098 ==> 
