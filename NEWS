@@ -116,4 +116,6 @@ BUGFIXES:
 096 ==> 396933 - Tooltips of thumbnails and albums not readable in light designs.
 097 ==> 393777 - Item Tool Tips are unreadable in Windows 10 (white on yellow).
 098 ==> 240237 - Not possible to rotate the image.
-099 ==> 
+099 ==> 366446 - Creating new albums fails due to invalid path name.
+100 ==> 369235 - Menu bar is not translated.
+101 ==> 
