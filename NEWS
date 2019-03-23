@@ -106,7 +106,8 @@ BUGFIXES:
 086 ==> 377782 - Group is lost when moved to another album.
 087 ==> 385147 - Moving grouped images into another album removes groups.
 088 ==> 342017 - Reverse Geocoding doesn't work.
-089 ==> 
-
-
-
+089 ==> 405174 - Right-click advice menu. Open with another program.
+090 ==> 399285 - Would it be possible to drop kio for a better 'open with' functionality across all platforms?
+091 ==> 383079 - Open the photo in GIMP under windows.
+092 ==> 374356 - "Show item in file explorer" as well as "open with".
+093 ==> 
