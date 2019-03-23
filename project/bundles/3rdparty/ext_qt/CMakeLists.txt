@@ -8,6 +8,15 @@
 
 SET(EXTPREFIX_qt "${EXTPREFIX}")
 
+IF(NOT ENABLE_QTWEBENGINE)
+    SET(DROP_QTWEBENGINE_DEPS
+        "
+        -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
+        -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
+        -skip qtquickcontrols             # QtQuick support      ==> QWebEngine dependency
+        ")
+ENDIF()
+
 ExternalProject_Add(ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.qt.io/official_releases/qt/5.11/5.11.3/single/qt-everywhere-src-5.11.3.tar.xz
@@ -74,10 +83,8 @@ ExternalProject_Add(ext_qt
                   -skip qtwebsockets                # No need websocket support
                   -skip qtwebview                   # QML extension for QWebEngine
                   -skip qtwebglplugin               # No need browser OpenGL extention support
+                  ${DROP_QTWEBENGINE_DEPS}
 
-#                  -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
-#                  -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
-#                  -skip qtquickcontrols             # QtQuick support      ==> QWebEngine dependency
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1

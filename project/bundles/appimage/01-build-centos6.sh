@@ -301,7 +301,8 @@ rm -rf $BUILDING_DIR/* || true
 cmake3 $ORIG_WD/../3rdparty \
        -DCMAKE_INSTALL_PREFIX:PATH=/usr \
        -DINSTALL_ROOT=/usr \
-       -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR
+       -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR \
+       -DENABLE_QTWEBENGINE=$DK_QTWEBENGINE
 
 # Low level libraries and Qt5 dependencies
 # NOTE: The order to compile each component here is very important.
@@ -316,7 +317,10 @@ cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit      -- -j$CPU_CORES
+
+if [[ $DK_QTWEBENGINE = 0 ]] ; then
+    cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit  -- -j$CPU_CORES
+fi
 
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig

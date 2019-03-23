@@ -44,6 +44,9 @@ DK_EPOCH="-`date "+%Y%m%dT%H%M%S"`"
 # Installer will include or not digiKam debug symbols
 DK_DEBUG=1
 
+# Option to use QtWebEngine instead QtWebkit
+DK_QTWEBENGINE=0
+
 # Sign bundles with GPG. Passphrase must be hosted in ~/.gnupg/dkorg-gpg-pwd.txt
 DK_SIGN=0
 
