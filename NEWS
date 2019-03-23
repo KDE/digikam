@@ -118,4 +118,5 @@ BUGFIXES:
 098 ==> 240237 - Not possible to rotate the image.
 099 ==> 366446 - Creating new albums fails due to invalid path name.
 100 ==> 369235 - Menu bar is not translated.
-101 ==> 
+101 ==> 403132 - Lazy Update not working (or: Stop when I say so).
+102 ==> 
