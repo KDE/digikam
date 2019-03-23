@@ -10,11 +10,10 @@ SET(EXTPREFIX_qt "${EXTPREFIX}")
 
 IF(NOT ENABLE_QTWEBENGINE)
     SET(DROP_QTWEBENGINE_DEPS
-        "
         -skip qtwebengine                 # No need Chromium browser support (QtWebkit instead)
         -skip qtwebchannel                # QtWebChannel support ==> QWebEngine dependency
         -skip qtquickcontrols             # QtQuick support      ==> QWebEngine dependency
-        ")
+        )
 ENDIF()
 
 ExternalProject_Add(ext_qt
