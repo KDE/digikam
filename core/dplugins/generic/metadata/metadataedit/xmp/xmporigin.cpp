@@ -68,18 +68,23 @@ public:
         countryCheck           = 0;
         dateCreatedSel         = 0;
         dateDigitalizedSel     = 0;
+        dateVideoSel           = 0;
         zoneCreatedSel         = 0;
         zoneDigitalizedSel     = 0;
+        zoneVideoSel           = 0;
         dateCreatedCheck       = 0;
         dateDigitalizedCheck   = 0;
+        dateVideoCheck         = 0;
         syncEXIFDateCheck      = 0;
         setTodayCreatedBtn     = 0;
         setTodayDigitalizedBtn = 0;
+        setTodayVideoBtn       = 0;
         countryCB              = 0;
     }
 
     QCheckBox*                     dateCreatedCheck;
     QCheckBox*                     dateDigitalizedCheck;
+    QCheckBox*                     dateVideoCheck;
     QCheckBox*                     syncEXIFDateCheck;
     QCheckBox*                     cityCheck;
     QCheckBox*                     sublocationCheck;
@@ -87,12 +92,15 @@ public:
 
     QPushButton*                   setTodayCreatedBtn;
     QPushButton*                   setTodayDigitalizedBtn;
+    QPushButton*                   setTodayVideoBtn;
 
     QDateTimeEdit*                 dateCreatedSel;
     QDateTimeEdit*                 dateDigitalizedSel;
+    QDateTimeEdit*                 dateVideoSel;
 
     TimeZoneComboBox*              zoneCreatedSel;
     TimeZoneComboBox*              zoneDigitalizedSel;
+    TimeZoneComboBox*              zoneVideoSel;
 
     QLineEdit*                     cityEdit;
     QLineEdit*                     sublocationEdit;
@@ -165,6 +173,25 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->dateVideoCheck   = new QCheckBox(i18n("Video date"), this);
+    d->zoneVideoSel     = new TimeZoneComboBox(this);
+
+    d->dateVideoSel     = new QDateTimeEdit(this);
+    d->dateVideoSel->setDisplayFormat(dateTimeFormat);
+
+    d->setTodayVideoBtn = new QPushButton();
+    d->setTodayVideoBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
+    d->setTodayVideoBtn->setWhatsThis(i18n("Set video date to today"));
+
+    d->dateVideoSel->setWhatsThis(i18n("Set here the video date of "
+                                       "intellectual content."));
+    d->zoneVideoSel->setWhatsThis(i18n("Set here the time zone of "
+                                       "intellectual content."));
+
+    slotSetTodayVideo();
+
+    // --------------------------------------------------------
+
     d->cityCheck = new QCheckBox(i18n("City:"), this);
     d->cityEdit  = new QLineEdit(this);
     d->cityEdit->setClearButtonEnabled(true);
@@ -203,18 +230,23 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     grid->addWidget(d->dateCreatedSel,                      3, 0, 1, 3);
     grid->addWidget(d->zoneCreatedSel,                      3, 3, 1, 1);
     grid->addWidget(d->setTodayCreatedBtn,                  3, 5, 1, 1);
-    grid->addWidget(d->syncEXIFDateCheck,                   5, 0, 1, 6);
-    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  6, 0, 1, 6);
-    grid->addWidget(d->cityCheck,                           7, 0, 1, 1);
-    grid->addWidget(d->cityEdit,                            7, 1, 1, 5);
-    grid->addWidget(d->sublocationCheck,                    8, 0, 1, 1);
-    grid->addWidget(d->sublocationEdit,                     8, 1, 1, 5);
-    grid->addWidget(d->provinceCheck,                       9, 0, 1, 1);
-    grid->addWidget(d->provinceEdit,                        9, 1, 1, 5);
-    grid->addWidget(d->countryCheck,                       10, 0, 1, 1);
-    grid->addWidget(d->countryCB,                          10, 1, 1, 5);
+    grid->addWidget(d->syncEXIFDateCheck,                   4, 0, 1, 6);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  5, 0, 1, 6);
+    grid->addWidget(d->dateVideoCheck,                      6, 0, 1, 6);
+    grid->addWidget(d->dateVideoSel,                        7, 0, 1, 3);
+    grid->addWidget(d->zoneVideoSel,                        7, 3, 1, 1);
+    grid->addWidget(d->setTodayVideoBtn,                    7, 5, 1, 1);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, this),  8, 0, 1, 6);
+    grid->addWidget(d->cityCheck,                           9, 0, 1, 1);
+    grid->addWidget(d->cityEdit,                            9, 1, 1, 5);
+    grid->addWidget(d->sublocationCheck,                   10, 0, 1, 1);
+    grid->addWidget(d->sublocationEdit,                    10, 1, 1, 5);
+    grid->addWidget(d->provinceCheck,                      11, 0, 1, 1);
+    grid->addWidget(d->provinceEdit,                       11, 1, 1, 5);
+    grid->addWidget(d->countryCheck,                       12, 0, 1, 1);
+    grid->addWidget(d->countryCB,                          12, 1, 1, 5);
     grid->setColumnStretch(4, 10);
-    grid->setRowStretch(11, 10);
+    grid->setRowStretch(13, 10);
     grid->setContentsMargins(QMargins());
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -226,11 +258,17 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     connect(d->dateDigitalizedCheck, SIGNAL(toggled(bool)),
             d->dateDigitalizedSel, SLOT(setEnabled(bool)));
 
+    connect(d->dateVideoCheck, SIGNAL(toggled(bool)),
+            d->dateVideoSel, SLOT(setEnabled(bool)));
+
     connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
             d->zoneCreatedSel, SLOT(setEnabled(bool)));
 
     connect(d->dateDigitalizedCheck, SIGNAL(toggled(bool)),
             d->zoneDigitalizedSel, SLOT(setEnabled(bool)));
+
+    connect(d->dateVideoCheck, SIGNAL(toggled(bool)),
+            d->zoneVideoSel, SLOT(setEnabled(bool)));
 
     connect(d->dateCreatedCheck, SIGNAL(toggled(bool)),
             d->syncEXIFDateCheck, SLOT(setEnabled(bool)));
@@ -255,6 +293,9 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     connect(d->dateDigitalizedCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalModified()));
 
+    connect(d->dateVideoCheck, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalModified()));
+
     connect(d->cityCheck, SIGNAL(toggled(bool)),
             this, SIGNAL(signalModified()));
 
@@ -275,10 +316,16 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
     connect(d->dateDigitalizedSel, SIGNAL(dateTimeChanged(QDateTime)),
             this, SIGNAL(signalModified()));
 
+    connect(d->dateVideoSel, SIGNAL(dateTimeChanged(QDateTime)),
+            this, SIGNAL(signalModified()));
+
     connect(d->zoneCreatedSel, SIGNAL(currentIndexChanged(QString)),
             this, SIGNAL(signalModified()));
 
     connect(d->zoneDigitalizedSel, SIGNAL(currentIndexChanged(QString)),
+            this, SIGNAL(signalModified()));
+
+    connect(d->zoneVideoSel, SIGNAL(currentIndexChanged(QString)),
             this, SIGNAL(signalModified()));
 
     // --------------------------------------------------------
@@ -288,6 +335,9 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 
     connect(d->setTodayDigitalizedBtn, SIGNAL(clicked()),
             this, SLOT(slotSetTodayDigitalized()));
+
+    connect(d->setTodayVideoBtn, SIGNAL(clicked()),
+            this, SLOT(slotSetTodayVideo()));
 
     // --------------------------------------------------------
 
@@ -307,6 +357,12 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 XMPOrigin::~XMPOrigin()
 {
     delete d;
+}
+
+void XMPOrigin::slotSetTodayVideo()
+{
+    d->dateVideoSel->setDateTime(QDateTime::currentDateTime());
+    d->zoneVideoSel->setToUTC();
 }
 
 void XMPOrigin::slotSetTodayCreated()
@@ -408,6 +464,36 @@ void XMPOrigin::readMetadata(QByteArray& xmpData)
     d->dateDigitalizedSel->setEnabled(d->dateDigitalizedCheck->isChecked());
     d->zoneDigitalizedSel->setEnabled(d->dateDigitalizedCheck->isChecked());
 
+    dateTimeStr = meta.getXmpTagString("Xmp.video.DateTimeOriginal", false);
+
+    if (dateTimeStr.isEmpty())
+        dateTimeStr = meta.getXmpTagString("Xmp.video.DateTimeDigitized", false);
+
+    if (dateTimeStr.isEmpty())
+        dateTimeStr = meta.getXmpTagString("Xmp.video.ModificationDate", false);
+
+    if (dateTimeStr.isEmpty())
+        dateTimeStr = meta.getXmpTagString("Xmp.video.DateUTC", false);
+
+    d->dateVideoSel->setDateTime(QDateTime::currentDateTime());
+    d->dateVideoCheck->setChecked(false);
+    d->zoneVideoSel->setToUTC();
+
+    if (!dateTimeStr.isEmpty())
+    {
+        dateTime = QDateTime::fromString(dateTimeStr, Qt::ISODate);
+
+        if (dateTime.isValid())
+        {
+            d->dateVideoSel->setDateTime(dateTime);
+            d->dateVideoCheck->setChecked(true);
+            d->zoneVideoSel->setTimeZone(dateTimeStr);
+        }
+    }
+
+    d->dateVideoSel->setEnabled(d->dateVideoCheck->isChecked());
+    d->zoneVideoSel->setEnabled(d->dateVideoCheck->isChecked());
+
     d->cityEdit->clear();
     d->cityCheck->setChecked(false);
     data = meta.getXmpTagString("Xmp.photoshop.City", false);
@@ -480,31 +566,33 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     meta.setExif(exifData);
     meta.setXmp(xmpData);
 
+    QString xmpDateTimeFormat = QLatin1String("yyyy:MM:ddThh:mm:ss");
+
     if (d->dateCreatedCheck->isChecked())
     {
         meta.setXmpTagString("Xmp.photoshop.DateCreated",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
         meta.setXmpTagString("Xmp.xmp.CreateDate",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
         meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
         meta.setXmpTagString("Xmp.tiff.DateTime",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
         meta.setXmpTagString("Xmp.xmp.ModifyDate",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
         meta.setXmpTagString("Xmp.xmp.MetadataDate",
-                                   getXMPCreationDate().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneCreatedSel->getTimeZone());
+                             getXMPCreationDate().toString(xmpDateTimeFormat) +
+                             d->zoneCreatedSel->getTimeZone());
 
         if (syncEXIFDateIsChecked())
         {
             meta.setExifTagString("Exif.Image.DateTime",
-                    getXMPCreationDate().toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                                  getXMPCreationDate().toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
         }
     }
     else
@@ -520,12 +608,35 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     if (d->dateDigitalizedCheck->isChecked())
     {
         meta.setXmpTagString("Xmp.exif.DateTimeDigitized",
-                             d->dateDigitalizedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
+                             d->dateDigitalizedSel->dateTime().toString(xmpDateTimeFormat) +
                              d->zoneDigitalizedSel->getTimeZone());
     }
     else
     {
         meta.removeXmpTag("Xmp.exif.DateTimeDigitized");
+    }
+
+    if (d->dateVideoCheck->isChecked())
+    {
+        meta.setXmpTagString("Xmp.video.DateTimeOriginal",
+                             d->dateVideoSel->dateTime().toString(xmpDateTimeFormat) +
+                             d->zoneVideoSel->getTimeZone());
+        meta.setXmpTagString("Xmp.video.DateTimeDigitized",
+                             d->dateVideoSel->dateTime().toString(xmpDateTimeFormat) +
+                             d->zoneVideoSel->getTimeZone());
+        meta.setXmpTagString("Xmp.video.ModificationDate",
+                             d->dateVideoSel->dateTime().toString(xmpDateTimeFormat) +
+                             d->zoneVideoSel->getTimeZone());
+        meta.setXmpTagString("Xmp.video.DateUTC",
+                             d->dateVideoSel->dateTime().toString(xmpDateTimeFormat) +
+                             d->zoneVideoSel->getTimeZone());
+    }
+    else
+    {
+        meta.removeXmpTag("Xmp.video.DateTimeOriginal");
+        meta.removeXmpTag("Xmp.video.DateTimeDigitized");
+        meta.removeXmpTag("Xmp.video.ModificationDate");
+        meta.removeXmpTag("Xmp.video.DateUTC");
     }
 
     if (d->cityCheck->isChecked())

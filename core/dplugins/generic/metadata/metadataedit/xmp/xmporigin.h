@@ -56,6 +56,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotSetTodayVideo();
     void slotSetTodayCreated();
     void slotSetTodayDigitalized();
 
