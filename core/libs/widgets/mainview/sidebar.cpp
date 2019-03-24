@@ -873,7 +873,7 @@ void Sidebar::backup(const QList<QWidget*> thirdWidgetsToBackup, QList<int>* con
 {
     sizes->clear();
 
-    foreach(QWidget* const widget, thirdWidgetsToBackup)
+    foreach (QWidget* const widget, thirdWidgetsToBackup)
     {
         *sizes << d->splitter->size(widget);
     }
@@ -898,7 +898,7 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
 
     if (thirdWidgetsToRestore.size() == sizes.size())
     {
-        for (int i=0; i<thirdWidgetsToRestore.size(); ++i)
+        for (int i = 0 ; i < thirdWidgetsToRestore.size() ; ++i)
         {
             d->splitter->setSize(thirdWidgetsToRestore.at(i), sizes.at(i));
         }
@@ -1124,11 +1124,11 @@ bool Sidebar::isExpanded() const
 
 bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
 {
-    for (int i = 0 ; i < d->tabs; ++i)
+    for (int i = 0 ; i < d->tabs ; ++i)
     {
-        if ( obj == tab(i) )
+        if (obj == tab(i))
         {
-            if ( ev->type() == QEvent::DragEnter)
+            if (ev->type() == QEvent::DragEnter)
             {
                 QDragEnterEvent* const e = static_cast<QDragEnterEvent*>(ev);
                 enterEvent(e);
@@ -1204,7 +1204,7 @@ SidebarSplitter::SidebarSplitter(Qt::Orientation orientation, QWidget* const par
 SidebarSplitter::~SidebarSplitter()
 {
     // retreat cautiously from sidebars that live longer
-    foreach(Sidebar* const sidebar, d->sidebars)
+    foreach (Sidebar* const sidebar, d->sidebars)
     {
         sidebar->d->splitter = 0;
     }
@@ -1309,7 +1309,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     {
         QWidget* const w = widget(index-1);
 
-        foreach(Sidebar* const sidebar, d->sidebars)
+        foreach (Sidebar* const sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {
@@ -1330,7 +1330,7 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     {
         QWidget* const w = widget(index);
 
-        foreach(Sidebar* const sidebar, d->sidebars)
+        foreach (Sidebar* const sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {
