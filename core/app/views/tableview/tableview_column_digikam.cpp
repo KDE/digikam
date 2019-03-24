@@ -129,7 +129,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
         switch (subColumn)
         {
             case SubColumnRating:
-                return QVariant(Qt::Alignment(Qt::AlignRight | Qt::AlignVCenter));
+                return QVariant(Qt::Alignment(Qt::AlignCenter));
 
             default:
                 return QVariant();
