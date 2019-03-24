@@ -435,6 +435,7 @@ private Q_SLOTS:
      */
     void clicked(int tab);
 
+    void slotExpandTimer();
     void slotDragSwitchTimer();
 
     void slotSplitterBtnClicked();

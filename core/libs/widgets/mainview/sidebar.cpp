@@ -1101,6 +1101,11 @@ void Sidebar::expand()
     d->minimized = false;
     d->stack->show();
 
+    QTimer::singleShot(0, this, SLOT(slotExpandTimer()));
+}
+
+void Sidebar::slotExpandTimer()
+{
     // Do not expand to size 0 (only splitter handle visible)
     // but either to previous size, or the minimum size hint
     if (d->splitter->size(this) == 0)

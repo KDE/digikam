@@ -120,5 +120,5 @@ BUGFIXES:
 100 ==> 369235 - Menu bar is not translated.
 101 ==> 403132 - Lazy Update not working (or: Stop when I say so).
 102 ==> 404797 - digikam-6.0.0-x86-64.appimage: stack trace shortly after startup.
-103 ==> 
-
+103 ==> 405789 - Sidebar widths revert to their defaults after switching back from full-screen view.
+104 ==> 
