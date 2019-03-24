@@ -479,25 +479,28 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
     meta.setIptc(iptcData);
     meta.setXmp(xmpData);
 
+    QString exifDateTimeFormat = QLatin1String("yyyy:MM:dd hh:mm:ss");
+    QString xmpDateTimeFormat  = QLatin1String("yyyy:MM:ddThh:mm:ss");
+
     if (d->dateCreatedCheck->isChecked())
     {
         meta.setExifTagString("Exif.Image.DateTime",
-                   d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+            d->dateCreatedSel->dateTime().toString(exifDateTimeFormat));
 
         if (meta.supportXmp() && d->syncXMPDateCheck->isChecked())
         {
             meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
             meta.setXmpTagString("Xmp.photoshop.DateCreated",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
             meta.setXmpTagString("Xmp.tiff.DateTime",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
             meta.setXmpTagString("Xmp.xmp.CreateDate",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
             meta.setXmpTagString("Xmp.xmp.MetadataDate",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
             meta.setXmpTagString("Xmp.xmp.ModifyDate",
-                d->dateCreatedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+                d->dateCreatedSel->dateTime().toString(xmpDateTimeFormat));
         }
 
         if (syncIPTCDateIsChecked())
@@ -519,7 +522,7 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
 
     if (d->dateOriginalCheck->isChecked())
         meta.setExifTagString("Exif.Photo.DateTimeOriginal",
-                   d->dateOriginalSel->dateTime().toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                   d->dateOriginalSel->dateTime().toString(exifDateTimeFormat));
     else
         meta.removeExifTag("Exif.Photo.DateTimeOriginal");
 
@@ -531,7 +534,7 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
 
     if (d->dateDigitalizedCheck->isChecked())
         meta.setExifTagString("Exif.Photo.DateTimeDigitized",
-                   d->dateDigitalizedSel->dateTime().toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
+                   d->dateDigitalizedSel->dateTime().toString(exifDateTimeFormat));
     else
         meta.removeExifTag("Exif.Photo.DateTimeDigitized");
 
