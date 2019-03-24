@@ -648,7 +648,11 @@ CollectionLocation CollectionManager::locationForAlbumRoot(const QUrl& fileUrl)
 
 CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& albumRootPath)
 {
-    if (!QFileInfo::exists(albumRootPath))
+    // This function is used when an album is created or an external scan is
+    // initiated by the AlbumWatcher. We check to see if the trash exists
+    // because the mount path of a network share may always be available.
+
+    if (!QFileInfo::exists(albumRootPath + QLatin1String("/.dtrash")))
     {
         qCWarning(DIGIKAM_DATABASE_LOG) << "Album root path not exist" << albumRootPath;
         qCWarning(DIGIKAM_DATABASE_LOG) << "Drive or network connection broken?";
