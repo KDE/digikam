@@ -122,4 +122,8 @@ BUGFIXES:
 102 ==> 404797 - digikam-6.0.0-x86-64.appimage: stack trace shortly after startup.
 103 ==> 405789 - Sidebar widths revert to their defaults after switching back from full-screen view.
 104 ==> 405813 - Tab-View do not show Rating information.
-105 ==> 
+105 ==> 404138 - can't connect to my account.
+106 ==> 403819 - Export to Google Photos not working (bad request).
+107 ==> 
+
+
