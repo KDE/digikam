@@ -128,7 +128,7 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, DRawInfo& identi
     identify.rawImages        = raw->imgdata.idata.raw_count;
     identify.blackPoint       = raw->imgdata.color.black;
 
-    for (int ch = 0; ch < 4; ch++)
+    for (int ch = 0 ; ch < 4 ; ++ch)
     {
         identify.blackPointCh[ch] = raw->imgdata.color.cblack[ch];
     }
@@ -147,7 +147,7 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, DRawInfo& identi
             raw->imgdata.idata.cdesc[3] = 'G';
         }
 
-        for (int i=0; i < 16; i++)
+        for (int i = 0 ; i < 16 ; ++i)
         {
             identify.filterPattern.append(QLatin1Char(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
         }
@@ -155,14 +155,14 @@ void DRawDecoder::Private::fillIndentifyInfo(LibRaw* const raw, DRawInfo& identi
         identify.colorKeys = QLatin1String(raw->imgdata.idata.cdesc);
     }
 
-    for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
+    for (int c = 0 ; c < raw->imgdata.idata.colors ; ++c)
     {
         identify.daylightMult[c] = raw->imgdata.color.pre_mul[c];
     }
 
     if (raw->imgdata.color.cam_mul[0] > 0)
     {
-        for(int c = 0 ; c < 4 ; c++)
+        for (int c = 0 ; c < 4 ; ++c)
         {
             identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
         }

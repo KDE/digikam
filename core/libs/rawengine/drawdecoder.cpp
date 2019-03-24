@@ -436,11 +436,11 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, D
 
         unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
-        for (unsigned int row = 0; row < raw->imgdata.sizes.iheight; row++)
+        for (unsigned int row = 0 ; row < raw->imgdata.sizes.iheight ; ++row)
         {
-            for (unsigned int col = 0; col < raw->imgdata.sizes.iwidth; col++)
+            for (unsigned int col = 0 ; col < raw->imgdata.sizes.iwidth ; ++col)
             {
-                for (int color = 0; color < raw->imgdata.idata.colors; color++)
+                for (int color = 0 ; color < raw->imgdata.idata.colors ; ++color)
                 {
                     *output = raw->imgdata.image[raw->imgdata.sizes.iwidth*row + col][color];
                     output++;
@@ -454,9 +454,9 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, D
 
         unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
-        for (uint row = 0; row < raw->imgdata.sizes.iheight; row++)
+        for (uint row = 0 ; row < raw->imgdata.sizes.iheight ; ++row)
         {
-            for (uint col = 0; col < raw->imgdata.sizes.iwidth; col++)
+            for (uint col = 0 ; col < raw->imgdata.sizes.iwidth ; ++col)
             {
                 *output = raw->imgdata.image[raw->imgdata.sizes.iwidth*row + col][raw->COLOR(row, col)];
                 output++;
@@ -516,7 +516,7 @@ QStringList DRawDecoder::supportedCamera()
     QStringList camera;
     const char** const list = LibRaw::cameraList();
 
-    for (int i = 0; i < LibRaw::cameraCount(); i++)
+    for (int i = 0 ; i < LibRaw::cameraCount() ; ++i)
         camera.append(QString::fromUtf8(list[i]));
 
     return camera;

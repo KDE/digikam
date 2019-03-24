@@ -779,7 +779,7 @@ void DRawDecoderWidget::updateMinimumWidth()
 {
     int width = 0;
 
-    for (int i = 0; i < count(); i++)
+    for (int i = 0 ; i < count() ; ++i)
     {
         if (widget(i)->width() > width)
         {

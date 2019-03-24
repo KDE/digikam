@@ -157,7 +157,7 @@ void TileGrouper::updateClusters()
     int debugTilesSearched      = 0;
 
     /// @todo Review this
-    for(int i = 0 ; i < mapBounds.count() ; ++i)
+    for (int i = 0 ; i < mapBounds.count() ; ++i)
     {
         s->markerModel->prepareTiles(mapBounds.at(i).first, mapBounds.at(i).second, markerLevel);
     }

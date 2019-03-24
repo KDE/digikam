@@ -220,7 +220,7 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
 
 GLViewerWidget::~GLViewerWidget()
 {
-    for(int i = 0 ; i < CACHESIZE ; ++i)
+    for (int i = 0 ; i < CACHESIZE ; ++i)
     {
         d->cache[i].file_index = EMPTY;
         delete d->cache[i].texture;
@@ -249,7 +249,7 @@ void GLViewerWidget::initializeGL()
     glClearDepth(1.0f);
 
     // initialize cache
-    for(int i = 0 ; i < CACHESIZE ; ++i)
+    for (int i = 0 ; i < CACHESIZE ; ++i)
     {
         d->cache[i].file_index = EMPTY;
         d->cache[i].texture    = new GLViewerTexture(d->iface);

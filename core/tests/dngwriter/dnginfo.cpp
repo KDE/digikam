@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
         qint32 index;
 
-        for (index = 1; index < argc && argv[index][0] == '-'; ++index)
+        for (index = 1 ; index < argc && argv[index][0] == '-' ; ++index)
         {
             QString option = QString::fromUtf8(&argv[index][1]);
 
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
                     quint32 forkBlocks = (uint32)floor((forkLength + 65535.0) / 65536.0);
                     QVector<quint32> offsets;
 
-                    for(quint32 block = 0; block <= forkBlocks; ++block)
+                    for (quint32 block = 0 ; block <= forkBlocks ; ++block)
                     {
                         quint32 offset = compressedDataStream.Get_uint32();
                         offsets.push_back(offset);
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 
                     QDataStream originalDataStream(&originalFile);
 
-                    for (quint32 block = 0; block < forkBlocks; ++block)
+                    for (quint32 block = 0 ; block < forkBlocks ; ++block)
                     {
                         QByteArray compressedDataBlock;
                         compressedDataBlock.resize(offsets[block + 1] - offsets[block]);

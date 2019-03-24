@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
                                                          QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
                                                          filter);
 
-        foreach(const QString& f, files)
+        foreach (const QString& f, files)
             list.append(QUrl::fromLocalFile(f));
     }
     else
     {
-        for (int i = 1 ; i < argc ; i++)
+        for (int i = 1 ; i < argc ; ++i)
             list.append(QUrl::fromLocalFile(QString::fromLocal8Bit(argv[i])));
     }
 
