@@ -241,7 +241,7 @@ QRectF TagRegion::absoluteToRelative(const QRect& region, const QSize& fullSize)
                   (qreal)region.height() / (qreal)fullSize.height());
 }
 
-void TagRegion::adjustToOrientation(QRect& region, int rotation, const QSize& fullSize)
+QSize TagRegion::adjustToOrientation(QRect& region, int rotation, const QSize& fullSize)
 {
     QSize size = fullSize;
 
@@ -276,6 +276,8 @@ void TagRegion::adjustToOrientation(QRect& region, int rotation, const QSize& fu
     {
         region.moveTo(region.x(), size.height() - region.y() - region.height());
     }
+
+    return size;
 }
 
 QDebug operator<<(QDebug dbg, const TagRegion& r)
