@@ -126,4 +126,5 @@ BUGFIXES:
 106 ==> 403819 - Export to Google Photos not working (bad request).
 107 ==> 382367 - Unreadable light on light tooltip.
 108 ==> 405825 - Feature request: "Video date" in XMP Metadata Editor.
-109 ==> 
+109 ==> 405799 - Not possible to add collection.
+110 ==> 
