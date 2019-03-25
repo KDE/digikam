@@ -127,4 +127,5 @@ BUGFIXES:
 107 ==> 382367 - Unreadable light on light tooltip.
 108 ==> 405825 - Feature request: "Video date" in XMP Metadata Editor.
 109 ==> 405799 - Not possible to add collection.
-110 ==> 
+110 ==> 389549 - "Clear all faces on this image" Does Not Remove All People Tags.
+111 ==> 
