@@ -319,6 +319,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
         return;
     }
 
+    QSize fullSize = info.dimensions();
     QMultiMap<QString, QRect> ajustedFaces;
 
     foreach (const FaceTagsIface& dface, facesList)
@@ -326,9 +327,9 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
         QString name   = FaceTags::faceNameForTag(dface.tagId());
         QRect faceRect = dface.region().toRect();
 
-        TagRegion::adjustToOrientation(faceRect,
-                                       orientation,
-                                       info.dimensions());
+        fullSize = TagRegion::adjustToOrientation(faceRect,
+                                                  orientation,
+                                                  info.dimensions());
 
         ajustedFaces.insertMulti(name, faceRect);
     }
@@ -358,8 +359,8 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
      */
     MetadataHub hub;
     hub.load(info);
-    QSize tempS = info.dimensions();
-    hub.loadFaceTags(info, QSize(tempS.height(), tempS.width()));
+    // Adjusted fullSize
+    hub.loadFaceTags(info, fullSize);
     hub.write(info.filePath(), MetadataHub::WRITE_ALL);
 }
 

@@ -704,18 +704,16 @@ void ImageWindow::prepareImageToSave()
                     switch (type)
                     {
                         case EditorWindow::TransformType::RotateLeft:
-                            TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_270, tempSize);
-                            tempSize.transpose();
+                            tempSize = TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_270, tempSize);
                             break;
                         case EditorWindow::TransformType::RotateRight:
-                            TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_90,  tempSize);
-                            tempSize.transpose();
+                            tempSize = TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_90,  tempSize);
                             break;
                         case EditorWindow::TransformType::FlipHorizontal:
-                            TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_HFLIP,   tempSize);
+                            tempSize = TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_HFLIP,   tempSize);
                             break;
                         case EditorWindow::TransformType::FlipVertical:
-                            TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_VFLIP,   tempSize);
+                            tempSize = TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_VFLIP,   tempSize);
                             break;
                         default:
                             break;
