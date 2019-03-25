@@ -324,12 +324,17 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
 
     foreach (const FaceTagsIface& dface, facesList)
     {
-        QString name   = FaceTags::faceNameForTag(dface.tagId());
         QRect faceRect = dface.region().toRect();
+        QString name   = FaceTags::faceNameForTag(dface.tagId());
 
         fullSize = TagRegion::adjustToOrientation(faceRect,
                                                   orientation,
                                                   info.dimensions());
+
+        if (dface.tagId() == FaceTags::unknownPersonTagId())
+        {
+            name.clear();
+        }
 
         ajustedFaces.insertMulti(name, faceRect);
     }
@@ -343,15 +348,26 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
 
     for ( ; it != ajustedFaces.constEnd() ; ++it)
     {
-        int tagId = FaceTags::getOrCreateTagForPerson(it.key());
-
-        if (!tagId)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
-        }
-
         TagRegion region(it.value());
-        FaceTagsEditor().add(info.id(), tagId, region, false);
+
+        if (it.key().isEmpty())
+        {
+            int tagId = FaceTags::unknownPersonTagId();
+            FaceTagsIface face(FaceTagsIface::UnknownName, info.id(), tagId, region);
+
+            FaceTagsEditor().addManually(face);
+        }
+        else
+        {
+            int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+
+            if (!tagId)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
+            }
+
+            FaceTagsEditor().add(info.id(), tagId, region, false);
+        }
     }
 
     /**
