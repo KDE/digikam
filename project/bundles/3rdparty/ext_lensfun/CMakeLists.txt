@@ -12,6 +12,8 @@ if (MINGW)
 
     ExternalProject_Add(ext_lensfun
 
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+
         GIT_REPOSITORY https://git.code.sf.net/p/lensfun/code
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun0.3.95-installdb-mxe.patch
 
