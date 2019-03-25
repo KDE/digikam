@@ -268,7 +268,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
 
         if (rotatedPixels)
         {
-            ajustFaceRectangles(info, finalOrientation);
+            adjustFaceRectangles(info, finalOrientation);
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
@@ -307,7 +307,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int orientation)
+void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int orientation)
 {
     /**
      *  Get all faces from database and rotate them
@@ -320,7 +320,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
     }
 
     QSize fullSize = info.dimensions();
-    QMultiMap<QString, QRect> ajustedFaces;
+    QMultiMap<QString, QRect> adjustedFaces;
 
     foreach (const FaceTagsIface& dface, facesList)
     {
@@ -336,7 +336,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
             name.clear();
         }
 
-        ajustedFaces.insertMulti(name, faceRect);
+        adjustedFaces.insertMulti(name, faceRect);
     }
 
     /**
@@ -344,9 +344,9 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
      */
     FaceTagsEditor().removeAllFaces(info.id());
 
-    QMap<QString, QRect>::ConstIterator it = ajustedFaces.constBegin();
+    QMap<QString, QRect>::ConstIterator it = adjustedFaces.constBegin();
 
-    for ( ; it != ajustedFaces.constEnd() ; ++it)
+    for ( ; it != adjustedFaces.constEnd() ; ++it)
     {
         TagRegion region(it.value());
 
