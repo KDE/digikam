@@ -262,63 +262,109 @@ done
 
 echo -e "---------- Clean-up Bundle Directory Contents\n"
 
-ln -s libssl.so.10 usr/lib/libssl.so || true
-
 # The following are assumed to be part of the base system
-rm -f usr/lib/libcom_err.so.2 || true
-rm -f usr/lib/libcrypt.so.1 || true
-rm -f usr/lib/libdl.so.2 || true
-rm -f usr/lib/libexpat.so.1 || true
-rm -f usr/lib/libgcc_s.so.1 || true
-rm -f usr/lib/libglib-2.0.so.0 || true
-rm -f usr/lib/libgpg-error.so.0 || true
-rm -f usr/lib/libgssapi_krb5.so.2 || true
-rm -f usr/lib/libgssapi.so.3 || true
-rm -f usr/lib/libhcrypto.so.4 || true
-rm -f usr/lib/libheimbase.so.1 || true
-rm -f usr/lib/libheimntlm.so.0 || true
-rm -f usr/lib/libhx509.so.5 || true
-rm -f usr/lib/libICE.so.6 || true
-rm -f usr/lib/libidn.so.11 || true
-rm -f usr/lib/libk5crypto.so.3 || true
-rm -f usr/lib/libkeyutils.so.1 || true
-rm -f usr/lib/libkrb5.so.26 || true
-rm -f usr/lib/libkrb5.so.3 || true
-rm -f usr/lib/libkrb5support.so.0 || true
-# rm -f usr/lib/liblber-2.4.so.2 || true # needed for debian wheezy
-# rm -f usr/lib/libldap_r-2.4.so.2 || true # needed for debian wheezy
-rm -f usr/lib/libm.so.6 || true
-rm -f usr/lib/libp11-kit.so.0 || true
-rm -f usr/lib/libpcre.so.3 || true
-rm -f usr/lib/libpthread.so.0 || true
-rm -f usr/lib/libresolv.so.2 || true
-rm -f usr/lib/libroken.so.18 || true
-rm -f usr/lib/librt.so.1 || true
-rm -f usr/lib/libsasl2.so.2 || true
-rm -f usr/lib/libSM.so.6 || true
-rm -f usr/lib/libusb-1.0.so.0 || true
-rm -f usr/lib/libuuid.so.1 || true
-rm -f usr/lib/libwind.so.0 || true
-rm -f usr/lib/libfontconfig.so.* || true
-rm -f usr/lib/libfreetype.so.* || true
-# Remove this library, else appimage cannot be started properly (Bug #390162)
-rm -f usr/lib/libopenal.so.1 || true
 
-# Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
-rm -f usr/lib/libGL.so.* || true
-rm -f usr/lib/libdrm.so.* || true
-rm -f usr/lib/libX11.so.* || true
-rm -f usr/lib/libz.so.1 || true
+# This list is taken from linuxdeplotqt
+# [https://github.com/probonopd/linuxdeployqt/blob/master/tools/linuxdeployqt/excludelist.h]
+# NOTE: libglapi is included explicity in Krita exclude list.
+EXCLUDE_FILES="\
+ld-linux.so.2 \
+ld-linux-x86-64.so.2 \
+libanl.so.1 \
+libasound.so.2 \
+libBrokenLocale.so.1 \
+libcidn.so.1 \
+libcom_err.so.2 \
+libcrypt.so.1 \
+libc.so.6 \
+libdl.so.2 \
+libdrm.so.2 \
+libexpat.so.1 \
+libfontconfig.so.1 \
+libfreetype.so.6 \
+libgcc_s.so.1 \
+libgdk_pixbuf-2.0.so.0 \
+libgio-2.0.so.0 \
+libglapi.so.0 \
+libglib-2.0.so.0 \
+libGL.so.1 \
+libgobject-2.0.so.0 \
+libgpg-error.so.0 \
+libharfbuzz.so.0 \
+libICE.so.6 \
+libjack.so.0 \
+libkeyutils.so.1 \
+libm.so.6 \
+libmvec.so.1 \
+libnsl.so.1 \
+libnss_compat.so.2 \
+libnss_db.so.2 \
+libnss_dns.so.2 \
+libnss_files.so.2 \
+libnss_hesiod.so.2 \
+libnss_nisplus.so.2 \
+libnss_nis.so.2 \
+libp11-kit.so.0 \
+libpango-1.0.so.0 \
+libpangocairo-1.0.so.0 \
+libpangoft2-1.0.so.0 \
+libpthread.so.0 \
+libresolv.so.2 \
+librt.so.1 \
+libSM.so.6 \
+libstdc++.so.6 \
+libthai.so.0 \
+libthread_db.so.1 \
+libusb-1.0.so.0 \
+libutil.so.1 \
+libuuid.so.1 \
+libX11.so.6 \
+libxcb.so.1 \
+libz.so.1 \
+"
 
-# These seem to be available on most systems but not Ubuntu 11.04
-# rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
+for FILE in $EXCLUDE_FILES ; do
+    if [[ -f usr/lib/${FILE} ]] ; then
+        echo -e "   ==> ${FILE} will be removed for the bundle"
+        rm -f usr/lib/${FILE} ./usr/lib
+    fi
+done
 
-# Delete potentially dangerous libraries
-rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
-rm -f usr/lib/libxcb.so.1
+# This list is taken from older AppImage build script from krita
+# NOTE: libopenal => see bug 390162
+EXTRA_EXCLUDE_FILES="\
+libgssapi_krb5.so.2 \
+libgssapi.so.3 \
+libhcrypto.so.4 \
+libheimbase.so.1 \
+libheimntlm.so.0 \
+libhx509.so.5 \
+libidn.so.11 \
+libk5crypto.so.3 \
+libkrb5.so.26 \
+libkrb5.so.3 \
+libkrb5support.so.0 \
+libpcre.so.3 \
+libroken.so.18 \
+libsasl2.so.2 \
+libwind.so.0 \
+libopenal.so.1 \
+"
 
-# Do NOT delete libX* because otherwise on Ubuntu 11.04:
-# loaded library "Xcursor" malloc.c:3096: sYSMALLOc: Assertion (...) Aborted
+#liblber-2.4.so.2       # needed for debian wheezy
+#libldap_r-2.4.so.2     # needed for debian wheezy
+
+#libffi.so.6            # needed for Ubuntu 11.04
+#libxcb-glx.so.0        # needed for Ubuntu 11.04
+
+for FILE in $EXCLUDE_FILES ; do
+    if [[ -f usr/lib/${FILE} ]] ; then
+        echo -e "   ==> ${FILE} will be removed for the bundle"
+        rm -f usr/lib/${FILE} ./usr/lib
+    fi
+done
+
+ln -s libssl.so.10 usr/lib/libssl.so || true
 
 # We don't bundle the developer stuff
 rm -rf usr/include || true
@@ -356,7 +402,7 @@ cd usr/ ; find . -type f -exec sed -i -e 's|$APP_IMG_DIR/usr/|./././././././././
 # Also, Krita has a hardcoded /usr which we patch away
 cd usr/ ; find . -type f -exec sed -i -e 's|/usr|././|g' {} \; ; cd ..
 
-# We do not bundle this, so let's not search that inside the AppImage. 
+# We do not bundle this, so let's not search that inside the AppImage.
 # Fixes "Qt: Failed to create XKB context!" and lets us enter text
 sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
 sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
