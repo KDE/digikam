@@ -388,7 +388,7 @@ fi
 
 for FILE in $FILES ; do
     echo -e "Strip symbols in: $FILE"
-    strip ${FILE} 2>/dev/null || true
+    strip ${FILE} 2>&1>/dev/null || true
 done
 
 #################################################################################################
