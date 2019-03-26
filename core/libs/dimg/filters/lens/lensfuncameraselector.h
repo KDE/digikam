@@ -92,6 +92,10 @@ private:
     void populateDeviceCombos();
     void populateLensCombo();
 
+protected:
+
+    void showEvent(QShowEvent* event);
+
 private:
 
     class Private;

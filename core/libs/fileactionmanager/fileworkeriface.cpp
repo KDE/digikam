@@ -268,7 +268,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
 
         if (rotatedPixels)
         {
-            ajustFaceRectangles(info, finalOrientation);
+            adjustFaceRectangles(info, finalOrientation);
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
@@ -307,7 +307,7 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int orientation)
+void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int orientation)
 {
     /**
      *  Get all faces from database and rotate them
@@ -320,18 +320,23 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
     }
 
     QSize fullSize = info.dimensions();
-    QMultiMap<QString, QRect> ajustedFaces;
+    QMultiMap<QString, QRect> adjustedFaces;
 
     foreach (const FaceTagsIface& dface, facesList)
     {
-        QString name   = FaceTags::faceNameForTag(dface.tagId());
         QRect faceRect = dface.region().toRect();
+        QString name   = FaceTags::faceNameForTag(dface.tagId());
 
         fullSize = TagRegion::adjustToOrientation(faceRect,
                                                   orientation,
                                                   info.dimensions());
 
-        ajustedFaces.insertMulti(name, faceRect);
+        if (dface.tagId() == FaceTags::unknownPersonTagId())
+        {
+            name.clear();
+        }
+
+        adjustedFaces.insertMulti(name, faceRect);
     }
 
     /**
@@ -339,19 +344,30 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ItemInfo& info, int ori
      */
     FaceTagsEditor().removeAllFaces(info.id());
 
-    QMap<QString, QRect>::ConstIterator it = ajustedFaces.constBegin();
+    QMap<QString, QRect>::ConstIterator it = adjustedFaces.constBegin();
 
-    for ( ; it != ajustedFaces.constEnd() ; ++it)
+    for ( ; it != adjustedFaces.constEnd() ; ++it)
     {
-        int tagId = FaceTags::getOrCreateTagForPerson(it.key());
-
-        if (!tagId)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
-        }
-
         TagRegion region(it.value());
-        FaceTagsEditor().add(info.id(), tagId, region, false);
+
+        if (it.key().isEmpty())
+        {
+            int tagId = FaceTags::unknownPersonTagId();
+            FaceTagsIface face(FaceTagsIface::UnknownName, info.id(), tagId, region);
+
+            FaceTagsEditor().addManually(face);
+        }
+        else
+        {
+            int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+
+            if (!tagId)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
+            }
+
+            FaceTagsEditor().add(info.id(), tagId, region, false);
+        }
     }
 
     /**

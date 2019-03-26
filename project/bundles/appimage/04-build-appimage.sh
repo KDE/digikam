@@ -326,7 +326,7 @@ libz.so.1 \
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
         echo -e "   ==> ${FILE} will be removed for the bundle"
-        rm -f usr/lib/${FILE} ./usr/lib
+        rm -f usr/lib/${FILE}
     fi
 done
 
@@ -360,7 +360,7 @@ libopenal.so.1 \
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
         echo -e "   ==> ${FILE} will be removed for the bundle"
-        rm -f usr/lib/${FILE} ./usr/lib
+        rm -f usr/lib/${FILE}
     fi
 done
 

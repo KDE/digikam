@@ -232,9 +232,6 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
 
     connect(d->distance, SIGNAL(valueChanged(double)),
             this, SLOT(slotDistanceChanged()));
-
-    populateDeviceCombos();
-    populateLensCombo();
 }
 
 LensFunCameraSelector::~LensFunCameraSelector()
@@ -329,17 +326,6 @@ void LensFunCameraSelector::writeSettings(KConfigGroup& group)
 void LensFunCameraSelector::setMetadata(const DMetadata& meta)
 {
     d->metadata = meta;
-
-    if (d->metadata.isEmpty())
-    {
-        d->metadataUsage->setCheckState(Qt::Unchecked);
-        setEnabledUseMetadata(false);
-    }
-    else
-    {
-        setEnabledUseMetadata(true);
-        findFromMetadata();
-    }
 }
 
 void LensFunCameraSelector::setEnabledUseMetadata(bool b)
@@ -704,15 +690,24 @@ void LensFunCameraSelector::populateLensCombo()
     settings.cropFactor       = dev ? dev->CropFactor : -1.0;
     d->iface->setSettings(settings);
 
+    QMultiMap<QString, QVariant> lensMap;
+
     while (lenses && *lenses)
     {
         LensFunIface::LensPtr lens = *lenses;
         QVariant b                 = qVariantFromValue(lens);
-        d->lens->addSqueezedItem(QLatin1String(lens->Model), b);
+        lensMap.insert(QLatin1String(lens->Model), b);
         ++lenses;
     }
 
-    d->lens->model()->sort(0, Qt::AscendingOrder);
+    QMap<QString, QVariant>::ConstIterator it = lensMap.constBegin();
+
+    for ( ; it != lensMap.constEnd() ; ++it)
+    {
+        d->lens->addSqueezedItem(it.key(), it.value());
+    }
+
+    //d->lens->model()->sort(0, Qt::AscendingOrder);
     d->lens->blockSignals(false);
 }
 
@@ -785,6 +780,25 @@ void LensFunCameraSelector::slotDistanceChanged()
                                 d->distance->value();
     d->iface->setSettings(settings);
     emit signalLensSettingsChanged();
+}
+
+void LensFunCameraSelector::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+
+    populateDeviceCombos();
+    populateLensCombo();
+
+    if (d->metadata.isEmpty())
+    {
+        d->metadataUsage->setCheckState(Qt::Unchecked);
+        setEnabledUseMetadata(false);
+    }
+    else
+    {
+        setEnabledUseMetadata(true);
+        findFromMetadata();
+    }
 }
 
 } // namespace Digikam
