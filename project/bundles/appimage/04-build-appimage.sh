@@ -147,9 +147,11 @@ find  /usr/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgph
 find  /usr/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
 
 # copy sane backends
-
 cp -r /usr/lib/sane                       ./usr/lib
 cp -r /usr/etc/sane.d                     ./usr/etc
+
+# copy openssl configuration files
+cp -r /usr/etc/pki                        ./usr/etc
 
 # copy i18n
 
