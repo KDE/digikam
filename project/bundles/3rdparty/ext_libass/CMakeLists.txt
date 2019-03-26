@@ -14,7 +14,7 @@ ExternalProject_Add(ext_libass
     URL_MD5 5b8c23340654587b8a472cb74ee9366b
 
     INSTALL_DIR ${EXTPREFIX_libass}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_libass}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix ${EXTPREFIX_libass}
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1

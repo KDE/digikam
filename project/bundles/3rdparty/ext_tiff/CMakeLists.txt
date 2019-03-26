@@ -13,7 +13,7 @@ ExternalProject_Add(ext_tiff
     URL https://gitlab.com/libtiff/libtiff/-/archive/Release-v4-0-9/libtiff-Release-v4-0-9.tar.bz2
     URL_MD5 107e5cbe8204df361ac117841dfec2fb
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_tiff}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix ${EXTPREFIX_tiff}
     UPDATE_COMMAND ""
     ALWAYS 0
 )

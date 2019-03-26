@@ -19,7 +19,7 @@ ExternalProject_Add(ext_liblqr
 
 
     INSTALL_DIR ${EXTPREFIX_liblqr}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_liblqr}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix ${EXTPREFIX_liblqr}
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1

@@ -14,7 +14,7 @@ ExternalProject_Add(ext_sane
     URL_MD5 25a5d5a9f105df116ed09ad9c1745cfd
 
     INSTALL_DIR ${EXTPREFIX_sane}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_sane} --with-gphoto2=no --with-v4l=no
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix ${EXTPREFIX_sane} --with-gphoto2=no --with-v4l=no
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1

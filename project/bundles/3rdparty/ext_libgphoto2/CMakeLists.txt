@@ -14,7 +14,7 @@ ExternalProject_Add(ext_libgphoto2
     URL_MD5 a80e1d4dc9c350311d4ba76d7e20f84e
 
     INSTALL_DIR ${EXTPREFIX_libgphoto2}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_libgphoto2}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix ${EXTPREFIX_libgphoto2}
 
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
