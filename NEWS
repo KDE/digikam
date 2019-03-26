@@ -128,4 +128,5 @@ BUGFIXES:
 108 ==> 405825 - Feature request: "Video date" in XMP Metadata Editor.
 109 ==> 405799 - Not possible to add collection.
 110 ==> 389549 - "Clear all faces on this image" Does Not Remove All People Tags.
-111 ==> 
+111 ==> 405904 - The saved version of the image is not linked to the original.
+112 ==> 

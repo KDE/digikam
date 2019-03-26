@@ -100,13 +100,13 @@ QString CoreDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelati
     {
         sql = QString::fromUtf8("SELECT object FROM ImageRelations "
                                 "INNER JOIN Images ON ImageRelations.object=Images.id "
-                                "WHERE subject=? %1 AND status!=3 %2;");
+                                "WHERE subject=? %1 AND status<3 %2;");
     }
     else
     {
         sql = QString::fromUtf8("SELECT subject FROM ImageRelations "
                                 "INNER JOIN Images ON ImageRelations.subject=Images.id "
-                                "WHERE object=? %1 AND status!=3 %2;");
+                                "WHERE object=? %1 AND status<3 %2;");
     }
 
     if (type != DatabaseRelation::UndefinedType)
@@ -2234,7 +2234,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                                      "LEFT JOIN ImageInformation ON id=imageid "
-                                     " WHERE name=? AND creationDate=? AND status!=3;"),
+                                     " WHERE name=? AND creationDate=? AND status<3;"),
                    fileName, creationDate, &values);
 
     QList<qlonglong> ids;
@@ -2288,7 +2288,7 @@ QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid)
 
     d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHistory "
                                      "INNER JOIN Images ON imageid=id "
-                                     " WHERE uuid=? AND status!=3;"),
+                                     " WHERE uuid=? AND status<3;"),
                    uuid, &values);
 
     QList<qlonglong> imageIds;
@@ -2499,8 +2499,8 @@ QList<QPair<qlonglong, qlonglong> > CoreDB::getRelationCloud(qlonglong imageId, 
                                     " INNER JOIN Images AS ObjectImages "
                                     " ON ImageRelations.object=ObjectImages.id "
                                     "  WHERE (subject=? OR object=?) %1 "
-                                    "   AND SubjectImages.status!=3 "
-                                    "   AND ObjectImages.status!=3;");
+                                    "   AND SubjectImages.status<3 "
+                                    "   AND ObjectImages.status<3;");
 
     if (type == DatabaseRelation::UndefinedType)
     {
@@ -2562,8 +2562,8 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
                                     "ON ImageRelations.subject=SubjectImages.id "
                                     " INNER JOIN Images AS ObjectImages "
                                     " ON ImageRelations.object=ObjectImages.id "
-                                    "  WHERE ( (subject=? AND ObjectImages.status!=3) "
-                                    "  OR (object=? AND SubjectImages.status!=3) ) "
+                                    "  WHERE ( (subject=? AND ObjectImages.status<3) "
+                                    "  OR (object=? AND SubjectImages.status<3) ) "
                                     "   %1 LIMIT 1;");
 
     if (type == DatabaseRelation::UndefinedType)
@@ -2619,8 +2619,8 @@ QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type)
                                      " INNER JOIN Images AS ObjectImages "
                                      " ON ImageRelations.object=ObjectImages.id "
                                      "  WHERE type=? "
-                                     "   AND SubjectImages.status!=3 "
-                                     "   AND ObjectImages.status!=3;"),
+                                     "   AND SubjectImages.status<3 "
+                                     "   AND ObjectImages.status<3;"),
                    (int)type, &values);
 
     QList<qlonglong> imageIds;
