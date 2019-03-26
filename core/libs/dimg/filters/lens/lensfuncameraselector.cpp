@@ -700,7 +700,7 @@ void LensFunCameraSelector::populateLensCombo()
         ++lenses;
     }
 
-    QMap<QString, QVariant>::ConstIterator it = lensMap.constBegin();
+    QMultiMap<QString, QVariant>::ConstIterator it = lensMap.constBegin();
 
     for ( ; it != lensMap.constEnd() ; ++it)
     {

@@ -344,7 +344,7 @@ void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int or
      */
     FaceTagsEditor().removeAllFaces(info.id());
 
-    QMap<QString, QRect>::ConstIterator it = adjustedFaces.constBegin();
+    QMultiMap<QString, QRect>::ConstIterator it = adjustedFaces.constBegin();
 
     for ( ; it != adjustedFaces.constEnd() ; ++it)
     {
