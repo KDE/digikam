@@ -175,6 +175,10 @@ DIGIKAM_EXPORT QProcessEnvironment adjustedEnvironmentForAppImage();
  */
 DIGIKAM_EXPORT void tryInitDrMingw();
 
+/** Style sheet for transparent QToolButtons over image and video preview.
+ */
+DIGIKAM_EXPORT QString toolButtonStyleSheet();
+
 } // namespace Digikam
 
 #endif // DIGIKAM_GLOBALS_H

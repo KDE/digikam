@@ -50,6 +50,7 @@
 // Local includes
 
 #include "metaenginesettings.h"
+#include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "thememanager.h"
 #include "dlayoutbox.h"
@@ -258,6 +259,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->playAction);
+    d->toolBar->setStyleSheet(toolButtonStyleSheet());
 
     setPreviewMode(Private::PlayerView);
 

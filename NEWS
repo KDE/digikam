@@ -129,4 +129,5 @@ BUGFIXES:
 109 ==> 405799 - Not possible to add collection.
 110 ==> 389549 - "Clear all faces on this image" Does Not Remove All People Tags.
 111 ==> 405904 - The saved version of the image is not linked to the original.
-112 ==> 
+112 ==> 372308 - Buttons for rotate does not show very well.
+113 ==> 

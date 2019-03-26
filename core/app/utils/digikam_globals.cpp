@@ -233,4 +233,32 @@ void tryInitDrMingw()
 #endif // HAVE_DRMINGW
 }
 
+QString toolButtonStyleSheet()
+{
+    return QLatin1String("QToolButton { padding: 1px; background-color: "
+                         "  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
+                         "  stop: 0 rgba(100, 100, 100, 50%), "
+                         "  stop: 1 rgba(170, 170, 170, 50%)); "
+                         "border: 1px solid rgba(200, 200, 200, 30%); "
+                         "border-radius: 4px; } "
+
+                         "QToolButton:hover { border-color: white; } "
+
+                         "QToolButton:pressed { background-color: "
+                         "  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
+                         "  stop: 0 rgba(40, 40, 40, 50%), "
+                         "  stop: 1 rgba(90, 90, 90, 50%)); "
+                         "border-color: white; } "
+
+                         "QToolButton:checked { background-color: "
+                         "  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
+                         "  stop: 0 rgba(40, 40, 40, 50%), "
+                         "  stop: 1 rgba(90, 90, 90, 50%)); } "
+
+                         "QToolButton:disabled { background-color: "
+                         "  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
+                         "  stop: 0 rgba(40, 40, 40, 50%), "
+                         "  stop: 1 rgba(50, 50, 50, 50%)); }");
+}
+
 } // namespace Digikam
