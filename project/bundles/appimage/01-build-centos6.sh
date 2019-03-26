@@ -315,12 +315,11 @@ cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_iconv         -- -j$CPU_CORES
 
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, tiff, png, jpeg
 
 if [[ $DK_QTWEBENGINE = 0 ]] ; then
-    cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit  -- -j$CPU_CORES
+    cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit  -- -j$CPU_CORES    # depend of Qt and libicu
 fi
 
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
