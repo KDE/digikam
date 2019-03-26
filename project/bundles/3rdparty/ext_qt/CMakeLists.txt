@@ -24,6 +24,8 @@ ExternalProject_Add(ext_qt
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-appimage-support.patch &&
                   ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-appimage-glibc.patch
 
+    CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
+
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                   -prefix ${EXTPREFIX_qt}
                   -verbose
