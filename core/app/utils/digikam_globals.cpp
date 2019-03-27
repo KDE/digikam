@@ -180,11 +180,19 @@ QProcessEnvironment adjustedEnvironmentForAppImage()
             env.insert(QLatin1String("LD_LIBRARY_PATH"),
                        env.value(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")));
         }
+        else
+        {
+            env.remove(QLatin1String("LD_LIBRARY_PATH"));
+        }
 
         if (!env.value(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH")).isEmpty())
         {
             env.insert(QLatin1String("QT_PLUGIN_PATH"),
                        env.value(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH")));
+        }
+        else
+        {
+            env.remove(QLatin1String("QT_PLUGIN_PATH"));
         }
 
         if (!env.value(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS")).isEmpty())
@@ -192,11 +200,19 @@ QProcessEnvironment adjustedEnvironmentForAppImage()
             env.insert(QLatin1String("XDG_DATA_DIRS"),
                        env.value(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS")));
         }
+        else
+        {
+            env.remove(QLatin1String("XDG_DATA_DIRS"));
+        }
 
         if (!env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")).isEmpty())
         {
             env.insert(QLatin1String("PATH"),
                        env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")));
+        }
+        else
+        {
+            env.remove(QLatin1String("PATH"));
         }
     }
 
