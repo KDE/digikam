@@ -307,9 +307,6 @@ cmake3 $ORIG_WD/../3rdparty \
 # Low level libraries and Qt5 dependencies
 # NOTE: The order to compile each component here is very important.
 
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, tiff, png, jpeg
-exit
-
 cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
