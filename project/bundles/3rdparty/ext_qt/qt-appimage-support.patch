@@ -1,13 +1,14 @@
 diff --git a/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-index cb1e367b9f..caad8828be 100644
+index cb1e367b9f..9a0ea647fc 100644
 --- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 +++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-@@ -164,7 +164,45 @@ static inline bool launch(const QString &launcher, const QUrl &url)
+@@ -164,7 +164,48 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
  #else
 -    const bool ok = QProcess::startDetached(command);
 +    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
++    qDebug() << env.toStringList();
 +
 +    // If we are running into AppImage bundle, switch env var to the right values.
 +    if (env.contains(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")) &&
@@ -40,6 +41,8 @@ index cb1e367b9f..caad8828be 100644
 +            env.insert(QLatin1String("PATH"),
 +                       env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")));
 +        }
++
++        qDebug() << env.toStringList();
 +    }
 +
 +    QProcess process;
