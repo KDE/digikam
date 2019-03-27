@@ -7,7 +7,7 @@
  * Description : A QImage loader for DImg framework.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2019 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,6 +65,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     if (image.isNull())
     {
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
+        qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Error message from loader:" << reader.errorString();
         loadingFailed();
         return false;
     }
@@ -76,29 +77,29 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     {
         case QImage::Format_Invalid:
         default:
-            colorModel = DImg::COLORMODELUNKNOWN;
+            colorModel    = DImg::COLORMODELUNKNOWN;
             originalDepth = 0;
             break;
 
         case QImage::Format_Mono:
         case QImage::Format_MonoLSB:
-            colorModel = DImg::MONOCHROME;
+            colorModel    = DImg::MONOCHROME;
             originalDepth = 1;
             break;
 
         case QImage::Format_Indexed8:
-            colorModel = DImg::INDEXED;
+            colorModel    = DImg::INDEXED;
             originalDepth = 0;
             break;
 
         case QImage::Format_RGB32:
-            colorModel = DImg::RGB;
+            colorModel    = DImg::RGB;
             originalDepth = 8;
             break;
 
         case QImage::Format_ARGB32:
         case QImage::Format_ARGB32_Premultiplied:
-            colorModel = DImg::RGB;
+            colorModel    = DImg::RGB;
             originalDepth = 8;
             break;
     }
