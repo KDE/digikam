@@ -1,8 +1,8 @@
 diff --git a/src/platformsupport/services/genericunix/qgenericunixservices.cpp b/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-index cb1e367b9f..9a0ea647fc 100644
+index cb1e367b9f..ca71e67f81 100644
 --- a/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
 +++ b/qtbase/src/platformsupport/services/genericunix/qgenericunixservices.cpp
-@@ -164,7 +164,48 @@ static inline bool launch(const QString &launcher, const QUrl &url)
+@@ -164,7 +164,49 @@ static inline bool launch(const QString &launcher, const QUrl &url)
  #if !QT_CONFIG(process)
      const bool ok = ::system(qPrintable(command + QLatin1String(" &")));
  #else
@@ -47,7 +47,8 @@ index cb1e367b9f..9a0ea647fc 100644
 +
 +    QProcess process;
 +    process.setProcessEnvironment(env);
-+    process.setProgram(command);
++    process.setProgram(launcher);
++    process.setArguments(QStringList() << QLatin1String(url.toEncoded()));
 +    const bool ok = process.startDetached();
  #endif
      if (!ok)
