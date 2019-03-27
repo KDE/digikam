@@ -25,10 +25,6 @@
 
 #include "dmetadata.h"
 
-// Qt includes
-
-#include <QUuid>
-
 // Local includes
 
 #include "metaenginesettings.h"
