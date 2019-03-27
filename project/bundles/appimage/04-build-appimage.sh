@@ -151,7 +151,7 @@ cp -r /usr/lib/sane                       ./usr/lib
 cp -r /usr/etc/sane.d                     ./usr/etc
 
 # copy openssl configuration files
-cp -r /usr/etc/pki                        ./usr/etc
+cp -r /etc/pki                            ./usr/etc
 
 # copy i18n
 
