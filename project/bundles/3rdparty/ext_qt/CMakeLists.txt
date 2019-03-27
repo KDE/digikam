@@ -89,6 +89,10 @@ ExternalProject_Add(ext_qt
                   ${DROP_QTWEBENGINE_DEPS}
 
 
+    # Exemple of code to install only one Qt module for hacking purpose (aka qtbase here)
+    #BUILD_COMMAND cd <SOURCE_DIR> && $(MAKE) module-qtbase
+    #INSTALL_COMMAND cd <SOURCE_DIR> && $(MAKE) module-qtbase-install_subtargets
+
     UPDATE_COMMAND ""
     BUILD_IN_SOURCE 1
     ALWAYS 0
