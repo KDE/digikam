@@ -65,7 +65,7 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
     : QWidget(parent),
       d(new Private)
 {
-    // setup remote target selection
+    // setup local target selection
 
     DHBox* const hbox   = new DHBox(this);
     QLabel* const label = new QLabel(hbox);
@@ -78,11 +78,11 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
 
     // setup image list
     d->imageList = new DItemsList(this);
-    d->imageList->setObjectName(QLatin1String("FTExport ImagesList"));
+    d->imageList->setObjectName(QLatin1String("FCExport ImagesList"));
     d->imageList->setIface(iface);
     d->imageList->loadImagesFromCurrentSelection();
     d->imageList->setAllowRAW(true);
-    d->imageList->listView()->setWhatsThis(i18n("This is the list of images to upload "
+    d->imageList->listView()->setWhatsThis(i18n("This is the list of items to copy "
                                                 "to the specified target."));
 
     // layout dialog
