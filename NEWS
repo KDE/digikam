@@ -134,4 +134,5 @@ BUGFIXES:
 114 ==> 405700 - Lensfun supported Camera is missing.
 115 ==> 400140 - Digikam crash when exporting on google photos.
 116 ==> 397744 - Face recognition not working.
-117 ==> 
+117 ==> 398000 - Multi/batch rename fails almost every time.
+118 ==> 
