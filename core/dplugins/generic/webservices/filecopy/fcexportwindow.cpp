@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006-2009 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (c) 2019      by Maik Qualmann <metzpinguin at gmail dot com>
+ * Copyright (C) 2019      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,21 +28,20 @@
 
 #include <QWindow>
 #include <QCloseEvent>
-#include <QMenu>
 #include <QMessageBox>
 
 // KDE includes
 
 #include <kconfig.h>
-#include <klocalizedstring.h>
 #include <kwindowconfig.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "digikam_version.h"
-#include "ditemslist.h"
 #include "fcexportwidget.h"
+#include "ditemslist.h"
 #include "fcthread.h"
 
 namespace DigikamGenericFileCopyPlugin
@@ -62,13 +61,13 @@ public:
     const static QString TARGET_OVERWRITE;
     const static QString CONFIG_GROUP;
 
-    FCExportWidget* exportWidget;
-    FCThread*       thread;
+    FCExportWidget*      exportWidget;
+    FCThread*            thread;
 };
 
-const QString FCExportWindow::Private::TARGET_URL_PROPERTY  = QLatin1String("targetUrl");
-const QString FCExportWindow::Private::TARGET_OVERWRITE     = QLatin1String("overwrite");
-const QString FCExportWindow::Private::CONFIG_GROUP         = QLatin1String("FileCopyExport");
+const QString FCExportWindow::Private::TARGET_URL_PROPERTY = QLatin1String("targetUrl");
+const QString FCExportWindow::Private::TARGET_OVERWRITE    = QLatin1String("overwrite");
+const QString FCExportWindow::Private::CONFIG_GROUP        = QLatin1String("FileCopyExport");
 
 FCExportWindow::FCExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0, QLatin1String("FileCopy Export Dialog")),
@@ -179,7 +178,7 @@ void FCExportWindow::updateUploadButton()
 
 void FCExportWindow::slotCopyingDone(const QUrl& from, const QUrl& to)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "copied " << to.toDisplayString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Copied to:" << to.toLocalFile();
 
     d->exportWidget->imagesList()->removeItemByUrl(from);
 }

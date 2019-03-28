@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006-2009 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2011-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (c) 2019      by Maik Qualmann <metzpinguin at gmail dot com>
+ * Copyright (C) 2019      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,9 +26,9 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QApplication>
 
 // KDE includes
 
@@ -77,7 +77,7 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
 
     label->setText(i18n("Target location: "));
     d->selector->setFileDlgMode(QFileDialog::Directory);
-    d->selector->setFileDlgTitle(i18n("Destination Folder"));
+    d->selector->setFileDlgTitle(i18n("Target Folder"));
     d->selector->setWhatsThis(i18n("Sets the target address to copy the items to."));
 
     // setup image list
