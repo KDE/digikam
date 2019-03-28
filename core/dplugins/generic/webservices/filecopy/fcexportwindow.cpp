@@ -171,8 +171,8 @@ void FCExportWindow::updateUploadButton()
     bool listNotEmpty = !d->exportWidget->imagesList()->imageUrls().isEmpty();
     startButton()->setEnabled(listNotEmpty && d->exportWidget->targetUrl().isValid());
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated upload button with listNotEmpty = "
-                                     << listNotEmpty << ", targetUrl().isValid() = "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated upload button with listNotEmpty ="
+                                     << listNotEmpty << ", targetUrl().isValid() ="
                                      << d->exportWidget->targetUrl().isValid();
 }
 
@@ -218,9 +218,9 @@ void FCExportWindow::slotCopy()
                 this, SLOT(slotCopyingDone(QUrl,QUrl)));
     }
 
-    d->thread->setItemsUrlList(d->exportWidget->imagesList()->imageUrls(),
-                               d->exportWidget->targetUrl(),
-                               d->exportWidget->overwriteBox()->isChecked());
+    d->thread->createCopyJobs(d->exportWidget->imagesList()->imageUrls(),
+                              d->exportWidget->targetUrl(),
+                              d->exportWidget->overwriteBox()->isChecked());
 
     d->thread->start();
 }

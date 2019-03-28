@@ -48,8 +48,8 @@ public:
     explicit FCThread(QObject* const parent);
     ~FCThread();
 
-    void setItemsUrlList(const QList<QUrl>& itemsList,
-                         const QUrl& dstUrl, bool overwrite);
+    void createCopyJobs(const QList<QUrl>& itemsList,
+                        const QUrl& dstUrl, bool overwrite);
     void cancel();
 
 Q_SIGNALS:

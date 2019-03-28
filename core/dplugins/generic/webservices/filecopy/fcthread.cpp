@@ -45,8 +45,8 @@ FCThread::~FCThread()
     wait();
 }
 
-void FCThread::setItemsUrlList(const QList<QUrl>& itemsList,
-                               const QUrl& dstUrl, bool overwrite)
+void FCThread::createCopyJobs(const QList<QUrl>& itemsList,
+                              const QUrl& dstUrl, bool overwrite)
 {
     ActionJobCollection collection;
 
