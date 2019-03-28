@@ -48,21 +48,14 @@ public:
     explicit FCThread(QObject* const parent);
     ~FCThread();
 
-    void setItemUrlList(const QList<QUrl>& itemsList, const QUrl& dstUrl);
+    void setItemsUrlList(const QList<QUrl>& itemsList,
+                         const QUrl& dstUrl, bool overwrite);
     void cancel();
 
 Q_SIGNALS:
 
     void signalUrlProcessed(const QUrl& from, const QUrl& to);
     void signalCancelTask();
-
-public:
-
-    class Private;
-
-private:
-
-    Private* const d;
 };
 
 }  // namespace DigikamGenericFileCopyPlugin

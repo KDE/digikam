@@ -52,18 +52,22 @@ public:
 
     explicit Private()
     {
+        overwrite = false;
     }
 
     QUrl    srcUrl;
     QUrl    dstUrl;
+    bool    overwrite;
 };
 
-FCTask::FCTask(const QUrl& srcUrl, const QUrl& dstUrl)
+FCTask::FCTask(const QUrl& srcUrl,
+               const QUrl& dstUrl, bool overwrite)
     : ActionJob(),
       d(new Private)
 {
-    d->srcUrl = srcUrl;
-    d->dstUrl = dstUrl;
+    d->srcUrl    = srcUrl;
+    d->dstUrl    = dstUrl;
+    d->overwrite = overwrite;
 }
 
 FCTask::~FCTask()
@@ -81,6 +85,11 @@ void FCTask::run()
     dest.setPath(dest.path() +
                  QLatin1Char('/') +
                  d->srcUrl.fileName());
+
+    if (d->overwrite && QFile::exists(dest.toLocalFile()))
+    {
+        QFile::remove(dest.toLocalFile());
+    }
 
     bool ok   = QFile::copy(d->srcUrl.toLocalFile(),
                             dest.toLocalFile());

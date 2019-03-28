@@ -59,6 +59,7 @@ public:
     }
 
     const static QString TARGET_URL_PROPERTY;
+    const static QString TARGET_OVERWRITE;
     const static QString CONFIG_GROUP;
 
     FCExportWidget* exportWidget;
@@ -66,6 +67,7 @@ public:
 };
 
 const QString FCExportWindow::Private::TARGET_URL_PROPERTY  = QLatin1String("targetUrl");
+const QString FCExportWindow::Private::TARGET_OVERWRITE     = QLatin1String("overwrite");
 const QString FCExportWindow::Private::CONFIG_GROUP         = QLatin1String("FileCopyExport");
 
 FCExportWindow::FCExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
@@ -134,6 +136,7 @@ void FCExportWindow::restoreSettings()
     KConfig config;
     KConfigGroup group  = config.group(d->CONFIG_GROUP);
     d->exportWidget->setTargetUrl(group.readEntry(d->TARGET_URL_PROPERTY, QUrl()));
+    d->exportWidget->overwriteBox()->setChecked(group.readEntry(d->TARGET_OVERWRITE, false));
 
     winId();
     KConfigGroup group2 = config.group(QLatin1String("FileCopy Export Dialog"));
@@ -145,7 +148,8 @@ void FCExportWindow::saveSettings()
 {
     KConfig config;
     KConfigGroup group = config.group(d->CONFIG_GROUP);
-    group.writeEntry(d->TARGET_URL_PROPERTY,  d->exportWidget->targetUrl().url());
+    group.writeEntry(d->TARGET_URL_PROPERTY, d->exportWidget->targetUrl().url());
+    group.writeEntry(d->TARGET_OVERWRITE,    d->exportWidget->overwriteBox()->isChecked());
 
     KConfigGroup group2 = config.group(QLatin1String("FileCopy Export Dialog"));
     KWindowConfig::saveWindowSize(windowHandle(), group2);
@@ -215,8 +219,9 @@ void FCExportWindow::slotCopy()
                 this, SLOT(slotCopyingDone(QUrl,QUrl)));
     }
 
-    d->thread->setItemUrlList(d->exportWidget->imagesList()->imageUrls(),
-                              d->exportWidget->targetUrl());
+    d->thread->setItemsUrlList(d->exportWidget->imagesList()->imageUrls(),
+                               d->exportWidget->targetUrl(),
+                               d->exportWidget->overwriteBox()->isChecked());
 
     d->thread->start();
 }

@@ -27,9 +27,10 @@
 
 // Qt includes
 
+#include <QCheckBox>
 #include <QWidget>
-#include <QUrl>
 #include <QList>
+#include <QUrl>
 
 // Local includes
 
@@ -63,6 +64,11 @@ public:
      * Returns a pointer to the imagelist that is displayed.
      */
     DItemsList* imagesList() const;
+
+    /**
+     * Returns a pointer to the overweite QCheckBox.
+     */
+    QCheckBox* overwriteBox() const;
 
     /**
      * Returns the currently selected target url. Maybe invalid.

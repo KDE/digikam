@@ -32,21 +32,8 @@
 namespace DigikamGenericFileCopyPlugin
 {
 
-class Q_DECL_HIDDEN FCThread::Private
-{
-
-public:
-
-    explicit Private()
-    {
-    }
-
-    QList<QUrl> itemsList;
-};
-
 FCThread::FCThread(QObject* const parent)
-    : ActionThreadBase(parent),
-      d(new Private)
+    : ActionThreadBase(parent)
 {
 }
 
@@ -56,18 +43,16 @@ FCThread::~FCThread()
     cancel();
     // wait for the thread to finish
     wait();
-
-    delete d;
 }
 
-void FCThread::setItemUrlList(const QList<QUrl>& itemsList, const QUrl& dstUrl)
+void FCThread::setItemsUrlList(const QList<QUrl>& itemsList,
+                               const QUrl& dstUrl, bool overwrite)
 {
-    d->itemsList = itemsList;
     ActionJobCollection collection;
 
-    foreach (const QUrl& srcUrl, d->itemsList)
+    foreach (const QUrl& srcUrl, itemsList)
     {
-        FCTask* const t = new FCTask(srcUrl, dstUrl);
+        FCTask* const t = new FCTask(srcUrl, dstUrl, overwrite);
 
         connect(t, SIGNAL(signalUrlProcessed(QUrl,QUrl)),
                 this, SIGNAL(signalUrlProcessed(QUrl,QUrl)));

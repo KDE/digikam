@@ -44,7 +44,8 @@ class FCTask : public ActionJob
 
 public:
 
-    explicit FCTask(const QUrl& srcUrl, const QUrl& dstUrl);
+    explicit FCTask(const QUrl& srcUrl,
+                    const QUrl& dstUrl, bool overwrite);
     ~FCTask();
 
 Q_SIGNALS:

@@ -51,12 +51,15 @@ public:
 
     explicit Private()
     {
-        selector        = 0;
-        imageList       = 0;
+        selector      = 0;
+        imageList     = 0;
+        overwrite     = 0;
     }
 
     DFileSelector*      selector;
     DItemsList*         imageList;
+    QCheckBox*          overwrite;
+
     QUrl                targetUrl;
 
 };
@@ -70,6 +73,8 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
     DHBox* const hbox   = new DHBox(this);
     QLabel* const label = new QLabel(hbox);
     d->selector         = new DFileSelector(hbox);
+    d->overwrite        = new QCheckBox(i18n("Overwrite existing items in the target"), this);
+
     d->selector->setFileDlgTitle(i18n("Destination Folder"));
     d->selector->setFileDlgMode(QFileDialog::Directory);
 
@@ -89,6 +94,7 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(hbox);
+    layout->addWidget(d->overwrite);
     layout->addWidget(d->imageList);
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->setContentsMargins(QMargins());
@@ -121,6 +127,11 @@ void FCExportWidget::setTargetUrl(const QUrl& url)
 DItemsList* FCExportWidget::imagesList() const
 {
     return d->imageList;
+}
+
+QCheckBox* FCExportWidget::overwriteBox() const
+{
+    return d->overwrite;
 }
 
 void FCExportWidget::slotLabelUrlChanged()
