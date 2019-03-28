@@ -282,8 +282,6 @@ libc.so.6 \
 libdl.so.2 \
 libdrm.so.2 \
 libexpat.so.1 \
-libfontconfig.so.1 \
-libfreetype.so.6 \
 libgcc_s.so.1 \
 libgdk_pixbuf-2.0.so.0 \
 libgio-2.0.so.0 \
@@ -358,6 +356,9 @@ libopenal.so.1 \
 
 #libffi.so.6            # needed for Ubuntu 11.04
 #libxcb-glx.so.0        # needed for Ubuntu 11.04
+
+#libfontconfig.so.1      # generated while compilation with recent version
+#libfreetype.so.6        # generated while compilation with recent version
 
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
