@@ -270,8 +270,7 @@ QString toolButtonStyleSheet()
                          "  qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, "
                          "  stop: 0 rgba(100, 100, 100, 50%), "
                          "  stop: 1 rgba(170, 170, 170, 50%)); "
-                         "border: 1px solid rgba(200, 200, 200, 30%); "
-                         "border-radius: 4px; } "
+                         "border: 1px solid rgba(170, 170, 170, 10%); } "
 
                          "QToolButton:hover { border-color: white; } "
 
