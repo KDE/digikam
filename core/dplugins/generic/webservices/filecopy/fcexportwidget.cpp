@@ -75,10 +75,9 @@ FCExportWidget::FCExportWidget(DInfoInterface* const iface, QWidget* const paren
     d->selector         = new DFileSelector(hbox);
     d->overwrite        = new QCheckBox(i18n("Overwrite existing items in the target"), this);
 
-    d->selector->setFileDlgTitle(i18n("Destination Folder"));
-    d->selector->setFileDlgMode(QFileDialog::Directory);
-
     label->setText(i18n("Target location: "));
+    d->selector->setFileDlgMode(QFileDialog::Directory);
+    d->selector->setFileDlgTitle(i18n("Destination Folder"));
     d->selector->setWhatsThis(i18n("Sets the target address to copy the items to."));
 
     // setup image list

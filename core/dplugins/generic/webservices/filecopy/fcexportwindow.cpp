@@ -135,7 +135,7 @@ void FCExportWindow::restoreSettings()
 {
     KConfig config;
     KConfigGroup group  = config.group(d->CONFIG_GROUP);
-    d->exportWidget->setTargetUrl(group.readEntry(d->TARGET_URL_PROPERTY, QUrl()));
+    d->exportWidget->setTargetUrl(group.readEntry(d->TARGET_URL_PROPERTY,            QUrl()));
     d->exportWidget->overwriteBox()->setChecked(group.readEntry(d->TARGET_OVERWRITE, false));
 
     winId();
