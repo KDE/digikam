@@ -132,4 +132,5 @@ BUGFIXES:
 112 ==> 372308 - Buttons for rotate does not show very well.
 113 ==> 375375 - Various bugs detecting and tagging faces in current 5.4.0 Digikam appimage.
 114 ==> 405700 - Lensfun supported Camera is missing.
-115 ==> 
+115 ==> 400140 - Digikam crash when exporting on google photos.
+116 ==> 
