@@ -131,4 +131,5 @@ BUGFIXES:
 111 ==> 405904 - The saved version of the image is not linked to the original.
 112 ==> 372308 - Buttons for rotate does not show very well.
 113 ==> 375375 - Various bugs detecting and tagging faces in current 5.4.0 Digikam appimage.
-114 ==> 
+114 ==> 405700 - Lensfun supported Camera is missing.
+115 ==> 
