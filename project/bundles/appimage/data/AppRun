@@ -85,9 +85,9 @@ export APPIMAGE_STARTUP_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=$PATH
 
-preload_shared_library libfontconfig.so.1
-preload_shared_library libfreetype.so.6
 preload_shared_library libudev.so.0
+#preload_shared_library libfontconfig.so.1
+#preload_shared_library libfreetype.so.6
 #preload_shared_library libssl.so.10
 #preload_shared_library libcrypto.so.10
 

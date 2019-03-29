@@ -282,6 +282,8 @@ libc.so.6 \
 libdl.so.2 \
 libdrm.so.2 \
 libexpat.so.1 \
+libfontconfig.so.1 \
+libfreetype.so.6 \
 libgcc_s.so.1 \
 libgdk_pixbuf-2.0.so.0 \
 libgio-2.0.so.0 \
@@ -359,9 +361,6 @@ libdbus-1.so.3 \
 #libffi.so.6            # needed for Ubuntu 11.04
 #libxcb-glx.so.0        # needed for Ubuntu 11.04
 
-#libfontconfig.so.1      # generated while compilation with recent version
-#libfreetype.so.6        # generated while compilation with recent version
-
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
         echo -e "   ==> ${FILE} will be removed for the bundle"
@@ -372,11 +371,11 @@ done
 ln -s libssl.so.10 usr/lib/libssl.so || true
 
 # We don't bundle the developer stuff
-rm -rf usr/include || true
-rm -rf usr/lib/cmake3 || true
-rm -rf usr/lib/pkgconfig || true
-rm -rf usr/share/ECM/ || true
-rm -rf usr/share/gettext || true
+rm -rf usr/include         || true
+rm -rf usr/lib/cmake3      || true
+rm -rf usr/lib/pkgconfig   || true
+rm -rf usr/share/ECM/      || true
+rm -rf usr/share/gettext   || true
 rm -rf usr/share/pkgconfig || true
 
 #################################################################################################
