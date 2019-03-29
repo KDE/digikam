@@ -331,7 +331,8 @@ for FILE in $EXCLUDE_FILES ; do
 done
 
 # This list is taken from older AppImage build script from krita
-# NOTE: libopenal => see bug 390162
+# NOTE: libopenal => see bug 390162.
+#       libdbus-1 => see Krita rules.
 EXTRA_EXCLUDE_FILES="\
 libgssapi_krb5.so.2 \
 libgssapi.so.3 \
@@ -349,6 +350,7 @@ libroken.so.18 \
 libsasl2.so.2 \
 libwind.so.0 \
 libopenal.so.1 \
+libdbus-1.so.3 \
 "
 
 #liblber-2.4.so.2       # needed for debian wheezy
@@ -409,14 +411,6 @@ cd usr/ ; find . -type f -exec sed -i -e 's|/usr|././|g' {} \; ; cd ..
 # Fixes "Qt: Failed to create XKB context!" and lets us enter text
 sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
 sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
-
-# Workaround for:
-# D-Bus library appears to be incorrectly set up;
-# failed to read machine uuid: Failed to open
-# The file is more commonly in /etc/machine-id
-# sed -i -e 's|/var/lib/dbus/machine-id|//././././etc/machine-id|g' ./usr/lib/libdbus-1.so.3
-# or
-rm -f ./usr/lib/libdbus-1.so.3 || true
 
 #################################################################################################
 
