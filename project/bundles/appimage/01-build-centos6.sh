@@ -125,6 +125,8 @@ yum -y install wget \
                openal-soft-devel \
                libical-devel \
                libcap-devel \
+               fontconfig-devel \
+               freetype-devel \
                patchelf \
                dpkg
 
@@ -252,8 +254,6 @@ yum -y erase qt-devel \
              ffmpeg-devel \
              ant \
              pulseaudio-libs-devel \
-             fontconfig-devel \
-             freetype-devel \
              libicu-devel
 
 #################################################################################################
@@ -311,19 +311,16 @@ cmake3 --build . --config RelWithDebInfo --target ext_jpeg          -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
-#cmake3 --build . --config RelWithDebInfo --target ext_openssl       -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_freetype      -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_fontconfig    -- -j$CPU_CORES    # depend of freetype
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
 
-cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of fontconfig, freetype, tiff, png, jpeg
+cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of tiff, png, jpeg
 
 if [[ $DK_QTWEBENGINE = 0 ]] ; then
     cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit  -- -j$CPU_CORES    # depend of Qt and libicu
 fi
 
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES    # depend of fontconfig
+cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
 cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
 
