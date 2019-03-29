@@ -221,7 +221,8 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
 fi
 
-yum -y install fdk-aac-devel \
+yum -y install libass-devel \
+               fdk-aac-devel \
                faac-devel \
                libfribidi-devel \
                lame-devel \
@@ -320,7 +321,6 @@ if [[ $DK_QTWEBENGINE = 0 ]] ; then
 fi
 
 cmake3 --build . --config RelWithDebInfo --target ext_boost         -- -j$CPU_CORES
-cmake3 --build . --config RelWithDebInfo --target ext_libass        -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg        -- -j$CPU_CORES    # depend of libass
 cmake3 --build . --config RelWithDebInfo --target ext_qtav          -- -j$CPU_CORES    # depend of qt and ffmpeg
 
