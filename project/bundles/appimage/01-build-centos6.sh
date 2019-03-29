@@ -313,7 +313,6 @@ cmake3 --build . --config RelWithDebInfo --target ext_jasper        -- -j$CPU_CO
 cmake3 --build . --config RelWithDebInfo --target ext_png           -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_tiff          -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libicu        -- -j$CPU_CORES
-
 cmake3 --build . --config RelWithDebInfo --target ext_qt            -- -j$CPU_CORES    # depend of tiff, png, jpeg
 
 if [[ $DK_QTWEBENGINE = 0 ]] ; then
