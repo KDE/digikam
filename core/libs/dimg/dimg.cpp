@@ -2694,8 +2694,8 @@ bool DImg::reverseRotateAndFlip(int orientation)
             break;
 
         case DMetadata::ORIENTATION_ROT_90_HFLIP:
-            rotate(DImg::ROT270);
             flip(DImg::HORIZONTAL);
+            rotate(DImg::ROT270);
             rotatedOrFlipped = true;
             break;
 
@@ -2705,8 +2705,8 @@ bool DImg::reverseRotateAndFlip(int orientation)
             break;
 
         case DMetadata::ORIENTATION_ROT_90_VFLIP:
-            rotate(DImg::ROT270);
             flip(DImg::VERTICAL);
+            rotate(DImg::ROT270);
             rotatedOrFlipped = true;
             break;
 

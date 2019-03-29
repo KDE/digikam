@@ -129,6 +129,12 @@ public:
      */
     static QSize adjustToOrientation(QRect& region, int orientation, const QSize& fullSize);
 
+    /**
+     * Reverse rotate and flip region to MetaEngine::ImageOrientation
+     * The value region are calculated for the new image orientation
+     */
+    static void reverseToOrientation(QRect& region, int orientation, const QSize& fullSize);
+
 protected:
 
     QVariant m_value;

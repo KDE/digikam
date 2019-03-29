@@ -713,7 +713,15 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ItemInfo&, const
 {
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
     FaceTagsIface face      = item->face();
-    QRect faceRect          = convertItemRectToFaceRect(item->originalRect());
+    QRect faceRect          = item->originalRect();
+
+    if (MetaEngineSettings::instance()->settings().exifRotate)
+    {
+        TagRegion::reverseToOrientation(faceRect,
+                                        d->info.orientation(),
+                                        d->info.dimensions());
+    }
+
     TagRegion currentRegion = TagRegion(faceRect);
 
     if (!face.isConfirmedName() || face.region() != currentRegion ||
@@ -821,8 +829,18 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
-        QRect faceRect     = convertItemRectToFaceRect(d->manuallyAddedItem->originalRect());
-        FaceTagsIface face = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+        QRect faceRect = d->manuallyAddedItem->originalRect();
+        DImg preview(d->view->previewItem()->image());
+
+        if (MetaEngineSettings::instance()->settings().exifRotate)
+        {
+            preview.reverseRotateAndFlip(d->info.orientation());
+            TagRegion::reverseToOrientation(faceRect,
+                                            d->info.orientation(),
+                                            d->info.dimensions());
+        }
+
+        FaceTagsIface face = d->editPipeline.addManually(d->info, preview,
                                                          TagRegion(faceRect));
         FaceItem* const item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
@@ -862,47 +880,6 @@ void FaceGroup::applyItemGeometryChanges()
             d->editPipeline.editRegion(d->info, d->view->previewItem()->image(), item->face(), currentRegion);
         }
     }
-}
-
-QRect FaceGroup::convertItemRectToFaceRect(const QRect& rect) const
-{
-    QRect faceRect = rect;
-
-    if (MetaEngineSettings::instance()->settings().exifRotate)
-    {
-        QSize imgSize = d->info.dimensions();
-
-        switch (d->info.orientation())
-        {
-            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
-                imgSize.transpose();
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_HFLIP,   imgSize);
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_270, imgSize);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_90:
-                imgSize.transpose();
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_270, imgSize);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-                imgSize.transpose();
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_VFLIP,   imgSize);
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_270, imgSize);
-                break;
-
-            case MetaEngine::ORIENTATION_ROT_270:
-                imgSize.transpose();
-                TagRegion::adjustToOrientation(faceRect, MetaEngine::ORIENTATION_ROT_90,  imgSize);
-                break;
-
-            default:
-                TagRegion::adjustToOrientation(faceRect, d->info.orientation(),           imgSize);
-                break;
-        }
-    }
-
-    return faceRect;
 }
 
 /*

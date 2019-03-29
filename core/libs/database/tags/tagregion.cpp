@@ -280,6 +280,39 @@ QSize TagRegion::adjustToOrientation(QRect& region, int rotation, const QSize& f
     return size;
 }
 
+void TagRegion::reverseToOrientation(QRect& region, int orientation, const QSize& fullSize)
+{
+    QSize size = fullSize;
+
+    switch (orientation)
+    {
+        case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_HFLIP,   size);
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_ROT_270, size);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_90:
+            size.transpose();
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_ROT_270, size);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+            size.transpose();
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_VFLIP,   size);
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_ROT_270, size);
+            break;
+
+        case MetaEngine::ORIENTATION_ROT_270:
+            size.transpose();
+            TagRegion::adjustToOrientation(region, MetaEngine::ORIENTATION_ROT_90,  size);
+            break;
+
+        default:
+            TagRegion::adjustToOrientation(region, orientation,                     size);
+            break;
+    }
+}
+
 QDebug operator<<(QDebug dbg, const TagRegion& r)
 {
     QVariant var = r.toVariant();
