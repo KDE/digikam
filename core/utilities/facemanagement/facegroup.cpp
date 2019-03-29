@@ -531,14 +531,14 @@ FaceItem* FaceGroup::Private::createItem(const FaceTagsIface& face)
     item->setFace(face);
 
     QRect faceRect = face.region().toRect();
-
+/*
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         TagRegion::adjustToOrientation(faceRect,
                                        info.orientation(),
                                        info.dimensions());
     }
-
+*/
     item->setOriginalRect(faceRect);
     item->setVisible(false);
 
@@ -714,14 +714,14 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ItemInfo&, const
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
     FaceTagsIface face      = item->face();
     QRect faceRect          = item->originalRect();
-
+/*
     if (MetaEngineSettings::instance()->settings().exifRotate)
     {
         TagRegion::reverseToOrientation(faceRect,
                                         d->info.orientation(),
                                         d->info.dimensions());
     }
-
+*/
     TagRegion currentRegion = TagRegion(faceRect);
 
     if (!face.isConfirmedName() || face.region() != currentRegion ||
@@ -831,7 +831,7 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
         d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
         QRect faceRect = d->manuallyAddedItem->originalRect();
         DImg preview(d->view->previewItem()->image());
-
+/*
         if (MetaEngineSettings::instance()->settings().exifRotate)
         {
             preview.reverseRotateAndFlip(d->info.orientation());
@@ -839,7 +839,7 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
                                             d->info.orientation(),
                                             d->info.dimensions());
         }
-
+*/
         FaceTagsIface face = d->editPipeline.addManually(d->info, preview,
                                                          TagRegion(faceRect));
         FaceItem* const item = d->addItem(face);
