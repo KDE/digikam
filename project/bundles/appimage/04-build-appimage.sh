@@ -148,10 +148,8 @@ find  /usr/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgph
 
 # copy sane backends
 cp -r /usr/lib/sane                       ./usr/lib
+rm ./usr/lib/sane/*.la
 cp -r /usr/etc/sane.d                     ./usr/etc
-
-# copy openssl configuration files
-cp -r /etc/pki                            ./usr/etc
 
 # copy i18n
 
@@ -247,11 +245,11 @@ for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
 done
 
-#FILES=$(ls /usr/$LIB_PATH_ALT/plugins/imageformats/*.so)
-#
-#for FILE in $FILES ; do
-#    CopyReccursiveDependencies /usr/plugins/imageformats/*.so ./usr/lib
-#done
+FILES=$(ls /usr/plugins/imageformats/*.so)
+
+for FILE in $FILES ; do
+    CopyReccursiveDependencies ${FILE} ./usr/lib
+done
 
 # Copy in the indirect dependencies
 FILES=$(find . -type f -executable)
@@ -379,6 +377,7 @@ rm -rf usr/share/gettext   || true
 rm -rf usr/share/pkgconfig || true
 
 #################################################################################################
+# See LFS instruction: http://www.linuxfromscratch.org/lfs/view/systemd/chapter05/stripping.html
 
 echo -e "---------- Strip Binaries Files \n"
 
@@ -389,8 +388,9 @@ else
 fi
 
 for FILE in $FILES ; do
-    echo -e "Strip symbols in: $FILE"
-    strip ${FILE} 2>&1>/dev/null || true
+    echo -en "Strip symbols in: $FILE"
+    /usr/bin/strip --strip-debug ${FILE}
+    echo -e " ==> OK"
 done
 
 #################################################################################################
