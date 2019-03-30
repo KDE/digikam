@@ -137,4 +137,5 @@ BUGFIXES:
 117 ==> 398000 - Multi/batch rename fails almost every time.
 118 ==> 396496 - QSQLITE -> MYSQL loses grouping information.
 119 ==> 382311 - Photos in collapsed groups are incorrectly excluded if first photo in group does not match filter.
-120 ==> 
+120 ==> 400981 - Appimage not working anymore: /lib64/libfontconfig.so.1: undefined symbol: FT_Done_MM_Var.
+121 ==> 
