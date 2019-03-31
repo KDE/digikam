@@ -425,8 +425,6 @@ APP=digikam
 
 if [[ $DK_QTWEBENGINE = 1 ]] ; then
     WEB_BROWSER="-qtwebengine"
-else
-    WEB_BROWSER="-qtwebkit"
 fi
 
 if [[ "$ARCH" = "x86_64" ]] ; then
@@ -528,9 +526,9 @@ if [[ $DK_UPLOAD = 1 ]] ; then
     echo -e "---------- Cleanup older bundle AppImage files from files.kde.org repository \n"
 
     if [[ "$ARCH" = "x86_64" ]] ; then
-        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-x86-64*.appimage*
+        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*$WEB_BROWSER-x86-64*.appimage*
     elif [[ "$ARCH" = "i686" ]] ; then
-        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-i386*.appimage*
+        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*$WEB_BROWSER-i386*.appimage*
     fi
 
     echo -e "---------- Upload new bundle AppImage files to files.kde.org repository \n"
