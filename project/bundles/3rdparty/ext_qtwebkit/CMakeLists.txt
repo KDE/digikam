@@ -31,10 +31,12 @@ ExternalProject_Add(ext_qtwebkit
                -DENABLE_INSPECTOR_UI=ON
                -DENABLE_API_TESTS=OFF
                -DENABLE_TOOLS=OFF
+               -DENABLE_JIT=OFF
                -DUSE_GSTREAMER=OFF
                -DUSE_MEDIA_FOUNDATION=OFF
                -DUSE_QT_MULTIMEDIA=OFF
                -DUSE_LIBHYPHEN=OFF
+               -DUSE_SYSTEM_MALLOC=1
                -DUSE_WOFF2=ON
                -DPORT=Qt
                -Wno-dev
