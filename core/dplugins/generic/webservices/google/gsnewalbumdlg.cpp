@@ -72,14 +72,14 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
     const int spacing        = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QGroupBox* const privBox = new QGroupBox(i18n("Access Level"), getMainWidget());
-    privBox->setWhatsThis(i18n("These are security and privacy settings for the new Google Photos/PicasaWeb album."));
+    privBox->setWhatsThis(i18n("These are security and privacy settings for the new Google Photos album."));
 
-    d->publicRBtn        = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Public"));
+    d->publicRBtn        = new QRadioButton(i18nc("google photos album privacy", "Public"));
     d->publicRBtn->setChecked(true);
-    d->publicRBtn->setWhatsThis(i18n("Public album is listed on your public Google Photos/PicasaWeb page."));
-    d->unlistedRBtn      = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Unlisted / Private"));
+    d->publicRBtn->setWhatsThis(i18n("Public album is listed on your public Google Photos page."));
+    d->unlistedRBtn      = new QRadioButton(i18nc("google photos album privacy", "Unlisted / Private"));
     d->unlistedRBtn->setWhatsThis(i18n("Unlisted album is only accessible via URL."));
-    d->protectedRBtn     = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Sign-In Required to View"));
+    d->protectedRBtn     = new QRadioButton(i18nc("google photos album privacy", "Sign-In Required to View"));
     d->protectedRBtn->setWhatsThis(i18n("Unlisted album require Sign-In to View"));
 
     QVBoxLayout* const radioLayout = new QVBoxLayout;

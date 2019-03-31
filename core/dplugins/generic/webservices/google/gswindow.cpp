@@ -125,12 +125,12 @@ GSWindow::GSWindow(DInfoInterface* const iface,
              Qt::CaseInsensitive) == 0)
     {
         d->service  = GoogleService::GPhotoExport;
-        d->toolName = QLatin1String("Google Photos/PicasaWeb");
+        d->toolName = QLatin1String("Google Photos");
     }
     else
     {
         d->service  = GoogleService::GPhotoImport;
-        d->toolName = QLatin1String("Google Photos/PicasaWeb");
+        d->toolName = QLatin1String("Google Photos");
     }
 
     d->tmp         = WSToolUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
@@ -189,19 +189,19 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             if (d->service == GoogleService::GPhotoExport)
             {
-                setWindowTitle(i18n("Export to Google Photos/PicasaWeb Service"));
+                setWindowTitle(i18n("Export to Google Photos Service"));
 
                 startButton()->setText(i18n("Start Upload"));
-                startButton()->setToolTip(i18n("Start upload to Google Photos/PicasaWeb Service"));
+                startButton()->setToolTip(i18n("Start upload to Google Photos Service"));
 
                 d->widget->setMinimumSize(700, 500);
             }
             else
             {
-                setWindowTitle(i18n("Import from Google Photos/PicasaWeb Service"));
+                setWindowTitle(i18n("Import from Google Photos Service"));
 
                 startButton()->setText(i18n("Start Download"));
-                startButton()->setToolTip(i18n("Start download from Google Photos/PicasaWeb service"));
+                startButton()->setToolTip(i18n("Start download from Google Photos service"));
 
                 d->widget->setMinimumSize(300, 400);
             }
@@ -369,7 +369,7 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode,
     if (errCode == 0)
     {
         QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                              i18n("Google Photos/PicasaWeb Call Failed: %1\n", errMsg));
+                              i18n("Google Photos call failed: %1\n", errMsg));
         return;
     }
 
@@ -398,91 +398,6 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode,
     downloadNextPhoto();
 }
 
-void GSWindow::slotListPhotosDoneForUpload(int errCode,
-                                           const QString& errMsg,
-                                           const QList <GSPhoto>& photosList)
-{
-    qCCritical(DIGIKAM_WEBSERVICES_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
-
-    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
-               this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
-
-    if (errCode == 0)
-    {
-        QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                              i18n("Google Photos/PicasaWeb Call Failed: %1\n", errMsg));
-        return;
-    }
-
-    typedef QPair<QUrl, GSPhoto> Pair;
-
-    d->transferQueue.clear();
-
-    QList<QUrl> urlList = d->widget->imagesList()->imageUrls(true);
-
-    if (urlList.isEmpty())
-        return;
-
-    for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
-    {
-        DItemInfo info(d->iface->itemInfo((*it)));
-        GSPhoto temp;
-        temp.title = info.name();
-
-        // Google Photo doesn't support image titles. Include it in descriptions if needed.
-        QStringList descriptions = QStringList() << info.title() << info.comment();
-        descriptions.removeAll(QLatin1String(""));
-        temp.description         = descriptions.join(QLatin1String("\n\n"));
-
-        // check for existing items
-        QString localId;
-
-        if (d->meta.load((*it).toLocalFile()))
-        {
-            localId = d->meta.getXmpTagString("Xmp.digiKam.picasawebGPhotoId");
-        }
-
-        QList<GSPhoto>::const_iterator itPWP;
-
-        for (itPWP = photosList.begin(); itPWP != photosList.end(); ++itPWP)
-        {
-            if ((*itPWP).id == localId)
-            {
-                temp.id       = localId;
-                temp.editUrl  = (*itPWP).editUrl;
-                temp.thumbURL = (*itPWP).thumbURL;
-                break;
-            }
-        }
-
-        // Tags from the database
-        temp.gpsLat.setNum(info.latitude());
-        temp.gpsLon.setNum(info.longitude());
-
-        temp.tags = info.tagsPath();
-        d->transferQueue.append(Pair((*it), temp));
-    }
-
-    if (d->transferQueue.isEmpty())
-        return;
-
-    d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
-    d->imagesTotal    = d->transferQueue.count();
-    d->imagesCount    = 0;
-
-    d->widget->progressBar()->setFormat(i18n("%v / %m"));
-    d->widget->progressBar()->setMaximum(d->imagesTotal);
-    d->widget->progressBar()->setValue(0);
-    d->widget->progressBar()->show();
-    d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(
-        QIcon::fromTheme((QLatin1String("dk-googlephoto"))).pixmap(22, 22));
-
-    d->renamingOpt = 0;
-
-    uploadNextPhoto();
-}
-
 void GSWindow::slotListAlbumsDone(int code, const QString& errMsg, const QList <GSFolder>& list)
 {
     switch (d->service)
@@ -492,7 +407,7 @@ void GSWindow::slotListAlbumsDone(int code, const QString& errMsg, const QList <
             if (code == 0)
             {
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                                      i18n("Google Drive Call Failed: %1\n", errMsg));
+                                      i18n("Google Drive call failed: %1\n", errMsg));
                 return;
             }
 
@@ -518,7 +433,7 @@ void GSWindow::slotListAlbumsDone(int code, const QString& errMsg, const QList <
             if (code == 0)
             {
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                                      i18n("Google Photos/PicasaWeb Call Failed: %1\n", errMsg));
+                                      i18n("Google Photos call failed: %1\n", errMsg));
                 return;
             }
 
@@ -561,34 +476,6 @@ void GSWindow::slotBusy(bool val)
         setCursor(Qt::ArrowCursor);
         d->widget->getChangeUserBtn()->setEnabled(true);
         buttonStateChange(true);
-    }
-}
-
-void GSWindow::googlePhotoTransferHandler()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Google Photo Transfer invoked";
-
-    switch (d->service)
-    {
-        case GoogleService::GPhotoImport:
-            // list photos of the album, then start download
-            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
-                    this, SLOT(slotListPhotosDoneForDownload(int,QString,QList<GSPhoto>)));
-
-            d->gphotoTalker->listPhotos(
-                d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString(),
-                d->widget->getDimensionCoB()->itemData(d->widget->getDimensionCoB()->currentIndex()).toString());
-            break;
-
-        default:
-            // list photos of the album, then start upload with add/update items
-            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
-                    this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
-
-            d->gphotoTalker->listPhotos(
-                d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());
-
-            break;
     }
 }
 
@@ -662,13 +549,17 @@ void GSWindow::slotStartTransfer()
                 }
             }
 
-            /**
-             * (Trung) At that time, googlePhotoTransferHandler is only used for GPhotoImport, 
-             * since we don't sync image to update in GPhotoExport
-             */
             if (d->service == GoogleService::GPhotoImport)
             {
-                googlePhotoTransferHandler();
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Google Photo Transfer invoked";
+                // list photos of the album, then start download
+                connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
+                        this, SLOT(slotListPhotosDoneForDownload(int,QString,QList<GSPhoto>)));
+
+                d->gphotoTalker->listPhotos(
+                    d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString(),
+                    d->widget->getDimensionCoB()->itemData(d->widget->getDimensionCoB()->currentIndex()).toString());
+
                 return;
             }
     }
@@ -684,14 +575,19 @@ void GSWindow::slotStartTransfer()
         switch (d->service)
         {
             case GoogleService::GDrive:
-                temp.title = info.title();
+                temp.title       = info.title();
+                temp.description = info.comment().section(QLatin1String("\n"), 0, 0);
                 break;
             default:
                 temp.title = info.name();
+
+                // Google Photo doesn't support image titles. Include it in descriptions if needed.
+                QStringList descriptions = QStringList() << info.title() << info.comment();
+                descriptions.removeAll(QLatin1String(""));
+                temp.description         = descriptions.join(QLatin1String("\n\n"));
                 break;
         }
 
-        temp.description = info.comment().section(QLatin1String("\n"), 0, 0);
         temp.gpsLat.setNum(info.latitude());
         temp.gpsLon.setNum(info.longitude());
         temp.tags        = info.tagsPath();
@@ -707,9 +603,20 @@ void GSWindow::slotStartTransfer()
     d->widget->progressBar()->setMaximum(d->imagesTotal);
     d->widget->progressBar()->setValue(0);
     d->widget->progressBar()->show();
-    d->widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(
-        QIcon::fromTheme(QLatin1String("dk-googledrive")).pixmap(22, 22));
+
+    switch (d->service)
+    {
+        case GoogleService::GDrive:
+            d->widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
+            d->widget->progressBar()->progressThumbnailChanged(
+                QIcon::fromTheme(QLatin1String("dk-googledrive")).pixmap(22, 22));
+            break;
+        default:
+            d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
+            d->widget->progressBar()->progressThumbnailChanged(
+                QIcon::fromTheme((QLatin1String("dk-googlephoto"))).pixmap(22, 22));
+            break;
+    }
 
     uploadNextPhoto();
 }
@@ -1271,7 +1178,7 @@ void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString&
         case GoogleService::GPhotoExport:
             if (code == 0)
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                                      i18n("Google Photos/PicasaWeb call failed:\n%1", msg));
+                                      i18n("Google Photos call failed:\n%1", msg));
             else
             {
                 d->currentAlbumId = albumId;
