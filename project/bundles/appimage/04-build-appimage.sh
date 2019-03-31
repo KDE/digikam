@@ -140,7 +140,9 @@ cp -r /usr/share/metainfo/org.kde.digikam.appdata.xml   ./usr/share/metainfo/dig
 cp -r /usr/share/metainfo/org.kde.showfoto.appdata.xml  ./usr/share/metainfo/showfoto.appdata.xml
 
 # QWebEngine bin data files.
-[[ -e /usr/ressources ]] && cp -r /usr/resources ./usr/
+if [[ $DK_QTWEBENGINE = 1 ]] ; then
+    cp -r /usr/resources ./usr
+fi
 
 # copy libgphoto2 drivers
 find  /usr/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
@@ -158,16 +160,16 @@ if [[ -e /usr/translations ]]; then
 
     cp -r /usr/translations ./usr
     # optimizations
-    rm ./usr/translations/assistant*
-    rm ./usr/translations/designer*
-    rm ./usr/translations/linguist*
-    rm ./usr/translations/qmlviewer*
-    rm ./usr/translations/qtmultimedia*
-    rm ./usr/translations/qtscript*
-    rm ./usr/translations/qtquick*
-    rm ./usr/translations/qt_help*
-    rm ./usr/translations/qtserialport*
-    rm ./usr/translations/qtwebsockets*
+    rm -rf ./usr/translations/assistant*    || true
+    rm -rf ./usr/translations/designer*     || true
+    rm -rf ./usr/translations/linguist*     || true
+    rm -rf ./usr/translations/qmlviewer*    || true
+    rm -rf ./usr/translations/qtmultimedia* || true
+    rm -rf ./usr/translations/qtscript*     || true
+    rm -rf ./usr/translations/qtquick*      || true
+    rm -rf ./usr/translations/qt_help*      || true
+    rm -rf ./usr/translations/qtserialport* || true
+    rm -rf ./usr/translations/qtwebsockets* || true
 
 fi
 
@@ -421,10 +423,16 @@ APP=digikam
 #    DEBUG_SUF="-debug"
 #fi
 
+if [[ $DK_QTWEBENGINE = 1 ]] ; then
+    WEB_BROWSER="-qtwebengine"
+else
+    WEB_BROWSER="-qtwebkit"
+fi
+
 if [[ "$ARCH" = "x86_64" ]] ; then
-    APPIMAGE=$APP"-"$DK_RELEASEID$DK_EPOCH"-x86-64$DEBUG_SUF.appimage"
+    APPIMAGE=$APP"-"$DK_RELEASEID$DK_EPOCH$WEB_BROWSER"-x86-64$DEBUG_SUF.appimage"
 elif [[ "$ARCH" = "i686" ]] ; then
-    APPIMAGE=$APP"-"$DK_RELEASEID$DK_EPOCH"-i386$DEBUG_SUF.appimage"
+    APPIMAGE=$APP"-"$DK_RELEASEID$DK_EPOCH$WEB_BROWSER"-i386$DEBUG_SUF.appimage"
 fi
 
 echo -e "---------- Create Bundle with AppImage SDK stage1\n"
