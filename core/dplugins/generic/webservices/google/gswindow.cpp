@@ -612,7 +612,7 @@ void GSWindow::slotStartTransfer()
                 QIcon::fromTheme(QLatin1String("dk-googledrive")).pixmap(22, 22));
             break;
         default:
-            d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
+            d->widget->progressBar()->progressScheduled(i18n("Google Photo export"), true, true);
             d->widget->progressBar()->progressThumbnailChanged(
                 QIcon::fromTheme((QLatin1String("dk-googlephoto"))).pixmap(22, 22));
             break;
@@ -974,23 +974,10 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
     if (!QFile::rename(tmpUrl.toLocalFile(), newUrl.toLocalFile()))
     {
         QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                              i18n("Failed to save image to %1", newUrl.toLocalFile()));
+                              i18n("Failed to save image to %1",
+                                   newUrl.toLocalFile()));
     }
-/* TODO
-    else
-    {
-        KPItemInfo info(newUrl);
-        info.setName(item.title);
-        info.setDescription(item.description);
-        info.setTagsPath(item.tags);
 
-        if (!item.gpsLat.isEmpty() && !item.gpsLon.isEmpty())
-        {
-            info.setLatitude(item.gpsLat.toDouble());
-            info.setLongitude(item.gpsLon.toDouble());
-        }
-    }
-*/
     downloadNextPhoto();
 }
 
@@ -1002,7 +989,9 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg)
 
         QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                          i18n("Warning"),
-                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", d->toolName,msg),
+                         i18n("Failed to upload photo to %1.\n%2\n"
+                              "Do you want to continue?",
+                              d->toolName,msg),
                          QMessageBox::Yes | QMessageBox::No);
 
         (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
@@ -1049,7 +1038,9 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
     {
         QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                                                      i18n("Warning"),
-                                                     i18n("Failed to finish uploading photo to %1.\n%2\nNo image uploaded to your account.", d->toolName,msg),
+                                                     i18n("Failed to finish uploading photo to %1.\n%2\n"
+                                                          "No image uploaded to your account.",
+                                                          d->toolName,msg),
                                                      QMessageBox::Yes);
 
         (warn->button(QMessageBox::Yes))->setText(i18n("OK"));
