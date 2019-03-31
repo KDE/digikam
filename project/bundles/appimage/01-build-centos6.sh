@@ -236,6 +236,7 @@ yum -y install libass-devel \
                x264-devel \
                x265-devel \
                xvidcore-devel \
+               libwebp-devel \
                yasm
 
 #################################################################################################

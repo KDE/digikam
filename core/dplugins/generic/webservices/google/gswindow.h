@@ -76,7 +76,6 @@ private:
 
     void buttonStateChange(bool state);
     void closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-    void googlePhotoTransferHandler();
 
 private Q_SLOTS:
 
@@ -86,7 +85,6 @@ private Q_SLOTS:
     void slotReloadAlbumsRequest();
     void slotStartTransfer();
     void slotFinished();
-    //void slotChangeProgressBar();
 
     void slotBusy(bool);
     void slotAccessTokenObtained();
@@ -94,7 +92,6 @@ private Q_SLOTS:
     void slotSetUserName(const QString& msg);
     void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
-    void slotListPhotosDoneForUpload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
     void slotCreateFolderDone(int,const QString& msg, const QString& = QStringLiteral("-1"));
     void slotAddPhotoDone(int,const QString& msg);
     void slotUploadPhotoDone(int, const QString& msg, const QStringList&);
