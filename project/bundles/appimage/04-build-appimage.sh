@@ -425,6 +425,8 @@ APP=digikam
 
 if [[ $DK_QTWEBENGINE = 1 ]] ; then
     WEB_BROWSER="-qtwebengine"
+else
+    WEB_BROWSER="-qtwebkit"
 fi
 
 if [[ "$ARCH" = "x86_64" ]] ; then
