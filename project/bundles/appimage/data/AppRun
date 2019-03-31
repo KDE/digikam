@@ -64,6 +64,10 @@ export KDE_FORK_SLAVES=1
 export CAMLIBS=$DIR/usr/lib/libgphoto2
 export IOLIBS=$DIR/usr/lib/libgphoto2_port
 
+# QtWebEngine crash with some video card drivers
+# https://github.com/qutebrowser/qutebrowser/issues/2368
+export QT_XCB_FORCE_SOFTWARE_OPENGL=1
+
 # code to disable Plasma desktopk detection with QDesktopService
 export APPIMAGE_ORIGINAL_KDE_FULL_SESSION=$KDE_FULL_SESSION
 export APPIMAGE_ORIGINAL_DESKTOP_SESSION=$DESKTOP_SESSION
