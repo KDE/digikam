@@ -126,7 +126,7 @@ void GSWidget::updateLabels(const QString& name, const QString& url)
         {
             getHeaderLbl()->setText(QString::fromLatin1(
                 "<b><h2><a href='https://photos.google.com/%1'>"
-                "<font color=\"#9ACD32\">Google Photos/PicasaWeb</font>"
+                "<font color=\"#9ACD32\">Google Photos</font>"
                 "</a></h2></b>").arg(url));
             break;
         }
