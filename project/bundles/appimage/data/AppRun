@@ -70,6 +70,7 @@ export QT_XCB_FORCE_SOFTWARE_OPENGL=1
 
 # OpenCV can use GPU for computation and this can break face management workflow
 # https://github.com/opencv/opencv/issues/9852
+export OPENCV_OPENCL_RUNTIME=null
 export OPENCV_OPENCL_DEVICE=disabled
 
 # code to disable Plasma desktopk detection with QDesktopService
