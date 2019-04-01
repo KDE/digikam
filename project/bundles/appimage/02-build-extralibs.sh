@@ -34,6 +34,7 @@ ChecksRunAsRoot
 StartScript
 ChecksCPUCores
 CentOS6Adjustments
+RegisterRemoteServers
 . /opt/rh/devtoolset-6/enable
 
 ORIG_WD="`pwd`"

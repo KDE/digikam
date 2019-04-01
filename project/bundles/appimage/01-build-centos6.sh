@@ -34,6 +34,7 @@ ChecksRunAsRoot
 StartScript
 ChecksCPUCores
 CentOS6Adjustments
+RegisterRemoteServers
 ORIG_WD="`pwd`"
 
 #################################################################################################
