@@ -68,6 +68,10 @@ export IOLIBS=$DIR/usr/lib/libgphoto2_port
 # https://github.com/qutebrowser/qutebrowser/issues/2368
 export QT_XCB_FORCE_SOFTWARE_OPENGL=1
 
+# OpenCV can use GPU for computation and this can break face management workflow
+# https://github.com/opencv/opencv/issues/9852
+export OPENCV_OPENCL_DEVICE=disabled
+
 # code to disable Plasma desktopk detection with QDesktopService
 export APPIMAGE_ORIGINAL_KDE_FULL_SESSION=$KDE_FULL_SESSION
 export APPIMAGE_ORIGINAL_DESKTOP_SESSION=$DESKTOP_SESSION
