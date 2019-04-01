@@ -53,3 +53,28 @@ difftimelps=$(($TERMIN_SCRIPT-$BEGIN_SCRIPT))
 echo "Elaspsed time for script execution : $(($difftimelps / 3600 )) hours $((($difftimelps % 3600) / 60)) minutes $(($difftimelps % 60)) seconds"
 
 }
+
+########################################################################
+# Automatically register the remote servers has know hosts
+RegisterRemoteServers()
+{
+
+SERVER_LIST="\
+git.kde.org \
+milonia.kde.org \
+"
+
+if [[ ! -f ~/.ssh/known_hosts ]] ; then
+    touch ~/.ssh/known_hosts
+fi
+
+for server in $SERVER_LIST; do
+
+    echo "Register $server"
+
+    ssh-keygen -R $server
+    ssh-keyscan -H $server >> ~/.ssh/known_hosts
+
+done
+
+}

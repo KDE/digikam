@@ -33,6 +33,7 @@ echo "--------------------------------------------------------"
 . ./common.sh
 StartScript
 ChecksCPUCores
+RegisterRemoteServers
 
 #################################################################################################
 # Check if NSIS CLI tools is installed
