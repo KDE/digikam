@@ -110,12 +110,17 @@ git.kde.org \
 milonia.kde.org \
 "
 
-for h in $SERVER_LIST; do
-    ip=$(dig +search +short $h)
-    ssh-keygen -R $h
-    ssh-keygen -R $ip
-    ssh-keyscan -H $ip >> ~/.ssh/known_hosts
-    ssh-keyscan -H $h >> ~/.ssh/known_hosts
+if [[ ! -f ~/.ssh/known_hosts ]] ; then
+    touch ~/.ssh/known_hosts
+fi
+
+for server in $SERVER_LIST; do
+
+    echo "Register $server"
+
+    ssh-keygen -R $server
+    ssh-keyscan -H $server >> ~/.ssh/known_hosts
+
 done
 
 }
