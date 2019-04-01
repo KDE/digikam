@@ -71,7 +71,9 @@ public:
     void writeMetadataToFiles(FileActionItemInfoList infos);
     void writeMetadata(FileActionItemInfoList infos, int flags);
     void transform(FileActionItemInfoList infos, int orientation);
-    void adjustFaceRectangles(const ItemInfo& info, int orientation);
+    void adjustFaceRectangles(const ItemInfo& info, bool rotatedPixels,
+                                                    int newOrientation,
+                                                    int oldOrientation);
 
 private:
 

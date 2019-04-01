@@ -266,9 +266,12 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
             }
         }
 
+        adjustFaceRectangles(info, rotatedPixels,
+                                   finalOrientation,
+                                   currentOrientation);
+
         if (rotatedPixels)
         {
-            adjustFaceRectangles(info, finalOrientation);
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
@@ -307,7 +310,9 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int orientation)
+void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, bool rotatedPixels,
+                                                                          int newOrientation,
+                                                                          int oldOrientation)
 {
     /**
      *  Get all faces from database and rotate them
@@ -319,7 +324,7 @@ void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int or
         return;
     }
 
-    QSize fullSize = info.dimensions();
+    QSize newSize = info.dimensions();
     QMultiMap<QString, QRect> adjustedFaces;
 
     foreach (const FaceTagsIface& dface, facesList)
@@ -327,9 +332,13 @@ void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int or
         QRect faceRect = dface.region().toRect();
         QString name   = FaceTags::faceNameForTag(dface.tagId());
 
-        fullSize = TagRegion::adjustToOrientation(faceRect,
-                                                  orientation,
-                                                  info.dimensions());
+        TagRegion::reverseToOrientation(faceRect,
+                                        oldOrientation,
+                                        info.dimensions());
+
+        newSize = TagRegion::adjustToOrientation(faceRect,
+                                                 newOrientation,
+                                                 info.dimensions());
 
         if (dface.tagId() == FaceTags::unknownPersonTagId())
         {
@@ -370,13 +379,18 @@ void FileActionMngrFileWorker::adjustFaceRectangles(const ItemInfo& info, int or
         }
     }
 
+    if (!rotatedPixels)
+    {
+        newSize = info.dimensions();
+    }
+
     /**
      * Write medatada
      */
     MetadataHub hub;
     hub.load(info);
-    // Adjusted fullSize
-    hub.loadFaceTags(info, fullSize);
+    // Adjusted newSize
+    hub.loadFaceTags(info, newSize);
     hub.write(info.filePath(), MetadataHub::WRITE_ALL);
 }
 
