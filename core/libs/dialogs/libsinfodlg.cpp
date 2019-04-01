@@ -103,6 +103,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "Eigen support"),               SUPPORTED_NO);
 #endif // HAVE_EIGEN3
 
+#ifdef HAVE_QWEBENGINE
+    list.insert(i18nc(CONTEXT, "Qt WebEngine support"),        SUPPORTED_YES);
+#else
+    list.insert(i18nc(CONTEXT, "Qt Webkit support"),           SUPPORTED_YES);
+#endif
+
     list.insert(i18nc(CONTEXT, "Exiv2"),                       MetaEngine::Exiv2Version());
     list.insert(i18nc(CONTEXT, "Exiv2 supports XMP metadata"), MetaEngine::supportXmp() ?
                 i18n("Yes") : i18n("No"));
