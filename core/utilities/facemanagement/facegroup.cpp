@@ -529,17 +529,7 @@ FaceItem* FaceGroup::Private::createItem(const FaceTagsIface& face)
 {
     FaceItem* const item = new FaceItem(view->previewItem());
     item->setFace(face);
-
-    QRect faceRect = face.region().toRect();
-/*
-    if (MetaEngineSettings::instance()->settings().exifRotate)
-    {
-        TagRegion::adjustToOrientation(faceRect,
-                                       info.orientation(),
-                                       info.dimensions());
-    }
-*/
-    item->setOriginalRect(faceRect);
+    item->setOriginalRect(face.region().toRect());
     item->setVisible(false);
 
     return item;
@@ -713,16 +703,7 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ItemInfo&, const
 {
     FaceItem* const item    = d->items[faceIdentifier.toInt()];
     FaceTagsIface face      = item->face();
-    QRect faceRect          = item->originalRect();
-/*
-    if (MetaEngineSettings::instance()->settings().exifRotate)
-    {
-        TagRegion::reverseToOrientation(faceRect,
-                                        d->info.orientation(),
-                                        d->info.dimensions());
-    }
-*/
-    TagRegion currentRegion = TagRegion(faceRect);
+    TagRegion currentRegion = TagRegion(item->originalRect());
 
     if (!face.isConfirmedName() || face.region() != currentRegion ||
         action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
@@ -829,19 +810,8 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
     if (d->manuallyAddedItem)
     {
         d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
-        QRect faceRect = d->manuallyAddedItem->originalRect();
-        DImg preview(d->view->previewItem()->image());
-/*
-        if (MetaEngineSettings::instance()->settings().exifRotate)
-        {
-            preview.reverseRotateAndFlip(d->info.orientation());
-            TagRegion::reverseToOrientation(faceRect,
-                                            d->info.orientation(),
-                                            d->info.dimensions());
-        }
-*/
-        FaceTagsIface face = d->editPipeline.addManually(d->info, preview,
-                                                         TagRegion(faceRect));
+        FaceTagsIface face   = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
+                                                           TagRegion(d->manuallyAddedItem->originalRect()));
         FaceItem* const item = d->addItem(face);
         d->visibilityController->setItemDirectlyVisible(item, true);
         item->switchMode(AssignNameWidget::UnconfirmedEditMode);
