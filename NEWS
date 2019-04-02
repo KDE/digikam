@@ -14,6 +14,7 @@ BQM         : All Batch Queue Manager tools become Bqm plugins.
 Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.
 Item View   : Add sort items by modification date.
 DPlugin     : New plugin to copy items to a local storage.
+DPlugin     : New plugin to set image as Linux desktop wallpaper.
 
 *****************************************************************************************************
 BUGFIXES:
@@ -139,4 +140,6 @@ BUGFIXES:
 119 ==> 382311 - Photos in collapsed groups are incorrectly excluded if first photo in group does not match filter.
 120 ==> 400981 - Appimage not working anymore: /lib64/libfontconfig.so.1: undefined symbol: FT_Done_MM_Var.
 121 ==> 406054 - Export to google photo a picture with a "title" => no "title" in google photo.
-122 ==> 
+122 ==> 254932 - New tool to export images as desktop wallpaper folder.
+123 ==> 192020 - Tool to export as plasma backgrounds.
+124 ==> 
