@@ -88,30 +88,7 @@ blacklist = [
     "d2d1.dll",
     "d3d11.dll",
     "dwrite.dll",
-    "api-ms-win-crt-string-l1-1-0.dll",
-    "api-ms-win-crt-time-l1-1-0.dll",
-    "api-ms-win-crt-runtime-l1-1-0.dll",
-    "api-ms-win-crt-private-l1-1-0.dll",
-    "api-ms-win-core-file-l1-1-0.dll",
-    "api-ms-win-core-errorhandling-l1-1-0.dll",
-    "api-ms-win-core-synch-l1-1-0.dll",
-    "api-ms-win-core-misc-l1-1-0.dll",
-    "api-ms-win-core-processthreads-l1-1-0.dll",
-    "api-ms-win-core-handle-l1-1-0.dll",
-    "api-ms-win-core-sysinfo-l1-1-0.dll",
-    "api-ms-win-core-heap-l1-1-0.dll",
-    "api-ms-win-core-libraryloader-l1-1-0.dll",
-    "api-ms-win-core-processenvironment-l1-1-0.dll",
-    "api-ms-win-security-base-l1-1-0.dll",
-    "api-ms-win-core-string-l1-1-0.dll",
-    "api-ms-win-core-memory-l1-1-0.dll",
-    "api-ms-win-core-debug-l1-1-0.dll",
-    "api-ms-win-core-localregistry-l1-1-0.dll",
-    "api-ms-win-core-rtlsupport-l1-1-0.dll",
-    "api-ms-win-core-profile-l1-1-0.dll",
-    "api-ms-win-core-interlocked-l1-1-0.dll",
-    "api-ms-win-core-localization-l1-1-0.dll",
-    "api-ms-win-core-io-l1-1-0.dll",
+    "dbghelp.dll",      # blacklisted dll from DrMinGW as it use MSVC dll to show debg dialog.
 ]
 
 # -----------------------------------------------
@@ -141,8 +118,7 @@ def find_full_path(filename, path_prefixes):
     if path is None:
         raise RuntimeError(
             "Can't find " + filename + ". If it is an inbuilt Windows DLL, "
-            "please add it to the blacklist variable in the script and send "
-            "a pull request!")
+            "please add it to the blacklist variable in this script.")
 
     return path
 
