@@ -254,6 +254,7 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer(this);
+    d->mouseMoveTimer->setSingleShot(true);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -274,6 +275,9 @@ PresentationGL::~PresentationGL()
 #ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->slotStop();
 #endif
+
+    d->timer->stop();
+    d->mouseMoveTimer->stop();
 
     d->texture[0]->destroy();
     d->texture[1]->destroy();
@@ -390,7 +394,6 @@ void PresentationGL::mousePressEvent(QMouseEvent* e)
 void PresentationGL::mouseMoveEvent(QMouseEvent* e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
-    d->mouseMoveTimer->setSingleShot(true);
     d->mouseMoveTimer->start(1000);
 
     if (!d->slideCtrlWidget->canHide()
@@ -403,7 +406,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
     QPoint pos(e->pos());
 
     if ((pos.y() > (d->deskY + 20)) &&
-            (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
+        (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
         if (d->slideCtrlWidget->isHidden()
 #ifdef HAVE_MEDIAPLAYER
@@ -871,7 +874,6 @@ void PresentationGL::slotTimeOut()
 
     update();
 
-    d->timer->setSingleShot(true);
     d->timer->start(d->timeout);
 }
 

@@ -280,12 +280,12 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer(this);
+    d->mouseMoveTimer->setSingleShot(true);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
 
     setMouseTracking(true);
-
     slotMouseMoveTimeOut();
 
     // -- load image and let's start
@@ -306,6 +306,9 @@ PresentationKB::~PresentationKB()
 #ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->slotStop();
 #endif
+
+    d->timer->stop();
+    d->mouseMoveTimer->stop();
 
     delete d->effect;
     delete d->image[0];
@@ -653,7 +656,6 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
     d->mouseMoveTimer->start(1000);
-    d->mouseMoveTimer->setSingleShot(true);
 
 #ifdef HAVE_MEDIAPLAYER
     if (!d->playbackWidget->canHide())
@@ -661,7 +663,8 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
 
     QPoint pos(e->pos());
 
-    if ((pos.y() > (d->deskY + 20)) && (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
+    if ((pos.y() > (d->deskY + 20)) &&
+        (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
         if (d->playbackWidget->isHidden())
         {

@@ -291,16 +291,28 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     // -- hide cursor when not moved --------------------
 
     d->mouseMoveTimer = new QTimer(this);
+    d->mouseMoveTimer->setSingleShot(true);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
 
     setMouseTracking(true);
     slotMouseMoveTimeOut();
+
+#ifdef HAVE_MEDIAPLAYER
+
+    if (d->sharedData->soundtrackPlay)
+        d->playbackWidget->slotPlay();
+
+#endif
 }
 
 PresentationWidget::~PresentationWidget()
 {
+#ifdef HAVE_MEDIAPLAYER
+    d->playbackWidget->slotStop();
+#endif
+
     d->timer->stop();
     d->mouseMoveTimer->stop();
 
@@ -601,7 +613,6 @@ void PresentationWidget::mousePressEvent(QMouseEvent* e)
 void PresentationWidget::mouseMoveEvent(QMouseEvent* e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
-    d->mouseMoveTimer->setSingleShot(true);
     d->mouseMoveTimer->start(1000);
 
     if (!d->slideCtrlWidget->canHide()
@@ -929,8 +940,6 @@ void PresentationWidget::slotTimeOut()
         tmout            = d->sharedData->delay;
         d->effectRunning = false;
     }
-
-    d->timer->setSingleShot(true);
 
     d->timer->start(tmout);
 }
