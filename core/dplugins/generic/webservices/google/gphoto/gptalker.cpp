@@ -845,8 +845,7 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
         photo.width         = metadata[QLatin1String("width")].toString();
         photo.height        = metadata[QLatin1String("height")].toString();
 
-        photo.originalURL   = QUrl(photo.baseUrl + QString::fromLatin1("=w%1-h%2").arg(photo.width)
-                                                                                  .arg(photo.height));
+        photo.originalURL   = QUrl(photo.baseUrl + QLatin1String("=d"));
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
 
         photoList.append(photo);
