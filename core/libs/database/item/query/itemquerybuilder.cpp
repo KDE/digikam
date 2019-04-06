@@ -355,6 +355,14 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
             *boundValues << tagname << tagname;
         }
     }
+    else if (name == QLatin1String("nottagged"))
+    {
+        reader.readToEndOfElement();
+        sql += QString::fromUtf8(" (Images.id NOT IN (SELECT imageid FROM ImageTags "
+               "    WHERE tagid NOT IN (SELECT id FROM Tags "
+               "    WHERE pid IN (SELECT id FROM Tags "
+               "    WHERE name = '_Digikam_Internal_Tags_') ))) ");
+    }
     else if (name == QLatin1String("notag"))
     {
         reader.readToEndOfElement();

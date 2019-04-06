@@ -347,7 +347,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
         SearchXmlWriter writer;
         writer.setFieldOperator((SearchXml::standardFieldOperator()));
         writer.writeGroup();
-        writer.writeField(QLatin1String("notag"), SearchXml::Equal);
+        writer.writeField(QLatin1String("nottagged"), SearchXml::Equal);
         writer.finishField();
         writer.finishGroup();
         writer.finish();
