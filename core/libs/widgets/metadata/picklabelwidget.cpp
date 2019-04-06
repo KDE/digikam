@@ -188,36 +188,36 @@ void PickLabelWidget::updateDescription(PickLabel label)
 
 bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->btnNone)
+    if (obj == d->btnNone)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(NoPickLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnRej)
+    if (obj == d->btnRej)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(RejectedLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnPndg)
+    if (obj == d->btnPndg)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(PendingLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnAccpt)
+    if (obj == d->btnAccpt)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(AcceptedLabel);
             return false;

@@ -210,7 +210,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
     // Check for overwrite ----------------------------------------------------------
 
-    if ( fi.exists() )
+    if (fi.exists())
     {
         int result = QMessageBox::warning(0, i18n("Overwrite File?"),
                                           i18n("A file named \"%1\" already "

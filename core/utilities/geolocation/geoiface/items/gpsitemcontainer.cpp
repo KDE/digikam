@@ -89,7 +89,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
             {
                 QDateTime dateTime = value.toDateTime();
 
-                if(!dateTime.isValid())
+                if (!dateTime.isValid())
                 {
                     success = false;
                     break;

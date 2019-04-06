@@ -755,7 +755,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     Album* currentAlbum     = 0;
 
-    if(!albumList.isEmpty())
+    if (!albumList.isEmpty())
     {
         currentAlbum = albumList.first();
     }

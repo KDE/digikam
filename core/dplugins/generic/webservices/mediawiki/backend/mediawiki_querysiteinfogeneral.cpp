@@ -114,9 +114,9 @@ void QuerySiteInfoGeneral::doWorkProcessReply()
     {
         QXmlStreamReader::TokenType token = reader.readNext();
 
-        if(token == QXmlStreamReader::StartElement)
+        if (token == QXmlStreamReader::StartElement)
         {
-            if(reader.name() == QLatin1String("general"))
+            if (reader.name() == QLatin1String("general"))
             {
                 generalinfo.setMainPage(reader.attributes().value(QStringLiteral("mainpage")).toString());
                 generalinfo.setUrl(QUrl::fromEncoded(reader.attributes().value(QStringLiteral("base")).toString().toLocal8Bit()));
@@ -142,7 +142,7 @@ void QuerySiteInfoGeneral::doWorkProcessReply()
                 generalinfo.setWikiId(reader.attributes().value(QStringLiteral("wikiid")).toString());
                 generalinfo.setTime(QDateTime::fromString(reader.attributes().value(QStringLiteral("time")).toString(), QStringLiteral("yyyy-MM-dd'T'hh:mm:ss'Z'")));
             }
-            else if(reader.name() == QLatin1String("error"))
+            else if (reader.name() == QLatin1String("error"))
             {
                 this->setError(QuerySiteInfoGeneral::IncludeAllDenied);
                 d->reply->close();

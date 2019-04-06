@@ -621,9 +621,9 @@ void DLabelExpander::slotToggleContainer()
 
 bool DLabelExpander::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->pixmapLabel)
+    if (obj == d->pixmapLabel)
     {
-        if ( ev->type() == QEvent::MouseButtonRelease)
+        if (ev->type() == QEvent::MouseButtonRelease)
         {
             slotToggleContainer();
             return false;

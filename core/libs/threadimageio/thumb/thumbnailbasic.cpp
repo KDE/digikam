@@ -90,8 +90,8 @@ QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData( QFile::encodeName(uri).constData() );
-    return ( basePath + QString::fromUtf8(QFile::encodeName(QString::fromUtf8(md5.result().toHex()))) + QLatin1String(".png") );
+    md5.addData(QFile::encodeName(uri).constData());
+    return (basePath + QString::fromUtf8(QFile::encodeName(QString::fromUtf8(md5.result().toHex()))) + QLatin1String(".png"));
 }
 
 // --- non-static methods ---
@@ -248,7 +248,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     }
 
     /* 16bit color -> 8bit color */
-    if ( bit_depth == 16 )
+    if (bit_depth == 16)
     {
         png_set_strip_16(png_ptr);
     }

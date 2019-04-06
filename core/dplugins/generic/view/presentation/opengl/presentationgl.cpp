@@ -734,9 +734,9 @@ void PresentationGL::printComments(QImage& layer)
 
         commentsIndex = currIndex; // The line is ended
 
-        if ( commentsIndex != (uint) comments.length() )
+        if (commentsIndex != (uint) comments.length())
         {
-            while ( !newLine.endsWith(QLatin1Char(' ')) )
+            while (!newLine.endsWith(QLatin1Char(' ')))
             {
                 newLine.truncate(newLine.length() - 1);
                 commentsIndex--;
@@ -754,7 +754,7 @@ void PresentationGL::printComments(QImage& layer)
     bool   drawTextOutline = d->sharedData->commentsDrawOutline;
     int    opacity = d->sharedData->bgOpacity;
 
-    for ( int lineNumber = 0 ; lineNumber < (int)commentsByLines.count() ; ++lineNumber )
+    for (int lineNumber = 0 ; lineNumber < (int)commentsByLines.count() ; ++lineNumber)
     {
         QPixmap pix = generateCustomOutlinedTextPixmap(commentsByLines[lineNumber],
                                                        font, fgColor, bgColor, opacity, drawTextOutline);
@@ -1680,7 +1680,7 @@ QPixmap PresentationGL::generateCustomOutlinedTextPixmap(const QString& text, QF
     QPixmap pix(rect.width(), rect.height());
     pix.fill(Qt::transparent);
 
-    if(opacity > 0)
+    if (opacity > 0)
     {
         QPainter pbg(&pix);
         pbg.setBrush(bgColor);

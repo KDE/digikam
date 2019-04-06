@@ -80,12 +80,12 @@ void QueryRevision::setProperties(Properties properties)
     Q_D(QueryRevision);
     QString buff;
 
-    if(properties & QueryRevision::Ids)
+    if (properties & QueryRevision::Ids)
     {
         buff.append(QStringLiteral("ids"));
     }
 
-    if(properties & QueryRevision::Flags)
+    if (properties & QueryRevision::Flags)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));
@@ -93,7 +93,7 @@ void QueryRevision::setProperties(Properties properties)
         buff.append(QStringLiteral("flags"));
     }
 
-    if(properties & QueryRevision::Timestamp)
+    if (properties & QueryRevision::Timestamp)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));
@@ -101,7 +101,7 @@ void QueryRevision::setProperties(Properties properties)
         buff.append(QStringLiteral("timestamp"));
     }
 
-    if(properties & QueryRevision::User)
+    if (properties & QueryRevision::User)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));
@@ -109,7 +109,7 @@ void QueryRevision::setProperties(Properties properties)
         buff.append(QStringLiteral("user"));
     }
 
-    if(properties & QueryRevision::Comment)
+    if (properties & QueryRevision::Comment)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));
@@ -117,7 +117,7 @@ void QueryRevision::setProperties(Properties properties)
         buff.append(QStringLiteral("comment"));
     }
 
-    if(properties & QueryRevision::Size)
+    if (properties & QueryRevision::Size)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));
@@ -125,7 +125,7 @@ void QueryRevision::setProperties(Properties properties)
         buff.append(QStringLiteral("size"));
     }
 
-    if(properties & QueryRevision::Content)
+    if (properties & QueryRevision::Content)
     {
         if (buff.length())
             buff.append(QStringLiteral("|"));

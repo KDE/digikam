@@ -132,7 +132,7 @@ void PresentationMainPage::readSettings()
     m_shuffleCheckBox->setChecked(d->sharedData->shuffle);
 
     m_delaySpinBox->setValue(d->sharedData->useMilliseconds ? d->sharedData->delay
-                                                            : d->sharedData->delay / 1000 );
+                                                            : d->sharedData->delay / 1000);
 
     slotUseMillisecondsToggled();
 
@@ -206,7 +206,7 @@ void PresentationMainPage::saveSettings()
 
         for (it = effects.constBegin(); it != effects.constEnd(); ++it)
         {
-            if ( it.value() == m_effectsComboBox->currentText())
+            if (it.value() == m_effectsComboBox->currentText())
             {
                 effect = it.key();
                 break;
@@ -226,7 +226,7 @@ void PresentationMainPage::showNumberImages()
     int transitionDuration = 2000;
 
 #ifdef HAVE_OPENGL
-    if ( m_openglCheckBox->isChecked() )
+    if (m_openglCheckBox->isChecked())
         transitionDuration += 500;
 #endif
 
@@ -408,7 +408,7 @@ void PresentationMainPage::slotEffectChanged()
     d->sharedData->captionPage->setEnabled((!isKB) && m_printCommentsCheckBox->isChecked());
 }
 
-void PresentationMainPage::slotDelayChanged( int delay )
+void PresentationMainPage::slotDelayChanged(int delay)
 {
     d->sharedData->delay = d->sharedData->useMilliseconds ? delay : delay * 1000;
     showNumberImages();
@@ -418,7 +418,7 @@ void PresentationMainPage::slotUseMillisecondsToggled()
 {
     int delay = d->sharedData->delay;
 
-    if ( d->sharedData->useMilliseconds )
+    if (d->sharedData->useMilliseconds)
     {
         m_delayLabel->setText(i18n("Delay between images (ms):"));
 
@@ -429,7 +429,7 @@ void PresentationMainPage::slotUseMillisecondsToggled()
     {
         m_delayLabel->setText(i18n("Delay between images (s):"));
 
-        m_delaySpinBox->setRange(d->sharedData->delayMsMinValue / 100, d->sharedData->delayMsMaxValue / 1000  );
+        m_delaySpinBox->setRange(d->sharedData->delayMsMinValue / 100, d->sharedData->delayMsMaxValue / 1000);
         m_delaySpinBox->setSingleStep(d->sharedData->delayMsLineStep / 100);
         delay /= 1000;
     }
@@ -440,7 +440,7 @@ void PresentationMainPage::slotUseMillisecondsToggled()
 void PresentationMainPage::slotPortfolioDurationChanged(int)
 {
     showNumberImages();
-    emit signalTotalTimeChanged( d->totalTime );
+    emit signalTotalTimeChanged(d->totalTime);
 }
 
 void PresentationMainPage::slotThumbnail(const LoadingDescription& /*desc*/, const QPixmap& pix)

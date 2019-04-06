@@ -48,8 +48,8 @@ void DigikamApp::slotSetupChanged()
     LoadingCacheInterface::cleanCache();
 
     // TODO: clear history when location changed
-    //if(ApplicationSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
-    //  d->view->clearHistory();
+    //if (ApplicationSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
+    //    d->view->clearHistory();
 
     const DbEngineParameters prm = ApplicationSettings::instance()->getDbEngineParameters();
 

@@ -240,9 +240,9 @@ bool ThumbsDbSchemaUpdater::makeUpdates()
 
 bool ThumbsDbSchemaUpdater::createDatabase()
 {
-    if ( createTables()  &&
-         createIndices() &&
-         createTriggers())
+    if (createTables()  &&
+        createIndices() &&
+        createTriggers())
     {
         d->currentVersion         = schemaVersion();
         d->currentRequiredVersion = 1;

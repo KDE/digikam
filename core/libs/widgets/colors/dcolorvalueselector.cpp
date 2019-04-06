@@ -90,7 +90,7 @@ bool DSelector::indent() const
 
 QRect DSelector::contentsRect() const
 {
-    int w  = indent() ? style()->pixelMetric( QStyle::PM_DefaultFrameWidth ) : 0;
+    int w  = indent() ? style()->pixelMetric(QStyle::PM_DefaultFrameWidth) : 0;
     int iw = (w < d->arrowsize) ? d->arrowsize : w;
 
     if (orientation() == Qt::Vertical)
@@ -130,7 +130,7 @@ QRect DSelector::contentsRect() const
 void DSelector::paintEvent(QPaintEvent*)
 {
     QPainter painter;
-    int w  = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
+    int w  = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     int iw = (w < d->arrowsize) ? d->arrowsize : w;
 
     painter.begin(this);
@@ -145,18 +145,18 @@ void DSelector::paintEvent(QPaintEvent*)
     if (indent())
     {
         QStyleOptionFrame opt;
-        opt.initFrom( this );
+        opt.initFrom(this);
         opt.state = QStyle::State_Sunken;
 
         if (orientation() == Qt::Vertical)
-            opt.rect.adjust( 0, iw - w, -5, w - iw );
+            opt.rect.adjust(0, iw - w, -5, w - iw);
         else
             opt.rect.adjust(iw - w, 0, w - iw, -5);
 
         QBrush oldBrush = painter.brush();
-        painter.setBrush( Qt::NoBrush );
-        style()->drawPrimitive( QStyle::PE_Frame, &opt, &painter, this );
-        painter.setBrush( oldBrush );
+        painter.setBrush(Qt::NoBrush);
+        style()->drawPrimitive(QStyle::PE_Frame, &opt, &painter, this);
+        painter.setBrush(oldBrush);
     }
 
 
@@ -166,17 +166,17 @@ void DSelector::paintEvent(QPaintEvent*)
 void DSelector::mousePressEvent(QMouseEvent* e)
 {
     setSliderDown(true);
-    moveArrow( e->pos() );
+    moveArrow(e->pos());
 }
 
 void DSelector::mouseMoveEvent(QMouseEvent* e)
 {
-    moveArrow( e->pos() );
+    moveArrow(e->pos());
 }
 
 void DSelector::mouseReleaseEvent(QMouseEvent* e)
 {
-    moveArrow( e->pos() );
+    moveArrow(e->pos());
     setSliderDown(false);
 }
 
@@ -194,22 +194,22 @@ void DSelector::moveArrow(const QPoint& pos)
     int w  = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     int iw = (w < d->arrowsize) ? d->arrowsize : w;
 
-    if ( orientation() == Qt::Vertical )
+    if (orientation() == Qt::Vertical)
     {
-        val = ( maximum() - minimum() ) * (height() - pos.y() - iw)
+        val = (maximum() - minimum()) * (height() - pos.y() - iw)
             / (height() - iw * 2) + minimum();
     }
     else
     {
-        val = ( maximum() - minimum() ) * ( pos.x() - iw)
+        val = (maximum() - minimum()) * ( pos.x() - iw)
             / (width() - iw * 2) + minimum();
     }
 
-    setValue( val );
+    setValue(val);
     update();
 }
 
-QPoint DSelector::calcArrowPos( int val )
+QPoint DSelector::calcArrowPos(int val)
 {
     QPoint p;
     int w  = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
@@ -217,11 +217,11 @@ QPoint DSelector::calcArrowPos( int val )
 
     if (orientation() == Qt::Vertical)
     {
-        p.setY(height() - iw - 1 - (height() - 2 * iw - 1) * val  / ( maximum() - minimum() ));
+        p.setY(height() - iw - 1 - (height() - 2 * iw - 1) * val  / (maximum() - minimum()));
 
         if (d->arrowPE == QStyle::PE_IndicatorArrowRight)
         {
-            p.setX( 0 );
+            p.setX(0);
         }
         else
         {
@@ -230,7 +230,7 @@ QPoint DSelector::calcArrowPos( int val )
     }
     else
     {
-        p.setX(iw + (width() - 2 * iw - 1) * val  / ( maximum() - minimum() ));
+        p.setX(iw + (width() - 2 * iw - 1) * val  / (maximum() - minimum()));
 
         if (d->arrowPE == QStyle::PE_IndicatorArrowDown)
         {
@@ -245,12 +245,12 @@ QPoint DSelector::calcArrowPos( int val )
     return p;
 }
 
-void DSelector::setArrowDirection( Qt::ArrowType direction )
+void DSelector::setArrowDirection(Qt::ArrowType direction)
 {
-    switch ( direction )
+    switch (direction)
     {
         case Qt::UpArrow:
-            if ( orientation() == Qt::Horizontal )
+            if (orientation() == Qt::Horizontal)
             {
                 d->arrowPE = QStyle::PE_IndicatorArrowUp;
             }
@@ -261,7 +261,7 @@ void DSelector::setArrowDirection( Qt::ArrowType direction )
             break;
 
         case Qt::DownArrow:
-            if ( orientation() == Qt::Horizontal )
+            if (orientation() == Qt::Horizontal)
             {
                 d->arrowPE = QStyle::PE_IndicatorArrowDown;
             }
@@ -272,7 +272,7 @@ void DSelector::setArrowDirection( Qt::ArrowType direction )
             break;
 
         case Qt::LeftArrow:
-            if ( orientation() == Qt::Vertical )
+            if (orientation() == Qt::Vertical)
             {
                 d->arrowPE = QStyle::PE_IndicatorArrowLeft;
             }
@@ -283,7 +283,7 @@ void DSelector::setArrowDirection( Qt::ArrowType direction )
             break;
 
         case Qt::RightArrow:
-            if ( orientation() == Qt::Vertical )
+            if (orientation() == Qt::Vertical)
             {
                 d->arrowPE = QStyle::PE_IndicatorArrowRight;
             }
@@ -321,19 +321,19 @@ Qt::ArrowType DSelector::arrowDirection() const
 void DSelector::drawArrow(QPainter* painter, const QPoint& pos)
 {
     painter->setPen(QPen());
-    painter->setBrush(QBrush( palette().color(QPalette::ButtonText) ));
+    painter->setBrush(QBrush(palette().color(QPalette::ButtonText)));
 
     QStyleOption o;
 
-    if ( orientation() == Qt::Vertical )
+    if (orientation() == Qt::Vertical)
     {
-        o.rect = QRect( pos.x(), pos.y() - d->arrowsize / 2,
-                        d->arrowsize, d->arrowsize );
+        o.rect = QRect(pos.x(), pos.y() - d->arrowsize / 2,
+                       d->arrowsize, d->arrowsize);
     }
     else
     {
-        o.rect = QRect( pos.x() - d->arrowsize / 2, pos.y(),
-                        d->arrowsize, d->arrowsize );
+        o.rect = QRect(pos.x() - d->arrowsize / 2, pos.y(),
+                       d->arrowsize, d->arrowsize);
 
     }
 
@@ -435,7 +435,7 @@ void DColorValueSelector::setChooserMode(DColorChooserMode c)
     }
     else
     {
-        setRange( 0, 255 );
+        setRange(0, 255);
     }
 
     d->mode = c;

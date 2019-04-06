@@ -223,7 +223,7 @@ bool FaceDbSchemaUpdater::makeUpdates()
 
 bool FaceDbSchemaUpdater::createDatabase()
 {
-    if ( createTables() && createIndices() && createTriggers())
+    if (createTables() && createIndices() && createTriggers())
     {
         d->currentVersion         = schemaVersion();
         d->currentRequiredVersion = 3;

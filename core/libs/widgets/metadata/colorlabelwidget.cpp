@@ -243,90 +243,90 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
 
 bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->btnNone)
+    if (obj == d->btnNone)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(NoColorLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnRed)
+    if (obj == d->btnRed)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(RedLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnOrange)
+    if (obj == d->btnOrange)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(OrangeLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnYellow)
+    if (obj == d->btnYellow)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(YellowLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnGreen)
+    if (obj == d->btnGreen)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(GreenLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnBlue)
+    if (obj == d->btnBlue)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(BlueLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnMagenta)
+    if (obj == d->btnMagenta)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(MagentaLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnGray)
+    if (obj == d->btnGray)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(GrayLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnBlack)
+    if (obj == d->btnBlack)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(BlackLabel);
             return false;
         }
     }
 
-    if ( obj == d->btnWhite)
+    if (obj == d->btnWhite)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
         {
             updateDescription(WhiteLabel);
             return false;

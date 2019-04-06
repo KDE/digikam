@@ -79,14 +79,14 @@ void DPointSelect::Private::setValues(int _xPos, int _yPos)
     xPos  = _xPos;
     yPos  = _yPos;
 
-    if ( xPos > maxX )
+    if (xPos > maxX)
         xPos = maxX;
-    else if ( xPos < minX )
+    else if (xPos < minX)
         xPos = minX;
 
-    if ( yPos > maxY )
+    if (yPos > maxY)
         yPos = maxY;
-    else if ( yPos < minY )
+    else if (yPos < minY)
         yPos = minY;
 
     Q_ASSERT(maxX != minX);
@@ -95,7 +95,7 @@ void DPointSelect::Private::setValues(int _xPos, int _yPos)
     Q_ASSERT(maxY != minY);
     int yp = q->height() - w - (q->height() - 2 * w) * yPos / (maxY - minY);
 
-    q->setPosition( xp, yp );
+    q->setPosition(xp, yp);
 }
 
 DPointSelect::DPointSelect(QWidget* const parent)
@@ -157,7 +157,7 @@ void DPointSelect::setValues(int _xPos, int _yPos)
     d->setValues(_xPos, _yPos);
 }
 
-void DPointSelect::setMarkerColor( const QColor &col )
+void DPointSelect::setMarkerColor(const QColor &col)
 {
     d->m_markerColor =  col;
 }
@@ -171,10 +171,10 @@ QRect DPointSelect::contentsRect() const
 QSize DPointSelect::minimumSizeHint() const
 {
     int w = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    return QSize( 2 * w, 2 * w );
+    return QSize(2 * w, 2 * w);
 }
 
-void DPointSelect::paintEvent( QPaintEvent * /* ev */ )
+void DPointSelect::paintEvent(QPaintEvent * /* ev */)
 {
     QStyleOptionFrame opt;
     opt.initFrom(this);
@@ -198,52 +198,52 @@ void DPointSelect::mousePressEvent(QMouseEvent* e)
 void DPointSelect::mouseMoveEvent(QMouseEvent* e)
 {
     int xVal, yVal;
-    int w = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
-    valuesFromPosition( e->pos().x() - w, e->pos().y() - w, xVal, yVal );
-    setValues( xVal, yVal );
+    int w = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    valuesFromPosition(e->pos().x() - w, e->pos().y() - w, xVal, yVal);
+    setValues(xVal, yVal);
 
-    emit valueChanged( d->xPos, d->yPos );
+    emit valueChanged(d->xPos, d->yPos);
 }
 
 void DPointSelect::wheelEvent(QWheelEvent* e)
 {
-    if ( e->orientation() == Qt::Horizontal )
-        setValues( xValue() + e->delta()/120, yValue() );
+    if (e->orientation() == Qt::Horizontal)
+        setValues(xValue() + e->delta()/120, yValue());
     else
-        setValues( xValue(), yValue() + e->delta()/120 );
+        setValues(xValue(), yValue() + e->delta()/120);
 
-    emit valueChanged( d->xPos, d->yPos );
+    emit valueChanged(d->xPos, d->yPos);
 }
 
 void DPointSelect::valuesFromPosition(int x, int y, int& xVal, int& yVal) const
 {
-    int w = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
-    xVal  = ( ( d->maxX - d->minX ) * ( x - w ) ) / ( width() - 2 * w );
-    yVal  = d->maxY - ( ( ( d->maxY - d->minY ) * (y - w) ) / ( height() - 2 * w ) );
+    int w = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    xVal  = ((d->maxX - d->minX) * (x - w)) / (width() - 2 * w);
+    yVal  = d->maxY - (((d->maxY - d->minY) * (y - w)) / (height() - 2 * w));
 
-    if ( xVal > d->maxX )
+    if (xVal > d->maxX)
         xVal = d->maxX;
-    else if ( xVal < d->minX )
+    else if (xVal < d->minX)
         xVal = d->minX;
 
-    if ( yVal > d->maxY )
+    if (yVal > d->maxY)
         yVal = d->maxY;
-    else if ( yVal < d->minY )
+    else if (yVal < d->minY)
         yVal = d->minY;
 }
 
 void DPointSelect::setPosition(int xp, int yp)
 {
-    int w = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
+    int w = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 
-    if ( xp < w )
+    if (xp < w)
         xp = w;
-    else if ( xp > width() - w )
+    else if (xp > width() - w)
         xp = width() - w;
 
-    if ( yp < w )
+    if (yp < w)
         yp = w;
-    else if ( yp > height() - w )
+    else if (yp > height() - w)
         yp = height() - w;
 
     d->px = xp;

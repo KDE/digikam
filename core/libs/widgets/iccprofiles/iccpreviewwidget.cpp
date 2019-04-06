@@ -56,7 +56,7 @@ void ICCPreviewWidget::slotShowPreview(const QUrl& url)
     slotClearPreview();
     QFileInfo fInfo(url.toLocalFile());
 
-    if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
+    if (url.isLocalFile() && fInfo.isFile() && fInfo.isReadable())
     {
         qCDebug(DIGIKAM_WIDGETS_LOG) << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);

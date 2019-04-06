@@ -381,7 +381,7 @@ void PiwigoWindow::slotLoginFailed(const QString& msg)
     QPointer<PiwigoLoginDlg> configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
                                                             d->pPiwigo, i18n("Edit Piwigo Data") );
 
-    if ( configDlg->exec() != QDialog::Accepted )
+    if (configDlg->exec() != QDialog::Accepted)
     {
         delete configDlg;
         return;
@@ -433,7 +433,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
         PiwigoAlbum album = workList.takeFirst();
         int parentRefNum  = album.m_parentRefNum;
 
-        if ( parentRefNum == -1 )
+        if (parentRefNum == -1)
         {
             QTreeWidgetItem* const item = new QTreeWidgetItem();
             item->setText(0, cleanName(album.m_name) );
@@ -533,7 +533,7 @@ void PiwigoWindow::slotAddPhoto()
 
 void PiwigoWindow::slotAddPhotoNext()
 {
-    if ( d->pUploadList->isEmpty() )
+    if (d->pUploadList->isEmpty())
     {
         d->progressDlg->reset();
         d->progressDlg->hide();
@@ -625,7 +625,7 @@ void PiwigoWindow::slotSettings()
     QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
                                                       d->pPiwigo, i18n("Edit Piwigo Data") );
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if (dlg->exec() == QDialog::Accepted)
     {
         slotDoLogin();
     }

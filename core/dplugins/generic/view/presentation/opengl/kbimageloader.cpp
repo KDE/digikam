@@ -172,7 +172,7 @@ void KBImageLoader::run()
                 continue;
             }
 
-            if ( !ok)
+            if (!ok)
             {
                 // generate a black dummy image
                 d->texture = QImage(128, 128, QImage::Format_ARGB32);

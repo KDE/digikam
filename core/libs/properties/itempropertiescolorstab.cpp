@@ -402,7 +402,7 @@ void ItemPropertiesColorsTab::setData(const QUrl& url, const QRect& selectionAre
     {
         d->image = img->copy();
 
-        if ( !d->image.isNull() )
+        if (!d->image.isNull())
         {
             getICCData();
 
@@ -491,12 +491,12 @@ void ItemPropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescript
                                                             const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
-    if ( !loadingDescription.equalsOrBetterThan(d->currentLoadingDescription) )
+    if (!loadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
     {
         return;
     }
 
-    if ( !img.isNull() )
+    if (!img.isNull())
     {
         d->histogramBox->histogram()->updateData(img);
         d->redHistogram->updateData(img);
@@ -699,7 +699,7 @@ void ItemPropertiesColorsTab::updateStatistics()
     int channel                 = d->histogramBox->channel();
     HistogramRenderingType type = d->histogramBox->histogram()->renderingType();
 
-    if ( channel == ColorChannels )
+    if (channel == ColorChannels)
     {
         channel = LuminosityChannel;
     }

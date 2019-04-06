@@ -725,7 +725,7 @@ void CIETongueWidget::paintEvent(QPaintEvent*)
 
     // Widget is disable : drawing grayed frame.
 
-    if ( !isEnabled() )
+    if (!isEnabled())
     {
         p.fillRect(0, 0, width(), height(),
                    palette().color(QPalette::Disabled, QPalette::Window));

@@ -103,11 +103,13 @@ int DTrashItemModel::columnCount(const QModelIndex&) const
 
 QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
 {
-    if ( role != Qt::DisplayRole       &&
-         role != Qt::DecorationRole    &&
-         role != Qt::TextAlignmentRole &&
-         role != Qt::ToolTipRole)
+    if (role != Qt::DisplayRole       &&
+        role != Qt::DecorationRole    &&
+        role != Qt::TextAlignmentRole &&
+        role != Qt::ToolTipRole)
+    {
         return QVariant();
+    }
 
     const DTrashItemInfo& item = d->data[index.row()];
 

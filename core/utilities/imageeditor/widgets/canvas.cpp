@@ -164,7 +164,7 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    if(d->core->getImg())
+    if (d->core->getImg())
     {
         d->canvasItem->setImage(*d->core->getImg());
     }

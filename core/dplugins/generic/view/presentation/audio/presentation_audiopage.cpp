@@ -238,10 +238,9 @@ void PresentationAudioPage::updateTracksNumber()
     QTime displayTime(0, 0, 0);
     int number = m_SoundFilesListBox->count();
 
-    if ( number > 0 )
+    if (number > 0)
     {
         displayTime = displayTime.addMSecs(1000 * (number - 1));
-        
 
         for (QMap<QUrl, QTime>::iterator it = d->tracksTime->begin(); it != d->tracksTime->end(); ++it)
         {
@@ -286,7 +285,7 @@ void PresentationAudioPage::compareTimes()
 {
     QFont statusBarFont = m_statusBarLabel->font();
 
-    if ( d->imageTime > d->totalTime )
+    if (d->imageTime > d->totalTime)
     {
         m_statusBarLabel->setText(i18n("Slide time is greater than soundtrack time. Suggestion: add more sound files."));
 
@@ -311,7 +310,7 @@ void PresentationAudioPage::compareTimes()
 
         QPalette paletteTimeLabel = m_soundtrackTimeLabel->palette();
 
-        if ( d->imageTime < d->totalTime )
+        if (d->imageTime < d->totalTime)
             paletteTimeLabel.setColor(QPalette::WindowText, Qt::black);
         else
             paletteTimeLabel.setColor(QPalette::WindowText, Qt::green);
@@ -336,7 +335,7 @@ void PresentationAudioPage::slotSoundFilesSelected( int row )
 {
     QListWidgetItem* const item = m_SoundFilesListBox->item(row);
 
-    if ( !item || m_SoundFilesListBox->count() == 0 )
+    if (!item || m_SoundFilesListBox->count() == 0)
     {
         return;
     }
@@ -382,8 +381,8 @@ void PresentationAudioPage::slotSoundFilesButtonDelete()
 {
     int Index = m_SoundFilesListBox->currentRow();
 
-    if( Index < 0 )
-       return;
+    if (Index < 0)
+        return;
 
     PresentationAudioListItem* const pitem = static_cast<PresentationAudioListItem*>(m_SoundFilesListBox->takeItem(Index));
     d->urlList.removeAll(pitem->url());
@@ -596,7 +595,7 @@ void PresentationAudioPage::slotPreviewButtonClicked()
         }
     }
 
-    if ( urlList.isEmpty() )
+    if (urlList.isEmpty())
     {
         QMessageBox::critical(this, QString(), i18n("Cannot create a preview of an empty file list."));
         return;

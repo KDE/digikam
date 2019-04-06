@@ -90,7 +90,7 @@ LensFunIface::LensFunIface()
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Using root lens database dir: " << lensPath;
 
-    foreach(const QString& lens, lensDir.entryList())
+    foreach (const QString& lens, lensDir.entryList())
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Load lens database file: " << lens;
         d->lfDb->Load(QFile::encodeName(lensDir.absoluteFilePath(lens)).constData());
@@ -352,7 +352,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 else
                 {
                     // Best case for an exact match is to have only one item returned by Lensfun searches.
-                    if(lensMatches.count() == 1)
+                    if (lensMatches.count() == 1)
                     {
                         setUsedLens(lensMatches.first());
                         qCDebug(DIGIKAM_DIMG_LOG) << "Lens found     : " << d->settings.lensModel;
@@ -363,16 +363,16 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                         qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : more than one...";
                         const lfLens* exact = 0;
 
-                        foreach(const lfLens* const l, lensMatches)
+                        foreach (const lfLens* const l, lensMatches)
                         {
-                            if(QLatin1String(l->Model) == d->lensDescription)
+                            if (QLatin1String(l->Model) == d->lensDescription)
                             {
                                 qCDebug(DIGIKAM_DIMG_LOG) << "found exact match from" << lensMatches.count() << "possibilities:" << l->Model;
                                 exact = l;
                             }
                         }
 
-                        if(exact)
+                        if (exact)
                         {
                             setUsedLens(exact);
                         }

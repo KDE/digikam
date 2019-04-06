@@ -137,7 +137,7 @@ QModelIndex SearchResultModel::index(int row, int column, const QModelIndex& par
         return QModelIndex();
     }
 
-    if ( (column < 0) || (column >= 1) || (row < 0) || (row >= d->searchResults.count()) )
+    if ((column < 0) || (column >= 1) || (row < 0) || (row >= d->searchResults.count()))
     {
         return QModelIndex();
     }

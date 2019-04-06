@@ -425,7 +425,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
     // recreate device from unambiguous UDI
     Solid::Device device(udi);
 
-    if ( device.isValid() )
+    if (device.isValid())
     {
         if (cameraLabel.isNull())
         {
@@ -544,7 +544,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
     // recreate device from unambiguous UDI
     Solid::Device device(udi);
 
-    if ( device.isValid() )
+    if (device.isValid())
     {
         Solid::StorageAccess* const access = device.as<Solid::StorageAccess>();
 

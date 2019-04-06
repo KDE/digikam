@@ -277,7 +277,7 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        if(d->noTagsBtn->isChecked())
+        if (d->noTagsBtn->isChecked())
         {
             setNoTagsAlbum();
         }

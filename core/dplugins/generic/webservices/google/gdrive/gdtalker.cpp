@@ -404,7 +404,7 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
         fps.id          = obj[QLatin1String("id")].toString();
         fps.title       = obj[QLatin1String("title")].toString();
 
-        if(editable && !trashed && !parents.isEmpty())
+        if (editable && !trashed && !parents.isEmpty())
         {
             albumList.append(fps);
         }

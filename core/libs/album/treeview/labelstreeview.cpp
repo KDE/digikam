@@ -202,9 +202,9 @@ QHash<LabelsTreeView::Labels, QList<int> > LabelsTreeView::selectedLabels()
         {
             QTreeWidgetItem* const item = (*it);
 
-            if(item->parent() == d->ratings)
+            if (item->parent() == d->ratings)
                 selectedRatings << indexFromItem(item).row();
-            else if(item->parent() == d->picks)
+            else if (item->parent() == d->picks)
                 selectedPicks << indexFromItem(item).row();
             else
                 selectedColors << indexFromItem(item).row();
@@ -215,9 +215,9 @@ QHash<LabelsTreeView::Labels, QList<int> > LabelsTreeView::selectedLabels()
     {
         foreach (QTreeWidgetItem* const item, selectedItems())
         {
-            if(item->parent() == d->ratings)
+            if (item->parent() == d->ratings)
                 selectedRatings << indexFromItem(item).row();
-            else if(item->parent() == d->picks)
+            else if (item->parent() == d->picks)
                 selectedPicks << indexFromItem(item).row();
             else
                 selectedColors << indexFromItem(item).row();
@@ -917,7 +917,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
 
     if (album)
     {
-        if(!d->currentXmlIsEmpty)
+        if (!d->currentXmlIsEmpty)
         {
             d->albumForSelectedItems = album;
             imagesUrlsForCurrentAlbum();

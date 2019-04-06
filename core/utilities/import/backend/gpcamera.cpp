@@ -421,7 +421,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
             // TODO in order for this to work, the upload dialog needs to be fixed.
 /*
-            if(nrofsinfos == 1)
+            if (nrofsinfos == 1)
             {
                 qCDebug(DIGIKAM_IMPORTUI_LOG) << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
                 m_path = QString(sinfos[i].basedir);

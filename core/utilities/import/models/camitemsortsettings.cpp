@@ -183,22 +183,22 @@ bool CamItemSortSettings::lessThan(const CamItemInfo& left, const CamItemInfo& r
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByFilePath)) != 0)
+    if ((result = compare(left, right, SortByFilePath)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByFileSize)) != 0)
+    if ((result = compare(left, right, SortByFileSize)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByRating)) != 0)
+    if ((result = compare(left, right, SortByRating)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByDownloadState)) != 0)
+    if ((result = compare(left, right, SortByDownloadState)) != 0)
     {
         return result < 0;
     }

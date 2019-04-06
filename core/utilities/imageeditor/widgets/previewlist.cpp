@@ -75,7 +75,7 @@ PreviewThreadWrapper::~PreviewThreadWrapper()
 
 void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* const filter)
 {
-    if(d->map.contains(id))
+    if (d->map.contains(id))
         return;
 
     filter->setParent(this);

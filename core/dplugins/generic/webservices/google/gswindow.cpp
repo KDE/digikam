@@ -1072,7 +1072,7 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
             }
         }
 
-        if(!d->widget->imagesList()->imageUrls().isEmpty())
+        if (!d->widget->imagesList()->imageUrls().isEmpty())
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "continue to upload";
             emit d->gphotoTalker->signalReadyToUpload();

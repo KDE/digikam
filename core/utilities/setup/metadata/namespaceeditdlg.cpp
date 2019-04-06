@@ -576,8 +576,8 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
                 return false;
             }
 
-            if(!d->alternativeName->text().isEmpty() &&
-               d->alternativeName->text().split(QLatin1Char('.')).first() != QLatin1String("Iptc"))
+            if (!d->alternativeName->text().isEmpty() &&
+                d->alternativeName->text().split(QLatin1Char('.')).first() != QLatin1String("Iptc"))
             {
                 errMsg = i18n("IPTC alternative namespace name must start with \"Iptc\".");
                 return false;

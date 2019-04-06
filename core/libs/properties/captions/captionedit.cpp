@@ -114,7 +114,7 @@ QString CaptionEdit::currentLanguageCode() const
 
 void CaptionEdit::setCurrentLanguageCode(const QString& lang)
 {
-    if(d->altLangStrEdit->currentLanguageCode().isEmpty())
+    if (d->altLangStrEdit->currentLanguageCode().isEmpty())
     {
         d->altLangStrEdit->setCurrentLanguageCode(QLatin1String("x-default"));
     }

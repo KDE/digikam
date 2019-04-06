@@ -118,7 +118,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 /*
     QDir libraryDir(settings->getAlbumLibraryPath());
 
-    if(!libraryDir.exists())
+    if (!libraryDir.exists())
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                               i18n("The album library has not been set correctly.\n"

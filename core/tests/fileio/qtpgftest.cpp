@@ -81,7 +81,7 @@ int main(int /*argc*/, char** /*argv*/)
 
     QFile file(QLatin1String("test-datastream.pgf"));
 
-    if ( !file.open(QIODevice::WriteOnly) )
+    if (!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Cannot open PGF file to write...";
         return -1;

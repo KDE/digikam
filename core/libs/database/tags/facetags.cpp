@@ -309,7 +309,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     // First, look for UUID
     if (!attributes.value(QLatin1String("uuid")).isEmpty())
     {
-        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineUuid(), attributes.value(QLatin1String("uuid")))) )
+        if ((tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineUuid(), attributes.value(QLatin1String("uuid")))))
         {
             return tagId;
         }
@@ -318,7 +318,7 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
     // Second, look for full name
     if (!attributes.value(QLatin1String("fullName")).isEmpty())
     {
-        if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), attributes.value(QLatin1String("fullName")))) )
+        if ((tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), attributes.value(QLatin1String("fullName")))))
         {
             return tagId;
         }
@@ -338,12 +338,12 @@ int FaceTags::getOrCreateTagForIdentity(const QMap<QString, QString>& attributes
         return FaceTags::unknownPersonTagId();
     }
 
-    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineName(), name)) )
+    if ((tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::faceEngineName(), name)))
     {
         return tagId;
     }
 
-    if ( (tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), name)) )
+    if ((tagId = FaceTagsHelper::findFirstTagWithProperty(TagPropertyName::person(), name)))
     {
         return tagId;
     }

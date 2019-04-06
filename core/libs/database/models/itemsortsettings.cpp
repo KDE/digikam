@@ -209,37 +209,37 @@ bool ItemSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) con
     }
 
     // If left and right equal for first sort order, use a hierarchy of all sort orders
-    if ( (result = compare(left, right, SortByFileName)) != 0)
+    if ((result = compare(left, right, SortByFileName)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByCreationDate)) != 0)
+    if ((result = compare(left, right, SortByCreationDate)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByModificationDate)) != 0)
+    if ((result = compare(left, right, SortByModificationDate)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByFilePath)) != 0)
+    if ((result = compare(left, right, SortByFilePath)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByFileSize)) != 0)
+    if ((result = compare(left, right, SortByFileSize)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortBySimilarity)) != 0)
+    if ((result = compare(left, right, SortBySimilarity)) != 0)
     {
         return result < 0;
     }
 
-    if ( (result = compare(left, right, SortByManualOrder)) != 0)
+    if ((result = compare(left, right, SortByManualOrder)) != 0)
     {
         return result < 0;
     }

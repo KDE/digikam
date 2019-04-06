@@ -67,10 +67,10 @@ namespace DigikamGenericDebianScreenshotsPlugin
 DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     : QWidget(parent),
       m_dlGrp(0),
-      m_lastTip( QString() ),
-      m_lastQueryUrl( QUrl() ),
-      m_httpManager( new KIO::AccessManager(this) ),
-      m_jsonManager( new KIO::AccessManager(this) )
+      m_lastTip(QString()),
+      m_lastQueryUrl(QUrl()),
+      m_httpManager(new KIO::AccessManager(this)),
+      m_jsonManager(new KIO::AccessManager(this))
 {
     setObjectName(QLatin1String("DSWidget"));
 
@@ -84,7 +84,7 @@ DSWidget::DSWidget(DInfoInterface* const iface, QWidget* const parent)
     m_imgList->setAllowRAW(true);
     m_imgList->setIface(iface);
     m_imgList->loadImagesFromCurrentSelection();
-    m_imgList->listView()->setWhatsThis( i18n("This is the list of images to upload to Debian Screenshots.") );
+    m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to Debian Screenshots."));
 
     QWidget* const settingsBox           = new QWidget(this);
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(settingsBox);
@@ -174,7 +174,7 @@ DProgressWdg* DSWidget::progressBar() const
 
 void DSWidget::slotCompletePackageName(const QString& tip)
 {
-    if ((!tip.isEmpty()) && (QString::compare(tip, m_lastTip, Qt::CaseInsensitive) != 0) )
+    if ((!tip.isEmpty()) && (QString::compare(tip, m_lastTip, Qt::CaseInsensitive) != 0))
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -206,13 +206,13 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
     QApplication::restoreOverrideCursor();
 
     // Check if this is the reply for the last request, or a delayed reply we are receiving just now
-    if ( QString::compare(replyUrl.toString(), m_lastQueryUrl.toString(), Qt::CaseInsensitive) != 0 )
+    if (QString::compare(replyUrl.toString(), m_lastQueryUrl.toString(), Qt::CaseInsensitive) != 0)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received a delayed reply, discarding it";
         return; // It was a delayed reply, discard it
     }
 
-    if ( reply->error() )
+    if (reply->error())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Didn't receive a reply for request "
                                          << replyUrl.toEncoded().constData() << " - "
@@ -222,7 +222,7 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
     {
         QByteArray ba = reply->readAll();
 
-        if( ba.isEmpty() )
+        if (ba.isEmpty())
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No completion data received for request "
                                              << replyUrl.toEncoded().constData()
@@ -234,7 +234,7 @@ void DSWidget::slotCompletePackageNameFinished(QNetworkReply* reply)
 
         QStandardItemModel* const m = new QStandardItemModel(pkgSuggestions.count(), 2, m_pkgLineEdit->completer());
 
-        for ( int i = 0 ; i < pkgSuggestions.count() ; ++i)
+        for (int i = 0 ; i < pkgSuggestions.count() ; ++i)
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Package suggestion:" << pkgSuggestions.at(i);
 
@@ -312,7 +312,7 @@ void DSWidget::slotFindVersionsForPackageFinished(QNetworkReply* reply)
 
             m_versionsComboBox->setEnabled(true);
 
-            if ( versions.size() == 1 )
+            if (versions.size() == 1)
             {
                 m_descriptionLineEdit->setEnabled(true);
                 slotEnableUpload();

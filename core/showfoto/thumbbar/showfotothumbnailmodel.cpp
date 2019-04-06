@@ -147,7 +147,7 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(QVariant::Pixmap);
         }
 
-        if(pixmapForItem(path,pixmap))
+        if (pixmapForItem(path,pixmap))
         {
             return pixmap;
         }

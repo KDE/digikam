@@ -229,9 +229,9 @@ public:
 
     ImportFilterModelPrivate()
     {
-        q                = 0;
+        q               = 0;
         importItemModel = 0;
-        filter = 0;
+        filter          = 0;
     }
 
     void init(ImportFilterModel* const _q);
@@ -244,7 +244,7 @@ Q_SIGNALS:
 public:
 
     ImportFilterModel*  q;
-    ImportItemModel*   importItemModel;
+    ImportItemModel*    importItemModel;
     CamItemSortSettings sorter;
     Filter*             filter;
 };
@@ -512,14 +512,16 @@ bool ImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sour
 {
     Q_D(const ImportFilterModel);
 
-    if(!d->filter) {
+    if (!d->filter)
+    {
         return true;
     }
 
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
     const CamItemInfo &info = d->importItemModel->camItemInfo(idx);
 
-    if(d->filter->matchesCurrentFilter(info)) {
+    if (d->filter->matchesCurrentFilter(info))
+    {
         return true;
     }
 

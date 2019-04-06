@@ -392,7 +392,7 @@ bool TwTalker::addPhoto(const QString& imgPath,
         chunked = true;
     }
 
-    if(chunked)
+    if (chunked)
     {
         return addPhotoInit(path);
     }
@@ -465,7 +465,7 @@ bool TwTalker::addPhotoInit(const QString& imgPath)
         if (fileFormat == QLatin1String("gif"))
         {
 
-            if(fileInfo.size() > 15728640)
+            if (fileInfo.size() > 15728640)
             {
                 emit signalBusy(false);
                 emit signalAddPhotoFailed(i18n("File too big to upload"));
@@ -476,7 +476,7 @@ bool TwTalker::addPhotoInit(const QString& imgPath)
         }
         else
         {
-            if(fileInfo.size() > 5242880)
+            if (fileInfo.size() > 5242880)
             {
                 emit signalBusy(false);
                 emit signalAddPhotoFailed(i18n("File too big to upload"));
@@ -487,7 +487,7 @@ bool TwTalker::addPhotoInit(const QString& imgPath)
     }
     else if (fileFormat == QLatin1String("mp4"))
     {
-        if(fileInfo.size() > 536870912)
+        if (fileInfo.size() > 536870912)
         {
             emit signalBusy(false);
             emit signalAddPhotoFailed(i18n("File too big to upload"));
@@ -531,7 +531,7 @@ bool TwTalker::addPhotoAppend(const QString& mediaId, int segmentIndex)
 
     static TwMPForm form;
 
-    if(segmentIndex == 0)
+    if (segmentIndex == 0)
     {
         form.addPair(form.createPair("command", "APPEND"));
         form.addPair(form.createPair("media_id", mediaId.toLatin1()));
@@ -553,7 +553,7 @@ bool TwTalker::addPhotoAppend(const QString& mediaId, int segmentIndex)
     d->state = Private::TW_UPLOADAPPEND;
 
     // Reset form for later uploads
-    if(segmentIndex == d->segmentIndex)
+    if (segmentIndex == d->segmentIndex)
     {
         form.reset();
     }
@@ -723,7 +723,7 @@ void TwTalker::parseResponseAddPhoto(const QByteArray& data)
     QJsonDocument doc      = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhoto: " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
@@ -744,7 +744,7 @@ void TwTalker::parseResponseAddPhotoInit(const QByteArray& data)
     QJsonDocument doc      = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoInit: " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
@@ -769,7 +769,7 @@ void TwTalker::parseResponseAddPhotoAppend(const QByteArray& /*data*/, int segme
      */
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoAppend: ";
 
-    if(segmentIndex <= d->segmentIndex)
+    if (segmentIndex <= d->segmentIndex)
     {
         addPhotoAppend(d->mediaId, segmentIndex);
     }
@@ -785,7 +785,7 @@ void TwTalker::parseResponseAddPhotoFinalize(const QByteArray& data)
     QJsonDocument doc      = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoFinalize: " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
@@ -819,7 +819,7 @@ void TwTalker::parseCheckUploadStatus(const QByteArray& data)
     QJsonDocument doc      = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseCheckUploadStatus: " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoFailed(i18n("Failed to upload photo"));
@@ -858,7 +858,7 @@ void TwTalker::parseResponseUserName(const QByteArray& data)
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUserName: "<<doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
@@ -880,7 +880,7 @@ void TwTalker::parseResponseCreateTweet(const QByteArray& data)
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateTweet: " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoFailed(i18n("Failed to create tweet for photo uploaded"));

@@ -362,7 +362,7 @@ int ImportView::downloadedCamItemInfos() const
     QList<CamItemInfo> infos = d->iconView->camItemInfos();
     int numberOfDownloaded   = 0;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         if (info.downloaded == CamItemInfo::DownloadedYes)
         {
@@ -377,7 +377,7 @@ bool ImportView::isSelected(const QUrl& url) const
 {
     QList<QUrl> urlsList = selectedUrls();
 
-    foreach(const QUrl& selected, urlsList)
+    foreach (const QUrl& selected, urlsList)
     {
         if (url == selected)
         {
@@ -450,8 +450,8 @@ void ImportView::slotDispatchImageSelected()
                 nextInfo = d->iconView->nextInfo(list.first());
             }
 
-            if (   (d->stackedView->viewMode() != ImportStackedView::PreviewCameraMode) &&
-                   (d->stackedView->viewMode() != ImportStackedView::MapWidgetMode) )
+            if ((d->stackedView->viewMode() != ImportStackedView::PreviewCameraMode) &&
+                (d->stackedView->viewMode() != ImportStackedView::MapWidgetMode))
             {
                 d->stackedView->setPreviewItem(list.first(), previousInfo, nextInfo);
             }
@@ -678,9 +678,9 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPre
         return;
     }
 
-    if (  (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode ||
-           d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview) &&
-           !info.isNull() )
+    if ((d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode ||
+         d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview) &&
+         !info.isNull())
     {
         d->lastViewMode      = d->stackedView->viewMode();
         CamItemInfo previous = CamItemInfo();
@@ -698,7 +698,7 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPre
         d->stackedView->setViewMode(d->lastViewMode);
     }
 
-    if(!downloadPreview)
+    if (!downloadPreview)
     {
         // make sure the next/previous buttons are updated
         slotImageSelected();

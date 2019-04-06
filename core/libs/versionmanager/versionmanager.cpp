@@ -364,7 +364,7 @@ void VersionNameCreator::setSaveFileName()
 
         // To find the right number for the new version, go through all the items in the given dir,
         // the version number won't be bigger than count()
-        for (uint i = 0; i <= dirInfo.count(); ++i)
+        for (uint i = 0 ; i <= dirInfo.count() ; ++i)
         {
             QString suggestedName = scheme->versionFileName(m_result.path, m_baseName, m_version);
 
@@ -419,8 +419,8 @@ void VersionNameCreator::checkIntermediates()
                                  << "save after raw" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterRawConversion)
                                  << "save when not repro" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible);
 
-    if ( (m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession) &&
-         (m_operation.tasks & VersionFileOperation::Replace) )
+    if ((m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession) &&
+        (m_operation.tasks & VersionFileOperation::Replace))
     {
         // We want a snapshot after each session. The main file will be overwritten by the current state.
         // So we consider the current file as snapshot of the last session and move
@@ -457,7 +457,7 @@ void VersionNameCreator::checkIntermediates()
     {
         int rawConversionStep = -1;
 
-        for (int i = firstStep; i <= lastStep; ++i)
+        for (int i = firstStep ; i <= lastStep ; ++i)
         {
             if (DImgFilterManager::instance()->isRawConversion(m_currentHistory.action(i).identifier()))
             {
@@ -474,7 +474,7 @@ void VersionNameCreator::checkIntermediates()
 
     if (m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible)
     {
-        for (int i = firstStep; i <= lastStep; ++i)
+        for (int i = firstStep ; i <= lastStep ; ++i)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "step" << i
                                          << "is reproducible"
@@ -501,7 +501,7 @@ void VersionNameCreator::checkIntermediates()
         // now all steps are available, already ordered thanks to QMap. Just fill in the empty VersionFileInfos.
         QMap<int,VersionFileInfo>::iterator it;
 
-        for (it = m_operation.intermediates.begin(); it != m_operation.intermediates.end(); ++it)
+        for (it = m_operation.intermediates.begin() ; it != m_operation.intermediates.end() ; ++it)
         {
             it.value() = nextIntermediate(m_result.format);
         }
@@ -518,7 +518,7 @@ VersionFileInfo VersionNameCreator::nextIntermediate(const QString& format)
 
     QDir dirInfo(m_intermediatePath);
 
-    for (uint i = 0; i <= dirInfo.count(); ++i)
+    for (uint i = 0 ; i <= dirInfo.count() ; ++i)
     {
         QString suggestedName = scheme->intermediateFileName(m_intermediatePath, m_baseName,
                                                              m_version, m_intermediateCounter);

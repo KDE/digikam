@@ -143,7 +143,7 @@ void MonthWidget::setYearMonth(int year, int month)
     d->year  = year;
     d->month = month;
 
-    for (int i=0; i<42; ++i)
+    for (int i = 0 ; i < 42 ; ++i)
     {
         d->days[i].active    = false;
         d->days[i].selected  = false;
@@ -154,7 +154,7 @@ void MonthWidget::setYearMonth(int year, int month)
     QDate date(year, month, 1);
     int s = date.dayOfWeek();
 
-    for (int i=s; i<(s+date.daysInMonth()); ++i)
+    for (int i = s ; i < (s+date.daysInMonth()) ; ++i)
     {
         d->days[i-1].day = i-s+1;
     }
@@ -196,12 +196,12 @@ void MonthWidget::paintEvent(QPaintEvent*)
     int index = 0;
     bool weekvisible;
 
-    for (int j=3; j<9; ++j)
+    for (int j = 3 ; j < 9 ; ++j)
     {
         sy          = d->currh * j;
         weekvisible = false;
 
-        for (int i=1; i<8; ++i)
+        for (int i = 1 ; i < 8 ; ++i)
         {
             sx     = d->currw * i;
             r.moveTopLeft(QPoint(sx,sy));
@@ -262,7 +262,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
     sy = 2*d->currh;
 
-    for (int i = 1; i < 8; ++i)
+    for (int i = 1 ; i < 8 ; ++i)
     {
         sx     = d->currw * i;
         r.moveTopLeft(QPoint(sx+1,sy+1));
@@ -296,7 +296,7 @@ void MonthWidget::mousePressEvent(QMouseEvent* e)
 
     if (e->modifiers() != Qt::ControlModifier)
     {
-        for (int i=0; i<42; ++i)
+        for (int i = 0 ; i < 42 ; ++i)
         {
             if (d->days[i].selected)
             {
@@ -317,11 +317,11 @@ void MonthWidget::mousePressEvent(QMouseEvent* e)
     QRect r3(d->currw, d->currh*2, d->currw*7, d->currh);
 
     // Click on a weekday
-    if ( r3.contains(e->pos()))
+    if (r3.contains(e->pos()))
     {
         int j = (e->pos().x() - d->currw)/d->currw;
 
-        for (int i=0; i<6; ++i)
+        for (int i = 0 ; i < 6 ; ++i)
         {
             d->days[i*7+j].selected = !d->days[i*7+j].selected;
         }
@@ -331,7 +331,7 @@ void MonthWidget::mousePressEvent(QMouseEvent* e)
     {
         int j = (e->pos().y() - 3*d->currh)/d->currh;
 
-        for (int i=0; i<7; ++i)
+        for (int i = 0 ; i < 7 ; ++i)
         {
             d->days[j*7+i].selected = !d->days[j*7+i].selected;
         }
@@ -348,12 +348,12 @@ void MonthWidget::mousePressEvent(QMouseEvent* e)
             int endSelection = j*7+i;
 
             if (endSelection > firstSelected)
-                for (int i2=firstSelected ; i2 <= endSelection; ++i2)
+                for (int i2=firstSelected ; i2 <= endSelection ; ++i2)
                 {
                     d->days[i2].selected = true;
                 }
             else if (endSelection < firstSelected)
-                for (int i2=lastSelected ; i2 >= endSelection; --i2)
+                for (int i2=lastSelected ; i2 >= endSelection ; --i2)
                 {
                     d->days[i2].selected = true;
                 }
@@ -366,7 +366,7 @@ void MonthWidget::mousePressEvent(QMouseEvent* e)
 
     QList<QDateTime> filterDays;
 
-    for (int i=0; i<42; ++i)
+    for (int i = 0 ; i < 42 ; ++i)
     {
         if (d->days[i].selected && d->days[i].day != -1)
         {
@@ -457,7 +457,7 @@ void MonthWidget::triggerUpdateDays()
 
 void MonthWidget::resetDayCounts()
 {
-    for (int i=0; i<42; ++i)
+    for (int i = 0 ; i < 42 ; ++i)
     {
         d->days[i].active    = false;
         d->days[i].numImages = 0;
@@ -480,7 +480,7 @@ void MonthWidget::updateDays()
 
     const int size = d->model->rowCount();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         QModelIndex index = d->model->index(i, 0);
 
@@ -496,7 +496,7 @@ void MonthWidget::updateDays()
             continue;
         }
 
-        for (int i=0; i<42; ++i)
+        for (int i = 0 ; i < 42 ; ++i)
         {
             if (d->days[i].day == dt.date().day())
             {

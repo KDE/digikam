@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     {
         bool extractOriginal = false;
 
-        if(argc == 1)
+        if (argc == 1)
         {
             qDebug() <<
                     "\n"

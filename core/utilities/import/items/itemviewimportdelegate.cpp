@@ -120,7 +120,7 @@ void ItemViewImportDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     Q_D(ItemViewImportDelegate);
 
-    if ( d->thumbSize != thumbSize)
+    if (d->thumbSize != thumbSize)
     {
         d->thumbSize = thumbSize;
         invalidatePaintingCache();

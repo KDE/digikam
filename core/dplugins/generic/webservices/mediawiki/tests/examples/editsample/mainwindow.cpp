@@ -119,7 +119,7 @@ void MainWindow::editError(KJob* job)
 
 void MainWindow::revisionError(KJob* job)
 {
-    if(job->error() != 0)
+    if (job->error() != 0)
     {
         QMessageBox popup;
         popup.setText(QLatin1String("The Wiki page can't be loaded."));

@@ -316,7 +316,7 @@ void RatingFilter::slotOptionsTriggered(QAction* action)
         {
             setRatingFilterCondition(ItemFilterSettings::LessEqualCondition);
         }
-        else if(action == d->excludeUnrated)
+        else if (action == d->excludeUnrated)
         {
             setExcludeUnratedItems(d->excludeUnrated->isChecked());
         }

@@ -382,7 +382,7 @@ QString IccProfile::description()
 
     LcmsLock lock;
 
-    if ( !QString(dkCmsTakeProductDesc(d->handle)).isEmpty() )
+    if (!QString(dkCmsTakeProductDesc(d->handle)).isEmpty())
     {
         d->description = QString(dkCmsTakeProductDesc(d->handle)).replace(QLatin1Char('\n'), QLatin1Char(' '));
     }

@@ -125,7 +125,7 @@ int DGradientSlider::gradientOffset() const
 void DGradientSlider::drawCursorAt(QPainter& painter, double pos, const QColor& brushColor,
                                    int width, int height, int gradientWidth)
 {
-    painter.setBrush( brushColor );
+    painter.setBrush(brushColor);
     int pos2  = (int)(gradientWidth * pos);
     QPoint points[3];
     points[0] = QPoint(pos2, 3 * height - 1);
@@ -144,35 +144,35 @@ void DGradientSlider::paintEvent(QPaintEvent*)
     QPainter painter(this);
     // Draw first gradient
     QLinearGradient lrGradient(QPointF(0, 0), QPointF(gradientWidth, 0));
-    lrGradient.setColorAt(0.0, d->leftColor );
-    lrGradient.setColorAt(1.0, d->rightColor );
-    painter.setPen( Qt::NoPen );
-    painter.setBrush( lrGradient );
-    painter.drawRect(gradientOffset, 0, gradientWidth, gradientHeight );
+    lrGradient.setColorAt(0.0, d->leftColor);
+    lrGradient.setColorAt(1.0, d->rightColor);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(lrGradient);
+    painter.drawRect(gradientOffset, 0, gradientWidth, gradientHeight);
 
     // Draw second gradient
     QLinearGradient lrcGradient(QPointF(0, 0), QPointF(gradientWidth, 0));
-    lrcGradient.setColorAt( d->leftCursor, d->leftColor );
-
-    if ( d->showMiddleCursor )
-    {
-        lrcGradient.setColorAt( d->middleCursor, d->middleColor );
-    }
-
-    lrcGradient.setColorAt( d->rightCursor, d->rightColor );
-    painter.setBrush( lrcGradient );
-    painter.drawRect(gradientOffset, gradientHeight, gradientWidth, gradientHeight );
-
-    // Draw cursors
-    painter.setPen( palette().color(QPalette::Text) );
-    drawCursorAt( painter, d->leftCursor, d->leftColor, cursorWidth, gradientHeight, gradientWidth );
+    lrcGradient.setColorAt(d->leftCursor, d->leftColor);
 
     if (d->showMiddleCursor)
     {
-        drawCursorAt( painter, d->middleCursor, d->middleColor, cursorWidth, gradientHeight, gradientWidth );
+        lrcGradient.setColorAt(d->middleCursor, d->middleColor);
     }
 
-    drawCursorAt( painter, d->rightCursor, d->rightColor, cursorWidth, gradientHeight, gradientWidth );
+    lrcGradient.setColorAt(d->rightCursor, d->rightColor);
+    painter.setBrush(lrcGradient);
+    painter.drawRect(gradientOffset, gradientHeight, gradientWidth, gradientHeight);
+
+    // Draw cursors
+    painter.setPen(palette().color(QPalette::Text));
+    drawCursorAt(painter, d->leftCursor, d->leftColor, cursorWidth, gradientHeight, gradientWidth);
+
+    if (d->showMiddleCursor)
+    {
+        drawCursorAt(painter, d->middleCursor, d->middleColor, cursorWidth, gradientHeight, gradientWidth);
+    }
+
+    drawCursorAt(painter, d->rightCursor, d->rightColor, cursorWidth, gradientHeight, gradientWidth);
 }
 
 inline bool isCursorClicked(const QPoint& pos, double cursorPos,
@@ -188,22 +188,22 @@ inline bool isCursorClicked(const QPoint& pos, double cursorPos,
 
 void DGradientSlider::mousePressEvent(QMouseEvent* e)
 {
-    if ( e->button() == Qt::LeftButton )
+    if (e->button() == Qt::LeftButton)
     {
         int gradientHeight = d->gradientHeight();
         int cursorWidth    = d->cursorWidth();
         int gradientWidth  = d->gradientWidth();
 
         // Select cursor
-        if ( isCursorClicked( e->pos(), d->leftCursor , cursorWidth, gradientHeight, gradientWidth ) )
+        if (isCursorClicked(e->pos(), d->leftCursor , cursorWidth, gradientHeight, gradientWidth))
         {
             d->activeCursor = Private::LeftCursor;
         }
-        else if ( d->showMiddleCursor && isCursorClicked( e->pos(), d->middleCursor , cursorWidth, gradientHeight, gradientWidth ) )
+        else if (d->showMiddleCursor && isCursorClicked(e->pos(), d->middleCursor , cursorWidth, gradientHeight, gradientWidth))
         {
             d->activeCursor = Private::MiddleCursor;
         }
-        else if ( isCursorClicked( e->pos(), d->rightCursor , cursorWidth, gradientHeight, gradientWidth ) )
+        else if (isCursorClicked(e->pos(), d->rightCursor , cursorWidth, gradientHeight, gradientWidth))
         {
             d->activeCursor = Private::RightCursor;
         }
@@ -217,18 +217,18 @@ void DGradientSlider::mouseReleaseEvent(QMouseEvent*)
 
 void DGradientSlider::mouseMoveEvent(QMouseEvent* e)
 {
-    double v = ( e->pos().x() - d->gradientOffset() ) / (double) d->gradientWidth();
+    double v = (e->pos().x() - d->gradientOffset()) / (double) d->gradientWidth();
 
     switch (d->activeCursor)
     {
         case Private::LeftCursor:
-            setLeftValue( v );
+            setLeftValue(v);
             break;
         case Private::MiddleCursor:
-            setMiddleValue( v );
+            setMiddleValue(v);
             break;
         case Private::RightCursor:
-            setRightValue( v );
+            setRightValue(v);
             break;
         default:
             break;
@@ -260,7 +260,7 @@ double DGradientSlider::middleValue() const
     return d->middleCursor;
 }
 
-void DGradientSlider::adjustMiddleValue( double newLeftValue, double newRightValue )
+void DGradientSlider::adjustMiddleValue(double newLeftValue, double newRightValue)
 {
     double newDist  = newRightValue   - newLeftValue;
     double oldDist  = d->rightCursor  - d->leftCursor;
@@ -270,9 +270,9 @@ void DGradientSlider::adjustMiddleValue( double newLeftValue, double newRightVal
 
 void DGradientSlider::setRightValue(double v)
 {
-    if ( v <= 1.0 && v > d->leftCursor && v != d->rightCursor )
+    if (v <= 1.0 && v > d->leftCursor && v != d->rightCursor)
     {
-        adjustMiddleValue( d->leftCursor, v );
+        adjustMiddleValue(d->leftCursor, v);
         d->rightCursor = v;
         update();
         emit rightValueChanged(v);
@@ -282,9 +282,9 @@ void DGradientSlider::setRightValue(double v)
 
 void DGradientSlider::setLeftValue(double v)
 {
-    if ( v >= 0.0 && v != d->leftCursor && v < d->rightCursor )
+    if (v >= 0.0 && v != d->leftCursor && v < d->rightCursor)
     {
-        adjustMiddleValue( v, d->rightCursor );
+        adjustMiddleValue(v, d->rightCursor);
         d->leftCursor = v;
         update();
         emit leftValueChanged(v);
@@ -294,7 +294,7 @@ void DGradientSlider::setLeftValue(double v)
 
 void DGradientSlider::setMiddleValue(double v)
 {
-    if ( v > d->leftCursor && v != d->middleCursor && v < d->rightCursor )
+    if (v > d->leftCursor && v != d->middleCursor && v < d->rightCursor)
     {
         d->middleCursor = v;
         update();

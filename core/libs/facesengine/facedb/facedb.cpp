@@ -785,7 +785,7 @@ bool FaceDb::integrityCheck()
 
             //qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL check returned " << values.size() << " rows";
 
-            if ( (values.size() % 4) != 0)
+            if ((values.size() % 4) != 0)
             {
                 return false;
             }

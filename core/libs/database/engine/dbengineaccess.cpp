@@ -54,7 +54,7 @@ bool DbEngineAccess::checkReadyForUse(QString& error)
 
     // Checking for QSQLITE driver
 
-    if(internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
+    if (internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
     {
         if (!drivers.contains(QLatin1String("QSQLITE")))
         {
@@ -69,7 +69,7 @@ bool DbEngineAccess::checkReadyForUse(QString& error)
 
     // Checking for QMYSQL driver
 
-    else if(internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
+    else if (internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
         if (!drivers.contains(QLatin1String("QMYSQL")))
         {

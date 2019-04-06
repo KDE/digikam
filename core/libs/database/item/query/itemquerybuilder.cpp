@@ -454,7 +454,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
         QString query;
         QString readerString = (reader.valueToStringOrStringList()).at(0);
 
-        if(readerString.contains(QRegExp(QLatin1String("^\\d+:\\d+$"))))
+        if (readerString.contains(QRegExp(QLatin1String("^\\d+:\\d+$"))))
         {
             QStringList ratioNum = readerString.split(QLatin1Char(':'), QString::SkipEmptyParts);
             int num              = ratioNum.at(0).toInt();
@@ -463,7 +463,7 @@ bool ItemQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader, 
             sql                 += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
             *boundValues << (double)num/denominator;
         }
-        else if(readerString.contains(QRegExp(QLatin1String("^\\d+(.\\d+)?$"))))
+        else if (readerString.contains(QRegExp(QLatin1String("^\\d+(.\\d+)?$"))))
         {
             query = QString::fromUtf8("ABS((ImageInformation.width/CAST(ImageInformation.height AS DOUBLE)) - ?)  < 0.1");
             sql  += QString::fromUtf8(" (") + query + QString::fromUtf8(") ");
@@ -1291,7 +1291,7 @@ QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* bo
     SubQueryBuilder subQuery;
     QStringList     strList = url.path().split(QLatin1Char(' '), QString::SkipEmptyParts);
 
-    for ( QStringList::const_iterator it = strList.constBegin(); it != strList.constEnd(); ++it )
+    for (QStringList::const_iterator it = strList.constBegin() ; it != strList.constEnd() ; ++it)
     {
         bool ok;
         int  num = (*it).toInt(&ok);
@@ -1335,12 +1335,12 @@ QString ItemQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* bo
                     sqlQuery += QLatin1Char('(');
                     QList<SKey>::const_iterator it = todo.constBegin();
 
-                    while ( it != todo.constEnd() )
+                    while (it != todo.constEnd())
                     {
                         sqlQuery += subQuery.build(*it, rule.op, rule.val, boundValues);
                         ++it;
 
-                        if ( it != todo.constEnd() )
+                        if (it != todo.constEnd())
                         {
                             sqlQuery += QLatin1String(" OR ");
                         }

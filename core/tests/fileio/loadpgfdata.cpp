@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     QString fname(QString::fromUtf8(argv[1]));
     QFile   file(fname);
 
-    if ( !file.open(QIODevice::ReadOnly) )
+    if (!file.open(QIODevice::ReadOnly))
     {
         qDebug() << "Cannot open PGF file to read...";
         return -1;

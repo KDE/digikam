@@ -75,7 +75,7 @@ public:
     {
         m_info = info;
 
-        if(!info.isNull())
+        if (!info.isNull())
         {
             setPath(info.url().toLocalFile(), true);
         }

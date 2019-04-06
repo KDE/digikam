@@ -282,14 +282,14 @@ const DMetadata& MetadataWidget::getMetadata()
 
 bool MetadataWidget::storeMetadataToFile(const QUrl& url, const QByteArray& metaData)
 {
-    if ( url.isEmpty() )
+    if (url.isEmpty())
     {
         return false;
     }
 
     QFile file(url.toLocalFile());
 
-    if ( !file.open(QIODevice::WriteOnly) )
+    if (!file.open(QIODevice::WriteOnly))
     {
         return false;
     }

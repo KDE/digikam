@@ -65,7 +65,7 @@ void QueuePoolBar::dragEnterEvent(QDragEnterEvent* e)
 {
     int tab = tabAt(e->pos());
 
-    if ( tab != -1 )
+    if (tab != -1)
     {
         bool accept = false;
         // The receivers of the testCanDecode() signal has to adjust 'accept' accordingly.
@@ -82,7 +82,7 @@ void QueuePoolBar::dragMoveEvent(QDragMoveEvent* e)
 {
     int tab = tabAt(e->pos());
 
-    if ( tab != -1 )
+    if (tab != -1)
     {
         bool accept = false;
         // The receivers of the testCanDecode() signal has to adjust 'accept' accordingly.

@@ -228,9 +228,9 @@ bool SimilarityDbSchemaUpdater::startUpdates()
 
 bool SimilarityDbSchemaUpdater::createDatabase()
 {
-    if ( createTables()  &&
-         createIndices() &&
-         createTriggers())
+    if (createTables()  &&
+        createIndices() &&
+        createTriggers())
     {
         d->currentVersion         = schemaVersion();
         d->currentRequiredVersion = 1;

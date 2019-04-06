@@ -147,7 +147,7 @@ int main(int argc, char** argv)
         FaceDbAccess::cleanUpDatabase();
     }
 
-    else if(switchCondition == QLatin1String("mysqlToSqlite"))
+    else if (switchCondition == QLatin1String("mysqlToSqlite"))
     {
         DbEngineParameters params;
 

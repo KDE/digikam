@@ -223,7 +223,8 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 break;
         }
 
-        if(DIGIKAM_DIMG_LOG_PGF().isDebugEnabled()) {
+        if (DIGIKAM_DIMG_LOG_PGF().isDebugEnabled())
+        {
             const PGFHeader* header = pgf.GetHeader();
             qCDebug(DIGIKAM_DIMG_LOG_PGF) << "PGF width    = " << header->width;
             qCDebug(DIGIKAM_DIMG_LOG_PGF) << "PGF height   = " << header->height;

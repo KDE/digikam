@@ -361,7 +361,7 @@ void SmugTalker::login()
     builder.setPermissions(O1SmugMug::PermissionsModify);
     d->o1->initAuthorizationUrl(builder);
 
-    if(!d->o1->linked())
+    if (!d->o1->linked())
     {
         link();
     }
@@ -877,7 +877,7 @@ void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json doc " << doc;
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalAddPhotoDone(err.error, errorToText(err.error, err.errorString()));
@@ -920,7 +920,7 @@ void SmugTalker::parseResponseListAlbums(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalListAlbumsDone(err.error,i18n("Failed to list albums"), QList<SmugAlbum>());
@@ -978,7 +978,7 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalListPhotosDone(err.error, errorToText(err.error, err.errorString()), QList<SmugPhoto>());
@@ -991,7 +991,7 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
 
     QList<SmugPhoto> photosList;
 
-    foreach(const QJsonValue& value, jsonArray)
+    foreach (const QJsonValue& value, jsonArray)
     {
         QJsonObject obj = value.toObject();
 
@@ -1023,7 +1023,7 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         emit signalListAlbumTmplDone(err.error,i18n("Failed to list album template"), QList<SmugAlbumTmpl>());
@@ -1037,7 +1037,7 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
 
     QList<SmugAlbumTmpl> albumTmplList;
 
-    foreach(const QJsonValue &value, jsonArray)
+    foreach (const QJsonValue &value, jsonArray)
     {
         QJsonObject obj = value.toObject();
 

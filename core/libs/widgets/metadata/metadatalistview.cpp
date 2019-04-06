@@ -156,12 +156,12 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         // We checking if we have changed of ifDName
         QString currentIfDName = it.key().section(QLatin1Char('.'), 1, 1);
 
-        if ( currentIfDName != ifDItemName )
+        if (currentIfDName != ifDItemName)
         {
             ifDItemName = currentIfDName;
 
             // Check if the current IfD have any items. If no remove it before to toggle to the next IfD.
-            if ( subItems == 0 && parentifDItem)
+            if (subItems == 0 && parentifDItem)
             {
                 delete parentifDItem;
             }
@@ -212,7 +212,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     }
 
     // To check if the last IfD have any items...
-    if ( subItems == 0 && parentifDItem)
+    if (subItems == 0 && parentifDItem)
     {
         delete parentifDItem;
     }
@@ -265,7 +265,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         {
             --it;
 
-            if ( *itKeysFilter == it.key().section(QLatin1Char('.'), 1, 1) )
+            if (*itKeysFilter == it.key().section(QLatin1Char('.'), 1, 1))
             {
                 if (filters.isEmpty())
                 {
@@ -310,7 +310,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
         }
 
         // We checking if the last IfD have any items. If no, we remove it.
-        if ( subItems == 0 && parentifDItem)
+        if (subItems == 0 && parentifDItem)
         {
             delete parentifDItem;
         }

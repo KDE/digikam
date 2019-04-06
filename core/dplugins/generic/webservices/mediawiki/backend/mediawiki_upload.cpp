@@ -171,13 +171,13 @@ void Upload::doWorkSendRequest(Page page)
     }
 
     // Set the request
-    QNetworkRequest request( url );
+    QNetworkRequest request(url);
     request.setRawHeader("User-Agent", d->MediaWiki.userAgent().toUtf8());
     request.setRawHeader("Accept-Charset", "utf-8");
 
     QByteArray boundary = "-----------------------------15827188141577679942014851228";
     request.setRawHeader("Content-Type", "multipart/form-data; boundary="  + boundary);
-    request.setRawHeader("Cookie", cookie );
+    request.setRawHeader("Cookie", cookie);
 
     // send data
     boundary = "--" + boundary + "\r\n";
@@ -228,21 +228,21 @@ void Upload::doWorkSendRequest(Page page)
     out += boundary.mid(0, boundary.length() - 2);
     out += "--\r\n";
 
-    d->reply = d->manager->post( request, out );
+    d->reply = d->manager->post(request, out);
     connectReply();
 
-    connect( d->reply, SIGNAL(finished()),
-             this, SLOT(doWorkProcessReply()) );
+    connect(d->reply, SIGNAL(finished()),
+            this, SLOT(doWorkProcessReply()));
 }
 
 void Upload::doWorkProcessReply()
 {
     Q_D(Upload);
 
-    disconnect( d->reply, SIGNAL(finished()),
-                this, SLOT(doWorkProcessReply()) );
+    disconnect(d->reply, SIGNAL(finished()),
+               this, SLOT(doWorkProcessReply()));
 
-    if ( d->reply->error() != QNetworkReply::NoError )
+    if (d->reply->error() != QNetworkReply::NoError)
     {
         this->setError(this->NetworkError);
         d->reply->close();
@@ -251,31 +251,31 @@ void Upload::doWorkProcessReply()
         return;
     }
 
-    QXmlStreamReader reader( d->reply );
+    QXmlStreamReader reader(d->reply);
 
-    while ( !reader.atEnd() && !reader.hasError() )
+    while (!reader.atEnd() && !reader.hasError())
     {
         QXmlStreamReader::TokenType token = reader.readNext();
 
-        if ( token == QXmlStreamReader::StartElement )
+        if (token == QXmlStreamReader::StartElement)
         {
             QXmlStreamAttributes attrs = reader.attributes();
 
-            if ( reader.name() == QLatin1String( "upload" ) )
+            if (reader.name() == QLatin1String("upload"))
             {
-                if ( attrs.value(QStringLiteral("result")).toString() == QLatin1String("Success") )
+                if (attrs.value(QStringLiteral("result")).toString() == QLatin1String("Success"))
                 {
                     this->setError(KJob::NoError);
                 }
             }
-            else if ( reader.name() == QLatin1String( "error" ) )
+            else if (reader.name() == QLatin1String("error"))
             {
                 this->setErrorText(attrs.value( QStringLiteral("info")).toString());
                 this->setError(UploadPrivate::error(attrs.value(QStringLiteral("code")).toString()));
             }
         }
-        else if ( token == QXmlStreamReader::Invalid && reader.error() != 
-                  QXmlStreamReader::PrematureEndOfDocumentError)
+        else if (token == QXmlStreamReader::Invalid && reader.error() !=
+                 QXmlStreamReader::PrematureEndOfDocumentError)
         {
             this->setError(this->XmlError);
         }

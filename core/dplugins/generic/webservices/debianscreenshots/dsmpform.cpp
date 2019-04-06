@@ -121,7 +121,7 @@ bool DSMPForm::addFile(const QString& fileName, const QString& path, const QStri
     str += "\r\n";
     str += "Content-Disposition: form-data; ";
 
-    if( !fieldName.isEmpty() )
+    if (!fieldName.isEmpty())
     {
         str += "name=\"" + QByteArray(fieldName.toLatin1()) + "\"; ";
     }

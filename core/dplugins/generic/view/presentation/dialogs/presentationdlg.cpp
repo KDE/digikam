@@ -162,7 +162,7 @@ void PresentationDlg::readSettings()
     // Comments tab settings
     QFont* const savedFont = new QFont();
     savedFont->setFamily(    grp.readEntry("Comments Font Family"));
-    savedFont->setPointSize( grp.readEntry("Comments Font Size",        10 ));
+    savedFont->setPointSize( grp.readEntry("Comments Font Size",        10));
     savedFont->setBold(      grp.readEntry("Comments Font Bold",        false));
     savedFont->setItalic(    grp.readEntry("Comments Font Italic",      false));
     savedFont->setUnderline( grp.readEntry("Comments Font Underline",   false));
@@ -182,7 +182,7 @@ void PresentationDlg::readSettings()
     // Soundtrack tab
     d->sharedData->soundtrackLoop             = grp.readEntry("Soundtrack Loop",                     false);
     d->sharedData->soundtrackPlay             = grp.readEntry("Soundtrack Auto Play",                false);
-    d->sharedData->soundtrackPath             = QUrl::fromLocalFile(grp.readEntry("Soundtrack Path", "" ));
+    d->sharedData->soundtrackPath             = QUrl::fromLocalFile(grp.readEntry("Soundtrack Path", ""));
     d->sharedData->soundtrackRememberPlaylist = grp.readEntry("Soundtrack Remember Playlist",        false);
 #endif
 
@@ -298,7 +298,7 @@ void PresentationDlg::slotStartClicked()
 {
     saveSettings();
 
-    if ( d->sharedData->mainPage->updateUrlList() )
+    if (d->sharedData->mainPage->updateUrlList())
         emit buttonStartClicked();
 
     return;

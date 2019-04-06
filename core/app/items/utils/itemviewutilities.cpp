@@ -305,7 +305,7 @@ void ItemViewUtilities::openInfos(const ItemInfo& info,
     imagefilter        += ApplicationSettings::instance()->getRawFileFilter();
 
     // If the current item is not an image file.
-    if ( !imagefilter.contains(fi.suffix().toLower()) )
+    if (!imagefilter.contains(fi.suffix().toLower()))
     {
         // Openonly the first one from the list.
         openInfosWithDefaultApplication(QList<ItemInfo>() << info);

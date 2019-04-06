@@ -369,7 +369,7 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
             {
                 QMap<YearMonth, int>::const_iterator it2 = yearMonthMap.constFind(YearMonth(date.year(), date.month()));
 
-                if ( it2 != yearMonthMap.constEnd() )
+                if (it2 != yearMonthMap.constEnd())
                 {
                     albumToCountMap.insert((*it)->id(), it2.value());
                 }

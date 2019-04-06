@@ -518,7 +518,7 @@ void ImageShackTalker::parseUploadPhotoDone(QByteArray data)
 
     if (d->state == Private::IMGHCK_ADDPHOTO || d->state == Private::IMGHCK_ADDVIDEO || (d->state == Private::IMGHCK_ADDPHOTOGALLERY))
     {
-        if(jsonObject[QLatin1String("success")].toBool())
+        if (jsonObject[QLatin1String("success")].toBool())
         {
             emit signalBusy(false);
             emit signalAddPhotoDone(0,QLatin1String(""));

@@ -121,12 +121,12 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
         // We checking if we have changed of ifDName
         currentIfDName = it.key().section(QLatin1Char('.'), 1, 1);
 
-        if ( currentIfDName != ifDItemName )
+        if (currentIfDName != ifDItemName)
         {
             ifDItemName = currentIfDName;
 
             // Check if the current IfD have any items. If not, remove it before to toggle to the next IfD.
-            if ( subItems == 0 && parentifDItem)
+            if (subItems == 0 && parentifDItem)
             {
                 delete parentifDItem;
             }

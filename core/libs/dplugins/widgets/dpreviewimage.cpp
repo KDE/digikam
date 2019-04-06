@@ -1142,29 +1142,29 @@ void DPreviewImage::leaveEvent(QEvent*)
 
 bool DPreviewImage::eventFilter(QObject* obj, QEvent* ev)
 {
-    if ( obj == d->toolBar )
+    if (obj == d->toolBar)
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
             setCursor(Qt::ArrowCursor);
-        else if ( ev->type() == QEvent::Leave)
+        else if (ev->type() == QEvent::Leave)
             unsetCursor();
 
         return false;
     }
-    else if ( obj == verticalScrollBar() && verticalScrollBar()->isVisible())
+    else if (obj == verticalScrollBar() && verticalScrollBar()->isVisible())
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
             setCursor(Qt::ArrowCursor);
-        else if ( ev->type() == QEvent::Leave)
+        else if (ev->type() == QEvent::Leave)
             unsetCursor();
 
         return false;
     }
-    else if ( obj == horizontalScrollBar() && horizontalScrollBar()->isVisible())
+    else if (obj == horizontalScrollBar() && horizontalScrollBar()->isVisible())
     {
-        if ( ev->type() == QEvent::Enter)
+        if (ev->type() == QEvent::Enter)
             setCursor(Qt::ArrowCursor);
-        else if ( ev->type() == QEvent::Leave)
+        else if (ev->type() == QEvent::Leave)
             unsetCursor();
 
         return false;

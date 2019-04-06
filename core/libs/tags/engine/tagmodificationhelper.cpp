@@ -91,7 +91,7 @@ TAlbum* TagModificationHelper::boundTag(QObject* sender) const
 {
     QAction* action = 0;
 
-    if ( (action = qobject_cast<QAction*>(sender)) )
+    if ((action = qobject_cast<QAction*>(sender)))
     {
         return action->data().value<AlbumPointer<TAlbum> >();
     }

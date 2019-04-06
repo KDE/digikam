@@ -201,7 +201,7 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     if (frameMargin)
     {
         QRegion borderReg;
-        borderReg         += QRect( width() - frameMargin, 0, frameMargin, height() ); // right
+        borderReg         += QRect(width() - frameMargin, 0, frameMargin, height()); // right
         p.setClipRegion(borderReg);
         QStyleOptionFrame frame;
         frame.rect         = rect();
@@ -479,7 +479,7 @@ void TagsPopupMenu::slotAboutToShow()
 
         bool hasValidTag = false;
 
-        for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
+        for (QSet<int>::const_iterator it = d->assignedTags.constBegin() ; it != d->assignedTags.constEnd() ; ++it)
         {
             TAlbum* const album = man->findTAlbum(*it);
 
@@ -523,8 +523,8 @@ void TagsPopupMenu::slotAboutToShow()
         {
             addSection(d->recentTagPix, i18n("Recently Assigned Tags"));
 
-            for (AlbumList::const_iterator it = recentTags.constBegin();
-                 it != recentTags.constEnd(); ++it)
+            for (AlbumList::const_iterator it = recentTags.constBegin() ;
+                 it != recentTags.constEnd() ; ++it)
             {
                 TAlbum* const album = static_cast<TAlbum*>(*it);
 
@@ -552,7 +552,7 @@ void TagsPopupMenu::slotAboutToShow()
         }
     }
 
-    if ( (d->mode == REMOVE || d->mode == DISPLAY) && d->assignedTags.count() < 10)
+    if ((d->mode == REMOVE || d->mode == DISPLAY) && d->assignedTags.count() < 10)
     {
         buildFlatMenu(this);
     }
@@ -595,14 +595,14 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu* menu, TAlbum* album)
 {
     QList<Album*> sortedTags;
 
-    for (Album* a = album->firstChild(); a; a = a->next())
+    for (Album* a = album->firstChild() ; a ; a = a->next())
     {
         sortedTags << a;
     }
 
     std::stable_sort(sortedTags.begin(), sortedTags.end(), lessThanByTitle);
 
-    for (QList<Album*>::const_iterator it = sortedTags.constBegin(); it != sortedTags.constEnd(); ++it)
+    for (QList<Album*>::const_iterator it = sortedTags.constBegin() ; it != sortedTags.constEnd() ; ++it)
     {
         TAlbum* const a = (TAlbum*)(*it);
 
@@ -724,7 +724,7 @@ void TagsPopupMenu::buildFlatMenu(QMenu* menu)
     QStringList shortenedPaths = TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,
                                                         TagsCache::NoLeadingSlash, TagsCache::NoHiddenTags);
 
-    for (int i=0; i<shortenedPaths.size(); ++i)
+    for (int i = 0 ; i < shortenedPaths.size() ; ++i)
     {
         QString t       = shortenedPaths.at(i);
         t.replace(QLatin1Char('&'), QLatin1String("&&"));
@@ -818,7 +818,7 @@ void TagsPopupMenu::slotAddTag(QAction* action)
     AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks, errMap);
     TagEditDlg::showtagsListCreationError(qApp->activeWindow(), errMap);
 
-    for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
+    for (AlbumList::const_iterator it = tList.constBegin() ; it != tList.constEnd() ; ++it)
     {
         emit signalTagActivated((*it)->id());
     }

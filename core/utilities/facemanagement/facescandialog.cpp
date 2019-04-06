@@ -451,7 +451,7 @@ FaceScanSettings FaceScanDialog::settings() const
     {
         settings.task = FaceScanSettings::RetrainAll;
     }
-    else if(d->detectButton->isChecked())
+    else if (d->detectButton->isChecked())
     {
         settings.task = FaceScanSettings::Detect;
     }

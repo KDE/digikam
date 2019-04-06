@@ -242,7 +242,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     authenticate();
 
-//     if(!nickName.isEmpty())
+//     if (!nickName.isEmpty())
 //     {
 //         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "login with nickname";
 //         authenticateWithNickName(nickName);

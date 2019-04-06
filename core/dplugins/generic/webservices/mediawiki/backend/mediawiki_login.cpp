@@ -163,7 +163,7 @@ void Login::doWorkProcessReply()
                     d->lgtoken     = attrs.value(QStringLiteral("lgtoken")).toString();
                     d->lgsessionid = attrs.value(QStringLiteral("sessionid")).toString();
 
-                    if(d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
+                    if (d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
                     {
                         QList<QNetworkCookie> cookies;
                         QString prefix = attrs.value(QStringLiteral("cookieprefix")).toString();
@@ -202,7 +202,7 @@ void Login::doWorkProcessReply()
                     d->lgtoken     = attrs.value(QStringLiteral("token")).toString();
                     d->lgsessionid = attrs.value(QStringLiteral("sessionid")).toString();
 
-                    if(d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
+                    if (d->manager->cookieJar()->cookiesForUrl(d->MediaWiki.url()).isEmpty())
                     {
                         QString prefix = attrs.value(QStringLiteral("cookieprefix")).toString();
                         prefix.append(QStringLiteral("_session"));

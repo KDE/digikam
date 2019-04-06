@@ -654,7 +654,7 @@ void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 
 void DeleteDialog::keyPressEvent(QKeyEvent* e)
 {
-    if ( e->modifiers() == 0 )
+    if (e->modifiers() == 0)
     {
         if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
         {
