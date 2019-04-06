@@ -68,11 +68,6 @@ export IOLIBS=$DIR/usr/lib/libgphoto2_port
 # https://github.com/qutebrowser/qutebrowser/issues/2368
 export QT_XCB_FORCE_SOFTWARE_OPENGL=1
 
-# OpenCV can use GPU for computation and this can break face management workflow
-# https://github.com/opencv/opencv/issues/9852
-export OPENCV_OPENCL_RUNTIME=null
-export OPENCV_OPENCL_DEVICE=disabled
-
 # code to disable Plasma desktopk detection with QDesktopService
 export APPIMAGE_ORIGINAL_KDE_FULL_SESSION=$KDE_FULL_SESSION
 export APPIMAGE_ORIGINAL_DESKTOP_SESSION=$DESKTOP_SESSION
@@ -93,6 +88,11 @@ export APPIMAGE_STARTUP_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export APPIMAGE_STARTUP_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=$PATH
+
+# See bug #401377: tested on Fedora 29 and Mageia 7 for transitional migration from openssl 1.0 to openssl 1.1
+if [ -f /etc/pki/openssl10.cnf ]; then
+    export OPENSSL_CONF=/etc/pki/openssl10.cnf
+fi
 
 preload_shared_library libudev.so.0
 #preload_shared_library libfontconfig.so.1
