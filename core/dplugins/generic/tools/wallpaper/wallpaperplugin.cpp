@@ -63,7 +63,7 @@ QIcon WallpaperPlugin::icon() const
 
 QString WallpaperPlugin::description() const
 {
-    return i18n("A tool to export image as wallpaper");
+    return i18n("A tool to set image as wallpaper");
 }
 
 QString WallpaperPlugin::details() const
@@ -85,7 +85,7 @@ void WallpaperPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Export as wallpaper..."));
+    ac->setText(i18nc("@action", "Set as wallpaper"));
     ac->setObjectName(QLatin1String("Wallpaper"));
     ac->setActionCategory(DPluginAction::GenericTool);
 
@@ -98,8 +98,7 @@ void WallpaperPlugin::setup(QObject* const parent)
 void WallpaperPlugin::slotWallpaper()
 {
     DInfoInterface* const iface = infoIface(sender());
-
-    QList<QUrl> images = iface->currentSelectedItems();
+    QList<QUrl> images          = iface->currentSelectedItems();
 
     if (images.isEmpty())
     {
@@ -129,7 +128,7 @@ void WallpaperPlugin::slotWallpaper()
         {
             QMessageBox::critical(nullptr,
                                   i18nc("@title:window",
-                                        "Export image as wallpaper error"),
+                                        "Error while set image as wallpaper"),
                                   reply.errorMessage());
         }
     }
