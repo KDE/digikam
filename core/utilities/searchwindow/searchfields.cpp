@@ -138,7 +138,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Tags"), i18n("A tag of the item contains"));
         return field;
     }
-    else if (name == QLatin1String("notag"))
+    else if (name == QLatin1String("nottagged"))
     {
         /**
         * @todo Merge a "Not tagged" field into TagModel together with AND/OR control

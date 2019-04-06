@@ -99,7 +99,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField(QLatin1String("albumcollection"), group));
     group->addField(SearchField::createField(QLatin1String("tagid"),           group));
     group->addField(SearchField::createField(QLatin1String("tagname"),         group));
-    group->addField(SearchField::createField(QLatin1String("notag"),           group));
+    group->addField(SearchField::createField(QLatin1String("nottagged"),       group));
     group->addField(SearchField::createField(QLatin1String("filename"),        group));
 
     m_fieldLabels << label;
