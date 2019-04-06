@@ -143,4 +143,5 @@ BUGFIXES:
 122 ==> 254932 - New tool to export images as desktop wallpaper folder.
 123 ==> 192020 - Tool to export as plasma backgrounds.
 124 ==> 406171 - digiKam crashed on exit.
-125 ==> 
+125 ==> 406276 - Error during Migration: "Error creating database schema".
+126 ==> 

@@ -1132,7 +1132,7 @@
                     name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
                     status INTEGER NOT NULL,
                     category INTEGER NOT NULL,
-                    modificationDate DATETIME(3),
+                    modificationDate DATETIME,
                     fileSize BIGINT,
                     uniqueHash VARCHAR(128),
                     manualOrder BIGINT,
@@ -1146,8 +1146,8 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
                     (imageid BIGINT PRIMARY KEY,
                     rating INTEGER,
-                    creationDate DATETIME(3),
-                    digitizationDate DATETIME(3),
+                    creationDate DATETIME,
+                    digitizationDate DATETIME,
                     orientation INTEGER,
                     width INTEGER,
                     height INTEGER,
@@ -1212,7 +1212,7 @@
                     type INTEGER,
                     language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci,
                     author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    date DATETIME(3),
+                    date DATETIME,
                     comment LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(imageid, type, language, author(202)))
@@ -1267,7 +1267,7 @@
                     identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     filesize BIGINT,
-                    filedate DATETIME(3),
+                    filedate DATETIME,
                     UNIQUE(identifier(164), filename(165), filesize, filedate))
                     ENGINE InnoDB;
                 </statement>
@@ -1594,7 +1594,7 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Thumbnails
                     (id BIGINT PRIMARY KEY AUTO_INCREMENT,
                     type INTEGER,
-                    modificationDate DATETIME(3),
+                    modificationDate DATETIME,
                     orientationHint INTEGER,
                     data LONGBLOB)
                     ENGINE InnoDB;
@@ -1813,7 +1813,7 @@
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
                     (imageid BIGINT PRIMARY KEY,
-                    modificationDate DATETIME(3),
+                    modificationDate DATETIME,
                     uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     matrix LONGBLOB)
                     ENGINE InnoDB;
