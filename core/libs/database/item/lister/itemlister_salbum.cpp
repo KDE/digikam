@@ -55,10 +55,10 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
                "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
-               "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
-               "       LEFT  JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
-               "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
-               "       INNER JOIN Albums           ON Albums.id=Images.album "
+               "       LEFT JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
+               "       LEFT JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
+               "       LEFT JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
+               "       INNER JOIN Albums          ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 
     // query body
