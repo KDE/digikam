@@ -142,4 +142,5 @@ BUGFIXES:
 121 ==> 406054 - Export to google photo a picture with a "title" => no "title" in google photo.
 122 ==> 254932 - New tool to export images as desktop wallpaper folder.
 123 ==> 192020 - Tool to export as plasma backgrounds.
-124 ==> 
+124 ==> 406171 - digiKam crashed on exit.
+125 ==> 

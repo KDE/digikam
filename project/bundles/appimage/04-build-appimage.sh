@@ -296,7 +296,6 @@ libgpg-error.so.0 \
 libharfbuzz.so.0 \
 libICE.so.6 \
 libjack.so.0 \
-libkeyutils.so.1 \
 libm.so.6 \
 libmvec.so.1 \
 libnsl.so.1 \
@@ -361,6 +360,8 @@ libdbus-1.so.3 \
 
 #libffi.so.6            # needed for Ubuntu 11.04
 #libxcb-glx.so.0        # needed for Ubuntu 11.04
+
+#libkeyutils.so.1       # Originally removed in linuxdeployqt, but needed for Gentoo (see https://bugs.kde.org/show_bug.cgi?id=406171#c2)
 
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
