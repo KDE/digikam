@@ -38,7 +38,7 @@ ChecksRunAsRoot
 ChecksXCodeCLI
 ChecksCPUCores
 OsxCodeName
-RegisterRemoteServers
+#RegisterRemoteServers
 
 #################################################################################################
 
