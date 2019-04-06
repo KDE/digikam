@@ -89,7 +89,7 @@ QRectF ClickDragReleaseItem::boundingRect() const
 {
     if (parentItem())
     {
-        return QRectF(QPointF(0,0), parentItem()->boundingRect().size());
+        return QRectF(QPointF(0, 0), parentItem()->boundingRect().size());
     }
 
     return QRectF();

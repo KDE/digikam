@@ -104,7 +104,7 @@ public:
         mouseMoveClusterIndex(-1),
         mouseMoveMarkerIndex(),
         mouseMoveObjectCoordinates(),
-        mouseMoveCenterOffset(0,0),
+        mouseMoveCenterOffset(0, 0),
         dragDropMarkerCount(0),
         dragDropMarkerPos(),
         clustersDirtyCacheProjection(),

@@ -218,7 +218,7 @@ void TestRGTagModel::testModel1()
     Q_ASSERT(ti21 == tagItem21Index);
 
     //checks invalid index
-    const QModelIndex ti111 = tagModel->index(0,0, ti11);
+    const QModelIndex ti111 = tagModel->index(0, 0, ti11);
     Q_ASSERT(!ti111.isValid());
 
     //checks parent of tagItem1
@@ -265,18 +265,18 @@ void TestRGTagModel::testModelSpacerTags()
 
     qDebug()<<"Added the spacers.";
 
-    const QModelIndex index11 = tagModel->index(0,0);
-    const QModelIndex index12 = tagModel->index(1,0);
-    const QModelIndex index13 = tagModel->index(2,0);
+    const QModelIndex index11 = tagModel->index(0, 0);
+    const QModelIndex index12 = tagModel->index(1, 0);
+    const QModelIndex index13 = tagModel->index(2, 0);
 
     qDebug()<<tagModel->data(index11, Qt::DisplayRole);
     qDebug()<<tagModel->data(index12, Qt::DisplayRole);
     qDebug()<<tagModel->data(index13, Qt::DisplayRole);
-//  qDebug()<<tagModel->data(2,0,QModelIndex());
+//  qDebug()<<tagModel->data(2, 0, QModelIndex());
 
 /*
     qDebug()<<"VERIFY IF NEW TAG EXISTS:";
-    QModelIndex ti211Spacer = tagModel->index(0,0,ti21);
+    QModelIndex ti211Spacer = tagModel->index(0, 0, ti21);
     Q_ASSERT(ti211Spacer.isValid());
 */
 

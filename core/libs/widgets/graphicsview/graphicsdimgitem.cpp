@@ -191,7 +191,7 @@ QRectF GraphicsDImgItem::boundingRect() const
 {
     Q_D(const GraphicsDImgItem);
     // always return full integer sizes, we can only scale to integer
-    return QRectF(QPointF(0,0), d->zoomSettings.zoomedSize()).toAlignedRect();
+    return QRectF(QPointF(0, 0), d->zoomSettings.zoomedSize()).toAlignedRect();
 }
 
 void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)

@@ -607,7 +607,7 @@ void ItemViewCategorized::ensureSelectionAfterChanges()
         bool hadInitial              = d->ensureInitialSelectedItem;
         d->ensureInitialSelectedItem = false;
         d->ensureOneSelectedItem     = false;
-        QModelIndex index            = model()->index(0,0);
+        QModelIndex index            = model()->index(0, 0);
 
         if (index.isValid())
         {

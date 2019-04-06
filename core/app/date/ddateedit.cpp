@@ -205,7 +205,7 @@ void DDateEdit::showPopup()
     }
 
     QRect desk          = QApplication::desktop()->screenGeometry(this);
-    QPoint popupPoint   = mapToGlobal(QPoint(0,0));
+    QPoint popupPoint   = mapToGlobal(QPoint(0, 0));
     int dateFrameHeight = d->popup->sizeHint().height();
 
     if (popupPoint.y() + height() + dateFrameHeight > desk.bottom())

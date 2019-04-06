@@ -177,7 +177,7 @@ DImg DImg::smoothScale(const QSize& destSize, Qt::AspectRatioMode aspectRatioMod
         return DImg();
     }
 
-    return smoothScaleClipped(scaleSize, QRect(QPoint(0,0), scaleSize));
+    return smoothScaleClipped(scaleSize, QRect(QPoint(0, 0), scaleSize));
 }
 
 DImg DImg::smoothScale(int dw, int dh, Qt::AspectRatioMode aspectRatioMode) const

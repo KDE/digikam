@@ -164,7 +164,7 @@ void FiltersHistoryWidget::enableEntries(int count)
 
 void FiltersHistoryWidget::clearData()
 {
-    d->model->removeRows(0, d->model->rowCount(), d->model->index(0,0));
+    d->model->removeRows(0, d->model->rowCount(), d->model->index(0, 0));
 }
 
 } // namespace Digikam

@@ -811,7 +811,7 @@ void DPreviewImage::mousePressEvent(QMouseEvent* e)
                 // Beginning of a selection area change
                 d->mouseDragAction = Private::DRAWSELECTION;
                 d->selection->setVisible(true);
-                d->selection->setRect(QRectF(scenePoint, QSizeF(0,0)));
+                d->selection->setRect(QRectF(scenePoint, QSizeF(0, 0)));
                 d->mouseZone = DSelectionItem::BottomRight;
             }
             else if (d->selection->isVisible() &&
@@ -885,7 +885,7 @@ void DPreviewImage::mouseMoveEvent(QMouseEvent* e)
                  d->mouseDragAction == Private::EXPANDORSHRINK ||
                  d->mouseDragAction == Private::MOVESELECTION)
         {
-            ensureVisible(QRectF(scenePoint, QSizeF(0,0)), 1, 1);
+            ensureVisible(QRectF(scenePoint, QSizeF(0, 0)), 1, 1);
             QRectF rect = d->selection->rect();
 
             switch (d->mouseZone)
