@@ -455,6 +455,13 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         return false;
     }
 
+    if (!ProgressManager::instance()->isEmpty())
+    {
+        errMsg = i18n("Other process are not finished yet.\n"
+                      "Please try again later.");
+        return false;
+    }
+
     if (hasDirectChildAlbumWithTitle(newParent, album->title()))
     {
         QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
@@ -534,6 +541,13 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
     if (album->firstChild())
     {
         errMsg = i18n("Only a tag without children can be merged!");
+        return false;
+    }
+
+    if (!ProgressManager::instance()->isEmpty())
+    {
+        errMsg = i18n("Other process are not finished yet.\n"
+                      "Please try again later.");
         return false;
     }
 

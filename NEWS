@@ -146,5 +146,5 @@ BUGFIXES:
 125 ==> 406276 - Error during Migration: "Error creating database schema".
 126 ==> 406227 - Picture without any tag are not listed with button "No Tags".
 127 ==> 401377 - Export to (Onedrive, Dropbox ...) crashes digikam (Segmentation Fault).
-128 ==> 
-
+128 ==> 406309 - Tags reappear after being merged when several merge processes overlap(?).
+129 ==> 
