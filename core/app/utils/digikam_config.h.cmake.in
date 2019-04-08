@@ -114,6 +114,9 @@
 /* Define to 1 if FaceEngine DNN is enabled */
 #cmakedefine HAVE_FACESENGINE_DNN 1
 
+/* Define to 1 if ImageMAgick codecs are supported */
+#cmakedefine HAVE_IMAGE_MAGICK 1
+
 /* Defines to 1 if the Dr. Mingw crash handler should be used */
 #cmakedefine HAVE_DRMINGW 1
 

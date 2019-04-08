@@ -9,6 +9,7 @@ General     : Update internal libpgf to last 07193.
 General     : Add compatiblity with OpenCV version 4.
 General     : MacOS and AppImage bundles are now published with Qt 5.11.3.
 General     : Add new optional configuration option to compile with Faces Engine Neural Network.
+General     : Add optional support to ImageMagick codecs to support extra image formats as XCF, FITS, HEIC, etc.
 BQM         : Add new advanced settings in resize tool.
 BQM         : All Batch Queue Manager tools become Bqm plugins.
 Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.

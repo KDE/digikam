@@ -335,6 +335,7 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | liblqr-1             |  opt     | >= 0.4.2    | http://liblqr.wikidot.com                         | For Liquid rescale tool                                |                                                                                       |
 | libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
 | libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
+| libmagick++          |  opt     | >= 6.7.0    | https://www.imagemagick.org                       | ImageMagick codecs support for DImg image loader       | Version >= 7.0 recommended                                                            |
 | DrMingw              |  opt     | >= 0.8.2    | https://github.com/jrfonseca/drmingw              | Mingw crash handler (run-time deps only for windows)   |                                                                                       |
 
 \section getsourcecode Get Source Code

@@ -24,6 +24,13 @@
 
 #include "qimageloader.h"
 
+#ifdef HAVE_IMAGE_MAGICK
+#   define MAGICKCORE_HDRI_ENABLE   0
+#   define MAGICKCORE_QUANTUM_DEPTH 8
+#   include <Magick++.h>
+using namespace Magick;
+#endif
+
 // Qt includes
 
 #include <QImage>
@@ -66,8 +73,12 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     {
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Error message from loader:" << reader.errorString();
-        loadingFailed();
-        return false;
+
+        if (!loadWithImageMagick(filePath, image))
+        {
+            loadingFailed();
+            return false;
+        }
     }
 
     int colorModel    = DImg::COLORMODELUNKNOWN;
@@ -202,6 +213,51 @@ bool QImageLoader::sixteenBit() const
 bool QImageLoader::isReadOnly() const
 {
     return false;
+}
+
+// -- ImageMagick codecs to QImage --------------------------------------------------------
+
+bool QImageLoader::loadWithImageMagick(const QString& path, QImage& qimg)
+{
+#ifdef HAVE_IMAGE_MAGICK
+
+    qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "Try to load image with ImageMagick codecs";
+
+    try
+    {
+        Image image;
+        image.read(path.toUtf8().constData());
+
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM toQImage:" << image.columns() << image.rows();
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM QuantumRange:" << QuantumRange;
+
+        Blob* const pixelBlob = new Blob;
+        image.write(pixelBlob, "BGRA", 8);
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM blob size:    " << pixelBlob->length();
+
+        qimg = QImage((uchar*)pixelBlob->data(), image.columns(), image.rows(), QImage::Format_ARGB32);
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "QImage data size:" << qimg.byteCount();
+
+        if (qimg.isNull())
+            return false;
+    }
+    catch (Exception &error_)
+    {
+        qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "ImageMagick exception [" << path << "]" << error_.what();
+        qimg = QImage();
+        return false;
+    }
+
+    return true;
+
+#else
+
+    Q_UNUSED(path);
+    Q_UNUSED(qimg);
+
+    return false;
+
+#endif
 }
 
 } // namespace Digikam

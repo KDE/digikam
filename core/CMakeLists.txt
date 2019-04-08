@@ -319,6 +319,7 @@ find_package(PkgConfig)
 find_package(Jasper)                               # For JPEG 2000 support.
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
+find_package(ImageMagick COMPONENTS Magick++)      # For QImage loader fail back to ImageMagick codecs.
 
 # For Monitor Profiles management with LCMS
 find_package(X11)
@@ -533,6 +534,7 @@ MACRO_BOOL_TO_01(ENABLE_APPSTYLES        HAVE_APPSTYLE_SUPPORT)
 MACRO_BOOL_TO_01(ENABLE_QWEBENGINE       HAVE_QWEBENGINE)
 MACRO_BOOL_TO_01(ENABLE_FACESENGINE_DNN  HAVE_FACESENGINE_DNN)
 MACRO_BOOL_TO_01(ENABLE_DRMINGW          HAVE_DRMINGW)
+MACRO_BOOL_TO_01(ImageMagick_FOUND       HAVE_IMAGE_MAGICK)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -581,6 +583,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("bison"             "https://www.gnu.org/software/
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                    "digiKam will be compiled without API documentation building support."        Doxygen_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("flex"              "http://flex.sourceforge.net/"                                    "(version >= 2.5.0)"                    "digiKam will be compiled without Panorama support."                          FLEX_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://cgit.kde.org/akonadi-contacts.git/about/"                "(version >= ${AKONADI_MIN_VERSION})"   "digiKam will be compiled without KDE desktop address book support."          KF5AkonadiContact_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libmagick++"       "https://www.imagemagick.org"                                     "(version >= 6.7.0)"                    "digiKam will be compiled without ImageMagick codecs."                        ImageMagick_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                    "digiKam will be compiled without Refocus tool support."                      Eigen3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                    "digiKam will be compiled without GPhoto2 camera drivers support."            Gphoto2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                    "digiKam will be compiled without JPEG2000 support."                          Jasper_FOUND)
@@ -737,7 +740,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
     if(LensFun_FOUND)
         include_directories(${LENSFUN_INCLUDE_DIRS})
     endif()
-    
+
+    if(ImageMagick_FOUND)
+        include_directories(${ImageMagick_INCLUDE_DIRS})
+    endif()
+
     # ==========================================================================
     # Common targets parts
 

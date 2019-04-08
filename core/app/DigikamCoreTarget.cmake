@@ -169,6 +169,10 @@ if(LensFun_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LENSFUN_LIBRARIES})
 endif()
 
+if(ImageMagick_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${ImageMagick_LIBRARIES})
+endif()
+
 # for nrfilter
 if(OpenCV_FOUND)
     target_link_libraries(digikamcore PRIVATE ${OpenCV_LIBRARIES})

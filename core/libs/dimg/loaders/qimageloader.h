@@ -29,6 +29,7 @@
 
 #include "dimgloader.h"
 #include "digikam_export.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {
@@ -46,6 +47,10 @@ public:
     virtual bool hasAlpha()   const;
     virtual bool sixteenBit() const;
     virtual bool isReadOnly() const;
+
+private:
+
+    bool loadWithImageMagick(const QString& path, QImage& qimg);
 
 private:
 

@@ -11,7 +11,8 @@ PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
-Others file formats are supported only in 8 bits/color/pixel using QImageFormats plugins.
+Others file formats are supported only in 8 bits/color/pixel using QImageFormats plugins,
+or with fail-back to ImageMAgick codecs (optional).
 Supported formats are listed below :
 
 Format   Read       Write      Remarks

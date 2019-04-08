@@ -52,6 +52,10 @@
 #   include "mapwidget.h"
 #endif // HAVE_MARBLE
 
+#ifdef HAVE_IMAGE_MAGICK
+#   include <Magick++.h>
+#endif
+
 // C ANSI includes
 
 #ifndef Q_OS_WIN
@@ -140,6 +144,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #else
     list.insert(i18nc(CONTEXT, "VKontakte support"),           SUPPORTED_NO);
 #endif // HAVE_VKONTAKTE
+
+#ifdef HAVE_IMAGE_MAGICK
+    list.insert(i18nc(CONTEXT, "ImageMagick codecs"),          QLatin1String(MagickLibVersionText));
+#else
+    list.insert(i18nc(CONTEXT, "ImageMagick codecs support"),  SUPPORTED_NO);
+#endif // HAVE_IMAGE_MAGICK
 
     QString tiffver = QLatin1String(TIFFLIB_VERSION_STR);
     tiffver         = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));
