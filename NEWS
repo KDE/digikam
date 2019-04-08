@@ -147,4 +147,5 @@ BUGFIXES:
 126 ==> 406227 - Picture without any tag are not listed with button "No Tags".
 127 ==> 401377 - Export to (Onedrive, Dropbox ...) crashes digikam (Segmentation Fault).
 128 ==> 406309 - Tags reappear after being merged when several merge processes overlap(?).
-129 ==> 
+129 ==> 387487 - Browsing through thumbnails quickly with right arrow key causes crash.
+130 ==> 
