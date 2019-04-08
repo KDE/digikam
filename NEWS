@@ -149,4 +149,7 @@ BUGFIXES:
 127 ==> 401377 - Export to (Onedrive, Dropbox ...) crashes digikam (Segmentation Fault).
 128 ==> 406309 - Tags reappear after being merged when several merge processes overlap(?).
 129 ==> 387487 - Browsing through thumbnails quickly with right arrow key causes crash.
-130 ==> 
+130 ==> 385726 - Add Support For Apple Live Photos.
+131 ==> 360806 - digiKam doesn't show Gimp 2.9 xcf images [patch].
+132 ==> 393408 - Support for extra image formats as HEIC, FITS, JPEG-XR [patch].
+133 ==> 
