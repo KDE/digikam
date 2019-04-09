@@ -28,9 +28,15 @@ ExternalProject_Add(ext_imagemagick
                                              --disable-docs
                                              --disable-largefile
                                              --disable-hdri
+                                             --disable-static
                                              --with-quantum-depth=8
                                              --with-magick-plus-plus
                                              --with-utilities=no
+                                             --with-heic
+                                             --with-flif
+                                             --with-jbig
+                                             --with-webp
+                                             --with-openexr
 
     UPDATE_COMMAND ""
     ALWAYS 0
