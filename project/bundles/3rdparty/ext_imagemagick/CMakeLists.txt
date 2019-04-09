@@ -16,12 +16,9 @@ ExternalProject_Add(ext_imagemagick
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_imagemagick}
                                              --without-freetype
                                              --without-fontconfig
-                                             --without-tiff
                                              --without-raw
-                                             --without-png
                                              --without-lqr
                                              --without-openjp2
-                                             --without-jpeg
                                              --without-threads
                                              --without-perl
                                              --without-x
