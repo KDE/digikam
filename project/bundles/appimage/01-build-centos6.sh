@@ -239,7 +239,6 @@ yum -y install libass-devel \
                xvidcore-devel \
                libwebp-devel \
                OpenEXR-devel \
-               libwmf-devel \
                jbigkit-devel \
                yasm
 
