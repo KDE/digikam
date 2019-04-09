@@ -91,7 +91,7 @@ QList<DPlugin*> DPluginLoader::allPlugins() const
 
 QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType type, QObject* const parent) const
 {
-    QList<DPluginAction*> list;
+    QMap<QString, DPluginAction*> list;
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -103,14 +103,14 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
             {
                 if (ac && (ac->actionType() == type))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
             }
         }
     }
 
     if (!list.isEmpty())
-        return list;
+        return list.values();
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -122,18 +122,18 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
             {
                 if (ac && (ac->actionType() == type))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
             }
         }
     }
 
-    return list;
+    return list.values();
 }
 
 QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategory cat, QObject* const parent) const
 {
-    QList<DPluginAction*> list;
+    QMap<QString, DPluginAction*> list;
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -145,14 +145,14 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
             {
                 if (ac && (ac->actionCategory() == cat))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
             }
         }
      }
 
     if (!list.isEmpty())
-        return list;
+        return list.values();
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -164,18 +164,18 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
             {
                 if (ac && (ac->actionCategory() == cat))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
             }
         }
      }
 
-     return list;
+     return list.values();
 }
 
 QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QObject* const parent) const
 {
-    QList<DPluginAction*> list;
+    QMap<QString, DPluginAction*> list;
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -187,7 +187,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
             {
                 foreach (DPluginAction* const ac, gene->actions(parent))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
 
                 break;
@@ -196,7 +196,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
     }
 
     if (!list.isEmpty())
-        return list;
+        return list.values();
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -208,7 +208,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
             {
                 foreach (DPluginAction* const ac, edit->actions(parent))
                 {
-                    list << ac;
+                    list.insert(d->cleanText(ac->text()), ac);
                 }
 
                 break;
@@ -216,7 +216,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
         }
     }
 
-    return list;
+    return list.values();
 }
 
 DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* const parent) const
