@@ -238,6 +238,8 @@ yum -y install libass-devel \
                x265-devel \
                xvidcore-devel \
                libwebp-devel \
+               OpenEXR-devel \
+               jbig2dec-devel \
                yasm
 
 #################################################################################################
