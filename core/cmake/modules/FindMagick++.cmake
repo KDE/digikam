@@ -305,3 +305,9 @@ mark_as_advanced(
   IMAGEMAGICK_MONTAGE_EXECUTABLE
   IMAGEMAGICK_COMPOSITE_EXECUTABLE
   )
+
+message(STATUS "ImageMagick_FOUND:                  ${ImageMagick_FOUND}"
+message(STATUS "ImageMagick_EXECUTABLE_DIR:         ${ImageMagick_EXECUTABLE_DIR}"
+message(STATUS "ImageMagick_<component>_FOUND:      ${ImageMagick_<component>_FOUND}"
+message(STATUS "ImageMagick_<component>_EXECUTABLE: ${ImageMagick_<component>_EXECUTABLE}"
+message(STATUS "ImageMagick_VERSION_STRING:         ${ImageMagick_VERSION_STRING}"
