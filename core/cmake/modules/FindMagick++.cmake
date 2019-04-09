@@ -274,7 +274,7 @@ endif()
 #---------------------------------------------------------------------
 # Standard Package Output
 #---------------------------------------------------------------------
-include(FindPackageHandleStandardArgs.cmake)
+include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(ImageMagick
                                   REQUIRED_VARS ${ImageMagick_REQUIRED_VARS}
                                   VERSION_VAR ImageMagick_VERSION_STRING
