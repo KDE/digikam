@@ -30,6 +30,7 @@ ExternalProject_Add(ext_imagemagick
                                              --disable-hdri
                                              --with-quantum-depth=8
                                              --with-magick-plus-plus
+                                             --with-utilities=no
 
     UPDATE_COMMAND ""
     ALWAYS 0
