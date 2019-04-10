@@ -2789,7 +2789,15 @@ void EditorWindow::registerExtraPluginsActions(QString& dom)
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_FILES_ACTIONS_ -->"),     dpl->pluginXmlSections(DPluginAction::EditorFile,      this));
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_COLORS_ACTIONS_ -->"),    dpl->pluginXmlSections(DPluginAction::EditorColors,    this));
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_ENHANCE_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::EditorEnhance,   this));
-    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_TRANSFORM_ACTIONS_ -->"), dpl->pluginXmlSections(DPluginAction::EditorTransform, this));
+
+    QString transformActions;
+    transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_rotateleft\" />\n"));
+    transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_rotateright\" />\n"));
+    transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_crop\" />\n"));
+    transformActions.append(QLatin1String("<Separator/>\n"));
+    transformActions.append(dpl->pluginXmlSections(DPluginAction::EditorTransform, this));
+
+    dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_TRANSFORM_ACTIONS_ -->"), transformActions);
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_DECORATE_ACTIONS_ -->"),  dpl->pluginXmlSections(DPluginAction::EditorDecorate,  this));
     dom.replace(QLatin1String("<!-- _DPLUGINS_EDITOR_FILTERS_ACTIONS_ -->"),   dpl->pluginXmlSections(DPluginAction::EditorFilters,   this));
 }
