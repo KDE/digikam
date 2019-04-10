@@ -111,6 +111,10 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     setupConnections();
 
+    // Disable all actions
+
+    toggleActions(false);
+
     // -- Read settings --------------------------------
 
     readSettings();
