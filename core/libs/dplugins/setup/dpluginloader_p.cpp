@@ -46,11 +46,6 @@
 namespace Digikam
 {
 
-static bool pluginNameLessThan(DPlugin* const a, DPlugin* const b)
-{
-    return a->name() < b->name();
-}
-
 DPluginLoader::Private::Private()
     : pluginsLoaded(false)
 {
@@ -197,10 +192,6 @@ void DPluginLoader::Private::loadPlugins()
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "No plugins loaded. Please check if the plugins were installed in the correct path,"
                                        << "or if any errors occurred while loading plugins.";
-    }
-    else
-    {
-        std::sort(allPlugins.begin(), allPlugins.end(), pluginNameLessThan);
     }
 
     pluginsLoaded = true;

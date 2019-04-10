@@ -100,6 +100,8 @@ public:
      * For debug purpose only.
      */
     QString toString() const;
+
+    static bool pluginActionLessThan(DPluginAction* const a, DPluginAction* const b);
 };
 
 } // namespace Digikam

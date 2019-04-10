@@ -110,7 +110,10 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
     }
 
     if (!list.isEmpty())
+    {
+        std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
         return list;
+    }
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -128,6 +131,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
         }
     }
 
+    std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
     return list;
 }
 
@@ -152,7 +156,10 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
      }
 
     if (!list.isEmpty())
+    {
+        std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
         return list;
+    }
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -170,6 +177,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
         }
      }
 
+     std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
      return list;
 }
 
@@ -196,7 +204,10 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
     }
 
     if (!list.isEmpty())
+    {
+        std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
         return list;
+    }
 
     foreach (DPlugin* const p, allPlugins())
     {
@@ -216,6 +227,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
         }
     }
 
+    std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
     return list;
 }
 

@@ -133,6 +133,7 @@ QList<DPluginAction*> DPluginGeneric::actions(QObject* const parent) const
         }
     }
 
+    std::sort(list.begin(), list.end(), DPluginAction::pluginActionLessThan);
     return list;
 }
 

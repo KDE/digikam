@@ -140,4 +140,14 @@ QString DPluginAction::pluginId() const
     return property("DPluginId").toString();
 }
 
+bool DPluginAction::pluginActionLessThan(DPluginAction* const a, DPluginAction* const b)
+{
+    QString textA(a->text());
+    QString textB(b->text());
+    textA.remove(QLatin1Char('&'));
+    textB.remove(QLatin1Char('&'));
+
+    return textA < textB;
+}
+
 } // namespace Digikam
