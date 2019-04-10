@@ -51,8 +51,6 @@ public:
                              QPluginLoader* const loader);
     void        loadPlugins();
 
-    QString     cleanText(const QString& text) const;
-
 public:
 
     bool                  pluginsLoaded;
