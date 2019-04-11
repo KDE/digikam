@@ -178,7 +178,9 @@ void TagCompleter::update(const QString& fragment)
 
                 if (items.count() < d->factory.indexOfLastRecentAction())
                 {
-                    item->setIcon(QIcon::fromTheme(QLatin1String("appointment-new")));
+                    QFont font = item->font();
+                    font.setBold(true);
+                    item->setFont(font);
                 }
             }
             else
