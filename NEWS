@@ -155,4 +155,5 @@ BUGFIXES:
 133 ==> 406356 - Crop to Selection not visible in Sidebar and Menubar.
 134 ==> 406418 - Tag icon don't show after using and show a clock icon for used tag.
 135 ==> 406440 - "Operation in all group items" even when only one item is selected.
-136 ==> 
+136 ==> 406445 - Reread Metadata From File failure.
+137 ==> 
