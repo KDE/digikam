@@ -44,7 +44,7 @@ bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::Operati
         return false;
     }
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (hasHiddenGroupedImages(info))
         {
@@ -64,7 +64,7 @@ ItemInfoList GroupingViewImplementation::resolveGrouping(const ItemInfoList& inf
 {
     ItemInfoList outInfos;
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         outInfos << info;
 
@@ -81,7 +81,7 @@ ItemInfoList GroupingViewImplementation::getHiddenGroupedInfos(const ItemInfoLis
 {
     ItemInfoList outInfos;
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         if (hasHiddenGroupedImages(info))
         {

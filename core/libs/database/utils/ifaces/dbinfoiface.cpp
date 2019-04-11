@@ -267,7 +267,7 @@ public:
         }
 
         withGroupedIsSet = true;
-        withGrouped      = DigikamApp::instance()->view()->allNeedGroupResolving(operationType);
+        withGrouped      = DigikamApp::instance()->view()->selectedNeedGroupResolving(operationType);
 
         return withGrouped;
     }

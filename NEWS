@@ -154,4 +154,5 @@ BUGFIXES:
 132 ==> 393408 - Support for extra image formats as HEIC, FITS, JPEG-XR [patch].
 133 ==> 406356 - Crop to Selection not visible in Sidebar and Menubar.
 134 ==> 406418 - Tag icon don't show after using and show a clock icon for used tag.
-135 ==> 
+135 ==> 406440 - "Operation in all group items" even when only one item is selected.
+136 ==> 
