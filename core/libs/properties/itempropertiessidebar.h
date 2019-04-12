@@ -62,7 +62,7 @@ public:
                                     bool mimimizedDefault=false);
     ~ItemPropertiesSideBar();
 
-    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
+    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = nullptr);
 
 Q_SIGNALS:
 

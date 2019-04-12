@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT ModelCompleter : public QCompleter
 
 public:
 
-    explicit ModelCompleter(QObject* const parent = 0);
+    explicit ModelCompleter(QObject* const parent = nullptr);
     ~ModelCompleter();
 
     /**

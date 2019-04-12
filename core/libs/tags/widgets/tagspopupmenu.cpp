@@ -112,7 +112,7 @@ TagToggleMenuWidget::TagToggleMenuWidget(QMenu* const parent, TagToggleAction* c
 {
     m_menu   = parent;
     m_action = action;
-    setMouseTracking(style()->styleHint(QStyle::SH_Menu_MouseTracking, 0, this));
+    setMouseTracking(style()->styleHint(QStyle::SH_Menu_MouseTracking, nullptr, this));
 }
 
 QSize TagToggleMenuWidget::sizeHint() const
@@ -124,7 +124,7 @@ QSize TagToggleMenuWidget::sizeHint() const
     // get the individual sizes
     QSize menuSize   = menuItemSize(&opt);
     QRect checkRect  = checkIndicatorSize(&opt);
-    const int margin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this) + 1;
+    const int margin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr, this) + 1;
 
     // return widget size
     int width        = margin + checkRect.width() + menuSize.width() + margin;
@@ -143,8 +143,8 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     initViewStyleOption(&viewOpt);
 
     // get a suitable margin
-    const int margin      = style()->pixelMetric(QStyle::PM_FocusFrameHMargin,     0, this);
-    const int frameMargin = style()->pixelMetric(QStyle::PM_MenuDesktopFrameWidth, 0, this);
+    const int margin      = style()->pixelMetric(QStyle::PM_FocusFrameHMargin,     nullptr, this);
+    const int frameMargin = style()->pixelMetric(QStyle::PM_MenuDesktopFrameWidth, nullptr, this);
 
     // create painter
     QPainter p(this);
@@ -259,7 +259,7 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
     }
 
     // seems QMenu does it like this
-    option->maxIconWidth = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    option->maxIconWidth = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
     option->rect         = rect();
     option->menuRect     = parentWidget()->rect();
 }
@@ -344,7 +344,7 @@ QWidget* TagToggleAction::createWidget(QWidget* parent)
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -380,8 +380,8 @@ public:
 
     explicit Private()
     {
-        addTagActions    = 0;
-        toggleTagActions = 0;
+        addTagActions    = nullptr;
+        toggleTagActions = nullptr;
         mode             = ASSIGN;
     }
 
@@ -626,7 +626,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu* menu, TAlbum* album)
         QString t = a->title();
         t.replace(QLatin1Char('&'), QLatin1String("&&"));
 
-        TagToggleAction* action = 0;
+        TagToggleAction* action = nullptr;
 
         if (d->mode == ASSIGN)
         {
@@ -667,7 +667,7 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (!album)
     {
-        return 0;
+        return nullptr;
     }
 
     QMenu* const popup = new QMenu(this);

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ItemViewDelegate : public DItemDelegate, public ItemDelegat
 
 public:
 
-    explicit ItemViewDelegate(QObject* const parent = 0);
+    explicit ItemViewDelegate(QObject* const parent = nullptr);
     ~ItemViewDelegate();
 
     ThumbnailSize thumbnailSize() const;
@@ -62,8 +62,8 @@ public:
     virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* tooltipRect = 0)       const;
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* activationRect = 0) const;
+    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* tooltipRect = nullptr)       const;
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* activationRect = nullptr) const;
 
     /** Returns the area where the pixmap is drawn,
      *  or null if not supported.

@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT DHBox : public QFrame
 
 public:
 
-    explicit DHBox(QWidget* const parent=0);
+    explicit DHBox(QWidget* const parent=nullptr);
     virtual ~DHBox();
 
     void setSpacing(int space);
@@ -76,7 +76,7 @@ class DIGIKAM_EXPORT DVBox : public DHBox
 
   public:
 
-    explicit DVBox(QWidget* const parent=0);
+    explicit DVBox(QWidget* const parent=nullptr);
     virtual ~DVBox();
 };
 

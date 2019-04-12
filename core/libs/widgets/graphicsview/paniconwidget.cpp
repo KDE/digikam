@@ -87,9 +87,9 @@ class Q_DECL_HIDDEN PanIconFrame::Private::OutsideClickCatcher
 {
 public:
 
-    explicit OutsideClickCatcher(QObject* const parent = 0)
+    explicit OutsideClickCatcher(QObject* const parent = nullptr)
         : QObject(parent),
-          m_popup(0)
+          m_popup(nullptr)
     {
     }
 
@@ -129,7 +129,7 @@ public:
 PanIconFrame::Private::Private(PanIconFrame* const qq)
     : q(qq),
       result(0), // rejected
-      main(0),
+      main(nullptr),
       outsideClickCatcher(new OutsideClickCatcher)
 {
     outsideClickCatcher->setPopupFrame(q);
@@ -267,7 +267,7 @@ public:
         xpos(0),
         ypos(0),
         zoomFactor(1.0),
-        timer(0)
+        timer(nullptr)
     {
     }
 

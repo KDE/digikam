@@ -44,7 +44,7 @@ class AlbumSelectTabs : public QTabWidget
 
 public:
 
-    explicit AlbumSelectTabs(const QString& name, QWidget* const parent = 0);
+    explicit AlbumSelectTabs(const QString& name, QWidget* const parent = nullptr);
     ~AlbumSelectTabs();
 
     AlbumList selectedAlbums() const;

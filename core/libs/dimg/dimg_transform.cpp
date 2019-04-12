@@ -86,7 +86,7 @@ void DImg::rotate(ANGLE angle)
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
                 ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
-                ullong* to      = 0;
+                ullong* to      = nullptr;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -108,7 +108,7 @@ void DImg::rotate(ANGLE angle)
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
                 uint* from    = reinterpret_cast<uint*>(m_priv->data);
-                uint* to      = 0;
+                uint* to      = nullptr;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -143,8 +143,8 @@ void DImg::rotate(ANGLE angle)
 
             if (sixteenBit())
             {
-                ullong* line1 = 0;
-                ullong* line2 = 0;
+                ullong* line1 = nullptr;
+                ullong* line2 = nullptr;
                 ullong* data  = reinterpret_cast<ullong*>(bits());
                 ullong  tmp;
 
@@ -174,8 +174,8 @@ void DImg::rotate(ANGLE angle)
             }
             else
             {
-                uint* line1 = 0;
-                uint* line2 = 0;
+                uint* line1 = nullptr;
+                uint* line2 = nullptr;
                 uint* data  = reinterpret_cast<uint*>(bits());
                 uint  tmp;
 
@@ -216,7 +216,7 @@ void DImg::rotate(ANGLE angle)
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
                 ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
-                ullong* to      = 0;
+                ullong* to      = nullptr;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -238,7 +238,7 @@ void DImg::rotate(ANGLE angle)
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
                 uint* from    = reinterpret_cast<uint*>(m_priv->data);
-                uint* to      = 0;
+                uint* to      = nullptr;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -296,8 +296,8 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* beg  = 0;
-                unsigned short* end  = 0;
+                unsigned short* beg  = nullptr;
+                unsigned short* end  = nullptr;
                 unsigned short* data = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
@@ -322,8 +322,8 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar* beg  = 0;
-                uchar* end  = 0;
+                uchar* beg  = nullptr;
+                uchar* end  = nullptr;
                 uchar* data = bits();
 
                 // can be done inplace
@@ -357,8 +357,8 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* line1 = 0;
-                unsigned short* line2 = 0;
+                unsigned short* line1 = nullptr;
+                unsigned short* line2 = nullptr;
                 unsigned short* data  = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
@@ -383,8 +383,8 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar* line1 = 0;
-                uchar* line2 = 0;
+                uchar* line1 = nullptr;
+                uchar* line2 = nullptr;
                 uchar* data  = bits();
 
                 // can be done inplace

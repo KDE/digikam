@@ -45,8 +45,8 @@ public:
 
     explicit Private()
     {
-        altLangStrEdit = 0;
-        authorEdit     = 0;
+        altLangStrEdit = nullptr;
+        authorEdit     = nullptr;
     }
 
     QLineEdit*      authorEdit;

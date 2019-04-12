@@ -62,8 +62,8 @@ public:
       : setError(false),
         currentVersion(0),
         currentRequiredVersion(0),
-        dbAccess(0),
-        observer(0)
+        dbAccess(nullptr),
+        observer(nullptr)
     {
     }
 

@@ -73,10 +73,10 @@ public:
         hasPrevious(false),
         hasNext(false),
         hasItemInfoOwnership(false),
-        desceditTab(0)
+        desceditTab(nullptr)
     {
-        desceditTab        = 0;
-        versionsHistoryTab = 0;
+        desceditTab        = nullptr;
+        versionsHistoryTab = nullptr;
         dirtyDesceditTab   = false;
     }
 
@@ -171,7 +171,7 @@ void ItemPropertiesSideBarDB::itemChanged(const ItemInfoList& infos)
 
     m_currentURL = infos.first().fileUrl();
 
-    itemChanged(infos, QRect(), 0, DImageHistory());
+    itemChanged(infos, QRect(), nullptr, DImageHistory());
 }
 
 void ItemPropertiesSideBarDB::itemChanged(const ItemInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history)

@@ -39,7 +39,7 @@ namespace Digikam
 {
 
 FileActionProgress::FileActionProgress(const QString& name)
-    : ProgressItem(0, name, QString(), QString(), true, true)
+    : ProgressItem(nullptr, name, QString(), QString(), true, true)
 {
     ProgressManager::addProgressItem(this);
     setLabel(i18n("Process Items"));

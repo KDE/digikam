@@ -112,7 +112,7 @@ public:
 
 public:
 
-    explicit LoadSaveThread(QObject* const parent = 0);
+    explicit LoadSaveThread(QObject* const parent = nullptr);
     /**
      * Destructor:
      * The thread will execute all pending tasks and wait for this upon destruction

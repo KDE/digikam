@@ -187,7 +187,7 @@ void AlbumManager::tagItemsCount()
     if (d->tagListJob)
     {
         d->tagListJob->cancel();
-        d->tagListJob = 0;
+        d->tagListJob = nullptr;
     }
 
     TagsDBJobInfo jInfo;
@@ -245,7 +245,7 @@ TAlbum* AlbumManager::findTAlbum(int id) const
 {
     if (!d->rootTAlbum)
     {
-        return 0;
+        return nullptr;
     }
 
     int gid = d->rootTAlbum->globalID() + id;
@@ -271,7 +271,7 @@ TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
         ++it;
     }
 
-    return 0;
+    return nullptr;
 
 }
 
@@ -281,27 +281,27 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     if (!parent)
     {
         errMsg = i18n("No parent found for tag");
-        return 0;
+        return nullptr;
     }
 
     // sanity checks
     if (name.isEmpty())
     {
         errMsg = i18n("Tag name cannot be empty");
-        return 0;
+        return nullptr;
     }
 
     if (name.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Tag name cannot contain '/'");
-        return 0;
+        return nullptr;
     }
 
     // first check if we have another album with the same name
     if (hasDirectChildAlbumWithTitle(parent, name))
     {
         errMsg = i18n("Tag name already exists");
-        return 0;
+        return nullptr;
     }
 
     ChangingDB changing(d);
@@ -310,7 +310,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
     if (id == -1)
     {
         errMsg = i18n("Failed to add tag to database");
-        return 0;
+        return nullptr;
     }
 
     TAlbum* const album = new TAlbum(name, id, false);
@@ -374,10 +374,10 @@ bool AlbumManager::deleteTAlbum(TAlbum* album, QString& errMsg, bool askUser)
         ChangingDB changing(d);
         access.db()->deleteTag(album->id());
 
-        Album* subAlbum = 0;
+        Album* subAlbum = nullptr;
         AlbumIterator it(album);
 
-        while ((subAlbum = it.current()) != 0)
+        while ((subAlbum = it.current()) != nullptr)
         {
             access.db()->deleteTag(subAlbum->id());
             ++it;
@@ -504,7 +504,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         album->parent()->removeChild(album);
     }
 
-    album->setParent(0);
+    album->setParent(nullptr);
     emit signalAlbumDeleted(album);
     emit signalAlbumHasBeenDeleted(reinterpret_cast<quintptr>(album));
 
@@ -516,7 +516,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     emit signalAlbumMoved(album);
     emit signalAlbumsUpdated(Album::TAG);
-    d->currentlyMovingAlbum = 0;
+    d->currentlyMovingAlbum = nullptr;
 
     TAlbum* personParentTag = findTAlbum(FaceTags::personParentTag());
 
@@ -822,7 +822,7 @@ void AlbumManager::insertTAlbum(TAlbum* album, TAlbum* parent)
         return;
     }
 
-    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : 0);
+    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : nullptr);
 
     if (parent)
     {
@@ -843,7 +843,7 @@ void AlbumManager::removeTAlbum(TAlbum* album)
 
     // remove all children of this album
     Album* child        = album->firstChild();
-    TAlbum* toBeRemoved = 0;
+    TAlbum* toBeRemoved = nullptr;
 
     while (child)
     {
@@ -853,7 +853,7 @@ void AlbumManager::removeTAlbum(TAlbum* album)
         if (toBeRemoved)
         {
             removeTAlbum(toBeRemoved);
-            toBeRemoved = 0;
+            toBeRemoved = nullptr;
         }
 
         child = next;
@@ -892,10 +892,10 @@ void AlbumManager::slotTagsJobResult()
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
-                             0, i18n("digiKam"));
+                             nullptr, i18n("digiKam"));
     }
 
-    d->tagListJob = 0;
+    d->tagListJob = nullptr;
 }
 
 void AlbumManager::slotTagsJobData(const QMap<int, int>& tagsStatMap)

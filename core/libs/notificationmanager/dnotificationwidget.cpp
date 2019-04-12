@@ -145,7 +145,7 @@ void DNotificationWidget::setMessageType(DNotificationWidget::MessageType type)
         .arg(border.name())
         // DefaultFrameWidth returns the size of the external margin + border width.
         //  We know our border is 1px, so we subtract this from the frame normal QStyle FrameWidth to get our margin.
-        .arg(style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this) - 1)
+        .arg(style()->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, this) - 1)
         .arg(fg.name())
     );
 }
@@ -249,7 +249,7 @@ void DNotificationWidget::removeAction(QAction* action)
 
 void DNotificationWidget::animatedShow()
 {
-    if (!style()->styleHint(QStyle::SH_Widget_Animate, 0, this))
+    if (!style()->styleHint(QStyle::SH_Widget_Animate, nullptr, this))
     {
         show();
         emit showAnimationFinished();
@@ -276,7 +276,7 @@ void DNotificationWidget::animatedShow()
 
 void DNotificationWidget::animatedHide()
 {
-    if (!style()->styleHint(QStyle::SH_Widget_Animate, 0, this))
+    if (!style()->styleHint(QStyle::SH_Widget_Animate, nullptr, this))
     {
         hide();
         emit hideAnimationFinished();

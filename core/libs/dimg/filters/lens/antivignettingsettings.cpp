@@ -56,14 +56,14 @@ class Q_DECL_HIDDEN AntiVignettingSettings::Private
 public:
 
     explicit Private()
-      : addVignettingCheck(0),
-        maskPreviewLabel(0),
-        densityInput(0),
-        powerInput(0),
-        innerRadiusInput(0),
-        outerRadiusInput(0),
-        xOffsetInput(0),
-        yOffsetInput(0)
+      : addVignettingCheck(nullptr),
+        maskPreviewLabel(nullptr),
+        densityInput(nullptr),
+        powerInput(nullptr),
+        innerRadiusInput(nullptr),
+        outerRadiusInput(nullptr),
+        xOffsetInput(nullptr),
+        yOffsetInput(nullptr)
     {}
 
     static const QString  configAddVignettingAdjustmentEntry;
@@ -311,7 +311,7 @@ void AntiVignettingSettings::slotSettingsChanged()
     // Compute preview mask.
     DImg preview(120, 120, false);
     memset(preview.bits(), 255, preview.numBytes());
-    AntiVignettingFilter maskPreview(&preview, 0, settings());
+    AntiVignettingFilter maskPreview(&preview, nullptr, settings());
     maskPreview.startFilterDirectly();
     QPixmap pix = maskPreview.getTargetImage().convertToPixmap();
     QPainter pt(&pix);

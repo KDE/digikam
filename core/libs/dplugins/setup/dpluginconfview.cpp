@@ -163,7 +163,7 @@ DPlugin* DPluginConfView::plugin(QTreeWidgetItem* const item) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void DPluginConfView::apply()

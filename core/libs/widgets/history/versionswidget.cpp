@@ -62,14 +62,14 @@ class Q_DECL_HIDDEN VersionsWidget::Private
 public:
 
     explicit Private()
-        : view(0),
-          model(0),
-          delegate(0),
-          showHideOverlay(0),
-          viewButtonGroup(0),
-          listModeButton(0),
-          treeModeButton(0),
-          combinedModeButton(0)
+        : view(nullptr),
+          model(nullptr),
+          delegate(nullptr),
+          showHideOverlay(nullptr),
+          viewButtonGroup(nullptr),
+          listModeButton(nullptr),
+          treeModeButton(nullptr),
+          combinedModeButton(nullptr)
     {
     }
 

@@ -157,12 +157,12 @@ public:
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
     QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
-            double maximumPercentage, DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None, HaarProgressObserver* const observer = 0);
+            double maximumPercentage, DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None, HaarProgressObserver* const observer = nullptr);
 
     /** Calls findDuplicates with all images in the given album ids
      */
     QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-            double maximumPercentage, HaarProgressObserver* const observer = 0);
+            double maximumPercentage, HaarProgressObserver* const observer = nullptr);
 
     /** Calls findDuplicates with all images in the given album and tag ids
      */
@@ -172,7 +172,7 @@ public:
             double requiredPercentage,
             double maximumPercentage,
             DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None,
-            HaarProgressObserver* const observer = 0);
+            HaarProgressObserver* const observer = nullptr);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
@@ -180,7 +180,7 @@ public:
     void rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan, AlbumTagRelation relation,
                                  double requiredPercentage, double maximumPercentage,
                                  DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None,
-                                 HaarProgressObserver* const observer = 0);
+                                 HaarProgressObserver* const observer = nullptr);
 
     /** This method rebuilds the given SAlbums by searching duplicates and replacing the SAlbums by the updated versions.
      *  @param imageIds The set of images to scan for duplicates.
@@ -190,7 +190,7 @@ public:
      */
     void rebuildDuplicatesAlbums(const QList<qlonglong>& imageIds, double requiredPercentage, double maximumPercentage,
                                  DuplicatesSearchRestrictions searchResultRestriction = DuplicatesSearchRestrictions::None,
-                                 HaarProgressObserver* const observer = 0);
+                                 HaarProgressObserver* const observer = nullptr);
 
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.

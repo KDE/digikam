@@ -87,10 +87,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 {
     png_uint_32  w32, h32;
     int          width, height;
-    FILE*        f          = 0;
+    FILE*        f          = nullptr;
     int          bit_depth, color_type, interlace_type;
-    png_structp  png_ptr    = NULL;
-    png_infop    info_ptr   = NULL;
+    png_structp  png_ptr    = nullptr;
+    png_infop    info_ptr   = nullptr;
 
     readMetadata(filePath, DImg::PNG);
 
@@ -129,7 +129,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Initialize the internal structures
 
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
     if (!png_ptr)
     {
@@ -144,7 +144,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     if (!info_ptr)
     {
         qCWarning(DIGIKAM_DIMG_LOG_PNG) << "Cannot reading PNG image file structure.";
-        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        png_destroy_read_struct(&png_ptr, nullptr, nullptr);
         fclose(f);
         loadingFailed();
         return false;
@@ -160,9 +160,9 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     public:
 
         CleanupData()
-          : data(0),
-            lines(0),
-            f(0)
+          : data(nullptr),
+            lines(nullptr),
+            f(nullptr)
         {
         }
 
@@ -194,7 +194,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         void takeData()
         {
-            data = 0;
+            data = nullptr;
         }
 
         void freeLines()
@@ -204,7 +204,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 free(lines);
             }
 
-            lines = 0;
+            lines = nullptr;
         }
 
         uchar*  data;
@@ -222,7 +222,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 #endif
     {
         qCWarning(DIGIKAM_DIMG_LOG_PNG) << "Internal libPNG error during reading file. Process aborted!";
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
         delete cleanupData;
         loadingFailed();
         return false;
@@ -241,7 +241,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)(&w32),
                  (png_uint_32*)(&h32), &bit_depth, &color_type,
-                 &interlace_type, NULL, NULL);
+                 &interlace_type, nullptr, nullptr);
 
     width  = (int)w32;
     height = (int)h32;
@@ -277,7 +277,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             break;
     }
 
-    uchar* data  = 0;
+    uchar* data  = nullptr;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -424,7 +424,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         cleanupData->setData(data);
 
-        uchar** lines = 0;
+        uchar** lines = nullptr;
         lines         = (uchar**)malloc(height * sizeof(uchar*));
         cleanupData->setLines(lines);
 
@@ -432,7 +432,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         {
             qCDebug(DIGIKAM_DIMG_LOG_PNG) << "Cannot allocate memory to load PNG image data.";
             png_read_end(png_ptr, info_ptr);
-            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
             delete cleanupData;
             loadingFailed();
             return false;
@@ -468,7 +468,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
                     if (!observer->continueQuery(m_image))
                     {
-                        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+                        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
                         delete cleanupData;
                         loadingFailed();
                         return false;
@@ -478,7 +478,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     observer->progressInfo(m_image, 0.1 + (0.7 * (((float)y) / ((float)height))));
                 }
 
-                png_read_rows(png_ptr, lines + y, NULL, 1);
+                png_read_rows(png_ptr, lines + y, nullptr, 1);
             }
         }
 
@@ -520,13 +520,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     if (m_loadFlags & LoadICCData)
     {
         png_charp   profile_name;
-        iCCP_data   profile_data = NULL;
+        iCCP_data   profile_data = nullptr;
         png_uint_32 profile_size;
         int         compression_type;
 
         png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &profile_size);
 
-        if (profile_data != NULL)
+        if (profile_data != nullptr)
         {
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
@@ -543,8 +543,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Get embedded text data.
 
-    png_text* text_ptr = 0;
-    int num_comments   = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    png_text* text_ptr = nullptr;
+    int num_comments   = png_get_text(png_ptr, info_ptr, &text_ptr, nullptr);
 
     /*
     Standard Embedded text includes in PNG :
@@ -589,7 +589,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         png_read_end(png_ptr, info_ptr);
     }
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
     cleanupData->takeData();
     delete cleanupData;
 
@@ -611,11 +611,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE*          f           = 0;
+    FILE*          f           = nullptr;
     png_structp    png_ptr;
     png_infop      info_ptr;
-    uchar*         ptr         = 0;
-    uchar*         data        = 0;
+    uchar*         ptr         = nullptr;
+    uchar*         data        = nullptr;
     uint           x, y, j;
     png_bytep      row_ptr;
     png_color_8    sig_bit;
@@ -636,7 +636,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Initialize the internal structures
 
-    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
     if (!png_ptr)
     {
@@ -647,10 +647,10 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     info_ptr = png_create_info_struct(png_ptr);
 
-    if (info_ptr == NULL)
+    if (info_ptr == nullptr)
     {
         qCWarning(DIGIKAM_DIMG_LOG_PNG) << "Cannot create PNG image file structure.";
-        png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+        png_destroy_write_struct(&png_ptr, (png_infopp) nullptr);
         fclose(f);
         return false;
     }
@@ -665,8 +665,8 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     public:
 
         CleanupData()
-          : data(0),
-            f(0)
+          : data(nullptr),
+            f(nullptr)
         {
         }
 

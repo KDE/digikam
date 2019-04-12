@@ -77,28 +77,28 @@ public:
 
     explicit Private()
     {
-        mysqlCmdBox            = 0;
-        dbType                 = 0;
-        dbPathLabel            = 0;
-        expertSettings         = 0;
-        dbNoticeBox            = 0;
-        sqlInit                = 0;
-        dbNameCore             = 0;
-        dbNameThumbs           = 0;
-        dbNameFace             = 0;
-        dbNameSimilarity       = 0;
-        hostName               = 0;
-        connectOpts            = 0;
-        userName               = 0;
-        password               = 0;
-        hostPort               = 0;
-        dbPathEdit             = 0;
-        dbBinariesWidget       = 0;
-        tab                    = 0;
-        dbDetailsBox           = 0;
-        ignoreDirectoriesBox   = 0;
-        ignoreDirectoriesEdit  = 0;
-        ignoreDirectoriesLabel = 0;
+        mysqlCmdBox            = nullptr;
+        dbType                 = nullptr;
+        dbPathLabel            = nullptr;
+        expertSettings         = nullptr;
+        dbNoticeBox            = nullptr;
+        sqlInit                = nullptr;
+        dbNameCore             = nullptr;
+        dbNameThumbs           = nullptr;
+        dbNameFace             = nullptr;
+        dbNameSimilarity       = nullptr;
+        hostName               = nullptr;
+        connectOpts            = nullptr;
+        userName               = nullptr;
+        password               = nullptr;
+        hostPort               = nullptr;
+        dbPathEdit             = nullptr;
+        dbBinariesWidget       = nullptr;
+        tab                    = nullptr;
+        dbDetailsBox           = nullptr;
+        ignoreDirectoriesBox   = nullptr;
+        ignoreDirectoriesEdit  = nullptr;
+        ignoreDirectoriesLabel = nullptr;
     }
 
     DVBox*             mysqlCmdBox;

@@ -128,8 +128,8 @@ public:
 
 public:
 
-    explicit DItemsListView(DItemsList* const parent = 0);
-    explicit DItemsListView(int iconSize, DItemsList* const parent = 0);
+    explicit DItemsListView(DItemsList* const parent = nullptr);
+    explicit DItemsListView(int iconSize, DItemsList* const parent = nullptr);
     ~DItemsListView();
 
     void setColumnLabel(ColumnType column, const QString& label);
@@ -180,7 +180,7 @@ class DIGIKAM_EXPORT CtrlButton : public QPushButton
 
 public:
 
-    explicit CtrlButton(const QIcon& icon, QWidget* parent = 0);
+    explicit CtrlButton(const QIcon& icon, QWidget* parent = nullptr);
     ~CtrlButton();
 };
 

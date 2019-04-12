@@ -64,13 +64,13 @@ DBinaryIface::DBinaryIface(const QString& binaryName,
       m_version(QLatin1String("")),
       m_pathDir(QLatin1String("")),
       m_description(desc),
-      m_pathWidget(0),
-      m_binaryLabel(0),
-      m_versionLabel(0),
-      m_pathButton(0),
-      m_downloadButton(0),
-      m_lineEdit(0),
-      m_statusIcon(0)
+      m_pathWidget(nullptr),
+      m_binaryLabel(nullptr),
+      m_versionLabel(nullptr),
+      m_pathButton(nullptr),
+      m_downloadButton(nullptr),
+      m_lineEdit(nullptr),
+      m_statusIcon(nullptr)
 {
 }
 
@@ -97,13 +97,13 @@ DBinaryIface::DBinaryIface(const QString& binaryName,
       m_version(QLatin1String("")),
       m_pathDir(QLatin1String("")),
       m_description(desc),
-      m_pathWidget(0),
-      m_binaryLabel(0),
-      m_versionLabel(0),
-      m_pathButton(0),
-      m_downloadButton(0),
-      m_lineEdit(0),
-      m_statusIcon(0)
+      m_pathWidget(nullptr),
+      m_binaryLabel(nullptr),
+      m_versionLabel(nullptr),
+      m_pathButton(nullptr),
+      m_downloadButton(nullptr),
+      m_lineEdit(nullptr),
+      m_statusIcon(nullptr)
 {
 }
 
@@ -207,7 +207,7 @@ void DBinaryIface::slotNavigateAndCheck()
 #endif
     }
 
-    QString f = DFileDialog::getOpenFileName(0, i18n("Navigate to %1", m_binaryBaseName),
+    QString f = DFileDialog::getOpenFileName(nullptr, i18n("Navigate to %1", m_binaryBaseName),
                                              start.toLocalFile(),
                                              m_binaryBaseName);
 

@@ -151,7 +151,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
 void SharpenFilter::convolveImageMultithreaded(const Args& prm)
 {
     double  maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
-    double* k        = 0;
+    double* k        = nullptr;
     double  red, green, blue, alpha;
     int     mx, my, sx, sy, mcx, mcy;
     DColor  color;

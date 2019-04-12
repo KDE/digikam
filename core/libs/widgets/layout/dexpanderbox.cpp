@@ -444,14 +444,14 @@ public:
 
     explicit Private()
     {
-        clickLabel      = 0;
-        containerWidget = 0;
-        pixmapLabel     = 0;
-        grid            = 0;
-        arrow           = 0;
-        line            = 0;
-        hbox            = 0;
-        checkBox        = 0;
+        clickLabel      = nullptr;
+        containerWidget = nullptr;
+        pixmapLabel     = nullptr;
+        grid            = nullptr;
+        arrow           = nullptr;
+        line            = nullptr;
+        hbox            = nullptr;
+        checkBox        = nullptr;
         expandByDefault = true;
     }
 
@@ -649,7 +649,7 @@ public:
     explicit Private(DExpanderBox* const box)
     {
         parent = box;
-        vbox   = 0;
+        vbox   = nullptr;
     }
 
     void createItem(int index, QWidget* const w, const QIcon& icon, const QString& txt,
@@ -855,7 +855,7 @@ bool DExpanderBox::isItemEnabled(int index) const
 
 DLabelExpander* DExpanderBox::widget(int index) const
 {
-    if (index > d->wList.count() || index < 0) return 0;
+    if (index > d->wList.count() || index < 0) return nullptr;
     return d->wList[index];
 }
 

@@ -474,12 +474,12 @@ class Q_DECL_HIDDEN DImgBuiltinThreadedFilter : public DImgThreadedFilter
 {
 public:
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* const orgImage, QObject* const parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, DImg* const orgImage, QObject* const parent = nullptr)
         : DImgThreadedFilter(orgImage, parent), m_filter(filter)
     {
     }
 
-    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject* const parent = 0)
+    explicit DImgBuiltinThreadedFilter(const DImgBuiltinFilter& filter, QObject* const parent = nullptr)
         : DImgThreadedFilter(parent), m_filter(filter)
     {
     }

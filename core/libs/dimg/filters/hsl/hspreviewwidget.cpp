@@ -98,9 +98,9 @@ void HSPreviewWidget::updatePixmap()
     int xSize = width() - 2 * d->xBorder;
     int ySize = height();
 
-    DImg   image(xSize, ySize, false, false, 0, false);
+    DImg   image(xSize, ySize, false, false, nullptr, false);
     QColor col;
-    uint*  p  = 0;
+    uint*  p  = nullptr;
 
     for (int s = ySize - 1 ; s >= 0 ; --s)
     {
@@ -121,7 +121,7 @@ void HSPreviewWidget::updatePixmap()
     settings.hue        = d->hue;
     settings.saturation = d->sat;
     settings.lightness  = 0.0;
-    HSLFilter hsl(&image, 0L, settings);
+    HSLFilter hsl(&image, nullptr, settings);
     hsl.startFilterDirectly();
     image.putImageData(hsl.getTargetImage().bits());
 

@@ -54,23 +54,23 @@ class Q_DECL_HIDDEN ImageQualitySettings::Private
 public:
 
     explicit Private()
-      : optionsView(0),
-        enableSorter(0),
-        useFullImage(0),
-        detectBlur(0),
-        detectNoise(0),
-        detectCompression(0),
-        detectExposure(0),
-        setRejected(0),
-        setPending(0),
-        setAccepted(0),
-        setSpeed(0),
-        setRejectedThreshold(0),
-        setPendingThreshold(0),
-        setAcceptedThreshold(0),
-        setBlurWeight(0),
-        setNoiseWeight(0),
-        setCompressionWeight(0)
+      : optionsView(nullptr),
+        enableSorter(nullptr),
+        useFullImage(nullptr),
+        detectBlur(nullptr),
+        detectNoise(nullptr),
+        detectCompression(nullptr),
+        detectExposure(nullptr),
+        setRejected(nullptr),
+        setPending(nullptr),
+        setAccepted(nullptr),
+        setSpeed(nullptr),
+        setRejectedThreshold(nullptr),
+        setPendingThreshold(nullptr),
+        setAcceptedThreshold(nullptr),
+        setBlurWeight(nullptr),
+        setNoiseWeight(nullptr),
+        setCompressionWeight(nullptr)
     {
     }
 

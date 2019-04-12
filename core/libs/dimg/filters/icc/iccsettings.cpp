@@ -236,7 +236,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
     int           format;
     unsigned long nitems;
     unsigned long bytes_after;
-    quint8*       str = 0;
+    quint8*       str = nullptr;
 
     static Atom icc_atom = XInternAtom(QX11Info::display(), atomName.toLatin1().constData(), True);
 

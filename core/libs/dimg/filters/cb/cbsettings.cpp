@@ -53,9 +53,9 @@ class Q_DECL_HIDDEN CBSettings::Private
 public:
 
     explicit Private()
-      : rInput(0),
-        gInput(0),
-        bInput(0)
+      : rInput(nullptr),
+        gInput(nullptr),
+        bInput(nullptr)
     {
     }
 

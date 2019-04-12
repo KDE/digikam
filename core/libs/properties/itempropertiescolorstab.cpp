@@ -78,23 +78,23 @@ public:
 public:
 
     explicit Private()
-      : minInterv(0),
-        maxInterv(0),
-        labelMeanValue(0),
-        labelPixelsValue(0),
-        labelStdDevValue(0),
-        labelCountValue(0),
-        labelMedianValue(0),
-        labelPercentileValue(0),
-        labelColorDepth(0),
-        labelAlphaChannel(0),
-        labelImageRegion(0),
-        iccProfileWidget(0),
-        imageLoaderThread(0),
-        histogramBox(0),
-        redHistogram(0),
-        greenHistogram(0),
-        blueHistogram(0)
+      : minInterv(nullptr),
+        maxInterv(nullptr),
+        labelMeanValue(nullptr),
+        labelPixelsValue(nullptr),
+        labelStdDevValue(nullptr),
+        labelCountValue(nullptr),
+        labelMedianValue(nullptr),
+        labelPercentileValue(nullptr),
+        labelColorDepth(nullptr),
+        labelAlphaChannel(nullptr),
+        labelImageRegion(nullptr),
+        iccProfileWidget(nullptr),
+        imageLoaderThread(nullptr),
+        histogramBox(nullptr),
+        redHistogram(nullptr),
+        greenHistogram(nullptr),
+        blueHistogram(nullptr)
     {
     }
 

@@ -57,7 +57,7 @@ QList<TAlbum*> ColorLabelFilter::getCheckedColorLabelTags()
 {
     QList<TAlbum*> list;
     int tagId   = 0;
-    TAlbum* tag = 0;
+    TAlbum* tag = nullptr;
 
     foreach(const ColorLabel& cl, colorLabels())
     {

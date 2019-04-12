@@ -100,15 +100,15 @@ class Q_DECL_HIDDEN DatabaseMigrationDialog::Private
 public:
 
     explicit Private()
-      : fromDatabaseSettingsWidget(0),
-        toDatabaseSettingsWidget(0),
-        migrateButton(0),
-        cancelButton(0),
-        overallStepTitle(0),
-        progressBar(0),
-        progressBarSmallStep(0),
-        buttons(0),
-        copyThread(0)
+      : fromDatabaseSettingsWidget(nullptr),
+        toDatabaseSettingsWidget(nullptr),
+        migrateButton(nullptr),
+        cancelButton(nullptr),
+        overallStepTitle(nullptr),
+        progressBar(nullptr),
+        progressBarSmallStep(nullptr),
+        buttons(nullptr),
+        copyThread(nullptr)
     {
     }
 

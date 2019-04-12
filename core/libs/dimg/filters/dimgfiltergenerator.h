@@ -104,7 +104,7 @@ public:
             return t;
         }
 
-        return 0;
+        return nullptr;
     }
 
     QString displayableName(const QString& filterIdentifier) override

@@ -52,9 +52,9 @@ public:
 
     explicit Private()
     {
-        label         = 0;
-        setupButton   = 0;
-        templateCombo = 0;
+        label         = nullptr;
+        setupButton   = nullptr;
+        templateCombo = nullptr;
     }
 
     QLabel*           label;

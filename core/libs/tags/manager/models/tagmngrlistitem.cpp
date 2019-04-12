@@ -42,7 +42,7 @@ public:
 
     explicit Private()
     {
-        parentItem = 0;
+        parentItem = nullptr;
     }
 
     QList<ListItem*> childItems;
@@ -197,7 +197,7 @@ ListItem* ListItem::containsItem(ListItem* const item) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool ListItem::equal(ListItem* const item) const

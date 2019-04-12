@@ -32,7 +32,7 @@ namespace Digikam
 Q_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
 // A friend-class shortcut to circumvent accessing this from within the destructor
-AlbumManager* AlbumManager::internalInstance = 0;
+AlbumManager* AlbumManager::internalInstance = nullptr;
 
 AlbumManager* AlbumManager::instance()
 {
@@ -112,7 +112,7 @@ AlbumManager::~AlbumManager()
     delete d->rootDAlbum;
     delete d->rootSAlbum;
 
-    internalInstance = 0;
+    internalInstance = nullptr;
     delete d;
 }
 
@@ -123,25 +123,25 @@ void AlbumManager::cleanUp()
     if (d->dateListJob)
     {
         d->dateListJob->cancel();
-        d->dateListJob = 0;
+        d->dateListJob = nullptr;
     }
 
     if (d->albumListJob)
     {
         d->albumListJob->cancel();
-        d->albumListJob = 0;
+        d->albumListJob = nullptr;
     }
 
     if (d->tagListJob)
     {
         d->tagListJob->cancel();
-        d->tagListJob = 0;
+        d->tagListJob = nullptr;
     }
 
     if (d->personListJob)
     {
         d->personListJob->cancel();
-        d->personListJob = 0;
+        d->personListJob = nullptr;
     }
 }
 
@@ -156,18 +156,18 @@ void AlbumManager::startScan()
 
     // create root albums
     d->rootPAlbum = new PAlbum(i18n("Albums"));
-    insertPAlbum(d->rootPAlbum, 0);
+    insertPAlbum(d->rootPAlbum, nullptr);
 
     d->rootTAlbum = new TAlbum(i18n("Tags"), 0, true);
-    insertTAlbum(d->rootTAlbum, 0);
+    insertTAlbum(d->rootTAlbum, nullptr);
 
     d->rootSAlbum = new SAlbum(i18n("Searches"), 0, true);
-    emit signalAlbumAboutToBeAdded(d->rootSAlbum, 0, 0);
+    emit signalAlbumAboutToBeAdded(d->rootSAlbum, nullptr, nullptr);
     d->allAlbumsIdHash[d->rootSAlbum->globalID()] = d->rootSAlbum;
     emit signalAlbumAdded(d->rootSAlbum);
 
     d->rootDAlbum = new DAlbum(QDate(), true);
-    emit signalAlbumAboutToBeAdded(d->rootDAlbum, 0, 0);
+    emit signalAlbumAboutToBeAdded(d->rootDAlbum, nullptr, nullptr);
     d->allAlbumsIdHash[d->rootDAlbum->globalID()] = d->rootDAlbum;
     emit signalAlbumAdded(d->rootDAlbum);
 

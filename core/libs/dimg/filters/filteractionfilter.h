@@ -41,7 +41,7 @@ public:
     /**
      * A meta-filter applying other filter according to a list of FilterActions
      */
-    explicit FilterActionFilter(QObject* const parent = 0);
+    explicit FilterActionFilter(QObject* const parent = nullptr);
     ~FilterActionFilter();
 
     /**

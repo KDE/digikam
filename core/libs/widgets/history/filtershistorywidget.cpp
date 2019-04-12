@@ -59,11 +59,11 @@ public:
 
     explicit Private()
     {
-        view        = 0;
-        model       = 0;
-        layout      = 0;
-        delegate    = 0;
-        headerLabel = 0;
+        view        = nullptr;
+        model       = nullptr;
+        layout      = nullptr;
+        delegate    = nullptr;
+        headerLabel = nullptr;
     }
 
     QTreeView*                       view;
@@ -80,7 +80,7 @@ FiltersHistoryWidget::FiltersHistoryWidget(QWidget* const parent)
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);
     d->delegate    = new ItemFiltersHistoryItemDelegate(this);
-    d->model       = new ItemFiltersHistoryModel(0, QUrl());
+    d->model       = new ItemFiltersHistoryModel(nullptr, QUrl());
     d->headerLabel = new QLabel(this);
 
     d->headerLabel->setText(i18n("Used filters"));
@@ -121,7 +121,7 @@ void FiltersHistoryWidget::showCustomContextMenu(const QPoint& position)
         QModelIndex index = d->view->indexAt(position);
 
         QString s(i18n("Remove filter"));
-        RemoveFilterAction* removeFilterAction = new RemoveFilterAction(s, index, 0);
+        RemoveFilterAction* removeFilterAction = new RemoveFilterAction(s, index, nullptr);
         removeFilterAction->setDisabled(true);
 
         if (!index.model()->parent(index).isValid())

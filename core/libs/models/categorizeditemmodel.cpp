@@ -106,7 +106,7 @@ public:
     void enumerate(QWidget* const w)
     {
         // recurse
-        enumerateActions(w, 0);
+        enumerateActions(w, nullptr);
     }
 
     void addTo(ActionItemModel* const model, ActionItemModel::MenuCategoryMode mode)
@@ -115,7 +115,7 @@ public:
 
         foreach(QAction* const a, actions)
         {
-            QAction* categoryAction = 0;
+            QAction* categoryAction = nullptr;
 
             if (mode & ActionItemModel::ToplevelMenuCategory)
             {
@@ -235,7 +235,7 @@ QAction* ActionItemModel::actionForIndex(const QModelIndex& index)
 QStandardItem* ActionItemModel::itemForAction(QAction* action) const
 {
     if (!action)
-        return 0;
+        return nullptr;
 
     for (int i = 0 ; i < rowCount() ; ++i)
     {
@@ -245,7 +245,7 @@ QStandardItem* ActionItemModel::itemForAction(QAction* action) const
             return it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QModelIndex ActionItemModel::indexForAction(QAction *action) const

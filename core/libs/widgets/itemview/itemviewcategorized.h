@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ItemViewCategorized : public DCategorizedView,
 
 public:
 
-    explicit ItemViewCategorized(QWidget* const parent = 0);
+    explicit ItemViewCategorized(QWidget* const parent = nullptr);
     ~ItemViewCategorized();
 
     DItemDelegate* delegate()                const;
@@ -170,7 +170,7 @@ protected:
      *  Returns true if a tooltip was shown.
      *  The help event is optional.
      */
-    virtual bool showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* e = 0);
+    virtual bool showToolTip(const QModelIndex& index, QStyleOptionViewItem& option, QHelpEvent* e = nullptr);
 
     DECLARE_VIEW_DRAG_DROP_METHODS(DCategorizedView)
 

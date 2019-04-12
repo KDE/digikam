@@ -51,13 +51,13 @@ class Q_DECL_HIDDEN ColorFXSettings::Private
 public:
 
     explicit Private()
-      : stack(0),
-        effectType(0),
-        levelInput(0),
-        iterationInput(0),
-        intensityInput(0),
-        iterationLabel(0),
-        correctionTools(0)
+      : stack(nullptr),
+        effectType(nullptr),
+        levelInput(nullptr),
+        iterationInput(nullptr),
+        intensityInput(nullptr),
+        iterationLabel(nullptr),
+        correctionTools(nullptr)
     {
     }
 

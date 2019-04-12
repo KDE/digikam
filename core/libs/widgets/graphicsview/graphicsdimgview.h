@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT GraphicsDImgView : public QGraphicsView
 
 public:
 
-    explicit GraphicsDImgView(QWidget* const parent = 0);
+    explicit GraphicsDImgView(QWidget* const parent = nullptr);
     virtual ~GraphicsDImgView();
 
     /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.

@@ -161,7 +161,7 @@ TemplateListItem* TemplateList::find(const QString& title)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

@@ -41,7 +41,7 @@ public:
 
     explicit Private()
     {
-        data      = 0;
+        data      = nullptr;
         paintTree = false;
     }
 
@@ -74,7 +74,7 @@ Qt::ItemFlags ItemVersionsModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;

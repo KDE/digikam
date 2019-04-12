@@ -82,7 +82,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     if (null)
     {
         // image is null - no data
-        m_priv->data = 0;
+        m_priv->data = nullptr;
     }
     else if (copyData)
     {
@@ -112,7 +112,7 @@ void DImg::putImageData(uchar* const data, bool copyData)
     if (!data)
     {
         delete [] m_priv->data;
-        m_priv->data = 0;
+        m_priv->data = nullptr;
         m_priv->null = true;
     }
     else if (copyData)
@@ -135,7 +135,7 @@ void DImg::resetMetaData()
 uchar* DImg::stripImageData()
 {
     uchar* const data  = m_priv->data;
-    m_priv->data       = 0;
+    m_priv->data       = nullptr;
     m_priv->null       = true;
     return data;
 }

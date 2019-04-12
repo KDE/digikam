@@ -53,7 +53,7 @@ ScanController::Advice ScanController::databaseInitialization()
     }
 
     delete d->progressDialog;
-    d->progressDialog = 0;
+    d->progressDialog = nullptr;
 
     return d->advice;
 }
@@ -72,7 +72,7 @@ void ScanController::completeCollectionScan(bool defer)
     completeCollectionScanCore(!CollectionScanner::databaseInitialScanDone(), defer);
 
     delete d->progressDialog;
-    d->progressDialog = 0;
+    d->progressDialog = nullptr;
 }
 
 void ScanController::completeCollectionScanInBackground(bool defer)

@@ -54,8 +54,8 @@ public:
       : thumbSize(ThumbnailSize::Large),
         sortColumn(2),
         sortOrder(Qt::DescendingOrder),
-        itemsLoadingThread(0),
-        thumbnailThread(0)
+        itemsLoadingThread(nullptr),
+        thumbnailThread(nullptr)
     {
     }
 

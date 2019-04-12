@@ -56,8 +56,8 @@ public:
     explicit Private()
     {
         defaultValue = 0;
-        resetButton  = 0;
-        input        = 0;
+        resetButton  = nullptr;
+        input        = nullptr;
     }
 
     int             defaultValue;
@@ -155,8 +155,8 @@ public:
     explicit Private()
     {
         defaultValue = 0.0;
-        resetButton  = 0;
-        input        = 0;
+        resetButton  = nullptr;
+        input        = nullptr;
     }
 
     double                defaultValue;

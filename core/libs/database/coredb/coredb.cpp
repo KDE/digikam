@@ -70,7 +70,7 @@ class Q_DECL_HIDDEN CoreDB::Private
 public:
 
     explicit Private()
-      : db(0),
+      : db(nullptr),
         uniqueHashVersion(-1)
     {
     }
@@ -207,7 +207,7 @@ int CoreDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const 
     QVariant id;
     d->db->execSql(QString::fromUtf8("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
                                      "VALUES(?, ?, 0, ?, ?);"),
-                   (int)type, label, identifier, specificPath, 0, &id);
+                   (int)type, label, identifier, specificPath, nullptr, &id);
 
     d->db->recordChangeset(AlbumRootChangeset(id.toInt(), AlbumRootChangeset::Added));
     return id.toInt();
@@ -497,7 +497,7 @@ int CoreDB::addAlbum(int albumRootId, const QString& relativePath,
 
     d->db->execSql(QString::fromUtf8("REPLACE INTO Albums (albumRoot, relativePath, date, caption, collection) "
                                      "VALUES(?, ?, ?, ?, ?);"),
-                   boundValues, 0, &id);
+                   boundValues, nullptr, &id);
 
     d->db->recordChangeset(AlbumChangeset(id.toInt(), AlbumChangeset::Added));
     return id.toInt();
@@ -616,7 +616,7 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
     parameters.insert(QLatin1String(":tagname"), name);
 
     if (BdEngineBackend::NoErrors != d->db->execDBAction(d->db->getDBAction(QLatin1String("InsertTag")),
-                                                                            parameters, 0 , &id))
+                                                                            parameters, nullptr , &id))
     {
         return -1;
     }
@@ -852,7 +852,7 @@ int CoreDB::addSearch(DatabaseSearch::Type type, const QString& name, const QStr
     QVariant id;
 
     if (!d->db->execSql(QString::fromUtf8("INSERT INTO Searches (type, name, query) VALUES(?, ?, ?);"),
-                        type, name, query, 0, &id))
+                        type, name, query, nullptr, &id))
     {
         return -1;
     }
@@ -2049,7 +2049,7 @@ int CoreDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseC
     d->db->execSql(QString::fromUtf8("REPLACE INTO ImageComments "
                            "( imageid, type, language, author, date, comment ) "
                            " VALUES (?,?,?,?,?,?);"),
-                   boundValues, 0, &id);
+                   boundValues, nullptr, &id);
 
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Set(DatabaseFields::ItemCommentsAll)));
     return id.toInt();
@@ -3153,7 +3153,7 @@ int CoreDB::addToDownloadHistory(const QString& identifier, const QString& name,
     d->db->execSql(QString::fromUtf8("REPLACE INTO DownloadHistory "
                                      "(identifier, filename, filesize, filedate) "
                                      " VALUES (?,?,?,?);"),
-                   identifier, name, fileSize, date, 0, &id);
+                   identifier, name, fileSize, date, nullptr, &id);
 
     return id.toInt();
 }
@@ -3760,7 +3760,7 @@ qlonglong CoreDB::addItem(int albumID, const QString& name,
     d->db->execSql(QString::fromUtf8("REPLACE INTO Images "
                                      "( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
                                      " VALUES (?,?,?,?,?,?,?);"),
-                   boundValues, 0, &id);
+                   boundValues, nullptr, &id);
 
     if (id.isNull())
     {
@@ -4728,7 +4728,7 @@ int CoreDB::copyItem(int srcAlbumID, const QString& srcName,
                                      "( album, name, status, category, modificationDate, fileSize, uniqueHash ) "
                                      " SELECT ?, ?, status, category, modificationDate, fileSize, uniqueHash "
                                      " FROM Images WHERE id=?;"),
-                   dstAlbumID, dstName, srcId, 0, &id);
+                   dstAlbumID, dstName, srcId, nullptr, &id);
 
     if (id.isNull())
     {

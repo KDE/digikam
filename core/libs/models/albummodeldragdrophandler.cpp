@@ -61,7 +61,7 @@ QStringList AlbumModelDragDropHandler::mimeTypes() const
 
 QMimeData* AlbumModelDragDropHandler::createMimeData(const QList<Album*>&)
 {
-    return 0;
+    return nullptr;
 }
 
 bool AlbumModelDragDropHandler::acceptsMimeData(const QMimeData* mime)

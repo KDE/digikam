@@ -37,18 +37,18 @@ namespace Digikam
 
 ItemFilterModel::ItemFilterModelPrivate::ItemFilterModelPrivate()
 {
-    imageModel            = 0;
+    imageModel            = nullptr;
     version               = 0;
     lastDiscardVersion    = 0;
     sentOut               = 0;
     sentOutForReAdd       = 0;
-    updateFilterTimer     = 0;
+    updateFilterTimer     = nullptr;
     needPrepare           = false;
     needPrepareComments   = false;
     needPrepareTags       = false;
     needPrepareGroups     = false;
-    preparer              = 0;
-    filterer              = 0;
+    preparer              = nullptr;
+    filterer              = nullptr;
     hasOneMatch           = false;
     hasOneMatchForText    = false;
 

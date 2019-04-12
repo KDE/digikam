@@ -72,22 +72,22 @@ public:
 
     explicit Private()
     {
-        tagPixmap        = 0;
-        searchBar        = 0;
-        splitter         = 0;
-        treeWindow       = 0;
-        mainToolbar      = 0;
-        rightToolBar     = 0;
-        organizeAction   = 0;
-        syncexportAction = 0;
-        tagProperties    = 0;
-        addAction        = 0;
-        delAction        = 0;
-        titleEdit        = 0;
-        listView         = 0;
-        tagPropWidget    = 0;
-        tagMngrView      = 0;
-        tagModel         = 0;
+        tagPixmap        = nullptr;
+        searchBar        = nullptr;
+        splitter         = nullptr;
+        treeWindow       = nullptr;
+        mainToolbar      = nullptr;
+        rightToolBar     = nullptr;
+        organizeAction   = nullptr;
+        syncexportAction = nullptr;
+        tagProperties    = nullptr;
+        addAction        = nullptr;
+        delAction        = nullptr;
+        titleEdit        = nullptr;
+        listView         = nullptr;
+        tagPropWidget    = nullptr;
+        tagMngrView      = nullptr;
+        tagModel         = nullptr;
         tagPropVisible   = false;
     }
 
@@ -117,7 +117,7 @@ public:
 };
 
 TagsManager::TagsManager()
-    : KMainWindow(0),
+    : KMainWindow(nullptr),
       StateSavingObject(this),
       d(new Private())
 {

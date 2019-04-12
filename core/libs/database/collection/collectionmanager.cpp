@@ -29,7 +29,7 @@
 namespace Digikam
 {
 
-CollectionManager* CollectionManager::m_instance = 0;
+CollectionManager* CollectionManager::m_instance = nullptr;
 
 CollectionManager* CollectionManager::instance()
 {
@@ -44,7 +44,7 @@ CollectionManager* CollectionManager::instance()
 void CollectionManager::cleanUp()
 {
     delete m_instance;
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 CollectionManager::CollectionManager()

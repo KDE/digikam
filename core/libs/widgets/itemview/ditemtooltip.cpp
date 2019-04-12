@@ -184,9 +184,9 @@ DItemToolTip::DItemToolTip(QWidget* const parent)
     setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
     ensurePolished();
-    const int fwidth = qMax(d->tipBorder, 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
+    const int fwidth = qMax(d->tipBorder, 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, nullptr, this));
     setContentsMargins(fwidth, fwidth, fwidth, fwidth);
-    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / 255.0);
+    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, nullptr, this) / 255.0);
     setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     setFrameStyle(QFrame::StyledPanel);

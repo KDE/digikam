@@ -74,15 +74,15 @@ public:
 
     explicit Private()
     {
-        albumSelectCB    = 0;
-        tagSelectCB      = 0;
-        albumClearButton = 0;
-        tagClearButton   = 0;
-        wholeAlbums      = 0;
-        wholeTags        = 0;
-        tabWidget        = 0;
-        albumWidget      = 0;
-        tagWidget        = 0;
+        albumSelectCB    = nullptr;
+        tagSelectCB      = nullptr;
+        albumClearButton = nullptr;
+        tagClearButton   = nullptr;
+        wholeAlbums      = nullptr;
+        wholeTags        = nullptr;
+        tabWidget        = nullptr;
+        albumWidget      = nullptr;
+        tagWidget        = nullptr;
         selectionMode    = All;
     }
 

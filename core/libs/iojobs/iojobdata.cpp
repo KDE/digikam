@@ -43,8 +43,8 @@ public:
     explicit Private()
       : operation(Unknown),
         overwrite(false),
-        srcAlbum(0),
-        destAlbum(0),
+        srcAlbum(nullptr),
+        destAlbum(nullptr),
         jobTime(QDateTime::currentDateTime())
     {
     }

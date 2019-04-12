@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT EqualizeFilter : public DImgThreadedFilter
 
 public:
 
-    explicit EqualizeFilter(QObject* const parent = 0);
-    EqualizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
+    explicit EqualizeFilter(QObject* const parent = nullptr);
+    EqualizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=nullptr);
     virtual ~EqualizeFilter();
 
     static QString          FilterIdentifier()

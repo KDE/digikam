@@ -78,7 +78,7 @@ public:
     virtual bool sixteenBit()    const = 0;
     virtual bool isReadOnly()    const = 0;
 
-    static QByteArray     uniqueHashV2(const QString& filePath, const DImg* const img = 0);
+    static QByteArray     uniqueHashV2(const QString& filePath, const DImg* const img = nullptr);
     static QByteArray     uniqueHash(const QString& filePath, const DImg& img, bool loadMetadata);
     static HistoryImageId createHistoryImageId(const QString& filePath, const DImg& img, const DMetadata& metadata);
 
@@ -152,7 +152,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, ui
     {
         qCCritical(DIGIKAM_DIMG_LOG) << "Requested memory of" << requested*quint64(sizeof(Type))
                                         << "is larger than size_t supported by platform.";
-        return 0;
+        return nullptr;
     }
 
     return new_failureTolerant<Type>(requested);
@@ -166,7 +166,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
     switch(res)
     {
         case 0:       // parse failure from supported platform
-            return 0;
+            return nullptr;
             break;
         case -1:      // unsupported platform
             // We will try to continue to allocate
@@ -175,7 +175,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
             break;
     }
 
-    Type* reserved = 0;
+    Type* reserved = nullptr;
 
     try
     {
@@ -184,7 +184,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
     catch (std::bad_alloc& ex)
     {
         qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size << ex.what();
-        reserved = 0;
+        reserved = nullptr;
     }
 
     return reserved;

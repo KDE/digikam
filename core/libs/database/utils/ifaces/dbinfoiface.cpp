@@ -65,8 +65,8 @@ public:
 
     explicit Private()
       : albumManager(AlbumManager::instance()),
-        albumsChooser(0),
-        albumSelector(0),
+        albumsChooser(nullptr),
+        albumSelector(nullptr),
         operationType(ApplicationSettings::Unspecified),
         withGroupedIsSet(false),
         withGrouped(false)

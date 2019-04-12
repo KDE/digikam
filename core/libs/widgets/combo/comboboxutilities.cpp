@@ -45,7 +45,7 @@ namespace Digikam
 
 ProxyLineEdit::ProxyLineEdit(QWidget* const parent)
     : QLineEdit(parent),
-      m_widget(0)
+      m_widget(nullptr)
 {
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
@@ -238,7 +238,7 @@ void ModelIndexBasedComboBox::setCurrentIndex(const QModelIndex& index)
 StayPoppedUpComboBox::StayPoppedUpComboBox(QWidget* const parent)
     : ModelIndexBasedComboBox(parent)
 {
-    m_view = 0;
+    m_view = nullptr;
 }
 
 void StayPoppedUpComboBox::installView(QAbstractItemView* view)
@@ -448,7 +448,7 @@ public:
 
 TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget* const parent)
     : TreeViewComboBox(parent),
-      m_comboLineEdit(0)
+      m_comboLineEdit(nullptr)
 {
 }
 

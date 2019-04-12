@@ -49,10 +49,10 @@ class Q_DECL_HIDDEN AbstractAlbumModel::Private
 public:
 
     explicit Private()
-        : rootAlbum(0),
-          addingAlbum(0),
+        : rootAlbum(nullptr),
+          addingAlbum(nullptr),
           type(Album::PHYSICAL),
-          dragDropHandler(0),
+          dragDropHandler(nullptr),
           rootBehavior(AbstractAlbumModel::IncludeRootAlbum),
           removingAlbum(0),
           itemDrag(true),
@@ -197,7 +197,7 @@ Qt::ItemFlags AbstractAlbumModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     Album* const a = static_cast<Album*>(index.internalPointer());
@@ -310,7 +310,7 @@ QMimeData* AbstractAlbumModel::mimeData(const QModelIndexList& indexes) const
 {
     if (!d->dragDropHandler)
     {
-        return 0;
+        return nullptr;
     }
 
     QList<Album*> albums;
@@ -482,7 +482,7 @@ void AbstractAlbumModel::slotAlbumAdded(Album* album)
     if (d->addingAlbum == album)
     {
         bool isRoot    = (d->addingAlbum == d->rootAlbum);
-        d->addingAlbum = 0;
+        d->addingAlbum = nullptr;
         endInsertRows();
 
         if (isRoot)
@@ -502,7 +502,7 @@ void AbstractAlbumModel::slotAlbumAboutToBeDeleted(Album* album)
     if (album->isRoot() && d->rootBehavior == IgnoreRootAlbum)
     {
         albumCleared(album);
-        d->rootAlbum = 0;
+        d->rootAlbum = nullptr;
         return;
     }
 
@@ -527,7 +527,7 @@ void AbstractAlbumModel::slotAlbumHasBeenDeleted(quintptr p)
 
 void AbstractAlbumModel::slotAlbumsCleared()
 {
-    d->rootAlbum = 0;
+    d->rootAlbum = nullptr;
     beginResetModel();
     allAlbumsCleared();
     endResetModel();
@@ -892,7 +892,7 @@ public:
     explicit Private()
         : staticVectorContainingCheckStateRole(1, Qt::CheckStateRole)
     {
-        extraFlags         = 0;
+        extraFlags         = nullptr;
         rootIsCheckable    = true;
         addExcludeTristate = false;
     }

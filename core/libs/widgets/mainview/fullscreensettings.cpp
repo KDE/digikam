@@ -49,9 +49,9 @@ public:
     explicit Private()
     {
         options      = FS_NONE;
-        hideToolBars = 0;
-        hideThumbBar = 0;
-        hideSideBars = 0;
+        hideToolBars = nullptr;
+        hideThumbBar = nullptr;
+        hideSideBars = nullptr;
     }
 
     int        options;

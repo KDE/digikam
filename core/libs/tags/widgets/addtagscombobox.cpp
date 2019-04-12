@@ -50,7 +50,7 @@ public:
 
     explicit Private()
     {
-        lineEdit   = 0;
+        lineEdit   = nullptr;
     }
 
     AddTagsLineEdit* lineEdit;
@@ -66,7 +66,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     setInsertPolicy(QComboBox::NoInsert); // do not let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
-    setParent(0);
+    setParent(nullptr);
 
     d->lineEdit = new AddTagsLineEdit(this);
     setLineEdit(d->lineEdit);

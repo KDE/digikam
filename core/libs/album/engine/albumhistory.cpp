@@ -71,7 +71,7 @@ public:
 
     HistoryItem()
     {
-        widget = 0;
+        widget = nullptr;
     };
 
     HistoryItem(QList<Album*> const a, QWidget* const w)
@@ -405,7 +405,7 @@ void AlbumHistory::getForwardHistory(QStringList& list) const
 
 void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *widget = 0;
+    *widget = nullptr;
 
     if (d->backwardStack.count() <= 1 || (int)steps > d->backwardStack.count())
     {
@@ -432,7 +432,7 @@ void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned i
 
 void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *widget = 0;
+    *widget = nullptr;
 
     if (d->forwardStack.isEmpty() || (int)steps > d->forwardStack.count())
     {
@@ -453,8 +453,8 @@ void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigne
 
 void AlbumHistory::getCurrentAlbum(Album** const album, QWidget** const widget) const
 {
-    *album  = 0;
-    *widget = 0;
+    *album  = nullptr;
+    *widget = nullptr;
 
     if (d->backwardStack.isEmpty())
     {

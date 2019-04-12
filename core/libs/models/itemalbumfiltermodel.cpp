@@ -47,8 +47,8 @@ public:
 
     ItemAlbumFilterModelPrivate()
     {
-        delayedAlbumNamesTimer = 0;
-        delayedTagNamesTimer   = 0;
+        delayedAlbumNamesTimer = nullptr;
+        delayedTagNamesTimer   = nullptr;
     }
 
     QHash<int, QString> tagNamesHash;

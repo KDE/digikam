@@ -52,7 +52,7 @@ public:
      *  to start the threaded computation.
      *  To run filter without to use multithreading, call startFilterDirectly().
      */
-    explicit DImgThreadedFilter(QObject* const parent=0, const QString& name = QString());
+    explicit DImgThreadedFilter(QObject* const parent=nullptr, const QString& name = QString());
 
     /** Constructs a filter with all arguments (ready to use).
      *  The given original image will be copied.

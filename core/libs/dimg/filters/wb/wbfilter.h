@@ -47,8 +47,8 @@ class DIGIKAM_EXPORT WBFilter : public DImgThreadedFilter
 
 public:
 
-    explicit WBFilter(QObject* const parent = 0);
-    explicit WBFilter(DImg* const orgImage, QObject* const parent=0, const WBContainer& settings=WBContainer());
+    explicit WBFilter(QObject* const parent = nullptr);
+    explicit WBFilter(DImg* const orgImage, QObject* const parent=nullptr, const WBContainer& settings=WBContainer());
     explicit WBFilter(const WBContainer& settings, DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                       int progressBegin=0, int progressEnd=100);
     virtual ~WBFilter();

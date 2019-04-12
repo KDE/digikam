@@ -50,8 +50,8 @@ public:
     {
         keepOpen      = false;
         enable        = true;
-        autoHideTimer = 0;
-        parent        = 0;
+        autoHideTimer = nullptr;
+        parent        = nullptr;
     }
 
     Qt::Alignment     alignment;
@@ -68,12 +68,12 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget* const parent, Qt::Al
     setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
     ensurePolished();
-    const int fwidth = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this);
+    const int fwidth = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, nullptr, this);
     setContentsMargins(fwidth, fwidth, fwidth, fwidth);
     setFrameStyle(QFrame::NoFrame);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setIndent(1);
-    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / 255.0);
+    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, nullptr, this) / 255.0);
 
     d->alignment = align;
     d->parent    = parent;

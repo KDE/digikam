@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT RedEyeCorrectionSettings : public QWidget
 
 public:
 
-    explicit RedEyeCorrectionSettings(QWidget* const parent=0);
+    explicit RedEyeCorrectionSettings(QWidget* const parent=nullptr);
     ~RedEyeCorrectionSettings();
 
     RedEyeCorrectionContainer defaultSettings() const;

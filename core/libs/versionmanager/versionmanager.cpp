@@ -636,7 +636,7 @@ public:
 
     VersionManagerPriv()
     {
-        scheme = 0;
+        scheme = nullptr;
     }
 
     VersionManagerSettings     settings;

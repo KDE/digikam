@@ -47,9 +47,9 @@ public:
 
     explicit Private()
     {
-        userComboBox = 0;
-        label        = 0;
-        okButton     = 0;
+        userComboBox = nullptr;
+        label        = nullptr;
+        okButton     = nullptr;
     }
 
     QComboBox*   userComboBox;

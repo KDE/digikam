@@ -121,7 +121,7 @@ public:
      * If the parameters were not changed, this method has no effect.
      * @returns if the database is ready for use
      */
-    static bool checkReadyForUse(InitializationObserver* const observer = 0);
+    static bool checkReadyForUse(InitializationObserver* const observer = nullptr);
 
     /**
      * Clean up the database access.

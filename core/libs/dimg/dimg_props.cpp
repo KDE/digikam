@@ -64,7 +64,7 @@ uchar* DImg::scanLine(uint i) const
 {
     if (i >= height())
     {
-        return 0;
+        return nullptr;
     }
 
     uchar* const data = bits() + (width() * bytesDepth() * i);
@@ -435,7 +435,7 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
     const LANCZOS_DATA_TYPE* lanczos_func = m_priv->lanczos_func;
 
-    if (lanczos_func == 0)
+    if (lanczos_func == nullptr)
     {
         return DColor();
     }
@@ -559,7 +559,7 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
     int yy      = (int)y;
     float d_x   = x - (int)x;
     float d_y   = y - (int)y;
-    uchar* data = 0;
+    uchar* data = nullptr;
 
     DColor d00, d01, d10, d11;
     DColor col;

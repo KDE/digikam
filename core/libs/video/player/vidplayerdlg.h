@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT VidPlayerDlg : public QDialog
 
 public:
 
-    explicit VidPlayerDlg(const QString& file, QWidget* const parent = 0);
+    explicit VidPlayerDlg(const QString& file, QWidget* const parent = nullptr);
     ~VidPlayerDlg();
 
 private:

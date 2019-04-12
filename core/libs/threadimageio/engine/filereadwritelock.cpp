@@ -51,7 +51,7 @@ public:
           waitingReaders(0),
           waitingWriters(0),
           accessCount(0),
-          writer(0)
+          writer(nullptr)
     {
     }
 
@@ -342,7 +342,7 @@ void FileReadWriteLockStaticPrivate::unlock_locked(Entry* entry)
     {
         // released a write lock
         unlocked = true;
-        entry->writer = 0;
+        entry->writer = nullptr;
     }
 
     if (unlocked)

@@ -61,10 +61,10 @@ public:
 
     explicit Private()
     {
-        browser     = 0;
-        toolbar     = 0;
-        progressbar = 0;
-        searchbar   = 0;
+        browser     = nullptr;
+        toolbar     = nullptr;
+        progressbar = nullptr;
+        searchbar   = nullptr;
     }
 
 public:

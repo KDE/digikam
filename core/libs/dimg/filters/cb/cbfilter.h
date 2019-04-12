@@ -70,9 +70,9 @@ class DIGIKAM_EXPORT CBFilter : public DImgThreadedFilter
 
 public:
 
-    explicit CBFilter(QObject* const parent = 0);
+    explicit CBFilter(QObject* const parent = nullptr);
     explicit CBFilter(DImg* const orgImage,
-                      QObject* const parent=0,
+                      QObject* const parent=nullptr,
                       const CBContainer& settings=CBContainer());
     explicit CBFilter(const CBContainer& settings,
                       DImgThreadedFilter* const master,

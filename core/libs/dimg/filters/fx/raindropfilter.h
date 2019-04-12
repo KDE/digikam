@@ -43,9 +43,9 @@ class DIGIKAM_EXPORT RainDropFilter : public DImgThreadedFilter
 
 public:
 
-    explicit RainDropFilter(QObject* const parent = 0);
+    explicit RainDropFilter(QObject* const parent = nullptr);
     explicit RainDropFilter(DImg* const orgImage,
-                            QObject* const parent=0,
+                            QObject* const parent=nullptr,
                             int drop=80,
                             int amount=150,
                             int coeff=30,

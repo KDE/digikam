@@ -115,7 +115,7 @@ void TextureFilter::filterImage()
     uint   offset;
 
     DColor teData, transData, inData, outData;
-    uchar* ptr=0, *dptr=0, *tptr=0;
+    uchar* ptr=nullptr, *dptr=nullptr, *tptr=nullptr;
     int    progress;
 
     int blendGain;

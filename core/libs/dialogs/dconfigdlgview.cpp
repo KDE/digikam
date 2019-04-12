@@ -358,13 +358,13 @@ void DConfigDlgViewPrivate::_k_dataChanged(const QModelIndex&, const QModelIndex
 
 DConfigDlgViewPrivate::DConfigDlgViewPrivate(DConfigDlgView* const _parent)
     : q_ptr(_parent),
-      model(0),
+      model(nullptr),
       faceType(DConfigDlgView::Auto),
-      layout(0),
-      stack(0),
-      titleWidget(0),
-      defaultWidget(0),
-      view(0)
+      layout(nullptr),
+      stack(nullptr),
+      titleWidget(nullptr),
+      defaultWidget(nullptr),
+      view(nullptr)
 {
 }
 
@@ -504,7 +504,7 @@ QAbstractItemDelegate *DConfigDlgView::itemDelegate() const
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -553,7 +553,7 @@ QAbstractItemView* DConfigDlgView::createView()
         else
         {
             // should never happen
-            return 0;
+            return nullptr;
         }
     }
     else if (d->faceType == Plain)
@@ -574,7 +574,7 @@ QAbstractItemView* DConfigDlgView::createView()
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 

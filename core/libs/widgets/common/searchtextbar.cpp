@@ -62,8 +62,8 @@ public:
         highlightOnResult(true),
         hasResultColor(200, 255, 200),
         hasNoResultColor(255, 200, 200),
-        completer(0),
-        filterModel(0)
+        completer(nullptr),
+        filterModel(nullptr)
     {
     }
 
@@ -275,7 +275,7 @@ void SearchTextBar::slotSearchResult(bool match)
 
 void SearchTextBar::contextMenuEvent(QContextMenuEvent* e)
 {
-    QAction* cs       = 0;
+    QAction* cs       = nullptr;
     QMenu* const menu = createStandardContextMenu();
 
     if (d->hasCaseSensitive)

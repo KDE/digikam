@@ -39,9 +39,9 @@ public:
 
     explicit Private()
     {
-        intervalLabel = 0;
-        minValueBox   = 0;
-        maxValueBox   = 0;
+        intervalLabel = nullptr;
+        minValueBox   = nullptr;
+        maxValueBox   = nullptr;
     }
 
     QLabel*   intervalLabel;

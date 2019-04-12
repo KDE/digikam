@@ -124,10 +124,10 @@ void AlbumManager::slotAlbumsJobResult()
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->albumListJob->errorsList().first(),
-                             0, i18n("digiKam"));
+                             nullptr, i18n("digiKam"));
     }
 
-    d->albumListJob = 0;
+    d->albumListJob = nullptr;
 }
 
 void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
@@ -147,9 +147,9 @@ void AlbumManager::updateAlbumPathHash()
     // Update AlbumDict. basically clear it and rebuild from scratch
     d->albumPathHash.clear();
     AlbumIterator it(d->rootPAlbum);
-    PAlbum* subAlbum = 0;
+    PAlbum* subAlbum = nullptr;
 
-    while ((subAlbum = static_cast<PAlbum*>(it.current())) != 0)
+    while ((subAlbum = static_cast<PAlbum*>(it.current())) != nullptr)
     {
         d->albumPathHash[PAlbumPath(subAlbum)] = subAlbum;
         ++it;
@@ -198,7 +198,7 @@ void AlbumManager::invalidateGuardedPointers(Album* album)
     {
         if (it.value())
         {
-            *(it.value()) = 0;
+            *(it.value()) = nullptr;
         }
     }
 }
@@ -215,7 +215,7 @@ void AlbumManager::getAlbumItemsCount()
     if (d->albumListJob)
     {
         d->albumListJob->cancel();
-        d->albumListJob = 0;
+        d->albumListJob = nullptr;
     }
 
     AlbumsDBJobInfo jInfo;

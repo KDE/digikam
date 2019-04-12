@@ -133,9 +133,9 @@ public:
      * The returned result enum describes the test result.
      */
     LocationCheckResult checkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
-                                      QString* message = 0, QString* suggestedMessageIconName = 0);
+                                      QString* message = nullptr, QString* suggestedMessageIconName = nullptr);
     LocationCheckResult checkNetworkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
-                                             QString* message = 0, QString* suggestedMessageIconName = 0);
+                                             QString* message = nullptr, QString* suggestedMessageIconName = nullptr);
 
     /**
      * Removes the given location. This means that all images contained on the

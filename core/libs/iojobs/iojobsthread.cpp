@@ -48,7 +48,7 @@ public:
     explicit Private()
       : jobsCount(0),
         isCanceled(false),
-        jobData(0)
+        jobData(nullptr)
     {
     }
 

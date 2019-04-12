@@ -53,7 +53,7 @@ public:
     /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store
      *  Albums configuration in settings file. 'parent' is parent widget.
      */
-    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0, AlbumType albumType = All);
+    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = nullptr, AlbumType albumType = All);
     ~AlbumSelectors();
 
     /** Return list of selected physical albums

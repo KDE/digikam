@@ -151,13 +151,13 @@ public:
 
     explicit Private()
       : maxLabelWidth(650),
-        progress(0),
-        cancelButton(0),
-        itemLabel(0),
-        itemStatus(0),
-        itemThumb(0),
-        frame(0),
-        item(0)
+        progress(nullptr),
+        cancelButton(nullptr),
+        itemLabel(nullptr),
+        itemStatus(nullptr),
+        itemThumb(nullptr),
+        frame(nullptr),
+        item(nullptr)
     {
     }
 
@@ -259,7 +259,7 @@ void TransactionItem::setProgress(int progress)
 
 void TransactionItem::setItemComplete()
 {
-    d->item = 0;
+    d->item = nullptr;
 }
 
 void TransactionItem::setLabel(const QString& label)
@@ -303,8 +303,8 @@ public:
 
     explicit Private()
       : wasLastShown(false),
-        scrollView(0),
-        previousItem(0)
+        scrollView(nullptr),
+        previousItem(nullptr)
     {
     }
 
@@ -386,7 +386,7 @@ void ProgressView::closeEvent(QCloseEvent* e)
 
 void ProgressView::slotTransactionAdded(ProgressItem* item)
 {
-    TransactionItem* parent = 0;
+    TransactionItem* parent = nullptr;
 
     if ( item->parent() )
     {

@@ -79,7 +79,7 @@ public:
     /**
      * Constructs a page model with the given parent.
      */
-    explicit DConfigDlgModel(QObject* const parent = 0);
+    explicit DConfigDlgModel(QObject* const parent = nullptr);
 
     /**
      * Destroys the page model.
@@ -256,7 +256,7 @@ public:
      *
      * @param parent The parent object.
      */
-    explicit DConfigDlgWdgModel(QObject* const parent = 0);
+    explicit DConfigDlgWdgModel(QObject* const parent = nullptr);
 
     /**
      * Destroys the page widget model.

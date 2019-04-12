@@ -84,7 +84,7 @@ public:
         PartialWrite
     };
 
-    explicit DisjointMetadata(QObject* const parent = 0);
+    explicit DisjointMetadata(QObject* const parent = nullptr);
     DisjointMetadata(const DisjointMetadata& other);
     ~DisjointMetadata();
 

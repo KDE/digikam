@@ -59,14 +59,14 @@ void VideoDecoder::initialize(const QString& filename)
 #endif
 
     if (avformat_open_input(&d->pFormatContext,
-                            filename.toUtf8().data(), NULL, NULL) != 0)
+                            filename.toUtf8().data(), nullptr, nullptr) != 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not open input file: "
                                     << filename;
         return;
     }
 
-    if (avformat_find_stream_info(d->pFormatContext, 0) < 0)
+    if (avformat_find_stream_info(d->pFormatContext, nullptr) < 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not find stream information";
         return;
@@ -97,32 +97,32 @@ void VideoDecoder::destroy()
     if (d->pVideoCodecContext)
     {
         avcodec_close(d->pVideoCodecContext);
-        d->pVideoCodecContext = 0;
+        d->pVideoCodecContext = nullptr;
     }
 
     if (d->pFormatContext)
     {
         avformat_close_input(&d->pFormatContext);
-        d->pFormatContext = 0;
+        d->pFormatContext = nullptr;
     }
 
     if (d->pPacket)
     {
         av_packet_unref(d->pPacket);
         delete d->pPacket;
-        d->pPacket = 0;
+        d->pPacket = nullptr;
     }
 
     if (d->pFrame)
     {
         av_frame_free(&d->pFrame);
-        d->pFrame = 0;
+        d->pFrame = nullptr;
     }
 
     if (d->pFrameBuffer)
     {
         av_free(d->pFrameBuffer);
-        d->pFrameBuffer = 0;
+        d->pFrameBuffer = nullptr;
     }
 }
 

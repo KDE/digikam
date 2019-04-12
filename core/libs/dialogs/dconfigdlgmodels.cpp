@@ -43,7 +43,7 @@ DConfigDlgModelPrivate::~DConfigDlgModelPrivate()
 
 DConfigDlgModel::DConfigDlgModel(QObject* const parent)
     : QAbstractItemModel(parent),
-      d_ptr(0)
+      d_ptr(nullptr)
 {
 }
 
@@ -75,7 +75,7 @@ public:
     ~Private()
     {
         delete widget;
-        widget = 0;
+        widget = nullptr;
     }
 
     QString           name;
@@ -88,7 +88,7 @@ public:
 };
 
 DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget* widget)
-    : QObject(0),
+    : QObject(nullptr),
       d(new Private)
 {
     d->widget = widget;
@@ -105,7 +105,7 @@ DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget* widget)
 }
 
 DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget* widget, const QString& name)
-    : QObject(0),
+    : QObject(nullptr),
       d(new Private)
 {
     d->widget = widget;
@@ -221,7 +221,7 @@ PageItem::PageItem(DConfigDlgWdgItem* pageWidgetItem, PageItem* parent)
 PageItem::~PageItem()
 {
     delete mPageWidgetItem;
-    mPageWidgetItem = 0;
+    mPageWidgetItem = nullptr;
 
     qDeleteAll(mChildItems);
 }
@@ -293,7 +293,7 @@ PageItem* PageItem::findChild(const DConfigDlgWdgItem* item)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void PageItem::dump(int indent)
@@ -412,7 +412,7 @@ Qt::ItemFlags DConfigDlgWdgModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     Qt::ItemFlags flags = Qt::ItemIsSelectable;
@@ -434,7 +434,7 @@ Qt::ItemFlags DConfigDlgWdgModel::flags(const QModelIndex& index) const
 
 QModelIndex DConfigDlgWdgModel::index(int row, int column, const QModelIndex& parent) const
 {
-    PageItem* parentItem = 0;
+    PageItem* parentItem = nullptr;
 
     if (parent.isValid())
     {
@@ -479,7 +479,7 @@ QModelIndex DConfigDlgWdgModel::parent(const QModelIndex& index) const
 
 int DConfigDlgWdgModel::rowCount(const QModelIndex& parent) const
 {
-    PageItem* parentItem = 0;
+    PageItem* parentItem = nullptr;
 
     if (!parent.isValid())
     {
@@ -670,14 +670,14 @@ DConfigDlgWdgItem* DConfigDlgWdgModel::item(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     PageItem* const item = static_cast<PageItem*>(index.internalPointer());
 
     if (!item)
     {
-        return 0;
+        return nullptr;
     }
 
     return item->pageWidgetItem();

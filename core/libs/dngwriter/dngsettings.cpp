@@ -53,10 +53,10 @@ public:
 
     explicit Private()
     {
-        compressLossLess      = 0;
-        previewModeCB         = 0;
-        previewModeLabel      = 0;
-        backupOriginalRawFile = 0;
+        compressLossLess      = nullptr;
+        previewModeCB         = nullptr;
+        previewModeLabel      = nullptr;
+        backupOriginalRawFile = nullptr;
     }
 
     QLabel*    previewModeLabel;

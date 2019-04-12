@@ -161,7 +161,7 @@ MetadataInfo::Field DatabaseImageMetadataFieldsToMetadataInfoField(const Databas
 
 }
 
-ItemInfoStatic* ItemInfoStatic::m_instance = 0;
+ItemInfoStatic* ItemInfoStatic::m_instance = nullptr;
 
 void ItemInfoStatic::create()
 {
@@ -174,7 +174,7 @@ void ItemInfoStatic::create()
 void ItemInfoStatic::destroy()
 {
     delete m_instance;
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 ItemInfoCache* ItemInfoStatic::cache()
@@ -240,7 +240,7 @@ ItemInfoData::~ItemInfoData()
 // ---------------------------------------------------------------
 
 ItemInfo::ItemInfo()
-    : m_data(0)
+    : m_data(nullptr)
 {
 }
 
@@ -313,7 +313,7 @@ ItemInfo::ItemInfo(qlonglong ID)
                 ItemInfoStatic::cache()->dropInfo(olddata);
             }
 
-            m_data = 0;
+            m_data = nullptr;
         }
     }
 }
@@ -360,7 +360,7 @@ ItemInfo ItemInfo::fromLocationAlbumAndName(int locationId, const QString& album
         if (!shortInfo.id)
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "No itemShortInfo could be retrieved from the database for image" << name;
-            info.m_data = 0;
+            info.m_data = nullptr;
             return info;
         }
 

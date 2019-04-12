@@ -47,7 +47,7 @@ public:
 
     /** Default constructor.
      */
-    explicit DPluginConfView(QWidget* const parent=0);
+    explicit DPluginConfView(QWidget* const parent=nullptr);
     ~DPluginConfView();
 
     /** Apply all changes about plugins selected to be hosted in host application.

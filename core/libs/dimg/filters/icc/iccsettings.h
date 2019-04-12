@@ -65,7 +65,7 @@ public:
      * and the widget parameter is passed, the returned profile is for the widget's screen.
      * If no settings is specified, the default sRGB profile is returned.
      */
-    IccProfile monitorProfile(QWidget* const widget = 0);
+    IccProfile monitorProfile(QWidget* const widget = nullptr);
 
     /**
      * Returns if the monitor profile (as returned by monitorProfile())

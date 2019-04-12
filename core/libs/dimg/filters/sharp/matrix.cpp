@@ -165,7 +165,7 @@ CMat* RefocusMatrix::allocate_c_mat(const int radius)
 void RefocusMatrix::finish_c_mat(CMat* const mat)
 {
     delete [] mat->data;
-    mat->data = NULL;
+    mat->data = nullptr;
 }
 
 inline double* RefocusMatrix::c_mat_eltptr(CMat* const mat, const int col, const int row)
@@ -385,9 +385,9 @@ CMat* RefocusMatrix::compute_g(const CMat* const convolution, const int m, const
                                const double noise_factor, const double musq, const bool symmetric)
 {
     CMat h_conv_ruv, a, corr;
-    CMat* result = 0;
-    Mat* b       = 0;
-    Mat* s       = 0;
+    CMat* result = nullptr;
+    Mat* b       = nullptr;
+    Mat* s       = nullptr;
 //    int status;
 
     init_c_mat(&h_conv_ruv, 3 * m);

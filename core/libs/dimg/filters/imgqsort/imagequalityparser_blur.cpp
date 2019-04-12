@@ -48,11 +48,11 @@ double ImageQualityParser::blurDetector() const
     d->lowThreshold   = 0.4;
     d->ratio          = 3;
     double maxval     = 0.0;
-    cannyThreshold(0, 0);
+    cannyThreshold(0, nullptr);
 
     double average    = mean(d->detected_edges)[0];
     int* const maxIdx = new int[sizeof(d->detected_edges)];
-    minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+    minMaxIdx(d->detected_edges, nullptr, &maxval, nullptr, maxIdx);
 
     double blurresult = average / maxval;
 

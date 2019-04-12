@@ -56,17 +56,17 @@ class Q_DECL_HIDDEN NRSettings::Private
 public:
 
     explicit Private()
-      : luminanceBox(0),
-        chrominanceRedBox(0),
-        chrominanceBlueBox(0),
-        checkAutoEst(0),
-        advExpanderBox(0),
-        thrLumInput(0),
-        softLumInput(0),
-        thrCrInput(0),
-        softCrInput(0),
-        thrCbInput(0),
-        softCbInput(0)
+      : luminanceBox(nullptr),
+        chrominanceRedBox(nullptr),
+        chrominanceBlueBox(nullptr),
+        checkAutoEst(nullptr),
+        advExpanderBox(nullptr),
+        thrLumInput(nullptr),
+        softLumInput(nullptr),
+        thrCrInput(nullptr),
+        softCrInput(nullptr),
+        thrCbInput(nullptr),
+        softCbInput(nullptr)
     {
     }
 

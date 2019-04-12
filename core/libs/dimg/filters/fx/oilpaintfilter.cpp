@@ -110,7 +110,7 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 
     mostFrequentColor.setSixteenBit(m_orgImage.sixteenBit());
     uchar* dest    = m_destImage.bits();
-    uchar* dptr    = 0;
+    uchar* dptr    = nullptr;
 
     for (uint h2 = start; runningFlag() && (h2 < stop); ++h2)
     {
@@ -174,7 +174,7 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
 
     uchar* dest     = src.bits();
     int bytesDepth  = src.bytesDepth();
-    uchar* sptr     = 0;
+    uchar* sptr     = nullptr;
     bool sixteenBit = src.sixteenBit();
 
     DColor mostFrequentColor;

@@ -40,7 +40,7 @@ class TagMngrListView : public QTreeView
 
 public:
 
-    explicit TagMngrListView(QWidget* const parent = 0);
+    explicit TagMngrListView(QWidget* const parent = nullptr);
 
     QModelIndexList mySelectedIndexes();
 

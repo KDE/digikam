@@ -42,8 +42,8 @@ public:
 
     explicit Private()
     {
-        iface    = 0;
-        modifier = 0;
+        iface    = nullptr;
+        modifier = nullptr;
         loop     = 0;
     }
 

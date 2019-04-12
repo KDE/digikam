@@ -35,7 +35,7 @@ class ItemFiltersHistoryItemDelegate : public QStyledItemDelegate
 {
 public:
 
-    explicit ItemFiltersHistoryItemDelegate(QObject* const parent = 0);
+    explicit ItemFiltersHistoryItemDelegate(QObject* const parent = nullptr);
     ~ItemFiltersHistoryItemDelegate();
 
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;

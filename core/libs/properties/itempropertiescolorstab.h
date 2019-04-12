@@ -56,7 +56,7 @@ public:
 
     void setData(const QUrl& url=QUrl(),
                  const QRect& selectionArea = QRect(),
-                 DImg* const img=0);
+                 DImg* const img=nullptr);
 
     void setSelection(const QRect& selectionArea);
 

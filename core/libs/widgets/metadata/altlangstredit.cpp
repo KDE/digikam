@@ -47,10 +47,10 @@ public:
 
     explicit Private()
     {
-        valueEdit       = 0;
-        titleLabel      = 0;
-        delValueButton  = 0;
-        languageCB      = 0;
+        valueEdit       = nullptr;
+        titleLabel      = nullptr;
+        delValueButton  = nullptr;
+        languageCB      = nullptr;
         linesVisible    = 0;
         currentLanguage = QLatin1String("x-default");
 

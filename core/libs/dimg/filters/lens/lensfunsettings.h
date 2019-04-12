@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT LensFunSettings : public QWidget
 
 public:
 
-    explicit LensFunSettings(QWidget* const parent=0);
+    explicit LensFunSettings(QWidget* const parent=nullptr);
     virtual ~LensFunSettings();
 
     void setEnabledCCA(bool b);

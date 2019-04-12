@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem : public QGraphicsObject
 
 public:
 
-    explicit GraphicsDImgItem(QGraphicsItem* const parent = 0);
+    explicit GraphicsDImgItem(QGraphicsItem* const parent = nullptr);
     virtual ~GraphicsDImgItem();
 
     /**
@@ -64,7 +64,7 @@ public:
     void            clearCache();
 
     virtual QRectF  boundingRect() const override;
-    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
+    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     virtual QString userLoadingHint() const { return QString(); }
 
 Q_SIGNALS:

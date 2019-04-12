@@ -58,8 +58,8 @@ class Q_DECL_HIDDEN InfoDlg::Private
 public:
 
     explicit Private() :
-        listView(0),
-        page(0)
+        listView(nullptr),
+        page(nullptr)
     {
     }
 

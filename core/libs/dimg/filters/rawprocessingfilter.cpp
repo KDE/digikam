@@ -43,14 +43,14 @@ namespace Digikam
 
 RawProcessingFilter::RawProcessingFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      m_observer(0)
+      m_observer(nullptr)
 {
 }
 
 RawProcessingFilter::RawProcessingFilter(DImg* const orgImage, QObject* const parent,
                                          const DRawDecoding& settings, const QString& name)
     : DImgThreadedFilter(orgImage, parent, name),
-      m_observer(0)
+      m_observer(nullptr)
 {
     setSettings(settings);
     initFilter();
@@ -60,7 +60,7 @@ RawProcessingFilter::RawProcessingFilter(const DRawDecoding& settings,
                                          DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                                          int progressBegin, int progressEnd, const QString& name)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, name),
-      m_observer(0)
+      m_observer(nullptr)
 {
     setSettings(settings);
     filterImage();
@@ -88,7 +88,7 @@ void RawProcessingFilter::setOutputProfile(const IccProfile& profile)
 
 void RawProcessingFilter::setObserver(DImgLoaderObserver* const observer, int progressBegin, int progressEnd)
 {
-    initSlave(0, progressBegin, progressEnd);
+    initSlave(nullptr, progressBegin, progressEnd);
     m_observer = observer;
 }
 
@@ -116,7 +116,7 @@ void RawProcessingFilter::postProgress(int)
 
 bool RawProcessingFilter::continueQuery() const
 {
-    if (m_observer && !m_observer->continueQuery(0))
+    if (m_observer && !m_observer->continueQuery(nullptr))
     {
         return false;
     }

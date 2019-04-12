@@ -74,9 +74,9 @@ class DIGIKAM_EXPORT LevelsFilter : public DImgThreadedFilter
 
 public:
 
-    explicit LevelsFilter(QObject* const parent = 0);
+    explicit LevelsFilter(QObject* const parent = nullptr);
     explicit LevelsFilter(DImg* const orgImage,
-                          QObject* const parent=0,
+                          QObject* const parent=nullptr,
                           const LevelsContainer& settings=LevelsContainer());
     explicit LevelsFilter(const LevelsContainer& settings,
                           DImgThreadedFilter* const master,

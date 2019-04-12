@@ -59,7 +59,7 @@ class TemplateList : public QTreeWidget
 
 public:
 
-    explicit TemplateList(QWidget* const parent=0);
+    explicit TemplateList(QWidget* const parent=nullptr);
     ~TemplateList();
 
     TemplateListItem* find(const QString& title);

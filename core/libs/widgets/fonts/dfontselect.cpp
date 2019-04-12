@@ -50,11 +50,11 @@ class Q_DECL_HIDDEN DFontSelect::Private
 public:
 
     explicit Private()
-      : space(0),
-        label(0),
-        desc(0),
-        chooseFontButton(0),
-        modeCombo(0),
+      : space(nullptr),
+        label(nullptr),
+        desc(nullptr),
+        chooseFontButton(nullptr),
+        modeCombo(nullptr),
         mode(DFontSelect::SystemFont)
     {
     }

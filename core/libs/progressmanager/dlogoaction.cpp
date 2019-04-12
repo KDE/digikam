@@ -56,8 +56,8 @@ public:
     explicit Private()
     {
         alignOnright  = true;
-        progressTimer = 0;
-        urlLabel      = 0;
+        progressTimer = nullptr;
+        urlLabel      = nullptr;
         progressCount = 0;
     }
 
@@ -169,7 +169,7 @@ QWidget* DLogoAction::createWidget(QWidget* parent)
 void DLogoAction::deleteWidget(QWidget* widget)
 {
     stop();
-    d->urlLabel = 0;
+    d->urlLabel = nullptr;
     QWidgetAction::deleteWidget(widget);
 }
 

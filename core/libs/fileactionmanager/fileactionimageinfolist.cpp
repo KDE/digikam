@@ -44,7 +44,7 @@ void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressIt
     {
         ProgressItem* const item = creator->createProgressItem(action);
 
-        if (ptr.testAndSetOrdered(0, item))
+        if (ptr.testAndSetOrdered(nullptr, item))
         {
             creator->addProgressItem(item);
         }
@@ -63,7 +63,7 @@ void TwoProgressItemsContainer::advance(QAtomicPointer<ProgressItem>& ptr, int n
     {
         ProgressItem* const item = ptr;
 
-        if (item && ptr.testAndSetOrdered(item, 0))
+        if (item && ptr.testAndSetOrdered(item, nullptr))
         {
             item->setComplete();
         }

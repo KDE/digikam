@@ -62,7 +62,7 @@ public:
     explicit AlbumHistory();
     ~AlbumHistory();
 
-    void addAlbums(const QList<Album*>& albums, QWidget* const widget = 0);
+    void addAlbums(const QList<Album*>& albums, QWidget* const widget = nullptr);
     void addAlbums(const QList<Album*>& albums, QWidget* const widget, QHash<LabelsTreeView::Labels, QList<int> > selectedLabels);
     void deleteAlbum(Album* const album);
     void clearHistory();

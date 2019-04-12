@@ -49,13 +49,13 @@ class Q_DECL_HIDDEN ItemViewCategorized::Private
 public:
 
     explicit Private(ItemViewCategorized* const q)
-      : delegate(0),
-        toolTip(0),
-        notificationToolTip(0),
+      : delegate(nullptr),
+        toolTip(nullptr),
+        notificationToolTip(nullptr),
         showToolTip(false),
         usePointingHand(true),
         scrollStepFactor(10),
-        currentMouseEvent(0),
+        currentMouseEvent(nullptr),
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
         scrollCurrentToCenter(false),
@@ -398,7 +398,7 @@ void ItemViewCategorized::slotActivated(const QModelIndex& index)
         }
     }
 
-    d->currentMouseEvent = 0;
+    d->currentMouseEvent = nullptr;
     indexActivated(index, modifiers);
 }
 
@@ -813,7 +813,7 @@ void ItemViewCategorized::mousePressEvent(QMouseEvent* event)
     }
     else
     {
-        d->currentMouseEvent = 0;
+        d->currentMouseEvent = nullptr;
     }
 
     DCategorizedView::mousePressEvent(event);

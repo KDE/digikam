@@ -34,7 +34,7 @@ namespace Digikam
 {
 
 MetaEngineData::MetaEngineData()
-    : d(0)
+    : d(nullptr)
 {
 }
 

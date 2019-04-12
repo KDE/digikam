@@ -50,11 +50,11 @@ public:
 
     explicit Private()
     {
-        scene            = 0;
-        item             = 0;
-        layout           = 0;
-        cornerButton     = 0;
-        panIconPopup     = 0;
+        scene            = nullptr;
+        item             = nullptr;
+        layout           = nullptr;
+        cornerButton     = nullptr;
+        panIconPopup     = nullptr;
         movingInProgress = false;
         showText         = true;
     }
@@ -410,7 +410,7 @@ void GraphicsDImgView::slotCornerButtonPressed()
     {
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
+        d->panIconPopup = nullptr;
     }
 
     d->panIconPopup          = new PanIconFrame(this);
@@ -459,7 +459,7 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
     {
         d->panIconPopup->hide();
         d->panIconPopup->deleteLater();
-        d->panIconPopup = 0;
+        d->panIconPopup = nullptr;
         slotPanIconHidden();
         //slotContentLeaveFocus();
     }

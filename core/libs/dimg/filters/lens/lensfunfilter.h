@@ -77,7 +77,7 @@ class DIGIKAM_EXPORT LensFunFilter : public DImgThreadedFilter
 
 public:
 
-    explicit LensFunFilter(QObject* const parent = 0);
+    explicit LensFunFilter(QObject* const parent = nullptr);
     explicit LensFunFilter(DImg* const origImage, QObject* const parent, const LensFunContainer& settings);
     ~LensFunFilter();
 

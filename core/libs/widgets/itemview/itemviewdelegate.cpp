@@ -56,7 +56,7 @@ namespace Digikam
 
 ItemViewDelegatePrivate::ItemViewDelegatePrivate()
 {
-    q         = 0;
+    q         = nullptr;
     spacing   = 0;
     thumbSize = ThumbnailSize(0);
 

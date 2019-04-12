@@ -41,7 +41,7 @@ namespace Digikam
 QString ApplicationSettings::getImageFileFilter() const
 {
     QStringList imageSettings;
-    CoreDbAccess().db()->getFilterSettings(&imageSettings, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageSettings, nullptr, nullptr);
     QStringList wildcards;
 
     foreach(const QString& suffix, imageSettings)
@@ -55,7 +55,7 @@ QString ApplicationSettings::getImageFileFilter() const
 QString ApplicationSettings::getMovieFileFilter() const
 {
     QStringList movieSettings;
-    CoreDbAccess().db()->getFilterSettings(0, &movieSettings, 0);
+    CoreDbAccess().db()->getFilterSettings(nullptr, &movieSettings, nullptr);
     QStringList wildcards;
 
     foreach(const QString& suffix, movieSettings)
@@ -69,7 +69,7 @@ QString ApplicationSettings::getMovieFileFilter() const
 QString ApplicationSettings::getAudioFileFilter() const
 {
     QStringList audioSettings;
-    CoreDbAccess().db()->getFilterSettings(0, 0, &audioSettings);
+    CoreDbAccess().db()->getFilterSettings(nullptr, nullptr, &audioSettings);
     QStringList wildcards;
 
     foreach(const QString& suffix, audioSettings)
@@ -84,7 +84,7 @@ QString ApplicationSettings::getRawFileFilter() const
 {
     QStringList supportedRaws = DRawDecoder::rawFilesList();
     QStringList imageSettings;
-    CoreDbAccess().db()->getFilterSettings(&imageSettings, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageSettings, nullptr, nullptr);
 
     // form intersection: those extensions that are supported as RAW as well in the list of allowed extensions
     for (QStringList::iterator it = supportedRaws.begin(); it != supportedRaws.end(); )

@@ -65,20 +65,20 @@ class Q_DECL_HIDDEN SharpSettings::Private
 public:
 
     explicit Private()
-      : stack(0),
-        sharpMethod(0),
-        radiusInput(0),
+      : stack(nullptr),
+        sharpMethod(nullptr),
+        radiusInput(nullptr),
 #ifdef HAVE_EIGEN3
-        radius(0),
-        correlation(0),
-        noise(0),
-        gauss(0),
-        matrixSize(0),
+        radius(nullptr),
+        correlation(nullptr),
+        noise(nullptr),
+        gauss(nullptr),
+        matrixSize(nullptr),
 #endif // HAVE_EIGEN3
-        radiusInput2(0),
-        amountInput(0),
-        thresholdInput(0),
-        luma(0)
+        radiusInput2(nullptr),
+        amountInput(nullptr),
+        thresholdInput(nullptr),
+        luma(nullptr)
     {
     }
 

@@ -51,7 +51,7 @@ class VersionsWidget : public QWidget
 
 public:
 
-    explicit VersionsWidget(QWidget* const parent = 0);
+    explicit VersionsWidget(QWidget* const parent = nullptr);
     ~VersionsWidget();
 
     void readSettings(const KConfigGroup& group);

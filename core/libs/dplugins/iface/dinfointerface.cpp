@@ -102,7 +102,7 @@ void DInfoInterface::setAlbumInfo(int, const DInfoMap&) const
 
 QWidget* DInfoInterface::albumChooser(QWidget* const) const
 {
-    return 0;
+    return nullptr;
 }
 
 DInfoInterface::DAlbumIDs DInfoInterface::albumChooserItems() const
@@ -117,7 +117,7 @@ bool DInfoInterface::supportAlbums() const
 
 QWidget* DInfoInterface::uploadWidget(QWidget* const) const
 {
-    return 0;
+    return nullptr;
 }
 
 QUrl DInfoInterface::uploadUrl() const
@@ -132,7 +132,7 @@ QUrl DInfoInterface::defaultUploadUrl() const
 
 QAbstractItemModel* DInfoInterface::tagFilterModel()
 {
-    return 0;
+    return nullptr;
 }
 
 // -----------------------------------------------------------------

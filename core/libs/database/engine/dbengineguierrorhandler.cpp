@@ -147,7 +147,7 @@ public:
 
     explicit Private()
     {
-        checker = 0;
+        checker = nullptr;
     }
 
     QPointer<QProgressDialog>  dialog;

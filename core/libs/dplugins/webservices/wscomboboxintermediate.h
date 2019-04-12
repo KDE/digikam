@@ -56,7 +56,7 @@ public:
     /* Initialize the combobox with a parent and a string to indicate the
      * intermediate state.
      */
-    explicit WSComboBoxIntermediate(QWidget* const = 0, const QString& = i18n("Various"));
+    explicit WSComboBoxIntermediate(QWidget* const = nullptr, const QString& = i18n("Various"));
     ~WSComboBoxIntermediate();
 
     /* Set the state of the combobox to intermediate. The intermediate state is

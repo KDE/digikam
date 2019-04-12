@@ -179,7 +179,7 @@ QString s_convertFFMpegFormatToXMP(int format)
 
 DMetadata::MetaDataMap s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
 {
-    AVDictionaryEntry* entry = 0;
+    AVDictionaryEntry* entry = nullptr;
     DMetadata::MetaDataMap meta;
 
     do
@@ -224,7 +224,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 #endif
 
     AVFormatContext* fmt_ctx = avformat_alloc_context();
-    int ret                  = avformat_open_input(&fmt_ctx, filePath.toUtf8().data(), NULL, NULL);
+    int ret                  = avformat_open_input(&fmt_ctx, filePath.toUtf8().data(), nullptr, nullptr);
 
     if (ret < 0)
     {
@@ -232,7 +232,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         return false;
     }
 
-    ret = avformat_find_stream_info(fmt_ctx, NULL);
+    ret = avformat_find_stream_info(fmt_ctx, nullptr);
 
     if (ret < 0)
     {
@@ -1570,7 +1570,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             else
             {
                 // No altitude available.
-                double* alt = 0;
+                double* alt = nullptr;
                 setGPSInfo(alt, lattitude, longitude);
             }
 

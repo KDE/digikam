@@ -264,7 +264,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     if (m_loadFlags & LoadICCData)
     {
-        uchar*  profile_data = 0;
+        uchar*  profile_data = nullptr;
         uint32  profile_size;
 
         if (TIFFGetField(tif, TIFFTAG_ICCPROFILE, &profile_size, &profile_data))
@@ -898,8 +898,8 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         observer->progressInfo(m_image, 0.1F);
     }
 
-    uchar*  pixel        = 0;
-    uint16* pixel16      = 0;
+    uchar*  pixel        = nullptr;
+    uint16* pixel16      = nullptr;
     double  alpha_factor = 0;
     uint32  x = 0, y = 0;
     uint8   r8 = 0, g8 = 0, b8 = 0, a8 = 0;

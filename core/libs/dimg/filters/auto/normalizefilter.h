@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 
 public:
 
-    explicit NormalizeFilter(QObject* const parent = 0);
-    NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
+    explicit NormalizeFilter(QObject* const parent = nullptr);
+    NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=nullptr);
     virtual ~NormalizeFilter();
 
     static QString          FilterIdentifier()

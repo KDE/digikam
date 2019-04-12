@@ -83,10 +83,10 @@ public:
 
     explicit Private()
       : setError(false),
-        backend(0),
-        albumDB(0),
-        dbAccess(0),
-        observer(0)
+        backend(nullptr),
+        albumDB(nullptr),
+        dbAccess(nullptr),
+        observer(nullptr)
     {
     }
 

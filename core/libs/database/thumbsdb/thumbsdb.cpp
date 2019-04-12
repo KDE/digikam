@@ -41,7 +41,7 @@ class Q_DECL_HIDDEN ThumbsDb::Private
 public:
 
     explicit Private()
-      : db(0)
+      : db(nullptr)
     {
     }
 
@@ -298,7 +298,7 @@ BdEngineBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, 
     QVariant id;
     BdEngineBackend::QueryState lastQueryState;
     lastQueryState = d->db->execSql(QLatin1String("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);"),
-                                    info.type, info.modificationDate, info.orientationHint, info.data, 0, &id);
+                                    info.type, info.modificationDate, info.orientationHint, info.data, nullptr, &id);
 
     if (BdEngineBackend::NoErrors == lastQueryState)
     {

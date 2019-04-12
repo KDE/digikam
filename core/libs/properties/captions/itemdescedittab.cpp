@@ -99,31 +99,31 @@ public:
         ignoreItemAttributesWatch = false;
         ignoreTagChanges           = false;
         togglingSearchSettings     = false;
-        recentTagsBtn              = 0;
-        titleEdit                  = 0;
-        captionsEdit               = 0;
-        tagsSearchBar              = 0;
-        dateTimeEdit               = 0;
-        tagCheckView               = 0;
-        ratingWidget               = 0;
-        assignedTagsBtn            = 0;
-        applyBtn                   = 0;
-        moreButton                 = 0;
-        revertBtn                  = 0;
-        openTagMngr                = 0;
-        moreMenu                   = 0;
-        applyToAllVersionsButton   = 0;
-        recentTagsMapper           = 0;
-        newTagEdit                 = 0;
-        lastSelectedWidget         = 0;
-        templateSelector           = 0;
-        templateViewer             = 0;
-        tabWidget                  = 0;
-        tagModel                   = 0;
-        tagCheckView               = 0;
-        colorLabelSelector         = 0;
-        pickLabelSelector          = 0;
-        metadataChangeTimer        = 0;
+        recentTagsBtn              = nullptr;
+        titleEdit                  = nullptr;
+        captionsEdit               = nullptr;
+        tagsSearchBar              = nullptr;
+        dateTimeEdit               = nullptr;
+        tagCheckView               = nullptr;
+        ratingWidget               = nullptr;
+        assignedTagsBtn            = nullptr;
+        applyBtn                   = nullptr;
+        moreButton                 = nullptr;
+        revertBtn                  = nullptr;
+        openTagMngr                = nullptr;
+        moreMenu                   = nullptr;
+        applyToAllVersionsButton   = nullptr;
+        recentTagsMapper           = nullptr;
+        newTagEdit                 = nullptr;
+        lastSelectedWidget         = nullptr;
+        templateSelector           = nullptr;
+        templateViewer             = nullptr;
+        tabWidget                  = nullptr;
+        tagModel                   = nullptr;
+        tagCheckView               = nullptr;
+        colorLabelSelector         = nullptr;
+        pickLabelSelector          = nullptr;
+        metadataChangeTimer        = nullptr;
     }
 
     bool                 modified;
@@ -486,7 +486,7 @@ void ItemDescEditTab::setFocusToLastSelectedWidget()
         d->lastSelectedWidget->setFocus();
     }
 
-    d->lastSelectedWidget = 0;
+    d->lastSelectedWidget = nullptr;
 }
 
 void ItemDescEditTab::setFocusToTagsView()
@@ -1028,7 +1028,7 @@ void ItemDescEditTab::slotCreateNewTag()
 
 void ItemDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
 {
-    TAlbum* assigned = 0;
+    TAlbum* assigned = nullptr;
 
     if (action.shallAssignTag())
     {

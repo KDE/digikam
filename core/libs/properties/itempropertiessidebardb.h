@@ -70,10 +70,10 @@ public:
     ItemPropertiesVersionsTab* getFiltersHistoryTab() const;
     ItemDescEditTab*           imageDescEditTab()     const;
 
-    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
+    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = nullptr);
 
     virtual void itemChanged(const ItemInfo& info, const QRect& rect = QRect(),
-                             DImg* const img = 0, const DImageHistory& history = DImageHistory());
+                             DImg* const img = nullptr, const DImageHistory& history = DImageHistory());
 
     virtual void itemChanged(const ItemInfoList& infos);
 

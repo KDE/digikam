@@ -46,7 +46,7 @@ class Q_DECL_HIDDEN ParkingThread : public QThread
 {
 public:
 
-    explicit ParkingThread(QObject* const parent = 0)
+    explicit ParkingThread(QObject* const parent = nullptr)
         : QThread(parent), running(true)
     {
         start();
@@ -191,7 +191,7 @@ void WorkerObjectRunnable::run()
         QEventLoop loop;
         object->setEventLoop(&loop);
         loop.exec();
-        object->setEventLoop(0);
+        object->setEventLoop(nullptr);
 
         if (previousPriority != QThread::InheritPriority)
         {
@@ -217,8 +217,8 @@ public:
 
     Private()
     {
-        parkingThread = 0;
-        pool          = 0;
+        parkingThread = nullptr;
+        pool          = nullptr;
     }
 
     ParkingThread* parkingThread;

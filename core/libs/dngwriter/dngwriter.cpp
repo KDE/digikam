@@ -501,7 +501,7 @@ int DNGWriter::convert()
 
         const dng_mosaic_info* const mosaicinfo = negative->GetMosaicInfo();
 
-        if ((mosaicinfo != NULL) && (mosaicinfo->fCFAPatternSize == dng_point(2, 2)))
+        if ((mosaicinfo != nullptr) && (mosaicinfo->fCFAPatternSize == dng_point(2, 2)))
         {
             negative->SetQuadBlacks(identify.blackPoint + identify.blackPointCh[0],
                                     identify.blackPoint + identify.blackPointCh[1],

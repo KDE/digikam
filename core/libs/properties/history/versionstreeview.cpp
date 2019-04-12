@@ -101,10 +101,10 @@ protected:
 
 VersionsTreeView::VersionsTreeView(QWidget* const parent)
     : QTreeView(parent),
-      m_delegate(0),
-      m_dragDropHandler(0),
+      m_delegate(nullptr),
+      m_dragDropHandler(nullptr),
       m_showToolTip(false),
-      m_toolTip(0)
+      m_toolTip(nullptr)
 {
     m_delegate = new VersionsDelegate(this);
     setItemDelegate(m_delegate);
@@ -133,7 +133,7 @@ void VersionsTreeView::addOverlay(ItemDelegateOverlay* overlay)
 void VersionsTreeView::removeOverlay(ItemDelegateOverlay* overlay)
 {
     m_delegate->removeOverlay(overlay);
-    overlay->setView(0);
+    overlay->setView(nullptr);
 }
 
 void VersionsTreeView::setToolTipEnabled(bool on)

@@ -161,7 +161,7 @@ void DImgLoader::loadingFailed()
         delete [] m_image->m_priv->data;
     }
 
-    m_image->m_priv->data   = 0;
+    m_image->m_priv->data   = nullptr;
     m_image->m_priv->width  = 0;
     m_image->m_priv->height = 0;
 }
@@ -406,7 +406,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
 
         if ((readlen = qfile.read(databuf, 8192)) > 0)
         {
-            QByteArray size = 0;
+            QByteArray size = nullptr;
             md5.addData(databuf, readlen);
             md5.addData(size.setNum(qfile.size()));
             hash = md5.result().toHex();

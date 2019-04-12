@@ -66,7 +66,7 @@ class Q_DECL_HIDDEN FaceDb::Private
 
 public:
     explicit Private()
-        : db(0)
+        : db(nullptr)
     {
     }
 
@@ -125,7 +125,7 @@ QString FaceDb::setting(const QString& keyword) const
 int FaceDb::addIdentity() const
 {
     QVariant id;
-    d->db->execSql(QLatin1String("INSERT INTO Identities (`type`) VALUES (0);"), 0, &id);
+    d->db->execSql(QLatin1String("INSERT INTO Identities (`type`) VALUES (0);"), nullptr, &id);
     return id.toInt();
 }
 
@@ -232,7 +232,7 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
     {
         QVariant insertedId;
         d->db->execSql(QLatin1String("INSERT INTO OpenCVLBPHRecognizer (version, radius, neighbors, grid_x, grid_y) VALUES (?,?,?,?,?);"),
-                       values, 0, &insertedId);
+                       values, nullptr, &insertedId);
         model.databaseId = insertedId.toInt();
     }
 
@@ -293,7 +293,7 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
 
                     d->db->execSql(QLatin1String("INSERT INTO OpenCVLBPHistograms (recognizerid, identity, `context`, `type`, `rows`, `cols`, `data`) "
                                                  "VALUES (?,?,?,?,?,?,?);"),
-                                   histogramValues, 0, &insertedId);
+                                   histogramValues, nullptr, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
 
@@ -503,7 +503,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
 
                     d->db->execSql(QLatin1String("INSERT INTO FaceMatrices (identity, `context`, `type`, `rows`, `cols`, `data`, vecdata) "
                                                  "VALUES (?,?,?,?,?,?,?);"),
-                                   histogramValues, 0, &insertedId);
+                                   histogramValues, nullptr, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());
 
@@ -668,7 +668,7 @@ void FaceDb::updateDNNFaceModel(DNNFaceModel& model)
 
                 d->db->execSql(QLatin1String("INSERT INTO FaceMatrices (identity, `context`, vecdata) "
                                              "VALUES (?,?,?);"),
-                               histogramValues, 0, &insertedId);
+                               histogramValues, nullptr, &insertedId);
 
                 model.setWrittenToDatabase(i, insertedId.toInt());
 

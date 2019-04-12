@@ -47,7 +47,7 @@ public:
 
     /** Standard constructor with image container to parse
      */
-    explicit AutoCrop(DImg* const orgImage, QObject* const parent = 0);
+    explicit AutoCrop(DImg* const orgImage, QObject* const parent = nullptr);
     ~AutoCrop();
 
     /** Perform auto-crop analyze to find best inner crop. Use autoInnerCrop()

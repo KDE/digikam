@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT HistogramBox : public QWidget
 
 public:
 
-    explicit HistogramBox(QWidget* const parent = 0,
+    explicit HistogramBox(QWidget* const parent = nullptr,
                           HistogramBoxType type = Digikam::LRGB,
                           bool selectMode = false);
     ~HistogramBox();

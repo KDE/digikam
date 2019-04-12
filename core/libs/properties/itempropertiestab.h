@@ -98,7 +98,7 @@ public:
      * you can optionally give a QVariant list. This list shall contain an identifier
      * for the tag path at the same index and will be resorted as the returned list.
      */
-    static QStringList shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers = 0);
+    static QStringList shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers = nullptr);
 
     /** This methods shortens make an model camera info to prevent bloating GUI
      *  See bug #265231 for details.

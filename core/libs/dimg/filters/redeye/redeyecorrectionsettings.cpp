@@ -54,7 +54,7 @@ class Q_DECL_HIDDEN RedEyeCorrectionSettings::Private
 public:
 
     explicit Private()
-      : redtoavgratioInput(0)
+      : redtoavgratioInput(nullptr)
     {
     }
 

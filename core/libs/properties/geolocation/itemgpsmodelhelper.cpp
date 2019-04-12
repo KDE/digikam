@@ -32,9 +32,9 @@ public:
 
     explicit Private()
     {
-        itemModel           = 0;
-        itemSelectionModel  = 0;
-        thumbnailLoadThread = 0;
+        itemModel           = nullptr;
+        itemSelectionModel  = nullptr;
+        thumbnailLoadThread = nullptr;
     }
 
     QStandardItemModel*  itemModel;

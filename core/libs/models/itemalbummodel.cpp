@@ -54,9 +54,9 @@ public:
 
     explicit Private()
     {
-        jobThread               = 0;
-        refreshTimer            = 0;
-        incrementalTimer        = 0;
+        jobThread               = nullptr;
+        refreshTimer            = nullptr;
+        incrementalTimer        = nullptr;
         recurseAlbums           = false;
         recurseTags             = false;
         listOnlyAvailableImages = false;
@@ -124,7 +124,7 @@ ItemAlbumModel::~ItemAlbumModel()
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 
     delete d;
@@ -215,7 +215,7 @@ void ItemAlbumModel::refresh()
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 
     clearItemInfos();
@@ -252,7 +252,7 @@ void ItemAlbumModel::incrementalRefresh()
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 
     startIncrementalRefresh();
@@ -318,7 +318,7 @@ void ItemAlbumModel::startListJob(const QList<Album*>& albums)
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 
     CoreDbUrl url;
@@ -443,7 +443,7 @@ void ItemAlbumModel::slotResult()
     }
 
     d->jobThread->cancel();
-    d->jobThread = 0;
+    d->jobThread = nullptr;
 
     // either of the two
     finishRefresh();

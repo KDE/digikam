@@ -34,7 +34,7 @@ namespace Digikam
 
 PreviewLoadThread::PreviewLoadThread(QObject* const parent)
     : ManagedLoadSaveThread(parent),
-      m_displayingWidget(0)
+      m_displayingWidget(nullptr)
 {
     m_loadingPolicy = LoadingPolicyFirstRemovePrevious;
 }
@@ -134,7 +134,7 @@ DImg PreviewLoadThread::loadSynchronously(const QString& filePath, const Preview
 
 DImg PreviewLoadThread::loadSynchronously(const LoadingDescription& description)
 {
-    PreviewLoadingTask task(0, description);
+    PreviewLoadingTask task(nullptr, description);
     task.execute();
     return task.img();
 }

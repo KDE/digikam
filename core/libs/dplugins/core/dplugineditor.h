@@ -47,7 +47,7 @@ public:
     /**
      * Constructor with optional parent object
      */
-    explicit DPluginEditor(QObject* const parent = 0);
+    explicit DPluginEditor(QObject* const parent = nullptr);
 
     /**
      * Destructor

@@ -163,8 +163,8 @@ void DImg::bitBlt(const uchar* const src, uchar* const dest,
         return;
     }
 
-    const uchar* sptr  = 0;
-    uchar* dptr        = 0;
+    const uchar* sptr  = nullptr;
+    uchar* dptr        = nullptr;
     uint   slinelength = swidth * sdepth;
     uint   dlinelength = dwidth * ddepth;
     int scurY          = sy;
@@ -217,8 +217,8 @@ void DImg::bitBlend(DColorComposer* const composer, uchar* const src, uchar* con
         return;
     }
 
-    uchar* sptr      = 0;
-    uchar* dptr      = 0;
+    uchar* sptr      = nullptr;
+    uchar* dptr      = nullptr;
     uint slinelength = swidth * sdepth;
     uint dlinelength = dwidth * ddepth;
     int scurY        = sy;
@@ -293,7 +293,7 @@ void DImg::bitBlendOnColor(DColorComposer* const composer, const DColor& color,
         return;
     }
 
-    uchar* ptr      = 0;
+    uchar* ptr      = nullptr;
     uint linelength = width * depth;
     int curY        = y;
 

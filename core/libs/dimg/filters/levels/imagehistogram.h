@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ImageHistogram : public DynamicThread
 
 public:
 
-    explicit ImageHistogram(const DImg& img, QObject* const parent = 0);
+    explicit ImageHistogram(const DImg& img, QObject* const parent = nullptr);
     ~ImageHistogram();
 
     /**

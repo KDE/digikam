@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT TIFFSettings : public QWidget
 
 public:
 
-    explicit TIFFSettings(QWidget* const parent = 0);
+    explicit TIFFSettings(QWidget* const parent = nullptr);
     ~TIFFSettings();
 
     void setCompression(bool b);

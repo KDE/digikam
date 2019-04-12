@@ -51,11 +51,11 @@ public:
     explicit Private()
       : toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
-        toggleAutoAction(0),
-        toggleNoneAction(0),
-        toggleChildrenAction(0),
-        toggleParentsAction(0),
-        toggleBothAction(0)
+        toggleAutoAction(nullptr),
+        toggleNoneAction(nullptr),
+        toggleChildrenAction(nullptr),
+        toggleParentsAction(nullptr),
+        toggleBothAction(nullptr)
     {
     }
 

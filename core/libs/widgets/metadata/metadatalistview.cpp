@@ -90,7 +90,7 @@ void MetadataListView::setCurrentItemByKey(const QString& itemKey)
     }
 
     int i                 = 0;
-    QTreeWidgetItem* item = 0;
+    QTreeWidgetItem* item = nullptr;
 
     do
     {
@@ -147,7 +147,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
     clear();
 
     uint               subItems      = 0;
-    MdKeyListViewItem* parentifDItem = 0;
+    MdKeyListViewItem* parentifDItem = nullptr;
     QStringList        filters       = tagsFilter;
     QString            ifDItemName;
 
@@ -245,7 +245,7 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
     QStringList        filters       = tagsFilter;
     uint               subItems      = 0;
-    MdKeyListViewItem* parentifDItem = 0;
+    MdKeyListViewItem* parentifDItem = nullptr;
 
     if (ifds.count() == 0)
     {
@@ -438,7 +438,7 @@ MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

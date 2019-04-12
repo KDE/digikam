@@ -47,14 +47,14 @@ DConfigDlgWdgPrivate::DConfigDlgWdgPrivate(DConfigDlgWdg* const q)
 
 void DConfigDlgWdgPrivate::_k_slotCurrentPageChanged(const QModelIndex& current, const QModelIndex& before)
 {
-    DConfigDlgWdgItem* currentItem = 0;
+    DConfigDlgWdgItem* currentItem = nullptr;
 
     if (current.isValid())
     {
         currentItem = model()->item(current);
     }
 
-    DConfigDlgWdgItem* beforeItem = 0;
+    DConfigDlgWdgItem* beforeItem = nullptr;
 
     if (before.isValid())
     {
@@ -164,7 +164,7 @@ DConfigDlgWdgItem* DConfigDlgWdg::currentPage() const
 
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     return d_func()->model()->item(index);

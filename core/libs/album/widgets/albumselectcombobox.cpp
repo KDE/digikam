@@ -51,8 +51,8 @@ public:
     explicit Private(AlbumSelectComboBox* q)
         : q(q)
     {
-        model                 = 0;
-        filterModel           = 0;
+        model                 = nullptr;
+        filterModel           = nullptr;
         isCheckable           = true;
         closeOnActivate       = false;
         showCheckStateSummary = true;
@@ -298,7 +298,7 @@ void AlbumSelectComboBox::updateText()
 
 AbstractAlbumTreeViewSelectComboBox::AbstractAlbumTreeViewSelectComboBox(QWidget* const parent)
     : AlbumSelectComboBox(parent),
-      m_treeView(0)
+      m_treeView(nullptr)
 {
 }
 
@@ -374,7 +374,7 @@ AlbumTreeView* AlbumTreeViewSelectComboBox::view() const
 
 void AlbumTreeViewSelectComboBox::setDefaultModel()
 {
-    setModel(0, 0);
+    setModel(nullptr, nullptr);
 }
 
 void AlbumTreeViewSelectComboBox::setModel(AlbumModel* model, CheckableAlbumFilterModel* filterModel)
@@ -417,7 +417,7 @@ TagTreeView* TagTreeViewSelectComboBox::view() const
 
 void TagTreeViewSelectComboBox::setDefaultModel()
 {
-    setModel(0, 0);
+    setModel(nullptr, nullptr);
 }
 
 void TagTreeViewSelectComboBox::setModel(TagModel* model,

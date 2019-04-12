@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT ThumbnailLoadThread : public ManagedLoadSaveThread
 
 public:
 
-    explicit ThumbnailLoadThread(QObject* const parent = 0);
+    explicit ThumbnailLoadThread(QObject* const parent = nullptr);
     ~ThumbnailLoadThread();
 
     /**
@@ -68,7 +68,7 @@ public:
      * This need not be called, then the FreeDesktop standard is used.
      * You can optionally provide a thumbnail info provider.
      */
-    static void initializeThumbnailDatabase(const DbEngineParameters& params, ThumbnailInfoProvider* const provider = 0);
+    static void initializeThumbnailDatabase(const DbEngineParameters& params, ThumbnailInfoProvider* const provider = nullptr);
 
     /**
      * For color management, this sets the widget the thumbnails will be color managed for.
@@ -285,8 +285,8 @@ public:
      *  Note: Not meant for loading QPixmap thumbnails.
      */
 
-    explicit ThumbnailImageCatcher(QObject* const parent = 0);
-    explicit ThumbnailImageCatcher(ThumbnailLoadThread* const thread, QObject* const parent = 0);
+    explicit ThumbnailImageCatcher(QObject* const parent = nullptr);
+    explicit ThumbnailImageCatcher(ThumbnailLoadThread* const thread, QObject* const parent = nullptr);
     ~ThumbnailImageCatcher();
 
     ThumbnailLoadThread* thread() const;

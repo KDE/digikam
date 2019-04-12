@@ -51,10 +51,10 @@ public:
 
     explicit Private()
     {
-        JPEG2000Grid             = 0;
-        labelJPEG2000compression = 0;
-        JPEG2000compression      = 0;
-        JPEG2000LossLess         = 0;
+        JPEG2000Grid             = nullptr;
+        labelJPEG2000compression = nullptr;
+        JPEG2000compression      = nullptr;
+        JPEG2000LossLess         = nullptr;
     }
 
     QGridLayout*  JPEG2000Grid;

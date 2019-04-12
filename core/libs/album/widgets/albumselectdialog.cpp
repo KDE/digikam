@@ -61,9 +61,9 @@ public:
 
     explicit Private()
     {
-        buttons   = 0;
-        albumSel  = 0;
-        searchBar = 0;
+        buttons   = nullptr;
+        albumSel  = nullptr;
+        searchBar = nullptr;
     }
 
     QDialogButtonBox*  buttons;
@@ -157,7 +157,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albu
     if (dlg->exec() != QDialog::Accepted)
     {
         delete dlg;
-        return 0;
+        return nullptr;
     }
 
     PAlbum* const selectedAlbum = dlg->d->albumSel->currentAlbum();
@@ -165,7 +165,7 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albu
     if (!selectedAlbum || (selectedAlbum->isRoot()))
     {
         delete dlg;
-        return 0;
+        return nullptr;
     }
 
     delete dlg;

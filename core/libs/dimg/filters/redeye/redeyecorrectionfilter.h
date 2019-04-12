@@ -41,8 +41,8 @@ class DIGIKAM_EXPORT RedEyeCorrectionFilter : public DImgThreadedFilter
 
 public:
 
-    explicit RedEyeCorrectionFilter(QObject* const parent=0);
-    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0,
+    explicit RedEyeCorrectionFilter(QObject* const parent=nullptr);
+    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=nullptr,
                                     const RedEyeCorrectionContainer& settings=RedEyeCorrectionContainer());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter

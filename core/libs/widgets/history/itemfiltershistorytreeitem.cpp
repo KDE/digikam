@@ -32,7 +32,7 @@ public:
 
     explicit Private()
     {
-        parentItem = 0;
+        parentItem = nullptr;
         disabled   = false;
     }
 

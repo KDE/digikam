@@ -49,7 +49,7 @@ public:
         : q(q)
     {
         // Note: Don't make the mutex recursive, we need to use a wait condition on it
-        watch = 0;
+        watch = nullptr;
     }
 
     void mapImageFilePath(const QString& filePath, const QString& cacheKey);
@@ -142,7 +142,7 @@ void LoadingCache::Private::cleanUpThumbnailFilePathHash()
     }
 }
 
-LoadingCache* LoadingCache::m_instance = 0;
+LoadingCache* LoadingCache::m_instance = nullptr;
 
 LoadingCache* LoadingCache::cache()
 {
@@ -179,7 +179,7 @@ LoadingCache::~LoadingCache()
 {
     delete d->watch;
     delete d;
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 DImg* LoadingCache::retrieveImage(const QString& cacheKey) const
@@ -376,7 +376,7 @@ LoadingCacheFileWatch::~LoadingCacheFileWatch()
 
         if (m_cache->d->watch == this)
         {
-            m_cache->d->watch = 0;
+            m_cache->d->watch = nullptr;
         }
     }
 }

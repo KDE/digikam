@@ -74,13 +74,13 @@ public:
     /**
      * Constructs a DNotificationWidget with the specified @p parent.
      */
-    explicit DNotificationWidget(QWidget* const parent = 0);
+    explicit DNotificationWidget(QWidget* const parent = nullptr);
 
     /**
      * Constructs a DNotificationWidget with the specified @p parent and
      * contents @p text.
      */
-    explicit DNotificationWidget(const QString& text, QWidget* const parent = 0);
+    explicit DNotificationWidget(const QString& text, QWidget* const parent = nullptr);
 
     /**
      * Destructor.

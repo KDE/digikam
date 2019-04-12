@@ -50,7 +50,7 @@ public:
 
 public:
 
-    explicit DFontSelect(const QString& text, QWidget* const parent=0);
+    explicit DFontSelect(const QString& text, QWidget* const parent=nullptr);
     virtual ~DFontSelect();
 
     void setMode(FontMode mode);

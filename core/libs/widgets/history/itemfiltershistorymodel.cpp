@@ -45,7 +45,7 @@ class Q_DECL_HIDDEN ItemFiltersHistoryModel::Private
 public:
 
     explicit Private()
-        : rootItem(0),
+        : rootItem(nullptr),
           disabledEntries(0)
     {
     }
@@ -124,7 +124,7 @@ QVariant ItemFiltersHistoryModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    ItemFiltersHistoryTreeItem* item = 0;
+    ItemFiltersHistoryTreeItem* item = nullptr;
 
     if (role == Qt::DecorationRole)
     {
@@ -144,7 +144,7 @@ Qt::ItemFlags ItemFiltersHistoryModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     Qt::ItemFlags flags = Qt::ItemIsSelectable;
@@ -174,7 +174,7 @@ QModelIndex ItemFiltersHistoryModel::index(int row, int column, const QModelInde
         return QModelIndex();
     }
 
-    ItemFiltersHistoryTreeItem* parentItem = 0;
+    ItemFiltersHistoryTreeItem* parentItem = nullptr;
 
     if (!parent.isValid())
     {
@@ -217,7 +217,7 @@ QModelIndex ItemFiltersHistoryModel::parent(const QModelIndex& index) const
 
 int ItemFiltersHistoryModel::rowCount(const QModelIndex& parent) const
 {
-    ItemFiltersHistoryTreeItem* parentItem = 0;
+    ItemFiltersHistoryTreeItem* parentItem = nullptr;
 
     if (parent.column() > 0)
     {

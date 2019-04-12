@@ -48,7 +48,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    explicit FileSaveOptionsBox(QWidget* const parent=0);
+    explicit FileSaveOptionsBox(QWidget* const parent=nullptr);
 
     /**
      * Destructor.

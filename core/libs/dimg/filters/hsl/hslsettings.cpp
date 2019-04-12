@@ -52,12 +52,12 @@ class Q_DECL_HIDDEN HSLSettings::Private
 public:
 
     explicit Private()
-      : HSSelector(0),
-        hInput(0),
-        sInput(0),
-        vInput(0),
-        lInput(0),
-        HSPreview(0)
+      : HSSelector(nullptr),
+        hInput(nullptr),
+        sInput(nullptr),
+        vInput(nullptr),
+        lInput(nullptr),
+        HSPreview(nullptr)
     {
     }
 

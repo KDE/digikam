@@ -38,7 +38,7 @@ namespace Digikam
 // ------------ Model sample implementation -------------
 
 DragDropModelImplementation::DragDropModelImplementation()
-    : m_dragDropHandler(0)
+    : m_dragDropHandler(nullptr)
 {
 }
 
@@ -48,7 +48,7 @@ Qt::ItemFlags DragDropModelImplementation::dragDropFlags(const QModelIndex& inde
 
     if (!m_dragDropHandler)
     {
-        return 0;
+        return nullptr;
     }
 
     return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
@@ -108,7 +108,7 @@ QMimeData* DragDropModelImplementation::mimeData(const QModelIndexList& indexes)
 {
     if (!m_dragDropHandler)
     {
-        return 0;
+        return nullptr;
     }
 
     return m_dragDropHandler->createMimeData(indexes);

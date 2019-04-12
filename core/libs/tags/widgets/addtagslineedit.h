@@ -48,7 +48,7 @@ class AddTagsLineEdit : public QLineEdit
 
 public:
 
-    explicit AddTagsLineEdit(QWidget* const parent = 0);
+    explicit AddTagsLineEdit(QWidget* const parent = nullptr);
     ~AddTagsLineEdit();
 
     /**

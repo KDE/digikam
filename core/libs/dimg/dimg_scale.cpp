@@ -64,11 +64,11 @@ public:
 
     DImgScaleInfo()
     {
-        xpoints   = 0;
-        ypoints   = 0;
-        ypoints16 = 0;
-        xapoints  = 0;
-        yapoints  = 0;
+        xpoints   = nullptr;
+        ypoints   = nullptr;
+        ypoints16 = nullptr;
+        xapoints  = nullptr;
+        yapoints  = nullptr;
         xup_yup   = 0;
     }
 
@@ -396,7 +396,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 
 uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
 {
-    uint** p = 0;
+    uint** p = nullptr;
     int i, j = 0;
     ullong val, inc;
 
@@ -415,7 +415,7 @@ uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
 
 ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
 {
-    ullong** p = 0;
+    ullong** p = nullptr;
     int i, j   = 0;
     ullong val, inc;
 
@@ -434,7 +434,7 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
 
 int* DImgScale::dimgCalcXPoints(int sw, int dw)
 {
-    int* p=0, i, j = 0;
+    int* p=nullptr, i, j = 0;
     ullong val, inc;
 
     p   = new int[dw+1];
@@ -452,7 +452,7 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
 
 int* DImgScale::dimgCalcApoints(int s, int d, int up)
 {
-    int* p=0, i, j = 0;
+    int* p=nullptr, i, j = 0;
 
     p = new int[d];
 
@@ -515,12 +515,12 @@ DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
 
     if (img.sixteenBit())
     {
-        isi->ypoints   = 0;
+        isi->ypoints   = nullptr;
         isi->ypoints16 = dimgCalcYPoints16(reinterpret_cast<ullong*>(img.bits()), img.width(), img.height(), sch);
     }
     else
     {
-        isi->ypoints16 = 0;
+        isi->ypoints16 = nullptr;
         isi->ypoints   = dimgCalcYPoints(reinterpret_cast<uint*>(img.bits()), img.width(), img.height(), sch);
     }
 
@@ -564,8 +564,8 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    uint* sptr=0;
-    uint* dptr=0;
+    uint* sptr=nullptr;
+    uint* dptr=nullptr;
     int x, y;
     uint** ypoints    = isi->ypoints;
     int* xpoints      = isi->xpoints;
@@ -604,8 +604,8 @@ void DImgScale::dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    ullong* sptr=0;
-    ullong* dptr=0;
+    ullong* sptr=nullptr;
+    ullong* dptr=nullptr;
     int x, y;
     ullong** ypoints  = isi->ypoints16;
     int* xpoints      = isi->xpoints;
@@ -665,8 +665,8 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    uint* sptr=0;
-    uint* dptr=0;
+    uint* sptr=nullptr;
+    uint* dptr=nullptr;
     int x, y;
     uint** ypoints    = isi->ypoints;
     int* xpoints      = isi->xpoints;
@@ -693,7 +693,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     int r, g, b, a;
-                    uint* pix=0;
+                    uint* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -761,7 +761,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    uint* pix=0;
+                    uint* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -802,7 +802,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int r, g, b, a, rr, gg, bb, aa;
         int yap;
 
@@ -896,7 +896,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int r, g, b, a, rr, gg, bb, aa;
         int xap;
 
@@ -994,7 +994,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
         |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
         \*/
         int Cx, Cy, i, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 
@@ -1138,8 +1138,8 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    uint* sptr=0;
-    uint* dptr=0;
+    uint* sptr=nullptr;
+    uint* dptr=nullptr;
     int x, y;
     uint** ypoints    = isi->ypoints;
     int* xpoints      = isi->xpoints;
@@ -1166,7 +1166,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     int   r = 0, g = 0, b = 0;
-                    uint* pix=0;
+                    uint* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -1226,7 +1226,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    uint* pix=0;
+                    uint* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -1264,7 +1264,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int r, g, b, rr, gg, bb;
         int yap;
 
@@ -1349,7 +1349,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int r, g, b, rr, gg, bb;
         int xap;
 
@@ -1435,7 +1435,7 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, Cy, i, j;
-        uint* pix=0;
+        uint* pix=nullptr;
         int r, g, b, rx, gx, bx;
         int xap, yap;
 
@@ -1569,8 +1569,8 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    ullong* sptr=0;
-    ullong* dptr=0;
+    ullong* sptr=nullptr;
+    ullong* dptr=nullptr;
     int x, y;
     ullong** ypoints  = isi->ypoints16;
     int*     xpoints  = isi->xpoints;
@@ -1597,7 +1597,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     llong r = 0, g = 0, b = 0;
-                    ullong* pix=0;
+                    ullong* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -1657,7 +1657,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
             {
                 for (x = x_begin; x < x_end; ++x)
                 {
-                    ullong* pix=0;
+                    ullong* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -1695,7 +1695,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
     {
         // 'Correct' version, with math units prepared for MMXification
         int Cy, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong r, g, b, rr, gg, bb;
         int yap;
 
@@ -1779,7 +1779,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
     {
         // 'Correct' version, with math units prepared for MMXification
         int Cx, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong r, g, b, rr, gg, bb;
         int xap;
 
@@ -1864,7 +1864,7 @@ void DImgScale::dimgScaleAARGB16(DImgScaleInfo* const isi, ullong* const dest,
     {
         // 'Correct' version, with math units prepared for MMXification
         int Cx, Cy, i, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong r, g, b, rx, gx, bx;
         int xap, yap;
 
@@ -1995,8 +1995,8 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
-    ullong* sptr=0;
-    ullong* dptr=0;
+    ullong* sptr=nullptr;
+    ullong* dptr=nullptr;
     int x, y;
     ullong** ypoints  = isi->ypoints16;
     int* xpoints      = isi->xpoints;
@@ -2024,7 +2024,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                 {
                     llong r, g, b, a;
                     llong rr, gg, bb, aa;
-                    ullong* pix=0;
+                    ullong* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -2091,7 +2091,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
                 for (x = x_begin; x < x_end; ++x)
                 {
                     llong r, g, b, a;
-                    ullong* pix=0;
+                    ullong* pix=nullptr;
 
                     if (XAP > 0)
                     {
@@ -2130,7 +2130,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cy, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong r, g, b, a, rr, gg, bb, aa;
         int yap;
 
@@ -2224,7 +2224,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
     {
         /*\ 'Correct' version, with math units prepared for MMXification \*/
         int Cx, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong r, g, b, a, rr, gg, bb, aa;
         int xap;
 
@@ -2322,7 +2322,7 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
         |*|  psllw (16 - d), %mmb; pmulh %mmc, %mmb
         \*/
         int Cx, Cy, i, j;
-        ullong* pix=0;
+        ullong* pix=nullptr;
         llong a, r, g, b, ax, rx, gx, bx;
         int xap, yap;
 

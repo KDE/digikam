@@ -57,16 +57,16 @@ class Q_DECL_HIDDEN BorderSettings::Private
 public:
 
     explicit Private()
-      : preserveAspectRatio(0),
-        labelBackground(0),
-        labelBorderPercent(0),
-        labelBorderWidth(0),
-        labelForeground(0),
-        firstColorButton(0),
-        secondColorButton(0),
-        borderType(0),
-        borderPercent(0),
-        borderWidth(0)
+      : preserveAspectRatio(nullptr),
+        labelBackground(nullptr),
+        labelBorderPercent(nullptr),
+        labelBorderWidth(nullptr),
+        labelForeground(nullptr),
+        firstColorButton(nullptr),
+        secondColorButton(nullptr),
+        borderType(nullptr),
+        borderPercent(nullptr),
+        borderWidth(nullptr)
     {
     }
 

@@ -68,7 +68,7 @@ public:
                                            ///< CategoryDisplayRole.
     };
 
-    explicit DCategorizedSortFilterProxyModel(QObject* const parent = 0);
+    explicit DCategorizedSortFilterProxyModel(QObject* const parent = nullptr);
     virtual ~DCategorizedSortFilterProxyModel();
 
     /**

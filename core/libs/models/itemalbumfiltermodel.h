@@ -41,7 +41,7 @@ class ItemAlbumFilterModel : public ItemFilterModel
 
 public:
 
-    explicit ItemAlbumFilterModel(QObject* const parent = 0);
+    explicit ItemAlbumFilterModel(QObject* const parent = nullptr);
     ~ItemAlbumFilterModel();
 
     void            setSourceItemModel(ItemAlbumModel* model);

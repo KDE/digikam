@@ -113,7 +113,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 
     uint                    subItems = 0;
     QString                 ifDItemName, currentIfDName;
-    MdKeyListViewItem*      parentifDItem = 0;
+    MdKeyListViewItem*      parentifDItem = nullptr;
     QList<QTreeWidgetItem*> toplevelItems;
 
     for (DMetadata::TagsMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
@@ -131,7 +131,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
                 delete parentifDItem;
             }
 
-            parentifDItem = new MdKeyListViewItem(0, currentIfDName);
+            parentifDItem = new MdKeyListViewItem(nullptr, currentIfDName);
             toplevelItems << parentifDItem;
             subItems      = 0;
         }
@@ -246,11 +246,11 @@ public:
 
     explicit Private()
     {
-        selectAllBtn        = 0;
-        clearSelectionBtn   = 0;
-        defaultSelectionBtn = 0;
-        selector            = 0;
-        searchBar           = 0;
+        selectAllBtn        = nullptr;
+        clearSelectionBtn   = nullptr;
+        defaultSelectionBtn = nullptr;
+        selector            = nullptr;
+        searchBar           = nullptr;
     }
 
     QStringList       defaultFilter;

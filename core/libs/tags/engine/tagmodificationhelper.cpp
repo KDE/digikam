@@ -62,8 +62,8 @@ public:
 
     explicit Private()
     {
-        parentTag    = 0;
-        dialogParent = 0;
+        parentTag    = nullptr;
+        dialogParent = nullptr;
     }
 
     AlbumPointer<TAlbum>  parentTag;
@@ -89,14 +89,14 @@ void TagModificationHelper::bindTag(QAction* action, TAlbum* album) const
 
 TAlbum* TagModificationHelper::boundTag(QObject* sender) const
 {
-    QAction* action = 0;
+    QAction* action = nullptr;
 
     if ((action = qobject_cast<QAction*>(sender)))
     {
         return action->data().value<AlbumPointer<TAlbum> >();
     }
 
-    return 0;
+    return nullptr;
 }
 void TagModificationHelper::bindMultipleTags(QAction* action, QList<TAlbum*> tags)
 {
@@ -105,7 +105,7 @@ void TagModificationHelper::bindMultipleTags(QAction* action, QList<TAlbum*> tag
 
 QList<TAlbum*> TagModificationHelper::boundMultipleTags(QObject* sender)
 {
-    QAction* action = 0;
+    QAction* action = nullptr;
 
     if ((action = qobject_cast<QAction*>(sender)))
     {
@@ -127,7 +127,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
         if (!p)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find root tag album";
-            return 0;
+            return nullptr;
         }
     }
 
@@ -141,7 +141,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
         if (!doCreate || !p)
         {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -157,7 +157,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 

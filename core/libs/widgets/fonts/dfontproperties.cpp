@@ -121,18 +121,18 @@ public:
         selectedSize           = -1;
         customSizeRow          = -1;
         usingFixed             = true;
-        sizeOfFont             = 0;
-        sampleEdit             = 0;
-        familyLabel            = 0;
-        styleLabel             = 0;
-        familyCheckbox         = 0;
-        styleCheckbox          = 0;
-        sizeCheckbox           = 0;
-        sizeLabel              = 0;
-        familyListBox          = 0;
-        styleListBox           = 0;
-        sizeListBox            = 0;
-        sizeIsRelativeCheckBox = 0;
+        sizeOfFont             = nullptr;
+        sampleEdit             = nullptr;
+        familyLabel            = nullptr;
+        styleLabel             = nullptr;
+        familyCheckbox         = nullptr;
+        styleCheckbox          = nullptr;
+        sizeCheckbox           = nullptr;
+        sizeLabel              = nullptr;
+        familyListBox          = nullptr;
+        styleListBox           = nullptr;
+        sizeListBox            = nullptr;
+        sizeIsRelativeCheckBox = nullptr;
     }
 
     void    setFamilyBoxItems(const QStringList& fonts);
@@ -150,7 +150,7 @@ public:
      * @param family the storage for family name
      * @param foundry the storage for foundry name
      */
-    void splitFontString(const QString& name, QString* family, QString* foundry = 0);
+    void splitFontString(const QString& name, QString* family, QString* foundry = nullptr);
 
     /**
      * Translate the font name for the user.
@@ -170,7 +170,7 @@ public:
      * @param trToRawNames storage for mapping of translated to raw names
      * @return sorted list of translated font names
      */
-    QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = 0);
+    QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = nullptr);
 
     void _d_toggled_checkbox();
     void _d_family_chosen_slot(const QString&);
@@ -244,8 +244,8 @@ DFontProperties::DFontProperties(QWidget* const parent,
 
     // Build the grid of font attribute widgets for the upper splitter part.
 
-    QWidget* page           = 0;
-    QGridLayout* gridLayout = 0;
+    QWidget* page           = nullptr;
+    QGridLayout* gridLayout = nullptr;
     int row                 = 0;
 
     if (flags & DisplayFrame)
@@ -278,11 +278,11 @@ DFontProperties::DFontProperties(QWidget* const parent,
         familyLayout->addWidget(d->familyCheckbox, 0, Qt::AlignLeft);
         d->familyCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font family settings."));
         d->familyCheckbox->setToolTip(i18n("Change font family?"));
-        d->familyLabel = 0;
+        d->familyLabel = nullptr;
     }
     else
     {
-        d->familyCheckbox = 0;
+        d->familyCheckbox = nullptr;
         d->familyLabel    = new QLabel(i18nc("@label", "Font:"), page);
         familyLayout->addWidget(d->familyLabel, 1, Qt::AlignLeft);
     }
@@ -301,11 +301,11 @@ DFontProperties::DFontProperties(QWidget* const parent,
         styleLayout->addWidget(d->styleCheckbox, 0, Qt::AlignLeft);
         d->styleCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font style settings."));
         d->styleCheckbox->setToolTip(i18n("Change font style?"));
-        d->styleLabel = 0;
+        d->styleLabel = nullptr;
     }
     else
     {
-        d->styleCheckbox = 0;
+        d->styleCheckbox = nullptr;
         d->styleLabel    = new QLabel(i18n("Font style:"), page);
         styleLayout->addWidget(d->styleLabel, 1, Qt::AlignLeft);
     }
@@ -325,11 +325,11 @@ DFontProperties::DFontProperties(QWidget* const parent,
         sizeLayout->addWidget(d->sizeCheckbox, 0, Qt::AlignLeft);
         d->sizeCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font size settings."));
         d->sizeCheckbox->setToolTip(i18n("Change font size?"));
-        d->sizeLabel = 0;
+        d->sizeLabel = nullptr;
     }
     else
     {
-        d->sizeCheckbox = 0;
+        d->sizeCheckbox = nullptr;
         d->sizeLabel    = new QLabel(i18nc("@label:listbox Font size", "Size:"), page);
         sizeLayout->addWidget(d->sizeLabel, 1, Qt::AlignLeft);
     }
@@ -430,7 +430,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
     }
     else
     {
-        d->sizeIsRelativeCheckBox      = 0;
+        d->sizeIsRelativeCheckBox      = nullptr;
         QGridLayout* const sizeLayout2 = new QGridLayout();
         sizeLayout2->setSpacing(spacingHint / 2);
         gridLayout->addLayout(sizeLayout2, row, 2);

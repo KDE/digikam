@@ -46,9 +46,9 @@ class Q_DECL_HIDDEN AddTagsLineEdit::Private
 public:
 
     explicit Private()
-        : completer(0),
-          tagView(0),
-          tagFilterModel(0),
+        : completer(nullptr),
+          tagView(nullptr),
+          tagFilterModel(nullptr),
           parentTagId(0)
     {
     }

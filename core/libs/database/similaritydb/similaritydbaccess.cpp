@@ -52,8 +52,8 @@ class Q_DECL_HIDDEN SimilarityDbAccessStaticPriv
 public:
 
     SimilarityDbAccessStaticPriv()
-        : backend(0),
-          db(0),
+        : backend(nullptr),
+          db(nullptr),
           initializing(false)
     {
     }
@@ -71,7 +71,7 @@ public:
     bool                 initializing;
 };
 
-SimilarityDbAccessStaticPriv* SimilarityDbAccess::d = 0;
+SimilarityDbAccessStaticPriv* SimilarityDbAccess::d = nullptr;
 
 // -----------------------------------------------------------------------------
 
@@ -189,7 +189,7 @@ void SimilarityDbAccess::setParameters(const DbEngineParameters& parameters)
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDbEngineErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(nullptr);
     }
 
     d->parameters = parameters;
@@ -278,7 +278,7 @@ void SimilarityDbAccess::cleanUpDatabase()
     }
 
     delete d;
-    d = 0;
+    d = nullptr;
 }
 
 } // namespace Digikam

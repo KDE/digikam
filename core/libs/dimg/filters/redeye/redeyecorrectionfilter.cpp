@@ -58,7 +58,7 @@ public:
     RedEyeCorrectionContainer      settings;
 };
 
-redeye::ShapePredictor* RedEyeCorrectionFilter::Private::sp = 0;
+redeye::ShapePredictor* RedEyeCorrectionFilter::Private::sp = nullptr;
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     : DImgThreadedFilter(parent),

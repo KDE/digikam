@@ -73,16 +73,16 @@ public:
 
     explicit Private()
     {
-        view           = 0;
-        mainLayout     = 0;
-        filterBtn      = 0;
-        toolBtn        = 0;
-        searchBar      = 0;
-        optionsMenu    = 0;
-        noneAction     = 0;
-        photoAction    = 0;
-        customAction   = 0;
-        settingsAction = 0;
+        view           = nullptr;
+        mainLayout     = nullptr;
+        filterBtn      = nullptr;
+        toolBtn        = nullptr;
+        searchBar      = nullptr;
+        optionsMenu    = nullptr;
+        noneAction     = nullptr;
+        photoAction    = nullptr;
+        customAction   = nullptr;
+        settingsAction = nullptr;
     }
 
     QAction*               noneAction;
@@ -325,7 +325,7 @@ void MetadataWidget::slotCopy2Clipboard()
 {
     QString textmetadata  = i18n("File name: %1 (%2)",d->fileName,getMetadataTitle());
     int i                 = 0;
-    QTreeWidgetItem* item = 0;
+    QTreeWidgetItem* item = nullptr;
 
     do
     {
@@ -339,7 +339,7 @@ void MetadataWidget::slotCopy2Clipboard()
             textmetadata.append(QLatin1String(" <<<\n\n"));
 
             int j                  = 0;
-            QTreeWidgetItem* item2 = 0;
+            QTreeWidgetItem* item2 = nullptr;
 
             do
             {
@@ -374,7 +374,7 @@ void MetadataWidget::slotPrintMetadata()
                                 d->fileName, getMetadataTitle());
 
     int i                 = 0;
-    QTreeWidgetItem* item = 0;
+    QTreeWidgetItem* item = nullptr;
 
     do
     {
@@ -388,7 +388,7 @@ void MetadataWidget::slotPrintMetadata()
             textmetadata.append(QLatin1String("</b><br/><br/>"));
 
             int j                  = 0;
-            QTreeWidgetItem* item2 = 0;
+            QTreeWidgetItem* item2 = nullptr;
 
             do
             {

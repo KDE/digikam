@@ -54,7 +54,7 @@ double ImageQualityParser::noiseDetector() const
     }
 
     // Array to store the centers of the clusters.
-    CvArr* centers = 0;
+    CvArr* centers = nullptr;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
 
@@ -67,10 +67,10 @@ double ImageQualityParser::noiseDetector() const
                   clusters,
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0),
                   3,
-                  0,
+                  nullptr,
                   0,
                   centers,
-                  0);
+                  nullptr);
     }
 
     qCDebug(DIGIKAM_DIMG_LOG) << "cvKmeans2 successfully run";
@@ -116,7 +116,7 @@ double ImageQualityParser::noiseDetector() const
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
-    CvMat* sd = 0;
+    CvMat* sd = nullptr;
 
     if (d->running)
     {
@@ -132,7 +132,7 @@ double ImageQualityParser::noiseDetector() const
         rPosition[i] = 0;
     }
 
-    float* ptr = 0;
+    float* ptr = nullptr;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "The rowPosition array is ready!";
 
@@ -169,10 +169,10 @@ double ImageQualityParser::noiseDetector() const
 
     CvScalar std;
     CvScalar mean;
-    CvMat*   meanStore    = 0;
-    CvMat*   stdStore     = 0;
-    float*   meanStorePtr = 0;
-    float*   stdStorePtr  = 0;
+    CvMat*   meanStore    = nullptr;
+    CvMat*   stdStore     = nullptr;
+    float*   meanStorePtr = nullptr;
+    float*   stdStorePtr  = nullptr;
     int      totalcount   = 0; // Number of non-empty clusters.
 
     if (d->running)

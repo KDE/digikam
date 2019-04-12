@@ -46,8 +46,8 @@ public:
     Private()
     {
         state         = WorkerObject::Inactive;
-        eventLoop     = 0;
-        runnable      = 0;
+        eventLoop     = nullptr;
+        runnable      = nullptr;
         inDestruction = false;
         priority      = QThread::InheritPriority;
     }
@@ -179,7 +179,7 @@ void WorkerObject::removeRunnable(WorkerObjectRunnable* runnable)
     // there could be a second runnable in the meantime, waiting for the other, leaving runnable to park
     if (d->runnable == runnable)
     {
-        d->runnable = 0;
+        d->runnable = nullptr;
     }
 
     d->condVar.wakeAll();

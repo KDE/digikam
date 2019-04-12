@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT PGFSettings : public QWidget
 
 public:
 
-    explicit PGFSettings(QWidget* const parent = 0);
+    explicit PGFSettings(QWidget* const parent = nullptr);
     ~PGFSettings();
 
     void setCompressionValue(int val);

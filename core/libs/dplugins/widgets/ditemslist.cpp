@@ -75,7 +75,7 @@ public:
     explicit Private()
     {
         rating   = -1;
-        view     = 0;
+        view     = nullptr;
         state    = Waiting;
         hasThumb = false;
     }
@@ -268,7 +268,7 @@ DInfoInterface* DItemsListView::iface() const
         return p->iface();
     }
 
-    return 0;
+    return nullptr;
 }
 
 void DItemsListView::setup(int iconSize)
@@ -389,7 +389,7 @@ DItemsListViewItem* DItemsListView::findItem(const QUrl& url)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QModelIndex DItemsListView::indexFromItem(DItemsListViewItem* item, int column) const
@@ -469,23 +469,23 @@ public:
 
     explicit Private()
     {
-        listView               = 0;
-        addButton              = 0;
-        removeButton           = 0;
-        moveUpButton           = 0;
-        moveDownButton         = 0;
-        clearButton            = 0;
-        loadButton             = 0;
-        saveButton             = 0;
+        listView               = nullptr;
+        addButton              = nullptr;
+        removeButton           = nullptr;
+        moveUpButton           = nullptr;
+        moveDownButton         = nullptr;
+        clearButton            = nullptr;
+        loadButton             = nullptr;
+        saveButton             = nullptr;
         iconSize               = DEFAULTSIZE;
         allowRAW               = true;
         controlButtonsEnabled  = true;
         allowDuplicate         = false;
         progressCount          = 0;
-        progressTimer          = 0;
+        progressTimer          = nullptr;
         progressPix            = DWorkingPixmap();
         thumbLoadThread        = ThumbnailLoadThread::defaultThread();
-        iface                  = 0;
+        iface                  = nullptr;
     }
 
     bool                       allowRAW;
@@ -692,7 +692,7 @@ void DItemsList::setControlButtonsPlacement(ControlButtonPlacement placement)
             delete vBtnLayout;
             delete hBtnLayout;
             // set all buttons invisible
-            setControlButtons(0x0);
+            setControlButtons(nullptr);
             break;
         }
     }
@@ -1305,7 +1305,7 @@ DItemsListViewItem* DItemsListView::getCurrentItem() const
 
     if (!currentTreeItem)
     {
-        return 0;
+        return nullptr;
     }
 
     return dynamic_cast<DItemsListViewItem*>(currentTreeItem);

@@ -47,7 +47,7 @@ class ItemGPSModelHelper : public GeoModelHelper
 
 public:
 
-    explicit ItemGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = 0);
+    explicit ItemGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent = nullptr);
     virtual ~ItemGPSModelHelper();
 
     virtual QAbstractItemModel* model()           const;

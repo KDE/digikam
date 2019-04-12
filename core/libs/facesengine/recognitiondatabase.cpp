@@ -346,18 +346,18 @@ static void trainIdentityBatchDNN(OpenCVDNNFaceRecognizer* const r,
 
 RecognitionDatabase::Private::Private()
     : mutex(QMutex::Recursive),
-      opencvfisher(0),
-      opencveigen(0),
-      opencvlbph(0),
+      opencvfisher(nullptr),
+      opencveigen(nullptr),
+      opencvlbph(nullptr),
 #ifdef HAVE_FACESENGINE_DNN
-      opencvdnn(0),
+      opencvdnn(nullptr),
 #endif
-      funnel(0)
+      funnel(nullptr)
 {
     DbEngineParameters params = CoreDbAccess::parameters().faceParameters();
     params.setFaceDatabasePath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir());
     FaceDbAccess::setParameters(params);
-    dbAvailable               = FaceDbAccess::checkReadyForUse(0);
+    dbAvailable               = FaceDbAccess::checkReadyForUse(nullptr);
     recognizeAlgorithm        = RecognizeAlgorithm::LBP;
 
     if (dbAvailable)
@@ -603,7 +603,7 @@ void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const,
 {
     // force later reload
     delete opencvlbph;
-    opencvlbph = 0;
+    opencvlbph = nullptr;
 
     if (idsToClear.isEmpty())
     {
@@ -621,7 +621,7 @@ void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const,
 {
     // force later reload
     delete opencveigen;
-    opencveigen = 0;
+    opencveigen = nullptr;
 
     if (idsToClear.isEmpty())
     {
@@ -639,7 +639,7 @@ void RecognitionDatabase::Private::clear(OpenCVFISHERFaceRecognizer* const,
 {
     // force later reload
     delete opencvfisher;
-    opencvfisher = 0;
+    opencvfisher = nullptr;
 }
 
 #ifdef HAVE_FACESENGINE_DNN
@@ -649,7 +649,7 @@ void RecognitionDatabase::Private::clear(OpenCVDNNFaceRecognizer* const,
 {
     // force later reload
     delete opencvdnn;
-    opencvdnn = 0;
+    opencvdnn = nullptr;
 }
 #endif
 

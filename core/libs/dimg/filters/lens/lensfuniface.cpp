@@ -39,10 +39,10 @@ public:
 
     explicit Private()
     {
-        usedLens   = 0;
-        usedCamera = 0;
-        lfDb       = 0;
-        lfCameras  = 0;
+        usedLens   = nullptr;
+        usedCamera = nullptr;
+        lfDb       = nullptr;
+        lfCameras  = nullptr;
     }
 
     // To be used for modification
@@ -195,7 +195,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
     }
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Search for camera " << make << "-" << model << " ==> false";
-    return 0;
+    return nullptr;
 }
 
 LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
@@ -216,14 +216,14 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
     }
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Search for lens " << model << " ==> false";
-    return 0;
+    return nullptr;
 }
 
 LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera, const QString& lensDesc,
                                                 const QString& lensMaker) const
 {
     LensList lensList;
-    const lfLens** lfLens = 0;
+    const lfLens** lfLens = nullptr;
 
     if (lfCamera)
     {
@@ -233,7 +233,7 @@ LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera, 
         }
         else
         {
-            lfLens = d->lfDb->FindLenses(lfCamera, NULL, lensDesc.toLatin1().constData());
+            lfLens = d->lfDb->FindLenses(lfCamera, nullptr, lensDesc.toLatin1().constData());
         }
 
         while (lfLens && *lfLens)
@@ -250,8 +250,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 {
     MetadataMatch ret  = MetadataNoMatch;
     d->settings        = LensFunContainer();
-    d->usedCamera      = 0;
-    d->usedLens        = 0;
+    d->usedCamera      = nullptr;
+    d->usedLens        = nullptr;
     d->lensDescription.clear();
 
     if (meta.isEmpty())
@@ -361,7 +361,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                     else
                     {
                         qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : more than one...";
-                        const lfLens* exact = 0;
+                        const lfLens* exact = nullptr;
 
                         foreach (const lfLens* const l, lensMatches)
                         {

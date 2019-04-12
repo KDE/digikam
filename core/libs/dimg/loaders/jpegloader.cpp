@@ -138,9 +138,9 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         CleanupData()
         {
-            data = 0;
-            dest = 0;
-            file = 0;
+            data = nullptr;
+            dest = nullptr;
+            file = nullptr;
             cmod = 0;
         }
 
@@ -183,12 +183,12 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         void deleteData()
         {
             delete [] data;
-            data = 0;
+            data = nullptr;
         }
 
         void takeDest()
         {
-            dest = 0;
+            dest = nullptr;
         }
 
     public:
@@ -330,7 +330,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Load image data.
 
-    uchar* dest = 0;
+    uchar* dest = nullptr;
 
     if (m_loadFlags & LoadImageData)
     {
@@ -381,8 +381,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         // -------------------------------------------------------------------
         // Get scanlines
 
-        uchar* ptr  = 0, *data = 0, *line[16];
-        uchar* ptr2 = 0;
+        uchar* ptr  = nullptr, *data = nullptr, *line[16];
+        uchar* ptr2 = nullptr;
         int    x, y, l, i, scans;
         //        int count;
         //        int prevy;
@@ -618,12 +618,12 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             startedDecompress = true;
         }
 
-        JOCTET* profile_data = NULL;
+        JOCTET* profile_data = nullptr;
         uint    profile_size = 0;
 
         read_icc_profile(&cinfo, &profile_data, &profile_size);
 
-        if (profile_data != NULL)
+        if (profile_data != nullptr)
         {
             QByteArray profile_rawdata;
             profile_rawdata.resize(profile_size);
@@ -695,8 +695,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     public:
 
         CleanupData()
-            : line(0),
-              f(0)
+            : line(nullptr),
+              f(nullptr)
         {
         }
 
@@ -723,7 +723,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         void deleteLine()
         {
             delete [] line;
-            line = 0;
+            line = nullptr;
         }
 
     public:
@@ -864,7 +864,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // Write Image data.
 
     uchar* line       = new uchar[w * 3];
-    uchar* dstPtr     = 0;
+    uchar* dstPtr     = nullptr;
     uint   checkPoint = 0;
     cleanupData->setLine(line);
 

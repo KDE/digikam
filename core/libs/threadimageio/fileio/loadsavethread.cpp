@@ -43,7 +43,7 @@ public:
     {
         running           = true;
         blockNotification = false;
-        lastTask          = 0;
+        lastTask          = nullptr;
     }
 
     bool                             running;
@@ -56,7 +56,7 @@ public:
     static LoadSaveFileInfoProvider* infoProvider;
 };
 
-LoadSaveFileInfoProvider* LoadSaveThread::Private::infoProvider = 0;
+LoadSaveFileInfoProvider* LoadSaveThread::Private::infoProvider = nullptr;
 
 //---------------------------------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ LoadSaveThread::LoadSaveThread(QObject* const parent)
     : DynamicThread(parent),
       d(new Private)
 {
-    m_currentTask        = 0;
+    m_currentTask        = nullptr;
     m_notificationPolicy = NotificationPolicyTimeLimited;
 }
 
@@ -106,9 +106,9 @@ void LoadSaveThread::run()
             QMutexLocker lock(threadMutex());
 
             delete d->lastTask;
-            d->lastTask = 0;
+            d->lastTask = nullptr;
             delete m_currentTask;
-            m_currentTask = 0;
+            m_currentTask = nullptr;
 
             if (!m_todo.isEmpty())
             {
@@ -149,7 +149,7 @@ void LoadSaveThread::taskHasFinished()
     // so that anyone who finds this task running as m_current task will get a message.
     QMutexLocker lock(threadMutex());
     d->lastTask   = m_currentTask;
-    m_currentTask = 0;
+    m_currentTask = nullptr;
 }
 
 void LoadSaveThread::imageStartedLoading(const LoadingDescription& loadingDescription)

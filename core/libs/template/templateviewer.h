@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT TemplateViewer : public DExpanderBox
 
 public:
 
-    explicit TemplateViewer(QWidget* const parent=0);
+    explicit TemplateViewer(QWidget* const parent=nullptr);
     virtual ~TemplateViewer();
 
     void setTemplate(const Template& t);

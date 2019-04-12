@@ -58,9 +58,9 @@ public:
     explicit Private()
     {
         status      = None;
-        info        = 0;
-        resetBtn    = 0;
-        settingsBtn = 0;
+        info        = nullptr;
+        resetBtn    = nullptr;
+        settingsBtn = nullptr;
     }
 
     int               status;

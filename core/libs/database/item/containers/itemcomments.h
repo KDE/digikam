@@ -120,7 +120,7 @@ public:
      */
     QString defaultComment(Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const
     {
-        return defaultComment(0, type);
+        return defaultComment(nullptr, type);
     }
 
     QString defaultComment(int* const index, Digikam::DatabaseComment::Type type = DatabaseComment::Comment) const;
@@ -130,7 +130,7 @@ public:
      * Matching behavior can be specified.
      * Optionally also returns the index with which you can access further information about the comment.
      */
-    QString commentForLanguage(const QString& languageCode, int* const index = 0,
+    QString commentForLanguage(const QString& languageCode, int* const index = nullptr,
                                LanguageChoiceBehavior behavior = ReturnMatchingDefaultOrFirstLanguage) const;
 
     /** Returns the number of comments available. */

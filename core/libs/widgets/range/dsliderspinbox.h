@@ -134,7 +134,7 @@ class DSliderSpinBox : public DAbstractSliderSpinBox
 
 public:
 
-    explicit DSliderSpinBox(QWidget* const parent = 0);
+    explicit DSliderSpinBox(QWidget* const parent = nullptr);
     ~DSliderSpinBox();
 
     void setRange(int minimum, int maximum);
@@ -176,7 +176,7 @@ class DDoubleSliderSpinBox : public DAbstractSliderSpinBox
 
 public:
 
-    explicit DDoubleSliderSpinBox(QWidget* const parent = 0);
+    explicit DDoubleSliderSpinBox(QWidget* const parent = nullptr);
     ~DDoubleSliderSpinBox();
 
     void   setRange(double minimum, double maximum, int decimals = 0);

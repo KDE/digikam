@@ -50,8 +50,8 @@ class Q_DECL_HIDDEN FaceDbAccessStaticPriv
 public:
 
     explicit FaceDbAccessStaticPriv()
-        : backend(0),
-          db(0),
+        : backend(nullptr),
+          db(nullptr),
           initializing(false)
     {
     }
@@ -70,7 +70,7 @@ public:
     bool               initializing;
 };
 
-FaceDbAccessStaticPriv* FaceDbAccess::d = 0;
+FaceDbAccessStaticPriv* FaceDbAccess::d = nullptr;
 
 // ----------------------------------------------------------------
 
@@ -186,7 +186,7 @@ void FaceDbAccess::setParameters(const DbEngineParameters& parameters)
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDbEngineErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(nullptr);
     }
 
     d->parameters = parameters;
@@ -278,7 +278,7 @@ void FaceDbAccess::cleanUpDatabase()
     }
 
     delete d;
-    d = 0;
+    d = nullptr;
 }
 
 // ---------------------------------------------------------------------------------

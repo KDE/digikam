@@ -62,10 +62,10 @@ public:
 
     explicit Private()
     {
-        buttons        = 0;
-        calendar       = 0;
-        dtLabel        = 0;
-        previewManager = 0;
+        buttons        = nullptr;
+        calendar       = nullptr;
+        dtLabel        = nullptr;
+        previewManager = nullptr;
     }
 
     DeltaTime         deltaValues;

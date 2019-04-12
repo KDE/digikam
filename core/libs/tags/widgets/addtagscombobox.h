@@ -51,13 +51,13 @@ class AddTagsComboBox : public TagTreeViewSelectComboBox
 
 public:
 
-    explicit AddTagsComboBox(QWidget* const parent = 0);
+    explicit AddTagsComboBox(QWidget* const parent = nullptr);
     ~AddTagsComboBox();
 
     /** You must call this after construction.
      *  If filtered/filterModel is 0, a default one is constructed
      */
-    void setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel = 0, CheckableAlbumFilterModel* const filterModel = 0);
+    void setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel = nullptr, CheckableAlbumFilterModel* const filterModel = nullptr);
 
     /** Returns the currently set tagging action.
      *  This is the last action emitted by either taggingActionActivated()

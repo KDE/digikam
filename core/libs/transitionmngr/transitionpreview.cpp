@@ -43,7 +43,7 @@ public:
 
     explicit Private()
     {
-        mngr          = 0;
+        mngr          = nullptr;
         curTransition = TransitionMngr::None;
         previewSize   = QSize(192, 144);
     }

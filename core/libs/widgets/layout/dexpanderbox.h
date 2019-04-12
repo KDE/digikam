@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT DLineWidget : public QFrame
 
 public:
 
-    explicit DLineWidget(Qt::Orientation orientation, QWidget* const parent=0);
+    explicit DLineWidget(Qt::Orientation orientation, QWidget* const parent=nullptr);
     virtual ~DLineWidget();
 };
 
@@ -67,7 +67,7 @@ class DIGIKAM_EXPORT DAdjustableLabel : public QLabel
 
 public:
 
-    explicit DAdjustableLabel(QWidget* const parent=0);
+    explicit DAdjustableLabel(QWidget* const parent=nullptr);
     virtual ~DAdjustableLabel();
 
     QSize minimumSizeHint() const override;
@@ -106,8 +106,8 @@ class DIGIKAM_EXPORT DClickLabel : public QLabel
 
 public:
 
-    explicit DClickLabel(QWidget* const parent = 0);
-    explicit DClickLabel(const QString& text, QWidget* const parent = 0);
+    explicit DClickLabel(QWidget* const parent = nullptr);
+    explicit DClickLabel(const QString& text, QWidget* const parent = nullptr);
     ~DClickLabel();
 
 Q_SIGNALS:
@@ -132,8 +132,8 @@ class DIGIKAM_EXPORT DSqueezedClickLabel : public DAdjustableLabel
 
 public:
 
-    explicit DSqueezedClickLabel(QWidget* const parent = 0);
-    explicit DSqueezedClickLabel(const QString& text, QWidget* const parent = 0);
+    explicit DSqueezedClickLabel(QWidget* const parent = nullptr);
+    explicit DSqueezedClickLabel(const QString& text, QWidget* const parent = nullptr);
     ~DSqueezedClickLabel();
 
 Q_SIGNALS:
@@ -156,7 +156,7 @@ class DIGIKAM_EXPORT DArrowClickLabel : public QWidget
 
 public:
 
-    explicit DArrowClickLabel(QWidget* const parent = 0);
+    explicit DArrowClickLabel(QWidget* const parent = nullptr);
     ~DArrowClickLabel();
 
     void setArrowType(Qt::ArrowType arrowType);
@@ -189,7 +189,7 @@ class DIGIKAM_EXPORT DLabelExpander : public QWidget
 
 public:
 
-    explicit DLabelExpander(QWidget* const parent = 0);
+    explicit DLabelExpander(QWidget* const parent = nullptr);
     ~DLabelExpander();
 
     void setCheckBoxVisible(bool b);
@@ -243,7 +243,7 @@ class DIGIKAM_EXPORT DExpanderBox : public QScrollArea
 
 public:
 
-    explicit DExpanderBox(QWidget* const parent = 0);
+    explicit DExpanderBox(QWidget* const parent = nullptr);
     ~DExpanderBox();
 
     /** Add DLabelExpander item at end of box layout with these settings :
@@ -328,7 +328,7 @@ class DIGIKAM_EXPORT DExpanderBoxExclusive : public DExpanderBox
 
 public:
 
-    explicit DExpanderBoxExclusive(QWidget* const parent = 0);
+    explicit DExpanderBoxExclusive(QWidget* const parent = nullptr);
     ~DExpanderBoxExclusive();
 
     /** Show one expander open at most */

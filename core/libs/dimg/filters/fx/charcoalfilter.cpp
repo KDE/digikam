@@ -176,7 +176,7 @@ void CharcoalFilter::filterImage()
     settings.blackRedGain   = 0.3;
     settings.blackGreenGain = 0.59;
     settings.blackBlueGain  = 0.11;
-    MixerFilter mixer(&m_destImage, 0L, settings);
+    MixerFilter mixer(&m_destImage, nullptr, settings);
     mixer.startFilterDirectly();
     m_destImage.putImageData(mixer.getTargetImage().bits());
 
@@ -192,7 +192,7 @@ void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* n
 {
     int     mx, my, sx, sy, mcx, mcy, oldProgress=0, progress=0;
     double  red, green, blue, alpha;
-    double* k = 0;
+    double* k = nullptr;
 
     uint height     = m_destImage.height();
     uint width      = m_destImage.width();

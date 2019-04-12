@@ -39,7 +39,7 @@ class DIGIKAM_EXPORT IccTransformFilter : public DImgThreadedFilter,
 
 public:
 
-    explicit IccTransformFilter(QObject* const parent = 0);
+    explicit IccTransformFilter(QObject* const parent = nullptr);
     explicit IccTransformFilter(DImg* const orgImage, QObject* const parent, const IccTransform& transform);
     ~IccTransformFilter();
 

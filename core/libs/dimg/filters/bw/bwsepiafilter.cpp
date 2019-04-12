@@ -115,7 +115,7 @@ void BWSepiaFilter::filterImage()
 
         // Calculate and apply the luminosity curve on image.
 
-        CurvesFilter curves(&m_destImage, 0L, d->settings.curvesPrm);
+        CurvesFilter curves(&m_destImage, nullptr, d->settings.curvesPrm);
         postProgress(50);
         curves.startFilterDirectly();
         postProgress(60);
@@ -124,7 +124,7 @@ void BWSepiaFilter::filterImage()
 
         // Adjust contrast.
 
-        BCGFilter bcg(&m_destImage, 0L, d->settings.bcgPrm);
+        BCGFilter bcg(&m_destImage, nullptr, d->settings.bcgPrm);
         postProgress(80);
         bcg.startFilterDirectly();
         postProgress(90);
@@ -468,7 +468,7 @@ void BWSepiaFilter::applyChannelMixer(DImg& img)
     settings.blackRedGain   = d->redMult   + d->redMult * d->redAttn;
     settings.blackGreenGain = d->greenMult + d->greenMult * d->greenAttn;
     settings.blackBlueGain  = d->blueMult  + d->blueMult * d->blueAttn;
-    MixerFilter mixer(&img, 0L, settings);
+    MixerFilter mixer(&img, nullptr, settings);
     mixer.startFilterDirectly();
     img.putImageData(mixer.getTargetImage().bits());
 }
@@ -480,7 +480,7 @@ void BWSepiaFilter::applyInfraredFilter(DImg& img, int sensibility)
     settings.redGain     = d->redMult   + d->redMult * d->redAttn;
     settings.greenGain   = d->greenMult + d->greenMult * d->greenAttn;
     settings.blueGain    = d->blueMult  + d->blueMult * d->blueAttn;
-    InfraredFilter infra(&img, 0L, settings);
+    InfraredFilter infra(&img, nullptr, settings);
     infra.startFilterDirectly();
     img.putImageData(infra.getTargetImage().bits());
 }
@@ -492,7 +492,7 @@ void BWSepiaFilter::applyToneFilter(DImg& img, TonalityContainer& settings)
     settings.redMask   = settings.redMask   * mul;
     settings.greenMask = settings.greenMask * mul;
     settings.blueMask  = settings.blueMask  * mul;
-    TonalityFilter tone(&img, 0L, settings);
+    TonalityFilter tone(&img, nullptr, settings);
     tone.startFilterDirectly();
     img.putImageData(tone.getTargetImage().bits());
 }

@@ -39,8 +39,8 @@ class DIGIKAM_EXPORT SharpenFilter : public DImgThreadedFilter
 
 public:
 
-    explicit SharpenFilter(QObject* const parent = 0);
-    explicit SharpenFilter(DImg* const orgImage, QObject* const parent=0, double radius=0.0, double sigma=1.0);
+    explicit SharpenFilter(QObject* const parent = nullptr);
+    explicit SharpenFilter(DImg* const orgImage, QObject* const parent=nullptr, double radius=0.0, double sigma=1.0);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     SharpenFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,

@@ -39,7 +39,7 @@ class DateTreeView : public AbstractCountingAlbumTreeView
 
 public:
 
-    explicit DateTreeView(QWidget* const parent = 0, Flags flags = DefaultFlags);
+    explicit DateTreeView(QWidget* const parent = nullptr, Flags flags = DefaultFlags);
 
     DateAlbumModel* albumModel()                    const;
     DAlbum* currentAlbum()                          const;

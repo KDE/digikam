@@ -54,8 +54,8 @@ public:
 
 public:
 
-    TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* const parent = 0);
-    TagsPopupMenu(const QList<qlonglong>& selectedImageIDs, Mode mode, QWidget* const parent = 0);
+    TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* const parent = nullptr);
+    TagsPopupMenu(const QList<qlonglong>& selectedImageIDs, Mode mode, QWidget* const parent = nullptr);
     ~TagsPopupMenu();
 
 Q_SIGNALS:

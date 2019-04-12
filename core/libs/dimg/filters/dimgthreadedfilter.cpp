@@ -80,14 +80,14 @@ DImgThreadedFilter::~DImgThreadedFilter()
 
     if (m_master)
     {
-        m_master->setSlave(0);
+        m_master->setSlave(nullptr);
     }
 }
 
 void DImgThreadedFilter::initSlave(DImgThreadedFilter* const master, int progressBegin, int progressEnd)
 {
     m_master          = master;
-    m_slave           = 0;
+    m_slave           = nullptr;
     m_progressBegin   = progressBegin;
     m_progressSpan    = progressEnd - progressBegin;
     m_progressCurrent = 0;
@@ -100,8 +100,8 @@ void DImgThreadedFilter::initSlave(DImgThreadedFilter* const master, int progres
 
 void DImgThreadedFilter::initMaster()
 {
-    m_master          = 0;
-    m_slave           = 0;
+    m_master          = nullptr;
+    m_slave           = nullptr;
     m_progressBegin   = 0;
     m_progressSpan    = 100;
     m_progressCurrent = 0;

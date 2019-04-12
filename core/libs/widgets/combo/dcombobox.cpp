@@ -47,8 +47,8 @@ public:
     explicit Private()
     {
         defaultIndex = 0;
-        resetButton  = 0;
-        combo        = 0;
+        resetButton  = nullptr;
+        combo        = nullptr;
     }
 
     int          defaultIndex;

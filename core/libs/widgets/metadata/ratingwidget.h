@@ -141,7 +141,7 @@ class DIGIKAM_EXPORT RatingMenuAction : public QMenu
 
 public:
 
-    explicit RatingMenuAction(QMenu* const parent=0);
+    explicit RatingMenuAction(QMenu* const parent=nullptr);
     virtual ~RatingMenuAction();
 
 Q_SIGNALS:

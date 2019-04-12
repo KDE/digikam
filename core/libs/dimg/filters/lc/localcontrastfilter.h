@@ -46,8 +46,8 @@ class DIGIKAM_EXPORT LocalContrastFilter : public DImgThreadedFilter
 
 public:
 
-    explicit LocalContrastFilter(QObject* const parent = 0);
-    explicit LocalContrastFilter(DImg* const image, QObject* const parent=0, const LocalContrastContainer& par=LocalContrastContainer());
+    explicit LocalContrastFilter(QObject* const parent = nullptr);
+    explicit LocalContrastFilter(DImg* const image, QObject* const parent=nullptr, const LocalContrastContainer& par=LocalContrastContainer());
     ~LocalContrastFilter();
 
     static QString          FilterIdentifier()

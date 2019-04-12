@@ -136,10 +136,10 @@ RegionFrameItem::Private::Private(RegionFrameItem* const qq)
     hudSide               = HS_None;
     movingHandle          = CH_None;
     fixedRatio            = 0;
-    resizeHandleVisibility= 0;
-    hudWidget             = 0;
+    resizeHandleVisibility= nullptr;
+    hudWidget             = nullptr;
     hoverAnimationOpacity = 1.0;
-    hudTimer              = 0;
+    hudTimer              = nullptr;
     flags                 = NoFlags;
 
     cropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom
@@ -419,7 +419,7 @@ RegionFrameItem::~RegionFrameItem()
 
 void RegionFrameItem::setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags)
 {
-    QGraphicsProxyWidget* const proxy = new QGraphicsProxyWidget(0, wFlags);
+    QGraphicsProxyWidget* const proxy = new QGraphicsProxyWidget(nullptr, wFlags);
     /*
      * This is utterly undocumented magic. If you add a normal widget directly,
      * with transparent parts (round corners), you will have ugly color in the corners.

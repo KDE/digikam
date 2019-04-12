@@ -83,8 +83,8 @@ public:
     {
         for (int c = 0 ; c < 3; ++c)
         {
-            fimg[c]   = 0;
-            buffer[c] = 0;
+            fimg[c]   = nullptr;
+            buffer[c] = nullptr;
         }
     }
 

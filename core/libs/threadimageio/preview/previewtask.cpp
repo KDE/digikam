@@ -60,7 +60,7 @@ void PreviewLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg* cachedImg        = 0;
+        DImg* cachedImg        = nullptr;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
 
         // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
@@ -79,7 +79,7 @@ void PreviewLoadingTask::execute()
                     }
                     else
                     {
-                        cachedImg = 0;
+                        cachedImg = nullptr;
                     }
                 }
                 else
@@ -97,7 +97,7 @@ void PreviewLoadingTask::execute()
         else
         {
             // find possible running loading process
-            m_usedProcess = 0;
+            m_usedProcess = nullptr;
 
             for (QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it)
             {
@@ -132,7 +132,7 @@ void PreviewLoadingTask::execute()
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
-                m_usedProcess = 0;
+                m_usedProcess = nullptr;
                 // m_img is now set to the result
             }
             else
@@ -356,7 +356,7 @@ void PreviewLoadingTask::execute()
         }
 
         // set to 0, as checked in setStatus
-        m_usedProcess = 0;
+        m_usedProcess = nullptr;
     }
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held

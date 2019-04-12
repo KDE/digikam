@@ -52,7 +52,7 @@ public:
     explicit Private()
     {
         activeCursor     = NoCursor;
-        parent           = 0;
+        parent           = nullptr;
         leftCursor       = 0.0;
         middleCursor     = 0.5;
         rightCursor      = 1.0;

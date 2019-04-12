@@ -343,11 +343,11 @@ void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit
         return ;
     }
 
-    int* r_table     = 0;
-    int* g_table     = 0;
-    int* b_table     = 0;
-    int* a_table     = 0;
-    int* dummy_table = 0;
+    int* r_table     = nullptr;
+    int* g_table     = nullptr;
+    int* b_table     = nullptr;
+    int* a_table     = nullptr;
+    int* dummy_table = nullptr;
 
     if (sixteenBit)
     {

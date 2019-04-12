@@ -49,7 +49,7 @@ class Q_DECL_HIDDEN PageItem
 {
 public:
 
-    explicit PageItem(DConfigDlgWdgItem* pageItem, PageItem* parent = 0);
+    explicit PageItem(DConfigDlgWdgItem* pageItem, PageItem* parent = nullptr);
     ~PageItem();
 
     void appendChild(PageItem* child);
@@ -84,14 +84,14 @@ class Q_DECL_HIDDEN DConfigDlgWdgModelPrivate : public DConfigDlgModelPrivate
 protected:
 
     DConfigDlgWdgModelPrivate()
-        : rootItem(new PageItem(0, 0))
+        : rootItem(new PageItem(nullptr, nullptr))
     {
     }
 
     ~DConfigDlgWdgModelPrivate()
     {
         delete rootItem;
-        rootItem = 0;
+        rootItem = nullptr;
     }
 
     void _k_itemChanged()
@@ -129,7 +129,7 @@ protected:
 
 protected:
 
-    PageItem* rootItem = 0;
+    PageItem* rootItem = nullptr;
 };
 
 } // namespace Digikam

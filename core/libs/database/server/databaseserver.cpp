@@ -58,8 +58,8 @@ public:
 
     explicit Private()
     {
-        app             = 0;
-        databaseProcess = 0;
+        app             = nullptr;
+        databaseProcess = nullptr;
     }
 
     DbEngineParameters     params;
@@ -191,7 +191,7 @@ void DatabaseServer::stopDatabaseProcess()
     }
 
     d->databaseProcess->~QProcess();
-    d->databaseProcess = 0;
+    d->databaseProcess = nullptr;
 
     databaseServerStateEnum = stopped;
     wait();
@@ -199,7 +199,7 @@ void DatabaseServer::stopDatabaseProcess()
 
 bool DatabaseServer::isRunning() const
 {
-    if (d->databaseProcess == 0)
+    if (d->databaseProcess == nullptr)
     {
         return false;
     }
@@ -510,7 +510,7 @@ DatabaseServerError DatabaseServer::startMysqlServer()
                                            i18n("Could not start database server."));
 
         delete d->databaseProcess;
-        d->databaseProcess = 0;
+        d->databaseProcess = nullptr;
 
         return DatabaseServerError(DatabaseServerError::StartError, errorMsg);
     }

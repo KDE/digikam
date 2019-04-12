@@ -59,7 +59,7 @@ class DIGIKAM_EXPORT PanIconFrame : public QFrame
 
 public:
 
-    explicit PanIconFrame(QWidget* const parent=0);
+    explicit PanIconFrame(QWidget* const parent=nullptr);
     ~PanIconFrame();
 
     /**
@@ -127,7 +127,7 @@ class DIGIKAM_EXPORT PanIconWidget : public QWidget
 
 public:
 
-    explicit PanIconWidget(QWidget* const parent=0);
+    explicit PanIconWidget(QWidget* const parent=nullptr);
     ~PanIconWidget();
 
     static QToolButton* button();

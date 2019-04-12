@@ -44,8 +44,8 @@ namespace Digikam
 
 ItemDelegateOverlay::ItemDelegateOverlay(QObject* const parent)
     : QObject(parent),
-      m_view(0),
-      m_delegate(0)
+      m_view(nullptr),
+      m_delegate(nullptr)
 {
 }
 
@@ -177,7 +177,7 @@ int ItemDelegateOverlay::numberOfAffectedIndexes(const QModelIndex& index) const
 
 AbstractWidgetDelegateOverlay::AbstractWidgetDelegateOverlay(QObject* const parent)
     : ItemDelegateOverlay(parent),
-      m_widget(0),
+      m_widget(nullptr),
       m_mouseButtonPressedOnWidget(false)
 {
 }
@@ -189,7 +189,7 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
         if (m_widget)
         {
             delete m_widget;
-            m_widget = 0;
+            m_widget = nullptr;
         }
 
         m_widget = createWidget();
@@ -221,7 +221,7 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
     else
     {
         delete m_widget;
-        m_widget = 0;
+        m_widget = nullptr;
 
         if (m_view)
         {
@@ -229,7 +229,7 @@ void AbstractWidgetDelegateOverlay::setActive(bool active)
 
             if (view()->model())
             {
-                disconnect(m_view->model(), 0, this, 0);
+                disconnect(m_view->model(), nullptr, this, nullptr);
             }
 
             disconnect(m_view, SIGNAL(entered(QModelIndex)),
@@ -696,9 +696,9 @@ QList<ItemDelegateOverlay*> ItemDelegateOverlayContainer::overlays() const
 void ItemDelegateOverlayContainer::removeOverlay(ItemDelegateOverlay* overlay)
 {
     overlay->setActive(false);
-    overlay->setDelegate(0);
+    overlay->setDelegate(nullptr);
     m_overlays.removeAll(overlay);
-    QObject::disconnect(overlay, 0, asDelegate(), 0);
+    QObject::disconnect(overlay, nullptr, asDelegate(), nullptr);
 }
 
 void ItemDelegateOverlayContainer::setAllOverlaysActive(bool active)
@@ -722,8 +722,8 @@ void ItemDelegateOverlayContainer::removeAllOverlays()
     foreach(ItemDelegateOverlay* const overlay, m_overlays)
     {
         overlay->setActive(false);
-        overlay->setDelegate(0);
-        overlay->setView(0);
+        overlay->setDelegate(nullptr);
+        overlay->setView(nullptr);
     }
 
     m_overlays.clear();

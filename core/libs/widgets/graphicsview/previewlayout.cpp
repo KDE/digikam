@@ -43,8 +43,8 @@ public:
 
     explicit Private()
     {
-        view           = 0;
-        item           = 0;
+        view           = nullptr;
+        item           = nullptr;
         isFitToWindow  = false;
         previousZoom   = 1;
         zoomMultiplier = 1.2;

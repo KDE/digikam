@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT RefocusFilter : public DImgThreadedFilter
 
 public:
 
-    explicit RefocusFilter(QObject* const parent = 0);
-    explicit RefocusFilter(DImg* const orgImage, QObject* const parent=0, int matrixSize=5, double radius=0.9,
+    explicit RefocusFilter(QObject* const parent = nullptr);
+    explicit RefocusFilter(DImg* const orgImage, QObject* const parent=nullptr, int matrixSize=5, double radius=0.9,
                            double gauss=0.0, double correlation=0.5, double noise=0.01);
 
     ~RefocusFilter();

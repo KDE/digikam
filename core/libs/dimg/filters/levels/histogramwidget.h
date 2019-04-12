@@ -54,7 +54,7 @@ public:
     /** Standard constructor. Needed to use updateData() methods after to create valid instance.
      */
     HistogramWidget(int w, int h,                              // Widget size.
-                    QWidget* const parent=0,
+                    QWidget* const parent=nullptr,
                     bool selectMode=true,
                     bool showProgress=true,
                     bool statisticsVisible=false);

@@ -42,7 +42,7 @@ public:
 
     explicit Private()
     {
-        parent    = 0;
+        parent    = nullptr;
         rowEdited = -1;
     }
 

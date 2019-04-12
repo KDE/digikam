@@ -74,21 +74,21 @@ class Q_DECL_HIDDEN ItemPropertiesGPSTab::Private
 public:
 
     explicit Private()
-      : altLabel(0),
-        latLabel(0),
-        lonLabel(0),
-        dateLabel(0),
-        detailsBtn(0),
-        detailsCombo(0),
-        altitude(0),
-        latitude(0),
-        longitude(0),
-        date(0),
-        map(0),
-        itemMarkerTiler(0),
-        itemModel(0),
-        gpsModelHelper(0),
-        gpsItemInfoSorter(0),
+      : altLabel(nullptr),
+        latLabel(nullptr),
+        lonLabel(nullptr),
+        dateLabel(nullptr),
+        detailsBtn(nullptr),
+        detailsCombo(nullptr),
+        altitude(nullptr),
+        latitude(nullptr),
+        longitude(nullptr),
+        date(nullptr),
+        map(nullptr),
+        itemMarkerTiler(nullptr),
+        itemModel(nullptr),
+        gpsModelHelper(nullptr),
+        gpsItemInfoSorter(nullptr),
         boundariesShouldBeAdjusted(false)
     {
     }

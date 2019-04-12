@@ -112,7 +112,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::CommentIptc:
         {
-            return fromIptcOrXmp("Iptc.Application2.Caption", 0);
+            return fromIptcOrXmp("Iptc.Application2.Caption", nullptr);
         }
 
         case MetadataInfo::Description:

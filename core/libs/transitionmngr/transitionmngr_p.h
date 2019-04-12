@@ -75,9 +75,9 @@ public:
         eff_fy               = 0;
         eff_alpha            = 0;
         eff_fd               = 0;
-        eff_intArray         = 0;
+        eff_intArray         = nullptr;
         eff_pdone            = 0;
-        eff_pixelMatrix      = 0;
+        eff_pixelMatrix      = nullptr;
         eff_px               = 0;
         eff_py               = 0;
         eff_psx              = 0;

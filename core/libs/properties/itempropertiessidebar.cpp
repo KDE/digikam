@@ -64,7 +64,7 @@ ItemPropertiesSideBar::ItemPropertiesSideBar(QWidget* const parent,
                                              bool mimimizedDefault)
     : Sidebar(parent, splitter, side, mimimizedDefault)
 {
-    m_image              = 0;
+    m_image              = nullptr;
     m_currentRect        = QRect();
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;

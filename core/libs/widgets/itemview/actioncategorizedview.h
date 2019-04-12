@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT ActionCategorizedView : public DCategorizedView
 {
 public:
 
-    explicit ActionCategorizedView(QWidget* const parent=0, bool autoScroll=false);
+    explicit ActionCategorizedView(QWidget* const parent=nullptr, bool autoScroll=false);
     ~ActionCategorizedView();
 
     void setupIconMode();

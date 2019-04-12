@@ -94,7 +94,7 @@ class DeleteItemList : public QTreeWidget
 
 public:
 
-    explicit DeleteItemList(QWidget* const parent=0);
+    explicit DeleteItemList(QWidget* const parent=nullptr);
     virtual ~DeleteItemList();
 
 private :
@@ -119,7 +119,7 @@ class DeleteWidget : public QWidget
 
 public:
 
-    explicit DeleteWidget(QWidget* const parent = 0);
+    explicit DeleteWidget(QWidget* const parent = nullptr);
     virtual ~DeleteWidget();
 
     void setUrls(const QList<QUrl>& urls);

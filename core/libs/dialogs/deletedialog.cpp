@@ -159,7 +159,7 @@ public:
     explicit Private()
         : iconSize(64)
     {
-        thumbLoadThread = 0;
+        thumbLoadThread = nullptr;
     }
 
     const int            iconSize;
@@ -235,13 +235,13 @@ public:
 
     explicit Private()
     {
-        checkBoxStack   = 0;
-        warningIcon     = 0;
-        deleteText      = 0;
-        numFiles        = 0;
-        shouldDelete    = 0;
-        doNotShowAgain  = 0;
-        fileList        = 0;
+        checkBoxStack   = nullptr;
+        warningIcon     = nullptr;
+        deleteText      = nullptr;
+        numFiles        = nullptr;
+        shouldDelete    = nullptr;
+        doNotShowAgain  = nullptr;
+        fileList        = nullptr;
         listMode        = DeleteDialogMode::Files;
         deleteMode      = DeleteDialogMode::UseTrash;
     }
@@ -471,8 +471,8 @@ public:
         saveShouldDeleteUserPreference = true;
         saveDoNotShowAgainTrash        = false;
         saveDoNotShowAgainPermanent    = false;
-        page                           = 0;
-        buttons                        = 0;
+        page                           = nullptr;
+        buttons                        = nullptr;
     }
 
     bool              saveShouldDeleteUserPreference;

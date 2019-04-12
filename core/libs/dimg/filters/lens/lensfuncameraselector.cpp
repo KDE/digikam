@@ -63,24 +63,24 @@ public:
           orangeStyle(QLatin1String("QLabel {color: orange;}")),
           greenStyle(QLatin1String("QLabel {color: green;}"))
     {
-        metadataUsage        = 0;
-        make                 = 0;
-        model                = 0;
-        lens                 = 0;
-        focal                = 0;
-        aperture             = 0;
-        distance             = 0;
-        iface                = 0;
-        metadataResult       = 0;
-        makeLabel            = 0;
-        modelLabel           = 0;
-        lensLabel            = 0;
-        focalLabel           = 0;
-        aperLabel            = 0;
-        distLabel            = 0;
-        lensDescription      = 0;
-        makeDescription      = 0;
-        modelDescription     = 0;
+        metadataUsage        = nullptr;
+        make                 = nullptr;
+        model                = nullptr;
+        lens                 = nullptr;
+        focal                = nullptr;
+        aperture             = nullptr;
+        distance             = nullptr;
+        iface                = nullptr;
+        metadataResult       = nullptr;
+        makeLabel            = nullptr;
+        modelLabel           = nullptr;
+        lensLabel            = nullptr;
+        focalLabel           = nullptr;
+        aperLabel            = nullptr;
+        distLabel            = nullptr;
+        lensDescription      = nullptr;
+        makeDescription      = nullptr;
+        modelDescription     = nullptr;
         passiveMetadataUsage = false;
     }
 
@@ -685,7 +685,7 @@ void LensFunCameraSelector::populateLensCombo()
     qCDebug(DIGIKAM_DIMG_LOG) << "dev: " << dev->Maker << " :: " << dev->Model << " :: " << dev->CropFactor;
 
     d->lens->blockSignals(true);
-    const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses(dev, 0, 0);
+    const lfLens** lenses     = d->iface->lensFunDataBase()->FindLenses(dev, nullptr, nullptr);
     LensFunContainer settings = d->iface->settings();
     settings.cropFactor       = dev ? dev->CropFactor : -1.0;
     d->iface->setSettings(settings);

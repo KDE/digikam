@@ -53,7 +53,7 @@ void ManagedLoadSaveThread::shutDown()
         case TerminationPolicyTerminateLoading:
         {
             QMutexLocker lock(threadMutex());
-            LoadingTask* loadingTask = 0;
+            LoadingTask* loadingTask = nullptr;
 
             if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterAll)))
             {
@@ -67,7 +67,7 @@ void ManagedLoadSaveThread::shutDown()
         case TerminationPolicyTerminatePreloading:
         {
             QMutexLocker lock(threadMutex());
-            LoadingTask* loadingTask = 0;
+            LoadingTask* loadingTask = nullptr;
 
             if ((loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))
             {
@@ -110,12 +110,12 @@ LoadingTask* ManagedLoadSaveThread::checkLoadingTask(LoadSaveTask* const task, L
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& loadingDescription) const
 {
-    LoadingTask* loadingTask = 0;
+    LoadingTask* loadingTask = nullptr;
 
     if (m_currentTask)
     {
@@ -146,7 +146,7 @@ LoadingTask* ManagedLoadSaveThread::findExistingTask(const LoadingDescription& l
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void ManagedLoadSaveThread::setTerminationPolicy(TerminationPolicy terminationPolicy)
@@ -189,8 +189,8 @@ void ManagedLoadSaveThread::load(const LoadingDescription& description, LoadingM
                                  LoadingPolicy policy, AccessMode accessMode)
 {
     QMutexLocker lock(threadMutex());
-    LoadingTask* loadingTask  = 0;
-    LoadingTask* existingTask = 0;
+    LoadingTask* loadingTask  = nullptr;
+    LoadingTask* existingTask = nullptr;
 
     if (policy != LoadingPolicySimplePrepend && policy != LoadingPolicySimpleAppend)
     {
@@ -552,7 +552,7 @@ void ManagedLoadSaveThread::stopSaving(const QString& filePath)
 
 void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter)
 {
-    LoadingTask* loadingTask = 0;
+    LoadingTask* loadingTask = nullptr;
 
     // stop current task if it is matching the criteria
     if ((loadingTask = checkLoadingTask(m_currentTask, filter)))
@@ -584,7 +584,7 @@ void ManagedLoadSaveThread::removeLoadingTasks(const LoadingDescription& descrip
 void ManagedLoadSaveThread::save(DImg& image, const QString& filePath, const QString& format)
 {
     QMutexLocker lock(threadMutex());
-    LoadingTask* loadingTask = 0;
+    LoadingTask* loadingTask = nullptr;
 
     // stop and postpone current task if it is a preloading task
     if (m_currentTask && (loadingTask = checkLoadingTask(m_currentTask, LoadingTaskFilterPreloading)))

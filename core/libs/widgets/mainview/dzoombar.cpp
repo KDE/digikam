@@ -58,14 +58,14 @@ public:
 
     explicit Private()
     {
-        zoomToFitButton = 0;
-        zoomTo100Button = 0;
-        zoomTracker     = 0;
-        zoomMinusButton = 0;
-        zoomPlusButton  = 0;
-        zoomSlider      = 0;
-        zoomTimer       = 0;
-        zoomCombo       = 0;
+        zoomToFitButton = nullptr;
+        zoomTo100Button = nullptr;
+        zoomTracker     = nullptr;
+        zoomMinusButton = nullptr;
+        zoomPlusButton  = nullptr;
+        zoomSlider      = nullptr;
+        zoomTimer       = nullptr;
+        zoomCombo       = nullptr;
     }
 
     QToolButton*    zoomToFitButton;

@@ -43,8 +43,8 @@ class DIGIKAM_EXPORT DistortionFXFilter : public DImgThreadedFilter
 
 public:
 
-    explicit DistortionFXFilter(QObject* const parent = 0);
-    explicit DistortionFXFilter(DImg* const orgImage, QObject* const parent=0, int effectType=0,
+    explicit DistortionFXFilter(QObject* const parent = nullptr);
+    explicit DistortionFXFilter(DImg* const orgImage, QObject* const parent=nullptr, int effectType=0,
                                 int level=0, int iteration=0, bool antialiasing=true);
 
     ~DistortionFXFilter();

@@ -44,7 +44,7 @@ class ItemAlbumModel : public ItemThumbnailModel
 
 public:
 
-    explicit ItemAlbumModel(QObject* const parent = 0);
+    explicit ItemAlbumModel(QObject* const parent = nullptr);
     ~ItemAlbumModel();
 
     QList<Album*> currentAlbums() const;

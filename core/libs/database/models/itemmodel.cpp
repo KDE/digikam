@@ -47,10 +47,10 @@ public:
 
     explicit Private()
     {
-        preprocessor                = 0;
+        preprocessor                = nullptr;
         keepFilePathCache           = false;
         sendRemovalSignals          = false;
-        incrementalUpdater          = 0;
+        incrementalUpdater          = nullptr;
         refreshing                  = false;
         reAdding                    = false;
         incrementalRefreshRequested = false;
@@ -557,7 +557,7 @@ void ItemModel::clearItemInfos()
 
     delete d->incrementalUpdater;
 
-    d->incrementalUpdater          = 0;
+    d->incrementalUpdater          = nullptr;
     d->pendingInfos.clear();
     d->pendingExtraValues.clear();
     d->refreshing                  = false;
@@ -678,9 +678,9 @@ void ItemModel::unsetPreprocessor(QObject* const preprocessor)
 {
     if (preprocessor && d->preprocessor == preprocessor)
     {
-        disconnect(this, SIGNAL(preprocess(QList<ItemInfo>,QList<QVariant>)), 0, 0);
-        disconnect(d->preprocessor, 0, this, SLOT(reAddItemInfos(QList<ItemInfo>,QList<QVariant>)));
-        disconnect(d->preprocessor, 0, this, SLOT(reAddingFinished()));
+        disconnect(this, SIGNAL(preprocess(QList<ItemInfo>,QList<QVariant>)), nullptr, nullptr);
+        disconnect(d->preprocessor, nullptr, this, SLOT(reAddItemInfos(QList<ItemInfo>,QList<QVariant>)));
+        disconnect(d->preprocessor, nullptr, this, SLOT(reAddingFinished()));
     }
 }
 
@@ -868,7 +868,7 @@ void ItemModel::finishIncrementalRefresh()
     appendInfos(d->incrementalUpdater->newInfos, d->incrementalUpdater->newExtraValues);
 
     delete d->incrementalUpdater;
-    d->incrementalUpdater = 0;
+    d->incrementalUpdater = nullptr;
 }
 
 void ItemModel::removeIndex(const QModelIndex& index)
@@ -1290,7 +1290,7 @@ Qt::ItemFlags ItemModel::flags(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
-        return 0;
+        return nullptr;
     }
 
     Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;

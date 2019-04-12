@@ -62,10 +62,10 @@ public:
 
     explicit Private(DConfigDlgTitle* const parent)
         : q(parent),
-          headerLayout(0),
-          imageLabel(0),
-          textLabel(0),
-          commentLabel(0),
+          headerLayout(nullptr),
+          imageLabel(nullptr),
+          textLabel(nullptr),
+          commentLabel(nullptr),
           autoHideTimeout(0),
           messageType(InfoMessage)
     {

@@ -52,9 +52,9 @@ class Q_DECL_HIDDEN WSLoginDialog::Private
 public:
 
     explicit Private()
-        : headerLabel(0),
-          loginEdit(0),
-          passwordEdit(0)
+        : headerLabel(nullptr),
+          loginEdit(nullptr),
+          passwordEdit(nullptr)
     {
     }
 

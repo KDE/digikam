@@ -257,7 +257,7 @@ DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* c
                                     << "not found in" << parent->objectName()
                                     << "(" << parent << ")";
 
-    return 0;
+    return nullptr;
 }
 
 QString DPluginLoader::pluginXmlSections(DPluginAction::ActionCategory cat, QObject* const parent) const

@@ -58,10 +58,10 @@ public:
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
 #ifdef HAVE_MARBLE
-        gpsTab(0),
+        gpsTab(nullptr),
 #endif // HAVE_MARBLE
-        metadataTab(0),
-        cameraItemTab(0)
+        metadataTab(nullptr),
+        cameraItemTab(nullptr)
     {
     }
 

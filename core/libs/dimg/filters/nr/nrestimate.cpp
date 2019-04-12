@@ -61,7 +61,7 @@ public:
     {
         for (int c = 0 ; c < 3 ; ++c)
         {
-            fimg[c] = 0;
+            fimg[c] = nullptr;
         }
     }
 
@@ -152,7 +152,7 @@ void NREstimate::startAnalyse()
     }
 
     // Array to store the centers of the clusters
-    CvArr* centers = 0;
+    CvArr* centers = nullptr;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
     postProgress(10);
@@ -160,7 +160,7 @@ void NREstimate::startAnalyse()
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
     cvKMeans2(points, d->clusterCount, clusters,
-              cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
+              cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, nullptr, 0, centers, nullptr);
 
     qCDebug(DIGIKAM_DIMG_LOG) << "cvKmeans2 successfully run";
     postProgress(15);
@@ -231,7 +231,7 @@ void NREstimate::startAnalyse()
         rPosition[i] = 0;
     }
 
-    float* ptr = 0;
+    float* ptr = nullptr;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "The rowPosition array is ready!";
     postProgress(40);

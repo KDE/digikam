@@ -43,8 +43,8 @@ namespace Digikam
 
 ParallelWorkers::ParallelWorkers()
     : m_currentIndex(0),
-      m_replacementMetaObject(0),
-      m_originalStaticMetacall(0)
+      m_replacementMetaObject(nullptr),
+      m_originalStaticMetacall(nullptr)
 {
 }
 

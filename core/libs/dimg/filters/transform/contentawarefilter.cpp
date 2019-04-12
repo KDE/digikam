@@ -52,7 +52,7 @@ LqrRetVal s_carverProgressEnd(const gchar* end_message);
 bool s_stage                  = false;
 bool s_wResize                = false;
 bool s_hResize                = false;
-ContentAwareFilter* s_resiser = 0;
+ContentAwareFilter* s_resiser = nullptr;
 
 static LqrEnergyFuncBuiltinType toLqrEnergy(ContentAwareContainer::EnergyFunction func)
 {
@@ -100,8 +100,8 @@ public:
 
     explicit Private()
     {
-        carver   = 0;
-        progress = 0;
+        carver   = nullptr;
+        progress = nullptr;
     }
 
     ContentAwareContainer settings;
@@ -229,9 +229,9 @@ void ContentAwareFilter::filterImage()
     // Write pixels in the DImg structure image
     lqr_carver_scan_reset(d->carver);
 
-    void*           rgb      = 0;
-    uchar*          rgbOut8  = 0;
-    unsigned short* rgbOut16 = 0;
+    void*           rgb      = nullptr;
+    uchar*          rgbOut8  = nullptr;
+    unsigned short* rgbOut16 = nullptr;
 
     if (m_orgImage.sixteenBit())
     {

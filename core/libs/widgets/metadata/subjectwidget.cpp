@@ -66,20 +66,20 @@ public:
 
     explicit Private()
     {
-        addSubjectButton = 0;
-        delSubjectButton = 0;
-        repSubjectButton = 0;
-        subjectsBox      = 0;
-        iprLabel         = 0;
-        refLabel         = 0;
-        nameLabel        = 0;
-        matterLabel      = 0;
-        detailLabel      = 0;
-        btnGroup         = 0;
-        stdBtn           = 0;
-        customBtn        = 0;
-        refCB            = 0;
-        optionsBox       = 0;
+        addSubjectButton = nullptr;
+        delSubjectButton = nullptr;
+        repSubjectButton = nullptr;
+        subjectsBox      = nullptr;
+        iprLabel         = nullptr;
+        refLabel         = nullptr;
+        nameLabel        = nullptr;
+        matterLabel      = nullptr;
+        detailLabel      = nullptr;
+        btnGroup         = nullptr;
+        stdBtn           = nullptr;
+        customBtn        = nullptr;
+        refCB            = nullptr;
+        optionsBox       = nullptr;
     }
 
     typedef QMap<QString, SubjectData> SubjectCodesMap;

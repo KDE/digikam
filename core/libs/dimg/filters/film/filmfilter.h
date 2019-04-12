@@ -134,8 +134,8 @@ class DIGIKAM_EXPORT FilmFilter: public DImgThreadedFilter
 {
 public:
 
-    explicit FilmFilter(QObject* const parent=0);
-    explicit FilmFilter(DImg* const orgImage, QObject* const parent=0, const FilmContainer& settings=FilmContainer());
+    explicit FilmFilter(QObject* const parent=nullptr);
+    explicit FilmFilter(DImg* const orgImage, QObject* const parent=nullptr, const FilmContainer& settings=FilmContainer());
     virtual ~FilmFilter();
 
     static QString FilterIdentifier()

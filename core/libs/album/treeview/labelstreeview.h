@@ -54,7 +54,7 @@ public:
 
 public:
 
-    explicit LabelsTreeView(QWidget* const parent = 0, bool setCheckable = false);
+    explicit LabelsTreeView(QWidget* const parent = nullptr, bool setCheckable = false);
     ~LabelsTreeView();
 
     /**

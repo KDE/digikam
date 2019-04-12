@@ -71,7 +71,7 @@ public:
      * You can also add QWidget directly. It will be wrapped in a proxy item.
      */
     void             setHudWidget(QGraphicsWidget* const hudWidget);
-    void             setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags = 0);
+    void             setHudWidget(QWidget* const widget, Qt::WindowFlags wFlags = nullptr);
     QGraphicsWidget* hudWidget() const;
     void             setHudWidgetVisible(bool visible);
 
@@ -98,7 +98,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);

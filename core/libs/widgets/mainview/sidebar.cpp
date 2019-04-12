@@ -121,7 +121,7 @@ DMultiTabBarTab* DMultiTabBarFrame::tab(int id) const
             return tab;
     }
 
-    return 0;
+    return nullptr;
 }
 
 int DMultiTabBarFrame::appendTab(const QPixmap& pic, int id, const QString& text)
@@ -275,7 +275,7 @@ void DMultiTabBarTab::setStyle(DMultiTabBar::TextStyle style)
 
 QPixmap DMultiTabBarTab::iconPixmap() const
 {
-    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
     return icon().pixmap(iconSize);
 }
 
@@ -378,7 +378,7 @@ void DMultiTabBarTab::setState(bool newState)
 void DMultiTabBarTab::setIcon(const QString& icon)
 {
     const QIcon i      = QIcon::fromTheme(icon);
-    const int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
+    const int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
     setIcon(i.pixmap(iconSize));
 }
 
@@ -637,7 +637,7 @@ DMultiTabBarButton* DMultiTabBar::button(int id) const
             return button;
     }
 
-    return 0;
+    return nullptr;
 }
 
 DMultiTabBarTab* DMultiTabBar::tab(int id) const
@@ -717,7 +717,7 @@ class Q_DECL_HIDDEN SidebarState
 public:
 
     SidebarState()
-      : activeWidget(0),
+      : activeWidget(nullptr),
         size(0)
     {
     }
@@ -747,9 +747,9 @@ public:
         activeTab(-1),
         dragSwitchId(-1),
         restoreSize(0),
-        stack(0),
-        splitter(0),
-        dragSwitchTimer(0),
+        stack(nullptr),
+        splitter(nullptr),
+        dragSwitchTimer(nullptr),
         appendedTabsStateCache(),
         optionActiveTabEntry(QLatin1String("ActiveTab")),
         optionMinimizedEntry(QLatin1String("Minimized")),
@@ -1076,7 +1076,7 @@ QWidget* Sidebar::getActiveTab() const
     }
     else
     {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -1206,7 +1206,7 @@ SidebarSplitter::~SidebarSplitter()
     // retreat cautiously from sidebars that live longer
     foreach (Sidebar* const sidebar, d->sidebars)
     {
-        sidebar->d->splitter = 0;
+        sidebar->d->splitter = nullptr;
     }
 
     delete d;

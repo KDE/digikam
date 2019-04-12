@@ -213,11 +213,11 @@ void CollectionScannerHintContainerImplementation::clear()
 CollectionScanner::Private::Private()
     : wantSignals(false),
       needTotalFiles(false),
-      hints(0),
+      hints(nullptr),
       updatingHashHint(false),
       recordHistoryIds(false),
       deferredFileScanning(false),
-      observer(0)
+      observer(nullptr)
 {
 }
 

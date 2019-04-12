@@ -140,8 +140,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     unsigned int   maximum_component_depth, scale[4], x_step[4], y_step[4];
     unsigned long  number_components;
 
-    jas_image_t*  jp2_image   = 0;
-    jas_stream_t* jp2_stream  = 0;
+    jas_image_t*  jp2_image   = nullptr;
+    jas_stream_t* jp2_stream  = nullptr;
     jas_matrix_t* pixels[4];
 
     int init = jas_init();
@@ -155,7 +155,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     jp2_stream = jas_stream_fopen(QFile::encodeName(filePath).constData(), "rb");
 
-    if (jp2_stream == 0)
+    if (jp2_stream == nullptr)
     {
         qCWarning(DIGIKAM_DIMG_LOG_JP2K) << "Unable to open JPEG2000 stream";
         loadingFailed();
@@ -163,9 +163,9 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     int fmt   = jas_image_strtofmt(QByteArray("jp2").data());
-    jp2_image = jas_image_decode(jp2_stream, fmt, 0);
+    jp2_image = jas_image_decode(jp2_stream, fmt, nullptr);
 
-    if (jp2_image == 0)
+    if (jp2_image == nullptr)
     {
         jas_stream_close(jp2_stream);
         qCWarning(DIGIKAM_DIMG_LOG_JP2K) << "Unable to decode JPEG2000 image";
@@ -530,22 +530,22 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     if (m_loadFlags & LoadICCData)
     {
-        jas_iccprof_t* icc_profile = 0;
-        jas_stream_t*  icc_stream  = 0;
-        jas_cmprof_t*  cm_profile  = 0;
+        jas_iccprof_t* icc_profile = nullptr;
+        jas_stream_t*  icc_stream  = nullptr;
+        jas_cmprof_t*  cm_profile  = nullptr;
 
         cm_profile = jas_image_cmprof(jp2_image);
 
-        if (cm_profile != 0)
+        if (cm_profile != nullptr)
         {
             icc_profile = jas_iccprof_createfromcmprof(cm_profile);
         }
 
-        if (icc_profile != 0)
+        if (icc_profile != nullptr)
         {
-            icc_stream = jas_stream_memopen(NULL, 0);
+            icc_stream = jas_stream_memopen(nullptr, 0);
 
-            if (icc_stream != 0)
+            if (icc_stream != nullptr)
             {
                 if (jas_iccprof_save(icc_profile, icc_stream) == 0)
                 {
@@ -608,8 +608,8 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     long  i, x, y;
     unsigned long  number_components;
 
-    jas_image_t*          jp2_image   = 0;
-    jas_stream_t*         jp2_stream  = 0;
+    jas_image_t*          jp2_image   = nullptr;
+    jas_stream_t*         jp2_stream  = nullptr;
     jas_matrix_t*         pixels[4];
     jas_image_cmptparm_t  component_info[4];
 
@@ -623,7 +623,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     jp2_stream = jas_stream_fopen(QFile::encodeName(filePath).constData(), "wb");
 
-    if (jp2_stream == 0)
+    if (jp2_stream == nullptr)
     {
         qCWarning(DIGIKAM_DIMG_LOG_JP2K) << "Unable to open JPEG2000 stream";
         return false;
@@ -645,7 +645,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     jp2_image = jas_image_create(number_components, component_info, JAS_CLRSPC_UNKNOWN);
 
-    if (jp2_image == 0)
+    if (jp2_image == nullptr)
     {
         jas_stream_close(jp2_stream);
         qCWarning(DIGIKAM_DIMG_LOG_JP2K) << "Unable to create JPEG2000 image";
@@ -679,18 +679,18 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     // FIXME : doesn't work yet!
 
-    jas_cmprof_t*  cm_profile  = 0;
-    jas_iccprof_t* icc_profile = 0;
+    jas_cmprof_t*  cm_profile  = nullptr;
+    jas_iccprof_t* icc_profile = nullptr;
 
     QByteArray profile_rawdata = m_image->getIccProfile().data();
 
     icc_profile = jas_iccprof_createfrombuf((uchar*)profile_rawdata.data(), profile_rawdata.size());
 
-    if (icc_profile != 0)
+    if (icc_profile != nullptr)
     {
         cm_profile = jas_cmprof_createfromiccprof(icc_profile);
 
-        if (cm_profile != 0)
+        if (cm_profile != nullptr)
         {
             jas_image_setcmprof(jp2_image, cm_profile);
             //enable when it works: purgeExifWorkingColorSpace();
@@ -707,7 +707,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     {
         pixels[i] = jas_matrix_create(1, (unsigned int)imageWidth());
 
-        if (pixels[i] == 0)
+        if (pixels[i] == nullptr)
         {
             for (x = 0 ; x < i ; ++x)
             {

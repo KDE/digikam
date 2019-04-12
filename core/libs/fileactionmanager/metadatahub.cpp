@@ -585,7 +585,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetaEngineSettings
 
     BalooWrap* const baloo = BalooWrap::instance();
     int rating             = -1;
-    QString* comment       = 0;
+    QString* comment       = nullptr;
 
     if (!baloo->getSyncToBaloo())
     {

@@ -1151,7 +1151,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
-        while (gi->tagList_ != 0)
+        while (gi->tagList_ != nullptr)
         {
             // NOTE: See BUG #375809 : MPF tags = exception Exiv2 0.26
 
@@ -1214,7 +1214,7 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
-        while (gi->tagList_ != 0)
+        while (gi->tagList_ != nullptr)
         {
             if (QLatin1String(gi->ifdName_) == QLatin1String("Makernote"))
             {

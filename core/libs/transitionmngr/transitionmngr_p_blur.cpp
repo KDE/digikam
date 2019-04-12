@@ -38,12 +38,12 @@ QRgb TransitionMngr::Private::convertFromPremult(const QRgb& p) const
 
 QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
 {
-    QRgb* p1 = 0;
-    QRgb* p2 = 0;
-    int*  as = 0;
-    int*  rs = 0;
-    int*  gs = 0;
-    int*  bs = 0;
+    QRgb* p1 = nullptr;
+    QRgb* p2 = nullptr;
+    int*  as = nullptr;
+    int*  rs = nullptr;
+    int*  gs = nullptr;
+    int*  bs = nullptr;
     int x, y, w, h, mx, my, mw, mh, mt, xx, yy;
     int a, r, g, b;
 

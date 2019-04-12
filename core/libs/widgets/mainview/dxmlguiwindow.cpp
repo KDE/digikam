@@ -83,8 +83,8 @@ public:
     explicit Private()
     {
         fsOptions              = FS_NONE;
-        fullScreenAction       = 0;
-        fullScreenBtn          = 0;
+        fullScreenAction       = nullptr;
+        fullScreenBtn          = nullptr;
         dirtyMainToolBar       = false;
         fullScreenHideToolBars = false;
         fullScreenHideThumbBar = true;
@@ -92,12 +92,12 @@ public:
         thumbbarVisibility     = true;
         menubarVisibility      = true;
         statusbarVisibility    = true;
-        libsInfoAction         = 0;
-        showMenuBarAction      = 0;
-        showStatusBarAction    = 0;
-        about                  = 0;
-        dbStatAction           = 0;
-        anim                   = 0;
+        libsInfoAction         = nullptr;
+        showMenuBarAction      = nullptr;
+        showStatusBarAction    = nullptr;
+        about                  = nullptr;
+        dbStatAction           = nullptr;
+        anim                   = nullptr;
     }
 
 public:
@@ -174,7 +174,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_animLogo = 0;
+    m_animLogo = nullptr;
 
     installEventFilter(this);
 }
@@ -428,7 +428,7 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
 {
-    d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
+    d->fullScreenAction = KStandardAction::fullScreen(nullptr, nullptr, this, this);
     actionCollection()->addAction(name, d->fullScreenAction);
     d->fullScreenBtn    = new QToolButton(this);
     d->fullScreenBtn->setDefaultAction(d->fullScreenAction);
@@ -645,7 +645,7 @@ void DXmlGuiWindow::keyPressEvent(QKeyEvent* e)
 KToolBar* DXmlGuiWindow::mainToolBar() const
 {
     QList<KToolBar*> toolbars = toolBars();
-    KToolBar* mainToolbar     = 0;
+    KToolBar* mainToolbar     = nullptr;
 
     foreach (KToolBar* const toolbar, toolbars)
     {
@@ -799,7 +799,7 @@ QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const 
             return KStandardAction::forward(recvr, slot, parent);
             break;
         default:
-            return 0;
+            return nullptr;
             break;
     }
 }

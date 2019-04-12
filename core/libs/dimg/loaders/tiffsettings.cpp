@@ -47,8 +47,8 @@ public:
 
     explicit Private()
     {
-        TIFFGrid        = 0;
-        TIFFcompression = 0;
+        TIFFGrid        = nullptr;
+        TIFFcompression = nullptr;
     }
 
     QGridLayout* TIFFGrid;

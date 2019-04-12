@@ -70,8 +70,8 @@ public:
     {
         iconSize             = ApplicationSettings::instance()->getTreeViewIconSize();
         minBlendSize         = 20;
-        iconAlbumThumbThread = 0;
-        iconTagThumbThread   = 0;
+        iconAlbumThumbThread = nullptr;
+        iconTagThumbThread   = nullptr;
     }
 
     int                                  iconSize;
@@ -127,10 +127,10 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
 void AlbumThumbnailLoader::cleanUp()
 {
     delete d->iconTagThumbThread;
-    d->iconTagThumbThread   = 0;
+    d->iconTagThumbThread   = nullptr;
 
     delete d->iconAlbumThumbThread;
-    d->iconAlbumThumbThread = 0;
+    d->iconAlbumThumbThread = nullptr;
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)

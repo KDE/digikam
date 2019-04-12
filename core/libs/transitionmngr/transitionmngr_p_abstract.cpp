@@ -71,7 +71,7 @@ int TransitionMngr::Private::transitionMeltdown(bool aInit)
     if (eff_pdone)
     {
         delete [] eff_intArray;
-        eff_intArray = NULL;
+        eff_intArray = nullptr;
         eff_curFrame = eff_outImage;
         return -1;
     }

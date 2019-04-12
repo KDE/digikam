@@ -50,7 +50,7 @@ class Q_DECL_HIDDEN AlbumWatch::Private
 public:
 
     explicit Private()
-      : dirWatch(0)
+      : dirWatch(nullptr)
     {
     }
 

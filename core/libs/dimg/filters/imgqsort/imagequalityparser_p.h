@@ -66,7 +66,7 @@ public:
     {
         for (int c = 0 ; c < 3 ; ++c)
         {
-            fimg[c] = 0;
+            fimg[c] = nullptr;
         }
 
         // Setting the default values
@@ -80,7 +80,7 @@ public:
         acceptedThreshold = 0.0;
         pendingThreshold  = 0.0;
         rejectedThreshold = 0.0;
-        label             = 0;
+        label             = nullptr;
         running           = true;
     }
 

@@ -49,8 +49,8 @@ class Q_DECL_HIDDEN RawCameraDlg::Private
 public:
 
     explicit Private()
-      : header(0),
-        searchBar(0)
+      : header(nullptr),
+        searchBar(nullptr)
     {
     }
 

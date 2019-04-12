@@ -49,7 +49,7 @@ namespace Digikam
 
 ColorFXFilter::ColorFXFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
-      m_lutTable(0),
+      m_lutTable(nullptr),
       m_lutTableSize(0)
 {
     initFilter();
@@ -60,7 +60,7 @@ ColorFXFilter::ColorFXFilter(DImg* const orgImage,
                              const ColorFXContainer& settings)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("ColorFX")),
       m_settings(settings),
-      m_lutTable(0),
+      m_lutTable(nullptr),
       m_lutTableSize(0)
 {
     loadLut3D(m_settings.path);
@@ -230,7 +230,7 @@ void ColorFXFilter::vivid(DImg* const orgImage, DImg* const destImage, int facto
     settings.blueGreenGain  = (-1.0) * amount;
     settings.blueBlueGain   = 1.0 + amount + amount;
 
-    MixerFilter mixer(orgImage, 0L, settings);
+    MixerFilter mixer(orgImage, nullptr, settings);
     mixer.startFilterDirectly();
     DImg mixed = mixer.getTargetImage();
 
@@ -254,7 +254,7 @@ void ColorFXFilter::vivid(DImg* const orgImage, DImg* const destImage, int facto
         prm.values[LuminosityChannel].setPoint(16, QPoint(65535, 65535));
     }
 
-    CurvesFilter curves(&mixed, 0L, prm);
+    CurvesFilter curves(&mixed, nullptr, prm);
     curves.startFilterDirectly();
     *destImage = curves.getTargetImage();
 }
@@ -323,7 +323,7 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
     Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
     BW        = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
 
-    uchar* ptr=0, *ptr1=0, *ptr2=0;
+    uchar* ptr=nullptr, *ptr1=nullptr, *ptr2=nullptr;
 
     // these must be uint, we need full 2^32 range for 16 bit
     uint color_1, color_2, colorPoint, colorOther1, colorOther2;
@@ -398,7 +398,7 @@ void ColorFXFilter::loadLut3D(const QString& path)
 {
     QFileInfo fi(path);
 
-    m_lutTable = NULL;
+    m_lutTable = nullptr;
 
     if (fi.suffix().toLower() == QLatin1String("cube"))
     {

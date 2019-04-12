@@ -92,13 +92,13 @@ class Q_DECL_HIDDEN AlbumPropsEdit::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        categoryCombo(0),
-        parentCombo(0),
-        titleEdit(0),
-        commentsEdit(0),
-        datePicker(0),
-        album(0)
+      : buttons(nullptr),
+        categoryCombo(nullptr),
+        parentCombo(nullptr),
+        titleEdit(nullptr),
+        commentsEdit(nullptr),
+        datePicker(nullptr),
+        album(nullptr)
     {
     }
 
@@ -115,7 +115,7 @@ public:
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
-    : QDialog(0),
+    : QDialog(nullptr),
       d(new Private)
 {
     setModal(true);

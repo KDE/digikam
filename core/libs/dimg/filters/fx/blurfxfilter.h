@@ -45,8 +45,8 @@ class DIGIKAM_EXPORT BlurFXFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BlurFXFilter(QObject* const parent = 0);
-    explicit BlurFXFilter(DImg* const orgImage, QObject* const parent=0, int blurFXType=ZoomBlur,
+    explicit BlurFXFilter(QObject* const parent = nullptr);
+    explicit BlurFXFilter(DImg* const orgImage, QObject* const parent=nullptr, int blurFXType=ZoomBlur,
                           int distance=100, int level=45);
     ~BlurFXFilter();
 
@@ -105,27 +105,27 @@ private:
             stop            = 0;
             h               = 0;
             w               = 0;
-            orgImage        = 0;
-            destImage       = 0;
+            orgImage        = nullptr;
+            destImage       = nullptr;
             X               = 0;
             Y               = 0;
             Distance        = 0;
             nCount          = 0;
-            lpXArray        = 0;
-            lpYArray        = 0;
+            lpXArray        = nullptr;
+            lpYArray        = nullptr;
             BlendRadius     = 0;
             bInversed       = 0;
-            layer1          = 0;
-            layer2          = 0;
-            layer3          = 0;
-            layer4          = 0;
+            layer1          = nullptr;
+            layer2          = nullptr;
+            layer3          = nullptr;
+            layer4          = nullptr;
             SizeW           = 0;
             SizeH           = 0;
             StrengthRange   = 0;
             Radius          = 0;
-            Kernel          = 0;
-            arrMult         = 0;
-            pBlur           = 0;
+            Kernel          = nullptr;
+            arrMult         = nullptr;
+            pBlur           = nullptr;
         }
 
         uint   start;

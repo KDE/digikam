@@ -52,7 +52,7 @@ class Q_DECL_HIDDEN DBusyDlg::Private
 public:
 
     explicit Private() :
-        thread(0)
+        thread(nullptr)
     {
     }
 
@@ -64,7 +64,7 @@ DBusyDlg::DBusyDlg(const QString& txt, QWidget* const parent)
       d(new Private)
 {
     setLabelText(txt);
-    setCancelButton(0);
+    setCancelButton(nullptr);
     setMinimumDuration(0);
     setModal(true);
     setAutoClose(false);

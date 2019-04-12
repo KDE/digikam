@@ -33,7 +33,7 @@ namespace Digikam
 
 SearchTreeView::SearchTreeView(QWidget* const parent, Flags flags)
     : AbstractCheckableAlbumTreeView(parent, flags),
-      m_filteredModel(0)
+      m_filteredModel(nullptr)
 {
     setRootIsDecorated(false);
 

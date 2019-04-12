@@ -60,13 +60,13 @@ public:
 
     explicit Private()
     {
-        scaleBG         = 0;
-        linHistoButton  = 0;
-        logHistoButton  = 0;
-        channelCB       = 0;
-        hGradient       = 0;
-        histogramWidget = 0;
-        histoBox        = 0;
+        scaleBG         = nullptr;
+        linHistoButton  = nullptr;
+        logHistoButton  = nullptr;
+        channelCB       = nullptr;
+        hGradient       = nullptr;
+        histogramWidget = nullptr;
+        histoBox        = nullptr;
     }
 
     QButtonGroup*        scaleBG;

@@ -170,11 +170,11 @@ public:
 
     explicit Private()
     {
-        tab                = 0;
-        exifViewerConfig   = 0;
-        mknoteViewerConfig = 0;
-        iptcViewerConfig   = 0;
-        xmpViewerConfig    = 0;
+        tab                = nullptr;
+        exifViewerConfig   = nullptr;
+        mknoteViewerConfig = nullptr;
+        iptcViewerConfig   = nullptr;
+        xmpViewerConfig    = nullptr;
 
         setDefaultFilter(ExifHumanList,      defaultExifFilter);
         setDefaultFilter(MakerNoteHumanList, defaultMknoteFilter);

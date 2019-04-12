@@ -41,8 +41,8 @@ class DIGIKAM_EXPORT AutoExpoFilter : public WBFilter
 
 public:
 
-    explicit AutoExpoFilter(QObject* const parent = 0);
-    AutoExpoFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
+    explicit AutoExpoFilter(QObject* const parent = nullptr);
+    AutoExpoFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=nullptr);
     virtual ~AutoExpoFilter();
 
     static QString          FilterIdentifier()

@@ -45,9 +45,9 @@ public:
     explicit Private()
       : displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
-        delayedModelTimer(0),
-        stringModel(0),
-        model(0)
+        delayedModelTimer(nullptr),
+        stringModel(nullptr),
+        model(nullptr)
     {
     }
 

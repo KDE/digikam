@@ -43,7 +43,7 @@ public:
 
     explicit Private()
     {
-        access   = 0;
+        access   = nullptr;
         acquired = false;
         maxTime  = 0;
     }

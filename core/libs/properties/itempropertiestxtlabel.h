@@ -48,7 +48,7 @@ class DTextLabelName : public QLabel
 
 public:
 
-    explicit DTextLabelName(const QString& name, QWidget* const parent=0)
+    explicit DTextLabelName(const QString& name, QWidget* const parent=nullptr)
         : QLabel(parent)
     {
         setText(name);
@@ -71,7 +71,7 @@ class DTextLabelValue : public DAdjustableLabel
 
 public:
 
-    explicit DTextLabelValue(const QString& value, QWidget* const parent=0)
+    explicit DTextLabelValue(const QString& value, QWidget* const parent=nullptr)
         : DAdjustableLabel(parent)
     {
         setAdjustedText(value);
@@ -91,7 +91,7 @@ class DTextBrowser : public QTextBrowser
 {
 public:
 
-    explicit DTextBrowser(const QString& text, QWidget* const parent=0)
+    explicit DTextBrowser(const QString& text, QWidget* const parent=nullptr)
         : QTextBrowser(parent)
     {
         setOpenExternalLinks(false);
@@ -121,7 +121,7 @@ class DTextList : public QListWidget
 {
 public:
 
-    explicit DTextList(const QStringList& list, QWidget* const parent=0)
+    explicit DTextList(const QStringList& list, QWidget* const parent=nullptr)
         : QListWidget(parent)
     {
         addItems(list);

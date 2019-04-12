@@ -110,8 +110,8 @@ public:
     /**
      * Returns a DImgThreadedFilter which executes this builtin action.
      */
-    DImgThreadedFilter* createThreadedFilter(QObject* const parent = 0)                       const;
-    DImgThreadedFilter* createThreadedFilter(DImg* const orgImage, QObject* const parent = 0) const;
+    DImgThreadedFilter* createThreadedFilter(QObject* const parent = nullptr)                       const;
+    DImgThreadedFilter* createThreadedFilter(DImg* const orgImage, QObject* const parent = nullptr) const;
 
 public:
 

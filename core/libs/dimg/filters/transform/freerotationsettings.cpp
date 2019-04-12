@@ -54,10 +54,10 @@ class Q_DECL_HIDDEN FreeRotationSettings::Private
 public:
 
     explicit Private()
-      : antialiasInput(0),
-        angleInput(0),
-        fineAngleInput(0),
-        autoCropCB(0)
+      : antialiasInput(nullptr),
+        angleInput(nullptr),
+        fineAngleInput(nullptr),
+        autoCropCB(nullptr)
     {}
 
     static const QString configAutoCropTypeEntry;

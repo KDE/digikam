@@ -34,20 +34,20 @@ namespace Digikam
 VideoDecoder::Private::Private()
 {
     videoStream           = -1;
-    pFormatContext        = 0;
-    pVideoCodecContext    = 0;
-    pVideoCodecParameters = 0;
-    pVideoCodec           = 0;
-    pVideoStream          = 0;
-    pFrame                = 0;
-    pFrameBuffer          = 0;
-    pPacket               = 0;
+    pFormatContext        = nullptr;
+    pVideoCodecContext    = nullptr;
+    pVideoCodecParameters = nullptr;
+    pVideoCodec           = nullptr;
+    pVideoStream          = nullptr;
+    pFrame                = nullptr;
+    pFrameBuffer          = nullptr;
+    pPacket               = nullptr;
     allowSeek             = true;
     initialized           = false;
-    bufferSinkContext     = 0;
-    bufferSourceContext   = 0;
-    filterGraph           = 0;
-    filterFrame           = 0;
+    bufferSinkContext     = nullptr;
+    bufferSourceContext   = nullptr;
+    filterGraph           = nullptr;
+    filterFrame           = nullptr;
     lastWidth             = 0;
     lastHeight            = 0;
     lastPixfmt            = AV_PIX_FMT_NONE;
@@ -91,10 +91,10 @@ bool VideoDecoder::Private::initializeVideo()
     pVideoCodecParameters = pFormatContext->streams[videoStream]->codecpar;
     pVideoCodec           = avcodec_find_decoder(pVideoCodecParameters->codec_id);
 
-    if (pVideoCodec == 0)
+    if (pVideoCodec == nullptr)
     {
         // set to 0, otherwise avcodec_close(d->pVideoCodecContext) crashes
-        pVideoCodecContext = 0;
+        pVideoCodecContext = nullptr;
         qDebug(DIGIKAM_GENERAL_LOG) << "Video Codec not found";
         return false;
     }
@@ -102,7 +102,7 @@ bool VideoDecoder::Private::initializeVideo()
     pVideoCodecContext = avcodec_alloc_context3(pVideoCodec);
     avcodec_parameters_to_context(pVideoCodecContext, pVideoCodecParameters);
 
-    if (avcodec_open2(pVideoCodecContext, pVideoCodec, 0) < 0)
+    if (avcodec_open2(pVideoCodecContext, pVideoCodec, nullptr) < 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not open video codec";
         return false;
@@ -219,15 +219,15 @@ void VideoDecoder::Private::deleteFilterGraph()
     {
         av_frame_free(&filterFrame);
         avfilter_graph_free(&filterGraph);
-        filterGraph = 0;
+        filterGraph = nullptr;
     }
 }
 
 bool VideoDecoder::Private::initFilterGraph(enum AVPixelFormat pixfmt,
                                             int width, int height)
 {
-    AVFilterInOut* inputs  = 0;
-    AVFilterInOut* outputs = 0;
+    AVFilterInOut* inputs  = nullptr;
+    AVFilterInOut* outputs = nullptr;
 
     deleteFilterGraph();
     filterGraph            = avfilter_graph_alloc();
@@ -358,9 +358,9 @@ void VideoDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
                                                     scaledHeight,
                                                     format,
                                                     SWS_BICUBIC,
-                                                    NULL,
-                                                    NULL,
-                                                    NULL);
+                                                    nullptr,
+                                                    nullptr,
+                                                    nullptr);
 
     if (!scaleContext)
     {
@@ -368,8 +368,8 @@ void VideoDecoder::Private::convertAndScaleFrame(AVPixelFormat format,
         return;
     }
 
-    AVFrame* convertedFrame       = 0;
-    uint8_t* convertedFrameBuffer = 0;
+    AVFrame* convertedFrame       = nullptr;
+    uint8_t* convertedFrameBuffer = nullptr;
 
     createAVFrame(&convertedFrame,
                   &convertedFrameBuffer,

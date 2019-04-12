@@ -85,14 +85,14 @@ public:
           state(HistogramNone),
           channelType(LuminosityChannel),
           scaleType(LogScaleHistogram),
-          imageHistogram(0),
-          selectionHistogram(0),
+          imageHistogram(nullptr),
+          selectionHistogram(nullptr),
           xmin(0),
           xminOrg(0),
           xmax(0),
           animationState(0),
-          animation(0),
-          histogramPainter(0)
+          animation(nullptr),
+          histogramPainter(nullptr)
     {
         progressPix = DWorkingPixmap();
     }
@@ -192,7 +192,7 @@ void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProg
     {
         // do not delete main histogram if only the selection is reset
         delete d->imageHistogram;
-        d->imageHistogram = 0;
+        d->imageHistogram = nullptr;
     }
 
     // Calc new histogram data
@@ -203,7 +203,7 @@ void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProg
     }
 
     delete d->selectionHistogram;
-    d->selectionHistogram = 0;
+    d->selectionHistogram = nullptr;
 
     if (!sel.isNull())
     {
@@ -365,9 +365,9 @@ void HistogramWidget::setState(int state)
 
             // Remove old histogram data from memory.
             delete d->imageHistogram;
-            d->imageHistogram     = 0;
+            d->imageHistogram     = nullptr;
             delete d->selectionHistogram;
-            d->selectionHistogram = 0;
+            d->selectionHistogram = nullptr;
 
             stopWaitingAnimation();
             update();
@@ -521,7 +521,7 @@ void HistogramWidget::paintEvent(QPaintEvent*)
     }
 
     // render histogram in normal case
-    ImageHistogram* histogram = 0;
+    ImageHistogram* histogram = nullptr;
 
     if (d->renderingType == ImageSelectionHistogram && d->selectionHistogram)
     {

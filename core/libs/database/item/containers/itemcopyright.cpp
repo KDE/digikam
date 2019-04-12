@@ -53,7 +53,7 @@ public:
 
     ~ItemCopyrightCache()
     {
-        object->m_cache = 0;
+        object->m_cache = nullptr;
     }
 
     QList<CopyrightInfo> infos;
@@ -67,19 +67,19 @@ private:
 
 ItemCopyright::ItemCopyright(qlonglong imageid)
     : m_id(imageid),
-      m_cache(0)
+      m_cache(nullptr)
 {
 }
 
 ItemCopyright::ItemCopyright()
     : m_id(0),
-      m_cache(0)
+      m_cache(nullptr)
 {
 }
 
 ItemCopyright::ItemCopyright(const ItemCopyright& other)
     : m_id(other.m_id),
-      m_cache(0)
+      m_cache(nullptr)
 {
     // the cache is only short-lived, to keep complexity low
 }
@@ -87,13 +87,13 @@ ItemCopyright::ItemCopyright(const ItemCopyright& other)
 ItemCopyright::~ItemCopyright()
 {
     delete m_cache;
-    m_cache = 0;
+    m_cache = nullptr;
 }
 
 ItemCopyright& ItemCopyright::operator=(const ItemCopyright& other)
 {
     delete m_cache;
-    m_cache = 0;
+    m_cache = nullptr;
 
     m_id = other.m_id;
     return *this;

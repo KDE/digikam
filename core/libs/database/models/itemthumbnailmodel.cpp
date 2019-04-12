@@ -43,8 +43,8 @@ class Q_DECL_HIDDEN ItemThumbnailModel::Private
 public:
 
     explicit Private()
-      : thread(0),
-        preloadThread(0),
+      : thread(nullptr),
+        preloadThread(nullptr),
         thumbSize(0),
         lastGlobalThumbSize(0),
         preloadThumbSize(0),
@@ -138,7 +138,7 @@ void ItemThumbnailModel::setPreloadThumbnails(bool preload)
     else
     {
         delete d->preloadThread;
-        d->preloadThread = 0;
+        d->preloadThread = nullptr;
 
         disconnect(this, SIGNAL(allRefreshingFinished()),
                    this, SLOT(preloadAllThumbnails()));

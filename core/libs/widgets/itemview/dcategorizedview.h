@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT DCategorizedView : public QListView
 
 public:
 
-    explicit DCategorizedView(QWidget* const parent = 0);
+    explicit DCategorizedView(QWidget* const parent = nullptr);
     ~DCategorizedView();
 
     void setGridSize(const QSize& size);

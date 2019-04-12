@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DComboBox : public QWidget
 
 public:
 
-    explicit DComboBox(QWidget* const parent=0);
+    explicit DComboBox(QWidget* const parent=nullptr);
     ~DComboBox();
 
     void setCurrentIndex(int d);

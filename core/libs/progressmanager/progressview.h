@@ -86,7 +86,7 @@ class TransactionItemView : public QScrollArea
 
 public:
 
-    explicit TransactionItemView(QWidget* const parent=0, const QString& name=QString());
+    explicit TransactionItemView(QWidget* const parent=nullptr, const QString& name=QString());
     virtual ~TransactionItemView() {}
 
     TransactionItem* addTransactionItem(ProgressItem* item, bool first);

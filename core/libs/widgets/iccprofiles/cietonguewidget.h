@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 
 public:
 
-    explicit CIETongueWidget(int w, int h, QWidget* const parent=0, cmsHPROFILE hMonitor=0);
+    explicit CIETongueWidget(int w, int h, QWidget* const parent=nullptr, cmsHPROFILE hMonitor=nullptr);
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());

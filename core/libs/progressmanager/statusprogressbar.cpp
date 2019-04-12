@@ -55,10 +55,10 @@ public:
 
     explicit Private()
       : notify(false),
-        progressWidget(0),
-        cancelButton(0),
-        progressBar(0),
-        textLabel(0)
+        progressWidget(nullptr),
+        cancelButton(nullptr),
+        progressBar(nullptr),
+        textLabel(nullptr)
     {
     }
 

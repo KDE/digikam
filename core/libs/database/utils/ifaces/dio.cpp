@@ -347,7 +347,7 @@ void DIO::createJob(IOJobData* const data)
         return;
     }
 
-    ProgressItem* item = 0;
+    ProgressItem* item = nullptr;
     QString itemString = getItemString(data);
 
     if (!itemString.isEmpty())
@@ -596,7 +596,7 @@ ProgressItem* DIO::getProgressItem(IOJobData* const data) const
 
     if (itemId.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return ProgressManager::instance()->findItembyId(itemId);

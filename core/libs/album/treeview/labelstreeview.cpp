@@ -61,9 +61,9 @@ class Q_DECL_HIDDEN LabelsTreeView::Private
 public:
 
     explicit Private()
-      : ratings(0),
-        picks(0),
-        colors(0),
+      : ratings(nullptr),
+        picks(nullptr),
+        colors(nullptr),
         isCheckableTreeView(false),
         isLoadingState(false),
         iconSizeFromSetting(0)
@@ -507,11 +507,11 @@ class Q_DECL_HIDDEN AlbumLabelsSearchHandler::Private
 public:
 
     explicit Private()
-      : treeWidget(0),
-        dbJobThread(0),
+      : treeWidget(nullptr),
+        dbJobThread(nullptr),
         restoringSelectionFromHistory(0),
         currentXmlIsEmpty(0),
-        albumForSelectedItems(0)
+        albumForSelectedItems(nullptr)
     {
     }
 
@@ -657,7 +657,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Label
 
 SAlbum* AlbumLabelsSearchHandler::search(const QString& xml) const
 {
-    SAlbum* album = 0;
+    SAlbum* album = nullptr;
     int id;
 
     if (!d->treeWidget->isCheckable())
@@ -924,7 +924,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
         }
         else
         {
-            d->albumForSelectedItems = 0;
+            d->albumForSelectedItems = nullptr;
         }
 
         emit checkStateChanged(album, Qt::Checked);

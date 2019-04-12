@@ -42,13 +42,13 @@ public:
 
     explicit Private()
     {
-        hlay          = 0;
-        logo          = 0;
-        leftBottomPix = 0;
-        leftView      = 0;
+        hlay          = nullptr;
+        logo          = nullptr;
+        leftBottomPix = nullptr;
+        leftView      = nullptr;
         isComplete    = true;
         id            = -1;
-        dlg           = 0;
+        dlg           = nullptr;
     }
 
     bool         isComplete;

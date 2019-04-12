@@ -95,7 +95,7 @@ class Q_DECL_HIDDEN AlbumTreeViewDelegate : public QStyledItemDelegate
 {
 public:
 
-    explicit AlbumTreeViewDelegate(AbstractAlbumTreeView* const treeView = 0)
+    explicit AlbumTreeViewDelegate(AbstractAlbumTreeView* const treeView = nullptr)
         : QStyledItemDelegate(treeView),
           m_treeView(treeView),
           m_height(0)
@@ -149,14 +149,14 @@ class Q_DECL_HIDDEN AbstractAlbumTreeView::Private
 public:
 
     explicit Private()
-      : delegate(0),
+      : delegate(nullptr),
         expandOnSingleClick(false),
         expandNewCurrent(false),
         selectAlbumOnClick(false),
         selectOnContextMenu(true),
         enableContextMenu(false),
         setInAlbumManager(false),
-        resizeColumnsTimer(0),
+        resizeColumnsTimer(nullptr),
         configSelectionEntry(QLatin1String("Selection")),
         configExpansionEntry(QLatin1String("Expansion")),
         configCurrentIndexEntry(QLatin1String("CurrentIndex")),

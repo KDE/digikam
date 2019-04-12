@@ -51,10 +51,10 @@ public:
 
     explicit Private()
     {
-        PGFGrid             = 0;
-        labelPGFcompression = 0;
-        PGFcompression      = 0;
-        PGFLossLess         = 0;
+        PGFGrid             = nullptr;
+        labelPGFcompression = nullptr;
+        PGFcompression      = nullptr;
+        PGFLossLess         = nullptr;
     }
 
     QGridLayout*  PGFGrid;

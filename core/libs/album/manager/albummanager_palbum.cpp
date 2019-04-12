@@ -110,8 +110,8 @@ void AlbumManager::scanPAlbums()
             continue;
         }
 
-        PAlbum* album  = 0;
-        PAlbum* parent = 0;
+        PAlbum* album  = nullptr;
+        PAlbum* parent = nullptr;
 
         if (info.relativePath == QLatin1String("/"))
         {
@@ -278,7 +278,7 @@ PAlbum* AlbumManager::currentPAlbum() const
     if (!d->currentAlbums.isEmpty())
         return dynamic_cast<PAlbum*>(d->currentAlbums.first());
     else
-        return 0;
+        return nullptr;
 }
 
 PAlbum* AlbumManager::findPAlbum(const QUrl& url) const
@@ -287,7 +287,7 @@ PAlbum* AlbumManager::findPAlbum(const QUrl& url) const
 
     if (location.isNull())
     {
-        return 0;
+        return nullptr;
     }
 
     return d->albumPathHash.value(PAlbumPath(location.id(), CollectionManager::instance()->album(location, url)));
@@ -297,7 +297,7 @@ PAlbum* AlbumManager::findPAlbum(int id) const
 {
     if (!d->rootPAlbum)
     {
-        return 0;
+        return nullptr;
     }
 
     int gid = d->rootPAlbum->globalID() + id;
@@ -324,7 +324,7 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation& location, const QSt
     if (location.isNull() || !location.isAvailable())
     {
         errMsg = i18n("The collection location supplied is invalid or currently not available.");
-        return 0;
+        return nullptr;
     }
 
     PAlbum* album = d->albumRootAlbumHash.value(location.id());
@@ -332,7 +332,7 @@ PAlbum* AlbumManager::createPAlbum(const CollectionLocation& location, const QSt
     if (!album)
     {
         errMsg = i18n("No album for collection location: Internal error");
-        return 0;
+        return nullptr;
     }
 
     return createPAlbum(album, name, caption, date, category, errMsg);
@@ -348,26 +348,26 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     if (!parent)
     {
         errMsg = i18n("No parent found for album.");
-        return 0;
+        return nullptr;
     }
 
     // sanity checks
     if (name.isEmpty())
     {
         errMsg = i18n("Album name cannot be empty.");
-        return 0;
+        return nullptr;
     }
 
     if (name.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Album name cannot contain '/'.");
-        return 0;
+        return nullptr;
     }
 
     if (parent->isRoot())
     {
         errMsg = i18n("createPAlbum does not accept the root album as parent.");
-        return 0;
+        return nullptr;
     }
 
     QString albumPath = parent->isAlbumRoot() ? QString(QLatin1Char('/') + name) : QString(parent->albumPath() + QLatin1Char('/') + name);
@@ -381,7 +381,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         if (child->albumRootId() == albumRootId && child->albumPath() == albumPath)
         {
             errMsg = i18n("An existing album has the same name.");
-            return 0;
+            return nullptr;
         }
 
         child = static_cast<PAlbum*>(child->next());
@@ -397,7 +397,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     if (!ret)
     {
         errMsg = i18n("Failed to create directory '%1'", fileUrl.toString()); // TODO add tags?
-        return 0;
+        return nullptr;
     }
 
     ChangingDB changing(d);
@@ -406,7 +406,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     if (id == -1)
     {
         errMsg = i18n("Failed to add album to database");
-        return 0;
+        return nullptr;
     }
 
     QString parentPath;
@@ -490,10 +490,10 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         ChangingDB changing(d);
         access.db()->renameAlbum(album->id(), album->albumRootId(), album->albumPath());
 
-        PAlbum* subAlbum = 0;
+        PAlbum* subAlbum = nullptr;
         AlbumIterator it(album);
 
-        while ((subAlbum = static_cast<PAlbum*>(it.current())) != 0)
+        while ((subAlbum = static_cast<PAlbum*>(it.current())) != nullptr)
         {
             subAlbum->m_parentPath = newAlbumPath + subAlbum->m_parentPath.mid(oldAlbumPath.length());
             access.db()->renameAlbum(subAlbum->id(), album->albumRootId(), subAlbum->albumPath());
@@ -548,7 +548,7 @@ void AlbumManager::insertPAlbum(PAlbum* album, PAlbum* parent)
         return;
     }
 
-    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : 0);
+    emit signalAlbumAboutToBeAdded(album, parent, parent ? parent->lastChild() : nullptr);
 
     if (parent)
     {
@@ -570,7 +570,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
 
     // remove all children of this album
     Album* child        = album->firstChild();
-    PAlbum* toBeRemoved = 0;
+    PAlbum* toBeRemoved = nullptr;
 
     while (child)
     {
@@ -580,7 +580,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
         if (toBeRemoved)
         {
             removePAlbum(toBeRemoved);
-            toBeRemoved = 0;
+            toBeRemoved = nullptr;
         }
 
         child = next;

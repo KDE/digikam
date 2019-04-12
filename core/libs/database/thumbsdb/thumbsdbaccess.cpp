@@ -50,8 +50,8 @@ class Q_DECL_HIDDEN ThumbsDbAccessStaticPriv
 public:
 
     explicit ThumbsDbAccessStaticPriv()
-        : backend(0),
-          db(0),
+        : backend(nullptr),
+          db(nullptr),
           initializing(false)
     {
     }
@@ -69,7 +69,7 @@ public:
     bool               initializing;
 };
 
-ThumbsDbAccessStaticPriv* ThumbsDbAccess::d = 0;
+ThumbsDbAccessStaticPriv* ThumbsDbAccess::d = nullptr;
 
 // -----------------------------------------------------------------------------
 
@@ -187,7 +187,7 @@ void ThumbsDbAccess::setParameters(const DbEngineParameters& parameters)
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDbEngineErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(nullptr);
     }
 
     d->parameters = parameters;
@@ -276,7 +276,7 @@ void ThumbsDbAccess::cleanUpDatabase()
     }
 
     delete d;
-    d = 0;
+    d = nullptr;
 }
 
 } // namespace Digikam

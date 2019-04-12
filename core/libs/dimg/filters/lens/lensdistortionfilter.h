@@ -39,8 +39,8 @@ class DIGIKAM_EXPORT LensDistortionFilter : public DImgThreadedFilter
 
 public:
 
-    explicit LensDistortionFilter(QObject* const parent = 0);
-    explicit LensDistortionFilter(DImg* const orgImage, QObject* const parent=0, double main=0.0,
+    explicit LensDistortionFilter(QObject* const parent = nullptr);
+    explicit LensDistortionFilter(DImg* const orgImage, QObject* const parent=nullptr, double main=0.0,
                                   double edge=0.0, double rescale=0.0, double brighten=0.0,
                                   int center_x=0, int center_y=0);
 

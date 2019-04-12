@@ -52,14 +52,14 @@ namespace Digikam
 
 DCategorizedView::Private::Private(DCategorizedView* const lv)
     : listView(lv),
-      categoryDrawer(0),
+      categoryDrawer(nullptr),
       biggestItemSize(QSize(0, 0)),
       mouseButtonPressed(false),
       rightMouseButtonPressed(false),
       dragLeftViewport(false),
       drawItemsWhileDragging(true),
       forcedSelectionPosition(0),
-      proxyModel(0)
+      proxyModel(nullptr)
 {
 }
 

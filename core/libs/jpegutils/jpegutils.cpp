@@ -606,8 +606,8 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     struct jpeg_decompress_struct srcinfo;
     struct jpeg_compress_struct   dstinfo;
     struct jpegutils_jpeg_error_mgr jsrcerr, jdsterr;
-    jvirt_barray_ptr* src_coef_arrays = 0;
-    jvirt_barray_ptr* dst_coef_arrays = 0;
+    jvirt_barray_ptr* src_coef_arrays = nullptr;
+    jvirt_barray_ptr* dst_coef_arrays = nullptr;
 
     // Initialize the JPEG decompression object with default error handling
     srcinfo.err                 = jpeg_std_error(&jsrcerr);
@@ -621,8 +621,8 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     dstinfo.err->emit_message   = jpegutils_jpeg_emit_message;
     dstinfo.err->output_message = jpegutils_jpeg_output_message;
 
-    FILE* input_file  = 0;
-    FILE* output_file = 0;
+    FILE* input_file  = nullptr;
+    FILE* output_file = nullptr;
 
     input_file = fopen(in.constData(), "rb");
 
@@ -874,7 +874,7 @@ int getJpegQuality(const QString& file)
 
     for (i = 0 ; i < NUM_QUANT_TBLS ; ++i)
     {
-        if (jpeg_info.quant_tbl_ptrs[i] != NULL)
+        if (jpeg_info.quant_tbl_ptrs[i] != nullptr)
         {
             for (j = 0 ; j < DCTSIZE2 ; ++j)
             {
@@ -883,8 +883,8 @@ int getJpegQuality(const QString& file)
         }
      }
 
-    if ((jpeg_info.quant_tbl_ptrs[0] != NULL) &&
-        (jpeg_info.quant_tbl_ptrs[1] != NULL))
+    if ((jpeg_info.quant_tbl_ptrs[0] != nullptr) &&
+        (jpeg_info.quant_tbl_ptrs[1] != nullptr))
     {
         long hash[101] =
              {
@@ -936,7 +936,7 @@ int getJpegQuality(const QString& file)
             break;
         }
     }
-    else if (jpeg_info.quant_tbl_ptrs[0] != NULL)
+    else if (jpeg_info.quant_tbl_ptrs[0] != nullptr)
     {
         long hash[101] =
              {

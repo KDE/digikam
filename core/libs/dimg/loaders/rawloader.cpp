@@ -44,8 +44,8 @@ namespace Digikam
 
 RAWLoader::RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings)
     : DImgLoader(image),
-      m_observer(0),
-      m_filter(0)
+      m_observer(nullptr),
+      m_filter(nullptr)
 {
     m_decoderSettings = rawDecodingSettings.rawPrm;
     m_filter              = new RawProcessingFilter(this);

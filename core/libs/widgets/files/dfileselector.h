@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT DFileSelector : public DHBox
 
 public:
 
-    explicit DFileSelector(QWidget* const parent=0);
+    explicit DFileSelector(QWidget* const parent=nullptr);
     virtual ~DFileSelector();
 
     QLineEdit* lineEdit() const;

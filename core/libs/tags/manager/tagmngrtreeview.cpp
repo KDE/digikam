@@ -48,7 +48,7 @@ public:
 
     explicit Private()
     {
-        tagMngr = 0;
+        tagMngr = nullptr;
     }
 
     TagsManager* tagMngr;

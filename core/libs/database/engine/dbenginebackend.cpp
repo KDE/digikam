@@ -113,10 +113,10 @@ BdEngineBackendPrivate::BdEngineBackendPrivate(BdEngineBackend* const backend)
     : currentValidity(0),
       isInTransaction(false),
       status(BdEngineBackend::Unavailable),
-      lock(0),
+      lock(nullptr),
       operationStatus(BdEngineBackend::ExecuteNormal),
       errorLockOperationStatus(BdEngineBackend::ExecuteNormal),
-      errorHandler(0),
+      errorHandler(nullptr),
       q(backend)
 {
 }
@@ -145,7 +145,7 @@ void BdEngineBackendPrivate::init(const QString& name, DbEngineLocking* const l)
 // finishing of the thread.
 QSqlDatabase BdEngineBackendPrivate::databaseForThread()
 {
-    DbEngineThreadData* threadData = 0;
+    DbEngineThreadData* threadData = nullptr;
 
     if (!threadDataStorage.hasLocalData())
     {
@@ -1339,7 +1339,7 @@ bool BdEngineBackend::connectionErrorHandling(int /*retries*/)
 
     if (d->reconnectOnError())
     {
-        if (d->handleWithErrorHandler(0))
+        if (d->handleWithErrorHandler(nullptr))
         {
             d->closeDatabaseForThread();
             return true;

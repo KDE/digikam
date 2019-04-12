@@ -33,9 +33,9 @@ namespace Digikam
 AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     : QTreeView(parent),
       StateSavingObject(this),
-      m_albumModel(0),
-      m_albumFilterModel(0),
-      m_dragDropHandler(0),
+      m_albumModel(nullptr),
+      m_albumFilterModel(nullptr),
+      m_dragDropHandler(nullptr),
       m_checkOnMiddleClick(false),
       m_restoreCheckState(false),
       m_flags(flags),
@@ -87,7 +87,7 @@ void AbstractAlbumTreeView::setAlbumModel(AbstractSpecificAlbumModel* const mode
 
     if (m_albumModel)
     {
-        disconnect(m_albumModel, 0, this, 0);
+        disconnect(m_albumModel, nullptr, this, nullptr);
     }
 
     m_albumModel = model;

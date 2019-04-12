@@ -44,8 +44,8 @@ protected:
 
     explicit DConfigDlgPrivate(DConfigDlg* const parent)
         : q_ptr(parent),
-          mPageWidget(0),
-          mButtonBox(0)
+          mPageWidget(nullptr),
+          mButtonBox(nullptr)
     {
     }
 

@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT IccProfilesComboBox : public SqueezedComboBox
 
 public:
 
-    explicit IccProfilesComboBox(QWidget* const parent = 0);
+    explicit IccProfilesComboBox(QWidget* const parent = nullptr);
     ~IccProfilesComboBox();
 
     /**
@@ -87,7 +87,7 @@ class DIGIKAM_EXPORT IccRenderingIntentComboBox : public QComboBox
 {
 public:
 
-    explicit IccRenderingIntentComboBox(QWidget* const parent = 0);
+    explicit IccRenderingIntentComboBox(QWidget* const parent = nullptr);
 
     void setIntent(int intent);
     int  intent() const;

@@ -91,7 +91,7 @@ public:
     /**
      * Creates a new page dialog.
      */
-    explicit DConfigDlg(QWidget* const parent = 0, Qt::WindowFlags flags = 0);
+    explicit DConfigDlg(QWidget* const parent = nullptr, Qt::WindowFlags flags = nullptr);
 
     /**
      * Destroys the page dialog.
@@ -219,8 +219,8 @@ protected:
      * \param widget The DConfigDlgWdg object will be reparented to this object, so you can create
      * it without parent and you are not allowed to delete it.
      */
-    DConfigDlg(DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = 0);
-    DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = 0);
+    DConfigDlg(DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = nullptr);
+    DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* const widget, QWidget* const parent, Qt::WindowFlags flags = nullptr);
 
     /**
      * Returns the page widget of the dialog or 0 if no page widget is set.

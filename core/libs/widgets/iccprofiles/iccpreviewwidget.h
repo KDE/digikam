@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ICCPreviewWidget : public QScrollArea
 
 public:
 
-    explicit ICCPreviewWidget(QWidget* const parent = 0);
+    explicit ICCPreviewWidget(QWidget* const parent = nullptr);
     ~ICCPreviewWidget();
 
 public Q_SLOTS:

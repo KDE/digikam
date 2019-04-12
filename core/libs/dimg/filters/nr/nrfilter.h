@@ -65,7 +65,7 @@ class DIGIKAM_EXPORT NRFilter : public DImgThreadedFilter
 
 public:
 
-    explicit NRFilter(QObject* const parent = 0);
+    explicit NRFilter(QObject* const parent = nullptr);
     NRFilter(DImg* const orgImage, QObject* const parent, const NRContainer& settings);
     ~NRFilter();
 

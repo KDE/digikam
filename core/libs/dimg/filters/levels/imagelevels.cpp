@@ -87,8 +87,8 @@ public:
 
     explicit Private()
     {
-        levels     = 0;
-        lut        = 0;
+        levels     = nullptr;
+        lut        = nullptr;
         dirty      = false;
         sixteenBit = false;
     }
@@ -111,7 +111,7 @@ ImageLevels::ImageLevels(bool sixteenBit)
     d->sixteenBit     = sixteenBit;
 
     memset(d->levels, 0, sizeof(struct Private::_Levels));
-    d->lut->luts      = NULL;
+    d->lut->luts      = nullptr;
     d->lut->nchannels = 0;
 
     reset();
@@ -491,7 +491,7 @@ void ImageLevels::levelsLutSetup(int nchannels)
 
 void ImageLevels::levelsLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h)
 {
-    unsigned short* lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
+    unsigned short* lut0 = nullptr, *lut1 = nullptr, *lut2 = nullptr, *lut3 = nullptr;
 
     int   i;
 
@@ -700,7 +700,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const QUrl& fileUrl)
 {
     // TODO : support QUrl !
 
-    FILE*   file = 0;
+    FILE*   file = nullptr;
     int     low_input[5];
     int     high_input[5];
     int     low_output[5];
@@ -708,7 +708,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const QUrl& fileUrl)
     double  gamma[5];
     int     i, fields;
     char    buf[50];
-    char*   nptr = 0;
+    char*   nptr = nullptr;
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()).constData(), "r");
 
@@ -779,7 +779,7 @@ bool ImageLevels::saveLevelsToGimpLevelsFile(const QUrl& fileUrl)
 {
     // TODO : support QUrl !
 
-    FILE* file = 0;
+    FILE* file = nullptr;
     int   i;
 
     file = fopen(QFile::encodeName(fileUrl.toLocalFile()).constData(), "w");

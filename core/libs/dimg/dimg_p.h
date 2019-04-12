@@ -133,8 +133,8 @@ public:
         null         = true;
         width        = 0;
         height       = 0;
-        data         = 0;
-        lanczos_func = 0;
+        data         = nullptr;
+        lanczos_func = nullptr;
         alpha        = false;
         sixteenBit   = false;
     }

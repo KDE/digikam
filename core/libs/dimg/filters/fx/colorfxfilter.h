@@ -84,7 +84,7 @@ public:
 
 public:
 
-    explicit ColorFXFilter(QObject* const parent = 0);
+    explicit ColorFXFilter(QObject* const parent = nullptr);
     explicit ColorFXFilter(DImg* const orgImage,
                            QObject* const parent,
                            const ColorFXContainer& settings=ColorFXContainer());

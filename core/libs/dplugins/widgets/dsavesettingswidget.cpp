@@ -44,10 +44,10 @@ public:
 
     explicit Private()
     {
-        formatLabel    = 0;
-        formatComboBox = 0;
-        conflictBox    = 0;
-        grid           = 0;
+        formatLabel    = nullptr;
+        formatComboBox = nullptr;
+        conflictBox    = nullptr;
+        grid           = nullptr;
     }
 
     QLabel*              formatLabel;

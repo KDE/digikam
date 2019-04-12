@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT DPluginSetup : public QWidget
 
 public:
 
-    explicit DPluginSetup(QWidget* const parent = 0);
+    explicit DPluginSetup(QWidget* const parent = nullptr);
     ~DPluginSetup();
 
     void setPluginConfView(DPluginConfView* const view);

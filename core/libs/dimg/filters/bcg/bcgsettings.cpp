@@ -53,9 +53,9 @@ class Q_DECL_HIDDEN BCGSettings::Private
 public:
 
     explicit Private()
-      : bInput(0),
-        cInput(0),
-        gInput(0)
+      : bInput(nullptr),
+        cInput(nullptr),
+        gInput(nullptr)
     {
     }
 

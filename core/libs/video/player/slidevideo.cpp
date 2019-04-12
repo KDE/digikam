@@ -60,8 +60,8 @@ public:
 
     using QProxyStyle::QProxyStyle;
 
-    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0,
-                  const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = nullptr,
+                  const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const
     {
         if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
         {
@@ -78,13 +78,13 @@ class Q_DECL_HIDDEN SlideVideo::Private
 public:
 
     explicit Private()
-      : iface(0),
-        videoWidget(0),
-        player(0),
-        slider(0),
-        volume(0),
-        tlabel(0),
-        indicator(0),
+      : iface(nullptr),
+        videoWidget(nullptr),
+        player(nullptr),
+        slider(nullptr),
+        volume(nullptr),
+        tlabel(nullptr),
+        indicator(nullptr),
         videoOrientation(0)
     {
     }

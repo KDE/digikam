@@ -77,8 +77,8 @@ public:
 public:
 
     explicit Private() :
-        curves(0),
-        lut(0),
+        curves(nullptr),
+        lut(nullptr),
         segmentMax(0),
         dirty(false)
     {
@@ -101,7 +101,7 @@ public:
     void init(bool sixteenBit)
     {
         lut        = new Private::_Lut;
-        lut->luts  = NULL;
+        lut->luts  = nullptr;
         curves     = new Private::_Curves;
         segmentMax = sixteenBit ? MAX_SEGMENT_16BIT : MAX_SEGMENT_8BIT;
     }
@@ -315,7 +315,7 @@ void ImageCurves::curvesReset()
 {
     memset(d->curves, 0, sizeof(struct Private::_Curves));
     d->freeLutData();
-    d->lut->luts      = NULL;
+    d->lut->luts      = nullptr;
     d->lut->nchannels = 0;
     d->dirty          = false;
 
@@ -652,7 +652,7 @@ void ImageCurves::curvesLutSetup(int nchannels)
 
 void ImageCurves::curvesLutProcess(uchar* const srcPR, uchar* const destPR, int w, int h)
 {
-    unsigned short* lut0 = NULL, *lut1 = NULL, *lut2 = NULL, *lut3 = NULL;
+    unsigned short* lut0 = nullptr, *lut1 = nullptr, *lut2 = nullptr, *lut3 = nullptr;
     int i;
 
     if (d->lut->nchannels > 0)
@@ -1175,7 +1175,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const QUrl& fileUrl)
 {
     // TODO : support QUrl !
 
-    FILE* file = 0;
+    FILE* file = nullptr;
     int   i, j;
     int   fields;
     char  buf[50];
@@ -1250,7 +1250,7 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const QUrl& fileUrl) const
 {
     // TODO : support QUrl !
 
-    FILE* file = 0;
+    FILE* file = nullptr;
     int   i, j;
     int   index;
 

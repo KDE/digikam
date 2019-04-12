@@ -53,7 +53,7 @@ bool DImg::loadItemInfo(const QString& filePath, bool loadMetadata, bool loadICC
         loadFlags |= DImgLoader::LoadImageHistory;
     }
 
-    return load(filePath, loadFlags, 0, DRawDecoding());
+    return load(filePath, loadFlags, nullptr, DRawDecoding());
 }
 
 bool DImg::load(const QString& filePath,
@@ -232,7 +232,7 @@ bool DImg::load(const QString& filePath,
             break;
     }
 
-    if (observer && !observer->continueQuery(0))
+    if (observer && !observer->continueQuery(nullptr))
     {
         return false;
     }

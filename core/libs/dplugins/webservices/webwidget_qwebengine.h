@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT WebWidget : public QWebEngineView
 
 public:
 
-  explicit WebWidget(QWidget* const parent = 0);
+  explicit WebWidget(QWidget* const parent = nullptr);
   ~WebWidget();
 
 protected:

@@ -42,7 +42,7 @@ public:
 
     explicit Private()
     {
-        player = 0;
+        player = nullptr;
     }
 
 public:

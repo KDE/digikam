@@ -57,14 +57,14 @@ public:
 
     explicit Private()
     {
-        pickBtns = 0;
-        btnNone  = 0;
-        btnRej   = 0;
-        btnPndg  = 0;
-        btnAccpt = 0;
-        desc     = 0;
-        descBox  = 0;
-        shortcut = 0;
+        pickBtns = nullptr;
+        btnNone  = nullptr;
+        btnRej   = nullptr;
+        btnPndg  = nullptr;
+        btnAccpt = nullptr;
+        desc     = nullptr;
+        descBox  = nullptr;
+        shortcut = nullptr;
     }
 
     QButtonGroup*     pickBtns;
@@ -304,7 +304,7 @@ public:
 
     explicit Private()
     {
-        plw = 0;
+        plw = nullptr;
     }
 
     PickLabelWidget* plw;

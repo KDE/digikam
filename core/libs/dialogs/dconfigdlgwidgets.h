@@ -56,7 +56,7 @@ public:
      *
      * @param parent The parent widget.
      */
-    explicit DConfigDlgWdg(QWidget* const parent = 0);
+    explicit DConfigDlgWdg(QWidget* const parent = nullptr);
 
     /**
      * Destroys the page widget.
@@ -220,7 +220,7 @@ public:
     /**
      * Constructs a title widget with the given @param parent .
      */
-    explicit DConfigDlgTitle(QWidget* const parent = 0);
+    explicit DConfigDlgTitle(QWidget* const parent = nullptr);
 
     virtual ~DConfigDlgTitle();
 

@@ -68,7 +68,7 @@ public:
 
     explicit Private()
       : histoSegments(0),
-        curvesBox(0)
+        curvesBox(nullptr)
     {
     }
 

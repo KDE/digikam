@@ -66,7 +66,7 @@ public:
     explicit Private()
     {
         running = false;
-        pool    = 0;
+        pool    = nullptr;
     }
 
     volatile bool       running;

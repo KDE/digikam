@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT WorkingWidget : public QLabel
 
 public:
 
-    explicit WorkingWidget(QWidget* const parent = 0);
+    explicit WorkingWidget(QWidget* const parent = nullptr);
     ~WorkingWidget();
 
 Q_SIGNALS:

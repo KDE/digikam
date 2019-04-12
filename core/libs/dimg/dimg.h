@@ -123,12 +123,12 @@ public:
 
     /** Load image using QByteArray as file path
      */
-    explicit DImg(const QByteArray& filePath, DImgLoaderObserver* const observer = 0,
+    explicit DImg(const QByteArray& filePath, DImgLoaderObserver* const observer = nullptr,
                   const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     /** Load image using QString as file path
      */
-    explicit DImg(const QString& filePath, DImgLoaderObserver* const observer = 0,
+    explicit DImg(const QString& filePath, DImgLoaderObserver* const observer = nullptr,
                   const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     /** Copy image: Creates a shallow copy that refers to the same shared data.
@@ -147,7 +147,7 @@ public:
         If copyData is false, this DImg object will take ownership of the data pointer.
         If there is an alpha channel, the data shall be in non-premultiplied form (unassociated alpha).
      */
-    DImg(uint width, uint height, bool sixteenBit, bool alpha = false, uchar* const data = 0, bool copyData = true);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha = false, uchar* const data = nullptr, bool copyData = true);
 
     ~DImg();
 
@@ -199,16 +199,16 @@ public:
      */
     uchar*      stripImageData();
 
-    bool        load(const QString& filePath, DImgLoaderObserver* const observer = 0,
+    bool        load(const QString& filePath, DImgLoaderObserver* const observer = nullptr,
                      const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
     bool        load(const QString& filePath,
                      bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadHistory,
-                     DImgLoaderObserver* const observer = 0,
+                     DImgLoaderObserver* const observer = nullptr,
                      const DRawDecoding& rawDecodingSettings=DRawDecoding());
 
-    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const observer = 0);
-    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer = 0);
+    bool        save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const observer = nullptr);
+    bool        save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer = nullptr);
 
     /**
      * It is common that images are not directly saved to the destination path.

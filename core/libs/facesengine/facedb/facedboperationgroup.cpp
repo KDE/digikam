@@ -40,7 +40,7 @@ class Q_DECL_HIDDEN FaceDbOperationGroup::Private
 public:
 
     explicit Private()
-        : dbAccess(0),
+        : dbAccess(nullptr),
           acquired(false),
           maxTime(0)
     {

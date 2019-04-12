@@ -99,7 +99,7 @@ public:
 
     /// Termination is controlled by setting the TerminationPolicy
     /// Default is TerminationPolicyTerminateLoading
-    explicit ManagedLoadSaveThread(QObject* const parent = 0);
+    explicit ManagedLoadSaveThread(QObject* const parent = nullptr);
     ~ManagedLoadSaveThread();
 
     /// Append a task to load the given file to the task list.

@@ -72,8 +72,8 @@ class DIGIKAM_EXPORT AntiVignettingFilter : public DImgThreadedFilter
 
 public:
 
-    explicit AntiVignettingFilter(QObject* const parent = 0);
-    explicit AntiVignettingFilter(DImg* const orgImage, QObject* const parent=0,
+    explicit AntiVignettingFilter(QObject* const parent = nullptr);
+    explicit AntiVignettingFilter(DImg* const orgImage, QObject* const parent=nullptr,
                                   const AntiVignettingContainer& settings=AntiVignettingContainer());
 
     ~AntiVignettingFilter();

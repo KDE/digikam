@@ -59,9 +59,9 @@ class Q_DECL_HIDDEN CoreDbAccessStaticPriv
 public:
 
     CoreDbAccessStaticPriv()
-        : backend(0),
-          db(0),
-          databaseWatch(0),
+        : backend(nullptr),
+          db(nullptr),
+          databaseWatch(nullptr),
           initializing(false)
     {
         // Create a unique identifier for this application (as an application accessing a database
@@ -106,7 +106,7 @@ public:
     CoreDbAccessStaticPriv* const d;
 };
 
-CoreDbAccessStaticPriv* CoreDbAccess::d = 0;
+CoreDbAccessStaticPriv* CoreDbAccess::d = nullptr;
 
 CoreDbAccess::CoreDbAccess()
 {
@@ -160,7 +160,7 @@ CoreDbWatch* CoreDbAccess::databaseWatch()
         return d->databaseWatch;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void CoreDbAccess::initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler)
@@ -216,7 +216,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
     // Kill the old database error handler
     if (d->backend)
     {
-        d->backend->setDbEngineErrorHandler(0);
+        d->backend->setDbEngineErrorHandler(nullptr);
     }
 
     d->parameters = parameters;
@@ -354,7 +354,7 @@ void CoreDbAccess::cleanUpDatabase()
 
     ItemInfoStatic::destroy();
     delete d;
-    d = 0;
+    d = nullptr;
 }
 
 // ----------------------------------------------------------------------

@@ -58,8 +58,8 @@ public:
     explicit Private()
       : showFindDuplicateAction(true),
         showDeleteFaceTagsAction(false),
-        resetIconAction(0),
-        findDuplAction(0)
+        resetIconAction(nullptr),
+        findDuplAction(nullptr)
     {
     }
 

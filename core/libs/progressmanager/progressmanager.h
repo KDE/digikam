@@ -370,7 +370,7 @@ public:
      * @param parent Specify an already existing item as the parent of this one (can be null).
      * @return true if ProgressItem have been added to manager, else false.
      */
-    static bool addProgressItem(ProgressItem* const t, ProgressItem* const parent=0);
+    static bool addProgressItem(ProgressItem* const t, ProgressItem* const parent=nullptr);
 
     /**
      * Ask all listeners to show the progress dialog, because there is

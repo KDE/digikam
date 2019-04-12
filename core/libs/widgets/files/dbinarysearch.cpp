@@ -45,7 +45,7 @@ public:
 
     explicit Private()
     {
-        downloadLabel = 0;
+        downloadLabel = nullptr;
     }
 
     QVector<DBinaryIface*>    binaryIfaces;

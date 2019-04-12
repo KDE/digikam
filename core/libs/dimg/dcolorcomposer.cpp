@@ -520,7 +520,7 @@ DColorComposer* DColorComposer::getComposer(DColorComposer::CompositingOperation
             return new DColorComposerPorterDuffDstOut;
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

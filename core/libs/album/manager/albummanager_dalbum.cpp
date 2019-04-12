@@ -35,7 +35,7 @@ void AlbumManager::scanDAlbums()
     if (d->dateListJob)
     {
         d->dateListJob->cancel();
-        d->dateListJob = 0;
+        d->dateListJob = nullptr;
     }
 
     DatesDBJobInfo jInfo;
@@ -73,7 +73,7 @@ DAlbum* AlbumManager::findDAlbum(int id) const
 {
     if (!d->rootDAlbum)
     {
-        return 0;
+        return nullptr;
     }
 
     int gid = d->rootDAlbum->globalID() + id;
@@ -99,10 +99,10 @@ void AlbumManager::slotDatesJobResult()
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->dateListJob->errorsList().first(),
-                             0, i18n("digiKam"));
+                             nullptr, i18n("digiKam"));
     }
 
-    d->dateListJob = 0;
+    d->dateListJob = nullptr;
 
     emit signalAllDAlbumsLoaded();
 }
@@ -181,7 +181,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         }
 
         // Check if Year Album already exist.
-        DAlbum* yAlbum = 0;
+        DAlbum* yAlbum = nullptr;
         AlbumIterator it(d->rootDAlbum);
 
         while (it.current())

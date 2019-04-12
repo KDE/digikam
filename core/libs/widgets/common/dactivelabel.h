@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT DActiveLabel : public QLabel
 
 public:
 
-    explicit DActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=0);
+    explicit DActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=nullptr);
     virtual ~DActiveLabel();
 
     void updateData(const QUrl& url, const QImage& img);

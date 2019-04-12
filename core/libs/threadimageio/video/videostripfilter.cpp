@@ -599,7 +599,7 @@ static const quint8* determineFilmStrip(quint32 videoWidth, quint32& videoStripW
 {
     if (videoWidth <= SMALLEST_FILM_STRIP_WIDTH * 2)
     {
-        return NULL;
+        return nullptr;
     }
 
     if (videoWidth <= 96)

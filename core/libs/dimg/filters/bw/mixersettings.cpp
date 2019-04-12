@@ -60,16 +60,16 @@ public:
 
     explicit Private() :
         currentChannel(RedChannel),
-        monochromeTips(0),
-        totalPercents(0),
-        outChannelLabel(0),
-        resetButton(0),
-        preserveLuminosity(0),
-        monochrome(0),
-        outChannelCB(0),
-        redGain(0),
-        greenGain(0),
-        blueGain(0)
+        monochromeTips(nullptr),
+        totalPercents(nullptr),
+        outChannelLabel(nullptr),
+        resetButton(nullptr),
+        preserveLuminosity(nullptr),
+        monochrome(nullptr),
+        outChannelCB(nullptr),
+        redGain(nullptr),
+        greenGain(nullptr),
+        blueGain(nullptr)
     {
     }
 
@@ -543,7 +543,7 @@ void MixerSettings::writeSettings(KConfigGroup& group)
 void MixerSettings::loadSettings()
 {
     QUrl           loadGainsFileUrl;
-    FILE*          fp = 0L;
+    FILE*          fp = nullptr;
     MixerContainer settings;
 
     loadGainsFileUrl = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Gains Mixer File to Load"),
@@ -626,7 +626,7 @@ void MixerSettings::loadSettings()
 void MixerSettings::saveAsSettings()
 {
     QUrl  saveGainsFileUrl;
-    FILE* fp = 0L;
+    FILE* fp = nullptr;
 
     saveGainsFileUrl = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Gains Mixer File to Save"),
                                                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
@@ -641,7 +641,7 @@ void MixerSettings::saveAsSettings()
 
     if (fp)
     {
-        const char* str = 0L;
+        const char* str = nullptr;
         char        buf1[256];
         char        buf2[256];
         char        buf3[256];

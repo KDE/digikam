@@ -55,8 +55,8 @@ class Q_DECL_HIDDEN AlbumSelectTreeView::Private
 public:
 
     explicit Private()
-      : albumModificationHelper(0),
-        newAlbumAction(0)
+      : albumModificationHelper(nullptr),
+        newAlbumAction(nullptr)
     {
     }
 
@@ -120,11 +120,11 @@ class Q_DECL_HIDDEN AlbumSelectWidget::Private
 public:
 
     explicit Private()
-      : albumModel(0),
-        albumTreeView(0),
-        albumModificationHelper(0),
-        searchBar(0),
-        newAlbumBtn(0)
+      : albumModel(nullptr),
+        albumTreeView(nullptr),
+        albumModificationHelper(nullptr),
+        searchBar(nullptr),
+        newAlbumBtn(nullptr)
     {
     }
 

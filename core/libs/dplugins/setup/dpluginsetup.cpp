@@ -51,14 +51,14 @@ class Q_DECL_HIDDEN DPluginSetup::Private
 public:
 
     explicit Private()
-      : pluginsNumber(0),
-        pluginsNumberActivated(0),
-        checkAllBtn(0),
-        clearBtn(0),
-        grid(0),
-        hbox(0),
-        pluginFilter(0),
-        pluginsList(0)
+      : pluginsNumber(nullptr),
+        pluginsNumberActivated(nullptr),
+        checkAllBtn(nullptr),
+        clearBtn(nullptr),
+        grid(nullptr),
+        hbox(nullptr),
+        pluginFilter(nullptr),
+        pluginsList(nullptr)
     {
     }
 

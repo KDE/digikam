@@ -130,7 +130,7 @@ void ThumbnailLoadingTask::execute()
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
-                m_usedProcess = 0;
+                m_usedProcess = nullptr;
             }
             else
             {
@@ -211,7 +211,7 @@ void ThumbnailLoadingTask::execute()
         }
 
         // set to 0, as checked in setStatus
-        m_usedProcess = 0;
+        m_usedProcess = nullptr;
     }
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held

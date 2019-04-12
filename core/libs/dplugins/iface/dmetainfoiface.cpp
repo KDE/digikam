@@ -47,7 +47,7 @@ public:
 
     explicit Private()
     {
-        dirSelector = 0;
+        dirSelector = nullptr;
     }
 
     DFileSelector* dirSelector;

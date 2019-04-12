@@ -45,7 +45,7 @@ class Q_DECL_HIDDEN SimilarityDb::Private
 public:
 
     explicit Private() :
-        db(0)
+        db(nullptr)
     {
     }
 

@@ -80,13 +80,13 @@ DInfoInterface* DPluginGeneric::infoIface(QObject* const ac) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 int DPluginGeneric::count() const
 {
     int count       = 0;
-    QObject* parent = 0;
+    QObject* parent = nullptr;
 
     foreach (DPluginAction* const ac, d->actions)
     {
@@ -147,7 +147,7 @@ DPluginAction* DPluginGeneric::findActionByName(const QString& name, QObject* co
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void DPluginGeneric::addAction(DPluginAction* const ac)

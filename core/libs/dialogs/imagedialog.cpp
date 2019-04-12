@@ -59,9 +59,9 @@ class Q_DECL_HIDDEN ImageDialogPreview::Private
 public:
 
     explicit Private()
-      : imageLabel(0),
-        infoLabel(0),
-        thumbLoadThread(0)
+      : imageLabel(nullptr),
+        infoLabel(nullptr),
+        thumbLoadThread(nullptr)
     {
     }
 

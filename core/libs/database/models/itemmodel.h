@@ -88,7 +88,7 @@ public:
 
 public:
 
-    explicit ItemModel(QObject* const parent = 0);
+    explicit ItemModel(QObject* const parent = nullptr);
     ~ItemModel();
 
     /**

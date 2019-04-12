@@ -489,7 +489,7 @@ DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentif
         return gen->createFilter(filterIdentifier, version);
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

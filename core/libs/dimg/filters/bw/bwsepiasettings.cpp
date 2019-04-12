@@ -73,13 +73,13 @@ public:
 public:
 
     explicit Private() :
-        bwFilters(0),
-        bwFilm(0),
-        bwTone(0),
-        tab(0),
-        cInput(0),
-        strengthInput(0),
-        curvesBox(0)
+        bwFilters(nullptr),
+        bwFilm(nullptr),
+        bwTone(nullptr),
+        tab(nullptr),
+        cInput(nullptr),
+        strengthInput(nullptr),
+        curvesBox(nullptr)
     {
     }
 
@@ -122,7 +122,7 @@ PreviewListItem* BWSepiaSettings::Private::addItem(PreviewList* const list,
                                                    const QString& name,
                                                    BWSepiaContainer::BlackWhiteConversionType type)
 {
-    BWSepiaFilter* const filter = new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type));
+    BWSepiaFilter* const filter = new BWSepiaFilter(&thumbImage, nullptr, BWSepiaContainer(type));
     PreviewListItem* const item = list->addItem(filter, name, type);
     return item;
 }

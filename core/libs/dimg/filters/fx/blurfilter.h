@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT BlurFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BlurFilter(QObject* const parent = 0);
-    explicit BlurFilter(DImg* const orgImage, QObject* const parent=0, int radius=3);
+    explicit BlurFilter(QObject* const parent = nullptr);
+    explicit BlurFilter(DImg* const orgImage, QObject* const parent=nullptr, int radius=3);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit BlurFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,

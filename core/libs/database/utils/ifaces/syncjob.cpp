@@ -43,9 +43,9 @@ class Q_DECL_HIDDEN SyncJob::Private
 public:
 
     explicit Private() :
-        waitingLoop(0),
-        thumbnail(0),
-        album(0)
+        waitingLoop(nullptr),
+        thumbnail(nullptr),
+        album(nullptr)
     {
     }
 
@@ -64,7 +64,7 @@ SyncJob::SyncJob()
 SyncJob::~SyncJob()
 {
     delete d->thumbnail;
-    d->thumbnail = 0;
+    d->thumbnail = nullptr;
     delete d;
 }
 

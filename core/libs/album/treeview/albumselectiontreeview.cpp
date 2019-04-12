@@ -80,14 +80,14 @@ public:
 
     explicit Private()
       : enableToolTips(false),
-        albumModificationHelper(0),
-        toolTip(0),
-        renameAction(0),
-        resetIconAction(0),
-        findDuplAction(0),
-        scanFacesAction(0),
-        rebuildThumbsAction(0),
-        contextMenuElement(0)
+        albumModificationHelper(nullptr),
+        toolTip(nullptr),
+        renameAction(nullptr),
+        resetIconAction(nullptr),
+        findDuplAction(nullptr),
+        scanFacesAction(nullptr),
+        rebuildThumbsAction(nullptr),
+        contextMenuElement(nullptr)
     {
     }
 

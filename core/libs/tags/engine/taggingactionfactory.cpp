@@ -45,7 +45,7 @@ public:
     explicit Private()
         : parentTagId(0),               // 0 means toplevel tag
           nameMatchMode(MatchStartingWithFragment),
-          constraintInterface(0),
+          constraintInterface(nullptr),
           defaultIndex(-1),
           recentIndex(0),
           valid(false)
@@ -157,7 +157,7 @@ void TaggingActionFactory::reset()
     d->parentTagId         = 0;
     d->defaultIndex        = -1;
     d->nameMatchMode       = MatchStartingWithFragment;
-    d->constraintInterface = 0;
+    d->constraintInterface = nullptr;
     d->invalidate();
 }
 

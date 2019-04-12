@@ -96,7 +96,7 @@ public:
 
 public:
 
-    explicit ThumbBarDock(QWidget* const parent = 0, Qt::WindowFlags flags = 0);
+    explicit ThumbBarDock(QWidget* const parent = nullptr, Qt::WindowFlags flags = nullptr);
     ~ThumbBarDock();
 
     /** Measure the orientation and size of the widget and adjust the containing

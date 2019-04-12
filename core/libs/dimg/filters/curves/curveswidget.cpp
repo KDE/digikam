@@ -82,9 +82,9 @@ public:
         rightMost        = 0;
         channelType      = LuminosityChannel;
         scaleType        = LinScaleHistogram;
-        imageHistogram   = 0;
-        histogramPainter = 0;
-        curves           = 0;
+        imageHistogram   = nullptr;
+        histogramPainter = nullptr;
+        curves           = nullptr;
         grabPoint        = -1;
         last             = 0;
         guideVisible     = false;
@@ -92,7 +92,7 @@ public:
         yMouseOver       = -1;
         clearFlag        = HistogramNone;
         progressCount    = 0;
-        progressTimer    = 0;
+        progressTimer    = nullptr;
         progressPix      = DWorkingPixmap();
     }
 
@@ -364,7 +364,7 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
     d->histogramPainter->initFrom(this);
     d->channelType      = LuminosityChannel;
     d->scaleType        = LogScaleHistogram;
-    d->imageHistogram   = 0;
+    d->imageHistogram   = nullptr;
 
     setMouseTracking(true);
     setMinimumSize(w, h);

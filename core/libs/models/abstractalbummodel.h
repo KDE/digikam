@@ -93,7 +93,7 @@ public:
     explicit AbstractAlbumModel(Album::Type albumType,
                                 Album* const rootAlbum,
                                 RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                QObject* const parent = 0);
+                                QObject* const parent = nullptr);
     ~AbstractAlbumModel();
 
     /** Set a drag drop handler
@@ -217,7 +217,7 @@ public:
     explicit AbstractSpecificAlbumModel(Album::Type albumType,
                                         Album* const rootAlbum,
                                         RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                        QObject* const parent = 0);
+                                        QObject* const parent = nullptr);
 
 protected:
 
@@ -252,7 +252,7 @@ public:
     explicit AbstractCountingAlbumModel(Album::Type albumType,
                                         Album* const rootAlbum,
                                         RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                        QObject* const parent = 0);
+                                        QObject* const parent = nullptr);
     ~AbstractCountingAlbumModel();
 
 protected:
@@ -336,7 +336,7 @@ public:
     explicit AbstractCheckableAlbumModel(Album::Type albumType,
                                          Album* const rootAlbum,
                                          RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                         QObject* const parent = 0);
+                                         QObject* const parent = nullptr);
     ~AbstractCheckableAlbumModel();
 
     /// Triggers if the albums in this model are checkable

@@ -430,20 +430,20 @@ public:
         : mouseDragAction(NONE),
           lastdx(0),
           lastdy(0),
-          scene(0),
-          pixmapItem(0),
-          selection(0),
+          scene(nullptr),
+          pixmapItem(nullptr),
+          selection(nullptr),
           enableSelection(false),
           mouseZone(DSelectionItem::None),
-          zoomInAction(0),
-          zoomOutAction(0),
-          zoom2FitAction(0),
-          toolBar(0),
-          highLightLeft(0),
-          highLightRight(0),
-          highLightTop(0),
-          highLightBottom(0),
-          highLightArea(0)
+          zoomInAction(nullptr),
+          zoomOutAction(nullptr),
+          zoom2FitAction(nullptr),
+          toolBar(nullptr),
+          highLightLeft(nullptr),
+          highLightRight(nullptr),
+          highLightTop(nullptr),
+          highLightBottom(nullptr),
+          highLightArea(nullptr)
     {
     }
 

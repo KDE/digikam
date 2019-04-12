@@ -59,7 +59,7 @@ class Q_DECL_HIDDEN AlbumModificationHelper::Private
 public:
 
     explicit Private()
-      : dialogParent(0)
+      : dialogParent(nullptr)
     {
     }
 
@@ -84,14 +84,14 @@ void AlbumModificationHelper::bindAlbum(QAction* const action, PAlbum* const alb
 
 PAlbum* AlbumModificationHelper::boundAlbum(QObject* const sender) const
 {
-    QAction* action = 0;
+    QAction* action = nullptr;
 
     if ( (action = qobject_cast<QAction*>(sender)) )
     {
         return action->data().value<AlbumPointer<PAlbum> >();
     }
 
-    return 0;
+    return nullptr;
 }
 
 PAlbum* AlbumModificationHelper::slotAlbumNew()
@@ -104,7 +104,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     if (!parent)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "No parent album given";
-        return 0;
+        return nullptr;
     }
 
     ApplicationSettings* settings = ApplicationSettings::instance();
@@ -112,7 +112,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     if (!settings)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "could not get Album Settings";
-        return 0;
+        return nullptr;
     }
 
 /*
@@ -144,7 +144,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     if (!AlbumPropsEdit::createNew(parent, title, comments, date, category,
                                    albumCategories, parentSelector))
     {
-        return 0;
+        return nullptr;
     }
 
     QStringList oldAlbumCategories(ApplicationSettings::instance()->getAlbumCategoryNames());
@@ -155,7 +155,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     }
 
     QString errMsg;
-    PAlbum* album = 0;
+    PAlbum* album = nullptr;
 
     if (parent->isRoot() || parentSelector == 1)
     {
@@ -171,7 +171,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
     if (!album)
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
-        return 0;
+        return nullptr;
     }
 
     return album;

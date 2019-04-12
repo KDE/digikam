@@ -207,7 +207,7 @@ ActionVersionsOverlay::ActionVersionsOverlay(QObject* const parent, const QIcon&
       m_icon(icon),
       m_text(text),
       m_tip(tip),
-      m_referenceModel(0)
+      m_referenceModel(nullptr)
 {
 }
 

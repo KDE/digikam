@@ -48,7 +48,7 @@ public:
 
     explicit RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings = DRawDecoding());
 
-    bool load(const QString& filePath, DImgLoaderObserver* const observer = 0) override;
+    bool load(const QString& filePath, DImgLoaderObserver* const observer = nullptr) override;
     bool save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer=0*/) override;
 
     bool hasAlpha()   const override;

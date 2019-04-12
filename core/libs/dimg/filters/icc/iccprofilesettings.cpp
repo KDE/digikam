@@ -54,7 +54,7 @@ class Q_DECL_HIDDEN IccProfilesSettings::Private
 public:
 
     explicit Private()
-      : profilesBox(0)
+      : profilesBox(nullptr)
     {
         favoriteProfiles.setMaxCost(10);
     }

@@ -49,7 +49,7 @@ class AlbumPointer
 public:
 
     AlbumPointer()
-        : album(0)
+        : album(nullptr)
     {
     }
 

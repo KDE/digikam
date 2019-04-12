@@ -49,9 +49,9 @@ public:
 
     DAbstractSliderSpinBoxPrivate()
     {
-        edit                    = 0;
-        validator               = 0;
-        dummySpinBox            = 0;
+        edit                    = nullptr;
+        validator               = nullptr;
+        dummySpinBox            = nullptr;
         upButtonDown            = false;
         downButtonDown          = false;
         factor                  = 1.0;
@@ -225,7 +225,7 @@ void DAbstractSliderSpinBox::paint(QPainter& painter)
 
     QStyleOptionProgressBar progressOpts = progressBarOptions();
     progressOpts.rect.adjust(0, 2, 0, -2);
-    style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, 0);
+    style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, nullptr);
 
     // Draw focus if necessary
     if (hasFocus() && d->edit->hasFocus())
@@ -736,7 +736,7 @@ QStyleOptionSpinBox DAbstractSliderSpinBox::spinBoxOptions() const
     }
     else
     {
-        opts.activeSubControls = 0;
+        opts.activeSubControls = nullptr;
     }
 
     return opts;

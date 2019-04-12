@@ -101,14 +101,14 @@ public:
     void transformForDisplay(QWidget* const widget);
     void transformForDisplay(const IccProfile& displayProfile);
 
-    static IccProfile displayProfile(QWidget* const displayingWidget = 0);
-    IccTransform displayTransform(QWidget* const displayingWidget = 0);
+    static IccProfile displayProfile(QWidget* const displayingWidget = nullptr);
+    IccTransform displayTransform(QWidget* const displayingWidget = nullptr);
     IccTransform displayTransform(const IccProfile& displayProfile);
 
     /**
      * Returns a display transform, with soft-proofing enabled for the given device profile.
      */
-    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* const displayingWidget = 0);
+    IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, QWidget* const displayingWidget = nullptr);
     IccTransform displaySoftProofingTransform(const IccProfile& deviceProfile, const IccProfile& displayProfile);
 
     /**

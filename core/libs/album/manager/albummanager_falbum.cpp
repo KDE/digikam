@@ -38,7 +38,7 @@ void AlbumManager::personItemsCount()
     if (d->personListJob)
     {
         d->personListJob->cancel();
-        d->personListJob = 0;
+        d->personListJob = nullptr;
     }
 
     TagsDBJobInfo jInfo;
@@ -66,10 +66,10 @@ void AlbumManager::slotPeopleJobResult()
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->personListJob->errorsList().first(),
-                             0, i18n("digiKam"));
+                             nullptr, i18n("digiKam"));
     }
 
-    d->personListJob = 0;
+    d->personListJob = nullptr;
 }
 
 void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& facesStatMap)

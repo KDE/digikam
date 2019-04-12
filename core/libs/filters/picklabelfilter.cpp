@@ -57,7 +57,7 @@ QList<TAlbum*> PickLabelFilter::getCheckedPickLabelTags()
 {
     QList<TAlbum*> list;
     int tagId   = 0;
-    TAlbum* tag = 0;
+    TAlbum* tag = nullptr;
 
     foreach(const PickLabel& pl, colorLabels())
     {

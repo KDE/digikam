@@ -60,7 +60,7 @@ class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public DCategorizedSortFilt
 
 public:
 
-    explicit ImageSortFilterModel(QObject* const parent = 0);
+    explicit ImageSortFilterModel(QObject* const parent = nullptr);
 
     void        setSourceItemModel(ItemModel* const model);
     ItemModel* sourceItemModel() const;
@@ -136,7 +136,7 @@ public:
 
 public:
 
-    explicit ItemFilterModel(QObject* const parent = 0);
+    explicit ItemFilterModel(QObject* const parent = nullptr);
     ~ItemFilterModel();
 
     /** Add a hook to get added images for preparation tasks before they are added in the model */
@@ -287,7 +287,7 @@ class DIGIKAM_DATABASE_EXPORT NoDuplicatesItemFilterModel : public ImageSortFilt
 
 public:
 
-    explicit NoDuplicatesItemFilterModel(QObject* const parent = 0);
+    explicit NoDuplicatesItemFilterModel(QObject* const parent = nullptr);
 
 protected:
 

@@ -42,18 +42,18 @@ public:
 
     explicit Private()
     {
-        itemNameAction        = 0;
-        itemTitleAction       = 0;
-        itemCommentAction     = 0;
-        tagNameAction         = 0;
-        albumNameAction       = 0;
-        optionsBtn            = 0;
-        optionsMenu           = 0;
-        searchTextBar         = 0;
-        itemAspectRatioAction = 0;
-        itemPixelSizeAction   = 0;
-        clearAllAction        = 0;
-        selAllAction          = 0;
+        itemNameAction        = nullptr;
+        itemTitleAction       = nullptr;
+        itemCommentAction     = nullptr;
+        tagNameAction         = nullptr;
+        albumNameAction       = nullptr;
+        optionsBtn            = nullptr;
+        optionsMenu           = nullptr;
+        searchTextBar         = nullptr;
+        itemAspectRatioAction = nullptr;
+        itemPixelSizeAction   = nullptr;
+        clearAllAction        = nullptr;
+        selAllAction          = nullptr;
     }
 
     QAction*       itemNameAction;

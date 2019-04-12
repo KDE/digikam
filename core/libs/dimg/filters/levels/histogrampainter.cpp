@@ -52,8 +52,8 @@ class Q_DECL_HIDDEN HistogramPainter::Private
 public:
 
     explicit Private()
-      : histogram(0),
-        widgetToInitFrom(0),
+      : histogram(nullptr),
+        widgetToInitFrom(nullptr),
         scale(LogScaleHistogram),
         channelType(LuminosityChannel),
         highlightSelection(false),

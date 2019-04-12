@@ -66,27 +66,27 @@ class Q_DECL_HIDDEN LocalContrastSettings::Private
 public:
 
     explicit Private()
-      : stretchContrastCheck(0),
-        label4(0),
-        label5(0),
-        label6(0),
-        label7(0),
-        label8(0),
-        label9(0),
-        label10(0),
-        label11(0),
-        lowSaturationInput(0),
-        highSaturationInput(0),
-        functionInput(0),
-        powerInput1(0),
-        blurInput1(0),
-        powerInput2(0),
-        blurInput2(0),
-        powerInput3(0),
-        blurInput3(0),
-        powerInput4(0),
-        blurInput4(0),
-        expanderBox(0)
+      : stretchContrastCheck(nullptr),
+        label4(nullptr),
+        label5(nullptr),
+        label6(nullptr),
+        label7(nullptr),
+        label8(nullptr),
+        label9(nullptr),
+        label10(nullptr),
+        label11(nullptr),
+        lowSaturationInput(nullptr),
+        highSaturationInput(nullptr),
+        functionInput(nullptr),
+        powerInput1(nullptr),
+        blurInput1(nullptr),
+        powerInput2(nullptr),
+        blurInput2(nullptr),
+        powerInput3(nullptr),
+        blurInput3(nullptr),
+        powerInput4(nullptr),
+        blurInput4(nullptr),
+        expanderBox(nullptr)
     {}
 
     static const QString  configLowSaturationEntry;

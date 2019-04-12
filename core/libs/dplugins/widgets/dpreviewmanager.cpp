@@ -57,13 +57,13 @@ public:
     {
         progressPix   = DWorkingPixmap();
         progressCount = 0;
-        progressTimer = 0;
-        progressLabel = 0;
-        thumbLabel    = 0;
+        progressTimer = nullptr;
+        progressLabel = nullptr;
+        thumbLabel    = nullptr;
         busy          = false;
-        textLabel     = 0;
-        preview       = 0;
-        button        = 0;
+        textLabel     = nullptr;
+        preview       = nullptr;
+        button        = nullptr;
     }
 
     bool           busy;

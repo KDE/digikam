@@ -80,7 +80,7 @@ public:
     explicit ThumbnailLoadThreadStaticPriv()
       : firstThreadCreated(false),
         storageMethod(ThumbnailCreator::FreeDesktopStandard),
-        provider(0),
+        provider(nullptr),
         profile(IccProfile::sRGB())
     {
     }
@@ -115,7 +115,7 @@ public:
         highlight          = true;
         sendSurrogate      = true;
         notifiedForResults = false;
-        creator            = 0;
+        creator            = nullptr;
     }
 
     bool                               wantPixmap;
@@ -211,7 +211,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DbEngineParameters& 
 
     ThumbsDbAccess::setParameters(params);
 
-    if (ThumbsDbAccess::checkReadyForUse(0))
+    if (ThumbsDbAccess::checkReadyForUse(nullptr))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnails database ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
@@ -456,7 +456,7 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
 
 bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect)
 {
-    const QPixmap* pix = 0;
+    const QPixmap* pix = nullptr;
     LoadingDescription description;
 
     if (detailRect.isNull())
@@ -526,7 +526,7 @@ void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier)
 
 void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size)
 {
-    find(identifier, size, 0, true, QRect());
+    find(identifier, size, nullptr, true, QRect());
 }
 
 void ThumbnailLoadThread::findGroup(QList<ThumbnailIdentifier>& identifiers)
@@ -564,7 +564,7 @@ void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRec
 
 void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRect& rect, int size)
 {
-    find(identifier, size, 0, true, rect);
+    find(identifier, size, nullptr, true, rect);
 }
 
 void ThumbnailLoadThread::findGroup(const QList<QPair<ThumbnailIdentifier, QRect> >& idsAndRects)
@@ -896,7 +896,7 @@ public:
     explicit Private()
     {
         state   = Inactive;
-        thread  = 0;
+        thread  = nullptr;
         active  = true;
     }
 

@@ -95,13 +95,13 @@ public:
         checkGamut      = false;
         doNotEmbed      = false;
         checkGamutColor = QColor(126, 255, 255);
-        handle          = 0;
+        handle          = nullptr;
     }
 
     explicit Private(const Private& other)
         : QSharedData(other)
     {
-        handle = 0;
+        handle = nullptr;
         operator=(other);
     }
 
@@ -123,7 +123,7 @@ public:
         builtinProfile     = other.builtinProfile;
 
         close();
-        handle             = 0;
+        handle             = nullptr;
         currentDescription = TransformDescription();
 
         return *this;
@@ -141,7 +141,7 @@ public:
             currentDescription = TransformDescription();
             LcmsLock lock;
             dkCmsDeleteTransform(handle);
-            handle = 0;
+            handle = nullptr;
         }
     }
 

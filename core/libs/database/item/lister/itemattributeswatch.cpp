@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-ItemAttributesWatch* ItemAttributesWatch::m_instance = 0;
+ItemAttributesWatch* ItemAttributesWatch::m_instance = nullptr;
 
 ItemAttributesWatch::ItemAttributesWatch()
 {
@@ -46,20 +46,20 @@ ItemAttributesWatch::ItemAttributesWatch()
 
 ItemAttributesWatch::~ItemAttributesWatch()
 {
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 void ItemAttributesWatch::cleanUp()
 {
     delete m_instance;
-    m_instance = 0;
+    m_instance = nullptr;
 }
 
 void ItemAttributesWatch::shutDown()
 {
     if (m_instance)
     {
-        m_instance->disconnect(0, 0, 0);
+        m_instance->disconnect(nullptr, nullptr, nullptr);
     }
 }
 

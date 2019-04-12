@@ -41,7 +41,7 @@ class TagMngrListModel : public QAbstractItemModel
 
 public:
 
-    explicit TagMngrListModel(QObject* const parent = 0);
+    explicit TagMngrListModel(QObject* const parent = nullptr);
     ~TagMngrListModel();
 
     /**

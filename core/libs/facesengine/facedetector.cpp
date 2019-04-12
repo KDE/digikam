@@ -42,7 +42,7 @@ class Q_DECL_HIDDEN FaceDetector::Private : public QSharedData
 public:
 
     explicit Private()
-        : m_backend(0)
+        : m_backend(nullptr)
     {
     }
 

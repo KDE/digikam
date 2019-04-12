@@ -59,7 +59,7 @@ public:
      * See initialCounter() for the valid counter formats.
      */
     virtual QString baseName(const QString& path, const QString& filename,
-                             QVariant* counter = 0, QVariant* intermediateCounter = 0) = 0;
+                             QVariant* counter = nullptr, QVariant* intermediateCounter = nullptr) = 0;
 
     /**
      * Creates a version file name for a file in given directory, as previously returned by directory(),

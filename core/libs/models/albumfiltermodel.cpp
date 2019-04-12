@@ -45,7 +45,7 @@ AlbumFilterModel::AlbumFilterModel(QObject* const parent)
     : QSortFilterProxyModel(parent), m_parent(parent)
 {
     m_filterBehavior = FullFiltering;
-    m_chainedModel   = 0;
+    m_chainedModel   = nullptr;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
@@ -328,7 +328,7 @@ AlbumFilterModel::MatchResult AlbumFilterModel::matchResult(Album* album) const
     {
         // check if any of the parents match the search
         Album* parent         = album->parent();
-        PAlbum* const pparent = palbum ? static_cast<PAlbum*>(parent) : 0;
+        PAlbum* const pparent = palbum ? static_cast<PAlbum*>(parent) : nullptr;
 
         while (parent && !(parent->isRoot() || (pparent && pparent->isAlbumRoot()) ) )
         {

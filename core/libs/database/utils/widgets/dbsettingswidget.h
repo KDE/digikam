@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit DatabaseSettingsWidget(QWidget* const parent = 0);
+    explicit DatabaseSettingsWidget(QWidget* const parent = nullptr);
     virtual ~DatabaseSettingsWidget();
 
 public:

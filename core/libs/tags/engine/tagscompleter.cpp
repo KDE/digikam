@@ -58,9 +58,9 @@ class Q_DECL_HIDDEN TagCompleter::Private : public TaggingActionFactory::Constra
 public:
 
     explicit Private()
-        : model(0),
-          supportingModel(0),
-          filterModel(0)
+        : model(nullptr),
+          supportingModel(nullptr),
+          filterModel(nullptr)
     {
     }
 
@@ -125,7 +125,7 @@ TagCompleter::~TagCompleter()
 void TagCompleter::setTagFilterModel(AlbumFilterModel* const filterModel)
 {
     d->filterModel = filterModel;
-    d->factory.setConstraintInterface(d->filterModel ? d : 0);
+    d->factory.setConstraintInterface(d->filterModel ? d : nullptr);
 }
 
 void TagCompleter::setSupportingTagModel(TagModel* const model)

@@ -63,13 +63,13 @@ public:
 
     explicit Private()
     {
-        titleEdit       = 0;
-        iconButton      = 0;
-        resetIconButton = 0;
-        saveButton      = 0;
-        discardButton   = 0;
-        topLabel        = 0;
-        keySeqWidget    = 0;
+        titleEdit       = nullptr;
+        iconButton      = nullptr;
+        resetIconButton = nullptr;
+        saveButton      = nullptr;
+        discardButton   = nullptr;
+        topLabel        = nullptr;
+        keySeqWidget    = nullptr;
         changed         = false;
     }
 

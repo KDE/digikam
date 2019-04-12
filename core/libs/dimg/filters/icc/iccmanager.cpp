@@ -45,7 +45,7 @@ public:
     explicit Private()
         : profileMismatch(false),
           settings(ICCSettingsContainer()),
-          observer(0)
+          observer(nullptr)
     {
     }
 

@@ -47,8 +47,8 @@ class Q_DECL_HIDDEN WSToolDialog::Private
 public:
 
     explicit Private()
-        : startButton(0),
-          mainWidget(0),
+        : startButton(nullptr),
+          mainWidget(nullptr),
           propagateReject(true)
     {
     }

@@ -118,8 +118,8 @@ public:
 
     using QProxyStyle::QProxyStyle;
 
-    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = 0,
-                  const QWidget* widget = 0, QStyleHintReturn* returnData = 0) const
+    int styleHint(QStyle::StyleHint hint, const QStyleOption* option = nullptr,
+                  const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const
     {
         if (hint == QStyle::SH_Slider_AbsoluteSetButtons)
         {
@@ -146,19 +146,19 @@ public:
 public:
 
     explicit Private() :
-        errorView(0),
-        playerView(0),
-        prevAction(0),
-        nextAction(0),
-        playAction(0),
-        loopPlay(0),
-        toolBar(0),
-        iface(0),
-        videoWidget(0),
-        player(0),
-        slider(0),
-        volume(0),
-        tlabel(0),
+        errorView(nullptr),
+        playerView(nullptr),
+        prevAction(nullptr),
+        nextAction(nullptr),
+        playAction(nullptr),
+        loopPlay(nullptr),
+        toolBar(nullptr),
+        iface(nullptr),
+        videoWidget(nullptr),
+        player(nullptr),
+        slider(nullptr),
+        volume(nullptr),
+        tlabel(nullptr),
         videoOrientation(0)
     {
     }

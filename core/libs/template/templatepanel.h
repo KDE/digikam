@@ -49,7 +49,7 @@ public:
 
 public:
 
-    explicit TemplatePanel(QWidget* const parent = 0);
+    explicit TemplatePanel(QWidget* const parent = nullptr);
     ~TemplatePanel();
 
     void     setTemplate(const Template& t);

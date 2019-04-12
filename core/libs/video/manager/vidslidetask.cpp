@@ -68,7 +68,7 @@ public:
 
     explicit Private()
     {
-        settings = 0;
+        settings = nullptr;
         astream  = 0;
         adec     = AudioDecoder::create("FFmpeg");
     }

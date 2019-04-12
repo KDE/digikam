@@ -207,7 +207,7 @@ PrivateProgressItemCreator* FileActionMngr::Private::fileProgressCreator()
 
 ProgressItem* PrivateProgressItemCreator::createProgressItem(const QString& action) const
 {
-    return new ProgressItem(0, ProgressManager::instance()->getUniqueID(), action, QString(), true, true);
+    return new ProgressItem(nullptr, ProgressManager::instance()->getUniqueID(), action, QString(), true, true);
 }
 
 void PrivateProgressItemCreator::addProgressItem(ProgressItem* const item)

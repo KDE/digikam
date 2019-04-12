@@ -58,20 +58,20 @@ public:
 
     explicit Private()
     {
-        colorBtns  = 0;
-        btnNone    = 0;
-        btnRed     = 0;
-        btnOrange  = 0;
-        btnYellow  = 0;
-        btnGreen   = 0;
-        btnBlue    = 0;
-        btnMagenta = 0;
-        btnGray    = 0;
-        btnBlack   = 0;
-        btnWhite   = 0;
-        desc       = 0;
-        descBox    = 0;
-        shortcut   = 0;
+        colorBtns  = nullptr;
+        btnNone    = nullptr;
+        btnRed     = nullptr;
+        btnOrange  = nullptr;
+        btnYellow  = nullptr;
+        btnGreen   = nullptr;
+        btnBlue    = nullptr;
+        btnMagenta = nullptr;
+        btnGray    = nullptr;
+        btnBlack   = nullptr;
+        btnWhite   = nullptr;
+        desc       = nullptr;
+        descBox    = nullptr;
+        shortcut   = nullptr;
     }
 
     QButtonGroup*       colorBtns;
@@ -465,7 +465,7 @@ public:
 
     explicit Private()
     {
-        clw = 0;
+        clw = nullptr;
     }
 
     ColorLabelWidget* clw;

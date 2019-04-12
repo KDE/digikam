@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT DPluginAboutDlg : public QDialog
 
 public:
 
-    explicit DPluginAboutDlg(DPlugin* const tool, QWidget* const parent = 0);
+    explicit DPluginAboutDlg(DPlugin* const tool, QWidget* const parent = nullptr);
     ~DPluginAboutDlg();
 
 private:

@@ -51,7 +51,7 @@ public:
     explicit Private()
     {
         dirty          = false;
-        ratingTracker  = 0;
+        ratingTracker  = nullptr;
         filterCond     = ItemFilterSettings::GreaterEqualCondition;
         excludeUnrated = 0;
     }
@@ -196,13 +196,13 @@ public:
 
     explicit Private()
     {
-        ratingWidget   = 0;
-        optionsBtn     = 0;
-        optionsMenu    = 0;
-        geCondAction   = 0;
-        eqCondAction   = 0;
-        leCondAction   = 0;
-        excludeUnrated = 0;
+        ratingWidget   = nullptr;
+        optionsBtn     = nullptr;
+        optionsMenu    = nullptr;
+        geCondAction   = nullptr;
+        eqCondAction   = nullptr;
+        leCondAction   = nullptr;
+        excludeUnrated = nullptr;
     }
 
     QToolButton*        optionsBtn;

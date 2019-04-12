@@ -46,7 +46,7 @@ public:
 
     /** A completion object operating on a TagModel
      */
-    explicit TagCompleter(QObject* const parent = 0);
+    explicit TagCompleter(QObject* const parent = nullptr);
     ~TagCompleter();
 
     // Update the completer for the given fragment

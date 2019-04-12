@@ -72,7 +72,7 @@ public:
 
 public:
 
-    explicit DMultiTabBar(Qt::Edge pos, QWidget* const parent=0);
+    explicit DMultiTabBar(Qt::Edge pos, QWidget* const parent=nullptr);
     virtual ~DMultiTabBar();
 
     /**
@@ -84,7 +84,7 @@ public:
      * @param popup A popup menu which should be displayed if the button is clicked
      * @param not_used_yet will be used for a popup text in the future
      */
-    int appendButton(const QPixmap &pic, int id=-1, QMenu* const popup=0, const QString& not_used_yet=QString());
+    int appendButton(const QPixmap &pic, int id=-1, QMenu* const popup=nullptr, const QString& not_used_yet=QString());
 
     /**
      * remove a button with the given ID
@@ -474,8 +474,8 @@ public:
      *  This is a QSplitter with better support for storing its state
      *  in config files, especially if Sidebars are contained in the splitter.
      */
-    explicit SidebarSplitter(QWidget* const parent = 0);
-    explicit SidebarSplitter(Qt::Orientation orientation, QWidget* const parent = 0);
+    explicit SidebarSplitter(QWidget* const parent = nullptr);
+    explicit SidebarSplitter(Qt::Orientation orientation, QWidget* const parent = nullptr);
 
     ~SidebarSplitter();
 

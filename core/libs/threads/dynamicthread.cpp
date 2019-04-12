@@ -48,7 +48,7 @@ public:
 
         state            = DynamicThread::Inactive;
         running          = true;
-        assignedThread   = 0;
+        assignedThread   = nullptr;
         emitSignals      = false;
         inDestruction    = false;
         threadRequested  = false;
@@ -152,7 +152,7 @@ void DynamicThread::Private::transitionToInactive()
                 previousPriority = QThread::InheritPriority;
             }
 
-            assignedThread = 0;
+            assignedThread = nullptr;
 
             if (state != DynamicThread::Scheduled)
             {

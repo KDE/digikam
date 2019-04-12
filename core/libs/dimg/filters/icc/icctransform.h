@@ -69,7 +69,7 @@ public:
      * Apply this transform with the set profiles and options to the image.
      * Optionally pass an observer to get progress information.
      */
-    bool apply(DImg& image, DImgLoaderObserver* const observer = 0);
+    bool apply(DImg& image, DImgLoaderObserver* const observer = nullptr);
 
     /// Apply this transform to the QImage. This has only basic functionality.
     bool apply(QImage& qimage);
@@ -152,7 +152,7 @@ private:
     TransformDescription getDescription(const QImage& image);
     bool open(TransformDescription& description);
     bool openProofing(TransformDescription& description);
-    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver* const observer = 0);
+    void transform(DImg& img, const TransformDescription&, DImgLoaderObserver* const observer = nullptr);
     void transform(QImage& img, const TransformDescription&);
 
 public:

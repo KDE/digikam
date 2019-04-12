@@ -49,13 +49,13 @@ class Q_DECL_HIDDEN DProgressDlg::Private
 public:
 
     explicit Private()
-      : logo(0),
-        title(0),
-        label(0),
-        actionPix(0),
-        actionLabel(0),
-        progress(0),
-        buttons(0)
+      : logo(nullptr),
+        title(nullptr),
+        label(nullptr),
+        actionPix(nullptr),
+        actionLabel(nullptr),
+        progress(nullptr),
+        buttons(nullptr)
     {
     }
 

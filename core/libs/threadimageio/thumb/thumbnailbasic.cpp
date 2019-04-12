@@ -133,8 +133,8 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     png_uint_32  w32, h32;
     int          w, h;
     bool         has_alpha = 0;
-    png_structp  png_ptr   = NULL;
-    png_infop    info_ptr  = NULL;
+    png_structp  png_ptr   = nullptr;
+    png_infop    info_ptr  = nullptr;
     int          bit_depth, color_type, interlace_type;
     QImage       qimage;
 
@@ -161,7 +161,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
 
     rewind(f);
 
-    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
     if (!png_ptr)
     {
@@ -173,7 +173,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
 
     if (!info_ptr)
     {
-        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        png_destroy_read_struct(&png_ptr, nullptr, nullptr);
         fclose(f);
         return qimage;
     }
@@ -185,7 +185,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     if (setjmp(png_ptr->jmpbuf))
 #endif
     {
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
         fclose(f);
         return qimage;
     }
@@ -194,7 +194,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     png_read_info(png_ptr, info_ptr);
     png_get_IHDR(png_ptr, info_ptr, (png_uint_32*) (&w32),
                  (png_uint_32*) (&h32), &bit_depth, &color_type,
-                 &interlace_type, NULL, NULL);
+                 &interlace_type, nullptr, nullptr);
 
     bool  has_grey = 0;
     w              = w32;
@@ -228,7 +228,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
         has_grey = 1;
     }
 
-    unsigned char** lines = 0;
+    unsigned char** lines = nullptr;
     int             i;
 
     if (has_alpha)
@@ -267,7 +267,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     if (!lines)
     {
         png_read_end(png_ptr, info_ptr);
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
         fclose(f);
         return qimage;
     }
@@ -306,7 +306,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     }
 
     png_read_end(png_ptr, info_ptr);
-    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
     fclose(f);
 
     return qimage;

@@ -52,7 +52,7 @@ class Q_DECL_HIDDEN DatabaseServerStarter::Private
 public:
 
     explicit Private()
-        : internalServer(0)
+        : internalServer(nullptr)
     {
     }
 

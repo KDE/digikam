@@ -62,10 +62,10 @@ public:
     explicit Private()
     {
         thumbnailSize                             = 0;
-        observer                                  = 0;
+        observer                                  = nullptr;
 
         thumbnailStorage                          = ThumbnailCreator::FreeDesktopStandard;
-        infoProvider                              = 0;
+        infoProvider                              = nullptr;
         dbIdForReplacement                        = -1;
 
         exifRotate                                = true;

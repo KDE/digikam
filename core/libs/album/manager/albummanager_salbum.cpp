@@ -129,7 +129,7 @@ SAlbum* AlbumManager::findSAlbum(int id) const
 {
     if (!d->rootSAlbum)
     {
-        return 0;
+        return nullptr;
     }
 
     int gid = d->rootSAlbum->globalID() + id;
@@ -148,7 +148,7 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
@@ -158,11 +158,11 @@ QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
     for (Album* album = d->rootSAlbum->firstChild() ;
          album ; album = album->next())
     {
-        if (album != 0)
+        if (album != nullptr)
         {
             SAlbum* const sAlbum = dynamic_cast<SAlbum*>(album);
 
-            if ((sAlbum != 0) && (sAlbum->searchType() == searchType))
+            if ((sAlbum != nullptr) && (sAlbum->searchType() == searchType))
             {
                 albums.append(sAlbum);
             }
@@ -191,7 +191,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name,
 
     if (id == -1)
     {
-        return 0;
+        return nullptr;
     }
 
     album = new SAlbum(name, id);

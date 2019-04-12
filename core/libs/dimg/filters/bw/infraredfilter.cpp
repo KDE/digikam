@@ -96,7 +96,7 @@ void InfraredFilter::filterImage()
     int    blurRadius   = (int)((m_settings.sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect [2 to 5].
     int    offset, progress;
 
-    uchar* pOverlayBits = 0;                  // Overlay to merge with original converted in gray scale.
+    uchar* pOverlayBits = nullptr;                  // Overlay to merge with original converted in gray scale.
     uchar*     pOutBits = m_destImage.bits(); // Destination image with merged grain mask and original.
 
     DColor bwData, bwBlurData, maskData, overData, outData;
@@ -122,7 +122,7 @@ void InfraredFilter::filterImage()
     settings.blackRedGain   = m_settings.redGain;
     settings.blackGreenGain = m_settings.greenGain - (m_settings.sensibility / 2000.0);   // Infrared green color boost [1.7 to 2.0].
     settings.blackBlueGain  = m_settings.blueGain;
-    MixerFilter mixer(&BWImage, 0L, settings);
+    MixerFilter mixer(&BWImage, nullptr, settings);
     mixer.startFilterDirectly();
     BWImage.putImageData(mixer.getTargetImage().bits());
 

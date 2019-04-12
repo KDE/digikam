@@ -206,7 +206,7 @@ public:
 // ------------------------------------------------------------------------
 
 HistoryTreeItem::HistoryTreeItem()
-    : parent(0)
+    : parent(nullptr)
 {
 }
 
@@ -265,7 +265,7 @@ public:
 
     explicit Private()
         : mode(ItemHistoryGraphModel::CombinedTreeMode),
-          rootItem(0)
+          rootItem(nullptr)
     {
     }
 
@@ -386,8 +386,8 @@ void ItemHistoryGraphModel::Private::buildImagesTree()
     QList<HistoryGraph::Vertex> sources;
     int previousLevel        = 0;
     HistoryTreeItem* parent  = rootItem;
-    VertexItem* item         = 0;
-    VertexItem* previousItem = 0;
+    VertexItem* item         = nullptr;
+    VertexItem* previousItem = nullptr;
 
     foreach(const HistoryGraph::Vertex& v, verticesOrdered)
     {
@@ -441,7 +441,7 @@ void ItemHistoryGraphModel::Private::buildImagesTree()
 
 void ItemHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vertex& ref)
 {
-    VertexItem* item           = 0;
+    VertexItem* item           = nullptr;
     CategoryItem *categoryItem = new CategoryItem(i18nc("@title", "Image History"));
     rootItem->addItem(categoryItem);
 
@@ -545,7 +545,7 @@ void ItemHistoryGraphModel::Private::addCombinedItemCategory(HistoryTreeItem* pa
 
     std::sort(vertices.begin(), vertices.end(), sortBy(oldestInfoFirst));
     bool isFirst     = true;
-    VertexItem* item = 0;
+    VertexItem* item = nullptr;
 
     foreach(const HistoryGraph::Vertex& v, vertices)
     {
@@ -614,7 +614,7 @@ void ItemHistoryGraphModel::Private::addIdenticalItems(HistoryTreeItem* parentIt
     parentItem->addItem(new CategoryItem(title));
 
     // the properties image info list is already sorted by proximity to subject
-    VertexItem* item = 0;
+    VertexItem* item = nullptr;
     bool isFirst     = true;
 
     for (int i = 1 ; i < infos.size() ; ++i)
@@ -932,7 +932,7 @@ Qt::ItemFlags ItemHistoryGraphModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     HistoryTreeItem* const item = d->item(index);

@@ -49,7 +49,7 @@ class Q_DECL_HIDDEN DConfigDlgStackedWidget : public QStackedWidget
 {
 public:
 
-    explicit DConfigDlgStackedWidget(QWidget* const parent = 0)
+    explicit DConfigDlgStackedWidget(QWidget* const parent = nullptr)
         : QStackedWidget(parent)
     {
     }
@@ -126,7 +126,7 @@ class Q_DECL_HIDDEN DConfigDlgPlainView : public QAbstractItemView
 {
 public:
 
-    explicit DConfigDlgPlainView(QWidget* const parent = 0);
+    explicit DConfigDlgPlainView(QWidget* const parent = nullptr);
 
     QModelIndex indexAt(const QPoint& point) const                           Q_DECL_OVERRIDE;
     void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible) Q_DECL_OVERRIDE;
@@ -150,7 +150,7 @@ class Q_DECL_HIDDEN DConfigDlgListView : public QListView
 
 public:
 
-    explicit DConfigDlgListView(QWidget* const parent = 0);
+    explicit DConfigDlgListView(QWidget* const parent = nullptr);
     virtual ~DConfigDlgListView();
 
     void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
@@ -168,7 +168,7 @@ class Q_DECL_HIDDEN DConfigDlgTreeView : public QTreeView
 
 public:
 
-    explicit DConfigDlgTreeView(QWidget* const parent = 0);
+    explicit DConfigDlgTreeView(QWidget* const parent = nullptr);
 
     void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
 
@@ -189,7 +189,7 @@ class Q_DECL_HIDDEN DConfigDlgTabbedView : public QAbstractItemView
 
 public:
 
-    explicit DConfigDlgTabbedView(QWidget* const parent = 0);
+    explicit DConfigDlgTabbedView(QWidget* const parent = nullptr);
     virtual ~DConfigDlgTabbedView();
 
     void setModel(QAbstractItemModel* model)                                            Q_DECL_OVERRIDE;
@@ -226,7 +226,7 @@ class Q_DECL_HIDDEN DConfigDlgListViewDelegate : public QAbstractItemDelegate
 
 public:
 
-    explicit DConfigDlgListViewDelegate(QObject* const parent = 0);
+    explicit DConfigDlgListViewDelegate(QObject* const parent = nullptr);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const Q_DECL_OVERRIDE;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const                Q_DECL_OVERRIDE;
@@ -248,7 +248,7 @@ class Q_DECL_HIDDEN DConfigDlgListViewProxy : public QAbstractProxyModel
 
 public:
 
-    explicit DConfigDlgListViewProxy(QObject* const parent = 0);
+    explicit DConfigDlgListViewProxy(QObject* const parent = nullptr);
     virtual ~DConfigDlgListViewProxy();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const                           Q_DECL_OVERRIDE;

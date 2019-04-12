@@ -78,13 +78,13 @@ public:
 
     explicit Private()
     {
-        titleEdit       = 0;
-        iconButton      = 0;
-        resetIconButton = 0;
-        buttons         = 0;
-        mainRootAlbum   = 0;
-        topLabel        = 0;
-        keySeqWidget    = 0;
+        titleEdit       = nullptr;
+        iconButton      = nullptr;
+        resetIconButton = nullptr;
+        buttons         = nullptr;
+        mainRootAlbum   = nullptr;
+        topLabel        = nullptr;
+        keySeqWidget    = nullptr;
         create          = false;
     }
 
@@ -400,7 +400,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
 {
     errMap.clear();
     AlbumList createdTagsList;
-    TAlbum* root = 0;
+    TAlbum* root = nullptr;
 
     // Check if new tags are include in a list of tags hierarchy separated by ','.
     // Ex: /Country/France/people,/City/France/Paris
@@ -421,7 +421,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
         {
             // Check if new tags is a hierarchy of tags separated by '/'.
 
-            root = 0;
+            root = nullptr;
 
             if (hierarchy.startsWith(QLatin1Char('/')) || !mainRootAlbum)
             {

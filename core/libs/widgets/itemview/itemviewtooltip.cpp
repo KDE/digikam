@@ -41,7 +41,7 @@ public:
 
     explicit Private()
     {
-        view            = 0;
+        view            = nullptr;
         filterInstalled = false;
     }
 
@@ -75,7 +75,7 @@ QAbstractItemView* ItemViewToolTip::view() const
 
 QAbstractItemModel* ItemViewToolTip::model() const
 {
-    return d->view ? d->view->model() : 0;
+    return d->view ? d->view->model() : nullptr;
 }
 
 QModelIndex ItemViewToolTip::currentIndex() const

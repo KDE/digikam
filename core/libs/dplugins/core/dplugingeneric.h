@@ -47,7 +47,7 @@ public:
     /**
      * Constructor with optional parent object
      */
-    explicit DPluginGeneric(QObject* const parent = 0);
+    explicit DPluginGeneric(QObject* const parent = nullptr);
 
     /**
      * Destructor

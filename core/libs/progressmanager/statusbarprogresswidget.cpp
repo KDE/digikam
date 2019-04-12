@@ -68,16 +68,16 @@ public:
     explicit Private()
       : mode(None),
         bShowButton(true),
-        pProgressBar(0),
-        pLabel(0),
-        pButton(0),
-        box(0),
-        stack(0),
-        currentItem(0),
-        progressView(0),
-        delayTimer(0),
-        busyTimer(0),
-        cleanTimer(0)
+        pProgressBar(nullptr),
+        pLabel(nullptr),
+        pButton(nullptr),
+        box(nullptr),
+        stack(nullptr),
+        currentItem(nullptr),
+        progressView(nullptr),
+        delayTimer(nullptr),
+        busyTimer(nullptr),
+        cleanTimer(nullptr)
     {
     }
 
@@ -221,7 +221,7 @@ void StatusbarProgressWidget::updateBusyMode()
     {
         // Exactly one item
         delete d->busyTimer;
-        d->busyTimer = 0;
+        d->busyTimer = nullptr;
         d->delayTimer->start( 1000 );
     }
     else
@@ -264,7 +264,7 @@ void StatusbarProgressWidget::slotProgressItemCompleted(ProgressItem* item)
     {
         // Exactly one item
         delete d->busyTimer;
-        d->busyTimer = 0;
+        d->busyTimer = nullptr;
         activateSingleItemMode();
     }
 }
@@ -275,7 +275,7 @@ void StatusbarProgressWidget::connectSingleItem()
     {
         disconnect(d->currentItem, SIGNAL(progressItemProgress(ProgressItem*,uint)),
                    this, SLOT(slotProgressItemProgress(ProgressItem*,uint)));
-        d->currentItem = 0;
+        d->currentItem = nullptr;
     }
 
     d->currentItem = ProgressManager::instance()->singleItem();

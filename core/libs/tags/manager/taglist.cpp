@@ -48,10 +48,10 @@ public:
 
     explicit Private()
     {
-        addButton       = 0;
-        tagList         = 0;
-        tagListModel    = 0;
-        treeView        = 0;
+        addButton       = nullptr;
+        tagList         = nullptr;
+        tagListModel    = nullptr;
+        treeView        = nullptr;
     }
 
     QPushButton*                 addButton;

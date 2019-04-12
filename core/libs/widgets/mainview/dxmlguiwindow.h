@@ -97,7 +97,7 @@ class DIGIKAM_EXPORT DXmlGuiWindow : public KXmlGuiWindow
 
 public:
 
-    explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
+    explicit DXmlGuiWindow(QWidget* const parent=nullptr, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     ~DXmlGuiWindow();
 
     /** Manage config group name used by window instance to get/set settings from config file
@@ -180,7 +180,7 @@ protected:
      *  with an extra action collection to configure. This method is called by slotEditKeys()
      *  which can be re-implement in child class for cutomization.
      */
-    void editKeyboardShortcuts(KActionCollection* const extraac=0, const QString& actitle=QString());
+    void editKeyboardShortcuts(KActionCollection* const extraac=nullptr, const QString& actitle=QString());
 
     void closeEvent(QCloseEvent* e) override;
     void keyPressEvent(QKeyEvent* e) override;

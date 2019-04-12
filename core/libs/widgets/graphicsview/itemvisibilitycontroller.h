@@ -86,7 +86,7 @@ public:
 
 public:
 
-    explicit ItemVisibilityController(QObject* const parent = 0);
+    explicit ItemVisibilityController(QObject* const parent = nullptr);
     ~ItemVisibilityController();
 
     bool  shallBeShown() const;
@@ -220,7 +220,7 @@ public:
      *  Connect to the signals accordingly, e.g. to trigger a repaint.
      */
 
-    explicit ItemVisibilityControllerPropertyObject(QObject* const parent = 0);
+    explicit ItemVisibilityControllerPropertyObject(QObject* const parent = nullptr);
 
     qreal opacity() const;
     void setOpacity(qreal opacity);
@@ -254,7 +254,7 @@ public:
      *  You want to call the controller's method!
      */
 
-    explicit AnimatedVisibility(QObject* const parent = 0);
+    explicit AnimatedVisibility(QObject* const parent = nullptr);
 
     ItemVisibilityController* controller() const;
 
@@ -279,10 +279,10 @@ public:
      * Note that the targetObject is not necessarily a controlled item!
      */
 
-    explicit HidingStateChanger(QObject* const parent = 0);
+    explicit HidingStateChanger(QObject* const parent = nullptr);
 
     /// Convenience constructor: Sets target and property name
-    HidingStateChanger(QObject* const target, const QByteArray& property, QObject* const parent = 0);
+    HidingStateChanger(QObject* const target, const QByteArray& property, QObject* const parent = nullptr);
 
     void setTargetObject(QObject* const object);
     void setPropertyName(const QByteArray& propertyName);

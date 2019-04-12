@@ -103,7 +103,7 @@ public:
      *  Returns true if the given ItemInfo matches the filter criteria.
      *  Optionally, foundText is set to true if it matched by text search.
      */
-    bool matches(const ItemInfo& info, bool* const foundText = 0) const;
+    bool matches(const ItemInfo& info, bool* const foundText = nullptr) const;
 
 public:
 

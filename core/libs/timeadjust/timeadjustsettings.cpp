@@ -62,36 +62,36 @@ public:
 
     explicit Private()
     {
-        useSettingsBox         = 0;
-        adjustSettingsBox      = 0;
-        updateSettingsBox      = 0;
-        useButtonGroup         = 0;
-        useApplDateBtn         = 0;
-        useFileDateBtn         = 0;
-        useFileNameBtn         = 0;
-        useMetaDateBtn         = 0;
-        useCustomDateBtn       = 0;
-        updIfAvailableCheck    = 0;
-        updFileModDateCheck    = 0;
-        updEXIFModDateCheck    = 0;
-        updEXIFOriDateCheck    = 0;
-        updEXIFDigDateCheck    = 0;
-        updEXIFThmDateCheck    = 0;
-        updIPTCDateCheck       = 0;
-        updXMPVideoCheck       = 0;
-        updXMPDateCheck        = 0;
-        useFileDateTypeChooser = 0;
-        useMetaDateTypeChooser = 0;
-        adjTypeChooser         = 0;
-        useApplDateLbl         = 0;
-        adjDaysLabel           = 0;
-        adjDaysInput           = 0;
-        adjDetByClockPhotoBtn  = 0;
-        useCustDateInput       = 0;
-        useCustTimeInput       = 0;
-        adjTimeInput           = 0;
-        useCustomDateTodayBtn  = 0;
-        settingsExpander       = 0;
+        useSettingsBox         = nullptr;
+        adjustSettingsBox      = nullptr;
+        updateSettingsBox      = nullptr;
+        useButtonGroup         = nullptr;
+        useApplDateBtn         = nullptr;
+        useFileDateBtn         = nullptr;
+        useFileNameBtn         = nullptr;
+        useMetaDateBtn         = nullptr;
+        useCustomDateBtn       = nullptr;
+        updIfAvailableCheck    = nullptr;
+        updFileModDateCheck    = nullptr;
+        updEXIFModDateCheck    = nullptr;
+        updEXIFOriDateCheck    = nullptr;
+        updEXIFDigDateCheck    = nullptr;
+        updEXIFThmDateCheck    = nullptr;
+        updIPTCDateCheck       = nullptr;
+        updXMPVideoCheck       = nullptr;
+        updXMPDateCheck        = nullptr;
+        useFileDateTypeChooser = nullptr;
+        useMetaDateTypeChooser = nullptr;
+        adjTypeChooser         = nullptr;
+        useApplDateLbl         = nullptr;
+        adjDaysLabel           = nullptr;
+        adjDaysInput           = nullptr;
+        adjDetByClockPhotoBtn  = nullptr;
+        useCustDateInput       = nullptr;
+        useCustTimeInput       = nullptr;
+        adjTimeInput           = nullptr;
+        useCustomDateTodayBtn  = nullptr;
+        settingsExpander       = nullptr;
     }
 
     QWidget*               useSettingsBox;

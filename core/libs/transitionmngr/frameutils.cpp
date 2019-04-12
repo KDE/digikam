@@ -52,7 +52,7 @@ QImage FrameUtils::makeFramedImage(const QString& file, const QSize& outSize)
         settings.RGBInterpolate4Colors = false;
         settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
-        DImg dimg(file, 0, DRawDecoding(settings));
+        DImg dimg(file, nullptr, DRawDecoding(settings));
         timg = dimg.copyQImage();
     }
 

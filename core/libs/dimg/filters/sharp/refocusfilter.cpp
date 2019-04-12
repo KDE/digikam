@@ -171,7 +171,7 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
                                  int matrixSize, double radius, double gauss,
                                  double correlation, double noise)
 {
-    CMat* matrix = 0;
+    CMat* matrix = nullptr;
 
     // Compute matrix
     qCDebug(DIGIKAM_DIMG_LOG) << "RefocusFilter::Compute matrix...";
@@ -226,7 +226,7 @@ void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, c
         if (!prm.sixteenBit)        // 8 bits image.
         {
             uchar red, green, blue;
-            uchar* ptr = 0;
+            uchar* ptr = nullptr;
 
             for (y2 = 0; runningFlag() && (y2 < prm.mat_size); ++y2)
             {
@@ -267,7 +267,7 @@ void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, c
         else                 // 16 bits image.
         {
             ushort red, green, blue;
-            ushort* ptr = 0;
+            ushort* ptr = nullptr;
 
             for (y2 = 0; runningFlag() && (y2 < prm.mat_size); ++y2)
             {

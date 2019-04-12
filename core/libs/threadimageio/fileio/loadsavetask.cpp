@@ -88,7 +88,7 @@ SharedLoadingTask::SharedLoadingTask(LoadSaveThread* const thread, const Loading
     : LoadingTask(thread, description, loadingTaskStatus),
       m_completed(false),
       m_accessMode(mode),
-      m_usedProcess(0),
+      m_usedProcess(nullptr),
       m_resultLoadingDescription(description)
 {
     if (m_accessMode == LoadSaveThread::AccessModeRead && needsPostProcessing())
@@ -112,7 +112,7 @@ void SharedLoadingTask::execute()
         LoadingCache::CacheLock lock(cache);
 
         // find possible cached images
-        DImg* cachedImg        = 0;
+        DImg* cachedImg        = nullptr;
         QStringList lookupKeys = m_loadingDescription.lookupCacheKeys();
 
         foreach (const QString& key, lookupKeys)
@@ -127,7 +127,7 @@ void SharedLoadingTask::execute()
                     }
                     else
                     {
-                        cachedImg = 0;
+                        cachedImg = nullptr;
                     }
                 }
                 else
@@ -145,7 +145,7 @@ void SharedLoadingTask::execute()
         else
         {
             // find possible running loading process
-            m_usedProcess = 0;
+            m_usedProcess = nullptr;
 
             for (QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it)
             {
@@ -180,7 +180,7 @@ void SharedLoadingTask::execute()
                 // wake up the process which is waiting until all listeners have removed themselves
                 lock.wakeAll();
                 // set to 0, as checked in setStatus
-                m_usedProcess = 0;
+                m_usedProcess = nullptr;
                 // m_img is now set to the result
             }
             else
@@ -250,7 +250,7 @@ void SharedLoadingTask::execute()
         }
 
         // set to 0, as checked in setStatus
-        m_usedProcess = 0;
+        m_usedProcess = nullptr;
     }
 
     // following the golden rule to avoid deadlocks, do this when CacheLock is not held
@@ -384,7 +384,7 @@ void SharedLoadingTask::setStatus(LoadingTaskStatus status)
             // remove this from list of listeners - check in continueQuery() of active thread
             m_usedProcess->removeListener(this);
             // set m_usedProcess to 0, signalling that we have detached already
-            m_usedProcess = 0;
+            m_usedProcess = nullptr;
             // wake all listeners - particularly this - from waiting on cache condvar
             lock.wakeAll();
         }

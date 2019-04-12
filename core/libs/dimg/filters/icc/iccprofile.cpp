@@ -48,14 +48,14 @@ public:
 
     explicit Private()
       : type(IccProfile::InvalidType),
-        handle(0)
+        handle(nullptr)
     {
     }
 
     explicit Private(const Private& other)
         : QSharedData(other)
     {
-        handle   = 0;
+        handle   = nullptr;
         operator = (other);
     }
 
@@ -66,7 +66,7 @@ public:
         description = other.description;
         type        = other.type;
         close();
-        handle      = 0;
+        handle      = nullptr;
         return *this;
     }
 
@@ -81,7 +81,7 @@ public:
         {
             LcmsLock lock;
             dkCmsCloseProfile(handle);
-            handle = 0;
+            handle = nullptr;
         }
     }
 
@@ -128,7 +128,7 @@ LcmsLock::~LcmsLock()
 // ----------------------------------------------------------------------------------
 
 IccProfile::IccProfile()
-    : d(0)
+    : d(nullptr)
 {
 }
 
@@ -145,7 +145,7 @@ IccProfile::IccProfile(const QString& filePath)
 }
 
 IccProfile::IccProfile(const char* const location, const QString& relativePath)
-    : d(0)
+    : d(nullptr)
 {
     QString filePath;
 
@@ -481,7 +481,7 @@ void* IccProfile::handle() const
 {
     if (!d)
     {
-        return 0;
+        return nullptr;
     }
 
     return d->handle;

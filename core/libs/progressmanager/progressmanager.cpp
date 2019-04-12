@@ -66,7 +66,7 @@ public:
         progress(0),
         total(0),
         completed(0),
-        parent(0)
+        parent(nullptr)
     {
     }
 
@@ -341,7 +341,7 @@ public:
 
     explicit Private()
         : uID(1000),
-          waitingLoop(0)
+          waitingLoop(nullptr)
     {
     }
 
@@ -422,7 +422,7 @@ ProgressItem* ProgressManager::findItembyId(const QString& id) const
 {
     if (id.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     QMutexLocker lock(&d->mutex);
@@ -436,7 +436,7 @@ QString ProgressManager::getUniqueID()
 
 ProgressManager* ProgressManager::instance()
 {
-    return creator.isDestroyed() ? 0 : &creator->object;
+    return creator.isDestroyed() ? nullptr : &creator->object;
 }
 
 ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* const parent,
@@ -564,7 +564,7 @@ ProgressItem* ProgressManager::singleItem() const
         hash = d->transactions;
     }
 
-    ProgressItem* item = 0;
+    ProgressItem* item = nullptr;
     QHash<QString, ProgressItem*>::const_iterator it = hash.constBegin();
 
     while (it != hash.constEnd())
@@ -572,7 +572,7 @@ ProgressItem* ProgressManager::singleItem() const
         // No single item for progress possible, as one of them is a busy indicator one.
         if ((*it)->usesBusyIndicator())
         {
-            return 0;
+            return nullptr;
         }
 
         // If it's a top level one, only those count.
@@ -580,7 +580,7 @@ ProgressItem* ProgressManager::singleItem() const
         {
             if (item)
             {
-                return 0; // we found more than one
+                return nullptr; // we found more than one
             }
             else
             {
@@ -632,7 +632,7 @@ void ProgressManager::emitShowProgressView()
 
 ProgressItem* ProgressManager::createProgressItem(const QString& label, const QString& status, bool canBeCanceled, bool hasThumb)
 {
-    return instance()->createProgressItemImpl(0, instance()->getUniqueID(), label, status, canBeCanceled, hasThumb);
+    return instance()->createProgressItemImpl(nullptr, instance()->getUniqueID(), label, status, canBeCanceled, hasThumb);
 }
 
 ProgressItem* ProgressManager::createProgressItem(ProgressItem* parent, const QString& id, const QString& label,
@@ -650,7 +650,7 @@ ProgressItem* ProgressManager::createProgressItem(const QString& parent, const Q
 ProgressItem* ProgressManager::createProgressItem(const QString& id, const QString& label, const QString& status,
                                                   bool canBeCanceled, bool hasThumb)
 {
-    return instance()->createProgressItemImpl(0, id, label, status, canBeCanceled, hasThumb);
+    return instance()->createProgressItemImpl(nullptr, id, label, status, canBeCanceled, hasThumb);
 }
 
 } // namespace Digikam

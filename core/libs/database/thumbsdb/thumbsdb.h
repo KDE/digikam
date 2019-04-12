@@ -116,7 +116,7 @@ public:
 
     BdEngineBackend::QueryState renameByFilePath(const QString& oldPath, const QString& newPath);
 
-    BdEngineBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = 0);
+    BdEngineBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = nullptr);
     BdEngineBackend::QueryState replaceThumbnail(const ThumbsDbInfo& info);
 
     QHash<QString, int> getFilePathsWithThumbnail();

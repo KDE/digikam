@@ -54,29 +54,29 @@ public:
 
     explicit Private()
     {
-        authorsEdit               = 0;
-        authorsPositionEdit       = 0;
-        creditEdit                = 0;
-        sourceEdit                = 0;
-        copyrightEdit             = 0;
-        rightUsageEdit            = 0;
-        instructionsEdit          = 0;
+        authorsEdit               = nullptr;
+        authorsPositionEdit       = nullptr;
+        creditEdit                = nullptr;
+        sourceEdit                = nullptr;
+        copyrightEdit             = nullptr;
+        rightUsageEdit            = nullptr;
+        instructionsEdit          = nullptr;
 
-        locationCountryCodeEdit   = 0;
-        locationProvinceStateEdit = 0;
-        locationCityEdit          = 0;
-        locationSublocationEdit   = 0;
+        locationCountryCodeEdit   = nullptr;
+        locationProvinceStateEdit = nullptr;
+        locationCityEdit          = nullptr;
+        locationSublocationEdit   = nullptr;
 
-        contactCityEdit           = 0;
-        contactCountryEdit        = 0;
-        contactAddressEdit        = 0;
-        contactPostalCodeEdit     = 0;
-        contactProvinceStateEdit  = 0;
-        contactEmailEdit          = 0;
-        contactPhoneEdit          = 0;
-        contactWebUrlEdit         = 0;
+        contactCityEdit           = nullptr;
+        contactCountryEdit        = nullptr;
+        contactAddressEdit        = nullptr;
+        contactPostalCodeEdit     = nullptr;
+        contactProvinceStateEdit  = nullptr;
+        contactEmailEdit          = nullptr;
+        contactPhoneEdit          = nullptr;
+        contactWebUrlEdit         = nullptr;
 
-        subjects                  = 0;
+        subjects                  = nullptr;
     }
 
     // Rights template information panel.

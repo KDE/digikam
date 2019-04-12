@@ -60,7 +60,7 @@ public:
 
     /** Get unique file url if file exist by appending a counter suffix or return original url.
      */
-    static QUrl getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl = 0);
+    static QUrl getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl = nullptr);
 
     /** Open file urls with the service.
      */
@@ -70,7 +70,7 @@ public:
      */
     static bool runFiles(const QString& appCmd,
                          const QList<QUrl>& urls,
-                         KService* const service = 0);
+                         KService* const service = nullptr);
 
     /** Return list of service available on desktop to open files.
      */
@@ -80,7 +80,7 @@ public:
      */
     static bool copyFolderRecursively(const QString& srcPath,
                                       const QString& dstPath,
-                                      const bool* cancel = 0);
+                                      const bool* cancel = nullptr);
 
     /** Copy a list of files to another place.
      */

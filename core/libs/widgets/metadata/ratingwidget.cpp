@@ -65,7 +65,7 @@ public:
         isHovered      = false;
         fading         = false;
         rating         = 0;
-        fadingTimeLine = 0;
+        fadingTimeLine = nullptr;
         fadingValue    = 0;
         offset         = 0;
         duration       = 600;   // ms
@@ -477,8 +477,8 @@ public:
 
     explicit Private()
     {
-        shortcut     = 0;
-        ratingWidget = 0;
+        shortcut     = nullptr;
+        ratingWidget = nullptr;
     }
 
     DAdjustableLabel* shortcut;

@@ -41,7 +41,7 @@ class DIGIKAM_DATABASE_EXPORT ItemListModel : public ItemThumbnailModel
 
 public:
 
-    explicit ItemListModel(QObject* const parent = 0);
+    explicit ItemListModel(QObject* const parent = nullptr);
     ~ItemListModel();
 
     // NOTE: necessary methods to add and remove ItemInfos to the model are inherited from ItemModel

@@ -50,9 +50,9 @@ public:
 
     explicit Private()
     {
-        PNGGrid             = 0;
-        labelPNGcompression = 0;
-        PNGcompression      = 0;
+        PNGGrid             = nullptr;
+        labelPNGcompression = nullptr;
+        PNGcompression      = nullptr;
     }
 
     QGridLayout*  PNGGrid;

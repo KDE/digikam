@@ -108,7 +108,7 @@ public:
 
     explicit Private()
     {
-        cieTongue = 0;
+        cieTongue = nullptr;
     }
 
     IccProfile       profile;

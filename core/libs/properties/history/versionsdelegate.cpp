@@ -57,8 +57,8 @@ public:
         : categoryExtraSpacing(6),
           filterItemExtraSpacing(4),
           animationState(0),
-          animation(0),
-          categoryDrawer(0),
+          animation(nullptr),
+          categoryDrawer(nullptr),
           thumbnailSize(64),
           thumbsWaitingFor(0),
           inSizeHint(false)
@@ -84,7 +84,7 @@ public:
     {
         if (const QStyleOptionViewItem* v3 = qstyleoption_cast<const QStyleOptionViewItem*>(&option))
             return v3->widget;
-        return 0;
+        return nullptr;
     }
 
     inline const QStyle* style(const QStyleOptionViewItem& option)
@@ -97,7 +97,7 @@ public:
 VersionsDelegate::VersionsDelegate(QObject* const parent)
     : QStyledItemDelegate(parent), d(new Private)
 {
-    d->categoryDrawer = new DCategoryDrawer(0);
+    d->categoryDrawer = new DCategoryDrawer(nullptr);
     d->animation      = new QPropertyAnimation(this, "animationState", this);
     d->animation->setStartValue(0);
     d->animation->setEndValue(d->workingPixmap.frameCount() - 1);
@@ -177,7 +177,7 @@ QSize VersionsDelegate::sizeHint(const QStyleOptionViewItem& option, const QMode
     else if (index.data(ItemHistoryGraphModel::IsSeparatorItemRole).toBool())
     {
         //int pm = d->style(option)->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, d->widget(option));
-        int pm = d->style(option)->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, 0, d->widget(option));
+        int pm = d->style(option)->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, d->widget(option));
         //int spacing = d->style(option)->pixelMetric(QStyle::PM_LayoutVerticalSpacing, &option);
         return QSize(1, pm);
     }

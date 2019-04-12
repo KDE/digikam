@@ -152,7 +152,7 @@ public:
 };
 
 ItemComments::ItemComments()
-    : d(0)
+    : d(nullptr)
 {
 }
 

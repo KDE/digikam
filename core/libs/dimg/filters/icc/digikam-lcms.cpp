@@ -130,7 +130,7 @@ cmsBool _cmsAdaptationMatrix(cmsMAT3* const r, const cmsMAT3* ConeMatrix, const 
         {{  0.0389, -0.0685,  1.0296 }}
     }};
 
-    if (ConeMatrix == NULL)
+    if (ConeMatrix == nullptr)
         ConeMatrix = &LamRigg;
 
     return ComputeChromaticAdaptation(r, FromIll, ToIll, ConeMatrix);
@@ -145,7 +145,7 @@ static cmsBool _cmsAdaptMatrixToD50(cmsMAT3* const r, const cmsCIExyY* const Sou
 
     cmsxyY2XYZ(&Dn, SourceWhitePt);
 
-    if (!_cmsAdaptationMatrix(&Bradford, NULL, &Dn, cmsD50_XYZ()))
+    if (!_cmsAdaptationMatrix(&Bradford, nullptr, &Dn, cmsD50_XYZ()))
         return FALSE;
 
     Tmp = *r;
@@ -218,7 +218,7 @@ static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* const r, const cmsCIExyY* const De
 
     cmsxyY2XYZ(&Dn, DestWhitePt);
 
-    if (!_cmsAdaptationMatrix(&Bradford, NULL, &Dn, cmsD50_XYZ()))
+    if (!_cmsAdaptationMatrix(&Bradford, nullptr, &Dn, cmsD50_XYZ()))
         return FALSE;
 
     Tmp = *r;
@@ -258,7 +258,7 @@ QString dkCmsTakeProductName(cmsHPROFILE hProfile)
 
     Name[0]         = '\0';
     Manufacturer[0] = Model[0] = '\0';
-    cmsMLU* mlu     = 0;
+    cmsMLU* mlu     = nullptr;
 
     if (cmsIsTag(hProfile, cmsSigDeviceMfgDescTag))
     {
@@ -324,7 +324,7 @@ QString dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
     static char Info[4096];
-    cmsMLU*     mlu = 0;
+    cmsMLU*     mlu = nullptr;
     Info[0]         = '\0';
 
     if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
@@ -391,7 +391,7 @@ LCMSBOOL dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
     LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>(cmsReadTag(hProfile, cmsSigMediaWhitePointTag));
 
-    if (tag == NULL)
+    if (tag == nullptr)
         return FALSE;
 
     *Dest = *tag;
@@ -404,7 +404,7 @@ QString dkCmsTakeModel(cmsHPROFILE hProfile)
     const cmsMLU* const mlu = (cmsMLU*)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
     buffer[0]               = '\0';
 
-    if (mlu == NULL)
+    if (mlu == nullptr)
         return QString();
 
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
@@ -417,7 +417,7 @@ QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
     const cmsMLU* const mlu = (cmsMLU*)cmsReadTag(hProfile, cmsSigCopyrightTag);
     buffer[0]               = '\0';
 
-    if (mlu == NULL)
+    if (mlu == nullptr)
         return QString();
 
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
@@ -500,14 +500,14 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile, cmsCIEXYZTRIPLE* const resu
 
     hXYZ = cmsCreateXYZProfile();
 
-    if (hXYZ == NULL)
+    if (hXYZ == nullptr)
         return FALSE;
 
     hTransform = cmsCreateTransform(hProfile, TYPE_RGB_DBL, hXYZ, TYPE_XYZ_DBL,
                                     intent, cmsFLAGS_NOCACHE | cmsFLAGS_NOOPTIMIZE);
     cmsCloseProfile(hXYZ);
 
-    if (hTransform == NULL)
+    if (hTransform == nullptr)
         return FALSE;
 
     cmsDoTransform(hTransform, rgb, result, 3);

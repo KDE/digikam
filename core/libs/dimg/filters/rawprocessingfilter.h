@@ -56,7 +56,7 @@ public:
      * Default constructor. You need to call setSettings() and setOriginalImage()
      * before starting the filter.
      */
-    explicit RawProcessingFilter(QObject* const parent = 0);
+    explicit RawProcessingFilter(QObject* const parent = nullptr);
 
     /**
      * Traditional constructor

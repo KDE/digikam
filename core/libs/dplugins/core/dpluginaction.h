@@ -70,7 +70,7 @@ public:
 
 public:
 
-    explicit DPluginAction(QObject* const parent = 0);
+    explicit DPluginAction(QObject* const parent = nullptr);
     ~DPluginAction();
 
     /**

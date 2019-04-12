@@ -77,7 +77,7 @@ public:
 
 public:
 
-    explicit AlbumFilterModel(QObject* const parent = 0);
+    explicit AlbumFilterModel(QObject* const parent = nullptr);
 
     /**
      * Sets the source model.
@@ -281,7 +281,7 @@ class DIGIKAM_EXPORT CheckableAlbumFilterModel : public AlbumFilterModel
 
 public:
 
-    explicit CheckableAlbumFilterModel(QObject* const parent = 0);
+    explicit CheckableAlbumFilterModel(QObject* const parent = nullptr);
 
     void                         setSourceAlbumModel(AbstractCheckableAlbumModel* const source);
     AbstractCheckableAlbumModel* sourceAlbumModel() const;
@@ -312,7 +312,7 @@ class DIGIKAM_EXPORT SearchFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    explicit SearchFilterModel(QObject* const parent = 0);
+    explicit SearchFilterModel(QObject* const parent = nullptr);
 
     void         setSourceSearchModel(SearchModel* const source);
     SearchModel* sourceSearchModel() const;
@@ -357,7 +357,7 @@ class DIGIKAM_EXPORT TagPropertiesFilterModel : public CheckableAlbumFilterModel
 
 public:
 
-    explicit TagPropertiesFilterModel(QObject* const parent = 0);
+    explicit TagPropertiesFilterModel(QObject* const parent = nullptr);
 
     void      setSourceAlbumModel(TagModel* const source);
     TagModel* sourceTagModel() const;
@@ -391,7 +391,7 @@ class DIGIKAM_EXPORT TagsManagerFilterModel : public TagPropertiesFilterModel
 
 public:
 
-    explicit TagsManagerFilterModel(QObject* const data = 0);
+    explicit TagsManagerFilterModel(QObject* const data = nullptr);
 
     void setQuickListTags(const QList<int>& tags);
 

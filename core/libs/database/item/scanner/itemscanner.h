@@ -313,8 +313,8 @@ public:
      * for all contained referred images.
      * If needTaggingIds is given, all ids marked for needing tagging of the history graph are added.
      */
-    static bool resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds = 0);
-    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong>* needTaggingIds = 0);
+    static bool resolveImageHistory(qlonglong id, QList<qlonglong>* needTaggingIds = nullptr);
+    static bool resolveImageHistory(qlonglong imageId, const QString& historyXml, QList<qlonglong>* needTaggingIds = nullptr);
 
     /**
      * Takes the history graph reachable from the given image, and assigns

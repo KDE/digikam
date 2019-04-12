@@ -95,7 +95,7 @@ public:
     /**
      * Creates a page view with given parent.
      */
-    explicit DConfigDlgView(QWidget* const parent = 0);
+    explicit DConfigDlgView(QWidget* const parent = nullptr);
 
     /**
      * Destroys the page view.

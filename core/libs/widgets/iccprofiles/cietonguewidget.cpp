@@ -169,9 +169,9 @@ public:
         pxrows(0),
         progressCount(0),
         gridside(0),
-        progressTimer(0),
-        hMonitorProfile(0),
-        hXFORM(0)
+        progressTimer(nullptr),
+        hMonitorProfile(nullptr),
+        hXFORM(nullptr)
     {
         progressPix = DWorkingPixmap();
     }
@@ -223,7 +223,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFIL
 
     hXYZProfile = dkCmsCreateXYZProfile();
 
-    if (hXYZProfile == NULL)
+    if (hXYZProfile == nullptr)
         return;
 
 
@@ -233,7 +233,7 @@ CIETongueWidget::CIETongueWidget(int w, int h, QWidget* const parent, cmsHPROFIL
 
     dkCmsCloseProfile(hXYZProfile);
 
-    if (d->hXFORM == NULL)
+    if (d->hXFORM == nullptr)
         qCDebug(DIGIKAM_WIDGETS_LOG) << "Wrong d->hXFORM" ;
 
     connect(d->progressTimer, SIGNAL(timeout()),

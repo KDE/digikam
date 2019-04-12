@@ -47,10 +47,10 @@ class Q_DECL_HIDDEN LensFunSettings::Private
 public:
 
     explicit Private()
-      : filterCCA(0),
-        filterVIG(0),
-        filterDST(0),
-        filterGEO(0)
+      : filterCCA(nullptr),
+        filterVIG(nullptr),
+        filterDST(nullptr),
+        filterGEO(nullptr)
     {
     }
 

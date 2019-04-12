@@ -108,7 +108,7 @@ qreal luma(const QColor& color)
 /**
  * Calculate hue, chroma and luma of a color in one call.
  */
-void getHcy(const QColor& color, qreal* h, qreal* c, qreal* y, qreal* a = 0)
+void getHcy(const QColor& color, qreal* h, qreal* c, qreal* y, qreal* a = nullptr)
 {
     if (!c || !h || !y)
     {

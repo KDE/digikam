@@ -163,7 +163,7 @@ public:
 
     inline DSharedDataPointer()
     {
-        d = 0;
+        d = nullptr;
     }
 
     explicit inline DSharedDataPointer(T* const data)
@@ -236,7 +236,7 @@ public:
             }
         }
 
-        return 0;
+        return nullptr;
     }
 
     inline T* assign(T* const o)
@@ -262,7 +262,7 @@ public:
             }
         }
 
-        return 0;
+        return nullptr;
     }
 
     /**
@@ -270,7 +270,7 @@ public:
      */
     inline T* unassign()
     {
-        return assign(0);
+        return assign(nullptr);
     }
 
     inline bool operator!() const

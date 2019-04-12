@@ -92,7 +92,7 @@ PGFLoader::PGFLoader(DImg* const image)
 {
     m_hasAlpha   = false;
     m_sixteenBit = false;
-    m_observer   = 0;
+    m_observer   = nullptr;
 }
 
 bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
@@ -241,7 +241,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         int width   = pgf.Width();
         int height  = pgf.Height();
-        uchar* data = 0;
+        uchar* data = nullptr;
 
         QSize originalSize(width, height);
 
@@ -295,7 +295,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             pgf.GetBitmap(m_sixteenBit ? width * 8 : width * 4,
                           (UINT8*)data,
                           m_sixteenBit ? 64 : 32,
-                          NULL,
+                          nullptr,
                           CallbackForLibPGF, this);
 
             if (observer)
@@ -458,7 +458,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         pgf.ImportBitmap(4 * imageWidth() * (imageSixteenBit() ? 2 : 1),
                          (UINT8*)imageData(),
                          imageBitsDepth() * 4,
-                         NULL,
+                         nullptr,
                          CallbackForLibPGF, this);
 
         UINT32 nWrittenBytes = 0;

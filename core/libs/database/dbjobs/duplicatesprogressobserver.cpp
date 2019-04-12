@@ -34,7 +34,7 @@ DuplicatesProgressObserver::DuplicatesProgressObserver(SearchesJob* const thread
 
 DuplicatesProgressObserver::~DuplicatesProgressObserver()
 {
-    m_job = 0;
+    m_job = nullptr;
 }
 
 void DuplicatesProgressObserver::totalNumberToScan(int number)

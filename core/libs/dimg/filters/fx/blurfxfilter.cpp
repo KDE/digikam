@@ -948,7 +948,7 @@ void BlurFXFilter::focusBlurMultithreaded(const Args& prm)
 
     DColor colorOrgImage, colorBlurredImage;
     int    alpha;
-    uchar* ptr = 0;
+    uchar* ptr = nullptr;
 
     // get composer for default blending
     DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);

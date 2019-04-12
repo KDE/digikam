@@ -60,8 +60,8 @@ public:
 
     explicit Private()
     {
-        versionsWidget       = 0;
-        filtersHistoryWidget = 0;
+        versionsWidget       = nullptr;
+        filtersHistoryWidget = nullptr;
     }
 
     VersionsWidget*       versionsWidget;

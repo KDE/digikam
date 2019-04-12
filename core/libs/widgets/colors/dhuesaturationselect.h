@@ -163,7 +163,7 @@ public:
     /**
      * Constructs a hue/saturation selection widget.
      */
-    explicit DHueSaturationSelector(QWidget* const parent = 0);
+    explicit DHueSaturationSelector(QWidget* const parent = nullptr);
 
     /**
      * Destructor.

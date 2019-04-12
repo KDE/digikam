@@ -51,12 +51,12 @@ class Q_DECL_HIDDEN JPEGSettings::Private
 public:
 
     explicit Private()
-      : JPEGGrid(0),
-        labelJPEGcompression(0),
-        labelWarning(0),
-        labelSubSampling(0),
-        subSamplingCB(0),
-        JPEGcompression(0)
+      : JPEGGrid(nullptr),
+        labelJPEGcompression(nullptr),
+        labelWarning(nullptr),
+        labelSubSampling(nullptr),
+        subSamplingCB(nullptr),
+        JPEGcompression(nullptr)
     {
     }
 

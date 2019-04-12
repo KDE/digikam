@@ -311,7 +311,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
 
     //--------------------------------------------------------------------------------
 
-    QPointer<QCheckBox> checkbox = 0;
+    QPointer<QCheckBox> checkbox = nullptr;
 
     if (!ask.isEmpty())
     {
@@ -355,24 +355,24 @@ QIcon DMessageBox::createIcon(QMessageBox::Icon icon)
     switch (icon)
     {
         case QMessageBox::Warning:
-            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning, 0, qApp->activeWindow());
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, qApp->activeWindow());
             break;
 
         case QMessageBox::Critical:
-            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical, 0, qApp->activeWindow());
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical, nullptr, qApp->activeWindow());
             break;
 
         case QMessageBox::Question:
-            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, qApp->activeWindow());
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, qApp->activeWindow());
             break;
 
         case QMessageBox::Information:
         default:
-            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation, 0, qApp->activeWindow());
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, qApp->activeWindow());
             break;
     }
 
-    int iconSize = qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, qApp->activeWindow());
+    int iconSize = qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, qApp->activeWindow());
 
     return tmpIcon.pixmap(iconSize);
 }
@@ -380,7 +380,7 @@ QIcon DMessageBox::createIcon(QMessageBox::Icon icon)
 
 QListWidget* DMessageBox::createWidgetList(const QStringList& items)
 {
-    QListWidget* listWidget = 0;
+    QListWidget* listWidget = nullptr;
 
     if (!items.isEmpty())
     {

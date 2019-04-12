@@ -63,15 +63,15 @@ public:
 
     explicit IOJobData(int operation,
                        const QList<ItemInfo>& infos,
-                       PAlbum* const dest = 0);
+                       PAlbum* const dest = nullptr);
 
     explicit IOJobData(int operation,
                        const QList<QUrl>& urls,
-                       PAlbum* const dest = 0);
+                       PAlbum* const dest = nullptr);
 
     explicit IOJobData(int operation,
                        PAlbum* const src,
-                       PAlbum* const dest = 0);
+                       PAlbum* const dest = nullptr);
 
     explicit IOJobData(int operation,
                        const QList<QUrl>& urls,

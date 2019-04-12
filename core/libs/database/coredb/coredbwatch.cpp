@@ -53,8 +53,8 @@ public:
     explicit Private() :
         mode(CoreDbWatch::DatabaseSlave)
 #ifdef HAVE_DBUS
-        ,adaptor(0)
-        ,slaveThread(0)
+        ,adaptor(nullptr)
+        ,slaveThread(nullptr)
 #endif
     {
     }

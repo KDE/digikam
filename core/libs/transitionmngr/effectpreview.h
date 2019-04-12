@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT EffectPreview : public QLabel
 
 public:
 
-    explicit EffectPreview(QWidget* const parent=0);
+    explicit EffectPreview(QWidget* const parent=nullptr);
     ~EffectPreview();
 
     void setImagesList(const QList<QUrl>& images);

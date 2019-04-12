@@ -63,7 +63,7 @@
 namespace Digikam
 {
 
-TagsActionMngr* TagsActionMngr::m_defaultManager = 0;
+TagsActionMngr* TagsActionMngr::m_defaultManager = nullptr;
 
 TagsActionMngr* TagsActionMngr::defaultManager()
 {
@@ -115,7 +115,7 @@ TagsActionMngr::~TagsActionMngr()
 
     if (m_defaultManager == this)
     {
-        m_defaultManager = 0;
+        m_defaultManager = nullptr;
     }
 }
 

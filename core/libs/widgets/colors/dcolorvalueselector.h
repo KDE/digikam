@@ -58,8 +58,8 @@ class DIGIKAM_EXPORT DSelector : public QAbstractSlider
 
 public:
 
-    explicit DSelector(QWidget *parent=0);
-    explicit DSelector(Qt::Orientation o, QWidget* const parent=0);
+    explicit DSelector(QWidget *parent=nullptr);
+    explicit DSelector(Qt::Orientation o, QWidget* const parent=nullptr);
     ~DSelector();
 
     /**
@@ -135,8 +135,8 @@ class DIGIKAM_EXPORT DColorValueSelector : public DSelector
 
 public:
 
-    explicit DColorValueSelector(QWidget* const parent = 0);
-    explicit DColorValueSelector(Qt::Orientation o, QWidget* const parent = 0);
+    explicit DColorValueSelector(QWidget* const parent = nullptr);
+    explicit DColorValueSelector(Qt::Orientation o, QWidget* const parent = nullptr);
     ~DColorValueSelector();
 
     /**

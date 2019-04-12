@@ -58,17 +58,17 @@ class Q_DECL_HIDDEN AlbumSelectTabs::Private
 public:
 
     explicit Private()
-      : albumModel(0),
-        albumTreeView(0),
-        tagModel(0),
-        tagTreeView(0),
-        searchModel(0),
-        searchTreeView(0),
-        albumSearchBar(0),
-        tagSearchBar(0),
-        searchSearchBar(0),
-        labelsTree(0),
-        labelsSearchHandler(0)
+      : albumModel(nullptr),
+        albumTreeView(nullptr),
+        tagModel(nullptr),
+        tagTreeView(nullptr),
+        searchModel(nullptr),
+        searchTreeView(nullptr),
+        albumSearchBar(nullptr),
+        tagSearchBar(nullptr),
+        searchSearchBar(nullptr),
+        labelsTree(nullptr),
+        labelsSearchHandler(nullptr)
     {
     }
 

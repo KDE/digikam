@@ -39,7 +39,7 @@ class Q_DECL_HIDDEN StateSavingObject::Private
 public:
 
     explicit Private()
-      : host(0),
+      : host(nullptr),
         group(),
         prefix(),
         groupSet(false),

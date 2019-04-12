@@ -44,8 +44,8 @@ class DIGIKAM_EXPORT ShearFilter : public DImgThreadedFilter
 
 public:
 
-    explicit ShearFilter(QObject* const parent = 0);
-    explicit ShearFilter(DImg* const orgImage, QObject* const parent=0, float hAngle=0.0, float vAngle=0.0,
+    explicit ShearFilter(QObject* const parent = nullptr);
+    explicit ShearFilter(DImg* const orgImage, QObject* const parent=nullptr, float hAngle=0.0, float vAngle=0.0,
                          bool antialiasing=true, const QColor& backgroundColor=Qt::black, int orgW=0, int orgH=0);
     ~ShearFilter();
 

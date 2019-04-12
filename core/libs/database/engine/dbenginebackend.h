@@ -227,9 +227,9 @@ public:
      * Queries by the specified parameters mustn't have named parameters.
      * The result values (if any) are stored within the values list.
      */
-    QueryState execDBAction(const DbEngineAction& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execDBAction(const DbEngineAction& action, QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
-    QueryState execDBAction(const QString& action, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execDBAction(const QString& action, QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
     /**
      * Performs the database action on the current database.
@@ -238,10 +238,10 @@ public:
      * The result values (if any) are stored within the values list.
      */
     QueryState execDBAction(const DbEngineAction& action, const QMap<QString, QVariant>& bindingMap,
-                            QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                            QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
     QueryState execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
-                            QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                            QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
     /**
      * Performs a special DBAction that is usually needed to "INSERT or UPDATE" entries in a table.
@@ -274,37 +274,37 @@ public:
      * If you want the last inserted id (and your query is suitable), set lastInsertId to the address of a QVariant.
      * Additionally, methods are provided for prepared statements.
      */
-    QueryState execSql(const QString& sql, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execSql(const QString& sql, QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(const QString& sql, const QVariant& boundValue1,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(const QString& sql,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(const QString& sql, const QList<QVariant>& boundValues,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
-    QueryState execSql(DbEngineSqlQuery& preparedQuery, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execSql(DbEngineSqlQuery& preparedQuery, QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(DbEngineSqlQuery& preparedQuery, const QVariant& boundValue1,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(DbEngineSqlQuery& preparedQuery,
                        const QVariant& boundValue1, const QVariant& boundValue2,
                        const QVariant& boundValue3, const QVariant& boundValue4,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     QueryState execSql(DbEngineSqlQuery& preparedQuery, const QList<QVariant>& boundValues,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
     /**
      * Checks if there was a connection error. If so BdEngineBackend::ConnectionError is returned.
@@ -325,7 +325,7 @@ public:
      * inserted in the following way: key1=value1, key2=value2,...,keyN=valueN.
      */
     QueryState execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
-                       QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+                       QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
     /**
      * Calls exec on the query, and handles debug output if something went wrong.
      * The query is not prepared, which can be fail in certain situations
@@ -338,7 +338,7 @@ public:
      * The query is not prepared, which can be fail in certain situations
      * (e.g. trigger statements on QMYSQL).
      */
-    QueryState execDirectSqlWithResult(const QString& query, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
+    QueryState execDirectSqlWithResult(const QString& query, QList<QVariant>* const values = nullptr, QVariant* const lastInsertId = nullptr);
 
     /**
      * Executes the statement and returns the query object.

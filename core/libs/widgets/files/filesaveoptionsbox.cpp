@@ -62,16 +62,16 @@ class Q_DECL_HIDDEN FileSaveOptionsBox::Private
 public:
 
     explicit Private() :
-        noneOptions(0),
-        noneGrid(0),
-        labelNone(0),
-        JPEGOptions(0),
-        PNGOptions(0),
-        TIFFOptions(0),
+        noneOptions(nullptr),
+        noneGrid(nullptr),
+        labelNone(nullptr),
+        JPEGOptions(nullptr),
+        PNGOptions(nullptr),
+        TIFFOptions(nullptr),
 #ifdef HAVE_JASPER
-        JPEG2000Options(0),
+        JPEG2000Options(nullptr),
 #endif // HAVE_JASPER
-        PGFOptions(0)
+        PGFOptions(nullptr)
     {
     }
 

@@ -64,20 +64,20 @@ public:
     explicit Private()
       : sixteenBit(false),
         channel(LuminosityChannel),
-        curveFree(0),
-        curveSmooth(0),
-        pickBlack(0),
-        pickGray(0),
-        pickWhite(0),
-        curveType(0),
-        pickerType(0),
-        pickerBox(0),
-        resetButton(0),
-        resetChannelAction(0),
-        resetChannelsAction(0),
-        curvesWidget(0),
-        hGradient(0),
-        vGradient(0)
+        curveFree(nullptr),
+        curveSmooth(nullptr),
+        pickBlack(nullptr),
+        pickGray(nullptr),
+        pickWhite(nullptr),
+        curveType(nullptr),
+        pickerType(nullptr),
+        pickerBox(nullptr),
+        resetButton(nullptr),
+        resetChannelAction(nullptr),
+        resetChannelsAction(nullptr),
+        curvesWidget(nullptr),
+        hGradient(nullptr),
+        vGradient(nullptr)
     {
     }
 

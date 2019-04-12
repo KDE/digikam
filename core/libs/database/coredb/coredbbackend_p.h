@@ -49,7 +49,7 @@ public:
           albumRootChangesetContainer(this),
           searchChangesetContainer(this)
     {
-        watch = 0;
+        watch = nullptr;
     }
 
 public:

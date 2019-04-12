@@ -48,7 +48,7 @@ public:
 
     explicit Private()
     {
-        rootItem = 0;
+        rootItem = nullptr;
     }
 
     ListItem*  rootItem;
@@ -255,7 +255,7 @@ QVariant TagMngrListModel::data(const QModelIndex& index, int role) const
 Qt::ItemFlags TagMngrListModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable
                              | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
@@ -275,7 +275,7 @@ QModelIndex TagMngrListModel::index(int row, int column, const QModelIndex& pare
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    ListItem* parentItem = 0;
+    ListItem* parentItem = nullptr;
 
     if (!parent.isValid())
         parentItem = d->rootItem;
@@ -306,7 +306,7 @@ QModelIndex TagMngrListModel::parent(const QModelIndex &index) const
 
 int TagMngrListModel::rowCount(const QModelIndex &parent) const
 {
-    ListItem* parentItem = 0;
+    ListItem* parentItem = nullptr;
 
     if (parent.column() > 0)
         return 0;

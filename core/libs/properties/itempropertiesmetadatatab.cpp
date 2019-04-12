@@ -62,10 +62,10 @@ public:
     };
 
     explicit Private()
-      : exifWidget(0),
-        makernoteWidget(0),
-        iptcWidget(0),
-        xmpWidget(0)
+      : exifWidget(nullptr),
+        makernoteWidget(nullptr),
+        iptcWidget(nullptr),
+        xmpWidget(nullptr)
     {
     }
 

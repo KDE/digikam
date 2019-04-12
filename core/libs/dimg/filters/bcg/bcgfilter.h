@@ -43,8 +43,8 @@ class DIGIKAM_EXPORT BCGFilter : public DImgThreadedFilter
 
 public:
 
-    explicit BCGFilter(QObject* const parent=0);
-    explicit BCGFilter(DImg* const orgImage, QObject* const parent=0, const BCGContainer& settings=BCGContainer());
+    explicit BCGFilter(QObject* const parent=nullptr);
+    explicit BCGFilter(DImg* const orgImage, QObject* const parent=nullptr, const BCGContainer& settings=BCGContainer());
     explicit BCGFilter(const BCGContainer& settings, DImgThreadedFilter* const master,
                        const DImg& orgImage, const DImg& destImage, int progressBegin=0, int progressEnd=100);
     virtual ~BCGFilter();

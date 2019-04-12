@@ -44,7 +44,7 @@ namespace Digikam
 
 Album::Album(Album::Type type, int id, bool root)
 {
-    m_parent           = 0;
+    m_parent           = nullptr;
     m_type             = type;
     m_id               = id;
     m_root             = root;
@@ -80,7 +80,7 @@ Album* Album::firstChild() const
 {
     if (m_childCache.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return m_childCache.constFirst();
@@ -90,7 +90,7 @@ Album* Album::lastChild() const
 {
     if (m_childCache.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return m_childCache.constLast();
@@ -100,14 +100,14 @@ Album* Album::next() const
 {
     if (!m_parent)
     {
-        return 0;
+        return nullptr;
     }
 
     int row = m_parent->m_childCache.indexOf(const_cast<Album*>(this));
 
     if (row < 0 || row + 1 >= m_parent->m_childCache.count())
     {
-        return 0;
+        return nullptr;
     }
 
     return m_parent->m_childCache.at(row + 1);
@@ -117,14 +117,14 @@ Album* Album::prev() const
 {
     if (!m_parent)
     {
-        return 0;
+        return nullptr;
     }
 
     int row = m_parent->m_childCache.indexOf(const_cast<Album*>(this));
 
     if (row < 1)
     {
-        return 0;
+        return nullptr;
     }
 
     return m_parent->m_childCache.at(row - 1);
@@ -801,7 +801,7 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
 AlbumIterator::AlbumIterator(Album* const album)
 {
     m_root    = album;
-    m_current = album ? album->firstChild() : 0;
+    m_current = album ? album->firstChild() : nullptr;
 }
 
 AlbumIterator::~AlbumIterator()
@@ -819,7 +819,7 @@ AlbumIterator& AlbumIterator::operator++()
 
     if (!album)
     {
-        while ((album = m_current->next()) == 0)
+        while ((album = m_current->next()) == nullptr)
         {
             m_current = m_current->parent();
 
@@ -827,11 +827,11 @@ AlbumIterator& AlbumIterator::operator++()
             {
                 // we have reached the root.
                 // that means no more children
-                m_current = 0;
+                m_current = nullptr;
                 break;
             }
 
-            if (m_current == 0)
+            if (m_current == nullptr)
             {
                 break;
             }

@@ -44,7 +44,7 @@ namespace Digikam
 
 DWizardDlg::DWizardDlg(QWidget* const parent, const QString& objName)
     : QWizard(parent),
-      m_tool(0)
+      m_tool(nullptr)
 {
     setObjectName(objName);
     restoreDialogSize();

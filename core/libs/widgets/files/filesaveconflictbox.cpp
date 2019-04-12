@@ -46,10 +46,10 @@ public:
 
     explicit Private()
     {
-        conflictLabel       = 0;
-        conflictButtonGroup = 0;
-        storeDiffButton     = 0;
-        overwriteButton     = 0;
+        conflictLabel       = nullptr;
+        conflictButtonGroup = nullptr;
+        storeDiffButton     = nullptr;
+        overwriteButton     = nullptr;
     }
 
     QLabel*       conflictLabel;

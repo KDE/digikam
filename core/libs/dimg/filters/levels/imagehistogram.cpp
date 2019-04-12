@@ -63,7 +63,7 @@ public:
 
     explicit Private()
     {
-        histogram     = 0;
+        histogram     = nullptr;
         histoSegments = 0;
         valid         = false;
     }

@@ -58,7 +58,7 @@ public:
      * Use this class if you need to pass a QLineEdit but
      * want actually to use a different widget.
      */
-    explicit ProxyLineEdit(QWidget* const parent = 0);
+    explicit ProxyLineEdit(QWidget* const parent = nullptr);
 
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
@@ -114,7 +114,7 @@ public:
      * Press on the held widget will result in the signal
      * if the widget does not accept() them.
      */
-    explicit ProxyClickLineEdit(QWidget* const parent = 0);
+    explicit ProxyClickLineEdit(QWidget* const parent = nullptr);
 
 Q_SIGNALS:
 
@@ -137,7 +137,7 @@ public:
      * This class is a combo box that stores a current index
      * based on QModelIndex.
      */
-    explicit ModelIndexBasedComboBox(QWidget* const  parent = 0);
+    explicit ModelIndexBasedComboBox(QWidget* const  parent = nullptr);
 
     QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& index);
@@ -168,7 +168,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a view.
      */
-    explicit StayPoppedUpComboBox(QWidget* const parent = 0);
+    explicit StayPoppedUpComboBox(QWidget* const parent = nullptr);
 
 protected:
 
@@ -209,11 +209,11 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    explicit TreeViewComboBox(QWidget* parent = 0);
+    explicit TreeViewComboBox(QWidget* parent = nullptr);
 
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model. */
-    virtual void installView(QAbstractItemView* view = 0);
+    virtual void installView(QAbstractItemView* view = nullptr);
 
     /** Returns the QTreeView of this class. Valid after installView() has been called */
     QTreeView* view() const;
@@ -238,7 +238,7 @@ public:
      *  Construct the object, call setModel() with an appropriate
      *  QAbstractItemModel, then call installView().
      */
-    explicit ListViewComboBox(QWidget* parent = 0);
+    explicit ListViewComboBox(QWidget* parent = nullptr);
 
     /** Returns the QTreeView of this class. Valid after installView() has been called.
      */
@@ -247,7 +247,7 @@ public:
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model.
      */
-    virtual void installView(QAbstractItemView* view = 0);
+    virtual void installView(QAbstractItemView* view = nullptr);
 
 protected:
 
@@ -269,7 +269,7 @@ public:
      *  QAbstractItemModel, then call installView() to replace
      *  the standard combo box view with a QTreeView.
      */
-    explicit TreeViewLineEditComboBox(QWidget* const parent = 0);
+    explicit TreeViewLineEditComboBox(QWidget* const parent = nullptr);
 
 
     /** Set the text of the line edit (the text that is visible
@@ -283,7 +283,7 @@ public:
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model.
      */
-    virtual void installView(QAbstractItemView* view = 0);
+    virtual void installView(QAbstractItemView* view = nullptr);
 
 protected:
 

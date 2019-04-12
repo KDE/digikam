@@ -42,7 +42,7 @@ class DTrashItemModel : public QAbstractTableModel
 
 public:
 
-    explicit DTrashItemModel(QObject* const parent = 0);
+    explicit DTrashItemModel(QObject* const parent = nullptr);
     ~DTrashItemModel();
 
     /**

@@ -42,7 +42,7 @@ namespace Digikam
 
 ImageSortFilterModel::ImageSortFilterModel(QObject* const parent)
     : DCategorizedSortFilterProxyModel(parent),
-      m_chainedModel(0)
+      m_chainedModel(nullptr)
 {
 }
 
@@ -108,7 +108,7 @@ ItemFilterModel* ImageSortFilterModel::imageFilterModel() const
         return m_chainedModel->imageFilterModel();
     }
 
-    return 0;
+    return nullptr;
 }
 
 QModelIndex ImageSortFilterModel::mapToSourceItemModel(const QModelIndex& index) const

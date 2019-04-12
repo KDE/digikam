@@ -218,7 +218,7 @@ private:
      * Returns all sub-tags of the given one which have the person property.
      * This includes the root tag, if it has the property, too.
      */
-    QList<TAlbum*> getFaceTags(TAlbum* rootTags = 0);
+    QList<TAlbum*> getFaceTags(TAlbum* rootTags = nullptr);
 
     /**
      * Returns all sub-tags of the given ones which have the person property.

@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT DIntRangeBox : public QWidget
 
 public:
 
-    explicit DIntRangeBox(QWidget* const parent=0);
+    explicit DIntRangeBox(QWidget* const parent=nullptr);
     ~DIntRangeBox();
 
     /**

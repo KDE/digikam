@@ -59,7 +59,7 @@ QStringList AbstractItemDragDropHandler::mimeTypes() const
 
 QMimeData* AbstractItemDragDropHandler::createMimeData(const QList<QModelIndex>&)
 {
-    return 0;
+    return nullptr;
 }
 
 bool AbstractItemDragDropHandler::acceptsMimeData(const QMimeData* mime)

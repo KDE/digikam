@@ -169,7 +169,7 @@ static Mat histc_(const Mat& src, int minVal = 0, int maxVal = 255, bool normed 
     const float* histRange = { range };
 
     // calc histogram
-    calcHist(&src, 1, 0, Mat(), result, 1, &histSize, &histRange, true, false);
+    calcHist(&src, 1, nullptr, Mat(), result, 1, &histSize, &histRange, true, false);
 
     // normalize
     if (normed)

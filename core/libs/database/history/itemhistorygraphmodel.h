@@ -70,7 +70,7 @@ public:
 
 public:
 
-    explicit ItemHistoryGraphModel(QObject* const parent = 0);
+    explicit ItemHistoryGraphModel(QObject* const parent = nullptr);
     ~ItemHistoryGraphModel();
 
     void setMode(Mode mode);

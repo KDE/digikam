@@ -43,7 +43,7 @@ public:
 
     explicit Private()
     {
-        timer = 0;
+        timer = nullptr;
     }
 
     QMap<int, QString> originalItems;

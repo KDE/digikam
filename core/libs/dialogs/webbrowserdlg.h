@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT WebBrowserDlg : public QDialog
 
 public:
 
-    explicit WebBrowserDlg(const QUrl& url, QWidget* const parent = 0);
+    explicit WebBrowserDlg(const QUrl& url, QWidget* const parent = nullptr);
     ~WebBrowserDlg();
 
 private Q_SLOTS:

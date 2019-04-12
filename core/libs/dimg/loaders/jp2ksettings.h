@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT JP2KSettings : public QWidget
 
 public:
 
-    explicit JP2KSettings(QWidget* const parent = 0);
+    explicit JP2KSettings(QWidget* const parent = nullptr);
     ~JP2KSettings();
 
     void setCompressionValue(int val);

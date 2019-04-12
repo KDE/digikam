@@ -66,13 +66,13 @@ public:
 public:
 
     CurvesBox(int w, int h,                            // Widget size.
-              QWidget* const parent=0,                 // Parent widget instance.
+              QWidget* const parent=nullptr,                 // Parent widget instance.
               bool readOnly=false);                    // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
 
     CurvesBox(int w, int h,                            // Widget size.
               const DImg& img,                         // Image data.
-              QWidget* const parent=0,                 // Parent widget instance.
+              QWidget* const parent=nullptr,                 // Parent widget instance.
               bool readOnly=false);                    // If true : widget with full edition mode capabilities.
                                                        // If false : display curve data only without edition.
     ~CurvesBox();

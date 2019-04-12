@@ -43,9 +43,9 @@ class DIGIKAM_EXPORT TextureFilter : public DImgThreadedFilter
 
 public:
 
-    explicit TextureFilter(QObject* const parent = 0);
+    explicit TextureFilter(QObject* const parent = nullptr);
     explicit TextureFilter(DImg* const orgImage,
-                           QObject* const parent=0,
+                           QObject* const parent=nullptr,
                            int blendGain=200,
                            const QString& texturePath=QString());
 

@@ -38,8 +38,8 @@ class DIGIKAM_EXPORT InvertFilter : public DImgThreadedFilter
 
 public:
 
-    explicit InvertFilter(QObject* const parent = 0);
-    explicit InvertFilter(DImg* const orgImage, QObject* const parent=0);
+    explicit InvertFilter(QObject* const parent = nullptr);
+    explicit InvertFilter(DImg* const orgImage, QObject* const parent=nullptr);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit InvertFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, DImg& destImage,

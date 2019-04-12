@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT PickLabelWidget : public DVBox
 
 public:
 
-    explicit PickLabelWidget(QWidget* const parent=0);
+    explicit PickLabelWidget(QWidget* const parent=nullptr);
     virtual ~PickLabelWidget();
 
     /**
@@ -102,7 +102,7 @@ class DIGIKAM_EXPORT PickLabelSelector : public QPushButton
 
 public:
 
-    explicit PickLabelSelector(QWidget* const parent=0);
+    explicit PickLabelSelector(QWidget* const parent=nullptr);
     virtual ~PickLabelSelector();
 
     void setPickLabel(PickLabel label);
@@ -132,7 +132,7 @@ class DIGIKAM_EXPORT PickLabelMenuAction : public QMenu
 
 public:
 
-    explicit PickLabelMenuAction(QMenu* const parent=0);
+    explicit PickLabelMenuAction(QMenu* const parent=nullptr);
     virtual ~PickLabelMenuAction();
 
 Q_SIGNALS:

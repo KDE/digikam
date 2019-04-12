@@ -48,12 +48,12 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     d->changed = true;
 
-    disconnect(CollectionManager::instance(), 0, this, 0);
+    disconnect(CollectionManager::instance(), nullptr, this, nullptr);
     CollectionManager::instance()->setWatchDisabled();
 
     if (CoreDbAccess::databaseWatch())
     {
-        disconnect(CoreDbAccess::databaseWatch(), 0, this, 0);
+        disconnect(CoreDbAccess::databaseWatch(), nullptr, this, nullptr);
     }
 
     DatabaseServerStarter::instance()->stopServerManagerProcess();
@@ -76,10 +76,10 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     delete d->rootDAlbum;
     delete d->rootSAlbum;
 
-    d->rootPAlbum = 0;
-    d->rootTAlbum = 0;
-    d->rootDAlbum = 0;
-    d->rootSAlbum = 0;
+    d->rootPAlbum = nullptr;
+    d->rootTAlbum = nullptr;
+    d->rootDAlbum = nullptr;
+    d->rootSAlbum = nullptr;
 
     // -- Database initialization -------------------------------------------------
 
@@ -197,7 +197,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
             // locale info LC_ALL (for eg: en_US.UTF-8) earlier,
             // we now save only the encoding (UTF-8)
 
-            QString oldConfigLocale = QString::fromUtf8(::setlocale(0, 0));
+            QString oldConfigLocale = QString::fromUtf8(::setlocale(0, nullptr));
 
             if (oldConfigLocale == dbLocale)
             {
@@ -283,8 +283,8 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
         QGridLayout* const layout = new QGridLayout;
         layout->setColumnStretch(1, 1);
 
-        QRadioButton* migrateButton = 0;
-        QComboBox* migrateChoices   = 0;
+        QRadioButton* migrateButton = nullptr;
+        QComboBox* migrateChoices   = nullptr;
 
         if (!candidateIds.isEmpty())
         {
@@ -395,7 +395,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     DbEngineGuiErrorHandler* const similarityHandler = new DbEngineGuiErrorHandler(SimilarityDbAccess::parameters());
     SimilarityDbAccess::initDbEngineErrorHandler(similarityHandler);
 
-    if (SimilarityDbAccess::checkReadyForUse(0))
+    if (SimilarityDbAccess::checkReadyForUse(nullptr))
     {
         qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database ready for use";
     }

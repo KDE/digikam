@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT ItemDelegateOverlay : public QObject
 
 public:
 
-    explicit ItemDelegateOverlay(QObject* const parent = 0);
+    explicit ItemDelegateOverlay(QObject* const parent = nullptr);
     ~ItemDelegateOverlay();
 
     /** Called when the overlay was installed and shall begin working,
