@@ -136,7 +136,7 @@ public:
 
 public:
 
-    void transactionFinished()
+    void transactionFinished() override
     {
         BdEngineBackendPrivate::transactionFinished();
 

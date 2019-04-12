@@ -119,7 +119,7 @@ protected:
 
     /** Main thread loop used to process jobs in todo list.
      */
-    void run();
+    void run() override;
 
     /** Append a collection of jobs to process into QThreadPool.
      *  Jobs are add to pending lists and will be deleted by ActionThreadBase, not QThreadPool.

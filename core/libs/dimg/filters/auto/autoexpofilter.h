@@ -65,18 +65,18 @@ public:
         return QString::fromUtf8(I18N_NOOP("Auto Exposure"));
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
 private:
 

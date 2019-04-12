@@ -194,22 +194,22 @@ Q_SIGNALS:
 
 public:
 
-    virtual void imageStartedLoading(const LoadingDescription& loadingDescription);
-    virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress);
-    virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img);
+    virtual void imageStartedLoading(const LoadingDescription& loadingDescription) override;
+    virtual void loadingProgress(const LoadingDescription& loadingDescription, float progress) override;
+    virtual void imageLoaded(const LoadingDescription& loadingDescription, const DImg& img) override;
     virtual void moreCompleteLoadingAvailable(const LoadingDescription& oldLoadingDescription,
-                                              const LoadingDescription& newLoadingDescription);
-    virtual void imageStartedSaving(const QString& filePath);
-    virtual void savingProgress(const QString& filePath, float progress);
-    virtual void imageSaved(const QString& filePath, bool success);
-    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
+                                              const LoadingDescription& newLoadingDescription) override;
+    virtual void imageStartedSaving(const QString& filePath) override;
+    virtual void savingProgress(const QString& filePath, float progress) override;
+    virtual void imageSaved(const QString& filePath, bool success) override;
+    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) override;
 
     virtual bool querySendNotifyEvent() const;
     virtual void taskHasFinished();
 
 protected:
 
-    virtual void run();
+    virtual void run() override;
     void notificationReceived();
 
 protected:

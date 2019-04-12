@@ -59,12 +59,12 @@ public:
 
     explicit JPEGLoader(DImg* const image);
 
-    bool load(const QString& filePath, DImgLoaderObserver* const observer);
-    bool save(const QString& filePath, DImgLoaderObserver* const observer);
+    bool load(const QString& filePath, DImgLoaderObserver* const observer) override;
+    bool save(const QString& filePath, DImgLoaderObserver* const observer) override;
 
-    virtual bool hasAlpha()   const;
-    virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const;
+    virtual bool hasAlpha()   const override;
+    virtual bool sixteenBit() const override;
+    virtual bool isReadOnly() const override;
 
 private:
 

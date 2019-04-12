@@ -60,12 +60,12 @@ public:
     explicit DragHandle(QDockWidget* const);
     ~DragHandle();
 
-    QSize sizeHint()        const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint()        const override;
+    QSize minimumSizeHint() const override;
 
 protected:
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 private Q_SLOTS:
 

@@ -194,9 +194,9 @@ protected:
 
     DMultiTabBarButton(const QPixmap& pic, const QString&, int id, QWidget* const parent);
 
-    virtual void hideEvent(QHideEvent*);
-    virtual void showEvent(QShowEvent*);
-    virtual void paintEvent(QPaintEvent*);
+    virtual void hideEvent(QHideEvent*) override;
+    virtual void showEvent(QShowEvent*) override;
+    virtual void paintEvent(QPaintEvent*) override;
 
 private:
 
@@ -215,8 +215,8 @@ public:
 
     virtual ~DMultiTabBarTab();
 
-    virtual QSize sizeHint()        const;
-    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint()        const override;
+    virtual QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
 
@@ -258,7 +258,7 @@ protected:
     DMultiTabBarTab(const QPixmap& pic, const QString&, int id, QWidget* const parent,
                     Qt::Edge pos, DMultiTabBar::TextStyle style);
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
 
 private:
 
@@ -293,7 +293,7 @@ protected:
      * parent can handle them.
      */
     virtual void contentsMousePressEvent(QMouseEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent*) override;
 
 private:
 
@@ -416,16 +416,16 @@ protected:
     /**
      * load the last view state from disk - called by StateSavingObject#loadState()
      */
-    void doLoadState();
+    void doLoadState() override;
 
     /**
      * save the view state to disk - called by StateSavingObject#saveState()
      */
-    void doSaveState();
+    void doSaveState() override;
 
 private:
 
-    bool eventFilter(QObject* o, QEvent* e);
+    bool eventFilter(QObject* o, QEvent* e) override;
     void switchTabAndStackToTab(int tab);
 
 private Q_SLOTS:

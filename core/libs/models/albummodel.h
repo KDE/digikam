@@ -48,8 +48,8 @@ public:
 
 protected:
 
-    virtual QVariant decorationRoleData(Album* a) const;
-    virtual Album*   albumForId(int id) const;
+    virtual QVariant decorationRoleData(Album* a) const override;
+    virtual Album*   albumForId(int id) const override;
 };
 
 // ------------------------------------------------------------------
@@ -80,8 +80,8 @@ public:
 
 protected:
 
-    virtual QVariant decorationRoleData(Album* a) const;
-    virtual Album*   albumForId(int id) const;
+    virtual QVariant decorationRoleData(Album* a) const override;
+    virtual Album*   albumForId(int id) const override;
 };
 
 // ------------------------------------------------------------------
@@ -112,8 +112,8 @@ public:
 
 protected:
 
-    virtual QVariant albumData(Album* a, int role) const;
-    virtual Album*   albumForId(int id) const;
+    virtual QVariant albumData(Album* a, int role) const override;
+    virtual Album*   albumForId(int id) const override;
 
 private Q_SLOTS:
 
@@ -165,10 +165,10 @@ public Q_SLOTS:
 
 protected:
 
-    virtual QString  albumName(Album* a) const;
-    virtual QVariant decorationRoleData(Album* a) const;
-    virtual QVariant sortRoleData(Album* a) const;
-    virtual Album*   albumForId(int id) const;
+    virtual QString  albumName(Album* a) const override;
+    virtual QVariant decorationRoleData(Album* a) const override;
+    virtual QVariant sortRoleData(Album* a) const override;
+    virtual Album*   albumForId(int id) const override;
 
 protected:
 

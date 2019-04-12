@@ -63,21 +63,21 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
-    void                    readParameters(const FilterAction& action);
-    bool                    parametersSuccessfullyRead() const;
-    QString                 readParametersError(const FilterAction& actionThatFailed) const;
+    void                    readParameters(const FilterAction& action) override;
+    bool                    parametersSuccessfullyRead() const override;
+    QString                 readParametersError(const FilterAction& actionThatFailed) const override;
 
 protected:
 
-    virtual void progressInfo(DImg* const img, float progress);
-    virtual void filterImage();
+    virtual void progressInfo(DImg* const img, float progress) override;
+    virtual void filterImage() override;
 
 private:
 

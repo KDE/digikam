@@ -158,17 +158,17 @@ public:
         return 1;
     }
 
-    virtual QString filterIdentifier() const
+    virtual QString filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction filterAction();
-    virtual void readParameters(const FilterAction& action);
+    virtual FilterAction filterAction() override;
+    virtual void readParameters(const FilterAction& action) override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
 private:
 

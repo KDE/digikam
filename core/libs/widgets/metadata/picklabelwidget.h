@@ -82,7 +82,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
 private:
 

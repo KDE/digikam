@@ -47,15 +47,13 @@ if(MINGW)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
         # To use official release tarball
-        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
-        URL_MD5 8f7e0a0b51f183f95820de4474364f76
+        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
+        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
 
         # To use current implementation from Git with tag 0.27 rc1
 
         #GIT_REPOSITORY https://github.com/Exiv2/exiv2.git
         #GIT_TAG v0.27-RC1
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/exiv2-0.27-mxe.patch
 
         CONFIGURE_COMMAND cp -f ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${BASH_OPTIONS}
@@ -78,8 +76,8 @@ elseif(APPLE)
 
         # To use official release tarball
 
-        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
-        URL_MD5 8f7e0a0b51f183f95820de4474364f76
+        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
+        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
 
         # To use current implementation from Git
 
@@ -105,8 +103,8 @@ else() # Linux
 
         # To use official release tarball
 
-        URL https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
-        URL_MD5 8f7e0a0b51f183f95820de4474364f76
+        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
+        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
 
         # To use current implementation from Git
 

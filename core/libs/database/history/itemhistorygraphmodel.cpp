@@ -106,7 +106,7 @@ public:
     {
     }
 
-    HistoryTreeItemType type() const
+    HistoryTreeItemType type() const override
     {
         return VertexItemType;
     }
@@ -133,7 +133,7 @@ public:
     {
     }
 
-    HistoryTreeItemType type() const
+    HistoryTreeItemType type() const override
     {
         return FilterActionItemType;
     }
@@ -154,7 +154,7 @@ public:
     {
     }
 
-    HistoryTreeItemType type() const
+    HistoryTreeItemType type() const override
     {
         return HeaderItemType;
     }
@@ -175,7 +175,7 @@ public:
     {
     }
 
-    HistoryTreeItemType type() const
+    HistoryTreeItemType type() const override
     {
         return CategoryItemType;
     }
@@ -191,7 +191,7 @@ class Q_DECL_HIDDEN SeparatorItem : public HistoryTreeItem
 {
 public:
 
-    HistoryTreeItemType type() const
+    HistoryTreeItemType type() const override
     {
         return SeparatorItemType;
     }

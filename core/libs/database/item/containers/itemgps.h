@@ -46,8 +46,8 @@ public:
     explicit ItemGPS(const ItemInfo& info);
     virtual ~ItemGPS();
 
-    QString saveChanges();
-    bool loadImageData();
+    QString saveChanges() override;
+    bool loadImageData() override;
 
     static QList<GPSItemContainer*> infosToItems(const ItemInfoList& infos);
 

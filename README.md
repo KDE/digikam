@@ -4,7 +4,7 @@
 
 If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://invent.kde.org/kde/digikam)
 
-Developers, if you want to contrib, see the online [API documentation here](https://www.digikam.org/api)
+Developers, if you want to contribute, see the online [API documentation here](https://www.digikam.org/api)
 
 # About
 
@@ -87,7 +87,7 @@ The current bugs and devel wishes reported to the bugzilla servers can be seen a
 Extra Bugzilla servers for shared libs used by digiKam :
 
 * [LibRaw library](https://github.com/LibRaw/LibRaw/issues)
-* [Lensfun library](https://sourceforge.net/p/lensfun/_list/tickets)
+* [Lensfun library](https://github.com/lensfun/lensfun/issues)
 * [GPhoto2 library](http://gphoto.org/bugs)
 * [Exiv2 library](https://github.com/Exiv2/exiv2/issues)
 * [QtAV library](https://github.com/wang-bin/QtAV/issues)
@@ -115,22 +115,22 @@ Usual CMake options :
 
 * `-DCMAKE_INSTALL_PREFIX` : decide where the program will be install on your computer.
 * `-DCMAKE_BUILD_TYPE`     : decide which type of build you want. You can chose between:
-                             `debugfull`.     : for hacking. Include all debug information.
-                             `debug`.
-                             `profile`.
-                             `relwithdebinfo` : default. use gcc `-O2` `-g` options.
-                             `release`        : generate stripped and optimized bin files. For packaging.
+  * `debugfull`.     : for hacking. Include all debug information.
+  * `debug`.
+  * `profile`.
+  * `relwithdebinfo` : default. use gcc `-O2` `-g` options.
+  * `release`        : generate stripped and optimized bin files. For packaging.
 
 Compared to old autoconf options:
 
-* cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
-* cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
+* `cmake . -DCMAKE_BUILD_TYPE=debugfull` is equivalent to `./configure --enable-debug=full`
+* `cmake . -DCMAKE_INSTALL_PREFIX=/usr`  is equivalent to `./configure --prefix=/usr`
 
 More details can be found [at this url](http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables)
 
 Note: To know KDE install path on your computer, use `kf5-config --prefix` command line like this (with full debug object enabled):
 
-* cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`
+* `cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=$(kf5-config --prefix)`
 
 # Donate Money
 

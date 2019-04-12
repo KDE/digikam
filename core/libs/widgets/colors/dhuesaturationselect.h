@@ -102,7 +102,7 @@ public:
     /**
      * Reimplemented to give the widget a minimum size
      */
-    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const override;
 
 Q_SIGNALS:
 
@@ -128,10 +128,10 @@ protected:
      */
     virtual void drawMarker(QPainter* p, int xp, int yp);
 
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void wheelEvent(QWheelEvent*);
+    virtual void paintEvent(QPaintEvent* e) override;
+    virtual void mousePressEvent(QMouseEvent* e) override;
+    virtual void mouseMoveEvent(QMouseEvent* e) override;
+    virtual void wheelEvent(QWheelEvent*) override;
 
     /**
      * Converts a pixel position to its corresponding values.
@@ -240,14 +240,14 @@ protected:
      * which is used for buffering.
      */
     virtual void drawPalette(QPixmap* pixmap);
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
 
     /**
      * Reimplemented from DPointSelect. This drawing is
      * buffered in a pixmap here. As real drawing
      * routine, drawPalette() is used.
      */
-    virtual void drawContents(QPainter* painter);
+    virtual void drawContents(QPainter* painter) override;
 
 private:
 

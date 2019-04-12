@@ -81,9 +81,9 @@ public:
 
 protected:
 
-    bool    event(QEvent*);
-    void    resizeEvent(QResizeEvent*);
-    void    paintEvent(QPaintEvent*);
+    bool    event(QEvent*) override;
+    void    resizeEvent(QResizeEvent*) override;
+    void    paintEvent(QPaintEvent*) override;
     void    updateToolTip();
     bool    toolTipIsEmpty() const;
     void    reposition();

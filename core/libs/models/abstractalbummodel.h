@@ -132,19 +132,19 @@ public:
      */
     Album::Type albumType() const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    virtual QModelIndex parent(const QModelIndex& index) const override;
 
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual QStringList mimeTypes() const;
-    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
+    virtual Qt::DropActions supportedDropActions() const override;
+    virtual QStringList mimeTypes() const override;
+    virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const override;
 
 Q_SIGNALS:
 
@@ -221,7 +221,7 @@ public:
 
 protected:
 
-    virtual QString  columnHeader() const;
+    virtual QString  columnHeader() const override;
     void setColumnHeader(const QString& header);
 
     /// You need to call this from your constructor if you intend to load the thumbnail facilities of this class
@@ -304,9 +304,9 @@ protected:
     virtual QString albumName(Album* a) const;
 
     // Reimplemented from parent classes
-    virtual QVariant albumData(Album* a, int role) const;
-    virtual void albumCleared(Album* album);
-    virtual void allAlbumsCleared();
+    virtual QVariant albumData(Album* a, int role) const override;
+    virtual void albumCleared(Album* album) override;
+    virtual void allAlbumsCleared() override;
 
 protected Q_SLOTS:
 
@@ -427,12 +427,12 @@ protected:
      */
     void prepareAddExcludeDecoration(Album* a, QPixmap& icon) const;
 
-    virtual QVariant albumData(Album* a, int role) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual QVariant albumData(Album* a, int role) const override;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-    virtual void albumCleared(Album* album);
-    virtual void allAlbumsCleared();
+    virtual void albumCleared(Album* album) override;
+    virtual void allAlbumsCleared() override;
 
 private:
 

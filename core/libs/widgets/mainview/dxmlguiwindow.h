@@ -182,9 +182,9 @@ protected:
      */
     void editKeyboardShortcuts(KActionCollection* const extraac=0, const QString& actitle=QString());
 
-    void closeEvent(QCloseEvent* e);
-    void keyPressEvent(QKeyEvent* e);
-    bool eventFilter(QObject* obj, QEvent* ev);
+    void closeEvent(QCloseEvent* e) override;
+    void keyPressEvent(QKeyEvent* e) override;
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
     /** Re-implement this method if you want to manage sidebars visibility in full-screen mode.
      *  By default this method do nothing.

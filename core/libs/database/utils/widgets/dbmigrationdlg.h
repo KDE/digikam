@@ -51,7 +51,7 @@ public:
     ~DatabaseCopyThread();
 
     void init(const DbEngineParameters& fromDatabaseSettingsWidget, const DbEngineParameters& toDatabaseSettingsWidget);
-    void run();
+    void run() override;
 
 public:
 

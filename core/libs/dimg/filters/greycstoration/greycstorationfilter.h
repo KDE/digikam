@@ -183,7 +183,7 @@ public:
 
     void setup();
 
-    virtual void cancelFilter();
+    virtual void cancelFilter() override;
 
     static QString cimgVersionString();
 
@@ -207,13 +207,13 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
@@ -224,8 +224,8 @@ private:
     void simpleResize();
     void iterationLoop(uint iter);
 
-    virtual void initFilter();
-    virtual void filterImage();
+    virtual void initFilter() override;
+    virtual void filterImage() override;
 
 private:
 

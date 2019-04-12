@@ -73,7 +73,7 @@ public:
 
     void setPreloadPaths(const QStringList& pathsToPreload);
 
-    QString userLoadingHint() const;
+    QString userLoadingHint() const override;
 
 Q_SIGNALS:
 

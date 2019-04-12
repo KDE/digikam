@@ -169,7 +169,7 @@ public:
      * Reimplemented. Returns a rectangle starting at (0,0) (pos() in parent coordinates)
      * and has a size determined by the relative size.
      */
-    virtual QRectF boundingRect() const;
+    virtual QRectF boundingRect() const override;
 
 protected Q_SLOTS:
 
@@ -197,7 +197,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
 private:
 

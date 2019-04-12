@@ -42,19 +42,19 @@ public:
     explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
     ~DMetaInfoIface();
 
-    Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
-    Q_SLOT void slotMetadataChangedForUrl(const QUrl& url);
+    Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate) override;
+    Q_SLOT void slotMetadataChangedForUrl(const QUrl& url) override;
 
     Q_SIGNAL void signalItemChanged(const QUrl& url);
 
 public:
 
-    QList<QUrl> currentSelectedItems()            const;
-    QList<QUrl> currentAlbumItems()               const;
-    QList<QUrl> allAlbumItems()                   const;
+    QList<QUrl> currentSelectedItems()            const override;
+    QList<QUrl> currentAlbumItems()               const override;
+    QList<QUrl> allAlbumItems()                   const override;
 
-    DInfoMap    itemInfo(const QUrl&)                     const;
-    void        setItemInfo(const QUrl&, const DInfoMap&) const;
+    DInfoMap    itemInfo(const QUrl&)                     const override;
+    void        setItemInfo(const QUrl&, const DInfoMap&) const override;
 
     bool        supportAlbums()                   const;
 

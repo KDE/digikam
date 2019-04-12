@@ -72,17 +72,17 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
 private:
 
-    void filterImage();
-    void readParameters(const FilterAction&);
+    void filterImage() override;
+    void readParameters(const FilterAction&) override;
 
     void correctRedEye(uchar* data, int type, cv::Rect eyerect, cv::Rect imgRect);
     void QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result);
