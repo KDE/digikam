@@ -145,9 +145,9 @@ class NPT_UdpSocketInterface
 
     // methods
     virtual NPT_Result Send(const NPT_DataBuffer&    packet, 
-                            const NPT_SocketAddress* address = nullptr) = 0;
+                            const NPT_SocketAddress* address = NULL) = 0;
     virtual NPT_Result Receive(NPT_DataBuffer&    packet, 
-                               NPT_SocketAddress* address = nullptr) = 0;
+                               NPT_SocketAddress* address = NULL) = 0;
 };
 
 /*----------------------------------------------------------------------
@@ -245,11 +245,11 @@ class NPT_UdpSocket : public NPT_Socket,
 
     // delegate NPT_UdpSocketInterface methods
     NPT_Result Send(const NPT_DataBuffer&    packet,           
-                    const NPT_SocketAddress* address = nullptr) override {
+                    const NPT_SocketAddress* address = NULL) override {
         return m_UdpSocketDelegate->Send(packet, address);              
     }                                                         
     NPT_Result Receive(NPT_DataBuffer&     packet,            
-                       NPT_SocketAddress*  address = nullptr) override {  
+                       NPT_SocketAddress*  address = NULL) override {  
         return m_UdpSocketDelegate->Receive(packet, address);           
     }
 

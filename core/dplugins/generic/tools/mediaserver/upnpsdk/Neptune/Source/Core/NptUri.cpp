@@ -212,7 +212,7 @@ NPT_Uri::PercentEncode(const char* str, const char* chars, bool encode_percents)
     NPT_String encoded;
 
     // check args
-    if (str == nullptr) return encoded;
+    if (str == NULL) return encoded;
 
     // reserve at least the size of the current uri
     encoded.Reserve(NPT_StringLength(str));
@@ -258,7 +258,7 @@ NPT_Uri::PercentDecode(const char* str)
     NPT_String decoded;
 
     // check args
-    if (str == nullptr) return decoded;
+    if (str == NULL) return decoded;
 
     // reserve at least the size of the current uri
     decoded.Reserve(NPT_StringLength(str));
@@ -441,7 +441,7 @@ NPT_UrlQuery::GetField(const char* name)
     }
 
     // field not found
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -489,7 +489,7 @@ NPT_Result
 NPT_Url::Parse(const char* url, NPT_UInt16 default_port)
 {
     // check parameters
-    if (url == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (url == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
     // set the uri scheme
     NPT_Result result = SetSchemeFromUri(url);
@@ -596,9 +596,9 @@ NPT_Url::NPT_Url(const char* scheme,
     m_Host(host),
     m_Port(port),
     m_Path(path),
-    m_HasQuery(query != nullptr),
+    m_HasQuery(query != NULL),
     m_Query(query),
-    m_HasFragment(fragment != nullptr),
+    m_HasFragment(fragment != NULL),
     m_Fragment(fragment)
 {
     SetScheme(scheme);
@@ -689,7 +689,7 @@ NPT_Result
 NPT_Url::ParsePathPlus(const char* path_plus)
 {
     // check parameters
-    if (path_plus == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (path_plus == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
     // reset any existing values
     m_Path.SetLength(0);
@@ -766,7 +766,7 @@ NPT_Url::SetQuery(const char* query, bool encoded)
     } else {
         m_Query = PercentEncode(query, QueryCharsToEncode);
     }
-    m_HasQuery = query!=nullptr && NPT_StringLength(query)>0;
+    m_HasQuery = query!=NULL && NPT_StringLength(query)>0;
 
     return NPT_SUCCESS;
 }
@@ -782,7 +782,7 @@ NPT_Url::SetFragment(const char* fragment, bool encoded)
     } else {
         m_Fragment = PercentEncode(fragment, FragmentCharsToEncode);
     }
-    m_HasFragment = fragment!=nullptr;
+    m_HasFragment = fragment!=NULL;
 
     return NPT_SUCCESS;
 }

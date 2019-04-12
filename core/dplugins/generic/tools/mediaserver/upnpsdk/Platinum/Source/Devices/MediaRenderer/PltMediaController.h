@@ -244,7 +244,7 @@ class PLT_MediaController : public PLT_CtrlPointListener
 {
 public:
     PLT_MediaController(PLT_CtrlPointReference&      ctrl_point, 
-                        PLT_MediaControllerDelegate* delegate = nullptr);
+                        PLT_MediaControllerDelegate* delegate = NULL);
     ~PLT_MediaController() override;
 
     // public methods
@@ -298,7 +298,7 @@ public:
     virtual NPT_Result FindBestResource(PLT_DeviceDataReference& device, PLT_MediaObject& item, NPT_Cardinal& resource_index);
 
 private:
-    NPT_Result InvokeActionWithInstance(PLT_ActionReference& action, NPT_UInt32 instance_id, void* userdata = nullptr);
+    NPT_Result InvokeActionWithInstance(PLT_ActionReference& action, NPT_UInt32 instance_id, void* userdata = NULL);
 
     NPT_Result OnGetCurrentTransportActionsResponse(NPT_Result res, PLT_DeviceDataReference& device, PLT_ActionReference& action, void* userdata);
     NPT_Result OnGetDeviceCapabilitiesResponse(NPT_Result res, PLT_DeviceDataReference& device, PLT_ActionReference& action, void* userdata);

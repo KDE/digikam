@@ -130,9 +130,9 @@ private:
 |   PLT_UPnP::PLT_UPnP
 +---------------------------------------------------------------------*/
 PLT_UPnP::PLT_UPnP() :
-    m_TaskManager(nullptr),
+    m_TaskManager(NULL),
     m_Started(false),
-    m_SsdpListenTask(nullptr),
+    m_SsdpListenTask(NULL),
 	m_IgnoreLocalUUIDs(true)
 {
 }
@@ -205,8 +205,8 @@ PLT_UPnP::Stop()
 
     // stop remaining tasks
     m_TaskManager->Abort();
-    m_SsdpListenTask = nullptr;
-    m_TaskManager = nullptr;
+    m_SsdpListenTask = NULL;
+    m_TaskManager = NULL;
 
     m_Started = false;
     return NPT_SUCCESS;

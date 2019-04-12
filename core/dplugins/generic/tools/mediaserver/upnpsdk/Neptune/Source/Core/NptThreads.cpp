@@ -43,9 +43,9 @@ NPT_Mutex NPT_SingletonLock::Instance;
 |   NPT_ThreadCallbackSlot::NPT_ThreadCallbackSlot
 +---------------------------------------------------------------------*/
 NPT_ThreadCallbackSlot::NPT_ThreadCallbackSlot() :
-    m_CallbackArgs(nullptr),
+    m_CallbackArgs(NULL),
     m_Shutdown(false),
-    m_NotificationHelper(nullptr)
+    m_NotificationHelper(NULL)
 {
 }
 
@@ -155,7 +155,7 @@ NPT_ThreadCallbackSlot::SendCallback(void* args)
 
     // done
     m_Ack.SetValue(0);
-    m_CallbackArgs = nullptr;
+    m_CallbackArgs = NULL;
 
     return m_Shutdown?NPT_ERROR_CALLBACK_HANDLER_SHUTDOWN:NPT_SUCCESS;
 }

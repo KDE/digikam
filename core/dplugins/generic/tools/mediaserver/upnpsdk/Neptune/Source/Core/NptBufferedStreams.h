@@ -63,7 +63,7 @@ public:
                                 bool        break_on_cr = false);
     virtual NPT_Result ReadLine(char*     buffer, 
                                 NPT_Size  buffer_size,
-                                NPT_Size* chars_read = nullptr,
+                                NPT_Size* chars_read = NULL,
                                 bool      break_on_cr = false);
     virtual NPT_Result SetBufferSize(NPT_Size size, bool force = false);
     virtual NPT_Result Peek(void*     buffer, 
@@ -73,7 +73,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                     NPT_Size  bytes_to_read, 
-                    NPT_Size* bytes_read = nullptr) override;
+                    NPT_Size* bytes_read = NULL) override;
     NPT_Result Seek(NPT_Position offset) override;
     NPT_Result Tell(NPT_Position& offset) override;
     NPT_Result GetSize(NPT_LargeSize& size) override;

@@ -61,10 +61,10 @@ public:
     PLT_MediaCache<T,U>() {}
     virtual ~PLT_MediaCache<T,U>() {}
 
-    NPT_Result Put(const char* root, const char* key, T& value, U* tag = nullptr);
-    NPT_Result Get(const char* root, const char* key, T& value, U* tag = nullptr);
+    NPT_Result Put(const char* root, const char* key, T& value, U* tag = NULL);
+    NPT_Result Get(const char* root, const char* key, T& value, U* tag = NULL);
     NPT_Result Clear(const char* root, const char* key);
-    NPT_Result Clear(const char* root = nullptr);
+    NPT_Result Clear(const char* root = NULL);
 
 private:
     // methods
@@ -132,7 +132,7 @@ PLT_MediaCache<T,U>::Get(const char* root,
     NPT_String fullkey = GenerateKey(root, key);
     if (fullkey.GetLength() == 0) return NPT_ERROR_INVALID_PARAMETERS;
     
-    T* _value = nullptr;
+    T* _value = NULL;
     NPT_CHECK(m_Items.Get(fullkey, _value));
     
     U* _tag;

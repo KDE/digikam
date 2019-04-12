@@ -140,16 +140,16 @@ class NPT_XmlNode
     } Type;
 
     // methods
-    NPT_XmlNode(Type type) : m_Type(type), m_Parent(nullptr) {}
+    NPT_XmlNode(Type type) : m_Type(type), m_Parent(NULL) {}
     virtual     ~NPT_XmlNode() {}
     Type         GetType() const { return m_Type; }
     NPT_XmlNode* GetParent() const { return m_Parent; }
 
     // type casting
-    virtual NPT_XmlElementNode*       AsElementNode()       { return nullptr; }
-    virtual const NPT_XmlElementNode* AsElementNode() const { return nullptr; }
-    virtual NPT_XmlTextNode*          AsTextNode()          { return nullptr; }
-    virtual const NPT_XmlTextNode*    AsTextNode() const    { return nullptr; }
+    virtual NPT_XmlElementNode*       AsElementNode()       { return NULL; }
+    virtual const NPT_XmlElementNode* AsElementNode() const { return NULL; }
+    virtual NPT_XmlTextNode*          AsTextNode()          { return NULL; }
+    virtual const NPT_XmlTextNode*    AsTextNode() const    { return NULL; }
 
  protected:
     // methods

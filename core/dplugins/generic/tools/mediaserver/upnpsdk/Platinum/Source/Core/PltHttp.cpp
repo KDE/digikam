@@ -81,7 +81,7 @@ public:
         m_Stream->WriteString(header->GetName());
         m_Stream->Write(": ", 2);
         m_Stream->WriteString(header->GetValue());
-        m_Stream->Write("\r\n", 2, nullptr);
+        m_Stream->Write("\r\n", 2, NULL);
         return NPT_SUCCESS;
     }
 
@@ -197,7 +197,7 @@ PLT_HttpHelper::SetBody(NPT_HttpMessage&         message,
 {
     // get the entity
     NPT_HttpEntity* _entity = message.GetEntity();
-    if (_entity == nullptr) {
+    if (_entity == NULL) {
         // no entity yet, create one
         message.SetEntity(_entity = new NPT_HttpEntity());
     }
@@ -243,7 +243,7 @@ PLT_HttpHelper::ParseBody(const NPT_HttpMessage& message,
                           NPT_XmlElementNode*&   tree) 
 {
     // reset tree
-    tree = nullptr;
+    tree = NULL;
 
     // read body
     NPT_String body;

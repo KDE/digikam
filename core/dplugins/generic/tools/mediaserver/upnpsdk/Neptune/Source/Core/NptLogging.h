@@ -154,7 +154,7 @@ public:
     // methods
     NPT_LogManager();
     ~NPT_LogManager();
-    NPT_Result                    Configure(const char* config_sources = nullptr);
+    NPT_Result                    Configure(const char* config_sources = NULL);
     NPT_String*                   GetConfigValue(const char* prefix, const char* suffix);
     NPT_List<NPT_Logger*>&        GetLoggers() { return m_Loggers; }
     NPT_List<NPT_LogConfigEntry>& GetConfig()  { return m_Config;  }

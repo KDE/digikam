@@ -165,7 +165,7 @@ PLT_SsdpDeviceSearchResponseInterfaceIterator::operator()(NPT_NetworkInterface*&
         }
 
         // socket already connected, so we don't need to specify where to go
-        remote_addr = nullptr;
+        remote_addr = NULL;
     }
 
     NPT_HttpResponse response(200, "OK", NPT_HTTP_PROTOCOL_1_1);
@@ -418,7 +418,7 @@ PLT_SsdpSearchTask::DoAbort()
 void
 PLT_SsdpSearchTask::DoRun()
 {
-    NPT_HttpResponse*      response = nullptr;
+    NPT_HttpResponse*      response = NULL;
     NPT_Timeout            timeout = 30000;
     NPT_HttpRequestContext context;
 
@@ -447,7 +447,7 @@ PLT_SsdpSearchTask::DoRun()
                                    *m_Request,
                                    false), 
                                done);
-        output_stream = nullptr;
+        output_stream = NULL;
 
         // keep track of when we sent the request
         NPT_TimeStamp last_send;
@@ -476,7 +476,7 @@ PLT_SsdpSearchTask::DoRun()
                 // process response
                 ProcessResponse(NPT_SUCCESS, *m_Request, context, response);
                 delete response;
-                response = nullptr;
+                response = NULL;
             } else if (res != NPT_ERROR_TIMEOUT) {
                 NPT_LOG_WARNING_1("PLT_SsdpSearchTask got an error (%d) waiting for response", res);
                 if (IsAborting(0))
@@ -485,7 +485,7 @@ PLT_SsdpSearchTask::DoRun()
                 NPT_System::Sleep(NPT_TimeInterval(.15f));
             }
 
-            input_stream = nullptr;
+            input_stream = NULL;
 
             // check if it's time to resend request
             NPT_TimeStamp now;

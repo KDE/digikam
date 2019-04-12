@@ -44,8 +44,8 @@ NPT_SET_LOCAL_LOGGER("platinum.core.threadtask")
 |   PLT_ThreadTask::PLT_ThreadTask
 +---------------------------------------------------------------------*/
 PLT_ThreadTask::PLT_ThreadTask() :
-    m_TaskManager(nullptr),
-    m_Thread(nullptr),
+    m_TaskManager(NULL),
+    m_Thread(NULL),
     m_AutoDestroy(false)
 {
 }
@@ -100,7 +100,7 @@ PLT_ThreadTask::StartThread()
         // delete thread manually in case m_AutoDestroy was true
         if (m_AutoDestroy) {
             delete m_Thread;
-            m_Thread = nullptr;
+            m_Thread = NULL;
         }
         
         NPT_CHECK_FATAL(result);

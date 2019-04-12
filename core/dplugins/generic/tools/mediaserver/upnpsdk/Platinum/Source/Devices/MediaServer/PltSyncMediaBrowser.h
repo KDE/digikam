@@ -93,7 +93,7 @@ class PLT_SyncMediaBrowser : public PLT_MediaBrowser,
 public:
     PLT_SyncMediaBrowser(PLT_CtrlPointReference&            ctrlPoint, 
                          bool                               use_cache = false, 
-                         PLT_MediaContainerChangesListener* listener = nullptr);
+                         PLT_MediaContainerChangesListener* listener = NULL);
     ~PLT_SyncMediaBrowser() override;
 
     // PLT_MediaBrowser methods

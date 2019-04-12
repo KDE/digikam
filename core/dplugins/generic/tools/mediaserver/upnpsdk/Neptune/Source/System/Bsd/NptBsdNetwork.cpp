@@ -148,7 +148,7 @@ NPT_NetworkInterface::GetNetworkInterfaces(NPT_List<NPT_NetworkInterface*>& inte
   
         // get a pointer to an interface we've looped over before
         // or create a new one
-        NPT_NetworkInterface* interface = nullptr;
+        NPT_NetworkInterface* interface = NULL;
         for (NPT_List<NPT_NetworkInterface*>::Iterator iface_iter = interfaces.GetFirstItem();
                                                        iface_iter;
                                                      ++iface_iter) {
@@ -157,7 +157,7 @@ NPT_NetworkInterface::GetNetworkInterfaces(NPT_List<NPT_NetworkInterface*>& inte
                 break;
             }
         }
-        if (interface == nullptr) {
+        if (interface == NULL) {
             // create a new interface object
             interface = new NPT_NetworkInterface(entry->ifr_name, flags);
 

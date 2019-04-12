@@ -69,7 +69,7 @@ NPT_Result
 PLT_MediaController::OnDeviceAdded(PLT_DeviceDataReference& device)
 {
     // verify the device implements the function we need
-    PLT_Service* serviceAVT = nullptr;
+    PLT_Service* serviceAVT = NULL;
     PLT_Service* serviceCMR;
 	PLT_Service* serviceRC;
     NPT_String   type;
@@ -825,7 +825,7 @@ PLT_MediaController::OnActionResponse(NPT_Result           res,
                                       PLT_ActionReference& action, 
                                       void*                userdata)
 {
-    if (m_Delegate == nullptr) return NPT_SUCCESS;
+    if (m_Delegate == NULL) return NPT_SUCCESS;
 
     PLT_DeviceDataReference device;
     NPT_String uuid = action->GetActionDesc().GetService()->GetDevice()->GetUUID();
@@ -953,7 +953,7 @@ PLT_MediaController::OnGetCurrentTransportActionsResponse(NPT_Result            
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetCurrentTransportActionsResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetCurrentTransportActionsResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -995,7 +995,7 @@ PLT_MediaController::OnGetDeviceCapabilitiesResponse(NPT_Result               re
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetDeviceCapabilitiesResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetDeviceCapabilitiesResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1051,7 +1051,7 @@ PLT_MediaController::OnGetMediaInfoResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetMediaInfoResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetMediaInfoResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1122,7 +1122,7 @@ PLT_MediaController::OnGetPositionInfoResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetPositionInfoResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetPositionInfoResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1155,7 +1155,7 @@ PLT_MediaController::OnGetTransportInfoResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetTransportInfoResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetTransportInfoResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1185,7 +1185,7 @@ PLT_MediaController::OnGetTransportSettingsResponse(NPT_Result               res
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetTransportSettingsResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetTransportSettingsResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1215,7 +1215,7 @@ PLT_MediaController::OnGetCurrentConnectionIDsResponse(NPT_Result               
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetCurrentConnectionIDsResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetCurrentConnectionIDsResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1260,7 +1260,7 @@ PLT_MediaController::OnGetCurrentConnectionInfoResponse(NPT_Result              
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetCurrentConnectionInfoResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnGetCurrentConnectionInfoResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -1294,7 +1294,7 @@ PLT_MediaController::OnGetProtocolInfoResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnGetProtocolInfoResult(NPT_FAILURE, device, nullptr, nullptr, userdata);
+    m_Delegate->OnGetProtocolInfoResult(NPT_FAILURE, device, NULL, NULL, userdata);
     return NPT_FAILURE;
 }
 

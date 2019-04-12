@@ -107,7 +107,7 @@ protected:
                                  NPT_HttpResponse&             response,
                                  const NPT_String&             file_path);
     virtual NPT_Result GetFilePath(const char* object_id, NPT_String& filepath);
-    virtual bool       ProcessFile(const NPT_String&, const char* filter = nullptr) { NPT_COMPILER_UNUSED(filter); return true;}
+    virtual bool       ProcessFile(const NPT_String&, const char* filter = NULL) { NPT_COMPILER_UNUSED(filter); return true;}
     virtual PLT_MediaObject* BuildFromFilePath(const NPT_String&             filepath, 
                                                const PLT_HttpRequestContext& context,
                                                bool                          with_count = true,
@@ -142,7 +142,7 @@ public:    // constructor
     PLT_FileMediaServer(const char*  file_root,
                         const char*  friendly_name,
                         bool         show_ip = false,
-                        const char*  uuid = nullptr,
+                        const char*  uuid = NULL,
                         NPT_UInt16   port = 0,
                         bool         port_rebind = false) :
         PLT_MediaServer(friendly_name, 

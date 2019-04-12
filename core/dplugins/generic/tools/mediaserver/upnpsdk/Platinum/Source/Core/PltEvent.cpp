@@ -95,7 +95,7 @@ bad_request:
         response.SetStatus(412, "Precondition Failed");
     }
     delete notification;
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -108,7 +108,7 @@ PLT_EventSubscriber::PLT_EventSubscriber(PLT_TaskManagerReference task_manager,
     m_TaskManager(task_manager), 
     m_Service(service), 
     m_EventKey(0),
-    m_SubscriberTask(nullptr),
+    m_SubscriberTask(NULL),
     m_SID(sid)
 {
     NPT_LOG_FINE_1("Creating new subscriber (%s)", m_SID.GetChars());
@@ -123,7 +123,7 @@ PLT_EventSubscriber::~PLT_EventSubscriber()
     NPT_LOG_FINE_1("Deleting subscriber (%s)", m_SID.GetChars());
     if (m_SubscriberTask) {
         m_SubscriberTask->Kill();
-        m_SubscriberTask = nullptr;
+        m_SubscriberTask = NULL;
     }
 }
 
@@ -265,7 +265,7 @@ PLT_EventSubscriber::Notify(NPT_List<PLT_StateVariable*>& vars)
     if (NPT_FAILED(PLT_XmlHelper::Serialize(*propertyset, xml))) {
         NPT_CHECK_FATAL(NPT_FAILURE);
     }
-    propertyset = nullptr;
+    propertyset = NULL;
 
     // parse the callback url
     NPT_HttpUrl url(m_CallbackURLs[0]);
@@ -306,7 +306,7 @@ PLT_EventSubscriber::Notify(NPT_List<PLT_StateVariable*>& vars)
         // before our first NOTIFY. Also make sure task is not auto-destroy
         // since we want to destroy it manually when the subscriber goes away.
         NPT_TimeInterval delay(0.05f);
-        NPT_CHECK_FATAL(m_TaskManager->StartTask(task.AsPointer(), nullptr /*&delay*/, false));
+        NPT_CHECK_FATAL(m_TaskManager->StartTask(task.AsPointer(), NULL /*&delay*/, false));
         
         // Task successfully started, keep around for future notifications
         m_SubscriberTask = task.AsPointer();

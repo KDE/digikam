@@ -60,7 +60,7 @@ class PLT_HttpClientSocketTask : public PLT_ThreadTask
 friend class PLT_ThreadTask;
 
 public:
-    PLT_HttpClientSocketTask(NPT_HttpRequest* request = nullptr, 
+    PLT_HttpClientSocketTask(NPT_HttpRequest* request = NULL, 
                              bool             wait_forever = false);
     ~PLT_HttpClientSocketTask() override;
 

@@ -115,7 +115,7 @@ class PLT_MediaBrowser : public PLT_CtrlPointListener
 {
 public:
     PLT_MediaBrowser(PLT_CtrlPointReference&   ctrl_point,
-                     PLT_MediaBrowserDelegate* delegate = nullptr);
+                     PLT_MediaBrowserDelegate* delegate = NULL);
     ~PLT_MediaBrowser() override;
 
     // ContentDirectory service
@@ -126,7 +126,7 @@ public:
                               bool                     browse_metadata = false,
                               const char*              filter = "dc:date,upnp:genre,res,res@duration,res@size,upnp:albumArtURI,upnp:originalTrackNumber,upnp:album,upnp:artist,upnp:author", // explicitly specify res otherwise WMP won't return a URL!
                               const char*              sort_criteria = "",
-                              void*                    userdata = nullptr);
+                              void*                    userdata = NULL);
 
 	virtual NPT_Result Search(PLT_DeviceDataReference& device, 
 		                      const char*              container_id,
@@ -134,13 +134,13 @@ public:
 				              NPT_UInt32               start_index,
 					          NPT_UInt32               count = 30, // DLNA recommendations
                               const char*              filter = "dc:date,upnp:genre,res,res@duration,res@size,upnp:albumArtURI,upnp:originalTrackNumber,upnp:album,upnp:artist,upnp:author", // explicitly specify res otherwise WMP won't return a URL!
-						  	  void*                    userdata = nullptr);
+						  	  void*                    userdata = NULL);
 
     virtual NPT_Result GetSearchCapabilities(PLT_DeviceDataReference& device,
-                                             void*                    userdata = nullptr);
+                                             void*                    userdata = NULL);
 
     virtual NPT_Result GetSortCapabilities(PLT_DeviceDataReference& device,
-                                           void*                    userdata = nullptr);
+                                           void*                    userdata = NULL);
 
     // methods
     virtual const NPT_Lock<PLT_DeviceDataReferenceList>& GetMediaServers() { return m_MediaServers; }

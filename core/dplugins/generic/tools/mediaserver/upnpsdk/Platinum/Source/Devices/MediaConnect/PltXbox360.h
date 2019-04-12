@@ -43,7 +43,7 @@
 class PLT_Xbox360 : public PLT_MediaRenderer
 {
 public:
-    PLT_Xbox360(const char*  uuid        = nullptr, 
+    PLT_Xbox360(const char*  uuid        = NULL, 
                 unsigned int port        = 0,
                 bool         port_rebind = false);
 
@@ -61,7 +61,7 @@ protected:
     // PLT_DeviceData methods
     NPT_Result GetDescription(NPT_String& desc) override { return PLT_MediaRenderer::GetDescription(desc); }
     NPT_Result GetDescription(NPT_XmlElementNode*  parent, 
-                                      NPT_XmlElementNode** device = nullptr) override;
+                                      NPT_XmlElementNode** device = NULL) override;
 
 protected:
     ~PLT_Xbox360() override;

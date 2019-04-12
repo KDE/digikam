@@ -253,7 +253,7 @@ NPT_LogHandler::Create(const char*      logger_name,
                        const char*      handler_name,
                        NPT_LogHandler*& handler)
 {
-    handler = nullptr;
+    handler = NULL;
 
     if (NPT_StringsEqual(handler_name, "NullHandler")) {
         return NPT_LogNullHandler::Create(handler);
@@ -343,7 +343,7 @@ NPT_Log::GetLogLevelAnsiColor(int level)
         case NPT_LOG_LEVEL_FINE:    return "34";
         case NPT_LOG_LEVEL_FINER:   return "35";
         case NPT_LOG_LEVEL_FINEST:  return "36";
-        default:                    return nullptr;
+        default:                    return NULL;
     }
 }
 
@@ -378,14 +378,14 @@ NPT_Log::FormatRecordToStream(const NPT_LogRecord& record,
             }
         }
         stream.WriteString(record.m_SourceFile + start);
-        stream.Write("(", 1, nullptr);
+        stream.Write("(", 1, NULL);
         stream.WriteString(NPT_String::FromIntegerU(record.m_SourceLine));
-        stream.Write("): ", 3, nullptr);
+        stream.Write("): ", 3, NULL);
     }
     if ((format_filter & NPT_LOG_FORMAT_FILTER_NO_LOGGER_NAME) == 0) {
-        stream.Write("[", 1, nullptr);
+        stream.Write("[", 1, NULL);
         stream.WriteString(record.m_LoggerName);
-        stream.Write("] ", 2, nullptr);
+        stream.Write("] ", 2, NULL);
     }
     if ((format_filter & NPT_LOG_FORMAT_FILTER_NO_TIMESTAMP) == 0) {
         NPT_String ts = NPT_DateTime(record.m_TimeStamp, true).ToString(NPT_DateTime::FORMAT_W3C, 
@@ -402,26 +402,26 @@ NPT_Log::FormatRecordToStream(const NPT_LogRecord& record,
         stream.WriteFully("] ",2);
     }
     if ((format_filter & NPT_LOG_FORMAT_FILTER_NO_THREAD_ID) == 0) {
-        stream.Write("(", 1, nullptr);
+        stream.Write("(", 1, NULL);
         stream.WriteString(NPT_String::FromIntegerU(record.m_ThreadId));
-        stream.Write(") ", 2, nullptr);
+        stream.Write(") ", 2, NULL);
     }
-    const char* ansi_color = nullptr;
+    const char* ansi_color = NULL;
     if (use_colors) {
         ansi_color = GetLogLevelAnsiColor(record.m_Level);
         if (ansi_color) {
-            stream.Write("\033[", 2, nullptr);
+            stream.Write("\033[", 2, NULL);
             stream.WriteString(ansi_color);
-            stream.Write(";1m", 3, nullptr);
+            stream.Write(";1m", 3, NULL);
         }
     }
     stream.WriteString(level_name);
     if (use_colors && ansi_color) {
-        stream.Write("\033[0m", 4, nullptr);
+        stream.Write("\033[0m", 4, NULL);
     }
-    stream.Write(": ", 2, nullptr);
+    stream.Write(": ", 2, NULL);
     stream.WriteString(record.m_Message);
-    stream.Write("\r\n", 2, nullptr);
+    stream.Write("\r\n", 2, NULL);
 }
 
 /*----------------------------------------------------------------------
@@ -431,7 +431,7 @@ NPT_LogManager::NPT_LogManager() :
     m_LockOwner(0),
     m_Enabled(true),
     m_Configured(false),
-    m_Root(nullptr)
+    m_Root(NULL)
 {
 }
 
@@ -501,7 +501,7 @@ NPT_LogManager::Configure(const char* config_sources)
     SetConfigValue(".handlers", NPT_LOG_ROOT_DEFAULT_HANDLER);
 
     // see if the config sources have been set to non-default values
-    if (config_sources == nullptr) {
+    if (config_sources == NULL) {
         config_sources = NPT_CONFIG_DEFAULT_LOG_CONFIG_SOURCE;
     }
     NPT_String config_sources_system;
@@ -581,14 +581,14 @@ NPT_LogManager::GetConfigValue(const char* prefix, const char* suffix)
          ++i) {
         NPT_LogConfigEntry& entry = *i;
         if ((entry.m_Key.GetLength() == key_length) &&
-            (prefix == nullptr || entry.m_Key.StartsWith(prefix)) &&
-            (suffix == nullptr || entry.m_Key.EndsWith(suffix  )) ) {
+            (prefix == NULL || entry.m_Key.StartsWith(prefix)) &&
+            (suffix == NULL || entry.m_Key.EndsWith(suffix  )) ) {
             return &entry.m_Value;
         }
     }
 
     // not found
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -597,7 +597,7 @@ NPT_LogManager::GetConfigValue(const char* prefix, const char* suffix)
 NPT_Result
 NPT_LogManager::SetConfigValue(const char* key, const char* value)
 {
-    NPT_String* value_string = GetConfigValue(key, nullptr);
+    NPT_String* value_string = GetConfigValue(key, NULL);
     if (value_string) {
         /* the key already exists, replace the value */
         *value_string = value;
@@ -618,7 +618,7 @@ NPT_LogManager::ParseConfig(const char* config,
 {
     const char* cursor    = config;
     const char* line      = config;
-    const char* separator = nullptr;
+    const char* separator = NULL;
     NPT_String  key;
     NPT_String  value;
 
@@ -640,8 +640,8 @@ NPT_LogManager::ParseConfig(const char* config,
                 SetConfigValue((const char*)key, (const char*)value);
             }
             line = cursor+1;
-            separator = nullptr;
-        } else if (*cursor == '=' && separator == nullptr) {
+            separator = NULL;
+        } else if (*cursor == '=' && separator == NULL) {
             separator = cursor;
         }
         cursor++;
@@ -796,7 +796,7 @@ NPT_LogManager::FindLogger(const char* name)
         }
     }
 
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -806,7 +806,7 @@ NPT_Logger*
 NPT_LogManager::GetLogger(const char* name)
 {
     // exit now if the log manager is disabled
-    if (!LogManager.m_Enabled) return nullptr;
+    if (!LogManager.m_Enabled) return NULL;
 
     // auto lock until we return from this method
     NPT_LogManagerAutoLocker lock(LogManager);
@@ -824,7 +824,7 @@ NPT_LogManager::GetLogger(const char* name)
 
     /* create a new logger */
     logger = new NPT_Logger(name, LogManager);
-    if (logger == nullptr) return nullptr;
+    if (logger == NULL) return NULL;
 
     /* configure the logger */
     LogManager.ConfigureLogger(logger);
@@ -872,7 +872,7 @@ NPT_Logger::NPT_Logger(const char* name, NPT_LogManager& manager) :
     m_Level(NPT_LOG_LEVEL_OFF),
     m_LevelIsInherited(true),
     m_ForwardToParent(true),
-    m_Parent(nullptr)
+    m_Parent(NULL)
 {
 }
 
@@ -943,7 +943,7 @@ NPT_Logger::Log(int          level,
         if (buffer_size > NPT_LOG_HEAP_BUFFER_MAX_SIZE) break;
         if (message != buffer) delete[] message;
         message = new char[buffer_size];
-        if (message == nullptr) return;
+        if (message == NULL) return;
     }
 
     /* the message is formatted, publish it to the handlers */
@@ -993,7 +993,7 @@ NPT_Result
 NPT_Logger::AddHandler(NPT_LogHandler* handler, bool transfer_ownership /* = true */)
 {
     /* check parameters */
-    if (handler == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (handler == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
 	/* keep track of what handlers we won't cleanup */
 	if (!transfer_ownership) m_ExternalHandlers.Add(handler);
@@ -1039,7 +1039,7 @@ NPT_LogNullHandler::Log(const NPT_LogRecord& /*record*/)
 }
 
 
-NPT_LogHandler::CustomHandlerExternalFunction NPT_LogCustomHandler::s_ExternalFunction = nullptr;
+NPT_LogHandler::CustomHandlerExternalFunction NPT_LogCustomHandler::s_ExternalFunction = NULL;
 /*----------------------------------------------------------------------
 |   NPT_LogCustomHandler::SetCustomHandlerFunction
 +---------------------------------------------------------------------*/
@@ -1150,7 +1150,7 @@ NPT_LogFileHandler::Log(const NPT_LogRecord& record)
         if (size > m_MaxFilesize) {
             /* release stream to force a reopen later 
                and to be able to rename file */
-            m_Stream = nullptr;
+            m_Stream = NULL;
 
             /* rename file using current time */
             NPT_TimeStamp now;
@@ -1187,7 +1187,7 @@ NPT_Result
 NPT_LogFileHandler::Open(bool append /* = true */)
 {
     /* reset stream just in case */
-    m_Stream = nullptr;
+    m_Stream = NULL;
             
     /* open the log file */
     NPT_File file(m_Filename);
@@ -1388,7 +1388,7 @@ NPT_LogTcpHandler::Log(const NPT_LogRecord& record)
     
     // log, and disconnect if this fails
     if (NPT_FAILED(m_Stream->WriteString(msg))) {
-        m_Stream = nullptr;
+        m_Stream = NULL;
     }
 }
 

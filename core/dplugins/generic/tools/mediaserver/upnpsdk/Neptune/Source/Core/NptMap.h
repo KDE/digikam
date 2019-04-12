@@ -156,7 +156,7 @@ NPT_Map<K,V>::GetEntry(const K& key) const
         ++entry;
     }
 
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -167,7 +167,7 @@ NPT_Result
 NPT_Map<K,V>::Put(const K& key, const V& value)
 {
     Entry* entry = GetEntry(key);
-    if (entry == nullptr) {
+    if (entry == NULL) {
         // no existing entry for that key, create one
         m_Entries.Add(new Entry(key, value));
     } else {
@@ -186,9 +186,9 @@ NPT_Result
 NPT_Map<K,V>::Get(const K& key, V*& value) const
 {
     Entry* entry = GetEntry(key);
-    if (entry == nullptr) {
+    if (entry == NULL) {
         // no existing entry for that key
-        value = nullptr;
+        value = NULL;
         return NPT_ERROR_NO_SUCH_ITEM;
     } else {
         // found an entry with that key
@@ -305,7 +305,7 @@ V&
 NPT_Map<K,V>::operator[](const K& key)
 {
     Entry* entry = GetEntry(key);
-    if (entry == nullptr) {
+    if (entry == NULL) {
         // create a new "default" entry for this key
         entry = new Entry(key);
         m_Entries.Add(entry);
@@ -438,7 +438,7 @@ public:
 
 private:
     // methods
-    Entry*     GetEntry(const K& key, NPT_UInt32* position=nullptr) const;
+    Entry*     GetEntry(const K& key, NPT_UInt32* position=NULL) const;
     NPT_Result AddEntry(Entry* entry);
     void       AllocateBuckets(unsigned int count_log);
     void       AdjustBuckets(NPT_Cardinal entry_count, bool allow_shrink=false);

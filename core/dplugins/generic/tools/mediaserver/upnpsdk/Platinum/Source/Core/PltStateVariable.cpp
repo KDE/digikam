@@ -47,7 +47,7 @@ NPT_SET_LOCAL_LOGGER("platinum.core.statevariable")
 +---------------------------------------------------------------------*/
 PLT_StateVariable::PLT_StateVariable(PLT_Service* service) : 
     m_Service(service), 
-    m_AllowedValueRange(nullptr),
+    m_AllowedValueRange(NULL),
     m_IsSendingEvents(false),
     m_IsSendingEventsIndirectly(true),
     m_ShouldClearOnSend(false)
@@ -149,7 +149,7 @@ PLT_StateVariable::SetRate(NPT_TimeInterval rate)
 NPT_Result
 PLT_StateVariable::SetValue(const char* value, const bool clearonsend /*=false*/)
 {
-    if (value == nullptr) {
+    if (value == NULL) {
         return NPT_FAILURE;
     }
 
@@ -237,7 +237,7 @@ PLT_StateVariable::ValidateValue(const char* value)
 PLT_StateVariable*
 PLT_StateVariable::Find(NPT_List<PLT_StateVariable*>& vars, const char* name)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(vars, PLT_StateVariableNameFinder(name), stateVariable);
     return stateVariable;
 }

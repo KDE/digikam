@@ -71,7 +71,7 @@ PLT_MediaServer::PLT_MediaServer(const char*  friendly_name,
                    show_ip, 
                    port,
                    port_rebind),
-    m_Delegate(nullptr)
+    m_Delegate(NULL)
 {
     m_ModelDescription = "Plutinosoft AV Media Server Device";
     m_ModelName        = "AV Media Server Device";
@@ -111,7 +111,7 @@ PLT_MediaServer::SetupServices()
         service->SetStateVariable("SortCapability", "dc:title,upnp:genre,upnp:album,dc:creator,res@size,res@duration,res@bitrate,dc:publisher,dc:language,upnp:originalTrackNumber,dc:date,upnp:producer,upnp:rating,upnp:actor,upnp:director,upnp:toc,dc:description,microsoft:year,microsoft:userRatingInStars,microsoft:userEffectiveRatingInStars,microsoft:userRating,microsoft:userEffectiveRating,microsoft:serviceProvider,microsoft:artistAlbumArtist,microsoft:artistPerformer,microsoft:artistConductor,microsoft:authorComposer,microsoft:authorOriginalLyricist,microsoft:authorWriter,microsoft:sourceUrl,upnp:userAnnotation,upnp:channelName,upnp:longDescription,upnp:programTitle");
         
         service.Detach();
-        service = nullptr;
+        service = NULL;
     }
 
     {
@@ -128,7 +128,7 @@ PLT_MediaServer::SetupServices()
         service->SetStateVariable("SourceProtocolInfo", "http-get:*:*:*");
         
         service.Detach();
-        service = nullptr;
+        service = NULL;
     }
 
     return NPT_SUCCESS;
@@ -368,8 +368,8 @@ PLT_MediaServer::ParseTagList(const NPT_String& updates, NPT_Map<NPT_String,NPT_
     tags.Clear();
 
     NPT_List<NPT_String> split = updates.Split(",");
-    NPT_XmlNode*        node = nullptr;
-    NPT_XmlElementNode* didl_partial = nullptr;
+    NPT_XmlNode*        node = NULL;
+    NPT_XmlElementNode* didl_partial = NULL;
     NPT_XmlParser       parser;
 
     // as these are single name value pairs, separated by commas we wrap in a tag
@@ -596,7 +596,7 @@ PLT_MediaServer::OnUpdate(PLT_ActionReference&          action,
         return NPT_ERROR_NOT_IMPLEMENTED;
 
     int err;
-    const char* msg = nullptr;
+    const char* msg = NULL;
 
     NPT_String object_id, current_xml, new_xml;
     NPT_Map<NPT_String,NPT_String> curr_values;

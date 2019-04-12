@@ -128,8 +128,8 @@ public:
 NPT_PosixSharedVariable::NPT_PosixSharedVariable(int value) : 
     m_Value(value)
 {
-    pthread_mutex_init(&m_Mutex, nullptr);
-    pthread_cond_init(&m_Condition, nullptr);
+    pthread_mutex_init(&m_Mutex, NULL);
+    pthread_cond_init(&m_Condition, NULL);
 }
 
 /*----------------------------------------------------------------------
@@ -175,7 +175,7 @@ NPT_PosixSharedVariable::WaitUntilEquals(int value, NPT_Timeout timeout)
     if (timeout != NPT_TIMEOUT_INFINITE) {
         // get current time from system
         struct timeval now;
-        if (gettimeofday(&now, nullptr)) {
+        if (gettimeofday(&now, NULL)) {
             return NPT_FAILURE;
         }
 
@@ -219,7 +219,7 @@ NPT_PosixSharedVariable::WaitWhileEquals(int value, NPT_Timeout timeout)
     if (timeout != NPT_TIMEOUT_INFINITE) {
         // get current time from system
         struct timeval now;
-        if (gettimeofday(&now, nullptr)) {
+        if (gettimeofday(&now, NULL)) {
             return NPT_FAILURE;
         }
 
@@ -285,7 +285,7 @@ class NPT_PosixAtomicVariable : public NPT_AtomicVariableInterface
 NPT_PosixAtomicVariable::NPT_PosixAtomicVariable(int value) : 
     m_Value(value)
 {
-    pthread_mutex_init(&m_Mutex, nullptr);
+    pthread_mutex_init(&m_Mutex, NULL);
 }
 
 /*----------------------------------------------------------------------
@@ -493,7 +493,7 @@ NPT_PosixThread::EntryPoint(void* argument)
     }
 
     // done
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -509,7 +509,7 @@ NPT_PosixThread::Start()
     m_ThreadId = 0;
     m_Done.SetValue(0);
 
-    pthread_attr_t *attributes = nullptr;
+    pthread_attr_t *attributes = NULL;
 
 #if defined(NPT_CONFIG_THREAD_STACK_SIZE)
     pthread_attr_t stack_size_attributes;

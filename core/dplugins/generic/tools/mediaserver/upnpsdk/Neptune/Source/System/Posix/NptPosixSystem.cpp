@@ -49,8 +49,8 @@ NPT_PosixSystem NPT_PosixSystem::System;
 +---------------------------------------------------------------------*/
 NPT_PosixSystem::NPT_PosixSystem()
 {
-    pthread_mutex_init(&m_SleepMutex, nullptr);
-    pthread_cond_init(&m_SleepCondition, nullptr);
+    pthread_mutex_init(&m_SleepMutex, NULL);
+    pthread_cond_init(&m_SleepCondition, NULL);
 }
 
 /*----------------------------------------------------------------------
@@ -90,7 +90,7 @@ NPT_System::GetCurrentTimeStamp(NPT_TimeStamp& now)
     struct timeval now_tv;
 
     // get current time from system
-    if (gettimeofday(&now_tv, nullptr)) {
+    if (gettimeofday(&now_tv, NULL)) {
         now.SetNanos(0);
         return NPT_FAILURE;
     }
@@ -139,7 +139,7 @@ NPT_System::SleepUntil(const NPT_TimeStamp& when)
     int             result;
 
     // get current time from system
-    if (gettimeofday(&now, nullptr)) {
+    if (gettimeofday(&now, NULL)) {
         return NPT_FAILURE;
     }
 

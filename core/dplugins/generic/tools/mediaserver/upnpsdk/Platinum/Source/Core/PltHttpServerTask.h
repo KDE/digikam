@@ -83,7 +83,7 @@ protected:
 private:
     virtual NPT_Result Read(NPT_BufferedInputStreamReference& buffered_input_stream, 
                             NPT_HttpRequest*&                 request,
-                            NPT_HttpRequestContext*           context = nullptr);
+                            NPT_HttpRequestContext*           context = NULL);
     virtual NPT_Result Write(NPT_HttpResponse* response, 
                              bool&             keep_alive, 
                              bool              headers_only = false);

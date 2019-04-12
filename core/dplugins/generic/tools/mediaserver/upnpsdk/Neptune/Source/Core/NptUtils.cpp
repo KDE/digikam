@@ -359,7 +359,7 @@ NPT_HexString(const unsigned char* data,
     NPT_String result;
     
     // quick check 
-    if (data == nullptr || data_size == 0) return result;
+    if (data == NULL || data_size == 0) return result;
         
     // set the result size
     NPT_Size separator_length = separator?NPT_StringLength(separator):0;
@@ -390,7 +390,7 @@ NPT_ParseFloat(const char* str, float& result, bool relaxed)
     result = 0.0f;
 
     // check params
-    if (str == nullptr || *str == '\0') {
+    if (str == NULL || *str == '\0') {
         return NPT_ERROR_INVALID_PARAMETERS;
     }
 
@@ -478,7 +478,7 @@ NPT_ParseInteger64(const char* str, NPT_Int64& result, bool relaxed, NPT_Cardina
     result = 0;
     if (chars_used) *chars_used = 0;
 
-    if (str == nullptr) {
+    if (str == NULL) {
         return NPT_ERROR_INVALID_PARAMETERS;
     }
 
@@ -552,7 +552,7 @@ NPT_ParseInteger64(const char* str, NPT_UInt64& result, bool relaxed, NPT_Cardin
     result = 0;
     if (chars_used) *chars_used = 0;
 
-    if (str == nullptr) {
+    if (str == NULL) {
         return NPT_ERROR_INVALID_PARAMETERS;
     }
 
@@ -742,7 +742,7 @@ NPT_FormatOutput(void        (*function)(void* parameter, const char* message),
         if (buffer_size > NPT_FORMAT_BUFFER_MAX_SIZE) break;
         if (buffer != local_buffer) delete[] buffer;
         buffer = new char[buffer_size];
-        if (buffer == nullptr) return;
+        if (buffer == NULL) return;
     }
 
     (*function)(function_parameter, buffer);
@@ -816,7 +816,7 @@ NPT_ParseMimeParameters(const char*                      encoded,
                         NPT_Map<NPT_String, NPT_String>& parameters)
 {
     // check parameters
-    if (encoded == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (encoded == NULL) return NPT_ERROR_INVALID_PARAMETERS;
     
     // reserve some space 
     NPT_String param_name;

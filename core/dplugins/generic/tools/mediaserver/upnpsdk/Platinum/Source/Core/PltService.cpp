@@ -55,7 +55,7 @@ PLT_Service::PLT_Service(PLT_DeviceData* device,
     m_ServiceType(type),
     m_ServiceID(id),
 	m_ServiceName(name),
-    m_EventTask(nullptr),
+    m_EventTask(NULL),
     m_EventingPaused(false),
     m_LastChangeNamespace(last_change_namespace)
 {
@@ -95,10 +95,10 @@ PLT_Service::GetSCPDXML(NPT_String& scpd)
     // it is required to have at least 1 state variable
     if (m_StateVars.GetItemCount() == 0) return NPT_FAILURE;
 
-    NPT_XmlElementNode* spec = nullptr;
-    NPT_XmlElementNode* actionList = nullptr;
+    NPT_XmlElementNode* spec = NULL;
+    NPT_XmlElementNode* actionList = NULL;
     NPT_XmlElementNode* top = new NPT_XmlElementNode("scpd");
-    NPT_XmlElementNode* serviceStateTable = nullptr;
+    NPT_XmlElementNode* serviceStateTable = NULL;
     NPT_CHECK_LABEL_SEVERE(res = top->SetNamespaceUri("", "urn:schemas-upnp-org:service-1-0"), cleanup);
 
     // add spec version
@@ -171,12 +171,12 @@ PLT_Service::InitURLs(const char* service_name)
 NPT_Result
 PLT_Service::SetSCPDXML(const char* scpd)
 {
-    if (scpd == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (scpd == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
     Cleanup();
 
     NPT_XmlParser parser;
-    NPT_XmlNode*  tree = nullptr;
+    NPT_XmlNode*  tree = NULL;
     NPT_Result    res;
     NPT_Array<NPT_XmlElementNode*> stateVariables;
     NPT_Array<NPT_XmlElementNode*> actions;
@@ -312,7 +312,7 @@ PLT_Service::SetSCPDXML(const char* scpd)
             
             // action arguments
             NPT_XmlElementNode* argumentList = PLT_XmlHelper::GetChild(actions[i], "argumentList");
-            if (argumentList == nullptr || !argumentList->GetChildren().GetItemCount())
+            if (argumentList == NULL || !argumentList->GetChildren().GetItemCount())
                 continue; // no arguments is ok I guess
 
             NPT_Array<NPT_XmlElementNode*> arguments;
@@ -332,7 +332,7 @@ PLT_Service::SetSCPDXML(const char* scpd)
 
                 // make sure the related state variable exists
                 PLT_StateVariable* variable = FindStateVariable(relatedStateVar);
-                if (variable == nullptr) {
+                if (variable == NULL) {
                     NPT_LOG_SEVERE_1("State variable not found %s", (const char*)relatedStateVar);
                     NPT_CHECK_LABEL_SEVERE(NPT_ERROR_INVALID_SYNTAX, failure);
                 }
@@ -413,7 +413,7 @@ PLT_Service::ForceVersion(NPT_Cardinal version)
 PLT_ActionDesc*
 PLT_Service::FindActionDesc(const char* name)
 {
-    PLT_ActionDesc* action = nullptr;
+    PLT_ActionDesc* action = NULL;
     NPT_ContainerFind(m_ActionDescs, PLT_ActionDescNameFinder(name), action);
     return action;
 }
@@ -424,7 +424,7 @@ PLT_Service::FindActionDesc(const char* name)
 PLT_StateVariable*
 PLT_Service::FindStateVariable(const char* name)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(m_StateVars, PLT_StateVariableNameFinder(name), stateVariable);
     return stateVariable;
 }
@@ -461,9 +461,9 @@ PLT_Service::IsSubscribable()
 NPT_Result
 PLT_Service::SetStateVariable(const char* name, const char* value, const bool clearonsend /*=false*/)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(m_StateVars, PLT_StateVariableNameFinder(name), stateVariable);
-    if (stateVariable == nullptr)
+    if (stateVariable == NULL)
         return NPT_FAILURE;
 
     return stateVariable->SetValue(value, clearonsend);
@@ -475,9 +475,9 @@ PLT_Service::SetStateVariable(const char* name, const char* value, const bool cl
 NPT_Result
 PLT_Service::SetStateVariableRate(const char* name, NPT_TimeInterval rate)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(m_StateVars, PLT_StateVariableNameFinder(name), stateVariable);
-    if (stateVariable == nullptr)
+    if (stateVariable == NULL)
         return NPT_FAILURE;
 
     return stateVariable->SetRate(rate);
@@ -491,9 +491,9 @@ PLT_Service::SetStateVariableExtraAttribute(const char* name,
 											const char* key,
 											const char* value)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(m_StateVars, PLT_StateVariableNameFinder(name), stateVariable);
-    if (stateVariable == nullptr)
+    if (stateVariable == NULL)
         return NPT_FAILURE;
 
     return stateVariable->SetExtraAttribute(key, value);
@@ -505,9 +505,9 @@ PLT_Service::SetStateVariableExtraAttribute(const char* name,
 NPT_Result
 PLT_Service::IncStateVariable(const char* name)
 {
-    PLT_StateVariable* stateVariable = nullptr;
+    PLT_StateVariable* stateVariable = NULL;
     NPT_ContainerFind(m_StateVars, PLT_StateVariableNameFinder(name), stateVariable);
-    if (stateVariable == nullptr)
+    if (stateVariable == NULL)
         return NPT_FAILURE;
 
     NPT_String value = stateVariable->GetValue();
@@ -732,7 +732,7 @@ NPT_Result
 PLT_Service::UpdateLastChange(NPT_List<PLT_StateVariable*>& vars)
 {
     PLT_StateVariable* var = FindStateVariable("LastChange");
-    if (var == nullptr) return NPT_FAILURE;
+    if (var == NULL) return NPT_FAILURE;
 
     NPT_ASSERT(m_LastChangeNamespace.GetLength() > 0);
 

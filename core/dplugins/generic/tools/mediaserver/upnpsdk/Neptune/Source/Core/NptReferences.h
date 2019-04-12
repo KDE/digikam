@@ -46,11 +46,11 @@ class NPT_Reference
 {
 public:
     // constructors and destructor
-    NPT_Reference() : m_Object(nullptr), m_Counter(nullptr), m_Mutex(nullptr), m_ThreadSafe(true) {}
+    NPT_Reference() : m_Object(NULL), m_Counter(NULL), m_Mutex(NULL), m_ThreadSafe(true) {}
     explicit NPT_Reference(T* object, bool thread_safe = true) :
         m_Object(object),
-        m_Counter(object?new NPT_Cardinal(1):nullptr),
-        m_Mutex((object && thread_safe)?new NPT_Mutex():nullptr),
+        m_Counter(object?new NPT_Cardinal(1):NULL),
+        m_Mutex((object && thread_safe)?new NPT_Mutex():NULL),
         m_ThreadSafe(thread_safe) {}
     
     NPT_Reference(const NPT_Reference<T>& ref) :
@@ -94,8 +94,8 @@ public:
     NPT_Reference<T>& operator=(T* object) {
         Release();
         m_Object  = object;
-        m_Counter = object?new NPT_Cardinal(1):nullptr;
-        m_Mutex   = (object && m_ThreadSafe)?new NPT_Mutex():nullptr;
+        m_Counter = object?new NPT_Cardinal(1):NULL;
+        m_Mutex   = (object && m_ThreadSafe)?new NPT_Mutex():NULL;
         return *this;
     }
     T& operator*() const { return *m_Object; }
@@ -127,7 +127,7 @@ public:
     /**
      * Returns whether this references a NULL object.
      */
-    bool IsNull()  const { return m_Object == nullptr; }
+    bool IsNull()  const { return m_Object == NULL; }
     
     /**
      * Detach the reference from the shared object.
@@ -151,12 +151,12 @@ private:
             last_reference = true;
         }
         
-        m_Counter = nullptr;
-        m_Object  = nullptr;
+        m_Counter = NULL;
+        m_Object  = NULL;
         
         if (m_Mutex) {
             NPT_Mutex* mutex = m_Mutex;
-            m_Mutex = nullptr;
+            m_Mutex = NULL;
             mutex->Unlock();
             if (last_reference) delete mutex;
         }

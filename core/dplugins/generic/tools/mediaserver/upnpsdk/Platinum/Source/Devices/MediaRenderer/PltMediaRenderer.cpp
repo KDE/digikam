@@ -63,7 +63,7 @@ PLT_MediaRenderer::PLT_MediaRenderer(const char*  friendly_name,
                    show_ip, 
                    port, 
                    port_rebind),
-    m_Delegate(nullptr)
+    m_Delegate(NULL)
 {
     m_ModelDescription = "Plutinosoft AV Media Renderer Device";
     m_ModelName        = "AV Renderer Device";
@@ -150,7 +150,7 @@ PLT_MediaRenderer::SetupServices()
         service->SetStateVariable("CurrentRecordQualityMode", "NOT_IMPLEMENTED");
         
         service.Detach();
-        service = nullptr;
+        service = NULL;
     }
 
     {
@@ -170,7 +170,7 @@ PLT_MediaRenderer::SetupServices()
         service->SetStateVariable("SourceProtocolInfo", "");
         
         service.Detach();
-        service = nullptr;
+        service = NULL;
     }
 
     {
@@ -196,7 +196,7 @@ PLT_MediaRenderer::SetupServices()
         service->SetStateVariable("PresetNameList", "FactoryDefaults");
         
         service.Detach();
-        service = nullptr;
+        service = NULL;
     }
 
     return NPT_SUCCESS;

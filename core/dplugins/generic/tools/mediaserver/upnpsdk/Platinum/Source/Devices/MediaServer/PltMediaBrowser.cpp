@@ -435,7 +435,7 @@ PLT_MediaBrowser::OnBrowseResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnBrowseResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnBrowseResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 
@@ -489,7 +489,7 @@ PLT_MediaBrowser::OnSearchResponse(NPT_Result               res,
     return NPT_SUCCESS;
 
 bad_action:
-    m_Delegate->OnSearchResult(NPT_FAILURE, device, nullptr, userdata);
+    m_Delegate->OnSearchResult(NPT_FAILURE, device, NULL, userdata);
     return NPT_FAILURE;
 }
 

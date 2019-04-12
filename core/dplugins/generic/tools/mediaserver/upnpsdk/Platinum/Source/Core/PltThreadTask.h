@@ -81,8 +81,8 @@ protected:
      @param auto_destroy a flag to indicate if the task is owned by someone else
      and thus should not destroy itself when done.
      */
-    NPT_Result Start(PLT_TaskManager*  task_manager = nullptr, 
-                     NPT_TimeInterval* delay = nullptr,
+    NPT_Result Start(PLT_TaskManager*  task_manager = NULL, 
+                     NPT_TimeInterval* delay = NULL,
                      bool              auto_destroy = true);
     /**
      Stop the task. This is either called by a task manager or the Kill method.

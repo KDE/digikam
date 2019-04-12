@@ -94,7 +94,7 @@ class PLT_DeviceData
 {
 public:
     PLT_DeviceData(
-        NPT_HttpUrl      description_url = NPT_HttpUrl(nullptr, 0, "/description.xml"), 
+        NPT_HttpUrl      description_url = NPT_HttpUrl(NULL, 0, "/description.xml"), 
         const char*      uuid = "",
         NPT_TimeInterval lease_time = *PLT_Constants::GetInstance().GetDefaultDeviceLease(),
         const char*      device_type = "",
@@ -102,11 +102,11 @@ public:
 
     /* methods */
     virtual NPT_Result  GetDescription(NPT_String& desc);
-    virtual NPT_String  GetDescriptionUrl(const char* ip_address = nullptr);
+    virtual NPT_String  GetDescriptionUrl(const char* ip_address = NULL);
     virtual NPT_HttpUrl GetURLBase();
     virtual NPT_HttpUrl NormalizeURL(const NPT_String& url);
-    virtual NPT_Result  GetDescription(NPT_XmlElementNode* parent, NPT_XmlElementNode** device = nullptr);
-    virtual NPT_String  GetIconUrl(const char* mimetype = nullptr, NPT_Int32 maxsize = 0, NPT_Int32 maxdepth = 0);
+    virtual NPT_Result  GetDescription(NPT_XmlElementNode* parent, NPT_XmlElementNode** device = NULL);
+    virtual NPT_String  GetIconUrl(const char* mimetype = NULL, NPT_Int32 maxsize = 0, NPT_Int32 maxdepth = 0);
     
     bool                    IsRoot()              { return m_ParentUUID.IsEmpty();   }
     const NPT_TimeInterval& GetLeaseTime()        const { return m_LeaseTime;        }

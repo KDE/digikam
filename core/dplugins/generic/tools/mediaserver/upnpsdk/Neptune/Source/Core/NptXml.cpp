@@ -176,7 +176,7 @@ class NPT_XmlTextFinder
 {
 public:
     bool operator()(const NPT_XmlNode* const & node) const {
-        return node->AsTextNode() != nullptr;
+        return node->AsTextNode() != NULL;
     }
 };
 
@@ -191,7 +191,7 @@ public:
 
     void operator()(NPT_XmlNode*& node) const {
         NPT_XmlElementNode* element = node->AsElementNode();
-        if (element == nullptr) return;
+        if (element == NULL) return;
 
         // collapse the namespace for this element
         CollapseNamespace(element, element->GetPrefix());
@@ -223,8 +223,8 @@ void
 NPT_XmlNamespaceCollapser::CollapseNamespace(NPT_XmlElementNode* element, 
                                              const NPT_String&   prefix) const
 {
-    if (m_Root->m_NamespaceMap == nullptr ||
-        (m_Root->m_NamespaceMap->GetNamespaceUri(prefix) == nullptr && prefix != "xml")) {
+    if (m_Root->m_NamespaceMap == NULL ||
+        (m_Root->m_NamespaceMap->GetNamespaceUri(prefix) == NULL && prefix != "xml")) {
         // the root element does not have that prefix in the map
         const NPT_String* uri = element->GetNamespaceUri(prefix);
         if (uri) m_Root->SetNamespaceUri(prefix, uri->GetChars());
@@ -256,8 +256,8 @@ NPT_XmlElementNode::NPT_XmlElementNode(const char* prefix, const char* tag) :
     NPT_XmlNode(ELEMENT),
     m_Prefix(prefix),
     m_Tag(tag),
-    m_NamespaceMap(nullptr),
-    m_NamespaceParent(nullptr)
+    m_NamespaceMap(NULL),
+    m_NamespaceParent(NULL)
 {
 }
 
@@ -266,8 +266,8 @@ NPT_XmlElementNode::NPT_XmlElementNode(const char* prefix, const char* tag) :
 +---------------------------------------------------------------------*/
 NPT_XmlElementNode::NPT_XmlElementNode(const char* tag) :
     NPT_XmlNode(ELEMENT),
-    m_NamespaceMap(nullptr),
-    m_NamespaceParent(nullptr)
+    m_NamespaceMap(NULL),
+    m_NamespaceParent(NULL)
 {
     const char* cursor = tag;
     while (char c = *cursor++) {
@@ -302,7 +302,7 @@ NPT_XmlElementNode::SetParent(NPT_XmlNode* parent)
 
     // update out namespace linkage
     NPT_XmlElementNode* parent_element =
-        parent?parent->AsElementNode():nullptr;
+        parent?parent->AsElementNode():NULL;
     NPT_XmlElementNode* namespace_parent;
     if (parent_element) {
         namespace_parent = 
@@ -310,7 +310,7 @@ NPT_XmlElementNode::SetParent(NPT_XmlNode* parent)
             parent_element:
             parent_element->m_NamespaceParent;
     } else {
-        namespace_parent = nullptr;
+        namespace_parent = NULL;
     }
     if (namespace_parent != m_NamespaceParent) {
         m_NamespaceParent = namespace_parent;
@@ -324,7 +324,7 @@ NPT_XmlElementNode::SetParent(NPT_XmlNode* parent)
 NPT_Result
 NPT_XmlElementNode::AddChild(NPT_XmlNode* child)
 {
-    if (child == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (child == NULL) return NPT_ERROR_INVALID_PARAMETERS;
     child->SetParent(this);
     return m_Children.Add(child);
 }
@@ -337,16 +337,16 @@ NPT_XmlElementNode::GetChild(const char* tag, const char* namespc, NPT_Ordinal n
 {
     // remap the requested namespace to match the semantics of the finder
     // and allow for "" to also mean NO namespace
-    if (namespc == nullptr || namespc[0] == '\0') {
+    if (namespc == NULL || namespc[0] == '\0') {
         namespc = ""; // for the finder, empty string means NO namespace
     } else if (namespc[0] == '*' && namespc[1] == '\0') {
-        namespc = nullptr; // for the finder, NULL means ANY namespace
+        namespc = NULL; // for the finder, NULL means ANY namespace
     }
 
     // find the child
     NPT_List<NPT_XmlNode*>::Iterator item;
     item = m_Children.Find(NPT_XmlTagFinder(tag, namespc), n);
-    return item?(*item)->AsElementNode():nullptr;
+    return item?(*item)->AsElementNode():NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -356,7 +356,7 @@ NPT_Result
 NPT_XmlElementNode::AddAttribute(const char* name, 
                                  const char* value)
 {
-    if (name == nullptr || value == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (name == NULL || value == NULL) return NPT_ERROR_INVALID_PARAMETERS;
     return m_Attributes.Add(new NPT_XmlAttribute(name, value));
 }
 
@@ -368,7 +368,7 @@ NPT_XmlElementNode::SetAttribute(const char* prefix,
                                  const char* name, 
                                  const char* value)
 {
-    if (name == nullptr || value == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (name == NULL || value == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
     /* see if this attribute is already set */
     NPT_List<NPT_XmlAttribute*>::Iterator attribute;
@@ -388,7 +388,7 @@ NPT_XmlElementNode::SetAttribute(const char* prefix,
 NPT_Result
 NPT_XmlElementNode::SetAttribute(const char* name, const char* value)
 {
-    return SetAttribute(nullptr, name, value);
+    return SetAttribute(NULL, name, value);
 }
 
 /*----------------------------------------------------------------------
@@ -399,10 +399,10 @@ NPT_XmlElementNode::GetAttribute(const char* name, const char* namespc) const
 {
     // remap the requested namespace to match the semantics of the finder
     // and allow for "" to also mean NO namespace
-    if (namespc == nullptr || namespc[0] == '\0') {
+    if (namespc == NULL || namespc[0] == '\0') {
         namespc = ""; // for the finder, empty string means NO namespace
     } else if (namespc[0] == '*' && namespc[1] == '\0') {
-        namespc = nullptr; // for the finder, NULL means ANY namespace
+        namespc = NULL; // for the finder, NULL means ANY namespace
     }
 
     // find the attribute
@@ -411,7 +411,7 @@ NPT_XmlElementNode::GetAttribute(const char* name, const char* namespc) const
     if (attribute) { 
         return &(*attribute)->GetValue();
     } else {
-        return nullptr;
+        return NULL;
     }
 }
 
@@ -432,7 +432,7 @@ NPT_XmlElementNode::GetText(NPT_Ordinal n) const
 {
     NPT_List<NPT_XmlNode*>::Iterator node;
     node = m_Children.Find(NPT_XmlTextFinder(), n);
-    return node?&(*node)->AsTextNode()->GetString():nullptr;
+    return node?&(*node)->AsTextNode()->GetString():NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -490,7 +490,7 @@ NPT_Result
 NPT_XmlElementNode::SetNamespaceUri(const char* prefix, const char* uri)
 {
     // ensure that we have a namespace map
-    if (m_NamespaceMap == nullptr) {
+    if (m_NamespaceMap == NULL) {
         m_NamespaceMap = new NPT_XmlNamespaceMap();
         RelinkNamespaceMaps();
     }
@@ -509,7 +509,7 @@ NPT_XmlElementNode::GetNamespaceUri(const char* prefix) const
         const NPT_String* namespc = m_NamespaceMap->GetNamespaceUri(prefix);
         if (namespc) {
             if (namespc->IsEmpty()) {
-                return nullptr;
+                return NULL;
             } else {
                 return namespc;
             }
@@ -529,7 +529,7 @@ NPT_XmlElementNode::GetNamespaceUri(const char* prefix) const
         }
 
         // not found
-        return nullptr;
+        return NULL;
     }
 }
 
@@ -553,12 +553,12 @@ NPT_XmlElementNode::GetNamespacePrefix(const char* uri) const
         m_NamespaceMap:
         (m_NamespaceParent?
          m_NamespaceParent->m_NamespaceMap:
-         nullptr);
+         NULL);
 
     if (namespace_map) {
         return namespace_map->GetNamespacePrefix(uri);
     } else {
-        return nullptr;
+        return NULL;
     }
 }
 
@@ -601,7 +601,7 @@ private:
 |   NPT_XmlAccumulator::NPT_XmlAccumulator
 +---------------------------------------------------------------------*/
 NPT_XmlAccumulator::NPT_XmlAccumulator() :
-    m_Buffer(nullptr),
+    m_Buffer(NULL),
     m_Allocated(0),
     m_Valid(0)
 {
@@ -743,7 +743,7 @@ NPT_XmlNamespaceMap::GetNamespaceUri(const char* prefix)
     }
 
     // the prefix is not in the map
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -762,7 +762,7 @@ NPT_XmlNamespaceMap::GetNamespacePrefix(const char* uri)
     }
 
     // the uri is not in the map
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -1539,7 +1539,7 @@ NPT_XmlProcessor::ProcessBuffer(const char* buffer, NPT_Size size)
           case STATE_IN_EMPTY_TAG_END:
             if (c == '>') {
                 NPT_CHECK(FlushPendingText());
-                NPT_CHECK(m_Parser->OnEndElement(nullptr));
+                NPT_CHECK(m_Parser->OnEndElement(NULL));
                 SetState(STATE_IN_CONTENT, CONTEXT_NONE);
             } else {
                 return NPT_ERROR_INVALID_SYNTAX;
@@ -1696,8 +1696,8 @@ NPT_XmlProcessor::ProcessBuffer(const char* buffer, NPT_Size size)
 |   NPT_XmlParser::NPT_XmlParser
 +---------------------------------------------------------------------*/
 NPT_XmlParser::NPT_XmlParser(bool keep_whitespace /* = false */) :
-    m_Root(nullptr),
-    m_CurrentElement(nullptr),
+    m_Root(NULL),
+    m_CurrentElement(NULL),
     m_KeepWhitespace(keep_whitespace)
 {
     m_Processor = new NPT_XmlProcessor(this);
@@ -1725,11 +1725,11 @@ NPT_XmlParser::Reset()
         walker = walker->GetParent(); 
     } 
     delete walker; 
-    m_CurrentElement = nullptr; 
+    m_CurrentElement = NULL; 
     
     m_Processor->Reset();
     
-    m_Root = nullptr;
+    m_Root = NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -1744,8 +1744,8 @@ NPT_XmlParser::Parse(NPT_InputStream& stream,
     NPT_Result result;
 
     // start with a known state
-    m_Root = nullptr;
-    node = nullptr;
+    m_Root = NULL;
+    node = NULL;
     if (!incremental) {
         Reset();
     }
@@ -1784,8 +1784,8 @@ NPT_XmlParser::Parse(NPT_InputStream& stream,
     } else {
         if (NPT_FAILED(result) && result != NPT_ERROR_EOS) {
             delete m_Root;
-            m_Root = nullptr;
-            node = nullptr;
+            m_Root = NULL;
+            node = NULL;
             return result;
         } else {
             return m_Root?NPT_SUCCESS:NPT_ERROR_XML_NO_ROOT;     
@@ -1828,8 +1828,8 @@ NPT_XmlParser::Parse(const char*   xml,
                      bool          incremental /* = false */)
 { 
     // start with a known state
-    m_Root = nullptr;
-    node = nullptr;
+    m_Root = NULL;
+    node = NULL;
     if (!incremental) {
         Reset();
     }
@@ -1844,8 +1844,8 @@ NPT_XmlParser::Parse(const char*   xml,
     } else {
         if (NPT_FAILED(result)) {
             delete m_Root;
-            m_Root = nullptr;
-            node = nullptr;
+            m_Root = NULL;
+            node = NULL;
             return result;
         } else {
             return m_Root?NPT_SUCCESS:NPT_ERROR_XML_NO_ROOT;     
@@ -1888,7 +1888,7 @@ NPT_XmlParser::OnElementAttribute(const char* name, const char* value)
     NPT_XML_Debug_2("\nNPT_XmlParser::OnElementAttribute: name=%s, value='%s'\n", 
                     name, value);
 
-    if (m_CurrentElement == nullptr) {
+    if (m_CurrentElement == NULL) {
         return NPT_ERROR_INVALID_SYNTAX;
     }
                               
@@ -1916,7 +1916,7 @@ NPT_XmlParser::OnEndElement(const char* name)
 {
     NPT_XML_Debug_1("\nNPT_XmlParser::OnEndElement: %s\n", name ? name : "NULL");
 
-    if (m_CurrentElement == nullptr) return NPT_ERROR_XML_TAG_MISMATCH;
+    if (m_CurrentElement == NULL) return NPT_ERROR_XML_TAG_MISMATCH;
 
     // check that the name matches (if there is a name)
     if (name) {
@@ -1953,11 +1953,11 @@ NPT_XmlParser::OnEndElement(const char* name)
         if (m_Root) {
             // this should never happen
             delete m_CurrentElement;
-            m_CurrentElement = nullptr;
+            m_CurrentElement = NULL;
             return NPT_ERROR_XML_MULTIPLE_ROOTS;
         } else {
             m_Root = m_CurrentElement;
-            m_CurrentElement = nullptr;
+            m_CurrentElement = NULL;
         }
     }
 
@@ -1973,7 +1973,7 @@ NPT_XmlParser::OnCharacterData(const char* data, NPT_Size size)
     NPT_XML_Debug_1("\nNPT_XmlParser::OnCharacterData: %s\n", data);
     
     // check that we have a current element
-    if (m_CurrentElement == nullptr) {
+    if (m_CurrentElement == NULL) {
         // we do not allow non-whitespace outside an element content
         if (!NPT_XmlStringIsWhitespace(data, size)) {
             return NPT_ERROR_XML_INVALID_NESTING;
@@ -2034,7 +2034,7 @@ public:
                 while (item) {
                     if ((*item)->m_Prefix.IsEmpty()) {
                         // default namespace
-                        m_Serializer.Attribute(nullptr, "xmlns", (*item)->m_Uri);
+                        m_Serializer.Attribute(NULL, "xmlns", (*item)->m_Uri);
                     } else {
                         // namespace with prefix
                         m_Serializer.Attribute("xmlns", (*item)->m_Prefix, (*item)->m_Uri);
@@ -2071,7 +2071,7 @@ public:
 
     // constructor
     NPT_XmlNodeCanonicalWriter(NPT_XmlSerializer& serializer, 
-                               MapChainLink*      map_chain = nullptr) : 
+                               MapChainLink*      map_chain = NULL) : 
         m_MapChain(map_chain),
         m_Serializer(serializer) {
         m_Serializer.StartDocument();
@@ -2128,7 +2128,7 @@ NPT_XmlNodeCanonicalWriter::SortedAttributeList::Add(
     const NPT_XmlAttribute* attribute)
 {
     // transform empty strings into NULL pointers
-    if (namespace_uri && namespace_uri->IsEmpty()) namespace_uri = nullptr;
+    if (namespace_uri && namespace_uri->IsEmpty()) namespace_uri = NULL;
 
     // find the namespace insertion position
     NPT_List<Entry>::Iterator entry = m_Entries.GetFirstItem();
@@ -2136,10 +2136,10 @@ NPT_XmlNodeCanonicalWriter::SortedAttributeList::Add(
         // decide if we insert now or move on
         const NPT_String* other_namespace_uri = entry->m_NamespaceUri;
         if (namespace_uri &&
-            (other_namespace_uri == nullptr || *namespace_uri > *other_namespace_uri)) {
+            (other_namespace_uri == NULL || *namespace_uri > *other_namespace_uri)) {
             // this namespace uri is greater than the other, skip
             continue;
-        } else if ((namespace_uri == nullptr && other_namespace_uri == nullptr) ||
+        } else if ((namespace_uri == NULL && other_namespace_uri == NULL) ||
                    (namespace_uri && other_namespace_uri && 
                    *namespace_uri == *other_namespace_uri)) {
             // namespace uris match, compare the names
@@ -2183,7 +2183,7 @@ NPT_XmlNodeCanonicalWriter::SortedNamespaceList::Add(const NPT_String* prefix,
             }
         }
     } else {
-        prefix = nullptr;
+        prefix = NULL;
     }
 
     Entry new_entry = {prefix, uri};
@@ -2199,8 +2199,8 @@ NPT_XmlNodeCanonicalWriter::SortedNamespaceList::Emit(NPT_XmlSerializer& seriali
     for (NPT_List<Entry>::Iterator i = m_Entries.GetFirstItem(); i; ++i) {
         const NPT_String* key   = i->m_NamespacePrefix;
         const NPT_String* value = i->m_NamespaceUri;
-        if (key == nullptr) {
-            serializer.Attribute(nullptr, "xmlns", *value);
+        if (key == NULL) {
+            serializer.Attribute(NULL, "xmlns", *value);
         } else if (*key != "xml" || *value != NPT_XmlNamespaceUri_Xml) {
             serializer.Attribute("xmlns", *key, *value);
         }
@@ -2222,7 +2222,7 @@ NPT_XmlNodeCanonicalWriter::GetNamespaceRenderedForPrefix(const NPT_String& pref
         }
     }
 
-    return nullptr;
+    return NULL;
 }
 
 /*----------------------------------------------------------------------
@@ -2240,10 +2240,10 @@ NPT_XmlNodeCanonicalWriter::operator()(NPT_XmlNode*& node) const
         // process namespaces
         const NPT_String* namespace_uri = element->GetNamespace();
         const NPT_String* rendered = GetNamespaceRenderedForPrefix(prefix);
-        if (namespace_uri && namespace_uri->IsEmpty()) namespace_uri = nullptr;
+        if (namespace_uri && namespace_uri->IsEmpty()) namespace_uri = NULL;
         if (prefix.IsEmpty()) {
             // default namespace
-            if (rendered == nullptr) {
+            if (rendered == NULL) {
                 // default namespace not rendered
                 if (namespace_uri) {
                     map_link.m_RenderedNamespaces.Put("", *namespace_uri);
@@ -2265,7 +2265,7 @@ NPT_XmlNodeCanonicalWriter::operator()(NPT_XmlNode*& node) const
             // explicit namespace
             // NOTE: namespace_uri should not be an empty string, but we test just
             // in case the XML document is not compliant
-            if (namespace_uri && (rendered == nullptr || *rendered != *namespace_uri)) {
+            if (namespace_uri && (rendered == NULL || *rendered != *namespace_uri)) {
                 // namespace prefix not rendered or rendered with a different value
                 map_link.m_RenderedNamespaces.Put(prefix, *namespace_uri);
             }
@@ -2280,13 +2280,13 @@ NPT_XmlNodeCanonicalWriter::operator()(NPT_XmlNode*& node) const
              const NPT_String& a_prefix = (*attribute)->GetPrefix();
              if (a_prefix.IsEmpty()) {
                  // naked attribute
-                 naked_attributes.Add(nullptr, *attribute);
+                 naked_attributes.Add(NULL, *attribute);
              } else {
                 // decide if we need to render this namespace declaration
                 namespace_uri = element->GetNamespaceUri(a_prefix);
                 if (namespace_uri) {
                     rendered = GetNamespaceRenderedForPrefix(a_prefix);;
-                    if (rendered == nullptr || *rendered != *namespace_uri) {
+                    if (rendered == NULL || *rendered != *namespace_uri) {
                         // namespace not rendered or rendered with a different value
                         map_link.m_RenderedNamespaces.Put(a_prefix, *namespace_uri);
                     }
@@ -2415,7 +2415,7 @@ NPT_XmlSerializer::OutputEscapedString(const char* text, bool attribute)
     const char* start = text;
     char escaped[7];
     while (char c = *text) {
-        const char* insert = nullptr;
+        const char* insert = NULL;
         switch (c) {
             case '\r': {
                 EscapeChar(c, escaped);

@@ -80,20 +80,20 @@ public:
     static NPT_String  GetMimeTypeFromProtocolInfo(const char* protocol_info);
     
     static const char* GetDlnaExtension(const char* mime_type, 
-                                        const PLT_HttpRequestContext* context = nullptr);
+                                        const PLT_HttpRequestContext* context = NULL);
     static const char* GetDlnaExtension(const char* mime_type, 
                                         PLT_DeviceSignature signature = PLT_DEVICE_UNKNOWN);
     
     static PLT_ProtocolInfo GetProtocolInfo(const char* filename, 
                                             bool with_dlna_extension = true, 
-                                            const PLT_HttpRequestContext* context = nullptr);
+                                            const PLT_HttpRequestContext* context = NULL);
     static PLT_ProtocolInfo GetProtocolInfo(const char* filename, 
                                             bool with_dlna_extension = true, 
                                             PLT_DeviceSignature signature = PLT_DEVICE_UNKNOWN);
     
     static PLT_ProtocolInfo GetProtocolInfoFromMimeType(const char* mime_type, 
                                                         bool with_dlna_extension = true, 
-                                                        const PLT_HttpRequestContext* context = nullptr);
+                                                        const PLT_HttpRequestContext* context = NULL);
     static PLT_ProtocolInfo GetProtocolInfoFromMimeType(const char* mime_type, 
                                                         bool with_dlna_extension = true, 
                                                         PLT_DeviceSignature signature = PLT_DEVICE_UNKNOWN);

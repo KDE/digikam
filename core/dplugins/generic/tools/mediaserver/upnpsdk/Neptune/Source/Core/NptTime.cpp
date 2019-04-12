@@ -454,7 +454,7 @@ NPT_DateTime::ToString(Format format, NPT_Flags flags) const
 NPT_Result
 NPT_DateTime::FromString(const char* date, Format format)
 {
-    if (date == nullptr || date[0] == '\0') return NPT_ERROR_INVALID_PARAMETERS;
+    if (date == NULL || date[0] == '\0') return NPT_ERROR_INVALID_PARAMETERS;
     
     // create a local copy to work with
     NPT_String workspace(date);

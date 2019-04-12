@@ -106,8 +106,8 @@ PLT_HttpClientSocketTask::DoAbort()
 void
 PLT_HttpClientSocketTask::DoRun()
 {
-    NPT_HttpRequest*       request = nullptr;
-    NPT_HttpResponse*      response = nullptr;
+    NPT_HttpRequest*       request = NULL;
+    NPT_HttpResponse*      response = NULL;
     NPT_HttpRequestContext context;
     NPT_Result             res;
     NPT_TimeStamp          watchdog;
@@ -117,7 +117,7 @@ PLT_HttpClientSocketTask::DoRun()
     do {
         // pop next request or wait for one for 100ms
         while (NPT_SUCCEEDED(GetNextRequest(request, 100))) {
-            response = nullptr;
+            response = NULL;
             
             if (IsAborting(0)) goto abort;
 
@@ -132,16 +132,16 @@ PLT_HttpClientSocketTask::DoRun()
 
             // cleanup
             delete response;
-            response = nullptr;
+            response = NULL;
             delete request;
-            request = nullptr;
+            request = NULL;
         }
 
         // DLNA requires that we abort unanswered/unused sockets after 60 secs
         NPT_TimeStamp now;
         NPT_System::GetCurrentTimeStamp(now);
         if (now > watchdog + NPT_TimeInterval(60.)) {
-            NPT_HttpConnectionManager::GetInstance()->Recycle(nullptr);
+            NPT_HttpConnectionManager::GetInstance()->Recycle(NULL);
             watchdog = now;
         }
 

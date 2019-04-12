@@ -146,7 +146,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                             NPT_Size  bytes_to_read, 
-                            NPT_Size* bytes_read = nullptr) override;
+                            NPT_Size* bytes_read = NULL) override;
     NPT_Result Seek(NPT_Position offset) override;
     NPT_Result Tell(NPT_Position& offset) override;
     NPT_Result GetSize(NPT_LargeSize& size) override;
@@ -177,7 +177,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                             NPT_Size  bytes_to_read, 
-                            NPT_Size* bytes_read = nullptr) override;
+                            NPT_Size* bytes_read = NULL) override;
     NPT_Result Seek(NPT_Position offset) override;
     NPT_Result Tell(NPT_Position& offset) override;
     NPT_Result GetSize(NPT_LargeSize& size) override;

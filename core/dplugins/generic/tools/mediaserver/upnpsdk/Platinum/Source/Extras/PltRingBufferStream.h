@@ -59,7 +59,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                     NPT_Size  bytes_to_read, 
-                    NPT_Size* bytes_read = nullptr) override;
+                    NPT_Size* bytes_read = NULL) override;
     NPT_Result GetSize(NPT_LargeSize& size) override  {
         NPT_COMPILER_UNUSED(size);
         return NPT_ERROR_NOT_SUPPORTED;
@@ -78,7 +78,7 @@ public:
     // NPT_OutputStream methods
     NPT_Result Write(const void* buffer, 
                      NPT_Size    bytes_to_write, 
-                     NPT_Size*   bytes_written = nullptr) override;
+                     NPT_Size*   bytes_written = NULL) override;
     NPT_Result Flush() override;
     NPT_Result SetEOS();
     NPT_Result Abort();

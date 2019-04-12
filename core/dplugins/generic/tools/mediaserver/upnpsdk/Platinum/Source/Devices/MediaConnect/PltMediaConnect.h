@@ -55,7 +55,7 @@ public:
     // constructor
     PLT_MediaConnect(const char*  friendly_name,
                      bool         add_hostname = true,
-                     const char*  udn = nullptr,
+                     const char*  udn = NULL,
                      NPT_UInt16   port = 0,
                      bool         port_rebind = false);
 

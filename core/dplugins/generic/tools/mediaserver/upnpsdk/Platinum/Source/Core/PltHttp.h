@@ -94,10 +94,10 @@ public:
     static void         SetHost(NPT_HttpRequest& request, const char* host);
 	static PLT_DeviceSignature GetDeviceSignature(const NPT_HttpRequest& request);
 
-    static NPT_Result   SetBody(NPT_HttpMessage& message, NPT_String& text, NPT_HttpEntity** entity = nullptr);
-    static NPT_Result   SetBody(NPT_HttpMessage& message, const char* text, NPT_HttpEntity** entity = nullptr);
-    static NPT_Result   SetBody(NPT_HttpMessage& message, const void* body, NPT_LargeSize len, NPT_HttpEntity** entity = nullptr);
-    static NPT_Result   SetBody(NPT_HttpMessage& message, NPT_InputStreamReference stream, NPT_HttpEntity** entity = nullptr);
+    static NPT_Result   SetBody(NPT_HttpMessage& message, NPT_String& text, NPT_HttpEntity** entity = NULL);
+    static NPT_Result   SetBody(NPT_HttpMessage& message, const char* text, NPT_HttpEntity** entity = NULL);
+    static NPT_Result   SetBody(NPT_HttpMessage& message, const void* body, NPT_LargeSize len, NPT_HttpEntity** entity = NULL);
+    static NPT_Result   SetBody(NPT_HttpMessage& message, NPT_InputStreamReference stream, NPT_HttpEntity** entity = NULL);
     static NPT_Result   GetBody(const NPT_HttpMessage& message, NPT_String& body);
     static NPT_Result   ParseBody(const NPT_HttpMessage& message, NPT_XmlElementNode*& xml);
 

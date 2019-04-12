@@ -77,7 +77,7 @@ public:
      and thus should not destroy itself when done.
      */
     virtual NPT_Result StartTask(PLT_ThreadTask*   task, 
-                                 NPT_TimeInterval* delay = nullptr,
+                                 NPT_TimeInterval* delay = NULL,
                                  bool              auto_destroy = true);
     
     /**

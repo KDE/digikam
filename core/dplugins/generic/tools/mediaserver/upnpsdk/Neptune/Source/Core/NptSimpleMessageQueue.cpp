@@ -49,7 +49,7 @@ class NPT_SimpleMessageCapsule
 public:
     NPT_SimpleMessageCapsule(NPT_Message* message, 
                              NPT_MessageHandler* handler) :
-        m_Message(message), m_Handler(handler), m_Proxy(nullptr) {
+        m_Message(message), m_Handler(handler), m_Proxy(NULL) {
         m_Proxy = NPT_DYNAMIC_CAST(NPT_MessageHandlerProxy, m_Handler);
         if (m_Proxy) m_Proxy->AddReference();
     }
@@ -96,7 +96,7 @@ NPT_SimpleMessageQueue::QueueMessage(NPT_Message*        message,
 NPT_Result
 NPT_SimpleMessageQueue::PumpMessage(NPT_Timeout timeout /* = NPT_TIMEOUT_INFINITE */)
 {
-    NPT_SimpleMessageCapsule* capsule = nullptr;
+    NPT_SimpleMessageCapsule* capsule = NULL;
     
     NPT_LOG_FINEST_1("popping message from queue, timeout=%d", timeout);
     NPT_Result result = m_Queue.Pop(capsule, timeout);

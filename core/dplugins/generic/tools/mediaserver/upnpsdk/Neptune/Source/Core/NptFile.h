@@ -156,7 +156,7 @@ public:
     // class methods
     static NPT_Result GetRoots(NPT_List<NPT_String>& roots);
     static NPT_Result GetSize(const char* path, NPT_LargeSize &size);
-    static NPT_Result GetInfo(const char* path, NPT_FileInfo* info = nullptr);
+    static NPT_Result GetInfo(const char* path, NPT_FileInfo* info = NULL);
     static bool       Exists(const char* path) { return NPT_SUCCEEDED(GetInfo(path)); }
     static NPT_Result Remove(const char* path, bool recurse = false);
     static NPT_Result RemoveFile(const char* path);

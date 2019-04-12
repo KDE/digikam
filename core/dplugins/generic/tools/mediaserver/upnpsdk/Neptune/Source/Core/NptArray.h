@@ -59,7 +59,7 @@ public:
     typedef T* Iterator;
 
     // methods
-    NPT_Array<T>(): m_Capacity(0), m_ItemCount(0), m_Items(nullptr) {}
+    NPT_Array<T>(): m_Capacity(0), m_ItemCount(0), m_Items(0) {}
     explicit NPT_Array<T>(NPT_Cardinal count);
     NPT_Array<T>(NPT_Cardinal count, const T& item);
     NPT_Array<T>(const T* items, NPT_Cardinal item_count);
@@ -85,7 +85,7 @@ public:
     bool         Contains(const T& data) const;
     Iterator     GetFirstItem() const { return m_ItemCount?&m_Items[0]:NULL; }
     Iterator     GetLastItem() const  { return m_ItemCount?&m_Items[m_ItemCount-1]:NULL; }
-    Iterator     GetItem(NPT_Ordinal n) { return n<m_ItemCount?&m_Items[n]:nullptr; }
+    Iterator     GetItem(NPT_Ordinal n) { return n<m_ItemCount?&m_Items[n]:NULL; }
 
     // template list operations
     // keep these template members defined here because MSV6 does not let
@@ -98,7 +98,7 @@ public:
     }
 
     template <typename X, typename P>
-    NPT_Result ApplyUntil(const X& function, const P& predicate, bool* match = nullptr) const
+    NPT_Result ApplyUntil(const X& function, const P& predicate, bool* match = NULL) const
     {                                  
         for (unsigned int i=0; i<m_ItemCount; i++) {
             NPT_Result return_value;
@@ -112,7 +112,7 @@ public:
     }
 
     template <typename X> 
-    T* Find(const X& predicate, NPT_Ordinal n=0, NPT_Ordinal* pos = nullptr) const
+    T* Find(const X& predicate, NPT_Ordinal n=0, NPT_Ordinal* pos = NULL) const
     {
         if (pos) *pos = -1;
 
@@ -123,7 +123,7 @@ public:
                 --n;
             }
         }
-        return nullptr;
+        return NULL;
     }
 
 protected:
@@ -144,7 +144,7 @@ inline
 NPT_Array<T>::NPT_Array(NPT_Cardinal count) :
     m_Capacity(0),
     m_ItemCount(0),
-    m_Items(nullptr)
+    m_Items(0)
 {
     Reserve(count);
 }
@@ -157,7 +157,7 @@ inline
 NPT_Array<T>::NPT_Array(const NPT_Array<T>& copy) :
     m_Capacity(0),
     m_ItemCount(0),
-    m_Items(nullptr)
+    m_Items(0)
 {
     Reserve(copy.GetItemCount());
     for (NPT_Ordinal i=0; i<copy.m_ItemCount; i++) {
@@ -285,7 +285,7 @@ NPT_Array<T>::Reserve(NPT_Cardinal count)
     // (re)allocate the items
     NPT_Cardinal new_capacity;
     T* new_items = Allocate(count, new_capacity);
-    if (new_items == nullptr) {
+    if (new_items == NULL) {
         return NPT_ERROR_OUT_OF_MEMORY;
     }
     if (m_ItemCount && m_Items) {
@@ -341,7 +341,7 @@ NPT_Result
 NPT_Array<T>::Erase(Iterator first, Iterator last)
 {
     // check parameters
-    if (first == nullptr || last == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
+    if (first == NULL || last == NULL) return NPT_ERROR_INVALID_PARAMETERS;
 
     // check the bounds
     NPT_Ordinal first_index = (NPT_Ordinal)(NPT_POINTER_TO_LONG(first-m_Items));
@@ -386,7 +386,7 @@ NPT_Array<T>::Insert(Iterator where, const T& item, NPT_Cardinal repeat)
         // allocate more memory
         NPT_Cardinal new_capacity;
         T* new_items = Allocate(needed, new_capacity);
-        if (new_items == nullptr) return NPT_ERROR_OUT_OF_MEMORY;
+        if (new_items == NULL) return NPT_ERROR_OUT_OF_MEMORY;
         m_Capacity = new_capacity;
 
         // move the items before the insertion point

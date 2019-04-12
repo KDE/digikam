@@ -63,13 +63,13 @@ PLT_DeviceHost::PLT_DeviceHost(const char*  description_path /* = "/" */,
                                bool         show_ip          /* = false */,
                                NPT_UInt16   port             /* = 0 */,
                                bool         port_rebind      /* = false */) :
-    PLT_DeviceData(NPT_HttpUrl(nullptr, 0, description_path), 
+    PLT_DeviceData(NPT_HttpUrl(NULL, 0, description_path), 
                    uuid, 
                    *PLT_Constants::GetInstance().GetDefaultDeviceLease(), 
                    device_type, 
                    friendly_name), 
-    m_TaskManager(nullptr),
-    m_HttpServer(nullptr),
+    m_TaskManager(NULL),
+    m_HttpServer(NULL),
     m_ExtraBroascast(false),
     m_Port(port),
     m_PortRebind(port_rebind),
@@ -175,8 +175,8 @@ PLT_DeviceHost::Start(PLT_SsdpListenTask* task)
     m_TaskManager = new PLT_TaskManager();
     m_HttpServer = new PLT_HttpServer(NPT_IpAddress::Any, m_Port, m_PortRebind, 100); // limit to 100 clients max  
     if (NPT_FAILED(result = m_HttpServer->Start())) {
-        m_TaskManager = nullptr;
-        m_HttpServer = nullptr;
+        m_TaskManager = NULL;
+        m_HttpServer = NULL;
         NPT_CHECK_FATAL(result);
     }
 
@@ -186,8 +186,8 @@ PLT_DeviceHost::Start(PLT_SsdpListenTask* task)
 
     // callback to initialize the device
     if (NPT_FAILED(result = SetupDevice())) {
-        m_TaskManager = nullptr;
-        m_HttpServer = nullptr;
+        m_TaskManager = NULL;
+        m_HttpServer = NULL;
         NPT_CHECK_FATAL(result);
     }
 
@@ -249,8 +249,8 @@ PLT_DeviceHost::Stop(PLT_SsdpListenTask* task)
     // Cleanup all services and embedded devices
     PLT_DeviceData::Cleanup();
     
-    m_HttpServer = nullptr;
-    m_TaskManager = nullptr;
+    m_HttpServer = NULL;
+    m_TaskManager = NULL;
     
     return NPT_SUCCESS;
 }
@@ -490,7 +490,7 @@ PLT_DeviceHost::ProcessHttpPostRequest(NPT_HttpRequest&              request,
     NPT_Result                res;
     NPT_String                service_type;
     NPT_String                str;
-    NPT_XmlElementNode*       xml = nullptr;
+    NPT_XmlElementNode*       xml = NULL;
     NPT_String                soap_action_header;
     PLT_Service*              service;
     NPT_XmlElementNode*       soap_body;
@@ -547,11 +547,11 @@ PLT_DeviceHost::ProcessHttpPostRequest(NPT_HttpRequest&              request,
 
     // read action
     soap_body = PLT_XmlHelper::GetChild(xml, "Body");
-    if (soap_body == nullptr)
+    if (soap_body == NULL)
         goto bad_request_soap_body;
 
     PLT_XmlHelper::GetChild(soap_body, soap_action);
-    if (soap_action == nullptr)
+    if (soap_action == NULL)
         goto bad_request_soap_action_body;
 
     // verify action name is identical to SOAPACTION header*/
@@ -563,7 +563,7 @@ PLT_DeviceHost::ProcessHttpPostRequest(NPT_HttpRequest&              request,
         goto bad_request_bad_namespace;
 
     // create a buffer for our response body and call the service
-    if ((action_desc = service->FindActionDesc(soap_action_name)) == nullptr) {
+    if ((action_desc = service->FindActionDesc(soap_action_name)) == NULL) {
         // create a bastard soap response
         PLT_Action::FormatSoapError(401, "Invalid Action", *resp);
         goto error;

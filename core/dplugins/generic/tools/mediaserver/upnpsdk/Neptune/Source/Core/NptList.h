@@ -62,7 +62,7 @@ public:
 
     class Iterator {
     public:
-        Iterator() : m_Item(nullptr) {}
+        Iterator() : m_Item(NULL) {}
         explicit Iterator(Item* item) : m_Item(item) {}
         Iterator(const Iterator& copy) : m_Item(copy.m_Item) {}
         T&  operator*()  const { return m_Item->m_Data; }
@@ -86,7 +86,7 @@ public:
             return saved_this;
         }
         operator bool() const {
-            return m_Item != nullptr;
+            return m_Item != NULL;
         }
         bool operator==(const Iterator& other) const {
             return m_Item == other.m_Item;
@@ -152,7 +152,7 @@ public:
     }
 
     template <typename X, typename P> 
-    NPT_Result ApplyUntil(const X& function, const P& predicate, bool* match = nullptr) const
+    NPT_Result ApplyUntil(const X& function, const P& predicate, bool* match = NULL) const
     {                          
         Item* item = m_Head;
         while (item) {
@@ -182,7 +182,7 @@ public:
             item = item->m_Next;
         }
 
-        return Iterator(nullptr);
+        return Iterator(NULL);
     }
 
     // Merge sort algorithm
@@ -213,7 +213,7 @@ public:
             m_ItemCount += right.m_ItemCount;
             
             right.m_ItemCount = 0;
-            right.m_Head = right.m_Tail = nullptr;
+            right.m_Head = right.m_Tail = NULL;
         }
         
         return NPT_SUCCESS;
@@ -241,7 +241,7 @@ public:
             if (m_Tail) m_Tail->m_Next = other.m_Head;
             m_Tail = other.m_Tail;
             if (!m_Head) m_Head = other.m_Head;
-            other.m_Head = other.m_Tail = nullptr;
+            other.m_Head = other.m_Tail = NULL;
         }
         m_ItemCount += other.m_ItemCount;
         other.m_ItemCount = 0;
@@ -259,7 +259,7 @@ protected:
     {
     public:
         // methods
-        Item(const T& data) : m_Next(nullptr), m_Prev(nullptr), m_Data(data) {}
+        Item(const T& data) : m_Next(0), m_Prev(0), m_Data(data) {}
 
         // members
         Item* m_Next;
@@ -282,7 +282,7 @@ protected:
 +---------------------------------------------------------------------*/
 template <typename T>
 inline
-NPT_List<T>::NPT_List() : m_ItemCount(0), m_Head(nullptr), m_Tail(nullptr) 
+NPT_List<T>::NPT_List() : m_ItemCount(0), m_Head(0), m_Tail(0) 
 {
 }
 
@@ -291,7 +291,7 @@ NPT_List<T>::NPT_List() : m_ItemCount(0), m_Head(nullptr), m_Tail(nullptr)
 +---------------------------------------------------------------------*/
 template <typename T>
 inline
-NPT_List<T>::NPT_List(const NPT_List<T>& list) : m_ItemCount(0), m_Head(nullptr), m_Tail(nullptr) 
+NPT_List<T>::NPT_List(const NPT_List<T>& list) : m_ItemCount(0), m_Head(0), m_Tail(0) 
 {
     *this = list;
 }
@@ -373,8 +373,8 @@ NPT_List<T>::Clear()
     }
 
     m_ItemCount = 0;
-    m_Head      = nullptr;
-    m_Tail      = nullptr;
+    m_Head      = NULL;
+    m_Tail      = NULL;
 
     return NPT_SUCCESS;
 }
@@ -389,14 +389,14 @@ NPT_List<T>::Add(Item& item)
     // add element at the tail
     if (m_Tail) {
         item.m_Prev = m_Tail;
-        item.m_Next = nullptr;
+        item.m_Next = NULL;
         m_Tail->m_Next = &item;
         m_Tail = &item;
     } else {
         m_Head = &item;
         m_Tail = &item;
-        item.m_Next = nullptr;
-        item.m_Prev = nullptr;
+        item.m_Next = NULL;
+        item.m_Prev = NULL;
     }
 
     // one more item in the list now
@@ -570,17 +570,17 @@ NPT_List<T>::Detach(Item& item)
         } else {
             // item is the tail
             m_Tail = item.m_Prev;
-            m_Tail->m_Next = nullptr;
+            m_Tail->m_Next = NULL;
         }
     } else {
         // item is the head
         m_Head = item.m_Next;
         if (m_Head) {
             // item is not the tail
-            m_Head->m_Prev = nullptr;
+            m_Head->m_Prev = NULL;
         } else {
             // item is also the tail
-            m_Tail = nullptr;
+            m_Tail = NULL;
         }
     }
 
@@ -630,7 +630,7 @@ NPT_Result
 NPT_List<T>::PopHead(T& data)
 {
     // check that we have an element
-    if (m_Head == nullptr) return NPT_ERROR_LIST_EMPTY;
+    if (m_Head == NULL) return NPT_ERROR_LIST_EMPTY;
 
     // copy the head item's data
     data = m_Head->m_Data;
@@ -639,9 +639,9 @@ NPT_List<T>::PopHead(T& data)
     Item* head = m_Head;
     m_Head = m_Head->m_Next;
     if (m_Head) {
-        m_Head->m_Prev = nullptr;
+        m_Head->m_Prev = NULL;
     } else {
-        m_Tail = nullptr;
+        m_Tail = NULL;
     }
     delete head;
 
@@ -692,12 +692,12 @@ NPT_List<T>::Cut(NPT_Cardinal keep, NPT_List<T>& cut)
     cut.m_Tail = m_Tail;
     
     // update the portion of the list we keep
-    if (item == m_Head) m_Head = nullptr;
+    if (item == m_Head) m_Head = NULL;
     m_Tail = item->m_Prev;
     
     // update the cut list
-    if (item->m_Prev) item->m_Prev->m_Next = nullptr;
-    item->m_Prev = nullptr;
+    if (item->m_Prev) item->m_Prev->m_Next = NULL;
+    item->m_Prev = NULL;
     
     return NPT_SUCCESS;
 }

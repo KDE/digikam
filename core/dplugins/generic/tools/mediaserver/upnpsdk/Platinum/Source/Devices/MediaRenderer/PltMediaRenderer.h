@@ -77,7 +77,7 @@ class PLT_MediaRenderer : public PLT_DeviceHost
 public:
     PLT_MediaRenderer(const char*  friendly_name,
                       bool         show_ip = false,
-                      const char*  uuid = nullptr,
+                      const char*  uuid = NULL,
                       unsigned int port = 0,
                       bool         port_rebind = false);
     // methods

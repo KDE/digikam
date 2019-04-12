@@ -39,8 +39,8 @@
 |   NPT_AutomaticCleaner::NPT_AutomaticCleaner
 +---------------------------------------------------------------------*/
 NPT_AutomaticCleaner::NPT_AutomaticCleaner() :
-    m_TlsContext(nullptr),
-    m_HttpConnectionManager(nullptr)
+    m_TlsContext(NULL),
+    m_HttpConnectionManager(NULL)
 {
 }
 
@@ -68,7 +68,7 @@ NPT_AutomaticCleaner::GetInstance()
     if (Instance) return Instance;
     
     NPT_SingletonLock::GetInstance().Lock();
-    if (Instance == nullptr) {
+    if (Instance == NULL) {
         // create the shared instance
         Instance = new NPT_AutomaticCleaner();
     }
@@ -76,7 +76,7 @@ NPT_AutomaticCleaner::GetInstance()
     
     return Instance;
 }
-NPT_AutomaticCleaner* NPT_AutomaticCleaner::Instance = nullptr;
+NPT_AutomaticCleaner* NPT_AutomaticCleaner::Instance = NULL;
 NPT_AutomaticCleaner::Cleaner NPT_AutomaticCleaner::Cleaner::AutomaticCleaner;
 
 /*----------------------------------------------------------------------

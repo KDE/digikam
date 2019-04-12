@@ -55,7 +55,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                     NPT_Size  bytes_to_read, 
-                    NPT_Size* bytes_read = nullptr) override;
+                    NPT_Size* bytes_read = 0) override;
 
     NPT_Result Seek(NPT_Position offset) override      { NPT_COMPILER_UNUSED(offset); return NPT_FAILURE; }
     NPT_Result Skip(NPT_Size offset) override          { NPT_COMPILER_UNUSED(offset); return NPT_FAILURE; }
