@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QVariant>
+#include <QCollator>
 
 // KDE includes
 
@@ -142,12 +143,12 @@ QString DPluginAction::pluginId() const
 
 bool DPluginAction::pluginActionLessThan(DPluginAction* const a, DPluginAction* const b)
 {
-    QString textA(a->text());
-    QString textB(b->text());
-    textA.remove(QLatin1Char('&'));
-    textB.remove(QLatin1Char('&'));
+    QCollator collator;
+    collator.setNumericMode(true);
+    collator.setIgnorePunctuation(true);
+    collator.setCaseSensitivity(Qt::CaseSensitive);
 
-    return textA < textB;
+    return (collator.compare(a->text(), b->text()) < 0);
 }
 
 } // namespace Digikam
