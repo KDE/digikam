@@ -157,4 +157,5 @@ BUGFIXES:
 135 ==> 406440 - "Operation in all group items" even when only one item is selected.
 136 ==> 406445 - Reread Metadata From File failure.
 137 ==> 406441 - Saved Timeline searches do not include newer items.
-138 ==> 
+138 ==> 406306 - If copying files fails, tags in the database will be lost.
+139 ==> 
