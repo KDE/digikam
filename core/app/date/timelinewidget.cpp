@@ -456,16 +456,35 @@ DateRangeList TimeLineWidget::selectedDateRange(int& totalCount) const
     QDateTime sdt, edt;
     QDate     date;
 
-    for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end(); ++it3)
+    if (d->selMinDateTime.isValid() &&
+        d->selMaxDateTime.isValid() &&
+        d->selMinDateTime != d->selMaxDateTime)
     {
-        if (it3.value().second == Selected)
+        for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end() ; ++it3)
         {
-            date = QDate(it3.key().first, 1, 1);
-            date = date.addDays(it3.key().second - 1);
-            sdt  = QDateTime(date);
-            edt  = sdt.addDays(1);
-            list.append(DateRange(sdt, edt));
-            totalCount += it3.value().first;
+            if (it3.value().second == Selected)
+            {
+                totalCount += it3.value().first;
+            }
+        }
+
+        sdt = d->selMinDateTime;
+        edt = nextDateTime(d->selMaxDateTime);
+        list.append(DateRange(sdt, edt));
+    }
+    else
+    {
+        for (it3 = d->dayStatMap.begin() ; it3 != d->dayStatMap.end() ; ++it3)
+        {
+            if (it3.value().second == Selected)
+            {
+                date = QDate(it3.key().first, 1, 1);
+                date = date.addDays(it3.key().second - 1);
+                sdt  = QDateTime(date);
+                edt  = sdt.addDays(1);
+                list.append(DateRange(sdt, edt));
+                totalCount += it3.value().first;
+            }
         }
     }
 
