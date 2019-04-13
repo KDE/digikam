@@ -313,9 +313,10 @@ void TagEditDlg::slotIconChanged()
 {
 #ifdef HAVE_KICONTHEMES
 
-    KIconDialog dlg(this);
-    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
-    QString icon = dlg.openDialog();
+    QPointer<KIconDialog> dlg = new KIconDialog(this);
+    dlg->setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
+    QString icon = dlg->openDialog();
+    delete dlg;
 
     if (icon.isEmpty() || icon == d->icon)
     {

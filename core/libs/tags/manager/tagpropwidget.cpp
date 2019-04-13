@@ -32,6 +32,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
+#include <QPointer>
 #include <QMessageBox>
 
 // KDE includes
@@ -315,17 +316,18 @@ void TagPropWidget::slotIconChanged()
 {
 #ifdef HAVE_KICONTHEMES
 
-    d->changed   = true;
-    KIconDialog dlg(this);
-    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
-    QString icon = dlg.openDialog();
+    QPointer<KIconDialog> dlg = new KIconDialog(this);
+    dlg->setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
+    QString icon = dlg->openDialog();
+    delete dlg;
 
     if (icon.isEmpty() || icon == d->icon)
     {
         return;
     }
 
-    d->icon = icon;
+    d->icon    = icon;
+    d->changed = true;
     d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 
 #endif
