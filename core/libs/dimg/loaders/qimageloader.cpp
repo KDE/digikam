@@ -25,8 +25,6 @@
 #include "qimageloader.h"
 
 #ifdef HAVE_IMAGE_MAGICK
-#   define MAGICKCORE_HDRI_ENABLE   0
-#   define MAGICKCORE_QUANTUM_DEPTH 8
 #   include <Magick++.h>
 using namespace Magick;
 #endif
@@ -228,20 +226,22 @@ bool QImageLoader::loadWithImageMagick(const QString& path, QImage& qimg)
         Image image;
         image.read(path.toUtf8().constData());
 
-        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM toQImage:" << image.columns() << image.rows();
-        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM QuantumRange:" << QuantumRange;
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM toQImage     :" << image.columns() << image.rows();
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM QuantumRange :" << QuantumRange;
 
         Blob* const pixelBlob = new Blob;
         image.write(pixelBlob, "BGRA", 8);
-        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM blob size:    " << pixelBlob->length();
+        qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "IM blob size    :" << pixelBlob->length();
 
         qimg = QImage((uchar*)pixelBlob->data(), image.columns(), image.rows(), QImage::Format_ARGB32);
         qCDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "QImage data size:" << qimg.byteCount();
 
         if (qimg.isNull())
+        {
             return false;
+        }
     }
-    catch (Exception &error_)
+    catch (Exception& error_)
     {
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "ImageMagick exception [" << path << "]" << error_.what();
         qimg = QImage();

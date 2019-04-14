@@ -319,7 +319,13 @@ find_package(PkgConfig)
 find_package(Jasper)                               # For JPEG 2000 support.
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
+
 find_package(ImageMagick COMPONENTS Magick++)      # For QImage loader fail back to ImageMagick codecs.
+
+if(ImageMagick_Magick++_FOUND)
+    add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=8)
+    add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)
+endif()
 
 # For Monitor Profiles management with LCMS
 find_package(X11)

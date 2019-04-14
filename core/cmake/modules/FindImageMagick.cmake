@@ -58,7 +58,8 @@
 # QUIET, REQUIRED, etc.).
 #
 #
-# Copyright (c) 20&à-2018, cmake project <https://cmake.org>
+# Based on cmake project implementation <https://cmake.org>
+#
 # Copyright (c) 2019, Gilles Caulier <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -72,6 +73,7 @@ find_package(PkgConfig QUIET)
 
 function(FIND_IMAGEMAGICK_API component header)
 
+    message(STATUS "FIND IMAGEMAGICK API ${component}")
     set(ImageMagick_${component}_FOUND FALSE PARENT_SCOPE)
 
     pkg_check_modules(PC_${component} QUIET ${component})
@@ -123,9 +125,7 @@ function(FIND_IMAGEMAGICK_API component header)
 
         # Construct per-component include directories.
 
-        set(ImageMagick_${component}_INCLUDE_DIRS
-            ${ImageMagick_${component}_INCLUDE_DIR}
-        )
+        set(ImageMagick_${component}_INCLUDE_DIRS ${ImageMagick_${component}_INCLUDE_DIR})
 
         if(ImageMagick_${component}_ARCH_INCLUDE_DIR)
 
@@ -135,8 +135,7 @@ function(FIND_IMAGEMAGICK_API component header)
         endif()
 
         list(REMOVE_DUPLICATES ImageMagick_${component}_INCLUDE_DIRS)
-        set(ImageMagick_${component}_INCLUDE_DIRS
-            ${ImageMagick_${component}_INCLUDE_DIRS} PARENT_SCOPE)
+        set(ImageMagick_${component}_INCLUDE_DIRS ${ImageMagick_${component}_INCLUDE_DIRS} PARENT_SCOPE)
 
         # Add the per-component include directories to the full include dirs.
 
@@ -144,10 +143,7 @@ function(FIND_IMAGEMAGICK_API component header)
         list(REMOVE_DUPLICATES ImageMagick_INCLUDE_DIRS)
         set(ImageMagick_INCLUDE_DIRS ${ImageMagick_INCLUDE_DIRS} PARENT_SCOPE)
 
-        list(APPEND ImageMagick_LIBRARIES
-                    ${ImageMagick_${component}_LIBRARY}
-        )
-
+        list(APPEND ImageMagick_LIBRARIES ${ImageMagick_${component}_LIBRARY})
         set(ImageMagick_LIBRARIES ${ImageMagick_LIBRARIES} PARENT_SCOPE)
 
     endif()
@@ -289,7 +285,8 @@ elseif(ImageMagick_DEFAULT_EXECUTABLES)
 endif()
 
 set(ImageMagick_INCLUDE_DIRS ${ImageMagick_INCLUDE_DIRS})
-set(ImageMagick_LIBRARIES ${ImageMagick_LIBRARIES})
+set(ImageMagick_LIBRARIES    ${ImageMagick_LIBRARIES})
+set(ImageMagick_LDFLAGS      ${ImageMagick_LDFLAGS})
 
 if(ImageMagick_mogrify_EXECUTABLE)
 
@@ -328,5 +325,7 @@ message(STATUS "ImageMagick_VERSION_STRING:         ${ImageMagick_VERSION_STRING
 message(STATUS "ImageMagick_EXECUTABLE_DIR:         ${ImageMagick_EXECUTABLE_DIR}")
 message(STATUS "ImageMagick_INCLUDE_DIRS:           ${ImageMagick_INCLUDE_DIRS}")
 message(STATUS "ImageMagick_LIBRARIES:              ${ImageMagick_LIBRARIES}")
+message(STATUS "ImageMagick_LDFLAGS:                ${ImageMagick_LDFLAGS}")
 message(STATUS "ImageMagick_Magick++_INCLUDE_DIRS:  ${ImageMagick_Magick++_INCLUDE_DIRS}")
 message(STATUS "ImageMagick_Magick++_LIBRARIES:     ${ImageMagick_Magick++_LIBRARIES}")
+message(STATUS "ImageMagick_Magick++_LDFLAGS:       ${ImageMagick_Magick++_LDFLAGS}")
