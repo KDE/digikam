@@ -1,4 +1,4 @@
-digiKam 6.1.0 - Release date: 2019-03-31
+digiKam 6.1.0 - Release date: 2019-04-14
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -158,4 +158,3 @@ BUGFIXES:
 136 ==> 406445 - Reread Metadata From File failure.
 137 ==> 406441 - Saved Timeline searches do not include newer items.
 138 ==> 406306 - If copying files fails, tags in the database will be lost.
-139 ==> 

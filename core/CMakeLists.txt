@@ -26,7 +26,7 @@ set(DIGIKAM_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-set(DIGIKAM_SUFFIX_VERSION "-git")
+set(DIGIKAM_SUFFIX_VERSION "")
 
 # ==============================================================================
 # Set env. variables accordingly.
@@ -323,6 +323,7 @@ find_package(OpenGL)                               # For Presentation tool.
 find_package(ImageMagick COMPONENTS Magick++)      # For QImage loader fail back to ImageMagick codecs.
 
 if(ImageMagick_Magick++_FOUND)
+    # Options to pass to IM as codecs are only used as fail-back image reader through Qt loader.
     add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=8)
     add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)
 endif()
