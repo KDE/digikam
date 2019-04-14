@@ -5,7 +5,7 @@
 #
 # Copyright (c)      2005, Mark Kretschmann, <kretschmann at kde dot org>
 # Copyright (c)      2014, Nicolas Lécureuil, <kde at nicolaslecureuil dot fr>
-# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -16,23 +16,6 @@ STDOUT.sync = true
 
 branch = "trunk"
 tag = ""
-
-enable_digikam = false
-
-for opt in $*
-
-    case opt
-        when "--enable-digikam"
-            enable_digikam = true
-        else
-            puts("Unknown option '#{opt}'.\n")
-            puts("Possible arguments to customize i18n extraction:\n")
-            puts("--enable-digikam\n")
-            exit
-    end
-end
-
-print ("extract digiKam i18n      : #{enable_digikam}\n")
 
 i18nlangs = []
 
@@ -71,21 +54,18 @@ i18nlangs.each_line do |lang|
         makefile << "GETTEXT_PROCESS_PO_FILES( #{lang} ALL INSTALL_DESTINATION ${LOCALE_INSTALL_DIR} PO_FILES ${_po_files} )\n"
         makefile.close()
 
-        if (enable_digikam == true)
+        # digiKam core extragear-graphics
 
-            # digiKam core extragear-graphics
+        for part in ['digikam']
 
-            for part in ['digikam']
+            if isWindows
+                `svn cat svn://anonsvn.kde.org/home/kde/#{branch}/l10n-kf5/#{lang}/messages/extragear-graphics/#{part}.po > #{part}.po`
+            else
+                `svn cat svn://anonsvn.kde.org/home/kde/#{branch}/l10n-kf5/#{lang}/messages/extragear-graphics/#{part}.po 2> /dev/null | tee #{part}.po `
+            end
 
-                if isWindows
-                    `svn cat svn://anonsvn.kde.org/home/kde/#{branch}/l10n-kf5/#{lang}/messages/extragear-graphics/#{part}.po > #{part}.po`
-                else
-                    `svn cat svn://anonsvn.kde.org/home/kde/#{branch}/l10n-kf5/#{lang}/messages/extragear-graphics/#{part}.po 2> /dev/null | tee #{part}.po `
-                end
-
-                if FileTest.size( "#{part}.po" ) == 0
-                    File.delete( "#{part}.po" )
-                end
+            if FileTest.size( "#{part}.po" ) == 0
+                File.delete( "#{part}.po" )
             end
         end
 

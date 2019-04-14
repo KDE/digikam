@@ -7,7 +7,7 @@
 
 # Configuration to tune before to build tarball.
 
-TARBALL_VERSION="6.0.0"
+TARBALL_VERSION="6.1.0"
 
 # Location to host target files.
 TARBALL_DIR="$PWD/../digikam-$TARBALL_VERSION"
