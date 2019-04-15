@@ -1,0 +1,160 @@
+digiKam 6.1.0 - Release date: 2019-04-14
+
+*****************************************************************************************************
+NEW FEATURES:
+
+General     : New plugins interface for digiKam and Showfoto named dplugins.
+General     : All export tools become generic plugins and are shared with Showfoto.
+General     : Update internal libpgf to last 07193.
+General     : Add compatiblity with OpenCV version 4.
+General     : MacOS and AppImage bundles are now published with Qt 5.11.3.
+General     : Add new optional configuration option to compile with Faces Engine Neural Network.
+General     : Add optional support to ImageMagick codecs to support extra image formats as XCF, FITS, HEIC, etc.
+BQM         : Add new advanced settings in resize tool.
+BQM         : All Batch Queue Manager tools become Bqm plugins.
+Editor      : All Image Editor tools become Editor plugins and are shared with Showfoto.
+Item View   : Add sort items by modification date.
+DPlugin     : New plugin to copy items to a local storage.
+DPlugin     : New plugin to set image as Linux desktop wallpaper.
+
+*****************************************************************************************************
+BUGFIXES:
+
+001 ==> 279216 - "Resize image" feature is missing some useful options [patch].
+002 ==> 368779 - Missing translations to Plugin Categories columns in setup page.
+003 ==> 165852 - Google Youtube video uploader.
+004 ==> 404578 - Links broken on downloadpage for 6.0.0.
+005 ==> 402069 - FAQ link on Support page is broken.
+006 ==> 404503 - There is a typo in support section of website.
+007 ==> 404621 - I can not import the album Google Photo.
+008 ==> 404642 - digiKam flatpak: Please include mysql driver (for using an external mysql db).
+009 ==> 404690 - There is an unwanted bar in the left screen edge in full screen view.
+010 ==> 404736 - Merging tags keeps popping up confirmation dialogs every second.
+011 ==> 404737 - digiKam does not compile with opencv 3.4.1.
+012 ==> 404735 - F2 should edit tag name when tag name has focus.
+013 ==> 404748 - Default Album rename dialog should be larger (or save its size when changed).
+014 ==> 304811 - Offer a "stretch histogram" functionality to automatically adjust brightness & gamma.
+015 ==> 374464 - Can start print wizzard.
+016 ==> 316687 - ImageMagick-6.8.3.9 could not be found.
+017 ==> 305137 - wish for integrated(?) clip-generator.
+018 ==> 404821 - Presentation offset from full screen when OpenGL transitions selected.
+019 ==> 404894 - 6.0.0 x86-64 appimage startup complains about mssing ']' (startup bash script being called).
+020 ==> 368262 - Google services tool does not use kaccounts.
+021 ==> 376913 - Can't create a new album in picasa/googlephoto.
+022 ==> 404896 - Vertical video are displayed horizontally.
+023 ==> 404859 - Using Batch Queue Manager to make a JPG copy of the images on completion the "arw" images are no longer visible in the originating album.
+024 ==> 404893 - Digikam::DigikamApp::slotSolidDeviceChanged: slotSolidDeviceChanged: messages referring to directory that digikam should not care about.
+025 ==> 264296 - Lack of right-click delete of points in Curves [patch].
+026 ==> 404954 - Places, Devices, and Removable Devices no longer show in "Select Target Location".
+027 ==> 404962 - List of subfolders: incorrect encoding (spaces -> %20, accents).
+028 ==> 402724 - digiKam Settings/Configuration: missing section "Plugins" in Windows/6.0.0B3.
+029 ==> 404987 - Ability to select which import/export options are included in menu.
+030 ==> 404999 - Inconsistency in facetag font size.
+031 ==> 244259 - Last image is displayed twice when Advanced Slideshow with KenBurns effect is run more than once.
+032 ==> 405043 - Add volume control to video playback.
+033 ==> 401253 - Face detect crashes every time.
+034 ==> 405042 - Ability to loop video playback.
+035 ==> 405138 - Can not disable webservice plugin.
+036 ==> 405137 - Original items visible in Thumbnails view.
+037 ==> 400606 - Dead space above thumbnails.
+038 ==> 380434 - 5.6.0-pre pkg does not detect filesystem changes.
+039 ==> 405250 - Menus gone missing.
+040 ==> 388198 - Menu Help -> What's this is not used.
+041 ==> 392570 - Missing Option to display complete filename.
+042 ==> 375474 - Renaming People Tag Causes Unpredictable Sort Order In People Menu.
+043 ==> 398868 - Video upside down in Preview (Thumbnail ok).
+044 ==> 380065 - "Open with" menu entry missing [patch].
+045 ==> 405258 - Provide an OpenWith... function to get a specific ImageEditor.
+046 ==> 402807 - Progress manager doesn't seem to be involved in the fingerprint scanning (v6.0 beta 3).
+047 ==> 278935 - Please make XMP Sidecar filename configurable [patch].
+048 ==> 405231 - Monitor Color Profile is not applied in "Presentation".
+049 ==> 405347 - Selecting by aspect ratio: abs function in sqlite lowercase, in mariadb uppercase.
+050 ==> 405327 - Position and size of faces display depends on configuration setting.
+051 ==> 405234 - Refresh does no work.
+052 ==> 403649 - Filesystem changes are not visible in album view [patch].
+053 ==> 400768 - Many different trash cans hard & slow to use.
+054 ==> 296864 - SETUP : Create interface for changing physical location or path of album.
+055 ==> 397189 - digikam is crashing when adding this photo.
+056 ==> 405378 - Missing libz.dll on launch.
+057 ==> 401306 - digikam-git r41326 doesn't compile with OpenCV 4
+058 ==> 379049 - IPTC and XMP metadata not always read when adding a new album.
+059 ==> 404939 - AppImage package: integration with the OS with AppImageLauncher.
+060 ==> 405514 - Configure Shortcuts : Shortcuts file contains space in assigned_tags.
+061 ==> 405149 - The "File Name" in the thumbnail view is not visible.
+062 ==> 405512 - Meta Key Not Useful For Key Modifier In Windows.
+063 ==> 405513 - Configure Shortcuts : Defaults Button Does Not Apply To New Schemes.
+064 ==> 388334 - Auto Filter In People Tag List Confused With Shortcut Keys.
+065 ==> 405518 - digiKam can not be added to the Gnome Dash as favorite.
+066 ==> 405342 - Increase slideshow caption font size and keyboard shortcut or button to display/hide it.
+067 ==> 405636 - When importing picture not all people tags are present.
+068 ==> 379916 - Some people tags are missing.
+069 ==> 386967 - digiKam with Adobe Bridge keywords under Windows.
+070 ==> 402433 - Google Maps Doesn't Zoom With Mouse Wheel.
+071 ==> 396920 - EXIF info not written when files from some cameras (Pentax K3) are edited and saved.
+072 ==> 375468 - Cannot turn on Menubar.
+073 ==> 387253 - No more menu bar in the Gnome desktop environment.
+074 ==> 397405 - Large empty space in Digikams main icon view since ~20180707 appimage.
+075 ==> 399237 - Thumbnails view shows an empty dock for thumbnails.
+076 ==> 393935 - Segmentation fault during face detection.
+077 ==> 388533 - UpdateSchemaFromV7ToV9 fails.
+078 ==> 281493 - digiKam fails to install on Windows XP.
+079 ==> 405537 - Strange behavior with tag in attached file.
+080 ==> 405233 - digikam: symbol lookup error: /tmp/.mount_digika5N9rGH/usr/lib/libQt5XcbQpa.so.5: undefined symbol: FT_Property_Set.
+081 ==> 404853 - digikam-6.0.0 faces engine fails to compile on PowerPC.
+082 ==> 405625 - digiKam 6.0.0 faces engine fails to compile on PowerPC with AltiVec enabled.
+083 ==> 372340 - Tagged face areas on portait (vertical) oriented images are mispositioned.
+084 ==> 405743 - Customise Tool tab in editor.
+085 ==> 376014 - Moving grouped photos from one folder to another breaks the group.
+086 ==> 377782 - Group is lost when moved to another album.
+087 ==> 385147 - Moving grouped images into another album removes groups.
+088 ==> 342017 - Reverse Geocoding doesn't work.
+089 ==> 405174 - Right-click advice menu. Open with another program.
+090 ==> 399285 - Would it be possible to drop kio for a better 'open with' functionality across all platforms?
+091 ==> 383079 - Open the photo in GIMP under windows.
+092 ==> 374356 - "Show item in file explorer" as well as "open with".
+093 ==> 208201 - Icons appears and disappears.
+094 ==> 202955 - thumbnails in album view are flickering with high frequency.
+095 ==> 208201 - Icons appears and disappears.
+096 ==> 396933 - Tooltips of thumbnails and albums not readable in light designs.
+097 ==> 393777 - Item Tool Tips are unreadable in Windows 10 (white on yellow).
+098 ==> 240237 - Not possible to rotate the image.
+099 ==> 366446 - Creating new albums fails due to invalid path name.
+100 ==> 369235 - Menu bar is not translated.
+101 ==> 403132 - Lazy Update not working (or: Stop when I say so).
+102 ==> 404797 - digikam-6.0.0-x86-64.appimage: stack trace shortly after startup.
+103 ==> 405789 - Sidebar widths revert to their defaults after switching back from full-screen view.
+104 ==> 405813 - Tab-View do not show Rating information.
+105 ==> 404138 - can't connect to my account.
+106 ==> 403819 - Export to Google Photos not working (bad request).
+107 ==> 382367 - Unreadable light on light tooltip.
+108 ==> 405825 - Feature request: "Video date" in XMP Metadata Editor.
+109 ==> 405799 - Not possible to add collection.
+110 ==> 389549 - "Clear all faces on this image" Does Not Remove All People Tags.
+111 ==> 405904 - The saved version of the image is not linked to the original.
+112 ==> 372308 - Buttons for rotate does not show very well.
+113 ==> 375375 - Various bugs detecting and tagging faces in current 5.4.0 Digikam appimage.
+114 ==> 405700 - Lensfun supported Camera is missing.
+115 ==> 400140 - Digikam crash when exporting on google photos.
+116 ==> 397744 - Face recognition not working.
+117 ==> 398000 - Multi/batch rename fails almost every time.
+118 ==> 396496 - QSQLITE -> MYSQL loses grouping information.
+119 ==> 382311 - Photos in collapsed groups are incorrectly excluded if first photo in group does not match filter.
+120 ==> 400981 - Appimage not working anymore: /lib64/libfontconfig.so.1: undefined symbol: FT_Done_MM_Var.
+121 ==> 406054 - Export to google photo a picture with a "title" => no "title" in google photo.
+122 ==> 254932 - New tool to export images as desktop wallpaper folder.
+123 ==> 192020 - Tool to export as plasma backgrounds.
+124 ==> 406171 - digiKam crashed on exit.
+125 ==> 406276 - Error during Migration: "Error creating database schema".
+126 ==> 406227 - Picture without any tag are not listed with button "No Tags".
+127 ==> 401377 - Export to (Onedrive, Dropbox ...) crashes digikam (Segmentation Fault).
+128 ==> 406309 - Tags reappear after being merged when several merge processes overlap(?).
+129 ==> 387487 - Browsing through thumbnails quickly with right arrow key causes crash.
+130 ==> 385726 - Add Support For Apple Live Photos.
+131 ==> 360806 - digiKam doesn't show Gimp 2.9 xcf images [patch].
+132 ==> 393408 - Support for extra image formats as HEIC, FITS, JPEG-XR [patch].
+133 ==> 406356 - Crop to Selection not visible in Sidebar and Menubar.
+134 ==> 406418 - Tag icon don't show after using and show a clock icon for used tag.
+135 ==> 406440 - "Operation in all group items" even when only one item is selected.
+136 ==> 406445 - Reread Metadata From File failure.
+137 ==> 406441 - Saved Timeline searches do not include newer items.
+138 ==> 406306 - If copying files fails, tags in the database will be lost.
