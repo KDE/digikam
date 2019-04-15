@@ -163,3 +163,18 @@ target_link_libraries(testcolorbalancefilter
 
                       ${OpenCV_LIBRARIES}
 )
+
+#------------------------------------------------------------------------
+
+if(ImageMagick_Magick++_FOUND)
+
+    set(magickloader_SRCS magickloader.cpp)
+    add_executable(magickloader ${magickloader_SRCS})
+
+    target_link_libraries(magickloader
+                          digikamcore
+                          Qt5::Core
+                          Qt5::Gui
+    )
+
+endif()
