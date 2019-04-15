@@ -29,10 +29,10 @@
 
 // Qt includes
 
-#include <QRadioButton>
 #include <QBrush>
 #include <QCheckBox>
 #include <QCloseEvent>
+#include <QRadioButton>
 #include <QComboBox>
 #include <QEvent>
 #include <QFile>
@@ -45,12 +45,11 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QVector>
 #include <QIcon>
 #include <QApplication>
 #include <QStandardPaths>
 #include <QMessageBox>
-#include <QString>
-#include <QVector>
 
 // KDE includes
 
@@ -83,19 +82,18 @@ public:
 
     enum WidthPreset
     {
-        Tiny = 0,
+        Original = 0,
+        Tiny,
         Small,
         Medium,
         Big,
         Large,
         Huge,
-        Profile,
-        Sep1,
+        UHD4K,
         A3,
         A4,
         A6,
         Letter,
-        Sep2,
         Print1,
         Print2,
         Print3,
@@ -107,7 +105,7 @@ public:
         Pixels,
         Inches,
         Centimeters,
-        Millimeters,
+        Millimeters
     };
 
     explicit Private()
@@ -115,14 +113,11 @@ public:
         orgHeight(0),
         prevW(0),
         prevH(0),
-        prevUnit(0),
         prevWP(0.0),
         prevHP(0.0),
         restorationTips(0),
-        labelPreset(0),
         presetCBox(0),
         units(0),
-        useCustom(0),
         preserveRatioBox(0),
         useGreycstorationBox(0),
         mainTab(0),
@@ -138,8 +133,7 @@ public:
     {
     }
 
-    QVector<int> presetLengthValue(WidthPreset preset);
-    int whr(QVector<int> dimension, int index);
+    QSize presetLengthValue(WidthPreset preset);
 
     static const QString    configGroupName;
     static const QString    configFastApproxEntry;
@@ -160,18 +154,14 @@ public:
     int                     orgHeight;
     int                     prevW;
     int                     prevH;
-    int                     prevUnit;
 
     double                  prevWP;
     double                  prevHP;
 
     QLabel*                 restorationTips;
-    QLabel*                 labelPreset;
 
     QComboBox*              presetCBox;
     QComboBox*              units;
-
-    QCheckBox*              useCustom;
 
     QCheckBox*              preserveRatioBox;
     QCheckBox*              useGreycstorationBox;
@@ -182,8 +172,8 @@ public:
 
     ImageGuideWidget*       previewWidget;
 
-    DDoubleNumInput*           wInput;
-    DDoubleNumInput*           hInput;
+    DDoubleNumInput*        wInput;
+    DDoubleNumInput*        hInput;
     DIntNumInput*           resolution;
 
     DDoubleNumInput*        wpInput;
@@ -193,109 +183,78 @@ public:
     GreycstorationSettings* settingsWidget;
 };
 
-QVector<int> ResizeTool::Private::presetLengthValue(WidthPreset preset)
+QSize ResizeTool::Private::presetLengthValue(WidthPreset preset)
 {
-    QVector<int> dimension(3);
+    QSize size;
 
     switch (preset)
     {
+        case Private::Original:
+            size = QSize(orgWidth, orgHeight);
+            break;
+
         case Private::Tiny:
-            dimension[0]  = 320;
-            dimension[1] = 200;
-            dimension[2] = 72;
+            size = QSize(320, 200);
             break;
 
         case Private::Small:
-            dimension[0]  = 640;
-            dimension[1] = 480;
-            dimension[2] = 72;
+            size = QSize(640, 480);
             break;
 
         case Private::Medium:
-            dimension[0]  = 960;
-            dimension[1] = 640;
-            dimension[2] = 144;
+            size = QSize(960, 640);
             break;
 
         case Private::Big:
-            dimension[0]  = 1024;
-            dimension[1] = 768;
-            dimension[2] = 72;
+            size = QSize(1024, 768);
             break;
 
         case Private::Large:
-            dimension[0]  = 1280;
-            dimension[1] = 720;
-            dimension[2] = 144;
+            size = QSize(1280, 720);
             break;
 
         case Private::Huge:
-            dimension[0]  = 1920;
-            dimension[1] = 1080;
-            dimension[2] = 72;
+            size = QSize(1920, 1080);
             break;
 
-        case Private::Profile:
-            dimension[0]  = 1080;
-            dimension[1] = 1080;
-            dimension[2] = 144;
+        case Private::UHD4K:
+            size = QSize(3840, 2160);
             break;
 
         case Private::A3:
-            dimension[0]  = 3508;
-            dimension[1] = 4961;
-            dimension[2] = 300;
+            size = QSize(3508, 4961);
             break;
 
         case Private::A4:
-            dimension[0]  = 2480;
-            dimension[1] = 3508;
-            dimension[2] = 300;
+            size = QSize(2480, 3508);
             break;
 
         case Private::A6:
-            dimension[0]  = 1240;
-            dimension[1] = 1748;
-            dimension[2] = 300;
+            size = QSize(1240, 1748);
             break;
 
         case Private::Letter:
-            dimension[0]  = 2550;
-            dimension[1] = 3300;
-            dimension[2] = 300;
+            size = QSize(2550, 3300);
             break;
 
         case Private::Print1:
-            dimension[0]  = 1200;
-            dimension[1] = 1800;
-            dimension[2] = 300;
+            size = QSize(1200, 1800);
             break;
 
         case Private::Print2:
-            dimension[0]  = 1500;
-            dimension[1] = 2100;
-            dimension[2] = 300;
+            size = QSize(1500, 2100);
             break;
 
         case Private::Print3:
-            dimension[0]  = 2400;
-            dimension[1] = 3000;
-            dimension[2] = 300;
+            size = QSize(2400, 3000);
             break;
 
         default:
-            dimension[0]  = 3300;
-            dimension[1] = 4200;
-            dimension[2] = 300;
+            size = QSize(3300, 4200);
             break;
     }
 
-    return dimension;
-}
-
-int ResizeTool::Private::whr(QVector<int> dimension, int index)
-{
-    return dimension[index];
+    return size;
 }
 
 const QString ResizeTool::Private::configGroupName(QLatin1String("resize Tool"));
@@ -328,11 +287,11 @@ ResizeTool::ResizeTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings(0);
-    d->gboxSettings->setButtons(EditorToolSettings::Default|
-                                EditorToolSettings::Try|
-                                EditorToolSettings::Ok|
-                                EditorToolSettings::Load|
-                                EditorToolSettings::SaveAs|
+    d->gboxSettings->setButtons(EditorToolSettings::Default |
+                                EditorToolSettings::Try     |
+                                EditorToolSettings::Ok      |
+                                EditorToolSettings::Load    |
+                                EditorToolSettings::SaveAs  |
                                 EditorToolSettings::Cancel);
 
     ImageIface iface;
@@ -351,116 +310,131 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     d->mainTab->addTab(firstPage, i18n("New Size"));
 
-    d->labelPreset          = new QLabel(i18n("Preset Resolutions:"), firstPage);
-    d->presetCBox           = new QComboBox(firstPage);
-    d->presetCBox->insertItem(Private::Tiny,    i18np("Tiny (1 pixel)",     "Tiny (%1 x %2 pixels) %3 ppi",     d->whr(d->presetLengthValue(Private::Tiny),0),     d->whr(d->presetLengthValue(Private::Tiny),1),     d->whr(d->presetLengthValue(Private::Tiny),2)));
-    d->presetCBox->insertItem(Private::Small,   i18np("Small (1 pixel)",    "Small (%1 x %2 pixels) %3 ppi",    d->whr(d->presetLengthValue(Private::Small),0),    d->whr(d->presetLengthValue(Private::Small),1),    d->whr(d->presetLengthValue(Private::Small),2)));
-    d->presetCBox->insertItem(Private::Medium,  i18np("Medium (1 pixel)",   "Medium (%1 x %2 pixels) %3 ppi",   d->whr(d->presetLengthValue(Private::Medium),0),   d->whr(d->presetLengthValue(Private::Medium),1),   d->whr(d->presetLengthValue(Private::Medium),2)));
-    d->presetCBox->insertItem(Private::Big,     i18np("Big (1 pixel)",      "Big (%1*%2 pixels) %3 ppi",        d->whr(d->presetLengthValue(Private::Big),0),      d->whr(d->presetLengthValue(Private::Big),1),      d->whr(d->presetLengthValue(Private::Big),2)));
-    d->presetCBox->insertItem(Private::Large,   i18np("Large (1 pixel)",    "Large (%1*%2 pixels) %3 ppi",      d->whr(d->presetLengthValue(Private::Large),0),    d->whr(d->presetLengthValue(Private::Large),1),    d->whr(d->presetLengthValue(Private::Large),2)));
-    d->presetCBox->insertItem(Private::Huge,    i18np("Huge (1 pixel)",     "Huge (%1*%2 pixels) %3 ppi",       d->whr(d->presetLengthValue(Private::Huge),0),     d->whr(d->presetLengthValue(Private::Huge),1),     d->whr(d->presetLengthValue(Private::Huge),2)));
-    d->presetCBox->insertItem(Private::Profile, i18np("Profile (1 pixel)",  "Profile (%1*%2 pixels) %3 ppi",    d->whr(d->presetLengthValue(Private::Profile),0),  d->whr(d->presetLengthValue(Private::Profile),1),  d->whr(d->presetLengthValue(Private::Profile),2)));
-    d->presetCBox->insertItem(Private::A3,      i18np("A3 (1 pixel)",       "A3 (210*297 mm) %1 ppi",           d->whr(d->presetLengthValue(Private::A3),2)));
-    d->presetCBox->insertItem(Private::A4,      i18np("A4 (1 pixel)",       "A4 (210*297 mm) %1 ppi",           d->whr(d->presetLengthValue(Private::A4),2)));
-    d->presetCBox->insertItem(Private::A6,      i18np("A6 (1 pixel)",       "A6 (105*148 mm) %1 ppi",           d->whr(d->presetLengthValue(Private::A6),2)));
-    d->presetCBox->insertItem(Private::Letter,  i18np("Letter (1 pixel)",   "Letter (8.5*11 in) %1 ppi",        d->whr(d->presetLengthValue(Private::Letter),2)));
-    d->presetCBox->insertItem(Private::Print1,  i18np("Print1 (1 pixel)",   "4*6 in %1 ppi",                    d->whr(d->presetLengthValue(Private::Print1),2)));
-    d->presetCBox->insertItem(Private::Print2,  i18np("Print2 (1 pixel)",   "5*7 in %1 ppi",                    d->whr(d->presetLengthValue(Private::Print2),2)));
-    d->presetCBox->insertItem(Private::Print2,  i18np("Print3 (1 pixel)",   "8*10 in %1 ppi",                   d->whr(d->presetLengthValue(Private::Print3),2)));
-    d->presetCBox->insertItem(Private::Print2,  i18np("Print3 (1 pixel)",   "11*14 in %1 ppi",                  d->whr(d->presetLengthValue(Private::Print4),2)));
+    QLabel* const label = new QLabel(i18n("Preset Resolutions:"), firstPage);
+    d->presetCBox       = new QComboBox(firstPage);
+    d->presetCBox->addItem(i18np("Original (size)", "Original (%1 x %2 pixels)", d->presetLengthValue(Private::Original).width(),
+                                                                                 d->presetLengthValue(Private::Original).height()),
+                                                                                 Private::Original);
+    d->presetCBox->addItem(i18np("Tiny (size)",     "Tiny (%1 x %2 pixels)",     d->presetLengthValue(Private::Tiny).width(),
+                                                                                 d->presetLengthValue(Private::Tiny).height()),
+                                                                                 Private::Tiny);
+    d->presetCBox->addItem(i18np("Small (size)",    "Small (%1 x %2 pixels)",    d->presetLengthValue(Private::Small).width(),
+                                                                                 d->presetLengthValue(Private::Small).height()),
+                                                                                 Private::Small);
+    d->presetCBox->addItem(i18np("Medium (size)",   "Medium (%1 x %2 pixels)",   d->presetLengthValue(Private::Medium).width(),
+                                                                                 d->presetLengthValue(Private::Medium).height()),
+                                                                                 Private::Medium);
+    d->presetCBox->addItem(i18np("Big (size)",      "Big (%1 x %2 pixels)",      d->presetLengthValue(Private::Big).width(),
+                                                                                 d->presetLengthValue(Private::Big).height()),
+                                                                                 Private::Big);
+    d->presetCBox->addItem(i18np("Large (size)",    "Large (%1 x %2 pixels)",    d->presetLengthValue(Private::Large).width(),
+                                                                                 d->presetLengthValue(Private::Large).height()),
+                                                                                 Private::Large);
+    d->presetCBox->addItem(i18np("Huge (size)",     "Huge (%1 x %2 pixels)",     d->presetLengthValue(Private::Huge).width(),
+                                                                                 d->presetLengthValue(Private::Huge).height()),
+                                                                                 Private::Huge);
+    d->presetCBox->addItem(i18np("UHD4K (size)",    "UHD-4K (%1 x %2 pixels)",   d->presetLengthValue(Private::UHD4K).width(),
+                                                                                 d->presetLengthValue(Private::UHD4K).height()),
+                                                                                 Private::UHD4K);
+    d->presetCBox->addItem(i18nc("A3 (size)",       "A3 (297 x 420 mm)"),        Private::A3);
+    d->presetCBox->addItem(i18nc("A4 (size)",       "A4 (210 x 297 mm)"),        Private::A4);
+    d->presetCBox->addItem(i18nc("A6 (size)",       "A6 (105 x 148 mm)"),        Private::A6);
+    d->presetCBox->addItem(i18nc("Letter (size)",   "Letter (8.5 x 11 in)"),     Private::Letter);
+    d->presetCBox->addItem(i18nc("Print (size)",    "4 x 6 in"),                 Private::Print1);
+    d->presetCBox->addItem(i18nc("Print (size)",    "5 x 7 in"),                 Private::Print2);
+    d->presetCBox->addItem(i18nc("Print (size)",    "8 x 10 in"),                Private::Print3);
+    d->presetCBox->addItem(i18nc("Print (size)",    "11 x 14 in"),               Private::Print4);
+    d->presetCBox->insertSeparator((int)Private::A3);
+    d->presetCBox->insertSeparator((int)Private::Tiny);
 
-    d->presetCBox->insertSeparator(7);
-    d->presetCBox->insertSeparator(12);
-
+    QLabel* const label1    = new QLabel(i18n("Units:"), firstPage);
     d->units                = new QComboBox(firstPage);
-    QLabel* const label = new QLabel(i18n("Units:"), firstPage);
-    d->prevUnit = 0;
-    d->units->insertItem(Private::Pixels,       i18n("Pixels (px)"));
-    d->units->insertItem(Private::Inches,       i18n("Inches (in)"));
-    d->units->insertItem(Private::Centimeters,  i18n("Centimeters (cm)"));
-    d->units->insertItem(Private::Millimeters,  i18n("Millimeters (mm)"));
-
-    d->useCustom            = new QCheckBox(i18n("Use Custom Units"),  firstPage);
+    d->units->addItem(i18n("Pixels (px)"),      Private::Pixels);
+    d->units->addItem(i18n("Inches (in)"),      Private::Inches);
+    d->units->addItem(i18n("Centimeters (cm)"), Private::Centimeters);
+    d->units->addItem(i18n("Millimeters (mm)"), Private::Millimeters);
 
     d->preserveRatioBox = new QCheckBox(i18n("Maintain aspect ratio"), firstPage);
     d->preserveRatioBox->setWhatsThis( i18n("Enable this option to maintain aspect "
                                             "ratio with new image sizes."));
 
-    QLabel* const label1 = new QLabel(i18n("Width:"), firstPage);
+    QLabel* const label2 = new QLabel(i18n("Width:"), firstPage);
     d->wInput            = new DDoubleNumInput(firstPage);
-    d->wInput->setRange(1, qMax(d->orgWidth * 10, 12000), 1);
-    d->wInput->setDefaultValue(d->orgWidth);
-    d->wInput->setSuffix(i18n(" px"));
-    d->wInput->setObjectName(i18n("wInput"));
+    d->wInput->setRange(1.0, (double)qMax(d->orgWidth * 10, 15000), 1.0);
+    d->wInput->setSuffix(QLatin1Char(' ') + i18n("px"));
+    d->wInput->setObjectName(QLatin1String("wInput"));
+    d->wInput->setDefaultValue((double)d->orgWidth);
+    d->wInput->setDecimals(0);
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
-    QLabel* const label2 = new QLabel(i18n("Height:"), firstPage);
+    QLabel* const label3 = new QLabel(i18n("Height:"), firstPage);
     d->hInput            = new DDoubleNumInput(firstPage);
-    d->hInput->setRange(1, qMax(d->orgHeight * 10, 12000), 1);
-    d->hInput->setDefaultValue(d->orgHeight);
-    d->hInput->setSuffix(i18n(" px"));
-    d->hInput->setObjectName(i18n("hInput"));
+    d->hInput->setRange(1.0, (double)qMax(d->orgHeight * 10, 15000), 1.0);
+    d->hInput->setSuffix(QLatin1Char(' ') + i18n("px"));
+    d->hInput->setObjectName(QLatin1String("hInput"));
+    d->hInput->setDefaultValue((double)d->orgHeight);
+    d->hInput->setDecimals(0);
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
-    QLabel* const label3 = new QLabel(i18n("Width (%):"), firstPage);
+    QLabel* const label4 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput           = new DDoubleNumInput(firstPage);
+    d->wpInput->setObjectName(QLatin1String("wpInput"));
     d->wpInput->setRange(1.0, 999.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
-    d->wpInput->setObjectName(i18n("wpInput"));
+    d->wInput->setDecimals(0);
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
-    QLabel* const label4 = new QLabel(i18n("Height (%):"), firstPage);
+    QLabel* const label5 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput           = new DDoubleNumInput(firstPage);
+    d->hpInput->setObjectName(QLatin1String("hpInput"));
     d->hpInput->setRange(1.0, 999.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
-    d->hpInput->setObjectName(i18n("hpInput"));
+    d->wInput->setDecimals(0);
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
 
-    QLabel* const label5 = new QLabel(i18n("Resolution:"), firstPage);
+    QLabel* const label6 = new QLabel(i18n("Resolution:"), firstPage);
     d->resolution        = new DIntNumInput(firstPage);
     d->resolution->setRange(1, 500, 1);
-    d->resolution->setDefaultValue(96);
+    d->resolution->setDefaultValue(300);
     d->resolution->setSuffix(i18n(" Pixel/Inch"));
-    d->resolution->setObjectName(i18n("resolution"));
+    d->resolution->setObjectName(QLatin1String("resolution"));
     d->resolution->setWhatsThis( i18n("New image resolution in pixels/inch."));
 
-    d->cimgLogoLabel = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
-                                        QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-cimg.png")),
-                                        firstPage);
+    d->cimgLogoLabel        = new DActiveLabel(QUrl(QLatin1String("http://cimg.sourceforge.net")),
+                                               QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                      QLatin1String("digikam/data/logo-cimg.png")), firstPage);
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);
     d->useGreycstorationBox->setWhatsThis( i18n("Enable this option to scale-up an image to a huge size. "
                                            "<b>Warning</b>: This process can take some time."));
 
-    d->restorationTips = new QLabel(i18n("<b>Note:</b> use Restoration Mode to scale-up an image to a huge size. "
-                                         "This process can take some time."), firstPage);
+    d->restorationTips      = new QLabel(i18n("<b>Note:</b> use Restoration Mode to scale-up an image to a huge size. "
+                                              "This process can take some time."), firstPage);
     d->restorationTips->setWordWrap(true);
 
     const int spacing = d->gboxSettings->spacingHint();
 
-    d->units->setMaximumWidth(200);
-    grid->addWidget(d->labelPreset,                             0, 0, 1, 3);
-    grid->addWidget(d->presetCBox,                              1, 0, 1, 3);
-    grid->addWidget(d->useCustom,                               2, 0, 1, 3);
-    grid->addWidget(d->preserveRatioBox,                        3, 0, 1, 3);
-    grid->addWidget(label,                                      4, 0, 1, 1);
-    grid->addWidget(d->units,                                   4, 1, 1, 1);
-    grid->addWidget(label1,                                     5, 0, 1, 1);
-    grid->addWidget(d->wInput,                                  5, 1, 1, 1);
-    grid->addWidget(label2,                                     6, 0, 1, 1);
-    grid->addWidget(d->hInput,                                  6, 1, 1, 2);
-    grid->addWidget(label3,                                     7, 0, 1, 1);
-    grid->addWidget(d->wpInput,                                 7, 1, 1, 2);
-    grid->addWidget(label4,                                     8, 0, 1, 1);
-    grid->addWidget(d->hpInput,                                 8, 1, 1, 2);
-    grid->addWidget(label5,                                     9, 0, 1, 1);
-    grid->addWidget(d->resolution,                              9, 1, 1, 2);
-    grid->addWidget(new DLineWidget(Qt::Horizontal, firstPage), 10, 0, 1, 3);
-    grid->addWidget(d->cimgLogoLabel,                           11, 0, 3, 1);
-    grid->addWidget(d->useGreycstorationBox,                    11, 1, 1, 2);
-    grid->addWidget(d->restorationTips,                         12, 1, 1, 2);
-    grid->setRowStretch(13, 10);
+    grid->addWidget(label,                                       0, 0, 1, 3);
+    grid->addWidget(d->presetCBox,                               1, 0, 1, 3);
+    grid->addWidget(d->preserveRatioBox,                         2, 0, 1, 3);
+    grid->addWidget(label1,                                      3, 0, 1, 1);
+    grid->addWidget(d->units,                                    3, 1, 1, 1);
+    grid->addWidget(label2,                                      4, 0, 1, 1);
+    grid->addWidget(d->wInput,                                   4, 1, 1, 2);
+    grid->addWidget(label3,                                      5, 0, 1, 1);
+    grid->addWidget(d->hInput,                                   5, 1, 1, 2);
+    grid->addWidget(label4,                                      6, 0, 1, 1);
+    grid->addWidget(d->wpInput,                                  6, 1, 1, 2);
+    grid->addWidget(label5,                                      7, 0, 1, 1);
+    grid->addWidget(d->hpInput,                                  7, 1, 1, 2);
+    grid->addWidget(label6,                                      8, 0, 1, 1);
+    grid->addWidget(d->resolution,                               8, 1, 1, 2);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, firstPage),  9, 0, 1, 3);
+    grid->addWidget(d->cimgLogoLabel,                           10, 0, 3, 1);
+    grid->addWidget(d->useGreycstorationBox,                    10, 1, 1, 2);
+    grid->addWidget(d->restorationTips,                         11, 1, 1, 2);
+    grid->setRowStretch(12, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
 
@@ -482,10 +456,7 @@ ResizeTool::ResizeTool(QObject* const parent)
     // -------------------------------------------------------------
 
     connect(d->presetCBox, SIGNAL(activated(int)),
-            this, SLOT(slotSettingsChanged()));
-
-    connect(d->useCustom, SIGNAL(toggled(bool)),
-            this, SLOT(slotSettingsChanged()));
+            this, SLOT(slotPresetsChanged()));
 
     connect(d->units, SIGNAL(activated(int)),
             this, SLOT(slotUnitsChanged()));
@@ -578,181 +549,165 @@ void ResizeTool::slotResetSettings()
     d->useGreycstorationBox->setChecked(false);
     slotRestorationToggled(d->useGreycstorationBox->isChecked());
 
-    blockWidgetSignals(true);
-
-    d->useCustom->setChecked(true);
-    d->preserveRatioBox->setChecked(true);
     d->units->setCurrentIndex(0);
-    d->units->setEnabled(d->useCustom->isChecked());
-    d->wInput->setEnabled(d->useCustom->isChecked());
-    d->hInput->setEnabled(d->useCustom->isChecked());
-    d->wpInput->setEnabled(d->useCustom->isChecked());
-    d->hpInput->setEnabled(d->useCustom->isChecked());
-    d->preserveRatioBox->setEnabled(d->useCustom->isChecked());
-    d->resolution->setEnabled(d->useCustom->isChecked());
+    d->presetCBox->setCurrentIndex(0);
+    d->preserveRatioBox->setChecked(true);
+
+    slotUnitsChanged();
+
+    blockWidgetSignals(true);
 
     d->wInput->slotReset();
     d->hInput->slotReset();
     d->wpInput->slotReset();
     d->hpInput->slotReset();
+    d->resolution->slotReset();
 
     blockWidgetSignals(false);
 }
 
-void ResizeTool::slotSettingsChanged()
+void ResizeTool::slotPresetsChanged()
 {
-    d->labelPreset->setEnabled(!d->useCustom->isChecked());
-    d->presetCBox->setEnabled(!d->useCustom->isChecked());
-    d->wInput->setEnabled(d->useCustom->isChecked());
-    d->hInput->setEnabled(d->useCustom->isChecked());
-    d->wpInput->setEnabled(d->useCustom->isChecked());
-    d->hpInput->setEnabled(d->useCustom->isChecked());
-    d->units->setEnabled(d->useCustom->isChecked());
-    d->preserveRatioBox->setEnabled(d->useCustom->isChecked());
-    d->resolution->setEnabled(d->useCustom->isChecked());
+    Private::WidthPreset preset = (Private::WidthPreset)d->presetCBox->currentData().toInt();
+    QSize size                  = d->presetLengthValue(preset);
 
-    if (d->useCustom->isChecked() == false)
+    switch (preset)
     {
-        Private::WidthPreset preset  = (Private::WidthPreset)d->presetCBox->currentIndex();
-        QVector<int> dimension    = d->presetLengthValue(preset);
-        d->resolution->setValue((int)dimension[2]);
-        if ((d->orgWidth < d->orgHeight && (d->presetCBox->currentIndex() < 7)) ||
-            (d->orgWidth > d->orgHeight && (d->presetCBox->currentIndex() > 10)))
-        {
-            d->hInput->setValue(pixelstoUnits((int)dimension[0], (int)dimension[2], d->units->currentIndex()));
-            d->wInput->setValue(pixelstoUnits((int)dimension[1], (int)dimension[2], d->units->currentIndex()));
-        }
-        else
-        {
-            d->wInput->setValue(pixelstoUnits((int)dimension[0], (int)dimension[2], d->units->currentIndex()));
-            d->hInput->setValue(pixelstoUnits((int)dimension[1], (int)dimension[2], d->units->currentIndex()));
-        }
+        case Private::A3:
+        case Private::A4:
+        case Private::A6:
+            d->units->setCurrentIndex(d->units->findData(Private::Millimeters));
+
+            if (d->orgWidth > d->orgHeight)
+            {
+                size.transpose();
+            }
+
+            break;
+
+        case Private::Letter:
+        case Private::Print1:
+        case Private::Print2:
+        case Private::Print3:
+        case Private::Print4:
+            d->units->setCurrentIndex(d->units->findData(Private::Inches));
+
+            if (d->orgWidth > d->orgHeight)
+            {
+                size.transpose();
+            }
+
+            break;
+
+        default:
+            d->units->setCurrentIndex(d->units->findData(Private::Pixels));
+            break;
     }
 
-    slotValuesChanged();
+    slotUnitsChanged();
+    d->resolution->slotReset();
+
+    if (!d->preserveRatioBox->isChecked())
+    {
+        d->wInput->setValue(pixelsToUnits(size.width()));
+        d->hInput->setValue(pixelsToUnits(size.height()));
+    }
+    else
+    {
+        d->wInput->setValue(pixelsToUnits(size.width()));
+
+        if (d->prevH > size.height())
+        {
+            d->hInput->setValue(pixelsToUnits(size.height()));
+        }
+    }
 }
 
 void ResizeTool::slotUnitsChanged()
 {
-    Private::Units units  = (Private::Units)d->units->currentIndex();
-    switch (units)
+    blockWidgetSignals(true);
+
+    int decimals = 0;
+    QString suffix;
+
+    switch ((Private::Units)d->units->currentData().toInt())
     {
         case Private::Pixels:
-        {
-            double wVal  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->prevUnit);
-            double hVal  = unitstoPixels((double)d->hInput->value(), d->resolution->value(), d->prevUnit);
+            decimals = 0;
+            suffix   = i18nc("Pixels", "px");
 
-            d->wInput->setSuffix(i18n(" px"));
-            d->wInput->setRange(1, 12000, 1);
-            d->wInput->setDefaultValue(1024);
-            d->wInput->setValue((int)wVal);
-
-            d->hInput->setSuffix(i18n(" px"));
-            d->hInput->setRange(1, 12000, 1);
-            d->hInput->setDefaultValue(1024);
-            d->hInput->setValue((int)hVal);
-        }
-        break;
+            break;
 
         case Private::Inches:
-        {
-            double wval  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->prevUnit);
-            double wVal = pixelstoUnits(wval, d->resolution->value(), 1);
-            double hval  = unitstoPixels(d->hInput->value(), d->resolution->value(), d->prevUnit);
-            double hVal = pixelstoUnits(hval, d->resolution->value(), 1);
+            decimals = 1;
+            suffix   = i18nc("Inches", "in");
 
-            d->wInput->setSuffix(i18n(" in"));
-            d->wInput->setRange(1.0, 50.0, 1.0);
-            d->wInput->setDefaultValue(10.0);
-            d->wInput->setDecimals(1);
-            d->wInput->setValue(wVal);
-
-            d->hInput->setSuffix(i18n(" in"));
-            d->hInput->setRange(1.0, 50.0, 1.0);
-            d->hInput->setDefaultValue(10.0);
-            d->hInput->setDecimals(1);
-            d->hInput->setValue(hVal);
-        }
             break;
 
         case Private::Millimeters:
-        {
-            double wval  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->prevUnit);
-            double wVal = pixelstoUnits(wval, d->resolution->value(), 3);
-            double hval  = unitstoPixels(d->hInput->value(), d->resolution->value(), d->prevUnit);
-            double hVal = pixelstoUnits(hval, d->resolution->value(), 3);
+            decimals = 1;
+            suffix   = i18nc("Millimeters", "mm");
 
-            d->wInput->setSuffix(i18n(" mm"));
-            d->wInput->setRange(1.0, 2000.0, 1.0);
-            d->wInput->setDefaultValue(300.0);
-            d->wInput->setDecimals(1);
-            d->wInput->setValue(wVal);
-
-            d->hInput->setSuffix(i18n(" mm"));
-            d->hInput->setRange(1.0, 2000.0, 1.0);
-            d->hInput->setDefaultValue(300.0);
-            d->hInput->setDecimals(1);
-            d->hInput->setValue(hVal);
-        }
             break;
 
         case Private::Centimeters:
-        {
-            double wval  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->prevUnit);
-            double wVal = pixelstoUnits(wval, d->resolution->value(), 2);
-            double hval  = unitstoPixels(d->hInput->value(), d->resolution->value(), d->prevUnit);
-            double hVal = pixelstoUnits(hval, d->resolution->value(), 2);
+            decimals = 2;
+            suffix   = i18nc("Centimeters", "cm");
 
-            d->wInput->setSuffix(i18n(" cm"));
-            d->wInput->setRange(1.0, 200.0, 1.0);
-            d->wInput->setDefaultValue(30.0);
-            d->wInput->setDecimals(1);
-            d->wInput->setValue(wVal);
-
-            d->hInput->setSuffix(i18n(" cm"));
-            d->hInput->setRange(1.0, 200.0, 1.0);
-            d->hInput->setDefaultValue(30.0);
-            d->hInput->setDecimals(1);
-            d->hInput->setValue(hVal);
-        }
             break;
 
         default:
             break;
     }
 
-    d->prevUnit = d->units->currentIndex();
-    slotSettingsChanged();
+    d->wInput->setRange(1.0, pixelsToUnits(qMax(d->orgWidth * 10, 15000)), 1.0);
+    d->wInput->setDefaultValue(pixelsToUnits(d->orgWidth));
+    d->wInput->setSuffix(QLatin1Char(' ') + suffix);
+    d->wInput->setDecimals(decimals);
+    d->wInput->setValue(pixelsToUnits(d->prevW));
+
+    d->hInput->setRange(1.0, pixelsToUnits(qMax(d->orgHeight * 10, 15000)), 1.0);
+    d->hInput->setDefaultValue(pixelsToUnits(d->orgHeight));
+    d->hInput->setSuffix(QLatin1Char(' ') + suffix);
+    d->hInput->setDecimals(decimals);
+    d->hInput->setValue(pixelsToUnits(d->prevH));
+
+    blockWidgetSignals(false);
 }
 
-double ResizeTool::unitstoPixels(double val, int res, int unitIndex)
+int ResizeTool::unitsToPixels(double val)
 {
-    Private::Units units  = (Private::Units)unitIndex;
+    Private::Units units = (Private::Units)d->units->currentData().toInt();
+    int res              = d->resolution->value();
+    int pixel            = qRound(val);
+
     switch (units)
     {
         case Private::Inches:
-            val = val * (double)res;
+            pixel = pixel * res;
             break;
 
         case Private::Millimeters:
-            val = val * ((double)res / 25.4);
+            pixel = qRound(pixel * res / 25.4);
             break;
 
         case Private::Centimeters:
-            val = val * ((double)res / 2.54);
+            pixel = qRound(pixel * res / 2.54);
             break;
 
         default:
-            val = val;
             break;
     }
 
-    return val;
+    return pixel;
 }
 
-double ResizeTool::pixelstoUnits(double val, int res, int unitIndex)
+double ResizeTool::pixelsToUnits(int pix)
 {
-    Private::Units units  = (Private::Units)unitIndex;
+    Private::Units units = (Private::Units)d->units->currentData().toInt();
+    int    res           = d->resolution->value();
+    double val           = (double)pix;
+
     switch (units)
     {
         case Private::Inches:
@@ -768,7 +723,6 @@ double ResizeTool::pixelstoUnits(double val, int res, int unitIndex)
             break;
 
         default:
-            val = val;
             break;
     }
 
@@ -783,28 +737,28 @@ void ResizeTool::slotValuesChanged()
 
     if (s == QLatin1String("wInput"))
     {
-        double val  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->units->currentIndex());
+        double val  = unitsToPixels(d->wInput->value());
         double pval = val / (double)(d->orgWidth) * 100.0;
 
         d->wpInput->setValue(pval);
 
         if (d->preserveRatioBox->isChecked())
         {
-            double h = pixelstoUnits((int)(pval * d->orgHeight / 100), d->resolution->value(), d->units->currentIndex());
+            double h = pixelsToUnits((int)(pval * d->orgHeight / 100));
             d->hpInput->setValue(pval);
             d->hInput->setValue(h);
         }
     }
     else if (s == QLatin1String("hInput"))
     {
-        double val  = unitstoPixels(d->hInput->value(), d->resolution->value(), d->units->currentIndex());
+        double val  = unitsToPixels(d->hInput->value());
         double pval = val / (double)(d->orgHeight) * 100.0;
 
         d->hpInput->setValue(pval);
 
         if (d->preserveRatioBox->isChecked())
         {
-            double w = pixelstoUnits((int)(pval * d->orgWidth / 100), d->resolution->value(), d->units->currentIndex());
+            double w = pixelsToUnits((int)(pval * d->orgWidth / 100));
             d->wpInput->setValue(pval);
             d->wInput->setValue(w);
         }
@@ -812,12 +766,12 @@ void ResizeTool::slotValuesChanged()
     else if (s == QLatin1String("wpInput"))
     {
         double val = d->wpInput->value();
-        double w      = pixelstoUnits((int)(val * d->orgWidth / 100), d->resolution->value(), d->units->currentIndex());
+        double w   = pixelsToUnits((int)(val * d->orgWidth / 100));
         d->wInput->setValue(w);
 
         if (d->preserveRatioBox->isChecked())
         {
-            double h = pixelstoUnits((int)(val * d->orgHeight / 100), d->resolution->value(), d->units->currentIndex());
+            double h = pixelsToUnits((int)(val * d->orgHeight / 100));
             d->hpInput->setValue(val);
             d->hInput->setValue(h);
         }
@@ -825,29 +779,29 @@ void ResizeTool::slotValuesChanged()
     else if (s == QLatin1String("hpInput"))
     {
         double val = d->hpInput->value();
-        double h = pixelstoUnits((int)(val * d->orgHeight / 100), d->resolution->value(), d->units->currentIndex());
+        double h   = pixelsToUnits((int)(val * d->orgHeight / 100));
         d->hInput->setValue(h);
 
         if (d->preserveRatioBox->isChecked())
         {
-            double w = pixelstoUnits((int)(val * d->orgWidth / 100), d->resolution->value(), d->units->currentIndex());
+            double w = pixelsToUnits((int)(val * d->orgWidth / 100));
             d->wpInput->setValue(val);
             d->wInput->setValue(w);
         }
     }
     else if (s == QLatin1String("resolution"))
     {
-        double hval  = unitstoPixels(d->hInput->value(), d->resolution->value(), d->units->currentIndex());
+        double hval  = unitsToPixels(d->hInput->value());
         double pHval = hval / (double)(d->orgHeight) * 100.0;
-        double wval  = unitstoPixels(d->wInput->value(), d->resolution->value(), d->units->currentIndex());
+        double wval  = unitsToPixels(d->wInput->value());
         double pWval = wval / (double)(d->orgWidth) * 100.0;
 
         d->wpInput->setValue(pWval);
         d->hpInput->setValue(pHval);
     }
 
-    d->prevW  = d->wInput->value();
-    d->prevH  = d->hInput->value();
+    d->prevW  = unitsToPixels(d->wInput->value());
+    d->prevH  = unitsToPixels(d->hInput->value());
     d->prevWP = d->wpInput->value();
     d->prevHP = d->hpInput->value();
 
@@ -856,8 +810,9 @@ void ResizeTool::slotValuesChanged()
 
 void ResizeTool::preparePreview()
 {
-    int h     = unitstoPixels(d->hInput->value(), d->resolution->value(), d->units->currentIndex());
-    int w     = unitstoPixels(d->wInput->value(), d->resolution->value(), d->units->currentIndex());
+    int h = unitsToPixels(d->hInput->value());
+    int w = unitsToPixels(d->wInput->value());
+
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
     {
@@ -887,8 +842,9 @@ void ResizeTool::preparePreview()
 
 void ResizeTool::prepareFinal()
 {
-    int h     = unitstoPixels(d->hInput->value(), d->resolution->value(), d->units->currentIndex());
-    int w     = unitstoPixels(d->wInput->value(), d->resolution->value(), d->units->currentIndex());
+    int h = unitsToPixels(d->hInput->value());
+    int w = unitsToPixels(d->wInput->value());
+
     if (d->prevW  != d->wInput->value()  || d->prevH  != d->hInput->value() ||
         d->prevWP != d->wpInput->value() || d->prevHP != d->hpInput->value())
     {

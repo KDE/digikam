@@ -56,8 +56,9 @@ private:
     void setFinalImage();
     void renderingFinished();
     void blockWidgetSignals(bool b);
-    double pixelstoUnits(double val, int res, int unitIndex);
-    double unitstoPixels(double val, int res, int unitIndex);
+
+    double pixelsToUnits(int pix);
+    int    unitsToPixels(double val);
 
 private Q_SLOTS:
 
@@ -65,8 +66,8 @@ private Q_SLOTS:
     void slotLoadSettings();
     void slotResetSettings();
     void slotValuesChanged();
-    void slotSettingsChanged();
     void slotUnitsChanged();
+    void slotPresetsChanged();
     void slotRestorationToggled(bool);
 
 private:
