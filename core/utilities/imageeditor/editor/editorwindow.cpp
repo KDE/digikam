@@ -2793,6 +2793,8 @@ void EditorWindow::registerExtraPluginsActions(QString& dom)
     QString transformActions;
     transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_rotateleft\" />\n"));
     transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_rotateright\" />\n"));
+    transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_fliphoriz\" />\n"));
+    transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_flipvert\" />\n"));
     transformActions.append(QLatin1String("<Action name=\"editorwindow_transform_crop\" />\n"));
     transformActions.append(QLatin1String("<Separator/>\n"));
     transformActions.append(dpl->pluginXmlSections(DPluginAction::EditorTransform, this));
