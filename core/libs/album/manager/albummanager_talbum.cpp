@@ -476,8 +476,14 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
         if (result == QMessageBox::Yes)
         {
-            TAlbum* const destAlbum = findTAlbum(newParent->tagPath() +
-                                                 QLatin1Char('/')     +
+            QString destPath(newParent->tagPath());
+
+            if (destPath != QLatin1String("/"))
+            {
+                destPath += QLatin1Char('/');
+            }
+
+            TAlbum* const destAlbum = findTAlbum(destPath +
                                                  album->title());
 
             return mergeTAlbum(album, destAlbum, false, errMsg);
