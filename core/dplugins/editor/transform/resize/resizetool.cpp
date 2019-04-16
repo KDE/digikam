@@ -312,7 +312,7 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     QLabel* const label = new QLabel(i18n("Preset Resolutions:"), firstPage);
     d->presetCBox       = new QComboBox(firstPage);
-    d->presetCBox->addItem(i18nс("Original (size)", "Original (%1 x %2 pixels)", d->presetLengthValue(Private::Original).width(),
+    d->presetCBox->addItem(i18nc("Original (size)", "Original (%1 x %2 pixels)", d->presetLengthValue(Private::Original).width(),
                                                                                  d->presetLengthValue(Private::Original).height()),
                                                                                  Private::Original);
     d->presetCBox->addItem(i18nc("Tiny (size)",     "Tiny (%1 x %2 pixels)",     d->presetLengthValue(Private::Tiny).width(),
