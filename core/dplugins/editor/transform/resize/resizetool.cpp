@@ -312,28 +312,28 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     QLabel* const label = new QLabel(i18n("Preset Resolutions:"), firstPage);
     d->presetCBox       = new QComboBox(firstPage);
-    d->presetCBox->addItem(i18np("Original (size)", "Original (%1 x %2 pixels)", d->presetLengthValue(Private::Original).width(),
+    d->presetCBox->addItem(i18nс("Original (size)", "Original (%1 x %2 pixels)", d->presetLengthValue(Private::Original).width(),
                                                                                  d->presetLengthValue(Private::Original).height()),
                                                                                  Private::Original);
-    d->presetCBox->addItem(i18np("Tiny (size)",     "Tiny (%1 x %2 pixels)",     d->presetLengthValue(Private::Tiny).width(),
+    d->presetCBox->addItem(i18nc("Tiny (size)",     "Tiny (%1 x %2 pixels)",     d->presetLengthValue(Private::Tiny).width(),
                                                                                  d->presetLengthValue(Private::Tiny).height()),
                                                                                  Private::Tiny);
-    d->presetCBox->addItem(i18np("Small (size)",    "Small (%1 x %2 pixels)",    d->presetLengthValue(Private::Small).width(),
+    d->presetCBox->addItem(i18nc("Small (size)",    "Small (%1 x %2 pixels)",    d->presetLengthValue(Private::Small).width(),
                                                                                  d->presetLengthValue(Private::Small).height()),
                                                                                  Private::Small);
-    d->presetCBox->addItem(i18np("Medium (size)",   "Medium (%1 x %2 pixels)",   d->presetLengthValue(Private::Medium).width(),
+    d->presetCBox->addItem(i18nc("Medium (size)",   "Medium (%1 x %2 pixels)",   d->presetLengthValue(Private::Medium).width(),
                                                                                  d->presetLengthValue(Private::Medium).height()),
                                                                                  Private::Medium);
-    d->presetCBox->addItem(i18np("Big (size)",      "Big (%1 x %2 pixels)",      d->presetLengthValue(Private::Big).width(),
+    d->presetCBox->addItem(i18nc("Big (size)",      "Big (%1 x %2 pixels)",      d->presetLengthValue(Private::Big).width(),
                                                                                  d->presetLengthValue(Private::Big).height()),
                                                                                  Private::Big);
-    d->presetCBox->addItem(i18np("Large (size)",    "Large (%1 x %2 pixels)",    d->presetLengthValue(Private::Large).width(),
+    d->presetCBox->addItem(i18nc("Large (size)",    "Large (%1 x %2 pixels)",    d->presetLengthValue(Private::Large).width(),
                                                                                  d->presetLengthValue(Private::Large).height()),
                                                                                  Private::Large);
-    d->presetCBox->addItem(i18np("Huge (size)",     "Huge (%1 x %2 pixels)",     d->presetLengthValue(Private::Huge).width(),
+    d->presetCBox->addItem(i18nc("Huge (size)",     "Huge (%1 x %2 pixels)",     d->presetLengthValue(Private::Huge).width(),
                                                                                  d->presetLengthValue(Private::Huge).height()),
                                                                                  Private::Huge);
-    d->presetCBox->addItem(i18np("UHD4K (size)",    "UHD-4K (%1 x %2 pixels)",   d->presetLengthValue(Private::UHD4K).width(),
+    d->presetCBox->addItem(i18nc("UHD4K (size)",    "UHD-4K (%1 x %2 pixels)",   d->presetLengthValue(Private::UHD4K).width(),
                                                                                  d->presetLengthValue(Private::UHD4K).height()),
                                                                                  Private::UHD4K);
     d->presetCBox->addItem(i18nc("A3 (size)",       "A3 (297 x 420 mm)"),        Private::A3);
