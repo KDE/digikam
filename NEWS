@@ -9,4 +9,5 @@ BUGFIXES:
 
 001 ==> 279216 - "Resize image" feature is missing some useful options [patch].
 002 ==> 406581 - "No such album" when dragging duplicated Tag to merge them.
-003 ==> 
+003 ==> 406585 - Feature request: clean or hide empty Tags.
+004 ==> 
