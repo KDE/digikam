@@ -788,6 +788,15 @@ void ItemDescEditTab::setInfos(const ItemInfoList& infos)
     d->applyBtn->setEnabled(false);
     d->revertBtn->setEnabled(false);
 
+    if (d->currInfos.count() > 1000)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+    }
+
+    // First, we read all tags of the items into the cache with one SQL query.
+    // This is faster than each item individually.
+    d->currInfos.loadTagIds();
+
     foreach (const ItemInfo& info, d->currInfos)
     {
         d->hub.load(info);
@@ -802,6 +811,11 @@ void ItemDescEditTab::setInfos(const ItemInfoList& infos)
     updateTagsView();
     updateRecentTags();
     setFocusToLastSelectedWidget();
+
+    if (d->currInfos.count() > 1000)
+    {
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void ItemDescEditTab::slotReadFromFileMetadataToDatabase()
