@@ -193,27 +193,67 @@ void DisjointMetadata::reset()
 
 void DisjointMetadata::load(const ItemInfo& info)
 {
+    Template metadataTemplate;
     CaptionsMap commentMap;
     CaptionsMap titleMap;
+    QDateTime dateTime;
+    int colorLabel;
+    int pickLabel;
+    int rating;
 
+    if (d->dateTimeStatus == MetadataDisjoint)
+        dateTime = d->dateTime;
+    else
+        dateTime = info.dateTime();
+
+    if (d->titlesStatus   == MetadataDisjoint &&
+        d->commentsStatus == MetadataDisjoint)
+    {
+        commentMap = d->comments;
+        titleMap   = d->titles;
+    }
+    else
     {
         CoreDbAccess access;
         ItemComments comments = info.imageComments(access);
-        commentMap             = comments.toCaptionsMap();
-        titleMap               = comments.toCaptionsMap(DatabaseComment::Title);
+        commentMap            = comments.toCaptionsMap();
+        titleMap              = comments.toCaptionsMap(DatabaseComment::Title);
     }
 
-    Template tref = info.metadataTemplate();
-    Template t    = TemplateManager::defaultManager()->findByContents(tref);
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
+    if (d->colorLabelStatus == MetadataDisjoint)
+        colorLabel = d->colorLabel;
+    else
+        colorLabel = info.colorLabel();
 
-    load(info.dateTime(),
+    if (d->pickLabelStatus == MetadataDisjoint)
+        pickLabel = d->pickLabel;
+    else
+        pickLabel = info.pickLabel();
+
+    if (d->ratingStatus == MetadataDisjoint)
+        rating = d->rating;
+    else
+        rating = info.rating();
+
+    if (d->templateStatus == MetadataDisjoint)
+    {
+        metadataTemplate = d->metadataTemplate;
+    }
+    else
+    {
+        Template tref    = info.metadataTemplate();
+        Template t       = TemplateManager::defaultManager()->findByContents(tref);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
+        metadataTemplate = t.isNull() ? tref : t;
+    }
+
+    load(dateTime,
          titleMap,
          commentMap,
-         info.colorLabel(),
-         info.pickLabel(),
-         info.rating(),
-         t.isNull() ? tref : t);
+         colorLabel,
+         pickLabel,
+         rating,
+         metadataTemplate);
 
     loadTags(info.tagIds());
 }
