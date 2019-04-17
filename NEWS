@@ -12,4 +12,5 @@ BUGFIXES:
 003 ==> 406585 - Feature request: clean or hide empty Tags.
 004 ==> 389657 - QFile::rename: Empty or null file name.
 005 ==> 406610 - hit enter when renaming, sometime don't rename correctly.
-006 ==> 
+006 ==> 406637 - Duplicates "Search in" Doesn't Show Collection Name Upon First Selection.
+007 ==> 
