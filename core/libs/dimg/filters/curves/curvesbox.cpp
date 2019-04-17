@@ -146,16 +146,16 @@ void CurvesBox::setup()
 
     // -------------------------------------------------------------
 
-    QWidget* const typeBox          = new QWidget();
+    QWidget* const typeBox           = new QWidget();
 
-    d->curveFree                    = new QToolButton;
+    d->curveFree                     = new QToolButton;
     d->curveFree->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/curvefree.png"))));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
     d->curveFree->setWhatsThis(i18n("With this button, you can draw your curve free-hand "
                                     "with the mouse."));
 
-    d->curveSmooth                  = new QToolButton;
+    d->curveSmooth                   = new QToolButton;
     d->curveSmooth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/curvemooth.png"))));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
@@ -228,9 +228,9 @@ void CurvesBox::setup()
                                       "First option will reset current channel. "
                                       "Second option will reset all channels."));
 
-    QMenu* const resetMenu    = new QMenu(i18n("&Reset"), d->resetButton);
-    d->resetChannelAction     = new QAction(i18n("Reset &Channel"));
-    d->resetChannelsAction    = new QAction(i18n("Reset &All"));
+    QMenu* const resetMenu    = new QMenu(i18n("&Reset"),           d->resetButton);
+    d->resetChannelAction     = new QAction(i18n("Reset &Channel"), nullptr);
+    d->resetChannelsAction    = new QAction(i18n("Reset &All"),     nullptr);
     resetMenu->addAction(d->resetChannelAction);
     resetMenu->addAction(d->resetChannelsAction);
 
@@ -268,10 +268,10 @@ void CurvesBox::setup()
     connect(d->curveType, SIGNAL(buttonClicked(int)),
             this, SLOT(slotCurveTypeChanged(int)));
 
-    connect(d->resetChannelAction, SIGNAL(triggered()), 
+    connect(d->resetChannelAction, SIGNAL(triggered()),
             this, SLOT(slotResetChannel()));
 
-    connect(d->resetChannelsAction, SIGNAL(triggered()), 
+    connect(d->resetChannelsAction, SIGNAL(triggered()),
             this, SLOT(slotResetChannels()));
 }
 
@@ -358,7 +358,7 @@ void CurvesBox::setChannel(ChannelType channel)
     {
         case RedChannel:
             d->hGradient->setColors(QColor("black"), QColor("red"));
-            d->vGradient->setColors(QColor("red"), QColor("black"));
+            d->vGradient->setColors(QColor("red"),   QColor("black"));
             break;
 
         case GreenChannel:
@@ -368,7 +368,7 @@ void CurvesBox::setChannel(ChannelType channel)
 
         case BlueChannel:
             d->hGradient->setColors(QColor("black"), QColor("blue"));
-            d->vGradient->setColors(QColor("blue"), QColor("black"));
+            d->vGradient->setColors(QColor("blue"),  QColor("black"));
             break;
 
         default:

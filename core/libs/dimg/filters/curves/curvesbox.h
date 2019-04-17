@@ -51,8 +51,8 @@ public:
 
     enum ColorPicker
     {
-        NoPicker   = -1,
-        BlackTonal = 0,
+        NoPicker      = -1,
+        BlackTonal    = 0,
         GrayTonal,
         WhiteTonal
     };
@@ -65,7 +65,11 @@ public:
 
 public:
 
-    CurvesBox(int w, int h, QWidget* const parent=0, bool readOnly=false);
+    CurvesBox(int w, int h,                            // Widget size.
+              QWidget* const parent=0,                 // Parent widget instance.
+              bool readOnly=false);                    // If true : widget with full edition mode capabilities.
+                                                       // If false : display curve data only without edition.
+
     CurvesBox(int w, int h,                            // Widget size.
               const DImg& img,                         // Image data.
               QWidget* const parent=0,                 // Parent widget instance.
