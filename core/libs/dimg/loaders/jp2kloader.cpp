@@ -100,6 +100,8 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
+    fclose(file);
+
     unsigned char jp2ID[5] = { 0x6A, 0x50, 0x20, 0x20, 0x0D, };
     unsigned char jpcID[2] = { 0xFF, 0x4F };
 
@@ -107,12 +109,9 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         memcmp(&header,    &jpcID, 2) != 0)
     {
         // not a jpeg2000 file
-        fclose(file);
         loadingFailed();
         return false;
     }
-
-    fclose(file);
 
     imageSetAttribute(QLatin1String("format"), QLatin1String("JP2"));
 
@@ -299,7 +298,6 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Get image format.
 
-    m_hasAlpha              = number_components > 3;
     maximum_component_depth = 0;
 
     for (i = 0; i < (long)number_components; ++i)
