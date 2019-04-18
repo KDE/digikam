@@ -14,4 +14,5 @@ BUGFIXES:
 005 ==> 406610 - Hit enter when renaming, sometime don't rename correctly.
 006 ==> 406637 - Duplicates "Search in" Doesn't Show Collection Name Upon First Selection.
 007 ==> 406226 - Adding tags to a selection from a large list of no-tags images takes a very long time.
-008 ==> 
+008 ==> 374302 - MYSQL : all Images with Geoinfo seem to be at (0°, 0°).
+009 ==> 
