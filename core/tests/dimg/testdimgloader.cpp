@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include <QFileInfo>
+#include <QApplication>
 #include <QDebug>
 
 // Local includes
@@ -34,6 +35,8 @@ using namespace Digikam;
 
 int main(int argc, char** argv)
 {
+    QApplication app(argc, argv);
+
     if (argc != 2)
     {
         qDebug() << "testdimgloader - test DImg image loader";
@@ -44,7 +47,7 @@ int main(int argc, char** argv)
     MetaEngine::initializeExiv2();
 
     QFileInfo input(QString::fromUtf8(argv[1]));
-    QString   outFilePath(input.baseName() + QLatin1String(".out.png"));
+    QString   outFilePath(input.baseName() + QLatin1String(".out"));
 
     DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
@@ -53,7 +56,7 @@ int main(int argc, char** argv)
     settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
     DImg img(input.filePath(), 0, DRawDecoding(settings));
-    img.save(outFilePath, QLatin1String("PNG"));
+    img.save(outFilePath, QLatin1String("webp"));
 
     MetaEngine::cleanupExiv2();
 
