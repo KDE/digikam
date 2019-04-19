@@ -41,6 +41,8 @@
 // QtAV includes
 
 #include <QtAVWidgets/WidgetRenderer.h>   // krazy:exclude=includes
+#include <QtAV/AudioDecoder.h>            // krazy:exclude=includes
+#include <QtAV/VideoDecoder.h>            // krazy:exclude=includes
 #include <QtAV/version.h>                 // krazy:exclude=includes
 
 // KDE includes
@@ -249,7 +251,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(d->playerView);
     vbox2->addWidget(d->videoWidget, 10);
-    vbox2->addWidget(hbox,           0);
+    vbox2->addWidget(hbox,            0);
     vbox2->setContentsMargins(0, 0, 0, spacing);
     vbox2->setSpacing(spacing);
 
@@ -308,8 +310,15 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
             this, SLOT(slotHandlePlayerError(QtAV::AVError)));
 
     slotVolumeChanged(d->volume->value());
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AudioOutput backends:"
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Audio output backends:"
                                  << d->player->audio()->backendsAvailable();
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of supported audio codecs:"
+                                 << AudioDecoder::supportedCodecs().count();
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of supported video codecs:"
+                                 << VideoDecoder::supportedCodecs().count();
 }
 
 MediaPlayerView::~MediaPlayerView()
