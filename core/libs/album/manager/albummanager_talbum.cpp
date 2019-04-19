@@ -586,30 +586,32 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QList<qlonglong> imageIds = CoreDbAccess().db()->getItemIDsInTag(oldId);
 
-    CoreDbOperationGroup group;
-    group.setMaximumTime(200);
-
-    foreach (const qlonglong& imageId, imageIds)
     {
-        QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(imageId);
-        bool foundFace                 = false;
+        CoreDbOperationGroup group;
+        group.setMaximumTime(200);
 
-        foreach (const FaceTagsIface& face, facesList)
+        foreach (const qlonglong& imageId, imageIds)
         {
-            if (face.tagId() == oldId)
+            QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(imageId);
+            bool foundFace                 = false;
+
+            foreach (const FaceTagsIface& face, facesList)
             {
-                foundFace = true;
-                FaceTagsEditor().removeFace(face);
-                FaceTagsEditor().add(imageId, mergeId, face.region(), false);
+                if (face.tagId() == oldId)
+                {
+                    foundFace = true;
+                    FaceTagsEditor().removeFace(face);
+                    FaceTagsEditor().add(imageId, mergeId, face.region(), false);
+                }
             }
-        }
 
-        if (!foundFace)
-        {
-            ItemInfo info(imageId);
-            info.removeTag(oldId);
-            info.setTag(mergeId);
-            group.allowLift();
+            if (!foundFace)
+            {
+                ItemInfo info(imageId);
+                info.removeTag(oldId);
+                info.setTag(mergeId);
+                group.allowLift();
+            }
         }
     }
 
