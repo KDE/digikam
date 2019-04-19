@@ -76,31 +76,30 @@ protected:
 
     bool eventFilter(QObject* obj, QEvent* event)
     {
-        if ((qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)  && event->type() == QEvent::MouseButtonRelease)   ||
-            (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) && event->type() == QEvent::MouseButtonDblClick))
+        if (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick)
         {
+            bool singleClick = qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick);
             QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
-            if (mouseEvent && (mouseEvent->button() == Qt::LeftButton ||
-                               mouseEvent->button() == Qt::RightButton))
+            if (m_parent && mouseEvent)
             {
-                if (m_parent)
+                MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
+
+                if (mplayer)
                 {
-                    MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
-
-                    if (mplayer)
+                    if (mouseEvent->button() == Qt::LeftButton &&
+                        ((singleClick  && event->type() == QEvent::MouseButtonRelease) ||
+                         (!singleClick && event->type() == QEvent::MouseButtonDblClick)))
                     {
-                        if (mouseEvent->button() == Qt::LeftButton)
-                        {
-                            mplayer->slotEscapePressed();
-                        }
-                        else
-                        {
-                            mplayer->slotRotateVideo();
-                        }
-
-                        return true;
+                        mplayer->slotEscapePressed();
                     }
+                    else if (mouseEvent->button() == Qt::RightButton &&
+                             event->type() == QEvent::MouseButtonRelease)
+                    {
+                        mplayer->slotRotateVideo();
+                    }
+
+                    return true;
                 }
             }
         }
