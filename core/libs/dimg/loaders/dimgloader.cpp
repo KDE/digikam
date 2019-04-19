@@ -89,6 +89,11 @@ unsigned char*& DImgLoader::imageData()
     return m_image->m_priv->data;
 }
 
+unsigned int DImgLoader::imageNumBytes() const
+{
+    return m_image->numBytes();
+}
+
 unsigned int& DImgLoader::imageWidth()
 {
     return m_image->m_priv->width;

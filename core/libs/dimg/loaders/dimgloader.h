@@ -107,6 +107,7 @@ protected:
     bool                    imageHasAlpha()   const;
     bool                    imageSixteenBit() const;
 
+    unsigned int            imageNumBytes() const;
     int                     imageBitsDepth()  const;
     int                     imageBytesDepth() const;
 
