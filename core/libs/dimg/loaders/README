@@ -12,31 +12,40 @@ PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
 Others file formats are supported only in 8 bits/color/pixel using QImageFormats plugins,
-or with fail-back to ImageMAgick codecs (optional).
+or with fail-back to ImageMagick codecs (optional).
 Supported formats are listed below :
 
-Format   Read       Write      Remarks
+Format   Read       Write      Description                          Codec
 
-PSD      yes        no         Photoshop file format
-EXR      yes        no         OpenEXR (libopenexr)
-XCF      yes        no         Gimp file format
-PBM      yes        yes
-PGM      yes        yes
-PPM      no         yes
-TGA      yes        yes
-PCX      yes        yes
-BMP      yes        yes        Windows bitmap format
-RGB      yes        yes
-XBM      yes        yes
-XPM      yes        yes
-EPS      yes        yes
-DDS      yes        no
-ICO      yes        no         Windows icon format
-MNG      yes        no
-GIF      yes        no
-WEBP     yes        yes
+KRA      yes        no         Krita image                              kimageformat
+ORA      yes        no         Krita image                              kimageformat
+PSD      yes        yes        Photoshop image                          ImageMagick
+XCF      yes        no         Gimp file format                         ImageMagick
+EXR      yes        yes        ILM High dynamic range image             ImageMagick
+PBM      yes        yes        Portable bitmap format                   ImageMagick
+PGM      yes        yes        Portable graymap format                  ImageMagick
+PNM      yes        yes        Portable anymap                          ImageMagick
+PPM      yes        yes        Portable pixmap format                   ImageMagick
+TGA      yes        yes        Truevision Targa image                   ImageMagick
+PCX      yes        yes        ZSoft IBM PC Paintbrush                  ImageMagick
+PCD      yes        yes        PhotoCD                                  ImageMagick
+BMP      yes        yes        Windows bitmap format                    ImageMagick
+RGB      yes        yes        Raw Red Green Blue                       ImageMagick
+XBM      yes        yes        X Windows system bitmap                  ImageMagick
+XPM      yes        yes        X Windows system pixmap                  ImageMagick
+EPS      yes        yes        Adobe Encapsulated PostScript            ImageMagick
+DDS      yes        yes        Microsoft Direct Draw Surface            ImageMagick
+SGI      yes        yes        Irix RGB image                           ImageMagick
+ICO      yes        no         Windows icon format                      ImageMagick
+MNG      yes        yes        Multiple-image Network Graphics          ImageMagick
+GIF      yes        yes        CompuServe Graphics Interchange Format   ImageMagick
+HDR      yes        yes        Radiance RGBE image format               ImageMagick
+SVG      yes        yes        Scalable Vector Graphics                 ImageMagick
+WEBP     yes        yes        Weppy image format                       ImageMagick
+HEIF     yes        yes        Apple High efficiency Image Format       ImageMagick
+FITS     yes        yes        Flexible Image Transport System          ImageMagick
 
----------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 
 TODO :
 
