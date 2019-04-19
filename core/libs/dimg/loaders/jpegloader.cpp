@@ -952,7 +952,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     jpeg_destroy_compress(&cinfo);
     delete cleanupData;
 
-    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("JPG"));
+    imageSetAttribute(QLatin1String("savedFormat"), QLatin1String("JPG"));
 
     saveMetadata(filePath);
 

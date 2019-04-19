@@ -492,7 +492,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
             observer->progressInfo(m_image, 1.0);
         }
 
-        imageSetAttribute(QLatin1String("savedformat"), QLatin1String("PGF"));
+        imageSetAttribute(QLatin1String("savedFormat"), QLatin1String("PGF"));
         saveMetadata(filePath);
 
         return true;

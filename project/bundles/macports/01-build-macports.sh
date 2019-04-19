@@ -240,6 +240,7 @@ port install \
              libgphoto2 \
              jasper \
              lcms2 \
+             ImageMagick \
              expat \
              libxml2 \
              libxslt \

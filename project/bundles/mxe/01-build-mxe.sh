@@ -121,6 +121,7 @@ make MXE_TARGETS=$MXE_BUILD_TARGETS \
      zlib \
      mman-win32 \
      pthreads \
+     imagemagick \
      qtbase \
      qttranslations \
      qtimageformats \

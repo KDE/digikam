@@ -866,7 +866,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     jas_cleanup();
 
-    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("JP2"));
+    imageSetAttribute(QLatin1String("savedFormat"), QLatin1String("JP2"));
     saveMetadata(filePath);
 
     return true;
