@@ -92,7 +92,7 @@ public:
     {
         QStringList list;
         list << QLatin1String("format")
-             << QLatin1String("isreadonly")
+             << QLatin1String("isReadOnly")
              << QLatin1String("originalFilePath")
              << QLatin1String("originalSize")
              << QLatin1String("originalImageHistory")

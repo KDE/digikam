@@ -1075,7 +1075,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("TIFF"));
+    imageSetAttribute(QLatin1String("savedFormat"), QLatin1String("TIFF"));
 
     // Save metadata
 

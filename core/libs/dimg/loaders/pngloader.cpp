@@ -944,7 +944,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     delete cleanupData;
 
-    imageSetAttribute(QLatin1String("savedformat"), QLatin1String("PNG"));
+    imageSetAttribute(QLatin1String("savedFormat"), QLatin1String("PNG"));
 
     saveMetadata(filePath);
 
