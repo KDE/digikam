@@ -76,6 +76,10 @@ AlbumSelectComboBox::AlbumSelectComboBox(QWidget* const parent)
       d(new Private(this))
 {
     d->noSelectionText = i18n("No Album Selected");
+
+    // Workaround for QLineEdit text when QComboBox loses focus
+    connect(this, SIGNAL(editTextChanged(QString)),
+            this, SLOT(updateText()));
 }
 
 AlbumSelectComboBox::~AlbumSelectComboBox()
@@ -272,6 +276,8 @@ void AlbumSelectComboBox::updateText()
         }
     }
 
+    blockSignals(true);
+
     if (newIncludeText.isEmpty() && newExcludeText.isEmpty())
     {
         setLineEditText(d->noSelectionText);
@@ -284,6 +290,8 @@ void AlbumSelectComboBox::updateText()
     {
         setLineEditText(newIncludeText + QLatin1String(", ") + newExcludeText);
     }
+
+    blockSignals(false);
 }
 
 // ---------------------------------------------------------------------------------------------------
