@@ -79,7 +79,7 @@ public:
 
     enum ANGLE
     {
-        ROT90=0,
+        ROT90 = 0,
         ROT180,
         ROT270,
         ROTNONE
@@ -87,13 +87,13 @@ public:
 
     enum FLIP
     {
-        HORIZONTAL=0,
+        HORIZONTAL = 0,
         VERTICAL
     };
 
     enum COLORMODEL
     {
-        COLORMODELUNKNOWN=0,
+        COLORMODELUNKNOWN = 0,
         RGB,
         GRAYSCALE,
         MONOCHROME,
@@ -148,7 +148,7 @@ public:
         If copyData is false, this DImg object will take ownership of the data pointer.
         If there is an alpha channel, the data shall be in non-premultiplied form (unassociated alpha).
      */
-    DImg(uint width, uint height, bool sixteenBit, bool alpha=false, uchar* const data=0, bool copyData=true);
+    DImg(uint width, uint height, bool sixteenBit, bool alpha = false, uchar* const data = 0, bool copyData = true);
 
     ~DImg();
 
