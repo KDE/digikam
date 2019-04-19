@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QMap>
-#include <QStringList>
 #include <QDateTime>
+#include <QStringList>
 #include <QMutexLocker>
 #include <QtAlgorithms>
 
@@ -54,7 +54,7 @@ class Q_DECL_HIDDEN DisjointMetadataDataFields
 public:
 
     DisjointMetadataDataFields()
-        : dateTimeChanged  (false),
+        : dateTimeChanged(false),
           titlesChanged(false),
           commentsChanged(false),
           pickLabelChanged(false),
@@ -188,7 +188,7 @@ DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata& other)
 void DisjointMetadata::reset()
 {
     delete d;
-    d =  new Private();
+    d = new Private();
 }
 
 void DisjointMetadata::load(const ItemInfo& info)
@@ -617,14 +617,14 @@ void DisjointMetadata::load(const QDateTime& dateTime,const CaptionsMap& titles,
 {
     if (dateTime.isValid())
     {
-        d->loadSingleValue<QDateTime>(dateTime, d->dateTime,d->dateTimeStatus);
+        d->loadSingleValue<QDateTime>(dateTime, d->dateTime, d->dateTimeStatus);
     }
 
     d->loadSingleValue<int>(pickLabel, d->pickLabel, d->pickLabelStatus);
 
     d->loadSingleValue<int>(colorLabel, d->colorLabel, d->colorLabelStatus);
 
-    d->loadSingleValue<int>(rating, d->rating,d->ratingStatus);
+    d->loadSingleValue<int>(rating, d->rating, d->ratingStatus);
 
     d->loadSingleValue<CaptionsMap>(titles, d->titles, d->titlesStatus);
 

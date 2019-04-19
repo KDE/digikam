@@ -88,7 +88,7 @@ public:
 
     enum DescEditTab
     {
-        DESCRIPTIONS=0,
+        DESCRIPTIONS = 0,
         TAGS,
         INFOS
     };
@@ -213,17 +213,17 @@ ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
     DHBox* const pickBox = new DHBox(captionTagsArea);
     new QLabel(i18n("Pick Label:"), pickBox);
     d->pickLabelSelector = new PickLabelSelector(pickBox);
-    pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
+    pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter | Qt::AlignRight);
 
     DHBox* const colorBox = new DHBox(captionTagsArea);
     new QLabel(i18n("Color Label:"), colorBox);
     d->colorLabelSelector = new ColorLabelSelector(colorBox);
-    colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
+    colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter | Qt::AlignRight);
 
     DHBox* const rateBox  = new DHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), rateBox);
     d->ratingWidget       = new RatingWidget(rateBox);
-    rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
+    rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignRight);
 
     // Buttons -----------------------------------------
 
@@ -317,10 +317,10 @@ ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
     d->recentTagsMapper = new QSignalMapper(this);
 
-    grid3->addWidget(d->openTagMngr,    0, 0, 1, 2);
-    grid3->addWidget(d->newTagEdit,     1, 0, 1, 2);
-    grid3->addWidget(d->tagCheckView,   2, 0, 1, 2);
-    grid3->addWidget(tagsSearch,        3, 0, 1, 2);
+    grid3->addWidget(d->openTagMngr,  0, 0, 1, 2);
+    grid3->addWidget(d->newTagEdit,   1, 0, 1, 2);
+    grid3->addWidget(d->tagCheckView, 2, 0, 1, 2);
+    grid3->addWidget(tagsSearch,      3, 0, 1, 2);
     grid3->setRowStretch(1, 10);
 
     d->tabWidget->insertTab(Private::TAGS, sv3, i18n("Tags"));
@@ -670,7 +670,7 @@ void ItemDescEditTab::slotAskToApplyChanges(const QList<ItemInfo>& infos, Disjoi
         text += i18n("<p>Do you want to apply your changes?</p>");
     }
 
-    QCheckBox* const alwaysCBox = new QCheckBox(i18n("Always apply changes without confirmation"));
+    QCheckBox* const alwaysCBox  = new QCheckBox(i18n("Always apply changes without confirmation"));
 
     QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Information,
                                                    i18n("Apply changes?"),
@@ -825,7 +825,7 @@ void ItemDescEditTab::slotReadFromFileMetadataToDatabase()
     emit signalProgressMessageChanged(i18n("Reading metadata from files. Please wait..."));
 
     d->ignoreItemAttributesWatch = true;
-    int i                         = 0;
+    int i                        = 0;
 
     ScanController::instance()->suspendCollectionScan();
 
@@ -865,7 +865,7 @@ void ItemDescEditTab::slotWriteToFileMetadataFromDatabase()
         // write out to file DMetadata
         fileHub.write(info.filePath());
 
-        emit signalProgressValueChanged(i++/(float)d->currInfos.count());
+        emit signalProgressValueChanged(i++ / (float)d->currInfos.count());
         qApp->processEvents();
     }
 
@@ -1107,7 +1107,8 @@ void ItemDescEditTab::updateTagsView()
     // then update checked state for all tags of the currently selected images
     const QMap<int, DisjointMetadata::Status> hubMap = d->hub.tags();
 
-    for (QMap<int, DisjointMetadata::Status>::const_iterator it = hubMap.begin(); it != hubMap.end(); ++it)
+    for (QMap<int, DisjointMetadata::Status>::const_iterator it = hubMap.begin() ;
+         it != hubMap.end() ; ++it)
     {
         TAlbum* tag = AlbumManager::instance()->findTAlbum(it.key());
         setTagState(tag, it.value());
@@ -1357,8 +1358,8 @@ void ItemDescEditTab::updateRecentTags()
     }
     else
     {
-        for (AlbumList::const_iterator it = recentTags.constBegin();
-             it != recentTags.constEnd(); ++it)
+        for (AlbumList::const_iterator it = recentTags.constBegin() ;
+             it != recentTags.constEnd() ; ++it)
         {
             TAlbum* const album = static_cast<TAlbum*>(*it);
 
@@ -1425,7 +1426,8 @@ void ItemDescEditTab::slotAssignedTagsToggled(bool t)
 {
     d->tagCheckView->checkableAlbumFilterModel()->setFilterChecked(t);
     d->tagCheckView->checkableAlbumFilterModel()->setFilterPartiallyChecked(t);
-    d->tagCheckView->checkableAlbumFilterModel()->setFilterBehavior(t ? AlbumFilterModel::StrictFiltering : AlbumFilterModel::FullFiltering);
+    d->tagCheckView->checkableAlbumFilterModel()->setFilterBehavior(t ? AlbumFilterModel::StrictFiltering
+                                                                      : AlbumFilterModel::FullFiltering);
 
     if (t)
     {
@@ -1469,7 +1471,7 @@ void ItemDescEditTab::slotApplyChangesToAllVersions()
         return;
     }
 
-    for (int i = 0; i < relations.size(); ++i)
+    for (int i = 0 ; i < relations.size() ; ++i)
     {
         // Use QSet to prevent duplicates
         tmpSet.insert(relations.at(i).first);
