@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QDir>
-#include <QDirIterator>
 #include <QFile>
+#include <QDirIterator>
 
 // KDE includes
 
@@ -43,6 +43,7 @@
 #include "coredbaccess.h"
 #include "albummanager.h"
 #include "dfileoperations.h"
+#include "coredboperationgroup.h"
 
 namespace Digikam
 {
@@ -400,22 +401,28 @@ DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
 
 void DeleteDTrashItemsJob::run()
 {
-    CoreDbAccess access;
-    QList<int> albumsFromImages;
-    QList<qlonglong> imagesToRemove;
-
-    foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
     {
-        QFile::remove(item.trashPath);
-        QFile::remove(item.jsonFilePath);
+        CoreDbOperationGroup group;
+        group.setMaximumTime(200);
 
-        imagesToRemove   << item.imageId;
-        albumsFromImages << ItemInfo(item.imageId).albumId();
+        QList<int> albumsFromImages;
+        QList<qlonglong> imagesToRemove;
 
-        access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
+        foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
+        {
+            QFile::remove(item.trashPath);
+            QFile::remove(item.jsonFilePath);
+
+            imagesToRemove   << item.imageId;
+            albumsFromImages << ItemInfo(item.imageId).albumId();
+
+            CoreDbAccess().db()->removeAllImageRelationsFrom(item.imageId,
+                                                             DatabaseRelation::Grouped);
+            group.allowLift();
+        }
+
+         CoreDbAccess().db()->removeItemsPermanently(imagesToRemove, albumsFromImages);
     }
-
-    access.db()->removeItemsPermanently(imagesToRemove, albumsFromImages);
 
     emit signalDone();
 }
