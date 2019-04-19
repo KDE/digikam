@@ -42,9 +42,11 @@
 #   ImageMagick_FOUND                    - TRUE if all components are found.
 #   ImageMagick_INCLUDE_DIRS             - Full paths to all include dirs.
 #   ImageMagick_LIBRARIES                - Full paths to all libraries.
+#   ImageMagick_DEFINITIONS              - CFlags strings defined to compile IM.
 #   ImageMagick_<component>_FOUND        - TRUE if <component> is found.
 #   ImageMagick_<component>_INCLUDE_DIRS - Full path to <component> include dirs.
 #   ImageMagick_<component>_LIBRARIES    - Full path to <component> libraries.
+#   ImageMagick_<component>_DEFINITIONS  - CFlags strings defined to compile IM <component>.
 #
 # Example Usages:
 #
@@ -143,8 +145,36 @@ function(FIND_IMAGEMAGICK_API component header)
         list(REMOVE_DUPLICATES ImageMagick_INCLUDE_DIRS)
         set(ImageMagick_INCLUDE_DIRS ${ImageMagick_INCLUDE_DIRS} PARENT_SCOPE)
 
+        # Add the per-component library to the full libraries list.
+
+        set(ImageMagick_${component}_LIBRARIES ${ImageMagick_${component}_LIBRARY} PARENT_SCOPE)
         list(APPEND ImageMagick_LIBRARIES ${ImageMagick_${component}_LIBRARY})
         set(ImageMagick_LIBRARIES ${ImageMagick_LIBRARIES} PARENT_SCOPE)
+
+        # Add the per-component CFLAGS definitions.
+
+        set(IM_DEFINITIONS ${PC_${component}_CFLAGS_OTHER})
+        list(REMOVE_DUPLICATES IM_DEFINITIONS)
+
+        foreach(DEF ${IM_DEFINITIONS})
+            string(FIND "${DEF}" "MAGICKCORE_HDRI_ENABLE" matchres)
+            if(NOT ${matchres} EQUAL -1)
+                message(STATUS ${DEF})
+                list(APPEND ImageMagick_${component}_DEFINITIONS ${DEF})
+            endif()
+
+            string(FIND "${DEF}" "MAGICKCORE_QUANTUM_DEPTH" matchres)
+            if(NOT ${matchres} EQUAL -1)
+                message(STATUS ${DEF})
+                list(APPEND ImageMagick_${component}_DEFINITIONS ${DEF})
+            endif()
+
+        endforeach()
+
+        set(ImageMagick_${component}_DEFINITIONS ${ImageMagick_${component}_DEFINITIONS} PARENT_SCOPE)
+
+        list(APPEND ImageMagick_DEFINITIONS ${ImageMagick_${component}_DEFINITIONS})
+        set(ImageMagick_DEFINITIONS ${ImageMagick_DEFINITIONS} PARENT_SCOPE)
 
     endif()
 
@@ -286,7 +316,7 @@ endif()
 
 set(ImageMagick_INCLUDE_DIRS ${ImageMagick_INCLUDE_DIRS})
 set(ImageMagick_LIBRARIES    ${ImageMagick_LIBRARIES})
-set(ImageMagick_LDFLAGS      ${ImageMagick_LDFLAGS})
+set(ImageMagick_DEFINITIONS  ${ImageMagick_DEFINITIONS})
 
 if(ImageMagick_mogrify_EXECUTABLE)
 
@@ -325,7 +355,7 @@ message(STATUS "ImageMagick_VERSION_STRING:         ${ImageMagick_VERSION_STRING
 message(STATUS "ImageMagick_EXECUTABLE_DIR:         ${ImageMagick_EXECUTABLE_DIR}")
 message(STATUS "ImageMagick_INCLUDE_DIRS:           ${ImageMagick_INCLUDE_DIRS}")
 message(STATUS "ImageMagick_LIBRARIES:              ${ImageMagick_LIBRARIES}")
-message(STATUS "ImageMagick_LDFLAGS:                ${ImageMagick_LDFLAGS}")
+message(STATUS "ImageMagick_DEFINITIONS:            ${ImageMagick_DEFINITIONS}")
 message(STATUS "ImageMagick_Magick++_INCLUDE_DIRS:  ${ImageMagick_Magick++_INCLUDE_DIRS}")
-message(STATUS "ImageMagick_Magick++_LIBRARIES:     ${ImageMagick_Magick++_LIBRARIES}")
-message(STATUS "ImageMagick_Magick++_LDFLAGS:       ${ImageMagick_Magick++_LDFLAGS}")
+message(STATUS "ImageMagick_Magick++_LIBRARY:       ${ImageMagick_Magick++_LIBRARY}")
+message(STATUS "ImageMagick_Magick++_DEFINITIONS:   ${ImageMagick_Magick++_DEFINITIONS}")
