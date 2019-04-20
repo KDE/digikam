@@ -85,7 +85,12 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         imageWidth()  = image.columns();
         imageHeight() = image.rows();
         imageData()   = (uchar*)pixelBlob->data();
+
+#if MagickLibVersion < 0x700
+        m_hasAlpha    = image.matte();
+#else
         m_hasAlpha    = image.alpha();
+#endif
 
         // We considering that PNG is the most representative format of an image loaded by Qt
         imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
@@ -131,7 +136,13 @@ bool MagickLoader::save(const QString& filePath, DImgLoaderObserver* const obser
         image.size(Geometry(imageWidth(), imageHeight()));
         image.magick("BGRA");
         image.depth(imageBitsDepth());
+
+#if MagickLibVersion < 0x700
+        image.matte(imageHasAlpha());
+#else
         image.alpha(imageHasAlpha());
+#endif
+
         image.read(pixelBlob);
         image.magick(format.data());
         image.write(filePath.toUtf8().constData());
