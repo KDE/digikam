@@ -8,14 +8,14 @@ PNG     Done  Done   Done  Done      N.A     yes      yes     libpng
 TIF/EP  Done  Done   Done  Done      Done    yes      yes     libtiff
 RAW     Done  N.A    N.A   Done      Done    yes      yes     libraw
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
-PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
+PGF     Done  Done   TODO  Done      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
 Others file formats are supported:
-- in 8 bits/color/pixel using Qt plugin loaders (KImageFormat - KIMG) and mostly in read only.
+- in 8 bits/color/pixel using Qt plugin loaders (KImageFormat - "KIMG") and mostly in read only.
   https://cgit.kde.org/kimageformats.git/tree/src/imageformats
 
-- in 8|16 bits/color/pixel using ImageMagick codecs (optional - IM).
+- in 8|16 bits/color/pixel using ImageMagick codecs (optional - "IM").
   https://www.imagemagick.org/script/formats.php
 
 Note: if ImageMagick is present, this one is used in favor than Qt plugin loaders.
