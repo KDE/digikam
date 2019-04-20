@@ -11,39 +11,50 @@ PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
-Others file formats are supported only in 8 bits/color/pixel using QImageFormats plugins,
-or with fail-back to ImageMagick codecs (optional).
-Supported formats are listed below :
+Others file formats are supported:
+- in 8 bits/color/pixel using Qt plugin loaders (KImageFormat - KIMG) and mostly in read only.
+  https://cgit.kde.org/kimageformats.git/tree/src/imageformats
 
-Format   Read       Write      Description                          Codec
+- in 8|16 bits/color/pixel using ImageMagick codecs (optional - IM).
+  https://www.imagemagick.org/script/formats.php
 
-KRA      yes        no         Krita image                              kimageformat
-ORA      yes        no         Krita image                              kimageformat
-PSD      yes        yes        Photoshop image                          ImageMagick
-XCF      yes        no         Gimp file format                         ImageMagick
-EXR      yes        yes        ILM High dynamic range image             ImageMagick
-PBM      yes        yes        Portable bitmap format                   ImageMagick
-PGM      yes        yes        Portable graymap format                  ImageMagick
-PNM      yes        yes        Portable anymap                          ImageMagick
-PPM      yes        yes        Portable pixmap format                   ImageMagick
-TGA      yes        yes        Truevision Targa image                   ImageMagick
-PCX      yes        yes        ZSoft IBM PC Paintbrush                  ImageMagick
-PCD      yes        yes        PhotoCD                                  ImageMagick
-BMP      yes        yes        Windows bitmap format                    ImageMagick
-RGB      yes        yes        Raw Red Green Blue                       ImageMagick
-XBM      yes        yes        X Windows system bitmap                  ImageMagick
-XPM      yes        yes        X Windows system pixmap                  ImageMagick
-EPS      yes        yes        Adobe Encapsulated PostScript            ImageMagick
-DDS      yes        yes        Microsoft Direct Draw Surface            ImageMagick
-SGI      yes        yes        Irix RGB image                           ImageMagick
-ICO      yes        no         Windows icon format                      ImageMagick
-MNG      yes        yes        Multiple-image Network Graphics          ImageMagick
-GIF      yes        yes        CompuServe Graphics Interchange Format   ImageMagick
-HDR      yes        yes        Radiance RGBE image format               ImageMagick
-SVG      yes        yes        Scalable Vector Graphics                 ImageMagick
-WEBP     yes        yes        Weppy image format                       ImageMagick
-HEIF     yes        yes        Apple High efficiency Image Format       ImageMagick
-FITS     yes        yes        Flexible Image Transport System          ImageMagick
+Note: if ImageMagick is present, this one is used in favor than Qt plugin loaders.
+
+Uncomplete list of supported formats are listed below:
+
+Format   Read       Write      Description                              Codec
+                    (IM only)
+
+DDS      yes        yes        Microsoft Direct Draw Surface            KIMG | IM
+EPS      yes        yes        Adobe Encapsulated PostScript            KIMG | IM
+EXR      yes        yes        ILM High dynamic range image             KIMG | IM
+HDR      yes        yes        Radiance RGBE image format               KIMG | IM
+KRA      yes        no         Krita image                              KIMG
+ORA      yes        no         Krita image                              KIMG
+PCX      yes        yes        ZSoft IBM PC Paintbrush                  KIMG | IM
+PIC      yes        no         Softimage Raster image                   KIMG
+PNM      yes        yes        Portable anymap                          KIMG | IM
+PSD      yes        yes        Photoshop Raster image                   KIMG | IM
+RAS/SUN  yes        yes        Sun Raster image                         KIMG | IM
+RGB      yes        yes        Raw Red Green Blue image                 KIMG | IM
+RLE      yes        no         Utah Run length encoded image            KIMG | IM
+TGA      yes        yes        Truevision Targa image                   KIMG | IM
+XCF      yes        no         Gimp Raster image                        KIMG | IM
+PBM      yes        yes        Portable bitmap format                   IM
+PGM      yes        yes        Portable graymap format                  IM
+PPM      yes        yes        Portable pixmap format                   IM
+PCD      yes        yes        PhotoCD                                  IM
+BMP      yes        yes        Windows bitmap format                    IM
+XBM      yes        yes        X Windows system bitmap                  IM
+XPM      yes        yes        X Windows system pixmap                  IM
+SGI      yes        yes        Irix RGB image                           IM
+ICO      yes        no         Windows icon format                      IM
+MNG      yes        yes        Multiple-image Network Graphics          IM
+GIF      yes        yes        CompuServe Graphics Interchange Format   IM
+SVG      yes        yes        Scalable Vector Graphics                 IM
+WEBP     yes        yes        Weppy image format                       IM
+HEIF     yes        yes        Apple High efficiency Image Format       IM
+FITS     yes        yes        Flexible Image Transport System          IM
 
 -----------------------------------------------------------------------------------
 

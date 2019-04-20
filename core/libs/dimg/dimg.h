@@ -74,7 +74,7 @@ public:
         // Others file formats.
         RAW,
         PPM,
-        QIMAGE
+        QIMAGE  // QImage or ImageMagick
     };
 
     enum ANGLE

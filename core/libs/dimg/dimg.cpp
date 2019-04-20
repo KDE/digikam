@@ -82,6 +82,10 @@ extern "C"
 #   include "jp2kloader.h"
 #endif // HAVE_JASPER
 
+#ifdef HAVE_IMAGE_MAGICK
+#   include "magickloader.h"
+#endif // HAVE_IMAGE_MAGICK
+
 typedef uint64_t ullong;    // krazy:exclude=typedefs
 typedef int64_t  llong;     // krazy:exclude=typedefs
 
@@ -401,10 +405,12 @@ bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bo
     return load(filePath, loadFlags, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* const observer,
+bool DImg::load(const QString& filePath,
+                int loadFlagsInt,
+                DImgLoaderObserver* const observer,
                 const DRawDecoding& rawDecodingSettings)
 {
-    FORMAT format = fileFormat(filePath);
+    FORMAT format                   = fileFormat(filePath);
     DImgLoader::LoadFlags loadFlags = (DImgLoader::LoadFlags)loadFlagsInt;
 
     setAttribute(QLatin1String("detectedFileFormat"), format);
@@ -558,17 +564,38 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
         return false;
     }
 
-    qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : QIMAGE file identified";
-    QImageLoader loader(this);
-    loader.setLoadFlags(loadFlags);
+#ifdef HAVE_IMAGE_MAGICK
 
-    if (loader.load(filePath, observer))
     {
-        m_priv->null       = !loader.hasLoadedData();
-        m_priv->alpha      = loader.hasAlpha();
-        m_priv->sixteenBit = loader.sixteenBit();
-        setAttribute(QLatin1String("isReadOnly"), loader.isReadOnly());
-        return true;
+        qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : Try to load with ImageMagick";
+        MagickLoader loader(this);
+        loader.setLoadFlags(loadFlags);
+
+        if (loader.load(filePath, observer))
+        {
+            m_priv->null       = !loader.hasLoadedData();
+            m_priv->alpha      = loader.hasAlpha();
+            m_priv->sixteenBit = loader.sixteenBit();
+            setAttribute(QLatin1String("isReadOnly"), loader.isReadOnly());
+            return true;
+        }
+    }
+
+#endif // HAVE_IMAGE_MAGICK
+
+    {
+        qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : Try to load with QImage";
+        QImageLoader loader(this);
+        loader.setLoadFlags(loadFlags);
+
+        if (loader.load(filePath, observer))
+        {
+            m_priv->null       = !loader.hasLoadedData();
+            m_priv->alpha      = loader.hasAlpha();
+            m_priv->sixteenBit = loader.sixteenBit();
+            setAttribute(QLatin1String("isReadOnly"), loader.isReadOnly());
+            return true;
+        }
     }
 
     return false;
@@ -623,7 +650,7 @@ QString DImg::formatToMimeType(FORMAT frm)
 
         default:
         {
-            // For QImage based.
+            // For QImage or ImageMagick based.
             break;
         }
     }
@@ -719,10 +746,17 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     }
     else
     {
+#ifdef HAVE_IMAGE_MAGICK
+        setAttribute(QLatin1String("format"), format);
+        MagickLoader loader(this);
+        setAttribute(QLatin1String("savedFormat-isReadOnly"), loader.isReadOnly());
+        return loader.save(filePath, observer);
+#else
         setAttribute(QLatin1String("format"), format);
         QImageLoader loader(this);
         setAttribute(QLatin1String("savedFormat-isReadOnly"), loader.isReadOnly());
         return loader.save(filePath, observer);
+#endif
     }
 
     return false;

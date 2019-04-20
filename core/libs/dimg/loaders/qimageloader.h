@@ -50,10 +50,6 @@ public:
 
 private:
 
-    bool loadWithImageMagick(const QString& path, QImage& qimg);
-
-private:
-
     bool m_hasAlpha;
 };
 
