@@ -23,6 +23,15 @@
  *
  * ============================================================ */
 
+#include "digikam_config.h"
+
+// ImageMagick includes
+
+#ifdef HAVE_IMAGE_MAGICK
+#   include <Magick++.h>
+using namespace Magick;
+#endif
+
 // Qt includes
 
 #include <QDir>
@@ -41,7 +50,6 @@
 
 // Local includes
 
-#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "digikam_version.h"
@@ -62,6 +70,10 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     tryInitDrMingw();
+
+#ifdef HAVE_IMAGE_MAGICK
+    InitializeMagick(NULL);
+#endif
 
 #ifdef Q_OS_LINUX
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
@@ -147,6 +159,10 @@ int main(int argc, char* argv[])
 #ifdef Q_OS_WIN
     // Necessary to open native open with dialog on windows
     CoUninitialize();
+#endif
+
+#ifdef HAVE_IMAGE_MAGICK
+    TerminateMagick();
 #endif
 
     return ret;
