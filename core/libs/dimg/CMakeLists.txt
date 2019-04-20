@@ -171,7 +171,6 @@ set(libdimgloaders_SRCS
     loaders/jpegloader.cpp
     loaders/tiffloader.cpp
     loaders/rawloader.cpp
-    loaders/ppmloader.cpp
     loaders/qimageloader.cpp
     loaders/pgfloader.cpp
     loaders/jpegsettings.cpp

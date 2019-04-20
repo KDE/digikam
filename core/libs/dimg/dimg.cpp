@@ -64,7 +64,6 @@ extern "C"
 #include "dimagehistory.h"
 #include "pngloader.h"
 #include "tiffloader.h"
-#include "ppmloader.h"
 #include "rawloader.h"
 #include "pgfloader.h"
 #include "qimageloader.h"
@@ -480,24 +479,6 @@ bool DImg::load(const QString& filePath,
             break;
         }
 
-        case (PPM):
-        {
-            qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : PPM file identified";
-            PPMLoader loader(this);
-            loader.setLoadFlags(loadFlags);
-
-            if (loader.load(filePath, observer))
-            {
-                m_priv->null       = !loader.hasLoadedData();
-                m_priv->alpha      = loader.hasAlpha();
-                m_priv->sixteenBit = loader.sixteenBit();
-                setAttribute(QLatin1String("isReadOnly"), loader.isReadOnly());
-                return true;
-            }
-
-            break;
-        }
-
         case (RAW):
         {
             qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : RAW file identified";
@@ -630,12 +611,6 @@ QString DImg::formatToMimeType(FORMAT frm)
             break;
         }
 
-        case (PPM):
-        {
-            format = QLatin1String("PPM");
-            break;
-        }
-
         case (JP2K):
         {
             format = QLatin1String("JP2");
@@ -715,12 +690,6 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     else if (frm == QLatin1String("TIFF") || frm == QLatin1String("TIF"))
     {
         TIFFLoader loader(this);
-        setAttribute(QLatin1String("savedFormat-isReadOnly"), loader.isReadOnly());
-        return loader.save(filePath, observer);
-    }
-    else if (frm == QLatin1String("PPM"))
-    {
-        PPMLoader loader(this);
         setAttribute(QLatin1String("savedFormat-isReadOnly"), loader.isReadOnly());
         return loader.save(filePath, observer);
     }
@@ -852,26 +821,6 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     else if (memcmp(&header, &pngID, 8) == 0)        // PNG file ?
     {
         return PNG;
-    }
-    else if (memcmp(&header[0], "P", 1)  == 0 &&
-             memcmp(&header[2], "\n", 1) == 0)       // PPM 16 bits file ?
-    {
-        int         width, height, rgbmax;
-        char        nl;
-        FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
-
-        // FIXME: scanf without field width limits can crash with huge input data
-        if (file && fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
-        {
-            if (rgbmax > 255)
-            {
-                fclose(file);
-                return PPM;
-            }
-        }
-
-        if (file)
-            fclose(file);
     }
     else if (DRawDecoder::rawFileIdentify(dcrawIdentify, filePath)
              && dcrawIdentify.isDecodable)

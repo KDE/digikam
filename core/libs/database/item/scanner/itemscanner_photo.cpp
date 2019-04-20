@@ -134,8 +134,6 @@ QString ItemScanner::detectImageFormat() const
             return QLatin1String("PNG");
         case DImg::TIFF:
             return QLatin1String("TIFF");
-        case DImg::PPM:
-            return QLatin1String("PPM");
         case DImg::JP2K:
             return QLatin1String("JP2");
         case DImg::PGF:

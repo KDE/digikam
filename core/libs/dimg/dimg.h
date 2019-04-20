@@ -73,7 +73,6 @@ public:
         PGF,
         // Others file formats.
         RAW,
-        PPM,
         QIMAGE  // QImage or ImageMagick
     };
 
