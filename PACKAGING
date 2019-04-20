@@ -63,10 +63,13 @@ Notice to make release tarballs from GIT
     Use same worflow than source tarball.
 
 11/ Create a release announcement page on digikam.org web site.
+
     Web-site is hosted in a dedicated release repository: https://cgit.kde.org/websites/digikam-org.git/
     Website repository use a staging branch to review changes before to post contents officialy.
     See this README file for details: https://cgit.kde.org/websites/digikam-org.git/tree/README
     The release announcement can use MarkDown format and are located to "news" directory.
+
+    Don't forget to patch default download links with new stable releases files in data/release.yml.
 
 12/ Perform an official release announcement to these mailing-lists:
 
