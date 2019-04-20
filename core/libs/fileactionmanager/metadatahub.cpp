@@ -344,7 +344,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteComponent writeMode, const Met
 
     dirty |= metadata.setItemFacesMap(d->faceTagsList, saveFaces);
 
-    dirty |= writeTags(metadata,saveTags);
+    dirty |= writeTags(metadata, saveTags);
 
     return dirty;
 }
@@ -629,7 +629,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetaEngineSettings
     }
 
     newKeywords = cleanupTags(newKeywords);
-    QUrl url = QUrl::fromLocalFile(filePath);
+    QUrl url    = QUrl::fromLocalFile(filePath);
     baloo->setAllData(url, &newKeywords, comment, rating);
 #else
     Q_UNUSED(filePath);
@@ -658,8 +658,8 @@ void Digikam::MetadataHub::loadFaceTags(const ItemInfo& info, const QSize& size)
             if (faceName.isEmpty())
                 continue;
 
-            QRect  temprect  = dface.region().toRect();
-            QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);
+            QRect  temprect = dface.region().toRect();
+            QRectF faceRect = TagRegion::absoluteToRelative(temprect,size);
             d->faceTagsList.insertMulti(faceName, QVariant(faceRect));
         }
 
@@ -688,7 +688,7 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const Ite
             if (faceName.isEmpty())
                 continue;
 
-            QRect  temprect  = dface.region().toRect();
+            QRect  temprect = dface.region().toRect();
             faceTagsList.insertMulti(faceName, QVariant(temprect));
         }
     }
@@ -703,8 +703,8 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
 
     for (it = newFaceTags.begin() ; it != newFaceTags.end() ; ++it)
     {
-        QRect  temprect  = it.value().toRect();
-        QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);
+        QRect  temprect = it.value().toRect();
+        QRectF faceRect = TagRegion::absoluteToRelative(temprect,size);
         d->faceTagsList.insertMulti(it.key(), faceRect);
     }
 }
