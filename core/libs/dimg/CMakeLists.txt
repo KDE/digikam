@@ -186,6 +186,7 @@ if(ImageMagick_Magick++_FOUND)
     set(libdimgloaders_SRCS
         ${libdimgloaders_SRCS}
         loaders/magickloader.cpp
+    )
 endif()
 
 # JPEG2000 support
