@@ -315,52 +315,52 @@ bool DMetadata::setItemRating(int rating, const DMetadataSettingsContainer& sett
                 }
                 break;
             case NamespaceEntry::EXIF:
-                if (!setExifTagLong(nameSpace, rating))
+                if (QLatin1String(nameSpace) == QLatin1String("Exif.Image.0x4749"))
                 {
-                    return false;
+                    // Wrapper around rating percents managed by Windows Vista.
+                    int ratePercents = 0;
+
+                    switch (rating)
+                    {
+                        case 0:
+                            ratePercents = 0;
+                            break;
+                        case 1:
+                            ratePercents = 1;
+                            break;
+                        case 2:
+                            ratePercents = 25;
+                            break;
+                        case 3:
+                            ratePercents = 50;
+                            break;
+                        case 4:
+                            ratePercents = 75;
+                            break;
+                        case 5:
+                            ratePercents = 99;
+                            break;
+                    }
+
+                    if (!setExifTagLong(nameSpace, ratePercents))
+                    {
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!setExifTagLong(nameSpace, rating))
+                    {
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace;
+                        return false;
+                    }
                 }
                 break;
             case NamespaceEntry::IPTC: // IPTC rating deprecated
             default:
                 break;
         }
-    }
-
-    // Set Exif rating tag used by Windows Vista.
-
-    if (!setExifTagLong("Exif.Image.0x4746", rating))
-    {
-        return false;
-    }
-
-    // Wrapper around rating percents managed by Windows Vista.
-    int ratePercents = 0;
-
-    switch (rating)
-    {
-        case 0:
-            ratePercents = 0;
-            break;
-        case 1:
-            ratePercents = 1;
-            break;
-        case 2:
-            ratePercents = 25;
-            break;
-        case 3:
-            ratePercents = 50;
-            break;
-        case 4:
-            ratePercents = 75;
-            break;
-        case 5:
-            ratePercents = 99;
-            break;
-    }
-
-    if (!setExifTagLong("Exif.Image.0x4749", ratePercents))
-    {
-        return false;
     }
 
     return true;
