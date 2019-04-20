@@ -72,8 +72,9 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         qCDebug(DIGIKAM_DIMG_LOG) << "IM QuantumRange :" << QuantumRange;
         qCDebug(DIGIKAM_DIMG_LOG) << "IM Format       :" << image.format().c_str();
 
+        int depth             = (QuantumRange >= 16) ? 16 : 8;
         Blob* const pixelBlob = new Blob;
-        image.write(pixelBlob, "BGRA", 16);
+        image.write(pixelBlob, "BGRA", depth);
         qCDebug(DIGIKAM_DIMG_LOG) << "IM blob size    :" << pixelBlob->length();
 
         if (observer)
@@ -84,12 +85,12 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         imageWidth()  = image.columns();
         imageHeight() = image.rows();
         imageData()   = (uchar*)pixelBlob->data();
-        m_hasAlpha    = image.matte();
+        m_hasAlpha    = image.alpha();
 
         // We considering that PNG is the most representative format of an image loaded by Qt
         imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
         imageSetAttribute(QLatin1String("originalColorModel"), DImg::RGB);
-        imageSetAttribute(QLatin1String("originalBitDepth"),   16);
+        imageSetAttribute(QLatin1String("originalBitDepth"),   depth);
         imageSetAttribute(QLatin1String("originalSize"),       QSize(image.columns(), image.rows()));
     }
     catch (Exception& error_)
@@ -129,7 +130,8 @@ bool MagickLoader::save(const QString& filePath, DImgLoaderObserver* const obser
         Image image;
         image.size(Geometry(imageWidth(), imageHeight()));
         image.magick("BGRA");
-        image.depth(16);
+        image.depth(imageBitsDepth());
+        image.alpha(imageHasAlpha());
         image.read(pixelBlob);
         image.magick(format.data());
         image.write(filePath.toUtf8().constData());
