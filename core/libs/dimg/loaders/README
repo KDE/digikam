@@ -29,8 +29,8 @@ DDS      yes        yes        Microsoft Direct Draw Surface            KIMG | I
 EPS      yes        yes        Adobe Encapsulated PostScript            KIMG | IM
 EXR      yes        yes        ILM High dynamic range image             KIMG | IM
 HDR      yes        yes        Radiance RGBE image format               KIMG | IM
-KRA      yes        no         Krita image                              KIMG
-ORA      yes        no         Krita image                              KIMG
+KRA      yes        no         Krita Raster image                       KIMG
+ORA      yes        no         OpenRaster image                         KIMG
 PCX      yes        yes        ZSoft IBM PC Paintbrush                  KIMG | IM
 PIC      yes        no         Softimage Raster image                   KIMG
 PNM      yes        yes        Portable anymap                          KIMG | IM
