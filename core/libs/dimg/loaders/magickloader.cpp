@@ -84,6 +84,7 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         imageWidth()  = image.columns();
         imageHeight() = image.rows();
         imageData()   = (uchar*)pixelBlob->data();
+        m_hasAlpha    = image.matte();
 
         // We considering that PNG is the most representative format of an image loaded by Qt
         imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
