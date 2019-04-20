@@ -171,8 +171,8 @@ int DMetadata::getItemRating(const DMetadataSettingsContainer& settings) const
             {
                 return -1;
             }
-
         }
+
         int index = entry.convertRatio.indexOf(rating);
 
         // Exact value was not found,but rating is in range,
