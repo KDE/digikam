@@ -32,7 +32,7 @@ ExternalProject_Add(ext_imagemagick
                                              --with-webp
                                              --with-openexr
                                              --disable-hdri
-                                             --with-quantum-depth=8
+                                             --with-quantum-depth=16
 #                                             --with-utilities=no
 
     UPDATE_COMMAND ""
