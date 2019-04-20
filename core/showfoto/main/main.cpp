@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 #endif
 
 #ifdef HAVE_IMAGE_MAGICK
-#   if MagickLibVersion >= 0x69A
+#   if MagickLibVersion >= 0x693
     TerminateMagick();
 #   endif
 #endif
