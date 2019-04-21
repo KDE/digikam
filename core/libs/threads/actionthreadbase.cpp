@@ -101,19 +101,19 @@ ActionThreadBase::~ActionThreadBase()
     d->pool->waitForDone();
 
     // Cleanup all jobs from memory
-    foreach(ActionJob* const job, d->todo.keys())
+    foreach (ActionJob* const job, d->todo.keys())
     {
-        delete(job);
+        delete job;
     }
 
-    foreach(ActionJob* const job, d->pending.keys())
+    foreach (ActionJob* const job, d->pending.keys())
     {
-        delete(job);
+        delete job;
     }
 
-    foreach(ActionJob* const job, d->processed.keys())
+    foreach (ActionJob* const job, d->processed.keys())
     {
-        delete(job);
+        delete job;
     }
 
     delete d;
@@ -167,7 +167,7 @@ void ActionThreadBase::cancel()
 
     d->todo.clear();
 
-    foreach(ActionJob* const job, d->pending.keys())
+    foreach (ActionJob* const job, d->pending.keys())
     {
         job->cancel();
         d->processed.insert(job, 0);
@@ -193,7 +193,7 @@ void ActionThreadBase::appendJobs(const ActionJobCollection& jobs)
 {
     QMutexLocker lock(&d->mutex);
 
-    for (ActionJobCollection::const_iterator it = jobs.begin() ; it != jobs.end(); ++it)
+    for (ActionJobCollection::const_iterator it = jobs.begin() ; it != jobs.end() ; ++it)
     {
         d->todo.insert(it.key(), it.value());
     }
@@ -213,7 +213,7 @@ void ActionThreadBase::run()
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Action Thread run " << d->todo.count() << " new jobs";
 
-            for (ActionJobCollection::iterator it = d->todo.begin() ; it != d->todo.end(); ++it)
+            for (ActionJobCollection::iterator it = d->todo.begin() ; it != d->todo.end() ; ++it)
             {
                 ActionJob* const job = it.key();
                 int priority         = it.value();
