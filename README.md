@@ -2,7 +2,7 @@
 
 [![Phabricator Build Status](https://build.kde.org/job/Extragear/job/digikam/job/kf5-qt5%20SUSEQt5.10/badge/icon)](https://build.kde.org/job/Extragear/job/digikam/job/kf5-qt5%20SUSEQt5.10/)
 
-If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://phabricator.kde.org/source/digikam/)
+If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://invent.kde.org/kde/digikam)
 
 Developers, if you want to contrib, see the online [API documentation here](https://www.digikam.org/api)
 
