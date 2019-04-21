@@ -25,20 +25,75 @@
 #ifndef DIGIKAM_DIMG_PRIVATE_H
 #define DIGIKAM_DIMG_PRIVATE_H
 
+#include "digikam_config.h"
+
+// C ANSI includes
+
+#ifndef Q_OS_WIN
+extern "C"
+{
+#endif
+
+#include <stdint.h>
+
+#ifndef Q_OS_WIN
+#include <math.h>
+}
+#endif
+
+// C++ includes
+
+#include <cstdio>
+
 // Qt includes
 
 #include <QString>
 #include <QByteArray>
 #include <QVariant>
 #include <QMap>
+#include <QFile>
+#include <QFileInfo>
+#include <QImage>
+#include <QImageReader>
+#include <QPaintEngine>
+#include <QPainter>
+#include <QPixmap>
+#include <QSysInfo>
+#include <QUuid>
 
 // Local includes
 
+#include "dimg.h"
 #include "digikam_export.h"
+#include "digikam_debug.h"
 #include "dmetadata.h"
 #include "dshareddata.h"
 #include "dimagehistory.h"
 #include "iccprofile.h"
+#include "metaengine_rotation.h"
+#include "drawdecoder.h"
+#include "dimagehistory.h"
+#include "pngloader.h"
+#include "tiffloader.h"
+#include "rawloader.h"
+#include "pgfloader.h"
+#include "qimageloader.h"
+#include "jpegloader.h"
+#include "filereadwritelock.h"
+#include "iccmanager.h"
+#include "icctransform.h"
+#include "exposurecontainer.h"
+#include "dmetadata.h"
+#include "dimgloaderobserver.h"
+#include "randomnumbergenerator.h"
+
+#ifdef HAVE_JASPER
+#   include "jp2kloader.h"
+#endif // HAVE_JASPER
+
+#ifdef HAVE_IMAGE_MAGICK
+#   include "magickloader.h"
+#endif // HAVE_IMAGE_MAGICK
 
 /** Lanczos kernel is precomputed in a table with this resolution
     The value below seems to be enough for HQ upscaling up to eight times
@@ -57,12 +112,15 @@
  */
 //#define LANCZOS_DATA_FLOAT
 #ifdef LANCZOS_DATA_FLOAT
-#define LANCZOS_DATA_TYPE float
-#define LANCZOS_DATA_ONE 1.0
+#   define LANCZOS_DATA_TYPE float
+#   define LANCZOS_DATA_ONE 1.0
 #else
-#define LANCZOS_DATA_TYPE int
-#define LANCZOS_DATA_ONE 4096
+#   define LANCZOS_DATA_TYPE int
+#   define LANCZOS_DATA_ONE 4096
 #endif
+
+typedef uint64_t ullong;    // krazy:exclude=typedefs
+typedef int64_t  llong;     // krazy:exclude=typedefs
 
 namespace Digikam
 {
