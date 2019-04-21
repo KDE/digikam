@@ -24,14 +24,14 @@ Uncomplete list of supported formats are listed below:
 Format   Read       Write      Description                              Codec
                     (IM only)
 
+KRA      yes        no         Krita Raster image                       KIMG
+ORA      yes        no         OpenRaster image                         KIMG
+PIC      yes        no         Softimage Raster image                   KIMG
 DDS      yes        yes        Microsoft Direct Draw Surface            KIMG | IM
 EPS      yes        yes        Adobe Encapsulated PostScript            KIMG | IM
 EXR      yes        yes        ILM High dynamic range image             KIMG | IM
 HDR      yes        yes        Radiance RGBE image format               KIMG | IM
-KRA      yes        no         Krita Raster image                       KIMG
-ORA      yes        no         OpenRaster image                         KIMG
 PCX      yes        yes        ZSoft IBM PC Paintbrush                  KIMG | IM
-PIC      yes        no         Softimage Raster image                   KIMG
 PNM      yes        yes        Portable anymap                          KIMG | IM
 PSD      yes        yes        Photoshop Raster image                   KIMG | IM
 RAS/SUN  yes        yes        Sun Raster image                         KIMG | IM
@@ -39,21 +39,21 @@ RGB      yes        yes        Raw Red Green Blue image                 KIMG | I
 RLE      yes        no         Utah Run length encoded image            KIMG | IM
 TGA      yes        yes        Truevision Targa image                   KIMG | IM
 XCF      yes        no         Gimp Raster image                        KIMG | IM
-PBM      yes        yes        Portable bitmap format                   IM
-PGM      yes        yes        Portable graymap format                  IM
-PPM      yes        yes        Portable pixmap format                   IM
+GIF      yes        yes        CompuServe Graphics Interchange Format   KIMG | IM
+BMP      yes        yes        Windows bitmap format                    KIMG | IM
+PBM      yes        yes        Portable bitmap format                   KIMG | IM
+PGM      yes        yes        Portable graymap format                  KIMG | IM
+PPM      yes        yes        Portable pixmap format                   KIMG | IM
+XBM      yes        yes        X Windows system bitmap                  KIMG | IM
+XPM      yes        yes        X Windows system pixmap                  KIMG | IM
 PCD      yes        yes        PhotoCD                                  IM
-BMP      yes        yes        Windows bitmap format                    IM
-XBM      yes        yes        X Windows system bitmap                  IM
-XPM      yes        yes        X Windows system pixmap                  IM
 SGI      yes        yes        Irix RGB image                           IM
 ICO      yes        no         Windows icon format                      IM
 MNG      yes        yes        Multiple-image Network Graphics          IM
-GIF      yes        yes        CompuServe Graphics Interchange Format   IM
 SVG      yes        yes        Scalable Vector Graphics                 IM
 WEBP     yes        yes        Weppy image format                       IM
 HEIF     yes        yes        Apple High efficiency Image Format       IM
-FITS     yes        yes        Flexible Image Transport System          IM
+FIT/FITS yes        yes        Flexible Image Transport System          IM
 
 -----------------------------------------------------------------------------------
 
