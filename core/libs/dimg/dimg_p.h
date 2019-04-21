@@ -4,7 +4,8 @@
  * https://www.digikam.org
  *
  * Date        : 2005-06-15
- * Description : DImg private data members
+ * Description : digiKam 8/16 bits image management API.
+ *               Private data container.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>

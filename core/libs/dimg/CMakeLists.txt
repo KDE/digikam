@@ -14,6 +14,7 @@ set(libdimg_SRCS
     dimg.cpp
     dimg_data.cpp
     dimg_fileio.cpp
+    dimg_props.cpp
     dimg_scale.cpp
     drawdecoding.cpp
     dcolor.cpp
