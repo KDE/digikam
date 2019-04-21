@@ -6,20 +6,16 @@
  * Date        : 2005-06-14
  * Description : digiKam 8/16 bits image management API.
  * Description : Smoothscale method based on Imlib2's implementations.
+ *               https://git.enlightenment.org/legacy/imlib2.git/tree/src/lib/scale.c
+ *               Ported to C++ and QImage
  *               Add smoothScaleSection to scale only an image section.
  *               Add 16 bits color depth image support.
  *
+ * Copyright (C) 1999-2004 by Carsten Haitzler <raster at rasterman dot com>
+ * Copyright (C) 2004      by Willem Monsuwe <willem at stack dot nl>
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Daniel M. Duley <mosfet at interaccess dot com>
  * Copyright (C) 2006-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Ported to C++/QImage by Daniel M. Duley
- * Following modification are (C) Daniel M. Duley
- * Changes include formatting, namespaces and other C++'ings, removal of old
- * #ifdef'ed code, and removal of unneeded border calculation code.
- * Original implementation: http://trac.enlightenment.org/e/browser/trunk/imlib2/src/lib/scale.c
- *
- * Imlib2 is (C) Carsten Haitzler and various contributors. The MMX code
- * is by Willem Monsuwe <willem@stack.nl>.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
