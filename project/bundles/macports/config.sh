@@ -51,9 +51,7 @@ MP_BUILDTEMP=~/mptemp
 ########################################################################
 
 # URL to git repository to checkout digiKam source code
-# Read/write url is an alternative when official read only server is down.
-#DK_GITURL="git://anongit.kde.org/digikam.git"
-DK_GITURL="git@git.kde.org:digikam"
+DK_GITURL="git@invent.kde.org:kde/digikam.git"
 
 # digiKam tarball information
 DK_URL="http://download.kde.org/stable/digikam"

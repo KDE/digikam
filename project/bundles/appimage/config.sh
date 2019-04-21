@@ -22,9 +22,7 @@ APP_IMG_DIR="/digikam.appdir"
 ########################################################################
 
 # URL to git repository to checkout digiKam source code
-# Read/write url is an alternative when official read only server is down.
-#DK_GITURL="git://anongit.kde.org/digikam.git"
-DK_GITURL="git@git.kde.org:digikam"
+DK_GITURL="git@invent.kde.org:kde/digikam.git"
 
 # Location to build source code.
 DK_BUILDTEMP=$BUILDING_DIR/dktemp
