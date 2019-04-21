@@ -56,13 +56,20 @@ bool DImg::loadItemInfo(const QString& filePath, bool loadMetadata, bool loadICC
     return load(filePath, loadFlags, 0, DRawDecoding());
 }
 
-bool DImg::load(const QString& filePath, DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
+bool DImg::load(const QString& filePath,
+                DImgLoaderObserver* const observer,
+                const DRawDecoding& rawDecodingSettings)
 {
     return load(filePath, DImgLoader::LoadAll, observer, rawDecodingSettings);
 }
 
-bool DImg::load(const QString& filePath, bool loadMetadata, bool loadICCData, bool loadUniqueHash, bool loadImageHistory,
-                DImgLoaderObserver* const observer, const DRawDecoding& rawDecodingSettings)
+bool DImg::load(const QString& filePath,
+                bool loadMetadata,
+                bool loadICCData,
+                bool loadUniqueHash,
+                bool loadImageHistory,
+                DImgLoaderObserver* const observer,
+                const DRawDecoding& rawDecodingSettings)
 {
     DImgLoader::LoadFlags loadFlags = DImgLoader::LoadItemInfo | DImgLoader::LoadImageData;
 

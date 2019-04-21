@@ -54,7 +54,7 @@ public:
 
     enum LoadFlag
     {
-        LoadItemInfo    = 1,
+        LoadItemInfo     = 1,
         LoadMetadata     = 2,
         LoadICCData      = 4,
         LoadImageData    = 8,
