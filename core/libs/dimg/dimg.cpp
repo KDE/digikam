@@ -28,6 +28,79 @@
 namespace Digikam
 {
 
+/**
+ * 
+ * DImg is a framework to support 16bits color depth image. it doesn't aim 
+ * to be a complete imaging library; it uses QImage/ImageMagick for 
+ * load/save files which are not supported natively by it. 
+ * some of the features:
+ * 
+ * - Native Image Loaders, for some imageformats which are of interest to 
+ * us: JPEG (complete), TIFF (mostly complete), PNG (complete), JPEG2000 
+ * (complete), RAW (complete through libraw), PGF (complete).
+ * For the rest ImageMAgick codecs or qimageloader are used.
+ * 
+ * - Metadata preservation: when a file is loaded, its metadata like XMP, 
+ * IPTC, EXIF, JFIF are read and held in memory. now when you save back the 
+ * file to the original file or to a different file, the metadata is 
+ * automatically written. All is delegate to Exiv2 library.
+ * 
+ * - Explicitly Shared Container format (see qt docs): this is necessary for 
+ * performance reasons.
+ * 
+ * - 8 bits and 16 bits support: if the file format is 16 bits, it will load up 
+ * the image in 16bits format (TIFF/PNG/JPEG2000/RAW/PGF support) and all 
+ * operations are done in 16 bits format, except when the rendering to screen 
+ * is done, when its converted on the fly to a temporary 8 bits image and then 
+ * rendered.
+ * 
+ * - Basic image manipulation: rotate, flip, color modifications, crop, 
+ * scale. This has been ported from Imlib2 with 16 bits scaling support
+ * and support for scaling of only a section of the image.
+ * 
+ * - Rendering to Pixmap: using QImage/QPixmap. (see above for rendering of 
+ * 16 bits images).
+ * 
+ * - Pixel format: the pixel format is different from QImage pixel 
+ * format. In QImage the pixel data is stored as unsigned ints and to 
+ * access the individual colors you need to use bit-shifting to ensure 
+ * endian correctness. in DImg, the pixel data is stored as unsigned char. 
+ * the color layout is B,G,R,A (blue, green, red, alpha)
+ * 
+ * for 8 bits images: you can access individual color components like this:
+ * 
+ * uchar* const pixels = image.bits();
+ * 
+ * for (int i = 0 ; i < image.width() * image.height() ; ++i)
+ * {
+ *    pixel[0] // blue
+ *    pixel[1] // green
+ *    pixel[2] // red
+ *    pixel[3] // alpha
+ * 
+ *    pixel += 4; // go to next pixel
+ * }
+ * 
+ * and for 16 bits images:
+ * 
+ * ushort* const pixels = (ushort*)image.bits();
+ * 
+ * for (int i = 0 ; i < image.width() * image.height() ; ++i)
+ * {
+ *    pixel[0] // blue
+ *    pixel[1] // green
+ *    pixel[2] // red
+ *    pixel[3] // alpha
+ * 
+ *    pixel += 4; // go to next pixel
+ * }
+ * 
+ * The above is true for both big and little endian platforms. What this also
+ * means is that the pixel format is different from that of QImage for big 
+ * endian machines. Functions are provided if you want to get a copy of the 
+ * DImg as a QImage.
+ * 
+ */
 DImg::DImg()
     : m_priv(new Private)
 {
@@ -113,168 +186,6 @@ DImg::DImg(const QImage& image)
 
 DImg::~DImg()
 {
-}
-
-//---------------------------------------------------------------------------------------------------
-// data management
-
-DImg& DImg::operator=(const DImg& image)
-{
-    //qCDebug(DIGIKAM_DIMG_LOG) << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
-    //qCDebug(DIGIKAM_DIMG_LOG) << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
-    m_priv = image.m_priv;
-    //qCDebug(DIGIKAM_DIMG_LOG) << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
-    return *this;
-}
-
-bool DImg::operator==(const DImg& image) const
-{
-    return m_priv == image.m_priv;
-}
-
-void DImg::reset()
-{
-    m_priv = new Private;
-}
-
-void DImg::detach()
-{
-    // are we being shared?
-    if (!m_priv->hasMoreReferences())
-    {
-        return;
-    }
-
-    DSharedDataPointer<Private> old = m_priv;
-
-    m_priv = new Private;
-    copyImageData(old);
-    copyMetaData(old);
-
-    if (old->data)
-    {
-        size_t size = allocateData();
-        memcpy(m_priv->data, old->data, size);
-    }
-}
-
-void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData)
-{
-    // set image data, metadata is untouched
-
-    bool null = (width == 0) || (height == 0);
-    // allocateData, or code below will set null to false
-    setImageData(true, width, height, sixteenBit, alpha);
-
-    // replace data
-    delete [] m_priv->data;
-
-    if (null)
-    {
-        // image is null - no data
-        m_priv->data = 0;
-    }
-    else if (copyData)
-    {
-        size_t size = allocateData();
-
-        if (data)
-        {
-            memcpy(m_priv->data, data, size);
-        }
-    }
-    else
-    {
-        if (data)
-        {
-            m_priv->data = data;
-            m_priv->null = false;
-        }
-        else
-        {
-            allocateData();
-        }
-    }
-}
-
-void DImg::putImageData(uchar* const data, bool copyData)
-{
-    if (!data)
-    {
-        delete [] m_priv->data;
-        m_priv->data = 0;
-        m_priv->null = true;
-    }
-    else if (copyData)
-    {
-        memcpy(m_priv->data, data, numBytes());
-    }
-    else
-    {
-        m_priv->data = data;
-    }
-}
-
-void DImg::resetMetaData()
-{
-    m_priv->attributes.clear();
-    m_priv->embeddedText.clear();
-    m_priv->metaData = MetaEngineData();
-}
-
-uchar* DImg::stripImageData()
-{
-    uchar* const data  = m_priv->data;
-    m_priv->data       = 0;
-    m_priv->null       = true;
-    return data;
-}
-
-void DImg::copyMetaData(const Private* const src)
-{
-    m_priv->metaData     = src->metaData;
-    m_priv->attributes   = src->attributes;
-    m_priv->embeddedText = src->embeddedText;
-    m_priv->iccProfile   = src->iccProfile;
-    m_priv->imageHistory = src->imageHistory;
-    //FIXME: what about sharing and deleting lanczos_func?
-}
-
-void DImg::copyImageData(const Private* const src)
-{
-    setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
-}
-
-size_t DImg::allocateData()
-{
-    size_t size  = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
-    m_priv->data = DImgLoader::new_failureTolerant(size);
-
-    if (!m_priv->data)
-    {
-        m_priv->null   = true;
-        m_priv->width  = 0;
-        m_priv->height = 0;
-        return 0;
-    }
-
-    m_priv->null = false;
-    return size;
-}
-
-void DImg::setImageDimension(uint width, uint height)
-{
-    m_priv->width  = width;
-    m_priv->height = height;
-}
-
-void DImg::setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha)
-{
-    m_priv->null       = null;
-    m_priv->width      = width;
-    m_priv->height     = height;
-    m_priv->alpha      = alpha;
-    m_priv->sixteenBit = sixteenBit;
 }
 
 //---------------------------------------------------------------------------------------------------

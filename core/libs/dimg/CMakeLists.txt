@@ -12,6 +12,7 @@ string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(libdimg_SRCS
     dimg.cpp
+    dimg_data.cpp
     dimg_fileio.cpp
     dimg_scale.cpp
     drawdecoding.cpp
