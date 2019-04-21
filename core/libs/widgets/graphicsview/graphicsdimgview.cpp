@@ -137,30 +137,27 @@ void GraphicsDImgView::drawForeground(QPainter* p, const QRectF& rect)
 {
     QGraphicsView::drawForeground(p, rect);
 
-    if (!d->movingInProgress)
+    QString text = d->item->userLoadingHint();
+
+    if (text.isNull() || !d->showText)
     {
-        QString text = d->item->userLoadingHint();
-
-        if (text.isNull() || !d->showText)
-        {
-            return;
-        }
-
-        QRect viewportRect        = viewport()->rect();
-        QRect fontRect            = p->fontMetrics().boundingRect(viewportRect, 0, text);
-        QPoint drawingPoint(viewportRect.topRight().x() - fontRect.width() - 10,
-                            viewportRect.topRight().y() + 5);
-
-        QPointF sceneDrawingPoint = mapToScene(drawingPoint);
-        QRectF sceneDrawingRect(sceneDrawingPoint, fontRect.size());
-
-        if (!rect.intersects(sceneDrawingRect))
-        {
-            return;
-        }
-
-        drawText(p, sceneDrawingRect, text);
+        return;
     }
+
+    QRect viewportRect        = viewport()->rect();
+    QRect fontRect            = p->fontMetrics().boundingRect(viewportRect, 0, text);
+    QPoint drawingPoint(viewportRect.topRight().x() - fontRect.width() - 10,
+                        viewportRect.topRight().y() + 5);
+
+    QPointF sceneDrawingPoint = mapToScene(drawingPoint);
+    QRectF sceneDrawingRect(sceneDrawingPoint, fontRect.size());
+
+    if (!rect.intersects(sceneDrawingRect))
+    {
+        return;
+    }
+
+    drawText(p, sceneDrawingRect, text);
 }
 
 void GraphicsDImgView::drawText(QPainter* p, const QRectF& rect, const QString& text)
@@ -322,7 +319,8 @@ void GraphicsDImgView::startPanning(const QPoint& pos)
     {
         d->movingInProgress = true;
         d->mousePressPos    = pos;
-        d->panningScrollPos = QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value());
+        d->panningScrollPos = QPoint(horizontalScrollBar()->value(),
+                                     verticalScrollBar()->value());
         viewport()->setCursor(Qt::SizeAllCursor);
     }
 }
@@ -455,6 +453,7 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
     QRectF zoomRect = item()->zoomSettings()->mapImageToZoom(imageRect);
     qCDebug(DIGIKAM_WIDGETS_LOG) << imageRect << zoomRect;
     centerOn(item()->mapToScene(zoomRect.center()));
+    viewport()->update();
 
     if (b)
     {
@@ -468,7 +467,9 @@ void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 
 void GraphicsDImgView::slotContentsMoved()
 {
-    emit contentsMoving(horizontalScrollBar()->value(), verticalScrollBar()->value());
+    emit contentsMoving(horizontalScrollBar()->value(),
+                        verticalScrollBar()->value());
+    viewport()->update();
 }
 
 int GraphicsDImgView::contentsX() const
