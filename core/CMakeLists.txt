@@ -320,7 +320,7 @@ find_package(Jasper)                               # For JPEG 2000 support.
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
 
-find_package(ImageMagick COMPONENTS Magick++)      # For QImage loader fail back to ImageMagick codecs.
+find_package(ImageMagick COMPONENTS Magick++ MagickCore)
 
 if(ImageMagick_Magick++_FOUND)
     add_definitions(${ImageMagick_Magick++_DEFINITIONS})

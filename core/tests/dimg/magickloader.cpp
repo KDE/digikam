@@ -23,6 +23,9 @@
 // IM includes
 
 #include <Magick++.h>
+using namespace Magick;
+
+#include <magick/magick.h>
 
 // Qt includes
 
@@ -36,8 +39,6 @@
 #include <QApplication>
 #include <QStandardPaths>
 #include <QFileDialog>
-
-using namespace Magick;
 
 /** Convert from QImage to IM::Image
  */
@@ -114,6 +115,16 @@ bool loadWithImageMagick(const QString& path, QImage& qimg)
 
 int main(int argc, char** argv)
 {
+    MagickCore::ExceptionInfo ex;
+    size_t n                              = 0;
+    const MagickCore::MagickInfo** inflst = MagickCore::GetMagickInfoList("*", &n, &ex);
+
+    for (uint i = 0 ; i < n ; ++i)
+    {
+        const MagickCore::MagickInfo* inf = inflst[i];
+        qDebug() << QString::fromUtf8(inf->name) << QString::fromUtf8(inf->mime_type)  << QString::fromUtf8(inf->version) << QString::fromUtf8(inf->description);
+    }
+
     QApplication app(argc, argv);
 
     QStringList list;
