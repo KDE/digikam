@@ -11,6 +11,10 @@ set -eE
 trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
 trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
 
+# Uncomment and adjust lines below to use Clang compiler instead GCC
+#export CC=/usr/bin/clang
+#export CXX=/usr/bin/clang++
+
 SOURCEDIR=$PWD
 
 command -v qtpaths >/dev/null 2>&1 || { echo >&2 "This script require qtpaths CLI tool from Qt5 project but it's not installed. Aborting."; exit 1; }
