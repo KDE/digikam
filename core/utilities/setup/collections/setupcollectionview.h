@@ -159,6 +159,8 @@ protected:
     QModelIndex indexForId(int id, int column) const;
 
     bool askForNewCollectionPath(int category, QString* const newPath, QString* const newLabel);
+    bool askForNewCollectionCategory(int* const category);
+
     int categoryButtonMapId(const QModelIndex& index) const;
     int buttonMapId(const QModelIndex& index) const;
 

@@ -105,7 +105,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, co
     return locationForPath(path);
 }
 
-CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& location,
+CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& location, int newType,
                                                       const QUrl& fileUrl, const QString& label)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "refreshLocation" << fileUrl;
@@ -135,7 +135,11 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
         QString identifier   = d->volumeIdentifier(volume);
         AlbumRoot::Type type;
 
-        if (location.type() == CollectionLocation::TypeNetwork)
+        if (newType == CollectionLocation::TypeVolumeRemovable)
+        {
+            type = AlbumRoot::VolumeRemovable;
+        }
+        else if (newType == CollectionLocation::TypeNetwork)
         {
             type         = AlbumRoot::Network;
             specificPath = QLatin1String("/");
@@ -143,14 +147,7 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
         }
         else
         {
-            if (volume.isRemovable)
-            {
-                type = AlbumRoot::VolumeRemovable;
-            }
-            else
-            {
-                type = AlbumRoot::VolumeHardWired;
-            }
+            type = AlbumRoot::VolumeHardWired;
         }
 
         CoreDbAccess access;

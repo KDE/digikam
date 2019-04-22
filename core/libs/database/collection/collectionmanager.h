@@ -123,7 +123,7 @@ public:
      */
     CollectionLocation addLocation(const QUrl& fileUrl, const QString& label = QString());
     CollectionLocation addNetworkLocation(const QUrl& fileUrl, const QString& label = QString());
-    CollectionLocation refreshLocation(const CollectionLocation& location,
+    CollectionLocation refreshLocation(const CollectionLocation& location, int newType,
                                        const QUrl& fileUrl, const QString& label = QString());
 
     /**

@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QLineEdit>
+#include <QComboBox>
 #include <QUrl>
 #include <QIcon>
 #include <QDialog>
@@ -50,7 +51,7 @@
 #include <klocalizedstring.h>
 
 // Local includes
-
+#include "digikam_debug.h"
 #include "dmessagebox.h"
 #include "dfiledialog.h"
 #include "applicationsettings.h"
@@ -488,7 +489,18 @@ void SetupCollectionModel::apply()
         Item& item = m_collections[i];
         CollectionLocation location;
 
-        location = CollectionManager::instance()->refreshLocation(item.location,
+        int newType = CollectionLocation::TypeVolumeHardWired;
+
+        if (item.parentId == CategoryRemovable)
+        {
+            newType = CollectionLocation::TypeVolumeRemovable;
+        }
+        else if (item.parentId == CategoryRemote)
+        {
+            newType = CollectionLocation::TypeNetwork;
+        }
+
+        location = CollectionManager::instance()->refreshLocation(item.location, newType,
                                                                   QUrl::fromLocalFile(item.path), item.label);
 
         if (location.isNull())
@@ -611,19 +623,24 @@ void SetupCollectionModel::updateCollection(int internalId)
         return;
     }
 
-    Item& item = m_collections[index.internalId()];
+    Item& item   = m_collections[index.internalId()];
+    int parentId = item.parentId;
 
-    QString path;
-    QString label;
-
-    if (askForNewCollectionPath(item.parentId, &path, &label))
+    if (askForNewCollectionCategory(&parentId))
     {
-        item.label   = label;
-        item.path    = path;
-        item.updated = true;
+        QString path;
+        QString label;
 
-        // only workaround for bug 182753
-        emit layoutChanged();
+        if (askForNewCollectionPath(parentId, &path, &label))
+        {
+            item.parentId = parentId;
+            item.label    = label;
+            item.path     = path;
+            item.updated  = true;
+
+            // only workaround for bug 182753
+            emit layoutChanged();
+        }
     }
 }
 
@@ -1192,7 +1209,8 @@ bool SetupCollectionModel::askForNewCollectionPath(int category, QString* const 
     mainWidget->setLayout(grid1);
 
     QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
-    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                           QDialogButtonBox::Cancel, dialog);
     vbx->addWidget(mainWidget);
     vbx->addWidget(buttons);
     dialog->setLayout(vbx);
@@ -1215,6 +1233,66 @@ bool SetupCollectionModel::askForNewCollectionPath(int category, QString* const 
             *newPath  = path;
             return true;
         }
+    }
+
+    return false;
+}
+
+bool SetupCollectionModel::askForNewCollectionCategory(int* const category)
+{
+    // Create a dialog that displays the category and allows to change the category of the collection
+    QDialog* const dialog = new QDialog(m_dialogParentWidget);
+    dialog->setWindowTitle(i18n("Change Category"));
+
+    QWidget* const mainWidget = new QWidget(dialog);
+    QLabel* const nameLabel   = new QLabel;
+    nameLabel->setText(i18n("Your collection will be changed to this category:"));
+    nameLabel->setWordWrap(true);
+
+    // combobox for collection category
+    QComboBox* const categoryBox = new QComboBox;
+    categoryBox->addItem(i18n("Local Collections"),              CategoryLocal);
+    categoryBox->addItem(i18n("Collections on Removable Media"), CategoryRemovable);
+    categoryBox->addItem(i18n("Collections on Network Shares"),  CategoryRemote);
+
+    // label for the icon showing the question icon
+    QLabel* const questionIconLabel = new QLabel;
+    questionIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(64));
+
+    QGridLayout* const grid1 = new QGridLayout;
+    grid1->addWidget(questionIconLabel, 0, 0, 3, 1);
+    grid1->addWidget(nameLabel,         0, 1);
+    grid1->addWidget(categoryBox,       1, 1);
+    mainWidget->setLayout(grid1);
+
+    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                           QDialogButtonBox::Cancel, dialog);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(buttons);
+    dialog->setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            dialog, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            dialog, SLOT(reject()));
+
+    // default to current category
+
+    if (category)
+    {
+        categoryBox->setCurrentIndex(categoryBox->findData(*category));
+    }
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        if (category)
+        {
+            *category = categoryBox->currentData().toInt();
+        }
+
+        return true;
     }
 
     return false;
