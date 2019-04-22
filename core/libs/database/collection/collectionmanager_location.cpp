@@ -96,7 +96,8 @@ CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, co
     }
 
     ChangingDB changing(d);
-    CoreDbAccess().db()->addAlbumRoot(AlbumRoot::Network, d->networkShareIdentifier(path), QLatin1String("/"), label);
+    CoreDbAccess().db()->addAlbumRoot(AlbumRoot::Network,
+                                      d->networkShareIdentifier(path), QLatin1String("/"), label);
 
     // Do not emit the locationAdded signal here, it is done in updateLocations()
     updateLocations();
@@ -114,6 +115,8 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
     {
         return CollectionLocation();
     }
+
+    QWriteLocker locker(&d->lock);
 
     AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -162,6 +165,7 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
         albumLoc->specificPath = specificPath;
         albumLoc->setType((CollectionLocation::Type)type);
 
+        locker.unlock();
         emit locationPropertiesChanged(*albumLoc);
     }
     else
@@ -194,6 +198,7 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
         albumLoc->setType((CollectionLocation::Type)type);
         albumLoc->identifier   = d->volumeIdentifier(path);
 
+        locker.unlock();
         emit locationPropertiesChanged(*albumLoc);
     }
 
@@ -459,7 +464,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(c
 void CollectionManager::removeLocation(const CollectionLocation& location)
 {
     {
-        CoreDbAccess access;
+        QWriteLocker locker(&d->lock);
 
         AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -470,6 +475,7 @@ void CollectionManager::removeLocation(const CollectionLocation& location)
 
         // Ensure that all albums are set to orphan and no images will be permanently deleted,
         // as would do only calling deleteAlbumRoot by a Trigger
+        CoreDbAccess access;
         QList<int> albumIds = access.db()->getAlbumsOnAlbumRoot(albumLoc->id());
         ChangingDB changing(d);
         CollectionScanner scanner;
@@ -488,7 +494,7 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
     QList<CollectionLocation> disappearedLocations;
     QList<SolidVolumeInfo> volumes = d->listVolumes();
 
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -514,7 +520,7 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location,
 
     QList<SolidVolumeInfo> volumes = d->listVolumes();
 
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -543,7 +549,7 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location,
 
 void CollectionManager::migrateToVolume(const CollectionLocation& location, const QString& identifier)
 {
-    CoreDbAccess access;
+    QWriteLocker locker(&d->lock);
 
     AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -554,16 +560,18 @@ void CollectionManager::migrateToVolume(const CollectionLocation& location, cons
 
     // update db
     ChangingDB db(d);
-    access.db()->migrateAlbumRoot(albumLoc->id(), identifier);
+    CoreDbAccess().db()->migrateAlbumRoot(albumLoc->id(), identifier);
 
+    // update local structur
     albumLoc->identifier = identifier;
 
+    locker.unlock();
     updateLocations();
 }
 
 void CollectionManager::setLabel(const CollectionLocation& location, const QString& label)
 {
-    CoreDbAccess access;
+    QWriteLocker locker(&d->lock);
 
     AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -574,17 +582,18 @@ void CollectionManager::setLabel(const CollectionLocation& location, const QStri
 
     // update db
     ChangingDB db(d);
-    access.db()->setAlbumRootLabel(albumLoc->id(), label);
+    CoreDbAccess().db()->setAlbumRootLabel(albumLoc->id(), label);
 
     // update local structure
     albumLoc->setLabel(label);
 
+    locker.unlock();
     emit locationPropertiesChanged(*albumLoc);
 }
 
 void CollectionManager::changeType(const CollectionLocation& location, int type)
 {
-    CoreDbAccess access;
+    QWriteLocker locker(&d->lock);
 
     AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
@@ -595,17 +604,19 @@ void CollectionManager::changeType(const CollectionLocation& location, int type)
 
     // update db
     ChangingDB db(d);
-    access.db()->changeAlbumRootType(albumLoc->id(), (AlbumRoot::Type)type);
+    CoreDbAccess().db()->changeAlbumRootType(albumLoc->id(), (AlbumRoot::Type)type);
 
     // update local structure
     albumLoc->setType((CollectionLocation::Type)type);
 
+    locker.unlock();
     emit locationPropertiesChanged(*albumLoc);
 }
 
 QList<CollectionLocation> CollectionManager::allLocations()
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
+
     QList<CollectionLocation> list;
 
     foreach (AlbumRootLocation* const location, d->locations)
@@ -618,7 +629,8 @@ QList<CollectionLocation> CollectionManager::allLocations()
 
 QList<CollectionLocation> CollectionManager::allAvailableLocations()
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
+
     QList<CollectionLocation> list;
 
     foreach (AlbumRootLocation* const location, d->locations)
@@ -631,19 +643,19 @@ QList<CollectionLocation> CollectionManager::allAvailableLocations()
 
     return list;
 }
+
 CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
+
     AlbumRootLocation* const location = d->locations.value(id);
 
     if (location)
     {
         return *location;
     }
-    else
-    {
-        return CollectionLocation();
-    }
+
+    return CollectionLocation();
 }
 
 CollectionLocation CollectionManager::locationForAlbumRoot(const QUrl& fileUrl)
@@ -665,7 +677,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
         updateLocations();
     }
 
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -685,7 +697,7 @@ CollectionLocation CollectionManager::locationForUrl(const QUrl& fileUrl)
 
 CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -707,120 +719,119 @@ CollectionLocation CollectionManager::locationForPath(const QString& givenPath)
 
 void CollectionManager::updateLocations()
 {
-    // get information from Solid
     QList<SolidVolumeInfo> volumes;
+    // get information from Solid
+    volumes = d->listVolumes();
+
+    QWriteLocker locker(&d->lock);
+
+    // read information from database
+    QList<AlbumRootInfo> infos = CoreDbAccess().db()->getAlbumRoots();
+
+    // synchronize map with database
+    QMap<int, AlbumRootLocation*> locs = d->locations;
+    d->locations.clear();
+
+    foreach (const AlbumRootInfo& info, infos)
     {
-        // Absolutely ensure that the db mutex is not held when emitting the blocking queued signal! Deadlock!
-        CoreDbAccessUnlock unlock;
-        volumes = d->listVolumes();
+        if (locs.contains(info.id))
+        {
+            d->locations[info.id] = locs.value(info.id);
+            locs.remove(info.id);
+        }
+        else
+        {
+            d->locations[info.id] = new AlbumRootLocation(info);
+        }
     }
 
+    // delete old locations
+    foreach (AlbumRootLocation* const location, locs)
     {
-        CoreDbAccess access;
-        // read information from database
-        QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
+        CollectionLocation::Status oldStatus = location->status();
+        location->setStatus(CollectionLocation::LocationDeleted);
+        locker.unlock();
+        emit locationStatusChanged(*location, oldStatus);
+        locker.relock();
+        delete location;
+    }
 
-        // synchronize map with database
-        QMap<int, AlbumRootLocation*> locs = d->locations;
-        d->locations.clear();
+    // update status with current access state, store old status in list
+    QList<CollectionLocation::Status> oldStatus;
 
-        foreach (const AlbumRootInfo& info, infos)
+    foreach (AlbumRootLocation* const location, d->locations)
+    {
+        oldStatus << location->status();
+        bool available = false;
+        QString absolutePath;
+
+        if (location->type() == CollectionLocation::TypeNetwork)
         {
-            if (locs.contains(info.id))
+            foreach (const QString& path, d->networkShareMountPathsFromIdentifier(location))
             {
-                d->locations[info.id] = locs.value(info.id);
-                locs.remove(info.id);
+                QDir dir(path);
+                available    = dir.isReadable() &&
+                               dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                absolutePath = path;
+
+                if (available)
+                {
+                    break;
+                }
+            }
+        }
+        else
+        {
+            SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
+
+            if (!info.isNull())
+            {
+                available          = info.isMounted;
+                QString volumePath = info.path;
+                // volume.path has a trailing slash (and this is good)
+                // but specific path has a leading slash, so remove it
+                volumePath.chop(1);
+                // volumePath is the mount point of the volume;
+                // specific path is the path on the file system of the volume.
+                absolutePath = volumePath + location->specificPath;
             }
             else
             {
-                d->locations[info.id] = new AlbumRootLocation(info);
-            }
-        }
+                QString path = d->pathFromIdentifier(location);
 
-        // delete old locations
-        foreach (AlbumRootLocation* const location, locs)
-        {
-            CollectionLocation::Status oldStatus = location->status();
-            location->setStatus(CollectionLocation::LocationDeleted);
-            emit locationStatusChanged(*location, oldStatus);
-            delete location;
-        }
-
-        // update status with current access state, store old status in list
-        QList<CollectionLocation::Status> oldStatus;
-
-        foreach (AlbumRootLocation* const location, d->locations)
-        {
-            oldStatus << location->status();
-            bool available = false;
-            QString absolutePath;
-
-            if (location->type() == CollectionLocation::TypeNetwork)
-            {
-                foreach (const QString& path, d->networkShareMountPathsFromIdentifier(location))
+                if (!path.isNull())
                 {
-                    QDir dir(path);
-                    available    = dir.isReadable() &&
-                                   dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                    available    = true;
+                    // Here we have the absolute path as definition of the volume.
+                    // specificPath is "/" as per convention, but ignored,
+                    // absolute path shall not have a trailing slash.
                     absolutePath = path;
-
-                    if (available)
-                    {
-                        break;
-                    }
                 }
             }
-            else
-            {
-                SolidVolumeInfo info = d->findVolumeForLocation(location, volumes);
-
-                if (!info.isNull())
-                {
-                    available          = info.isMounted;
-                    QString volumePath = info.path;
-                    // volume.path has a trailing slash (and this is good)
-                    // but specific path has a leading slash, so remove it
-                    volumePath.chop(1);
-                    // volumePath is the mount point of the volume;
-                    // specific path is the path on the file system of the volume.
-                    absolutePath = volumePath + location->specificPath;
-                }
-                else
-                {
-                    QString path = d->pathFromIdentifier(location);
-
-                    if (!path.isNull())
-                    {
-                        available    = true;
-                        // Here we have the absolute path as definition of the volume.
-                        // specificPath is "/" as per convention, but ignored,
-                        // absolute path shall not have a trailing slash.
-                        absolutePath = path;
-                    }
-                }
-            }
-
-            // set values in location
-            // Don't touch location->status, do not interfere with "hidden" setting
-            location->available = available;
-            location->setAbsolutePath(absolutePath);
-            qCDebug(DIGIKAM_DATABASE_LOG) << "location for " << absolutePath << " is available " << available;
-            // set the status depending on "hidden" and "available"
-            location->setStatusFromFlags();
         }
 
-        // emit status changes (and new locations)
-        int i = 0;
+        // set values in location
+        // Don't touch location->status, do not interfere with "hidden" setting
+        location->available = available;
+        location->setAbsolutePath(absolutePath);
+        qCDebug(DIGIKAM_DATABASE_LOG) << "location for " << absolutePath << " is available " << available;
+        // set the status depending on "hidden" and "available"
+        location->setStatusFromFlags();
+    }
 
-        foreach (AlbumRootLocation* const location, d->locations)
+    // emit status changes (and new locations)
+    int i = 0;
+
+    foreach (AlbumRootLocation* const location, d->locations)
+    {
+        if (oldStatus.at(i) != location->status())
         {
-            if (oldStatus.at(i) != location->status())
-            {
-                emit locationStatusChanged(*location, oldStatus.at(i));
-            }
-
-            ++i;
+            locker.unlock();
+            emit locationStatusChanged(*location, oldStatus.at(i));
+            locker.relock();
         }
+
+        ++i;
     }
 }
 

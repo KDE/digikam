@@ -28,7 +28,8 @@ namespace Digikam
 
 QStringList CollectionManager::allAvailableAlbumRootPaths()
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
+
     QStringList list;
 
     foreach (AlbumRootLocation* const location, d->locations)
@@ -44,7 +45,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 
 QString CollectionManager::albumRootPath(int id)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
     CollectionLocation* const location = d->locations.value(id);
 
     if (location && location->status() == CollectionLocation::LocationAvailable)
@@ -57,7 +58,8 @@ QString CollectionManager::albumRootPath(int id)
 
 QString CollectionManager::albumRootLabel(int id)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
+
     CollectionLocation* const location = d->locations.value(id);
 
     if (location && location->status() == CollectionLocation::LocationAvailable)
@@ -80,7 +82,7 @@ QString CollectionManager::albumRootPath(const QUrl& fileUrl)
 
 QString CollectionManager::albumRootPath(const QString& givenPath)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -107,7 +109,7 @@ bool CollectionManager::isAlbumRoot(const QUrl& fileUrl)
 
 bool CollectionManager::isAlbumRoot(const QString& filePath)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -127,7 +129,7 @@ QString CollectionManager::album(const QUrl& fileUrl)
 
 QString CollectionManager::album(const QString& filePath)
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -196,7 +198,7 @@ QUrl CollectionManager::oneAlbumRoot()
 
 QString CollectionManager::oneAlbumRootPath()
 {
-    CoreDbAccess access;
+    QReadLocker locker(&d->lock);
 
     foreach (AlbumRootLocation* const location, d->locations)
     {
@@ -228,12 +230,12 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
         {
             CollectionLocation toBeEmitted;
             {
-                CoreDbAccess access;
+                QReadLocker locker(&d->lock);
                 AlbumRootLocation* const location = d->locations.value(changeset.albumRootId());
 
                 if (location)
                 {
-                    QList<AlbumRootInfo> infos = access.db()->getAlbumRoots();
+                    QList<AlbumRootInfo> infos = CoreDbAccess().db()->getAlbumRoots();
 
                     foreach (const AlbumRootInfo& info, infos)
                     {

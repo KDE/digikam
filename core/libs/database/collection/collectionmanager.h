@@ -91,7 +91,7 @@ private:
     CollectionManager();
     ~CollectionManager();
 
-    void clear_locked();
+    void clearLocations();
 
     Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
 

@@ -73,13 +73,7 @@ CollectionManager::~CollectionManager()
 
 void CollectionManager::refresh()
 {
-    {
-        // if called from the CoreDbAccess constructor itself, it will
-        // hold a flag to prevent endless recursion
-        CoreDbAccess access;
-        clear_locked();
-    }
-
+    clearLocations();
     updateLocations();
 }
 
@@ -111,11 +105,13 @@ void CollectionManager::deviceRemoved(const QString& udi)
     }
 
     // we can't access the Solid::Device to check because it is removed
-    CoreDbAccess access;
-
-    if (!d->udisToWatch.contains(udi))
     {
-        return;
+        QReadLocker locker(&d->lock);
+
+        if (!d->udisToWatch.contains(udi))
+        {
+            return;
+        }
     }
 
     updateLocations();
@@ -128,15 +124,18 @@ void CollectionManager::accessibilityChanged(bool accessible, const QString& udi
     updateLocations();
 }
 
-void CollectionManager::clear_locked()
+void CollectionManager::clearLocations()
 {
-    // Internal method: Called with mutex locked
+    QWriteLocker locker(&d->lock);
+    // Internal method: Called with write lock
     // Cave: Difficult recursions with CoreDbAccess constructor and setParameters
     foreach (AlbumRootLocation* const location, d->locations)
     {
         CollectionLocation::Status oldStatus = location->status();
         location->setStatus(CollectionLocation::LocationDeleted);
+        locker.unlock();
         emit locationStatusChanged(*location, oldStatus);
+        locker.relock();
         delete location;
     }
 

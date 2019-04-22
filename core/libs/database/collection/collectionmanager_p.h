@@ -32,6 +32,7 @@
 #include <QDir>
 #include <QThread>
 #include <QCryptographicHash>
+#include <QReadWriteLock>
 #include <QUrlQuery>
 
 // KDE includes
@@ -250,6 +251,7 @@ public:
 
 public:
 
+    QReadWriteLock                lock;
     QMap<int, AlbumRootLocation*> locations;
     bool                          changingDB;
     QStringList                   udisToWatch;

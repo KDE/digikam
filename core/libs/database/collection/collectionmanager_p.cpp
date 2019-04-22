@@ -469,7 +469,7 @@ bool CollectionManager::Private::checkIfExists(const QString& filePath, QList<Co
 {
     const QUrl filePathUrl = QUrl::fromLocalFile(filePath);
 
-    CoreDbAccess access;
+    QReadLocker locker(&lock);
 
     foreach (AlbumRootLocation* const location, locations)
     {

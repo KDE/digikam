@@ -252,7 +252,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
     ItemInfoStatic::cache()->invalidate();
     TagsCache::instance()->invalidate();
     d->databaseWatch->setDatabaseIdentifier(QString());
-    CollectionManager::instance()->clear_locked();
+    CollectionManager::instance()->clearLocations();
 }
 
 bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
