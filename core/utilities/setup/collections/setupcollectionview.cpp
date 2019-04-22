@@ -488,7 +488,8 @@ void SetupCollectionModel::apply()
         Item& item = m_collections[i];
         CollectionLocation location;
 
-        location = CollectionManager::instance()->updateLocation(item.location, QUrl::fromLocalFile(item.path), item.label);
+        location = CollectionManager::instance()->refreshLocation(item.location,
+                                                                  QUrl::fromLocalFile(item.path), item.label);
 
         if (location.isNull())
         {
