@@ -155,10 +155,10 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
 
         CoreDbAccess access;
         ChangingDB changing(d);
-        access.db()->setAlbumRootLabel(location.id(), label);
+        access.db()->setAlbumRootLabel(location.id(),   label);
         access.db()->changeAlbumRootType(location.id(), type);
-        access.db()->migrateAlbumRoot(location.id(), identifier);
-        access.db()->setAlbumRootPath(location.id(), specificPath);
+        access.db()->migrateAlbumRoot(location.id(),    identifier);
+        access.db()->setAlbumRootPath(location.id(),    specificPath);
 
         albumLoc->setLabel(label);
         albumLoc->identifier   = identifier;
@@ -188,13 +188,13 @@ CollectionLocation CollectionManager::refreshLocation(const CollectionLocation& 
         CoreDbAccess access;
         ChangingDB changing(d);
         AlbumRoot::Type type = AlbumRoot::VolumeHardWired;
-        access.db()->setAlbumRootLabel(location.id(), label);
+        access.db()->setAlbumRootLabel(location.id(),   label);
         access.db()->changeAlbumRootType(location.id(), type);
-        access.db()->setAlbumRootPath(location.id(), QLatin1String("/"));
-        access.db()->migrateAlbumRoot(location.id(), d->volumeIdentifier(path));
+        access.db()->setAlbumRootPath(location.id(),    QLatin1String("/"));
+        access.db()->migrateAlbumRoot(location.id(),    d->volumeIdentifier(path));
 
         albumLoc->setLabel(label);
-        albumLoc->specificPath = (QLatin1String("/"));
+        albumLoc->specificPath = QLatin1String("/");
         albumLoc->setType((CollectionLocation::Type)type);
         albumLoc->identifier   = d->volumeIdentifier(path);
 
