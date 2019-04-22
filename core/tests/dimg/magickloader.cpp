@@ -118,11 +118,16 @@ int main(int argc, char** argv)
     MagickCore::ExceptionInfo ex;
     size_t n                              = 0;
     const MagickCore::MagickInfo** inflst = MagickCore::GetMagickInfoList("*", &n, &ex);
+    qDebug().noquote() << "Name             :: Mime Type                    :: Version                      :: Description";
 
     for (uint i = 0 ; i < n ; ++i)
     {
         const MagickCore::MagickInfo* inf = inflst[i];
-        qDebug() << QString::fromUtf8(inf->name) << QString::fromUtf8(inf->mime_type)  << QString::fromUtf8(inf->version) << QString::fromUtf8(inf->description);
+        qDebug().noquote()
+                 << QString::fromLatin1("%1").arg(QLatin1String(inf->name),        16) << "::"
+                 << QString::fromLatin1("%1").arg(QLatin1String(inf->mime_type),   28) << "::"
+                 << QString::fromLatin1("%1").arg(QLatin1String(inf->version),     28) << "::"
+                 << QString::fromLatin1("%1").arg(QLatin1String(inf->description), 64);
     }
 
     QApplication app(argc, argv);
