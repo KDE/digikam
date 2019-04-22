@@ -1255,7 +1255,7 @@ bool SetupCollectionModel::askForNewCollectionCategory(int* const category)
     categoryBox->addItem(i18n("Collections on Removable Media"), CategoryRemovable);
     categoryBox->addItem(i18n("Collections on Network Shares"),  CategoryRemote);
 
-    // label for the icon showing the question icon
+    // label for the icon showing the refresh icon
     QLabel* const questionIconLabel = new QLabel;
     questionIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(64));
 
