@@ -51,7 +51,7 @@
 #include <klocalizedstring.h>
 
 // Local includes
-#include "digikam_debug.h"
+
 #include "dmessagebox.h"
 #include "dfiledialog.h"
 #include "applicationsettings.h"
