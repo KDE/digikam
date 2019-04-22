@@ -24,7 +24,7 @@
 
 // Qt includes
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include <QString>
 #include <QMessageBox>
 
