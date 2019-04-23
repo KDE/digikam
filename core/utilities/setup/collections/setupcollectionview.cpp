@@ -628,8 +628,13 @@ void SetupCollectionModel::updateCollection(int internalId)
 
     if (askForNewCollectionCategory(&parentId))
     {
-        QString path;
+        QString path = item.path;
         QString label;
+
+        if (!item.location.isNull())
+        {
+            path = item.location.albumRootPath();
+        }
 
         if (askForNewCollectionPath(parentId, &path, &label))
         {
@@ -1097,6 +1102,12 @@ SetupCollectionModel::Category SetupCollectionModel::typeToCategory(CollectionLo
 bool SetupCollectionModel::askForNewCollectionPath(int category, QString* const newPath, QString* const newLabel)
 {
     QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+
+    if (newPath && !(*newPath).isEmpty() && QFileInfo::exists(*newPath))
+    {
+        picPath = *newPath;
+    }
+
     QUrl curl       = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
                                                           i18n("Choose the folder containing your collection"),
                                                           QUrl::fromLocalFile(picPath));
