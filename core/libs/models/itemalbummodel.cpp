@@ -324,6 +324,9 @@ void ItemAlbumModel::startListJob(const QList<Album*>& albums)
     CoreDbUrl url;
     QList<int> ids;
 
+    // stop preloading Thumbnails
+    imageInfosCleared();
+
     if (albums.first()->isTrashAlbum())
     {
         return;
