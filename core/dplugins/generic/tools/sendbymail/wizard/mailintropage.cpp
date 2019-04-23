@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "dlayoutbox.h"
 #include "mailwizard.h"
 #include "mailsettings.h"
