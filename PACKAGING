@@ -30,15 +30,15 @@ Notice to make release tarballs from GIT
     Where X is major version, Y minor version, and Z the patch version.
     The optional suffix is to indicate a non final release, as "-beta1" for ex.
     Look with "git tag" command for exiting tags in git.
-    These git tag will be used to make tarball and all bundles.
+    These git tags will be used to make tarball and all bundles.
 
 7/  Run the bootstrap.tarball script to release digiKam source tarball. This will include all translations
-    files and the documentation. The script compile all translations files to see if nothing is broken.
-    At end, if all is fine, the tarball properties must be displayed.
+    files and the documentation. The script compiles all translations files to see if nothing is broken.
+    At the end, if all is fine, the tarball properties must be displayed.
     3 files are generated:
 
        Source code tarball compressed as tar.xz.
-       The archive signature done with gpg.
+       The archive signature is done with gpg.
        The checksums of files.
 
 8/  Upload tarball and signature to the pre-release files repository available at url:
