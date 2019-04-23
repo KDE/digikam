@@ -1242,11 +1242,11 @@ bool SetupCollectionModel::askForNewCollectionCategory(int* const category)
 {
     // Create a dialog that displays the category and allows to change the category of the collection
     QDialog* const dialog = new QDialog(m_dialogParentWidget);
-    dialog->setWindowTitle(i18n("Change Category"));
+    dialog->setWindowTitle(i18n("Select Category"));
 
     QWidget* const mainWidget = new QWidget(dialog);
     QLabel* const nameLabel   = new QLabel;
-    nameLabel->setText(i18n("Your collection will be changed to this category:"));
+    nameLabel->setText(i18n("Your collection will use this category:"));
     nameLabel->setWordWrap(true);
 
     // combobox for collection category
@@ -1257,7 +1257,7 @@ bool SetupCollectionModel::askForNewCollectionCategory(int* const category)
 
     // label for the icon showing the refresh icon
     QLabel* const questionIconLabel = new QLabel;
-    questionIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(64));
+    questionIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-sort")).pixmap(64));
 
     QGridLayout* const grid1 = new QGridLayout;
     grid1->addWidget(questionIconLabel, 0, 0, 3, 1);
