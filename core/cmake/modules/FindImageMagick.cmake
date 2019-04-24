@@ -174,6 +174,7 @@ function(FIND_IMAGEMAGICK_API component header)
         set(ImageMagick_${component}_DEFINITIONS ${ImageMagick_${component}_DEFINITIONS} PARENT_SCOPE)
 
         list(APPEND ImageMagick_DEFINITIONS ${ImageMagick_${component}_DEFINITIONS})
+        list(REMOVE_DUPLICATES ImageMagick_DEFINITIONS)
         set(ImageMagick_DEFINITIONS ${ImageMagick_DEFINITIONS} PARENT_SCOPE)
 
     endif()
