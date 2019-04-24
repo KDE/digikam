@@ -25,7 +25,9 @@
 #include <Magick++.h>
 using namespace Magick;
 
-#include <magick/magick.h>
+#if MagickLibVersion < 0x700
+#   include <magick/magick.h>
+#endif
 
 // Qt includes
 
