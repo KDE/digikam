@@ -43,6 +43,7 @@
   <summary xml:lang="gl">Editor de imaxes</summary>
   <summary xml:lang="id">Editor Image</summary>
   <summary xml:lang="it">Editor di immagini</summary>
+  <summary xml:lang="ko">사진 편집기</summary>
   <summary xml:lang="nl">Afbeeldingsbewerker</summary>
   <summary xml:lang="nn">Biletredigering</summary>
   <summary xml:lang="pl">Edytor obrazów</summary>
@@ -102,6 +103,7 @@
       <caption xml:lang="gl">Editando unha foto en Showfoto</caption>
       <caption xml:lang="id">Pengeditan foto di Showfoto</caption>
       <caption xml:lang="it">Modifica di fotografie in Showfoto</caption>
+      <caption xml:lang="ko">Showfoto로 사진 편집하기</caption>
       <caption xml:lang="nl">Fotobewerking in Showfoto</caption>
       <caption xml:lang="pl">Edytowanie zdjęcia w Showfoto</caption>
       <caption xml:lang="pt">Edição de uma fotografia no Showfoto</caption>

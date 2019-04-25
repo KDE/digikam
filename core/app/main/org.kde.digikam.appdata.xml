@@ -48,6 +48,7 @@
   <summary xml:lang="gl">Xestor de álbums de fotos</summary>
   <summary xml:lang="id">Program Pengelolaan Foto</summary>
   <summary xml:lang="it">Programma di gestione delle foto</summary>
+  <summary xml:lang="ko">사진 관리 프로그램</summary>
   <summary xml:lang="nl">Fotobeheerprogramma</summary>
   <summary xml:lang="nn">Fotohandsamingsprogram</summary>
   <summary xml:lang="pa">ਫੋਟੋ ਇੰਤਜ਼ਾਮ ਲਈ ਪਰੋਗਰਾਮ</summary>
@@ -198,6 +199,7 @@
       <li xml:lang="gl">Almacenamento mediante SQLite ou MySQL para o contido dos álbums e os seus metadatos con ferramentas de busca avanzadas.</li>
       <li xml:lang="id">Penyimpanan yang diberdayakan SQLite atau Mysql untuk konten album dan metadatanya dengan alat pencarian tingkatlanjut</li>
       <li xml:lang="it">Memorizzazione del contenuto degli album e dei suoi metadati fornita da SQLite o Mysql, con strumenti di ricerca avanzati</li>
+      <li xml:lang="ko">SQLite 및 MySQL 기반 앨범과 메타데이터 저장소 및 고급 검색 도구</li>
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
       <li xml:lang="nn">SQLite- eller MySQL-basert lagring for album og metadata, med avanserte søkjeverktøy</li>
       <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych z zaawansowanymi narzędziami wyszukiwania jest napędzana SQLite lub Mysql</li>
@@ -283,6 +285,7 @@
       <li xml:lang="gl">Compatíbel con imaxes en máis de 900 formatos en cru (RAW).</li>
       <li xml:lang="id">Mendukung lebih dari 900 gambar format RAW</li>
       <li xml:lang="it">Supporto per più di 900 immagini in formato RAW</li>
+      <li xml:lang="ko">900종 이상의 RAW 사진 형식 지원</li>
       <li xml:lang="nl">Ondersteuning voor 900 RAW-format afbeeldingen</li>
       <li xml:lang="nn">Støtte for meir enn 900 råbiletformat</li>
       <li xml:lang="pl">Obsługa dla więcej niż 900 postaci zdjęć RAW</li>
@@ -309,6 +312,7 @@
       <li xml:lang="gl">Táboa de luz para comparar fotos unha ao lado da outra.</li>
       <li xml:lang="id">Light Table untuk membandingkan foto sisi demi sisi</li>
       <li xml:lang="it">Tavolo luminoso per confrontare le foto fianco a fianco</li>
+      <li xml:lang="ko">사진을 양쪽으로 비교하는 조명 테이블</li>
       <li xml:lang="nl">Lichttafel om foto's naast elkaar te vergelijken</li>
       <li xml:lang="nn">Lysbord for å samanlikna bilete ved sidan av kvarandre</li>
       <li xml:lang="pl">Podświetlarka do porównywania zdjęć jedno obok drugiego</li>
@@ -333,6 +337,7 @@
       <li xml:lang="gl">Funcionalidades estendidas usando ferramentas adicionais.</li>
       <li xml:lang="id">Fitur yang diperluas menggunakan peralatan extra</li>
       <li xml:lang="it">Funzionalità estese tramite strumenti aggiuntivi</li>
+      <li xml:lang="ko">추가 도구로 기능 확장</li>
       <li xml:lang="nl">Uitgebreide mogelijkheden met extra hulpmiddelen</li>
       <li xml:lang="nn">Programtillegg som gjev ekstrafunksjonar</li>
       <li xml:lang="pl">Rozszerzone funkcje używające dodatkowych narzędzi</li>
@@ -358,6 +363,7 @@
       <li xml:lang="gl">Permite compartir imaxes usando HTML ou publicándoas en servizos web remotos.</li>
       <li xml:lang="id">Bagikan fotomu menggunakan HTML atau mempublikasikannya ke layanan web jarak jauh</li>
       <li xml:lang="it">Condivisione delle foto tramite HTML o loro pubblicazione nei servizi web remoti</li>
+      <li xml:lang="ko">HTML로 사진 공유 및 웹 서비스에 올리기</li>
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op websites op afstand</li>
       <li xml:lang="nn">Del bileta med HTML eller publiser dei på ulike nett-tenester</li>
       <li xml:lang="pl">Udostępnianie zdjęć przy użyciu HTML lub publikowanie ich poprzez usługi sieciowe</li>
@@ -383,6 +389,7 @@
       <li xml:lang="gl">Inclúe un editor de imaxes con ferramentas avanzadas para arranxar fotos rapidamente.</li>
       <li xml:lang="id">Tersemat editor image dengan alat tingkatlanjut untuk memperbaiki foto secara cepat</li>
       <li xml:lang="it">Editor delle immagini con strumenti avanzati inclusi per la correzione rapida delle foto</li>
+      <li xml:lang="ko">사진을 빠르게 편집할 수 있는 고급 기능이 있는 그림 편집기</li>
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
       <li xml:lang="nn">Innebygd biletredigering med avanserte verktøy for å forbetra bileta</li>
       <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych narzedziach do szybkiego poprawiania zdjęć</li>
@@ -414,6 +421,7 @@
       <caption xml:lang="gl">Xestión de fotos en digiKam</caption>
       <caption xml:lang="id">Pengelolaan foto dalam digiKam</caption>
       <caption xml:lang="it">Gestione delle foto in digiKam</caption>
+      <caption xml:lang="ko">digiKam으로 사진 관리하기</caption>
       <caption xml:lang="nl">Fotobeheer in digiKam</caption>
       <caption xml:lang="pa">ਡਿਜਿਕੈਮ ਵਿੱਚ ਫੋਟੋ ਇੰਤਜ਼ਾਮ</caption>
       <caption xml:lang="pl">Zarządzanie zdjęciami w digiKam</caption>
