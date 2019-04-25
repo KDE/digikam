@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QUrl>
 #include <QDateTime>
 
 // Local includes
@@ -44,6 +45,7 @@ public:
     enum UseDateSource
     {
         APPDATE = 0,
+        FILENAME,
         FILEDATE,
         METADATADATE,
         CUSTOMDATE
@@ -81,6 +83,7 @@ public:
     bool atLeastOneUpdateToProcess() const;
 
     QDateTime calculateAdjustedDate(const QDateTime& originalTime) const;
+    QDateTime getDateTimeFromUrl(const QUrl& url) const;
 
 public:
 

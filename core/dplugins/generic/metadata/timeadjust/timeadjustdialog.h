@@ -78,6 +78,10 @@ private:
      */
     void readApplicationTimestamps();
 
+    /** Called by readTimestamps() to get file name timestamps
+     */
+    void readFileNameTimestamps();
+
     /** Called by readTimestamps() to get file timestamps
      */
     void readFileTimestamps();

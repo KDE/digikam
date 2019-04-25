@@ -289,6 +289,12 @@ void TimeAdjustDialog::slotReadTimestamps()
             break;
         }
 
+        case TimeAdjustContainer::FILENAME:
+        {
+            readFileNameTimestamps();
+            break;
+        }
+
         case TimeAdjustContainer::FILEDATE:
         {
             readFileTimestamps();
@@ -338,6 +344,16 @@ void TimeAdjustDialog::readApplicationTimestamps()
     }
 }
 
+void TimeAdjustDialog::readFileNameTimestamps()
+{
+    TimeAdjustContainer prm = d->settingsView->settings();
+
+    foreach (const QUrl& url, d->itemsUsedMap.keys())
+    {
+        d->itemsUsedMap.insert(url, prm.getDateTimeFromUrl(url));
+    }
+}
+
 void TimeAdjustDialog::readFileTimestamps()
 {
     foreach (const QUrl& url, d->itemsUsedMap.keys())
@@ -360,25 +376,31 @@ void TimeAdjustDialog::readMetadataTimestamps()
         }
 
         QDateTime curImageDateTime;
-        TimeAdjustContainer prm = d->settingsView->settings();
+        TimeAdjustContainer prm    = d->settingsView->settings();
+        QString exifDateTimeFormat = QLatin1String("yyyy:MM:dd hh:mm:ss");
+        QString xmpDateTimeFormat  = QLatin1String("yyyy:MM:ddThh:mm:ss");
 
         switch (prm.metadataSource)
         {
             case TimeAdjustContainer::EXIFIPTCXMP:
                 curImageDateTime = meta.getItemDateTime();
                 break;
+
             case TimeAdjustContainer::EXIFCREATED:
                 curImageDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Image.DateTime"),
-                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
+                                                         exifDateTimeFormat);
                 break;
+
             case TimeAdjustContainer::EXIFORIGINAL:
                 curImageDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Photo.DateTimeOriginal"),
-                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
+                                                         exifDateTimeFormat);
                 break;
+
             case TimeAdjustContainer::EXIFDIGITIZED:
                 curImageDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Photo.DateTimeDigitized"),
-                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
+                                                         exifDateTimeFormat);
                 break;
+
             case TimeAdjustContainer::IPTCCREATED:
                 // we have to truncate the timezone from the time, otherwise it cannot be converted to a QTime
                 curImageDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"),
@@ -386,10 +408,12 @@ void TimeAdjustDialog::readMetadataTimestamps()
                                              QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated").left(8),
                                                                Qt::ISODate));
                 break;
+
             case TimeAdjustContainer::XMPCREATED:
                 curImageDateTime = QDateTime::fromString(meta.getXmpTagString("Xmp.xmp.CreateDate"),
-                                                         QLatin1String("yyyy:MM:ddThh:mm:ss"));
+                                                         xmpDateTimeFormat);
                 break;
+
             default:
                 // curImageDateTime stays invalid
                 break;

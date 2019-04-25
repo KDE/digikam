@@ -88,6 +88,70 @@ QDateTime TimeAdjustContainer::calculateAdjustedDate(const QDateTime& originalTi
     return originalTime.addSecs(sign * seconds);
 }
 
+QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
+{
+    QStringList regExpStrings;
+    regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)");
+    regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)");
+    regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})(.+)?");
+    regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})(.+)?");
+
+    QDateTime dateTime;
+
+    for (int i = 0 ; i < regExpStrings.count() ; ++i)
+    {
+        QRegExp dateRegExp(regExpStrings.at(i));
+
+        if (dateRegExp.exactMatch(url.fileName()))
+        {
+            QString dateString = dateRegExp.cap(2);
+            QString timeString = dateRegExp.cap(4);
+            dateString.remove(QLatin1Char('-'));
+            dateString.remove(QLatin1Char('/'));
+            timeString.remove(QLatin1Char('-'));
+            timeString.remove(QLatin1Char(':'));
+
+            if (i == 0)
+            {
+                dateTime = QDateTime::fromString(dateString + timeString,
+                                                 QLatin1String("yyyyMMddhhmmss"));
+            }
+            else if (i == 1)
+            {
+                dateTime = QDateTime::fromString(dateString + timeString,
+                                                 QLatin1String("ddMMyyyyhhmmss"));
+
+                if (!dateTime.isValid())
+                {
+                    dateTime = QDateTime::fromString(dateString + timeString,
+                                                     QLatin1String("MMddyyyyhhmmss"));
+                }
+            }
+            else if (i == 2)
+            {
+                dateTime = QDateTime::fromString(dateString, QLatin1String("yyyyMMdd"));
+            }
+            else if (i == 3)
+            {
+                dateTime = QDateTime::fromString(dateString, QLatin1String("ddMMyyyy"));
+
+                if (!dateTime.isValid())
+                {
+                    dateTime = QDateTime::fromString(dateString, QLatin1String("MMddyyyy"));
+                }
+            }
+
+            if (!dateTime.isValid())
+                continue;
+
+            if (dateTime.date().year() >= 1900 && dateTime.date().year() <= 2100)
+                break;
+        }
+    }
+
+    return dateTime;
+}
+
 // -------------------------------------------------------------------
 
 DeltaTime::DeltaTime()

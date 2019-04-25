@@ -68,6 +68,7 @@ public:
         useButtonGroup         = 0;
         useApplDateBtn         = 0;
         useFileDateBtn         = 0;
+        useFileNameBtn         = 0;
         useMetaDateBtn         = 0;
         useCustomDateBtn       = 0;
         updIfAvailableCheck    = 0;
@@ -101,6 +102,7 @@ public:
 
     QRadioButton*          useApplDateBtn;
     QRadioButton*          useFileDateBtn;
+    QRadioButton*          useFileNameBtn;
     QRadioButton*          useMetaDateBtn;
     QRadioButton*          useCustomDateBtn;
 
@@ -158,13 +160,16 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->useButtonGroup->setExclusive(true);
 
     QString applDateLabelString = i18n("%1 timestamp", QApplication::applicationName());
-    d->useApplDateBtn           = new QRadioButton(QString(), d->useSettingsBox);
+    d->useApplDateBtn           = new QRadioButton(d->useSettingsBox);
     d->useApplDateLbl           = new QLabel(applDateLabelString);
-    d->useApplDateLbl->setIndent(5);
+
+    d->useFileNameBtn           = new QRadioButton(d->useSettingsBox);
+    QLabel* const fileNameLbl   = new QLabel(i18n("Try to get from filename"), d->useSettingsBox);
 
     d->useFileDateBtn           = new QRadioButton(d->useSettingsBox);
     d->useFileDateTypeChooser   = new QComboBox(d->useSettingsBox);
     d->useFileDateTypeChooser->insertItem(TimeAdjustContainer::FILELASTMOD, i18n("File last modified"));
+
     /*
     // NOTE: not supported by Linux, although supported by Qt (read-only)
     d->useFileDateTypeChooser->insertItem(TimeAdjustContainer::FILECREATED, i18n("File created"));
@@ -191,23 +196,26 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
 
     useGBLayout->addWidget(d->useApplDateBtn,         0, 0, 1, 1);
     useGBLayout->addWidget(d->useApplDateLbl,         0, 1, 1, 1);
-    useGBLayout->addWidget(d->useFileDateBtn,         1, 0, 1, 1);
-    useGBLayout->addWidget(d->useFileDateTypeChooser, 1, 1, 1, 1);
-    useGBLayout->addWidget(d->useMetaDateBtn,         2, 0, 1, 1);
-    useGBLayout->addWidget(d->useMetaDateTypeChooser, 2, 1, 1, 1);
-    useGBLayout->addWidget(d->useCustomDateBtn,       3, 0, 1, 1);
-    useGBLayout->addWidget(d->useCustDateInput,       3, 1, 1, 1);
-    useGBLayout->addWidget(d->useCustTimeInput,       3, 2, 1, 1);
-    useGBLayout->addWidget(d->useCustomDateTodayBtn,  3, 3, 1, 1);
+    useGBLayout->addWidget(d->useFileNameBtn,         1, 0, 1, 1);
+    useGBLayout->addWidget(fileNameLbl,               1, 1, 1, 1);
+    useGBLayout->addWidget(d->useFileDateBtn,         2, 0, 1, 1);
+    useGBLayout->addWidget(d->useFileDateTypeChooser, 2, 1, 1, 1);
+    useGBLayout->addWidget(d->useMetaDateBtn,         3, 0, 1, 1);
+    useGBLayout->addWidget(d->useMetaDateTypeChooser, 3, 1, 1, 1);
+    useGBLayout->addWidget(d->useCustomDateBtn,       4, 0, 1, 1);
+    useGBLayout->addWidget(d->useCustDateInput,       4, 1, 1, 1);
+    useGBLayout->addWidget(d->useCustTimeInput,       4, 2, 1, 1);
+    useGBLayout->addWidget(d->useCustomDateTodayBtn,  4, 3, 1, 1);
     useGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     useGBLayout->setSpacing(spacing);
     useGBLayout->setColumnStretch(1, 1);
-    useGBLayout->setColumnStretch(2, 1);
+    useGBLayout->setColumnStretch(3, 1);
 
     d->useButtonGroup->addButton(d->useApplDateBtn,   0);
-    d->useButtonGroup->addButton(d->useFileDateBtn,   1);
-    d->useButtonGroup->addButton(d->useMetaDateBtn,   2);
-    d->useButtonGroup->addButton(d->useCustomDateBtn, 3);
+    d->useButtonGroup->addButton(d->useFileNameBtn,   1);
+    d->useButtonGroup->addButton(d->useFileDateBtn,   2);
+    d->useButtonGroup->addButton(d->useMetaDateBtn,   3);
+    d->useButtonGroup->addButton(d->useCustomDateBtn, 4);
     d->useApplDateBtn->setChecked(true);
 
     // -- Settings View TimesStamp Adjustments ---------------------------------------------------
@@ -367,6 +375,7 @@ void TimeAdjustSettings::setSettings(const TimeAdjustContainer& settings)
 
     int useTimestampType = settings.dateSource;
     if      (useTimestampType == TimeAdjustContainer::APPDATE)      d->useApplDateBtn->setChecked(true);
+    else if (useTimestampType == TimeAdjustContainer::FILENAME)     d->useFileNameBtn->setChecked(true);
     else if (useTimestampType == TimeAdjustContainer::FILEDATE)     d->useFileDateBtn->setChecked(true);
     else if (useTimestampType == TimeAdjustContainer::METADATADATE) d->useMetaDateBtn->setChecked(true);
     else if (useTimestampType == TimeAdjustContainer::CUSTOMDATE)   d->useCustomDateBtn->setChecked(true);
@@ -416,6 +425,7 @@ TimeAdjustContainer TimeAdjustSettings::settings() const
     settings.updXMPDate     = d->updXMPDateCheck->isChecked();
     settings.dateSource     = TimeAdjustContainer::APPDATE;
 
+    if (d->useFileNameBtn->isChecked())   settings.dateSource = TimeAdjustContainer::FILENAME;
     if (d->useFileDateBtn->isChecked())   settings.dateSource = TimeAdjustContainer::FILEDATE;
     if (d->useMetaDateBtn->isChecked())   settings.dateSource = TimeAdjustContainer::METADATADATE;
     if (d->useCustomDateBtn->isChecked()) settings.dateSource = TimeAdjustContainer::CUSTOMDATE;

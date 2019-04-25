@@ -226,44 +226,59 @@ bool TimeAdjust::toolOperations()
                 case TimeAdjustContainer::EXIFIPTCXMP:
                     orgDateTime = meta.getItemDateTime();
                     break;
+
                 case TimeAdjustContainer::EXIFCREATED:
                     orgDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Image.DateTime"),
                                                         exifDateTimeFormat);
                     break;
+
                 case TimeAdjustContainer::EXIFORIGINAL:
                     orgDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Photo.DateTimeOriginal"),
                                                         exifDateTimeFormat);
                     break;
+
                 case TimeAdjustContainer::EXIFDIGITIZED:
                     orgDateTime = QDateTime::fromString(meta.getExifTagString("Exif.Photo.DateTimeDigitized"),
                                                         exifDateTimeFormat);
                     break;
+
                 case TimeAdjustContainer::IPTCCREATED:
                     orgDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"),
                                                               Qt::ISODate),
                                             QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated"),
                                                               Qt::ISODate));
                     break;
+
                 case TimeAdjustContainer::XMPCREATED:
                     orgDateTime = QDateTime::fromString(meta.getXmpTagString("Xmp.xmp.CreateDate"),
                                                         xmpDateTimeFormat);
                     break;
+
                 default:
                     // orgDateTime stays invalid
                     break;
             };
             break;
         }
+
         case TimeAdjustContainer::CUSTOMDATE:
         {
             orgDateTime = QDateTime(prm.customDate.date(), prm.customTime.time());
             break;
         }
+
+        case TimeAdjustContainer::FILENAME:
+        {
+            orgDateTime = prm.getDateTimeFromUrl(inputUrl());
+            break;
+        }
+
         case TimeAdjustContainer::FILEDATE:
         {
             orgDateTime = imageInfo().modDateTime();
             break;
         }
+
         default: // TimeAdjustContainer::APPDATE
         {
             orgDateTime = imageInfo().dateTime();
