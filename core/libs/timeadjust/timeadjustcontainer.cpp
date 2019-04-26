@@ -98,6 +98,8 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
                                    "(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})(.+)?");
+    regExpStrings << QLatin1String("(.+)?([0-9]{2}-[0-9]{2}-[0-9]{2})"
+                                   "(.+)?([0-9]{2}[0-9]{2})(.+)?");
 
     QDateTime dateTime;
 
@@ -132,15 +134,30 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
             }
             else if (index == 2)
             {
-                dateTime = QDateTime::fromString(dateString, QLatin1String("yyyyMMdd"));
+                dateTime = QDateTime::fromString(dateString,
+                                                 QLatin1String("yyyyMMdd"));
             }
             else if (index == 3)
             {
-                dateTime = QDateTime::fromString(dateString, QLatin1String("ddMMyyyy"));
+                dateTime = QDateTime::fromString(dateString,
+                                                 QLatin1String("ddMMyyyy"));
 
                 if (!dateTime.isValid())
                 {
-                    dateTime = QDateTime::fromString(dateString, QLatin1String("MMddyyyy"));
+                    dateTime = QDateTime::fromString(dateString,
+                                                     QLatin1String("MMddyyyy"));
+                }
+            }
+            else if (index == 4)
+            {
+                dateTime = QDateTime::fromString(dateString + timeString,
+                                                 QLatin1String("ddMMyyhhmm"));
+                if (dateTime.isValid())
+                {
+                    if (dateTime.date().year() < 1970)
+                    {
+                        dateTime.setDate(dateTime.date().addYears(100));
+                    }
                 }
             }
 
