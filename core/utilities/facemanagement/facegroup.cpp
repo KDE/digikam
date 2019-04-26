@@ -370,7 +370,7 @@ void FaceGroup::aboutToSetInfo(const ItemInfo& info)
         return;
     }
 
-    //applyItemGeometryChanges();
+    applyItemGeometryChanges();
     clear();
 }
 
