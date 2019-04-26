@@ -91,8 +91,10 @@ QDateTime TimeAdjustContainer::calculateAdjustedDate(const QDateTime& originalTi
 QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
 {
     QStringList regExpStrings;
-    regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)");
-    regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)");
+    regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})"
+                                   "(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)?");
+    regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})"
+                                   "(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})(.+)?");
 
