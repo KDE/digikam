@@ -91,6 +91,7 @@ QDateTime TimeAdjustContainer::calculateAdjustedDate(const QDateTime& originalTi
 QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
 {
     QStringList regExpStrings;
+    // Do not change the order of the list.
     regExpStrings << QLatin1String("(.+)?([0-9]{4}[-/]?[0-9]{2}[-/]?[0-9]{2})"
                                    "(.+)?([0-9]{2}[-:]?[0-9]{2}[-:]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{2}[-/]?[0-9]{2}[-/]?[0-9]{4})"
@@ -100,9 +101,9 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
 
     QDateTime dateTime;
 
-    for (int i = 0 ; i < regExpStrings.count() ; ++i)
+    for (int index = 0 ; index < regExpStrings.count() ; ++index)
     {
-        QRegExp dateRegExp(regExpStrings.at(i));
+        QRegExp dateRegExp(regExpStrings.at(index));
 
         if (dateRegExp.exactMatch(url.fileName()))
         {
@@ -113,12 +114,12 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
             timeString.remove(QLatin1Char('-'));
             timeString.remove(QLatin1Char(':'));
 
-            if (i == 0)
+            if (index == 0)
             {
                 dateTime = QDateTime::fromString(dateString + timeString,
                                                  QLatin1String("yyyyMMddhhmmss"));
             }
-            else if (i == 1)
+            else if (index == 1)
             {
                 dateTime = QDateTime::fromString(dateString + timeString,
                                                  QLatin1String("ddMMyyyyhhmmss"));
@@ -129,11 +130,11 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
                                                      QLatin1String("MMddyyyyhhmmss"));
                 }
             }
-            else if (i == 2)
+            else if (index == 2)
             {
                 dateTime = QDateTime::fromString(dateString, QLatin1String("yyyyMMdd"));
             }
-            else if (i == 3)
+            else if (index == 3)
             {
                 dateTime = QDateTime::fromString(dateString, QLatin1String("ddMMyyyy"));
 
