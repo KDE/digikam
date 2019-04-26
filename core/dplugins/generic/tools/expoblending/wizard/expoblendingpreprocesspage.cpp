@@ -120,8 +120,8 @@ ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* cons
     QPixmap leftPix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/assistant-preprocessing.png")));
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 
-    connect(d->mngr->thread(), SIGNAL(starting(Digikam::ExpoBlendingActionData)),
-            this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
+    connect(d->mngr->thread(), SIGNAL(starting(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)),
+            this, SLOT(slotExpoBlendingAction(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)));
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
@@ -166,8 +166,8 @@ void ExpoBlendingPreProcessPage::process()
     d->alignCheckBox->hide();
     d->progressTimer->start(300);
 
-    connect(d->mngr->thread(), SIGNAL(finished(Digikam::ExpoBlendingActionData)),
-            this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
+    connect(d->mngr->thread(), SIGNAL(finished(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)),
+            this, SLOT(slotExpoBlendingAction(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)));
 
     d->mngr->thread()->setPreProcessingSettings(d->alignCheckBox->isChecked());
     d->mngr->thread()->preProcessFiles(d->mngr->itemsList(), d->mngr->alignBinary().path());
@@ -178,8 +178,8 @@ void ExpoBlendingPreProcessPage::process()
 
 void ExpoBlendingPreProcessPage::cancel()
 {
-    disconnect(d->mngr->thread(), SIGNAL(finished(Digikam::ExpoBlendingActionData)),
-               this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
+    disconnect(d->mngr->thread(), SIGNAL(finished(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)),
+               this, SLOT(slotExpoBlendingAction(DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData)));
 
     d->mngr->thread()->cancel();
     d->progressTimer->stop();
