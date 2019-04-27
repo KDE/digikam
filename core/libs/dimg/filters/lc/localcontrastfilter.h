@@ -70,14 +70,14 @@ public:
         return 2;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
@@ -95,7 +95,7 @@ private:
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     void  processRgbImage(float* const img, int sizex, int sizey);
     void  process8bitRgbImage(unsigned char* const img, int sizex, int sizey);

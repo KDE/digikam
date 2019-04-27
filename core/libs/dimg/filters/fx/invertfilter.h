@@ -47,7 +47,7 @@ public:
 
     ~InvertFilter();
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
 
     static QString          FilterIdentifier()
@@ -70,16 +70,16 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 };
 
 } // namespace Digikam

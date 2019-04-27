@@ -64,17 +64,17 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
     void oilPaintImageMultithreaded(uint start, uint stop);
     DColor MostFrequentColor(DImg& src, int X, int Y, int Radius, int Intensity,
                              uchar* intensityCount, uint* averageColorR, uint* averageColorG, uint* averageColorB);

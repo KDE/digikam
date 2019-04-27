@@ -117,17 +117,17 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
-    void        filterImage();
+    void        filterImage() override;
     inline int  setPosition (int Width, int X, int Y);
     inline bool isInside (int Width, int Height, int X, int Y);
 

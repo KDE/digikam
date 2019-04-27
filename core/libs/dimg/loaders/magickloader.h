@@ -40,12 +40,12 @@ public:
 
     explicit MagickLoader(DImg* const image);
 
-    virtual bool load(const QString& filePath, DImgLoaderObserver* const observer);
-    virtual bool save(const QString& filePath, DImgLoaderObserver* const observer);
+    virtual bool load(const QString& filePath, DImgLoaderObserver* const observer) override;
+    virtual bool save(const QString& filePath, DImgLoaderObserver* const observer) override;
 
-    virtual bool hasAlpha()   const;
-    virtual bool sixteenBit() const;
-    virtual bool isReadOnly() const;
+    virtual bool hasAlpha()   const override;
+    virtual bool sixteenBit() const override;
+    virtual bool isReadOnly() const override;
 
 private:
 

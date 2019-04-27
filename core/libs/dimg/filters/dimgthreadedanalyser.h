@@ -60,35 +60,35 @@ private:
 
     // NOTE: Versionning is not supported in this class
 
-    FilterAction filterAction()
+    FilterAction filterAction() override
     {
         // return null object
         return FilterAction();
     };
 
-    void readParameters(const FilterAction&)
+    void readParameters(const FilterAction&) override
     {
          // Do nothing.
     };
 
-    QString filterIdentifier() const
+    QString filterIdentifier() const override
     {
         // return null object
         return QString();
     };
 
-    QList<int> supportedVersions() const
+    QList<int> supportedVersions() const override
     {
         // return null object
         return QList<int>();
     };
 
-    void prepareDestImage()
+    void prepareDestImage() override
     {
         // No destination image is required here.
     };
 
-    void filterImage()
+    void filterImage() override
     {
         startAnalyse();
     };

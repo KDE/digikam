@@ -91,18 +91,18 @@ public:
         return 1;
     }
 
-    void readParameters(const FilterAction& action);
+    void readParameters(const FilterAction& action) override;
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual Digikam::FilterAction filterAction();
+    virtual Digikam::FilterAction filterAction() override;
 
 private:
 
-    virtual void filterImage();
+    virtual void filterImage() override;
 
     void interpolate(DImg& img,HotPixel& hp, int method);
     void weightPixels(DImg& img, HotPixel& px, int method,

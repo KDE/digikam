@@ -48,17 +48,17 @@ public:
     static DImgFilterManager* instance();
 
     /// Returns a list of the supported filter identifiers
-    QStringList supportedFilters();
+    QStringList supportedFilters() override;
 
     /// Returns a list of supported versions of the given filter
-    QList<int> supportedVersions(const QString& filterIdentifier);
+    QList<int> supportedVersions(const QString& filterIdentifier) override;
 
     /**
      * Returns the (untranslated) displayable name for the given identifier.
      * This is only possible for supported filters. If you have a FilterAction,
      * it may already contain a displayable name.
      */
-    QString displayableName(const QString& filterIdentifier);
+    QString displayableName(const QString& filterIdentifier) override;
 
     /**
      * Returns the translated displayable name
@@ -77,8 +77,8 @@ public:
      * Returns true if the given filter, or, more specifically,
      * the given filter in the given version is supported.
      */
-    bool isSupported(const QString& filterIdentifier);
-    bool isSupported(const QString& filterIdentifier, int version);
+    bool isSupported(const QString& filterIdentifier) override;
+    bool isSupported(const QString& filterIdentifier, int version) override;
 
     /**
      * Returns true if the given filter is to be considered
@@ -92,7 +92,7 @@ public:
      * if identifier/version is not supported, or the filter is builtin.
      * Note: You probably want to use FilterActionFilter.
      */
-    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version);
+    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version) override;
 
     /**
      * Registers all filter provided by this generator.

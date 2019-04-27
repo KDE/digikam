@@ -102,7 +102,7 @@ public:
 
 protected:
 
-    virtual bool open(QIODevice::OpenMode);
+    virtual bool open(QIODevice::OpenMode) override;
 };
 
 } // namespace Digikam
