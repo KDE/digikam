@@ -68,13 +68,13 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
@@ -90,7 +90,7 @@ private:
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     void sharpenImage(double radius, double sigma);
 

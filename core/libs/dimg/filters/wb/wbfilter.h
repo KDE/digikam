@@ -53,7 +53,7 @@ public:
                       int progressBegin=0, int progressEnd=100);
     virtual ~WBFilter();
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
     static void             autoExposureAdjustement(const DImg* const img, double& black, double& expo);
     static void             findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& maxb);
@@ -79,16 +79,16 @@ public:
         return 2;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
 protected:
 
-    void filterImage();
+    void filterImage() override;
 
 protected:
 

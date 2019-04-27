@@ -69,10 +69,10 @@ public:
     NRFilter(DImg* const orgImage, QObject* const parent, const NRContainer& settings);
     ~NRFilter();
 
-    void readParameters(const FilterAction& action);
+    void readParameters(const FilterAction& action) override;
 
-    virtual FilterAction    filterAction();
-    virtual QString         filterIdentifier() const;
+    virtual FilterAction    filterAction() override;
+    virtual QString         filterIdentifier() const override;
 
     static QString          FilterIdentifier();
     static QString          DisplayableName();
@@ -99,7 +99,7 @@ private:
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     void waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                         float threshold, double softness);

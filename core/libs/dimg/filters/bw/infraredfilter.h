@@ -94,17 +94,17 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     inline int intMult8(uint a, uint b);
     inline int intMult16(uint a, uint b);

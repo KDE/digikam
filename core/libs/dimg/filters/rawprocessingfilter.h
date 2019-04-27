@@ -119,21 +119,21 @@ public:
         return 1;
     }
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
 protected:
 
     void postProgress(int);     // not virtual
     bool continueQuery() const; // not virtual
 
-    virtual void filterImage();
+    virtual void filterImage() override;
 
 protected:
 

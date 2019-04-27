@@ -48,12 +48,12 @@ public:
 
     explicit RAWLoader(DImg* const image, const DRawDecoding& rawDecodingSettings = DRawDecoding());
 
-    bool load(const QString& filePath, DImgLoaderObserver* const observer = 0);
-    bool save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer=0*/);
+    bool load(const QString& filePath, DImgLoaderObserver* const observer = 0) override;
+    bool save(const QString& /*filePath*/, DImgLoaderObserver* const /*observer=0*/) override;
 
-    bool hasAlpha()   const;
-    bool isReadOnly() const;
-    bool sixteenBit() const;
+    bool hasAlpha()   const override;
+    bool isReadOnly() const override;
+    bool sixteenBit() const override;
 
     void postProcess(DImgLoaderObserver* const observer);
 
@@ -64,8 +64,8 @@ private:
     bool loadedFromRawData(const QByteArray& data, int width, int height, int rgbmax,
                            DImgLoaderObserver* const observer);
 
-    bool checkToCancelWaitingData();
-    void setWaitingDataProgress(double value);
+    bool checkToCancelWaitingData() override;
+    void setWaitingDataProgress(double value) override;
 
 private:
 

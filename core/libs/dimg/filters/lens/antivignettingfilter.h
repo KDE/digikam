@@ -78,14 +78,14 @@ public:
 
     ~AntiVignettingFilter();
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
 
     static QString          FilterIdentifier()
@@ -110,7 +110,7 @@ public:
 
 private:
 
-    void           filterImage();
+    void           filterImage() override;
 
     double         hypothenuse(double x, double y);
     uchar          clamp8bits(double x);

@@ -122,18 +122,18 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
     void cancelFilter();
-    void filterImage();
+    void filterImage() override;
 
     void        buildBias(const QImage& mask);
     void        buildSkinToneBias();

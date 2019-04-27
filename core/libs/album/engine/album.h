@@ -381,7 +381,7 @@ public:
     QString     albumPath()      const;
     QString     prettyUrl()      const;
     QString     folderPath()     const;
-    CoreDbUrl   databaseUrl()    const;
+    CoreDbUrl   databaseUrl()    const override;
     QUrl        fileUrl()        const;
     qlonglong   iconId()         const;
     bool        isAlbumRoot()    const;
@@ -425,7 +425,7 @@ public:
      *         The root TAlbum returns "/" resp. "".
      */
     QString                tagPath(bool leadingSlash = true) const;
-    CoreDbUrl              databaseUrl() const;
+    CoreDbUrl              databaseUrl() const override;
     QString                prettyUrl() const;
     QString                icon() const;
     qlonglong              iconId() const;
@@ -468,7 +468,7 @@ public:
 
     QDate       date()      const;
     Range       range()     const;
-    CoreDbUrl databaseUrl() const;
+    CoreDbUrl databaseUrl() const override;
 
 private:
 
@@ -491,7 +491,7 @@ public:
     SAlbum(const QString& title, int id, bool root=false);
     ~SAlbum();
 
-    CoreDbUrl            databaseUrl()        const;
+    CoreDbUrl            databaseUrl()        const override;
     QString              query()              const;
     DatabaseSearch::Type searchType()         const;
     bool                 isNormalSearch()     const;

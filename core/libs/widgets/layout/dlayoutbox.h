@@ -55,14 +55,14 @@ public:
     void setContentsMargins(int left, int top, int right, int bottom);
     void setStretchFactor(QWidget* const widget, int stretch);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const override;
+    virtual QSize minimumSizeHint() const override;
 
 protected:
 
     DHBox(bool vertical, QWidget* const parent);
 
-    virtual void childEvent(QChildEvent* e);
+    virtual void childEvent(QChildEvent* e) override;
 };
 
 // ------------------------------------------------------------------------------------

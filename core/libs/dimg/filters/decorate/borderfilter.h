@@ -149,16 +149,16 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
-    virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+    virtual FilterAction    filterAction() override;
+    void                    readParameters(const FilterAction& action) override;
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     /** Methods to preserve aspect ratio of image. */
     void solid(DImg& src, DImg& dest, const DColor& fg, int borderWidth);

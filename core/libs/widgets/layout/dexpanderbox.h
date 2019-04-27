@@ -70,8 +70,8 @@ public:
     explicit DAdjustableLabel(QWidget* const parent=0);
     virtual ~DAdjustableLabel();
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint()        const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint()        const override;
 
     void setAlignment(Qt::Alignment align);
     void setElideMode(Qt::TextElideMode mode);
@@ -84,7 +84,7 @@ public Q_SLOTS:
 
 private:
 
-    void resizeEvent(QResizeEvent*);
+    void resizeEvent(QResizeEvent*) override;
     void adjustTextToLabel();
 
     // Disabled methods from QLabel
@@ -119,9 +119,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+    virtual void keyPressEvent(QKeyEvent* event) override;
 };
 
 // -------------------------------------------------------------------------
@@ -143,9 +143,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+    virtual void keyPressEvent(QKeyEvent* event) override;
 };
 
 // -------------------------------------------------------------------------
@@ -162,7 +162,7 @@ public:
     void setArrowType(Qt::ArrowType arrowType);
     Qt::ArrowType arrowType() const;
 
-    virtual QSize sizeHint () const;
+    virtual QSize sizeHint () const override;
 
 Q_SIGNALS:
 
@@ -170,9 +170,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+    virtual void paintEvent(QPaintEvent* event) override;
 
 protected:
 
@@ -227,7 +227,7 @@ private Q_SLOTS:
 
 private:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
 private:
 

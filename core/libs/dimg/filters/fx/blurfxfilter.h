@@ -70,14 +70,14 @@ public:
         return 1;
     }
 
-    virtual QString         filterIdentifier() const
+    virtual QString         filterIdentifier() const override
     {
         return FilterIdentifier();
     }
 
-    virtual FilterAction    filterAction();
+    virtual FilterAction    filterAction() override;
 
-    void                    readParameters(const FilterAction& action);
+    void                    readParameters(const FilterAction& action) override;
 
 public:
 
@@ -162,7 +162,7 @@ private:
 
 private:
 
-    void filterImage();
+    void filterImage() override;
 
     // Backported from ImageProcessing version 1
     void softenerBlur(DImg* const orgImage, DImg* const destImage);

@@ -171,7 +171,7 @@ protected:
 
     /** List of threaded operations by filter.
      */
-    virtual void run();
+    virtual void run() override;
 
     /** Main image filter method. Override in subclass.
      */

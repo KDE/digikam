@@ -484,24 +484,24 @@ public:
     {
     }
 
-    virtual QString filterIdentifier() const
+    virtual QString filterIdentifier() const override
     {
         return m_filter.filterAction().identifier();
     }
 
-    virtual FilterAction filterAction()
+    virtual FilterAction filterAction() override
     {
         return m_filter.filterAction();
     }
 
-    void readParameters(const FilterAction& action)
+    void readParameters(const FilterAction& action) override
     {
         m_filter = DImgBuiltinFilter(action);
     }
 
 protected:
 
-    void filterImage()
+    void filterImage() override
     {
         m_destImage = m_orgImage;
         m_filter.apply(m_destImage);

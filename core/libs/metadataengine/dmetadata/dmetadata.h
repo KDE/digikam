@@ -89,7 +89,7 @@ public: // File I/O helpers
      * Re-implemented from libMetaEngine to use libraw identify and
      * ffmpeg probe methods if Exiv2 failed.
      */
-    bool load(const QString& filePath);
+    bool load(const QString& filePath) override;
     bool save(const QString& filePath, bool setVersion = false) const;
     bool applyChanges(bool setVersion = false) const;
 
