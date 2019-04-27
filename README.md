@@ -4,7 +4,7 @@
 
 If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://invent.kde.org/kde/digikam)
 
-Developers, if you want to contrib, see the online [API documentation here](https://www.digikam.org/api)
+Developers, if you want to contribute, see the online [API documentation here](https://www.digikam.org/api)
 
 # About
 
