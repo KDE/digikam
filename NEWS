@@ -18,4 +18,5 @@ BUGFIXES:
 009 ==> 406815 - Can not setup Thunderbid in Send by mail.
 010 ==> 406855 - Feature request: date from filename.
 011 ==> 406938 - Face region is not saved after resizing.
-012 ==> 
+012 ==> 406942 - Thumbnails does not get saved for videofiles over 2^64b, mysql.
+013 ==> 
