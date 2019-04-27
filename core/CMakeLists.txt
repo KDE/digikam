@@ -466,6 +466,15 @@ message(STATUS "--------------------------------------------------")
 message(STATUS "digiKam RawEngine dependencies checks:")
 message(STATUS "")
 
+include(MacroOpenMP)
+DETECT_OPENMP()
+
+if(OPENMP_FOUND)
+    message(STATUS "RawEngine will be compiled with OpenMP support")
+else()
+    message(STATUS "RawEngine will not be compiled with OpenMP support")
+endif()
+
 # Flag to use libjasper with LibRaw RedCine codec
 
 if(Jasper_FOUND)
@@ -506,6 +515,7 @@ set(PTHREADS_FOUND (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT))
 # Registration of Libraw configuration to a dedicated header
 
 MACRO_BOOL_TO_01(JPEG8_FOUND  LIBRAW_USE_DNGLOSSYCODEC)
+MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
 MACRO_BOOL_TO_01(Jasper_FOUND LIBRAW_USE_REDCINECODEC)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libs/rawengine/libraw/libraw_config.h.cmake
