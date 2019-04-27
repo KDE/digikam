@@ -84,7 +84,7 @@ public:
 
 public:
 
-    DInfoInterface* infoIface(DPluginAction* const ac);
+    DInfoInterface* infoIface(DPluginAction* const ac) override;
 
 Q_SIGNALS:
 
@@ -101,16 +101,16 @@ Q_SIGNALS:
 
 protected:
 
-    bool queryClose();
-    void moveEvent(QMoveEvent* e);
-    void closeEvent(QCloseEvent* e);
+    bool queryClose() override;
+    void moveEvent(QMoveEvent* e) override;
+    void closeEvent(QCloseEvent* e) override;
 
 private:
 
-    void showThumbBar(bool visible);
-    void showSideBars(bool visible);
-    bool thumbbarVisibility() const;
-    void customizedFullScreenMode(bool set);
+    void showThumbBar(bool visible) override;
+    void showSideBars(bool visible) override;
+    bool thumbbarVisibility() const override;
+    void customizedFullScreenMode(bool set) override;
     void customizedTrashView(bool set);
     void toggleShowBar();
 
@@ -120,8 +120,8 @@ private Q_SLOTS:
     void slotImageSelected(const ItemInfoList&, const ItemInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();
-    void slotDBStat();
-    void slotComponentsInfo();
+    void slotDBStat() override;
+    void slotComponentsInfo() override;
 
     void slotRecurseAlbums(bool);
     void slotRecurseTags(bool);
@@ -135,12 +135,12 @@ private Q_SLOTS:
     void slotResetExifOrientationActions();
     void slotTransformAction();
 
-    void slotToggleLeftSideBar();
-    void slotToggleRightSideBar();
-    void slotPreviousLeftSideBarTab();
-    void slotNextLeftSideBarTab();
-    void slotPreviousRightSideBarTab();
-    void slotNextRightSideBarTab();
+    void slotToggleLeftSideBar() override;
+    void slotToggleRightSideBar() override;
+    void slotPreviousLeftSideBarTab() override;
+    void slotNextLeftSideBarTab() override;
+    void slotPreviousRightSideBarTab() override;
+    void slotNextRightSideBarTab() override;
 
     void slotToggleShowBar();
 
@@ -190,9 +190,9 @@ private:
 
 private Q_SLOTS:
 
-    void slotSetup();
+    void slotSetup() override;
     void slotSetupChanged();
-    void slotEditKeys();
+    void slotEditKeys() override;
     void slotThemeChanged();
 
 // -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------

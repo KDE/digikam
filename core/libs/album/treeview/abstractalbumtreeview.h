@@ -168,8 +168,8 @@ public:
      * the state of new rows based on the remaining entries in
      * d->statesByAlbumId.
      */
-    virtual void doLoadState();
-    virtual void doSaveState();
+    virtual void doLoadState() override;
+    virtual void doSaveState() override;
 
     /**
      * Some treeviews shall control the global current album kept by AlbumManager.
@@ -211,7 +211,7 @@ public:
     QList<A*> currentAlbums();
 
     // for internal use: public viewportEvent
-    virtual bool viewportEvent(QEvent* event);
+    virtual bool viewportEvent(QEvent* event) override;
 
     /**
      * @brief selectedItems() -
@@ -321,15 +321,15 @@ protected:
 
     // other stuff
 
-    void mousePressEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent* e) override;
 
-    void rowsInserted(const QModelIndex& index, int start, int end);
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void startDrag(Qt::DropActions supportedActions);
-    void dragEnterEvent(QDragEnterEvent* e);
-    void dragMoveEvent(QDragMoveEvent* e);
-    void dragLeaveEvent(QDragLeaveEvent* e);
-    void dropEvent(QDropEvent* e);
+    void rowsInserted(const QModelIndex& index, int start, int end) override;
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
+    void startDrag(Qt::DropActions supportedActions) override;
+    void dragEnterEvent(QDragEnterEvent* e) override;
+    void dragMoveEvent(QDragMoveEvent* e) override;
+    void dragLeaveEvent(QDragLeaveEvent* e) override;
+    void dropEvent(QDropEvent* e) override;
 
     virtual void middleButtonPressed(Album* a);
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, QList<QModelIndex> indexes);
@@ -370,7 +370,7 @@ private:
      *
      * @param event event that requested the menu
      */
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
 private Q_SLOTS:
 

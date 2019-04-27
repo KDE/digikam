@@ -49,34 +49,34 @@ public:
 
 public:
 
-    Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate);
-    Q_SLOT void slotMetadataChangedForUrl(const QUrl& url);
+    Q_SLOT void slotDateTimeForUrl(const QUrl& url, const QDateTime& dt, bool updModDate) override;
+    Q_SLOT void slotMetadataChangedForUrl(const QUrl& url) override;
 
 public:
 
-    QList<QUrl> currentSelectedItems()               const;
-    QList<QUrl> currentAlbumItems()                  const;
+    QList<QUrl> currentSelectedItems()                    const override;
+    QList<QUrl> currentAlbumItems()                       const override;
 
-    QList<QUrl> albumItems(Album* const album)       const;
-    QList<QUrl> albumItems(int id)                   const;
-    QList<QUrl> albumsItems(const DAlbumIDs&)        const;
-    QList<QUrl> allAlbumItems()                      const;
+    QList<QUrl> albumItems(Album* const album)            const;
+    QList<QUrl> albumItems(int id)                        const override;
+    QList<QUrl> albumsItems(const DAlbumIDs&)             const override;
+    QList<QUrl> allAlbumItems()                           const override;
 
-    DInfoMap    albumInfo(int)                       const;
+    DInfoMap    albumInfo(int)                            const override;
 
-    DInfoMap    itemInfo(const QUrl&)                     const;
-    void        setItemInfo(const QUrl&, const DInfoMap&) const;
-    
-    QWidget*    albumChooser(QWidget* const parent)  const;
-    DAlbumIDs   albumChooserItems()                  const;
-    bool        supportAlbums()                      const;
+    DInfoMap    itemInfo(const QUrl&)                     const override;
+    void        setItemInfo(const QUrl&, const DInfoMap&) const override;
 
-    QWidget*    uploadWidget(QWidget* const parent)  const;
-    QUrl        uploadUrl()                          const;
+    QWidget*    albumChooser(QWidget* const parent)       const override;
+    DAlbumIDs   albumChooserItems()                       const override;
+    bool        supportAlbums()                           const override;
 
-    QUrl        defaultUploadUrl()                   const;
+    QWidget*    uploadWidget(QWidget* const parent)       const override;
+    QUrl        uploadUrl()                               const override;
 
-    QAbstractItemModel* tagFilterModel();
+    QUrl        defaultUploadUrl()                        const override;
+
+    QAbstractItemModel* tagFilterModel() override;
 
 private:
 

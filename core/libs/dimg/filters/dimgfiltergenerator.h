@@ -79,12 +79,12 @@ public:
     {
     }
 
-    QStringList supportedFilters()
+    QStringList supportedFilters() override
     {
         return QList<QString>() << T::FilterIdentifier();
     }
 
-    QList<int> supportedVersions(const QString& filterIdentifier)
+    QList<int> supportedVersions(const QString& filterIdentifier) override
     {
         if (filterIdentifier == T::FilterIdentifier())
         {
@@ -94,7 +94,7 @@ public:
         return QList<int>();
     }
 
-    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version)
+    DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version) override
     {
         if (filterIdentifier == T::FilterIdentifier() &&
             T::SupportedVersions().contains(version))
@@ -107,7 +107,7 @@ public:
         return 0;
     }
 
-    QString displayableName(const QString& filterIdentifier)
+    QString displayableName(const QString& filterIdentifier) override
     {
         if (filterIdentifier == T::FilterIdentifier())
         {

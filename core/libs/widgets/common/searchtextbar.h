@@ -181,12 +181,12 @@ private Q_SLOTS:
 
 protected:
 
-    virtual void doLoadState();
-    virtual void doSaveState();
+    virtual void doLoadState() override;
+    virtual void doSaveState() override;
 
 private:
 
-    void contextMenuEvent(QContextMenuEvent* e);
+    void contextMenuEvent(QContextMenuEvent* e) override;
 
     /**
      * If hasCaseSensitive returns <code>true</code> this tells the search

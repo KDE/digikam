@@ -108,23 +108,23 @@ public:
     /**
      * These methods do not make sense here. Use filterActions.
      */
-    virtual FilterAction filterAction()
+    virtual FilterAction filterAction() override
     {
         return FilterAction();
     }
 
-    virtual void readParameters(const FilterAction&)
+    virtual void readParameters(const FilterAction&) override
     {
     }
 
-    virtual QString filterIdentifier() const
+    virtual QString filterIdentifier() const override
     {
         return QString();
     }
 
 protected:
 
-    virtual void filterImage();
+    virtual void filterImage() override;
 
 private:
 

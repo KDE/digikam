@@ -66,7 +66,7 @@ public:
 
 protected:
 
-    void run();
+    void run() override;
 
 Q_SIGNALS:
 
@@ -90,7 +90,7 @@ public:
 
 protected:
 
-    void run();
+    void run() override;
 
 Q_SIGNALS:
 
@@ -114,7 +114,7 @@ public:
 
 protected:
 
-    void run();
+    void run() override;
 
 Q_SIGNALS:
 
@@ -138,7 +138,7 @@ public:
 
 protected:
 
-    void run();
+    void run() override;
 
 Q_SIGNALS:
 
@@ -170,7 +170,7 @@ Q_SIGNALS:
 
 protected:
 
-    void run();
+    void run() override;
 
 private:
 

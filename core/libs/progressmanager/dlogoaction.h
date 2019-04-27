@@ -50,8 +50,8 @@ public:
 
 protected:
 
-    QWidget* createWidget(QWidget* parent);
-    void     deleteWidget(QWidget* widget);
+    QWidget* createWidget(QWidget* parent) override;
+    void     deleteWidget(QWidget* widget) override;
 
 private Q_SLOTS:
 

@@ -107,8 +107,8 @@ public:
 
     ClassicLoadingCacheFileWatch();
     ~ClassicLoadingCacheFileWatch();
-    virtual void addedImage(const QString& filePath);
-    virtual void addedThumbnail(const QString& filePath);
+    virtual void addedImage(const QString& filePath) override;
+    virtual void addedThumbnail(const QString& filePath) override;
 
 private Q_SLOTS:
 
