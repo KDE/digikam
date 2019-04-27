@@ -116,8 +116,9 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
 
         if (dateRegExp.exactMatch(url.fileName()))
         {
-            QString dateString = dateRegExp.cap(2);
-            QString format     = formatStrings.at(index).first;
+            QString dateString   = dateRegExp.cap(2);
+            QString format       = formatStrings.at(index).first;
+            QString secondFormat = formatStrings.at(index).second;
 
             if (format.contains(QLatin1String("hhmm")))
             {
@@ -130,15 +131,10 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
 
             dateTime = QDateTime::fromString(dateString, format);
 
-            if (!dateTime.isValid())
+            if (!dateTime.isValid() && !secondFormat.isEmpty())
             {
-                QString second = formatStrings.at(index).second;
-
-                if (!second.isEmpty())
-                {
-                    format   = second;
-                    dateTime = QDateTime::fromString(dateString, format);
-                }
+                format   = secondFormat;
+                dateTime = QDateTime::fromString(dateString, format);
             }
 
             if (dateTime.isValid() && format.count(QLatin1Char('y')) == 2)
