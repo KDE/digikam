@@ -60,13 +60,13 @@ class Q_DECL_HIDDEN LensDistortionTool::Private
 public:
 
     explicit Private()
-      : maskPreviewLabel(0),
-        mainInput(0),
-        edgeInput(0),
-        rescaleInput(0),
-        brightenInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : maskPreviewLabel(nullptr),
+        mainInput(nullptr),
+        edgeInput(nullptr),
+        rescaleInput(nullptr),
+        brightenInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -103,12 +103,12 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 {
     setObjectName(QLatin1String("lensdistortion"));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QGridLayout* const gridSettings = new QGridLayout(d->gboxSettings->plainPage());
@@ -283,7 +283,7 @@ void LensDistortionTool::preparePreview()
     double r = d->rescaleInput->value();
     double b = d->brightenInput->value();
 
-    LensDistortionFilter transformPreview(&d->previewRasterImage, 0, m, e, r, b, 0, 0);
+    LensDistortionFilter transformPreview(&d->previewRasterImage, nullptr, m, e, r, b, 0, 0);
     transformPreview.startFilterDirectly();
     d->maskPreviewLabel->setPixmap(transformPreview.getTargetImage().convertToPixmap());
 

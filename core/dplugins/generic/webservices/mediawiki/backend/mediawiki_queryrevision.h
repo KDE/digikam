@@ -135,7 +135,7 @@ public:
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryRevision(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QueryRevision(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destroys the QueryRevision job.

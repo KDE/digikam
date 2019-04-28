@@ -101,7 +101,7 @@ void IpfsPlugin::slotIpfs()
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new IpfsWindow(infoIface(sender()), 0);
+        m_toolDlg = new IpfsWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

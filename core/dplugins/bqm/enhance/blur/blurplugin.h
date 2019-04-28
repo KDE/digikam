@@ -42,7 +42,7 @@ class BlurPlugin : public DPluginBqm
 
 public:
 
-    explicit BlurPlugin(QObject* const parent = 0);
+    explicit BlurPlugin(QObject* const parent = nullptr);
     ~BlurPlugin();
 
     QString name()                 const override;

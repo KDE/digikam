@@ -306,7 +306,7 @@ void FlickrWidget::slotPermissionChanged(FlickrList::FieldType checkbox, Qt::Che
      * changed. */
 
     // Select the proper checkbox.
-    QCheckBox* currBox = 0;
+    QCheckBox* currBox = nullptr;
 
     if (checkbox == FlickrList::PUBLIC)
     {

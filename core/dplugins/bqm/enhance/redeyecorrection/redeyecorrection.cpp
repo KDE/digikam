@@ -41,9 +41,9 @@ namespace DigikamBqmRestorationPlugin
 
 RedEyeCorrection::RedEyeCorrection(QObject* const parent)
     : BatchTool(QLatin1String("RedEyeCorrection"), EnhanceTool, parent),
-      m_redEyeCFilter(0)
+      m_redEyeCFilter(nullptr)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 RedEyeCorrection::~RedEyeCorrection()
@@ -98,11 +98,11 @@ bool RedEyeCorrection::toolOperations()
     RedEyeCorrectionContainer prm;
     prm.m_redToAvgRatio = settings()[QLatin1String("redtoavgratio")].toDouble();
 
-    m_redEyeCFilter = new RedEyeCorrectionFilter(&image(), 0L, prm);
+    m_redEyeCFilter = new RedEyeCorrectionFilter(&image(), nullptr, prm);
     applyFilter(m_redEyeCFilter);
 
     delete m_redEyeCFilter;
-    m_redEyeCFilter = 0;
+    m_redEyeCFilter = nullptr;
 
     return (savefromDImg());
 }

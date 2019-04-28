@@ -55,7 +55,7 @@ class Q_DECL_HIDDEN HTMLImageSettingsPage::Private
 public:
 
     explicit Private()
-      : kcfg_thumbnailSquare(0)
+      : kcfg_thumbnailSquare(nullptr)
     {
     }
 

@@ -40,12 +40,12 @@ class BWConvert : public BatchTool
 
 public:
 
-    explicit BWConvert(QObject* const parent = 0);
+    explicit BWConvert(QObject* const parent = nullptr);
     ~BWConvert();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new BWConvert(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new BWConvert(parent); };
 
     void registerSettingsWidget();
 

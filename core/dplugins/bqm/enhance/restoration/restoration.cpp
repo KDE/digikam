@@ -45,8 +45,8 @@ namespace Digikam
 
 Restoration::Restoration(QObject* const parent)
     : BatchTool(QLatin1String("Restoration"), EnhanceTool, parent),
-      m_comboBox(0),
-      m_cimgIface(0)
+      m_comboBox(nullptr),
+      m_cimgIface(nullptr)
 {
 }
 
@@ -153,7 +153,7 @@ bool Restoration::toolOperations()
     applyFilter(m_cimgIface);
 
     delete m_cimgIface;
-    m_cimgIface = 0;
+    m_cimgIface = nullptr;
 
     return (savefromDImg());
 }

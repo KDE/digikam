@@ -159,8 +159,8 @@ public:
             const char* host, 
             NPT_UInt16  port, 
             const char* path,
-            const char* query = NULL,
-            const char* fragment = NULL);
+            const char* query = nullptr,
+            const char* fragment = nullptr);
 
     /**
      * Parse a URL from its fully encoded form.

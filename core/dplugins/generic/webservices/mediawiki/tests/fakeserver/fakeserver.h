@@ -74,7 +74,7 @@ public:
 
 public:
 
-    explicit FakeServer(QObject* const parent = 0);
+    explicit FakeServer(QObject* const parent = nullptr);
     ~FakeServer();
 
     void startAndWait();

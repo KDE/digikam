@@ -75,7 +75,7 @@ public:
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryImages(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QueryImages(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destroys a query images job.

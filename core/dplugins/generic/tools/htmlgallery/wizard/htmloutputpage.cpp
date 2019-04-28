@@ -52,10 +52,10 @@ class Q_DECL_HIDDEN HTMLOutputPage::Private
 public:
 
     explicit Private()
-      : destUrl(0),
-        openInBrowser(0),
-        titleLabel(0),
-        imageSelectionTitle(0)
+      : destUrl(nullptr),
+        openInBrowser(nullptr),
+        titleLabel(nullptr),
+        imageSelectionTitle(nullptr)
     {
     }
 

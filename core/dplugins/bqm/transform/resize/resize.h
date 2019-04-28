@@ -39,12 +39,12 @@ class Resize : public BatchTool
 
 public:
 
-    explicit Resize(QObject* const parent = 0);
+    explicit Resize(QObject* const parent = nullptr);
     ~Resize();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Resize(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Resize(parent); };
 
     void registerSettingsWidget();
 

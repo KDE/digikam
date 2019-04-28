@@ -53,7 +53,7 @@ public:
 
     explicit Private()
     {
-        sharedData    = 0;
+        sharedData    = nullptr;
         fileIndex     = 0;
         width         = 0;
         height        = 0;

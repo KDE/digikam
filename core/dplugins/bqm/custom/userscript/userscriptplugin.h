@@ -42,7 +42,7 @@ class UserScriptPlugin : public DPluginBqm
 
 public:
 
-    explicit UserScriptPlugin(QObject* const parent = 0);
+    explicit UserScriptPlugin(QObject* const parent = nullptr);
     ~UserScriptPlugin();
 
     QString name()                 const override;

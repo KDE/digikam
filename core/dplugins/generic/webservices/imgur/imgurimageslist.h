@@ -57,7 +57,7 @@ public:
 
 public:
 
-    explicit ImgurImagesList(QWidget* const parent = 0);
+    explicit ImgurImagesList(QWidget* const parent = nullptr);
     ~ImgurImagesList() override {}
 
     QList<const ImgurImageListViewItem*> getPendingItems();

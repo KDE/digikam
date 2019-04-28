@@ -128,11 +128,11 @@ public:
 
     explicit Private()
     {
-        sharedData     = 0;
-        loadingThreads = 0;
-        loadedImages   = 0;
-        imageLock      = 0;
-        threadLock     = 0;
+        sharedData     = nullptr;
+        loadingThreads = nullptr;
+        loadedImages   = nullptr;
+        imageLock      = nullptr;
+        threadLock     = nullptr;
         cacheSize      = 0;
         currIndex      = 0;
         swidth         = 0;

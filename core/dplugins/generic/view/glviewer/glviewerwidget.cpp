@@ -76,7 +76,7 @@ public:
 
     Private()
     {
-        texture    = 0;
+        texture    = nullptr;
         firstImage = true;
 
         // index of picture to be displayed
@@ -102,7 +102,7 @@ public:
         for (int i = 0 ; i < CACHESIZE ; ++i)
         {
             cache[i].file_index = 0;
-            cache[i].texture    = 0;
+            cache[i].texture    = nullptr;
         }
 
         ratio_view_x  = 0.0F;
@@ -116,8 +116,8 @@ public:
         vertex_bottom = 0.0F;
         wheelAction   = zoomImage;
         screen_width  = 0;
-        iface         = 0;
-        plugin        = 0;
+        iface         = nullptr;
+        plugin        = nullptr;
     }
 
     QStringList      files;
@@ -329,7 +329,7 @@ void GLViewerWidget::resizeGL(int w, int h)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (d->texture == 0)
+    if (d->texture == nullptr)
         return;
 
     if (d->firstImage)

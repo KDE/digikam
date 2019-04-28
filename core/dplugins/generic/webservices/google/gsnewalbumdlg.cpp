@@ -51,9 +51,9 @@ public:
 
     explicit Private()
     {
-        publicRBtn    = 0;
-        unlistedRBtn  = 0;
-        protectedRBtn = 0;
+        publicRBtn    = nullptr;
+        unlistedRBtn  = nullptr;
+        protectedRBtn = nullptr;
     }
 
     QString        serviceName;

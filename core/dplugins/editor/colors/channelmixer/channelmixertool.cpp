@@ -63,9 +63,9 @@ class Q_DECL_HIDDEN ChannelMixerTool::Private
 public:
 
     explicit Private()
-      : settingsView(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : settingsView(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -99,7 +99,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|

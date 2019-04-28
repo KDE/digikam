@@ -52,11 +52,11 @@ class Q_DECL_HIDDEN Crop::Private
 public:
 
     explicit Private()
-      : autoCrop(0),
-        heightInput(0),
-        widthInput(0),
-        xInput(0),
-        yInput(0),
+      : autoCrop(nullptr),
+        heightInput(nullptr),
+        widthInput(nullptr),
+        xInput(nullptr),
+        yInput(nullptr),
         changeSettings(true)
     {
     }

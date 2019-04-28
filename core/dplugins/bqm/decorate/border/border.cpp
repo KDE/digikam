@@ -43,7 +43,7 @@ namespace DigikamBqmBorderPlugin
 Border::Border(QObject* const parent)
     : BatchTool(QLatin1String("Border"), DecorateTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 Border::~Border()
@@ -161,7 +161,7 @@ bool Border::toolOperations()
     prm.orgWidth              = image().width();
     prm.orgHeight             = image().height();
 
-    BorderFilter bd(&image(), 0L, prm);
+    BorderFilter bd(&image(), nullptr, prm);
     applyFilterChangedProperties(&bd);
 
     return (savefromDImg());

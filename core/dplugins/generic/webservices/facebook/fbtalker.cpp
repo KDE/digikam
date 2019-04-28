@@ -110,12 +110,12 @@ public:
         serviceTime        = QLatin1String("token_time");
         serviceKey         = QLatin1String("access_token");
 
-        dialog             = 0;
-        parent             = 0;
-        settings           = 0;
-        netMngr            = 0;
-        reply              = 0;
-        view               = 0;
+        dialog             = nullptr;
+        parent             = nullptr;
+        settings           = nullptr;
+        netMngr            = nullptr;
+        reply              = nullptr;
+        view               = nullptr;
         state              = FB_GETLOGGEDINUSER;
     }
 
@@ -228,7 +228,7 @@ void FbTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -310,7 +310,7 @@ void FbTalker::getLoggedInUser()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -340,7 +340,7 @@ void FbTalker::logout()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -369,7 +369,7 @@ void FbTalker::listAlbums(long long userID)
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -412,7 +412,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -473,7 +473,7 @@ void FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -570,7 +570,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

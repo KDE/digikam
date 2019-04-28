@@ -63,10 +63,10 @@ public:
 
     explicit Private()
     {
-        buttonBox   = 0;
-        startButton = 0;
-        tab         = 0;
-        sharedData  = 0;
+        buttonBox   = nullptr;
+        startButton = nullptr;
+        tab         = nullptr;
+        sharedData  = nullptr;
     }
 
     QDialogButtonBox*      buttonBox;

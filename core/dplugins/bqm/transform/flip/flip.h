@@ -41,12 +41,12 @@ class Flip : public BatchTool
 
 public:
 
-    explicit Flip(QObject* const parent = 0);
+    explicit Flip(QObject* const parent = nullptr);
     ~Flip();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Flip(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Flip(parent); };
 
     void registerSettingsWidget();
 

@@ -70,8 +70,8 @@ public:
 
     explicit Private()
     {
-        sharedData         = 0;
-        imagesFilesListBox = 0;
+        sharedData         = nullptr;
+        imagesFilesListBox = nullptr;
     }
 
     PresentationContainer* sharedData;

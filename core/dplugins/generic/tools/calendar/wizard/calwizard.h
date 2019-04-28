@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT CalWizard : public DWizardDlg
 
 public:
 
-    explicit CalWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit CalWizard(QWidget* const parent, DInfoInterface* const iface = nullptr);
     ~CalWizard();
 
     DInfoInterface* iface()    const;

@@ -65,13 +65,13 @@ public:
 
     explicit Private(QWizard* const dialog)
       : FONT_HEIGHT_RATIO(0.8F),
-        progressView(0),
-        progressBar(0),
-        wizard(0),
-        settings(0),
-        printThread(0),
-        photoPage(0),
-        iface(0),
+        progressView(nullptr),
+        progressBar(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        printThread(nullptr),
+        photoPage(nullptr),
+        iface(nullptr),
         complete(false)
     {
         wizard = dynamic_cast<AdvPrintWizard*>(dialog);

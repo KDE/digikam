@@ -42,7 +42,7 @@ class ColorFXToolPlugin : public DPluginEditor
 
 public:
 
-    explicit ColorFXToolPlugin(QObject* const parent = 0);
+    explicit ColorFXToolPlugin(QObject* const parent = nullptr);
     ~ColorFXToolPlugin();
 
     QString name()                 const override;

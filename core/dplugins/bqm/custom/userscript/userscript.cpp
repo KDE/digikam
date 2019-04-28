@@ -63,8 +63,8 @@ public:
 public:
 
     explicit Private()
-      : comboBox(0),
-        textEdit(0),
+      : comboBox(nullptr),
+        textEdit(nullptr),
         changeSettings(true)
     {
     }

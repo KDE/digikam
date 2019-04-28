@@ -51,7 +51,7 @@ public:
      * @brief Constructs a Logout job.
      * @param parent the QObject parent
      */
-    explicit Logout(Iface& MediaWiki, QObject* const parent = 0);
+    explicit Logout(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destroys the Logout job.

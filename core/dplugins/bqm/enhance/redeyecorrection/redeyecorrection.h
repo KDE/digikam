@@ -41,12 +41,12 @@ class RedEyeCorrection : public BatchTool
 
 public:
 
-    explicit RedEyeCorrection(QObject* const parent = 0);
+    explicit RedEyeCorrection(QObject* const parent = nullptr);
     virtual ~RedEyeCorrection();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new RedEyeCorrection(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new RedEyeCorrection(parent); };
 
     void registerSettingsWidget();
 

@@ -52,13 +52,13 @@ class Q_DECL_HIDDEN AdvPrintOutputPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : labelImagesFormat(0),
-        destUrl(0),
-        conflictBox(0),
-        imagesFormat(0),
-        fileBrowserCB(0),
-        wizard(0),
-        settings(0)
+      : labelImagesFormat(nullptr),
+        destUrl(nullptr),
+        conflictBox(nullptr),
+        imagesFormat(nullptr),
+        fileBrowserCB(nullptr),
+        wizard(nullptr),
+        settings(nullptr)
     {
         wizard = dynamic_cast<AdvPrintWizard*>(dialog);
 

@@ -29,7 +29,7 @@
 MainWindow::MainWindow(QWidget* const parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      MediaWiki(0)
+      MediaWiki(nullptr)
 {
     ui->setupUi(this);
 }
@@ -92,7 +92,7 @@ void MainWindow::loginHandle(KJob* login)
     }
     else
     {
-        Edit* const job = new Edit(*MediaWiki, NULL);
+        Edit* const job = new Edit(*MediaWiki, nullptr);
         job->setPageName(this->ui->mPageEdit->text());
         job->setText(this->ui->plainTextEdit->toPlainText());
 

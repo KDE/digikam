@@ -42,7 +42,7 @@ class TimeAdjustPlugin : public DPluginBqm
 
 public:
 
-    explicit TimeAdjustPlugin(QObject* const parent = 0);
+    explicit TimeAdjustPlugin(QObject* const parent = nullptr);
     ~TimeAdjustPlugin();
 
     QString name()                 const override;

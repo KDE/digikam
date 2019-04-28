@@ -52,14 +52,14 @@ public:
 
     explicit Private()
     {
-        statusEdit              = 0;
-        JobIDEdit               = 0;
-        statusCheck             = 0;
-        JobIDCheck              = 0;
-        specialInstructionEdit  = 0;
-        specialInstructionCheck = 0;
-        objectNameEdit          = 0;
-        objectNameCheck         = 0;
+        statusEdit              = nullptr;
+        JobIDEdit               = nullptr;
+        statusCheck             = nullptr;
+        JobIDCheck              = nullptr;
+        specialInstructionEdit  = nullptr;
+        specialInstructionCheck = nullptr;
+        objectNameEdit          = nullptr;
+        objectNameCheck         = nullptr;
     }
 
     QCheckBox*      statusCheck;

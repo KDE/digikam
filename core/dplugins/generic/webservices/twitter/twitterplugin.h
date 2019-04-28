@@ -43,7 +43,7 @@ class TwitterPlugin : public DPluginGeneric
 
 public:
 
-    explicit TwitterPlugin(QObject* const parent = 0);
+    explicit TwitterPlugin(QObject* const parent = nullptr);
     ~TwitterPlugin();
 
     QString name()                 const override;

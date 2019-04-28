@@ -112,7 +112,7 @@ protected:
                                    NPT_String& filepath);
 
     virtual bool       ProcessFile(const NPT_String&,
-                                   const char* filter = NULL);
+                                   const char* filter = nullptr);
 
     virtual PLT_MediaObject* BuildFromFilePath(const NPT_String&             filepath,
                                                const PLT_HttpRequestContext& context,

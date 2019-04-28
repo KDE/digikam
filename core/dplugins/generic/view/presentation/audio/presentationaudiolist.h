@@ -86,7 +86,7 @@ class PresentationAudioList : public QListWidget
 
 public:
 
-    explicit PresentationAudioList(QWidget* const parent = 0);
+    explicit PresentationAudioList(QWidget* const parent = nullptr);
 
 public:
 

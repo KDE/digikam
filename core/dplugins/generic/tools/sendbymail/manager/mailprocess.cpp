@@ -57,9 +57,9 @@ public:
 
     explicit Private()
       : cancel(false),
-        settings(0),
-        iface(0),
-        threadImgResize(0)
+        settings(nullptr),
+        iface(nullptr),
+        threadImgResize(nullptr)
     {
     }
 

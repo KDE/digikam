@@ -57,17 +57,17 @@ class Q_DECL_HIDDEN PerspectiveTool::Private
 public:
 
     explicit Private()
-      : newWidthLabel(0),
-        newHeightLabel(0),
-        topLeftAngleLabel(0),
-        topRightAngleLabel(0),
-        bottomLeftAngleLabel(0),
-        bottomRightAngleLabel(0),
-        drawWhileMovingCheckBox(0),
-        drawGridCheckBox(0),
-        inverseTransformation(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : newWidthLabel(nullptr),
+        newHeightLabel(nullptr),
+        topLeftAngleLabel(nullptr),
+        topRightAngleLabel(nullptr),
+        bottomLeftAngleLabel(nullptr),
+        bottomRightAngleLabel(nullptr),
+        drawWhileMovingCheckBox(nullptr),
+        drawGridCheckBox(nullptr),
+        inverseTransformation(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -106,7 +106,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QFrame* const frame  = new QFrame(0);
+    QFrame* const frame  = new QFrame(nullptr);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     QVBoxLayout* const l = new QVBoxLayout(frame);
     d->previewWidget     = new PerspectiveWidget(525, 350, frame);
@@ -121,7 +121,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------

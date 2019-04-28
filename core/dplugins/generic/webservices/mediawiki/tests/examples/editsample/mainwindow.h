@@ -52,7 +52,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    explicit MainWindow(QWidget* const parent = 0);
+    explicit MainWindow(QWidget* const parent = nullptr);
     ~MainWindow();
 
 private Q_SLOTS:

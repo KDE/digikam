@@ -52,9 +52,9 @@ class Q_DECL_HIDDEN JAlbumOutputPage::Private
 public:
 
     explicit Private()
-      : destUrl(0),
-        titleLabel(0),
-        imageSelectionTitle(0)
+      : destUrl(nullptr),
+        titleLabel(nullptr),
+        imageSelectionTitle(nullptr)
     {
     }
 

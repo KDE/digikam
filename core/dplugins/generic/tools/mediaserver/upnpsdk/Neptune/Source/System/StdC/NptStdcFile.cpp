@@ -57,7 +57,7 @@ static int fopen_s(FILE**      file,
 #if defined(_WIN32_WCE)
     if (*file == NULL) return ENOENT;
 #else
-    if (*file == NULL) return errno;
+    if (*file == nullptr) return errno;
 #endif
     return 0;
 }
@@ -91,7 +91,7 @@ public:
     // constructors and destructor
     NPT_StdcFileWrapper(FILE* file, const char* name) : m_File(file), m_Name(name) {}
     ~NPT_StdcFileWrapper() {
-        if (m_File != NULL && 
+        if (m_File != nullptr && 
             m_File != stdin && 
             m_File != stdout && 
             m_File != stderr) {
@@ -207,7 +207,7 @@ NPT_StdcFileInputStream::Read(void*     buffer,
     size_t nb_read;
 
     // check the parameters
-    if (buffer == NULL) {
+    if (buffer == nullptr) {
         return NPT_ERROR_INVALID_PARAMETERS;
     }
 
@@ -350,7 +350,7 @@ NPT_StdcFile::~NPT_StdcFile()
 NPT_Result
 NPT_StdcFile::Open(NPT_File::OpenMode mode)
 {
-    FILE* file = NULL;
+    FILE* file = nullptr;
     
     // check if we're already open
     if (!m_FileReference.IsNull()) {
@@ -404,9 +404,9 @@ NPT_StdcFile::Open(NPT_File::OpenMode mode)
     }
 
     // unbuffer the file if needed 
-    if ((mode & NPT_FILE_OPEN_MODE_UNBUFFERED) && file != NULL) {
+    if ((mode & NPT_FILE_OPEN_MODE_UNBUFFERED) && file != nullptr) {
 #if !defined(_WIN32_WCE)
-        setvbuf(file, NULL, _IONBF, 0);
+        setvbuf(file, nullptr, _IONBF, 0);
 #endif
     }   
     
@@ -423,7 +423,7 @@ NPT_Result
 NPT_StdcFile::Close()
 {
     // release the file reference
-    m_FileReference = NULL;
+    m_FileReference = nullptr;
 
     // reset the mode
     m_Mode = 0;
@@ -438,7 +438,7 @@ NPT_Result
 NPT_StdcFile::GetInputStream(NPT_InputStreamReference& stream)
 {
     // default value
-    stream = NULL;
+    stream = nullptr;
 
     // check that the file is open
     if (m_FileReference.IsNull()) return NPT_ERROR_FILE_NOT_OPEN;
@@ -461,7 +461,7 @@ NPT_Result
 NPT_StdcFile::GetOutputStream(NPT_OutputStreamReference& stream)
 {
     // default value
-    stream = NULL;
+    stream = nullptr;
 
     // check that the file is open
     if (m_FileReference.IsNull()) return NPT_ERROR_FILE_NOT_OPEN;

@@ -58,9 +58,9 @@ public:
 
     explicit Private()
       : configGroupName(QLatin1String("antivignetting Tool")),
-        settingsView(0),
-        previewWidget(0),
-        gboxSettings(0)
+        settingsView(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -79,13 +79,13 @@ AntiVignettingTool::AntiVignettingTool(QObject* const parent)
     setToolName(i18n("Vignetting Correction"));
     setToolIcon(QIcon::fromTheme(QLatin1String("antivignetting")));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

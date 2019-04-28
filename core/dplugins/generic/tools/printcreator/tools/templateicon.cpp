@@ -43,9 +43,9 @@ public:
         rotate      = false;
         scaleWidth  = 0.0;
         scaleHeight = 0.0;
-        pixmap      = 0;
-        painter     = 0;
-        icon        = 0;
+        pixmap      = nullptr;
+        painter     = nullptr;
+        icon        = nullptr;
     }
 
     QSize     paperSize;

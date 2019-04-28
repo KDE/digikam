@@ -39,13 +39,13 @@ class ConvertToPGF : public BatchTool
 
 public:
 
-    explicit ConvertToPGF(QObject* const parent = 0);
+    explicit ConvertToPGF(QObject* const parent = nullptr);
     ~ConvertToPGF();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToPGF(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToPGF(parent); };
 
     void registerSettingsWidget();
 

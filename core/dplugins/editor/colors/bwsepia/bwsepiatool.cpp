@@ -55,9 +55,9 @@ class Q_DECL_HIDDEN BWSepiaTool::Private
 public:
 
     explicit Private()
-      : bwsepiaSettings(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : bwsepiaSettings(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -94,7 +94,7 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

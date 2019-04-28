@@ -57,14 +57,14 @@ class Q_DECL_HIDDEN VidSlideWizard::Private
 public:
 
     explicit Private()
-      : iface(0),
-        introPage(0),
-        albumsPage(0),
-        imagesPage(0),
-        videoPage(0),
-        outputPage(0),
-        finalPage(0),
-        settings(0)
+      : iface(nullptr),
+        introPage(nullptr),
+        albumsPage(nullptr),
+        imagesPage(nullptr),
+        videoPage(nullptr),
+        outputPage(nullptr),
+        finalPage(nullptr),
+        settings(nullptr)
     {
     }
 

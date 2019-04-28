@@ -44,7 +44,7 @@ class ImageShackPlugin : public DPluginGeneric
 
 public:
 
-    explicit ImageShackPlugin(QObject* const parent = 0);
+    explicit ImageShackPlugin(QObject* const parent = nullptr);
     ~ImageShackPlugin();
 
     QString name()                 const override;

@@ -59,18 +59,18 @@ class Q_DECL_HIDDEN VidSlideVideoPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : framesVal(0),
-        typeVal(0),
-        bitrateVal(0),
-        stdVal(0),
-        codecVal(0),
-        transVal(0),
-        effVal(0),
-        duration(0),
-        wizard(0),
-        settings(0),
-        transPreview(0),
-        effPreview(0)
+      : framesVal(nullptr),
+        typeVal(nullptr),
+        bitrateVal(nullptr),
+        stdVal(nullptr),
+        codecVal(nullptr),
+        transVal(nullptr),
+        effVal(nullptr),
+        duration(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        transPreview(nullptr),
+        effPreview(nullptr)
     {
         wizard = dynamic_cast<VidSlideWizard*>(dialog);
 

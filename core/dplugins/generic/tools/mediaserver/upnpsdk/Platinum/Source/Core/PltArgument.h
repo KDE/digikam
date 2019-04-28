@@ -67,7 +67,7 @@ public:
     PLT_ArgumentDesc(const char*        name,
                      NPT_Ordinal        position,
                      const char*        direction = "in",
-                     PLT_StateVariable* variable = NULL, 
+                     PLT_StateVariable* variable = nullptr, 
                      bool               has_ret = false);
 
     // accessor methods

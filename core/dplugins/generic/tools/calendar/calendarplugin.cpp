@@ -109,7 +109,7 @@ void CalendarPlugin::setup(QObject* const parent)
 
 void CalendarPlugin::slotCalendar()
 {
-    QPointer<CalWizard> wzrd = new CalWizard(0, infoIface(sender()));
+    QPointer<CalWizard> wzrd = new CalWizard(nullptr, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

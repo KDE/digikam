@@ -63,23 +63,23 @@ public:
     {
         modified        = false;
         isReadOnly      = false;
-        page_content    = 0;
-        page_properties = 0;
-        page_subjects   = 0;
-        page_keywords   = 0;
-        page_categories = 0;
-        page_credits    = 0;
-        page_status     = 0;
-        page_origin     = 0;
-        keywordsPage    = 0;
-        categoriesPage  = 0;
-        contentPage     = 0;
-        subjectsPage    = 0;
-        originPage      = 0;
-        creditsPage     = 0;
-        statusPage      = 0;
-        propertiesPage  = 0;
-        dlg             = 0;
+        page_content    = nullptr;
+        page_properties = nullptr;
+        page_subjects   = nullptr;
+        page_keywords   = nullptr;
+        page_categories = nullptr;
+        page_credits    = nullptr;
+        page_status     = nullptr;
+        page_origin     = nullptr;
+        keywordsPage    = nullptr;
+        categoriesPage  = nullptr;
+        contentPage     = nullptr;
+        subjectsPage    = nullptr;
+        originPage      = nullptr;
+        creditsPage     = nullptr;
+        statusPage      = nullptr;
+        propertiesPage  = nullptr;
+        dlg             = nullptr;
     }
 
     bool                  modified;

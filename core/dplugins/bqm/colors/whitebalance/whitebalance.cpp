@@ -42,7 +42,7 @@ namespace DigikamBqmWhiteBalancePlugin
 WhiteBalance::WhiteBalance(QObject* const parent)
     : BatchTool(QLatin1String("WhiteBalance"), ColorTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 WhiteBalance::~WhiteBalance()
@@ -129,7 +129,7 @@ bool WhiteBalance::toolOperations()
     prm.expositionMain = settings()[QLatin1String("expositionMain")].toDouble();
     prm.expositionFine = settings()[QLatin1String("expositionFine")].toDouble();
 
-    WBFilter wb(&image(), 0L, prm);
+    WBFilter wb(&image(), nullptr, prm);
     applyFilter(&wb);
 
     return (savefromDImg());

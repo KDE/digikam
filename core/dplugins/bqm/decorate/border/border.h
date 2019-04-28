@@ -40,12 +40,12 @@ class Border : public BatchTool
 
 public:
 
-    explicit Border(QObject* const parent = 0);
+    explicit Border(QObject* const parent = nullptr);
     ~Border();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Border(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Border(parent); };
 
     void registerSettingsWidget();
 

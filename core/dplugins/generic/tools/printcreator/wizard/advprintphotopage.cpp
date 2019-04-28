@@ -81,11 +81,11 @@ public:
 public:
 
     explicit Private(QWizard* const dialog)
-      : pageSetupDlg(0),
-        printer(0),
-        wizard(0),
-        settings(0),
-        iface(0)
+      : pageSetupDlg(nullptr),
+        printer(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        iface(nullptr)
     {
         photoUi = new PhotoUI(dialog);
         wizard  = dynamic_cast<AdvPrintWizard*>(dialog);
@@ -844,7 +844,7 @@ void AdvPrintPhotoPage::createPhotoGrid(AdvPrintPhotoSize* const p,
 
 void AdvPrintPhotoPage::slotListPhotoSizesSelected()
 {
-    AdvPrintPhotoSize* s = 0;
+    AdvPrintPhotoSize* s = nullptr;
     QSizeF size, sizeManaged;
 
     // TODO FREE STYLE
@@ -862,7 +862,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             s = d->settings->photosizes.at(curr);
             d->settings->photosizes.removeAt(curr);
             delete s;
-            s = NULL;
+            s = nullptr;
         }
 
         QPointer<AdvPrintCustomLayoutDlg> custDlg = new AdvPrintCustomLayoutDlg(this);
@@ -925,7 +925,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                                              << "> page size "
                                              << size;
                 delete s;
-                s = NULL;
+                s = nullptr;
             }
             else
             {
@@ -996,7 +996,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                                                  << "> columns "
                                                  << nColumns;
                     delete s;
-                    s = NULL;
+                    s = nullptr;
                 }
             }
         }
@@ -1241,7 +1241,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
 
     file.close();
 
-    AdvPrintPhotoSize* p = 0;
+    AdvPrintPhotoSize* p = nullptr;
 
     // print out the element names of all elements that are direct children
     // of the outermost element.

@@ -56,13 +56,13 @@ class Q_DECL_HIDDEN MailWizard::Private
 public:
 
     explicit Private()
-      : iface(0),
-        introPage(0),
-        albumsPage(0),
-        imagesPage(0),
-        settingsPage(0),
-        finalPage(0),
-        settings(0)
+      : iface(nullptr),
+        introPage(nullptr),
+        albumsPage(nullptr),
+        imagesPage(nullptr),
+        settingsPage(nullptr),
+        finalPage(nullptr),
+        settings(nullptr)
     {
     }
 

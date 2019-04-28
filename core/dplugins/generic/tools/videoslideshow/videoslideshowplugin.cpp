@@ -102,7 +102,7 @@ void VideoSlideShowPlugin::setup(QObject* const parent)
 
 void VideoSlideShowPlugin::slotVideoSlideShow()
 {
-    QPointer<VidSlideWizard> wzrd = new VidSlideWizard(0, infoIface(sender()));
+    QPointer<VidSlideWizard> wzrd = new VidSlideWizard(nullptr, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

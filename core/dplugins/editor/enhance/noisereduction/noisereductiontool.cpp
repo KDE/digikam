@@ -53,9 +53,9 @@ public:
 
     explicit Private()
       : configGroupName(QLatin1String("noisereduction Tool")),
-        nrSettings(0),
-        previewWidget(0),
-        gboxSettings(0)
+        nrSettings(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -76,7 +76,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

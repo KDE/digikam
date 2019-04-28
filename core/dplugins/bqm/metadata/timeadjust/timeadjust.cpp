@@ -53,7 +53,7 @@ namespace DigikamBqmTimeAdjustPlugin
 TimeAdjust::TimeAdjust(QObject* const parent)
     : BatchTool(QLatin1String("TimeAdjust"), MetadataTool, parent)
 {
-    m_taWidget       = 0;
+    m_taWidget       = nullptr;
     m_changeSettings = true;
 
     setToolTitle(i18n("Time Adjust"));

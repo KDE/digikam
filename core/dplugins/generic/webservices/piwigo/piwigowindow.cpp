@@ -101,12 +101,12 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
                                DInfoInterface* const interface)
 {
     iface       = interface;
-    talker      = 0;
-    pPiwigo     = 0;
-    progressDlg = 0;
+    talker      = nullptr;
+    pPiwigo     = nullptr;
+    progressDlg = nullptr;
     uploadCount = 0;
     uploadTotal = 0;
-    pUploadList = 0;
+    pUploadList = nullptr;
     widget      = new QWidget(parent);
     parent->setMainWidget(widget);
     parent->setModal(false);
@@ -222,7 +222,7 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
 
 PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
                            QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("PiwigoSync Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("PiwigoSync Dialog")),
       d(new Private(this, iface))
 {
     d->pPiwigo = new PiwigoSession();
@@ -449,7 +449,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
         }
         else
         {
-            QTreeWidgetItem* parentItem = 0;
+            QTreeWidgetItem* parentItem = nullptr;
             bool found                  = false;
             int i                       = 0;
 

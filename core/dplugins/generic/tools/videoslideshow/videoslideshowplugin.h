@@ -42,7 +42,7 @@ class VideoSlideShowPlugin : public DPluginGeneric
 
 public:
 
-    explicit VideoSlideShowPlugin(QObject* const parent = 0);
+    explicit VideoSlideShowPlugin(QObject* const parent = nullptr);
     ~VideoSlideShowPlugin();
 
     QString name()                 const override;

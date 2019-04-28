@@ -54,13 +54,13 @@ class Q_DECL_HIDDEN PanoWizard::Private
 public:
 
     explicit Private()
-      : mngr(0),
-        introPage(0),
-        itemsPage(0),
-        preProcessingPage(0),
-        optimizePage(0),
-        previewPage(0),
-        lastPage(0)
+      : mngr(nullptr),
+        introPage(nullptr),
+        itemsPage(nullptr),
+        preProcessingPage(nullptr),
+        optimizePage(nullptr),
+        previewPage(nullptr),
+        lastPage(nullptr)
     {
     }
 

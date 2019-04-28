@@ -59,13 +59,13 @@ public:
 
     explicit Private()
       : copyDone(false),
-        title(0),
-        saveSettingsGroupBox(0),
-        fileTemplateQLineEdit(0),
-        savePtoCheckBox(0),
-        warningLabel(0),
-        errorLabel(0),
-        mngr(0)
+        title(nullptr),
+        saveSettingsGroupBox(nullptr),
+        fileTemplateQLineEdit(nullptr),
+        savePtoCheckBox(nullptr),
+        warningLabel(nullptr),
+        errorLabel(nullptr),
+        mngr(nullptr)
     {
     }
 

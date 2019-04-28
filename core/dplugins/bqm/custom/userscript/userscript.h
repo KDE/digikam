@@ -40,14 +40,14 @@ class UserScript : public BatchTool
 
 public:
 
-    explicit UserScript(QObject* const parent = 0);
+    explicit UserScript(QObject* const parent = nullptr);
     ~UserScript();
 
     QString outputSuffix() const;
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new UserScript(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new UserScript(parent); };
 
     void registerSettingsWidget();
 

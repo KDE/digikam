@@ -44,8 +44,8 @@ public:
 
     explicit Private()
     {
-        valueCheck = 0;
-        editor     = 0;
+        valueCheck = nullptr;
+        editor     = nullptr;
     }
 
     DMetadata::AltLangMap oldValues;

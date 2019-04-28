@@ -99,7 +99,7 @@ void JAlbumPlugin::setup(QObject* const parent)
 
 void JAlbumPlugin::slotJAlbum()
 {
-    QPointer<JAlbumWizard> wzrd = new JAlbumWizard(0, infoIface(sender()));
+    QPointer<JAlbumWizard> wzrd = new JAlbumWizard(nullptr, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

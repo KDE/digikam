@@ -54,16 +54,16 @@ public:
 
     explicit Private()
     {
-        apertureCheck         = 0;
-        maxApertureCheck      = 0;
-        focalLength35mmCheck  = 0;
-        focalLengthCheck      = 0;
-        digitalZoomRatioCheck = 0;
-        apertureCB            = 0;
-        maxApertureCB         = 0;
-        focalLength35mmEdit   = 0;
-        focalLengthEdit       = 0;
-        digitalZoomRatioEdit  = 0;
+        apertureCheck         = nullptr;
+        maxApertureCheck      = nullptr;
+        focalLength35mmCheck  = nullptr;
+        focalLengthCheck      = nullptr;
+        digitalZoomRatioCheck = nullptr;
+        apertureCB            = nullptr;
+        maxApertureCB         = nullptr;
+        focalLength35mmEdit   = nullptr;
+        focalLengthEdit       = nullptr;
+        digitalZoomRatioEdit  = nullptr;
 
         apertureValues.append(QLatin1String("f/1.0"));
         apertureValues.append(QLatin1String("f/1.1"));

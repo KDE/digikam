@@ -51,7 +51,7 @@ bool Job::doKill()
 {
     Q_D(Job);
 
-    if (d->reply != 0)
+    if (d->reply != nullptr)
     {
         d->reply->abort();
     }

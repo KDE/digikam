@@ -95,11 +95,11 @@ public:
 
         state        = OD_USERNAME;
 
-        parent       = 0;
-        netMngr      = 0;
-        reply        = 0;
-        settings     = 0;
-        view         = 0;
+        parent       = nullptr;
+        netMngr      = nullptr;
+        reply        = nullptr;
+        settings     = nullptr;
+        view         = nullptr;
     }
 
 public:
@@ -259,7 +259,7 @@ void ODTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -341,7 +341,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -402,7 +402,7 @@ void ODTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

@@ -56,8 +56,8 @@ public:
     UploadTest()
     {
         uploadCount = 0;
-        m_file      = 0;
-        m_mediaWiki = 0;
+        m_file      = nullptr;
+        m_mediaWiki = nullptr;
     }
 
 public Q_SLOTS:
@@ -107,7 +107,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("senario");
         QTest::addColumn<Upload*>("job");
 
-        Upload* const e1 = new Upload( *m_mediaWiki, NULL);
+        Upload* const e1 = new Upload( *m_mediaWiki, nullptr);
         e1->setFile(this->m_file);
         e1->setFilename(QStringLiteral("Test.jpeg"));
         e1->setComment(QStringLiteral("Test"));
@@ -134,7 +134,7 @@ private Q_SLOTS:
             fakeserver.startAndWait();
         }
 
-        Upload* const job = new Upload(MediaWiki, NULL);
+        Upload* const job = new Upload(MediaWiki, nullptr);
         job->setFile(this->m_file);
         job->setFilename(QStringLiteral("Test.jpeg"));
         job->setComment(QStringLiteral("Test"));

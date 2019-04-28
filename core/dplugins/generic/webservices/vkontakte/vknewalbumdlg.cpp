@@ -56,10 +56,10 @@ public:
 
     explicit Private()
     {
-        titleEdit            = 0;
-        summaryEdit          = 0;
-        albumPrivacyCombo    = 0;
-        commentsPrivacyCombo = 0;
+        titleEdit            = nullptr;
+        summaryEdit          = nullptr;
+        albumPrivacyCombo    = nullptr;
+        commentsPrivacyCombo = nullptr;
     }
 
     QLineEdit*      titleEdit;

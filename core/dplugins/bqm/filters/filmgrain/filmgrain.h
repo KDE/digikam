@@ -40,12 +40,12 @@ class FilmGrain : public BatchTool
 
 public:
 
-    explicit FilmGrain(QObject* const parent = 0);
+    explicit FilmGrain(QObject* const parent = nullptr);
     ~FilmGrain();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new FilmGrain(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new FilmGrain(parent); };
 
     void registerSettingsWidget();
 

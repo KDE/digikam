@@ -44,7 +44,7 @@ class GSPlugin : public DPluginGeneric
 
 public:
 
-    explicit GSPlugin(QObject* const parent = 0);
+    explicit GSPlugin(QObject* const parent = nullptr);
     ~GSPlugin();
 
     QString name()                 const override;

@@ -47,7 +47,7 @@ class DigitalScannerPlugin : public DPluginGeneric
 
 public:
 
-    explicit DigitalScannerPlugin(QObject* const parent = 0);
+    explicit DigitalScannerPlugin(QObject* const parent = nullptr);
     ~DigitalScannerPlugin();
 
     QString name()                 const override;

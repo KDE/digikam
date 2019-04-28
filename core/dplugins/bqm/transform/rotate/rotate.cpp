@@ -55,10 +55,10 @@ public:
 
     explicit Private()
       : CUSTOM_ANGLE(DImg::ROT270 + 1),
-        label(0),
-        useExif(0),
-        comboBox(0),
-        frSettings(0)
+        label(nullptr),
+        useExif(nullptr),
+        comboBox(nullptr),
+        frSettings(nullptr)
     {
     }
 
@@ -246,7 +246,7 @@ bool Rotate::toolOperations()
             }
             default:      // Custom value
             {
-                FreeRotationFilter fr(&image(), 0L, prm);
+                FreeRotationFilter fr(&image(), nullptr, prm);
                 applyFilterChangedProperties(&fr);
                 break;
             }

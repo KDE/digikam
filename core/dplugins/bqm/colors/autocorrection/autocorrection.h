@@ -41,12 +41,12 @@ class AutoCorrection : public BatchTool
 
 public:
 
-    explicit AutoCorrection(QObject* const parent = 0);
+    explicit AutoCorrection(QObject* const parent = nullptr);
     ~AutoCorrection();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new AutoCorrection(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new AutoCorrection(parent); };
 
     void registerSettingsWidget();
 

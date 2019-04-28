@@ -62,11 +62,11 @@ public:
 public:
 
     explicit Private()
-      : labelPreset(0),
-        useCustom(0),
-        usePercent(0),
-        customLength(0),
-        presetCBox(0),
+      : labelPreset(nullptr),
+        useCustom(nullptr),
+        usePercent(nullptr),
+        customLength(nullptr),
+        presetCBox(nullptr),
         changeSettings(true)
     {
     }

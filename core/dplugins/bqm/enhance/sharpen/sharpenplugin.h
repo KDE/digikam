@@ -42,7 +42,7 @@ class SharpenPlugin : public DPluginBqm
 
 public:
 
-    explicit SharpenPlugin(QObject* const parent = 0);
+    explicit SharpenPlugin(QObject* const parent = nullptr);
     ~SharpenPlugin();
 
     QString name()                 const override;

@@ -36,8 +36,8 @@
 FakeServer::FakeServer(QObject* const parent)
     :  QThread(parent)
 {
-    m_clientSocket = 0;
-    m_tcpServer    = 0;
+    m_clientSocket = nullptr;
+    m_tcpServer    = nullptr;
 
     moveToThread(this);
 }

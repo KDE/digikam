@@ -42,7 +42,7 @@ class ColorFXPlugin : public DPluginBqm
 
 public:
 
-    explicit ColorFXPlugin(QObject* const parent = 0);
+    explicit ColorFXPlugin(QObject* const parent = nullptr);
     ~ColorFXPlugin();
 
     QString name()                 const override;

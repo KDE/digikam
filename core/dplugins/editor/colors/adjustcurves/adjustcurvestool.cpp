@@ -60,9 +60,9 @@ class Q_DECL_HIDDEN AdjustCurvesTool::Private
 public:
 
     explicit Private()
-      : settingsView(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : settingsView(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -96,7 +96,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(Digikam::LRGBA);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

@@ -67,7 +67,7 @@ PresentationMngr::PresentationMngr(QObject* const parent, DInfoInterface* const 
 {
     m_sharedData        = new PresentationContainer();
     m_sharedData->iface = iface;
-    m_plugin            = 0;
+    m_plugin            = nullptr;
 }
 
 PresentationMngr::~PresentationMngr()

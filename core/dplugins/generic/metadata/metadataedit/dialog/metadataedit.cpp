@@ -65,12 +65,12 @@ public:
     explicit Private()
     {
         isReadOnly = false;
-        tabWidget  = 0;
-        tabExif    = 0;
-        tabIptc    = 0;
-        tabXmp     = 0;
-        catcher    = 0;
-        iface      = 0;
+        tabWidget  = nullptr;
+        tabExif    = nullptr;
+        tabIptc    = nullptr;
+        tabXmp     = nullptr;
+        catcher    = nullptr;
+        iface      = nullptr;
     }
 
     bool                   isReadOnly;

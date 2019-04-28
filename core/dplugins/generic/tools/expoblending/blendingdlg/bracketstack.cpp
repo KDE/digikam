@@ -167,7 +167,7 @@ BracketStackItem* BracketStackList::findItem(const QUrl& url)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void BracketStackList::addItems(const QList<QUrl>& list)

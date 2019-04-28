@@ -89,30 +89,30 @@ public:
 public:
 
     explicit Private()
-      : textSettingsGroupBox(0),
-        imageSettingsGroupBox(0),
-        useAbsoluteImageSizeGroupBox(0),
-        useImageRadioButton(0),
-        ignoreWatermarkAspectCheckBox(0),
-        useAbsoluteSizeCheckBox(0),
-        useBackgroundCheckBox(0),
-        denseRepetitionCheckBox(0),
-        randomizeRotationCheckBox(0),
-        useTextRadioButton(0),
-        imageFileUrlRequester(0),
-        textEdit(0),
-        placementPositionComboBox(0),
-        placementTypeComboBox(0),
-        rotationComboBox(0),
-        sparsityFactorSpinBox(0),
-        extendedFontChooserWidget(0),
-        fontColorButton(0),
-        backgroundColorButton(0),
-        textOpacity(0),
-        backgroundOpacity(0),
-        xMarginInput(0),
-        yMarginInput(0),
-        waterMarkSizePercent(0),
+      : textSettingsGroupBox(nullptr),
+        imageSettingsGroupBox(nullptr),
+        useAbsoluteImageSizeGroupBox(nullptr),
+        useImageRadioButton(nullptr),
+        ignoreWatermarkAspectCheckBox(nullptr),
+        useAbsoluteSizeCheckBox(nullptr),
+        useBackgroundCheckBox(nullptr),
+        denseRepetitionCheckBox(nullptr),
+        randomizeRotationCheckBox(nullptr),
+        useTextRadioButton(nullptr),
+        imageFileUrlRequester(nullptr),
+        textEdit(nullptr),
+        placementPositionComboBox(nullptr),
+        placementTypeComboBox(nullptr),
+        rotationComboBox(nullptr),
+        sparsityFactorSpinBox(nullptr),
+        extendedFontChooserWidget(nullptr),
+        fontColorButton(nullptr),
+        backgroundColorButton(nullptr),
+        textOpacity(nullptr),
+        backgroundOpacity(nullptr),
+        xMarginInput(nullptr),
+        yMarginInput(nullptr),
+        waterMarkSizePercent(nullptr),
         changeSettings(true)
     {
     }
@@ -251,7 +251,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(textEditLabel);
     textSettingsGroupBoxLayout->addWidget(d->textEdit);
 
-    d->extendedFontChooserWidget = new DFontProperties(0, DFontProperties::NoDisplayFlags);
+    d->extendedFontChooserWidget = new DFontProperties(nullptr, DFontProperties::NoDisplayFlags);
     d->extendedFontChooserWidget->setSampleBoxVisible(true);
     d->extendedFontChooserWidget->enableColumn(0x04,false);
     d->extendedFontChooserWidget->setWhatsThis(i18n("choose the font type and style. size is auto calculated"));
@@ -724,7 +724,7 @@ bool WaterMark::toolOperations()
                                           radius, radius);
         }
 
-        BlurFilter blur(&backgroundLayer, 0L, radius);
+        BlurFilter blur(&backgroundLayer, nullptr, radius);
         blur.startFilterDirectly();
         backgroundLayer.putImageData(blur.getTargetImage().bits());
 

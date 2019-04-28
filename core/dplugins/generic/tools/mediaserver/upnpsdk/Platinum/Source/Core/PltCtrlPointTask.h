@@ -205,7 +205,7 @@ public:
                                     PLT_CtrlPoint*           ctrl_point, 
 									PLT_DeviceDataReference& device,
                                     PLT_Service*             service,
-                                    void*                    userdata = NULL);
+                                    void*                    userdata = nullptr);
     ~PLT_CtrlPointSubscribeEventTask() override;
     
 protected:

@@ -40,12 +40,12 @@ class ColorBalance : public BatchTool
 
 public:
 
-    explicit ColorBalance(QObject* const parent = 0);
+    explicit ColorBalance(QObject* const parent = nullptr);
     ~ColorBalance();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ColorBalance(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ColorBalance(parent); };
 
     void registerSettingsWidget();
 

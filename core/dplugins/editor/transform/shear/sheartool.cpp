@@ -56,15 +56,15 @@ class Q_DECL_HIDDEN ShearTool::Private
 public:
 
     explicit Private()
-      : newWidthLabel(0),
-        newHeightLabel(0),
-        antialiasInput(0),
-        mainHAngleInput(0),
-        mainVAngleInput(0),
-        fineHAngleInput(0),
-        fineVAngleInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : newWidthLabel(nullptr),
+        newHeightLabel(nullptr),
+        antialiasInput(nullptr),
+        mainHAngleInput(nullptr),
+        mainVAngleInput(nullptr),
+        fineHAngleInput(nullptr),
+        fineVAngleInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -105,7 +105,7 @@ ShearTool::ShearTool(QObject* const parent)
 {
     setObjectName(QLatin1String("sheartool"));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the shear operation preview. "
                                         "If you move the mouse cursor on this preview, "
                                         "a vertical and horizontal dashed line will be drawn "
@@ -121,7 +121,7 @@ ShearTool::ShearTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     // -------------------------------------------------------------

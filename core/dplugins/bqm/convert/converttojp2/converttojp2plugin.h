@@ -42,7 +42,7 @@ class ConvertToJp2Plugin : public DPluginBqm
 
 public:
 
-    explicit ConvertToJp2Plugin(QObject* const parent = 0);
+    explicit ConvertToJp2Plugin(QObject* const parent = nullptr);
     ~ConvertToJp2Plugin();
 
     QString name()                 const override;

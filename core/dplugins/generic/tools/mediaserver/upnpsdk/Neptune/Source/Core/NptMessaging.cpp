@@ -98,7 +98,7 @@ void
 NPT_MessageHandlerProxy::DetachHandler()
 {
     m_Lock.Lock();
-    m_Handler = NULL;
+    m_Handler = nullptr;
     m_Lock.Unlock();
 }
 

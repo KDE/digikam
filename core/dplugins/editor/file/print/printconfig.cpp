@@ -36,7 +36,7 @@ class Q_DECL_HIDDEN PrintConfigHelper
     public:
 
         PrintConfigHelper()
-            : q(0)
+            : q(nullptr)
         {
         }
 
@@ -158,7 +158,7 @@ PrintConfig::PrintConfig()
 
 PrintConfig::~PrintConfig()
 {
-    s_globalPrintConfig()->q = 0;
+    s_globalPrintConfig()->q = nullptr;
 }
 
 } // namespace DigikamEditorPrintToolPlugin

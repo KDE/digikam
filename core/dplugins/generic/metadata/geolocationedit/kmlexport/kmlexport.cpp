@@ -61,7 +61,7 @@ KmlExport::KmlExport(DInfoInterface* const iface)
     m_LineWidth          = 4;
     m_GPXOpacity         = 64;
     m_GPXAltitudeMode    = 0;
-    m_kmlDocument        = 0;
+    m_kmlDocument        = nullptr;
     m_iface              = iface;
 }
 
@@ -477,7 +477,7 @@ void KmlExport::generate()
     {
         logError(i18n("Cannot open file for writing"));
         delete m_kmlDocument;
-        m_kmlDocument = 0;
+        m_kmlDocument = nullptr;
         return;
     }
 
@@ -486,7 +486,7 @@ void KmlExport::generate()
     file.close();
 
     delete m_kmlDocument;
-    m_kmlDocument = 0;
+    m_kmlDocument = nullptr;
 
     logInfo(i18n("Move %1 to final directory %2", m_tempDestDir.absolutePath(), m_baseDestDir));
 

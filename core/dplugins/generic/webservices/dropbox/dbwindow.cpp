@@ -58,9 +58,9 @@ public:
     {
         imagesCount = 0;
         imagesTotal = 0;
-        widget      = 0;
-        albumDlg    = 0;
-        talker      = 0;
+        widget      = nullptr;
+        albumDlg    = nullptr;
+        talker      = nullptr;
     }
 
     unsigned int   imagesCount;
@@ -75,7 +75,7 @@ public:
 };
 
 DBWindow::DBWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Dropbox Export Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Dropbox Export Dialog")),
       d(new Private)
 {
     d->widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));

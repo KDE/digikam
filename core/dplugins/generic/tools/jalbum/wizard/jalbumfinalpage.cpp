@@ -57,8 +57,8 @@ class Q_DECL_HIDDEN JAlbumFinalPage::Private
 public:
 
     explicit Private()
-      : progressView(0),
-        progressBar(0),
+      : progressView(nullptr),
+        progressBar(nullptr),
         complete(false)
     {
     }

@@ -60,19 +60,19 @@ public:
     explicit Private()
       : dirty(false),
         mngr(DMediaServerMngr::instance()),
-        srvButton(0),
-        srvStatus(0),
-        progress(0),
-        aStats(0),
-        separator(0),
-        iStats(0),
-        startOnStartup(0),
+        srvButton(nullptr),
+        srvStatus(nullptr),
+        progress(nullptr),
+        aStats(nullptr),
+        separator(nullptr),
+        iStats(nullptr),
+        startOnStartup(nullptr),
         albumSupport(false),
-        albumSelector(0),
-        listView(0),
-        iface(0),
-        page(0),
-        buttons(0)
+        albumSelector(nullptr),
+        listView(nullptr),
+        iface(nullptr),
+        page(nullptr),
+        buttons(nullptr)
     {
     }
 
@@ -95,7 +95,7 @@ public:
 
 DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
                                  DInfoInterface* const iface)
-    : DPluginDialog(0, DMediaServerMngr::instance()->configGroupName()),
+    : DPluginDialog(nullptr, DMediaServerMngr::instance()->configGroupName()),
       d(new Private)
 {
     setWindowTitle(i18nc("@title:window", "Share Files with DLNA Media Server"));

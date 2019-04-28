@@ -44,7 +44,7 @@ class MediaWikiPlugin : public DPluginGeneric
 
 public:
 
-    explicit MediaWikiPlugin(QObject* const parent = 0);
+    explicit MediaWikiPlugin(QObject* const parent = nullptr);
     ~MediaWikiPlugin();
 
     QString name()                 const override;

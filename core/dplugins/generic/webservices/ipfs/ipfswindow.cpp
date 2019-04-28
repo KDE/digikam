@@ -53,8 +53,8 @@ public:
 
     explicit Private()
     {
-        list = 0;
-        api  = 0;
+        list = nullptr;
+        api  = nullptr;
     }
 
     IpfsImagesList* list;
@@ -67,7 +67,7 @@ public:
 };
 
 IpfsWindow::IpfsWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("IPFS Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("IPFS Dialog")),
       d(new Private)
 {
     d->api = new IpfsTalker(this);

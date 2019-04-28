@@ -42,7 +42,7 @@ namespace DigikamBqmAntiVignettingPlugin
 
 AntiVignetting::AntiVignetting(QObject* const parent)
     : BatchTool(QLatin1String("AntiVignetting"), EnhanceTool, parent),
-      m_settingsView(0)
+      m_settingsView(nullptr)
 {
 }
 
@@ -122,7 +122,7 @@ bool AntiVignetting::toolOperations()
     prm.xshift        = settings()[QLatin1String("xshift")].toDouble();
     prm.yshift        = settings()[QLatin1String("yshift")].toDouble();
 
-    AntiVignettingFilter vig(&image(), 0L, prm);
+    AntiVignettingFilter vig(&image(), nullptr, prm);
     applyFilter(&vig);
 
     return (savefromDImg());

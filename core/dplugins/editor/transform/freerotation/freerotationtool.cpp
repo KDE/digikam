@@ -64,15 +64,15 @@ public:
 
     explicit Private()
       : configGroupName(QLatin1String("freerotation Tool")),
-        newHeightLabel(0),
-        newWidthLabel(0),
-        autoAdjustBtn(0),
-        autoAdjustPoint1Btn(0),
-        autoAdjustPoint2Btn(0),
-        settingsView(0),
-        expanderBox(0),
-        gboxSettings(0),
-        previewWidget(0)
+        newHeightLabel(nullptr),
+        newWidthLabel(nullptr),
+        autoAdjustBtn(nullptr),
+        autoAdjustPoint1Btn(nullptr),
+        autoAdjustPoint2Btn(nullptr),
+        settingsView(nullptr),
+        expanderBox(nullptr),
+        gboxSettings(nullptr),
+        previewWidget(nullptr)
     {
     }
 
@@ -101,7 +101,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 {
     setObjectName(QLatin1String("freerotation"));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the free rotation operation preview. "
                                         "If you move the mouse cursor on this preview, "
                                         "a vertical and horizontal dashed line will be drawn "
@@ -117,7 +117,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     QString temp;
     ImageIface iface;
 
-    d->gboxSettings      = new EditorToolSettings(0);
+    d->gboxSettings      = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
 
     QLabel* const label1 = new QLabel(i18n("New width:"));

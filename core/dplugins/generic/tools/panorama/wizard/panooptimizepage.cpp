@@ -63,17 +63,17 @@ public:
 
     explicit Private()
       : progressCount(0),
-        progressLabel(0),
-        progressTimer(0),
+        progressLabel(nullptr),
+        progressTimer(nullptr),
         optimisationDone(false),
         canceled(false),
-        title(0),
+        title(nullptr),
 //      preprocessResults(0),
-        horizonCheckbox(0),
+        horizonCheckbox(nullptr),
 //      projectionAndSizeCheckbox(0),
-        detailsText(0),
+        detailsText(nullptr),
         progressPix(DWorkingPixmap()),
-        mngr(0)
+        mngr(nullptr)
     {
     }
 

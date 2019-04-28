@@ -59,11 +59,11 @@ class Q_DECL_HIDDEN MailIntroPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : imageGetOption(0),
-        hbox(0),
-        wizard(0),
-        iface(0),
-        binSearch(0)
+      : imageGetOption(nullptr),
+        hbox(nullptr),
+        wizard(nullptr),
+        iface(nullptr),
+        binSearch(nullptr)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

@@ -42,7 +42,7 @@ namespace DigikamBqmLocalContrastPlugin
 
 LocalContrast::LocalContrast(QObject* const parent)
     : BatchTool(QLatin1String("LocalContrast"), EnhanceTool, parent),
-      m_settingsView(0)
+      m_settingsView(nullptr)
 {
 }
 
@@ -177,7 +177,7 @@ bool LocalContrast::toolOperations()
     prm.stage[3].power   = settings()[QLatin1String("stage4Power")].toDouble();
     prm.stage[3].blur    = settings()[QLatin1String("stage4Blur")].toDouble();
 
-    LocalContrastFilter lc(&image(), 0L, prm);
+    LocalContrastFilter lc(&image(), nullptr, prm);
     applyFilter(&lc);
 
     return (savefromDImg());

@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT ImgurWindow : public WSToolDialog
 
 public:
 
-    explicit ImgurWindow(DInfoInterface* const iface, QWidget* const parent = 0);
+    explicit ImgurWindow(DInfoInterface* const iface, QWidget* const parent = nullptr);
     ~ImgurWindow();
 
 public:

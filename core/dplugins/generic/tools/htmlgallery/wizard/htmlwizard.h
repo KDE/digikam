@@ -52,7 +52,7 @@ class DIGIKAM_EXPORT HTMLWizard : public DWizardDlg
 
 public:
 
-    explicit HTMLWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit HTMLWizard(QWidget* const parent, DInfoInterface* const iface = nullptr);
     ~HTMLWizard();
 
     GalleryInfo*      galleryInfo()  const;

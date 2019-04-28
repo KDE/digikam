@@ -53,9 +53,9 @@ class Q_DECL_HIDDEN HSLTool::Private
 public:
 
     explicit Private()
-      : hslSettings(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : hslSettings(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -88,7 +88,7 @@ HSLTool::HSLTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

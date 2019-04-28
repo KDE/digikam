@@ -99,8 +99,8 @@ public:
     int dayOfWeek(const QDate& date)            const;
     int dayOfWeek(int year, int month, int day) const;
 
-    int weekNumber(const QDate& date, int* yearNum = 0)            const;
-    int weekNumber(int year, int month, int day, int* yearNum = 0) const;
+    int weekNumber(const QDate& date, int* yearNum = nullptr)            const;
+    int weekNumber(int year, int month, int day, int* yearNum = nullptr) const;
 
     int monthsInYear(const QDate& date) const;
     int monthsInYear(int year)          const;

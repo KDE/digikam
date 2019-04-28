@@ -101,8 +101,8 @@ public:
         currentOrientation(0),
         currentWidthRatioValue(0),
         currentHeightRatioValue(0),
-        pixmap(0),
-        iface(0)
+        pixmap(nullptr),
+        iface(nullptr)
     {
     }
 

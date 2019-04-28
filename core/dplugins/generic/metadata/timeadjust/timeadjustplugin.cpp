@@ -111,7 +111,7 @@ void TimeAdjustPlugin::setup(QObject* const parent)
 
 void TimeAdjustPlugin::slotTimeAdjust()
 {
-    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(0, infoIface(sender()));
+    QPointer<TimeAdjustDialog> dialog = new TimeAdjustDialog(nullptr, infoIface(sender()));
     dialog->setPlugin(this);
     dialog->exec();
     delete dialog;

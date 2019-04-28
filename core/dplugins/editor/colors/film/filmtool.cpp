@@ -79,21 +79,21 @@ public:
 
     explicit Private()
       : histoSegments(0),
-        resetButton(0),
-        pickWhitePoint(0),
-        autoButton(0),
-        exposureInput(0),
-        gammaInput(0),
-        cnType(0),
-        colorBalanceInput(0),
-        levelsHistogramWidget(0),
-        redInputLevels(0),
-        greenInputLevels(0),
-        blueInputLevels(0),
-        previewWidget(0),
-        levels(0),
-        originalImage(0),
-        gboxSettings(0)
+        resetButton(nullptr),
+        pickWhitePoint(nullptr),
+        autoButton(nullptr),
+        exposureInput(nullptr),
+        gammaInput(nullptr),
+        cnType(nullptr),
+        colorBalanceInput(nullptr),
+        levelsHistogramWidget(nullptr),
+        redInputLevels(nullptr),
+        greenInputLevels(nullptr),
+        blueInputLevels(nullptr),
+        previewWidget(nullptr),
+        levels(nullptr),
+        originalImage(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -170,7 +170,7 @@ FilmTool::FilmTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);

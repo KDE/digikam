@@ -66,7 +66,7 @@ public:
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QuerySiteInfoGeneral(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QuerySiteInfoGeneral(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destroys the QuerySiteInfoGeneral job.

@@ -35,7 +35,7 @@ namespace DigikamBqmColorFXPlugin
 ColorFX::ColorFX(QObject* const parent)
     : BatchTool(QLatin1String("ColorFX"), FiltersTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 ColorFX::~ColorFX()
@@ -110,7 +110,7 @@ bool ColorFX::toolOperations()
     prm.intensity   = settings()[QLatin1String("intensity")].toInt();
     prm.path        = settings()[QLatin1String("path")].toString();
 
-    ColorFXFilter fg(&image(), 0L, prm);
+    ColorFXFilter fg(&image(), nullptr, prm);
     applyFilter(&fg);
 
     return savefromDImg();

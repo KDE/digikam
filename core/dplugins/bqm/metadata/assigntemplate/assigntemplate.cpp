@@ -46,8 +46,8 @@ namespace DigikamBqmAssignTemplatePlugin
 AssignTemplate::AssignTemplate(QObject* const parent)
     : BatchTool(QLatin1String("AssignTemplate"), MetadataTool, parent)
 {
-    m_templateSelector = 0;
-    m_templateViewer   = 0;
+    m_templateSelector = nullptr;
+    m_templateViewer   = nullptr;
 }
 
 AssignTemplate::~AssignTemplate()

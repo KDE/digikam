@@ -42,7 +42,7 @@ class ChannelMixerToolPlugin : public DPluginEditor
 
 public:
 
-    explicit ChannelMixerToolPlugin(QObject* const parent = 0);
+    explicit ChannelMixerToolPlugin(QObject* const parent = nullptr);
     ~ChannelMixerToolPlugin();
 
     QString name()                 const override;

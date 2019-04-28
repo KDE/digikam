@@ -69,7 +69,7 @@ public:
 
     explicit Private()
     {
-        server = 0;
+        server = nullptr;
     }
 
     // Configuration XML file to store albums map to share in case of restoring between sessions.
@@ -118,7 +118,7 @@ QString DMediaServerMngr::configStartServerOnStartupEntry() const
 void DMediaServerMngr::cleanUp()
 {
     delete d->server;
-    d->server = 0;
+    d->server = nullptr;
 }
 
 bool DMediaServerMngr::loadAtStartup()

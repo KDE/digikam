@@ -60,30 +60,30 @@ public:
 
     explicit Private()
     {
-        dateReleasedSel     = 0;
-        dateExpiredSel      = 0;
-        timeReleasedSel     = 0;
-        timeExpiredSel      = 0;
-        zoneReleasedSel     = 0;
-        zoneExpiredSel      = 0;
-        dateReleasedCheck   = 0;
-        dateExpiredCheck    = 0;
-        timeReleasedCheck   = 0;
-        timeExpiredCheck    = 0;
-        setTodayReleasedBtn = 0;
-        setTodayExpiredBtn  = 0;
-        priorityCB          = 0;
-        priorityCheck       = 0;
-        objectCycleCB       = 0;
-        objectTypeCB        = 0;
-        objectCycleCheck    = 0;
-        objectTypeCheck     = 0;
-        objectAttribute     = 0;
-        languageBtn         = 0;
-        languageCheck       = 0;
-        originalTransCheck  = 0;
-        originalTransEdit   = 0;
-        objectTypeDescEdit  = 0;
+        dateReleasedSel     = nullptr;
+        dateExpiredSel      = nullptr;
+        timeReleasedSel     = nullptr;
+        timeExpiredSel      = nullptr;
+        zoneReleasedSel     = nullptr;
+        zoneExpiredSel      = nullptr;
+        dateReleasedCheck   = nullptr;
+        dateExpiredCheck    = nullptr;
+        timeReleasedCheck   = nullptr;
+        timeExpiredCheck    = nullptr;
+        setTodayReleasedBtn = nullptr;
+        setTodayExpiredBtn  = nullptr;
+        priorityCB          = nullptr;
+        priorityCheck       = nullptr;
+        objectCycleCB       = nullptr;
+        objectTypeCB        = nullptr;
+        objectCycleCheck    = nullptr;
+        objectTypeCheck     = nullptr;
+        objectAttribute     = nullptr;
+        languageBtn         = nullptr;
+        languageCheck       = nullptr;
+        originalTransCheck  = nullptr;
+        originalTransEdit   = nullptr;
+        objectTypeDescEdit  = nullptr;
     }
 
     QCheckBox*                     dateReleasedCheck;

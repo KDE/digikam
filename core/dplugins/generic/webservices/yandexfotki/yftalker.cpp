@@ -52,9 +52,9 @@ public:
     explicit Private()
     {
         state     = STATE_UNAUTHENTICATED;
-        lastPhoto = 0;
-        netMngr   = 0;
-        reply     = 0;
+        lastPhoto = nullptr;
+        netMngr   = nullptr;
+        reply     = nullptr;
     }
 
     // API-related fields
@@ -519,7 +519,7 @@ void YFTalker::reset()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     d->token.clear();
@@ -531,7 +531,7 @@ void YFTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (isAuthenticated())
@@ -558,7 +558,7 @@ void YFTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {
@@ -1162,7 +1162,7 @@ void YFTalker::slotParseResponseUpdatePhotoInfo()
 */
 
     d->state     = STATE_UPDATEPHOTO_DONE;
-    d->lastPhoto = 0;
+    d->lastPhoto = nullptr;
     emit signalUpdatePhotoDone(photo);
 }
 
@@ -1171,7 +1171,7 @@ void YFTalker::slotParseResponseUpdateAlbum()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated album" << d->buffer;
 
     d->state     = STATE_UPDATEALBUM_DONE;
-    d->lastPhoto = 0;
+    d->lastPhoto = nullptr;
 
     emit signalUpdateAlbumDone();
 }

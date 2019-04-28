@@ -47,8 +47,8 @@ class Q_DECL_HIDDEN HTMLThemePage::Private
 public:
 
     explicit Private()
-      : themeList(0),
-        themeInfo(0)
+      : themeList(nullptr),
+        themeInfo(nullptr)
     {
     }
 
@@ -171,7 +171,7 @@ GalleryTheme::Ptr HTMLThemePage::currentTheme() const
         return item->m_theme;
     }
 
-    return GalleryTheme::Ptr(0);
+    return GalleryTheme::Ptr(nullptr);
 }
 
 } // namespace DigikamGenericHtmlGalleryPlugin

@@ -39,7 +39,7 @@ class RajceNewAlbumDlg : public WSNewAlbumDialog
 {
 public:
 
-    explicit RajceNewAlbumDlg(QWidget* const parent = 0);
+    explicit RajceNewAlbumDlg(QWidget* const parent = nullptr);
     ~RajceNewAlbumDlg();
 
 public:

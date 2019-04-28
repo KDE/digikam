@@ -42,7 +42,7 @@ class SendByMailPlugin : public DPluginGeneric
 
 public:
 
-    explicit SendByMailPlugin(QObject* const parent = 0);
+    explicit SendByMailPlugin(QObject* const parent = nullptr);
     ~SendByMailPlugin();
 
     QString name()                 const override;

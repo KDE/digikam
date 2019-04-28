@@ -33,7 +33,7 @@ namespace DigikamGenericGeolocationEditPlugin
 KMLGeoDataParser::KMLGeoDataParser()
     : GeoDataParser()
 {
-    kmlDocument = 0;
+    kmlDocument = nullptr;
 }
 
 KMLGeoDataParser::~KMLGeoDataParser()

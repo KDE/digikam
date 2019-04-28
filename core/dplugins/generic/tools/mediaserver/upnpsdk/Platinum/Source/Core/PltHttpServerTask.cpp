@@ -93,20 +93,20 @@ PLT_HttpServerSocketTask::DoRun()
     buffered_input_stream = new NPT_BufferedInputStream(input_stream);
 
     while (!IsAborting(0)) {
-        NPT_HttpRequest*  request = NULL;
-        NPT_HttpResponse* response = NULL;
+        NPT_HttpRequest*  request = nullptr;
+        NPT_HttpResponse* response = nullptr;
 
         // reset keep-alive to exit task on read failure
         keep_alive = false;
 
         // wait for a request
         res = Read(buffered_input_stream, request, &context);
-        if (NPT_FAILED(res) || (request == NULL)) 
+        if (NPT_FAILED(res) || (request == nullptr)) 
             goto cleanup;
         
         // process request and setup response
         res = RespondToClient(*request, context, response);
-        if (NPT_FAILED(res) || (response == NULL)) 
+        if (NPT_FAILED(res) || (response == nullptr)) 
             goto cleanup;
 
         // check if client requested keep-alive
@@ -210,7 +210,7 @@ PLT_HttpServerSocketTask::Read(NPT_BufferedInputStreamReference& buffered_input_
             *NPT_InputStreamReference(new NPT_HttpChunkedInputStream(buffered_input_stream)).AsPointer(), 
             *body_stream));
 
-        request_entity->SetTransferEncoding(NULL);
+        request_entity->SetTransferEncoding(nullptr);
     } else if (request_entity->GetContentLength()) {
         // a request with a body must always have a content length if not chunked
         NPT_CHECK_SEVERE(NPT_StreamToStreamCopy(
@@ -219,7 +219,7 @@ PLT_HttpServerSocketTask::Read(NPT_BufferedInputStreamReference& buffered_input_
             0, 
             request_entity->GetContentLength()));
     } else {
-        request->SetEntity(NULL);
+        request->SetEntity(nullptr);
     }
 
     // rebuffer the stream
@@ -239,7 +239,7 @@ PLT_HttpServerSocketTask::RespondToClient(NPT_HttpRequest&              request,
     NPT_Result result   = NPT_ERROR_NO_SUCH_ITEM;
     
     // reset output params first
-    response = NULL;
+    response = nullptr;
     
     // prepare the response body
     NPT_HttpEntity* body = new NPT_HttpEntity();
@@ -261,7 +261,7 @@ PLT_HttpServerSocketTask::RespondToClient(NPT_HttpRequest&              request,
     } else if (result == NPT_ERROR_TERMINATED) {
         // mark that we want to exit
         delete response;
-        response = NULL;
+        response = nullptr;
     } else if (NPT_FAILED(result)) {
         body->SetInputStream(PLT_HTTP_DEFAULT_500_HTML);
         body->SetContentType("text/html");
@@ -423,7 +423,7 @@ void
 PLT_HttpListenTask::DoRun() 
 {
     while (!IsAborting(0)) {
-        NPT_Socket* client = NULL;
+        NPT_Socket* client = nullptr;
         NPT_Result  result = m_Socket->WaitForNewClient(client, 5000, NPT_SOCKET_FLAG_CANCELLABLE);
         if (NPT_FAILED(result)) {
             // cleanup just in case

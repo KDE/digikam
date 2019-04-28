@@ -150,9 +150,9 @@ public:
     explicit Private()
       : outputFormat(DSaveSettingsWidget::OUTPUT_PNG),
         progressCount(0),
-        progressTimer(0),
+        progressTimer(nullptr),
         progressPix(DWorkingPixmap()),
-        processItem(0)
+        processItem(nullptr)
     {
     }
 
@@ -354,7 +354,7 @@ EnfuseStackItem* EnfuseStackList::findItemByUrl(const QUrl& url)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void EnfuseStackList::processingItem(const QUrl& url, bool run)
@@ -372,7 +372,7 @@ void EnfuseStackList::processingItem(const QUrl& url, bool run)
         else
         {
             d->progressTimer->stop();
-            d->processItem = 0;
+            d->processItem = nullptr;
         }
     }
 }

@@ -46,8 +46,8 @@ int KBEffect::m_numKBEffectRepeated = 0;
 
 KBEffect::KBEffect(PresentationKB* const parent, bool needFadeIn)
 {
-    m_img[0]      = 0;
-    m_img[1]      = 0;
+    m_img[0]      = nullptr;
+    m_img[1]      = nullptr;
     m_slideWidget = parent;
     m_needFadeIn  = needFadeIn;
 }
@@ -136,7 +136,7 @@ BlendKBEffect::BlendKBEffect(PresentationKB* const parent, bool needFadeIn)
     : KBEffect(parent, needFadeIn)
 {
     m_img[0] = image(0);
-    m_img[1] = 0;
+    m_img[1] = nullptr;
 }
 
 BlendKBEffect::~BlendKBEffect()
@@ -172,7 +172,7 @@ void BlendKBEffect::advanceTime(float step)
     {
         m_img[0]->m_opacity = (1.0 - m_img[0]->m_pos) * 10;
 
-        if (m_img[1] == 0)
+        if (m_img[1] == nullptr)
         {
             setupNewImage(1);
             m_img[1] = image(1);

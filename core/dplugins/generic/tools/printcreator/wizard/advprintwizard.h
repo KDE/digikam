@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
 
 public:
 
-    explicit AdvPrintWizard(QWidget* const, DInfoInterface* const iface = 0);
+    explicit AdvPrintWizard(QWidget* const, DInfoInterface* const iface = nullptr);
     ~AdvPrintWizard();
 
     void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());

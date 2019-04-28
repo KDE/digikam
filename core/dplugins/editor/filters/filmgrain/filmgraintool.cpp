@@ -57,9 +57,9 @@ public:
 
     explicit Private()
       : configGroupName(QLatin1String("filmgrain Tool")),
-        settingsView(0),
-        previewWidget(0),
-        gboxSettings(0)
+        settingsView(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -84,7 +84,7 @@ FilmGrainTool::FilmGrainTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings  = new EditorToolSettings(0);
+    d->gboxSettings  = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

@@ -40,12 +40,12 @@ class HSLCorrection : public BatchTool
 
 public:
 
-    explicit HSLCorrection(QObject* const parent = 0);
+    explicit HSLCorrection(QObject* const parent = nullptr);
     ~HSLCorrection();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new HSLCorrection(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new HSLCorrection(parent); };
 
     void registerSettingsWidget();
 

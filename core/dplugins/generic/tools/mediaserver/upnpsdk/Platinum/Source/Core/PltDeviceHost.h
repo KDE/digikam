@@ -172,7 +172,7 @@ protected:
                                              NPT_HttpResponse&        response, 
                                              NPT_UdpSocket&           socket, 
                                              const char*              st,
-                                             const NPT_SocketAddress* addr = NULL);
+                                             const NPT_SocketAddress* addr = nullptr);
     /**
      Called by PLT_SsdpDeviceSearchResponseTask when responding to a M-SEARCH
      SSDP request.
@@ -185,7 +185,7 @@ protected:
     virtual NPT_Result SendSsdpSearchResponse(NPT_HttpResponse&        response, 
                                               NPT_UdpSocket&           socket, 
                                               const char*              st,
-                                              const NPT_SocketAddress* addr = NULL) {
+                                              const NPT_SocketAddress* addr = nullptr) {
         return SendSsdpSearchResponse(this, response, socket, st, addr);
     }
     

@@ -74,11 +74,11 @@ public:
         currentAlbumID    = 0;
         currentTmplID     = 0;
         currentCategoryID = 0;
-        loginDlg          = 0;
-        talker            = 0;
-        widget            = 0;
-        albumDlg          = 0;
-        iface             = 0;
+        loginDlg          = nullptr;
+        talker            = nullptr;
+        widget            = nullptr;
+        albumDlg          = nullptr;
+        iface             = nullptr;
     }
 
     bool             import;
@@ -111,7 +111,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
                        bool import,
                        QString /*nickName*/)
-    : WSToolDialog(0, QString::fromLatin1("Smug %1 Dialog").arg(import ? QLatin1String("Import") : QLatin1String("Export"))),
+    : WSToolDialog(nullptr, QString::fromLatin1("Smug %1 Dialog").arg(import ? QLatin1String("Import") : QLatin1String("Export"))),
       d(new Private)
 {
     d->tmpPath.clear();

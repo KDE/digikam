@@ -419,7 +419,7 @@ PLT_FileMediaServerDelegate::BuildFromFilePath(const NPT_String&             fil
 {
     NPT_String            root = m_FileRoot;
     PLT_MediaItemResource resource;
-    PLT_MediaObject*      object = NULL;
+    PLT_MediaObject*      object = nullptr;
     
     NPT_LOG_FINEST_1("Building didl for file '%s'", (const char*)filepath);
     
@@ -515,7 +515,7 @@ PLT_FileMediaServerDelegate::BuildFromFilePath(const NPT_String&             fil
     
 failure:
     delete object;
-    return NULL;
+    return nullptr;
 }
 
 NPT_Result PLT_FileMediaServerDelegate::OnUpdateObject(PLT_ActionReference&,

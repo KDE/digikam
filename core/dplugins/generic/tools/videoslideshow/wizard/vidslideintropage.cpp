@@ -48,10 +48,10 @@ class Q_DECL_HIDDEN VidSlideIntroPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : imageGetOption(0),
-        hbox(0),
-        wizard(0),
-        iface(0)
+      : imageGetOption(nullptr),
+        hbox(nullptr),
+        wizard(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<VidSlideWizard*>(dialog);
 

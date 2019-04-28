@@ -53,8 +53,8 @@ public:
 
     explicit Private()
     {
-        exportWidget = 0;
-        thread       = 0;
+        exportWidget = nullptr;
+        thread       = nullptr;
     }
 
     const static QString TARGET_URL_PROPERTY;
@@ -70,7 +70,7 @@ const QString FCExportWindow::Private::TARGET_OVERWRITE    = QLatin1String("over
 const QString FCExportWindow::Private::CONFIG_GROUP        = QLatin1String("FileCopyExport");
 
 FCExportWindow::FCExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("FileCopy Export Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("FileCopy Export Dialog")),
       d(new Private)
 {
     d->exportWidget = new FCExportWidget(iface, this);

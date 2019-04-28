@@ -65,7 +65,7 @@ public:
 
     explicit Private()
     {
-        mediaObject = 0;
+        mediaObject = nullptr;
     }
 
     QUrl          url;

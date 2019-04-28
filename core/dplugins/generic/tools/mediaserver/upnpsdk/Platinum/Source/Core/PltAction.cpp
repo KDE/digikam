@@ -96,7 +96,7 @@ PLT_ActionDesc::GetService()
 PLT_ArgumentDesc*
 PLT_ActionDesc::GetArgumentDesc(const char* name)
 {
-    PLT_ArgumentDesc* arg_desc = NULL;
+    PLT_ArgumentDesc* arg_desc = nullptr;
     NPT_ContainerFind(m_ArgumentDescs, PLT_ArgumentDescNameFinder(name), arg_desc);
     return arg_desc;
 }
@@ -136,7 +136,7 @@ NPT_Result
 PLT_Action::GetArgumentValue(const char* name, NPT_String& value) 
 {
     PLT_Argument* arg = GetArgument(name);
-    if (arg == NULL) {
+    if (arg == nullptr) {
         return NPT_FAILURE;
     }
     value = arg->GetValue();
@@ -193,7 +193,7 @@ PLT_Action::GetArgumentValue(const char* name, bool& value)
 PLT_Argument*
 PLT_Action::GetArgument(const char* name)
 {
-    PLT_Argument* argument = NULL;
+    PLT_Argument* argument = nullptr;
     NPT_ContainerFind(m_Arguments, PLT_ArgumentNameFinder(name), argument);
     return argument;
 }
@@ -207,7 +207,7 @@ PLT_Action::SetArgumentValue(const char* name,
 {
     // look for this argument in our argument list
     // and replace the value if we found it 
-	PLT_Arguments::Iterator iter = NULL;
+	PLT_Arguments::Iterator iter = nullptr;
     if (NPT_SUCCEEDED(NPT_ContainerFind(m_Arguments, PLT_ArgumentNameFinder(name), iter))) {
         NPT_Result res = (*iter)->SetValue(value);
 
@@ -264,7 +264,7 @@ PLT_Action::VerifyArguments(bool input)
             continue;
 
         // look for this argument in the list we received
-        PLT_Argument* arg = NULL;
+        PLT_Argument* arg = nullptr;
         if (NPT_FAILED(NPT_ContainerFind(m_Arguments, PLT_ArgumentNameFinder(arg_desc->GetName()), arg))) {
 			NPT_LOG_WARNING_2("Argument %s for action %s not found", 
 				(const char*) arg_desc->GetName(), 
@@ -304,7 +304,7 @@ NPT_Result
 PLT_Action::SetArgumentOutFromStateVariable(const char* name)
 {
     // look for this argument in the action list of arguments
-    PLT_ArgumentDesc* arg_desc = NULL;
+    PLT_ArgumentDesc* arg_desc = nullptr;
     NPT_CHECK_SEVERE(NPT_ContainerFind(m_ActionDesc.GetArgumentDescs(), 
         PLT_ArgumentDescNameFinder(name), arg_desc));
 
@@ -369,8 +369,8 @@ PLT_Action::FormatSoapRequest(NPT_OutputStream& stream)
 {
     NPT_String str;
     NPT_Result res;
-    NPT_XmlElementNode* body = NULL;
-    NPT_XmlElementNode* request = NULL;
+    NPT_XmlElementNode* body = nullptr;
+    NPT_XmlElementNode* request = nullptr;
     NPT_XmlElementNode* envelope = new NPT_XmlElementNode("s", "Envelope");
 
     NPT_CHECK_LABEL_SEVERE(res = envelope->SetNamespaceUri("s", "http://schemas.xmlsoap.org/soap/envelope/"), cleanup);
@@ -415,9 +415,9 @@ PLT_Action::FormatSoapResponse(NPT_OutputStream& stream)
 
     NPT_String str;
     NPT_Result res;
-    NPT_XmlElementNode* body = NULL;
-    NPT_XmlElementNode* response = NULL;
-    NPT_XmlElementNode* node = NULL;
+    NPT_XmlElementNode* body = nullptr;
+    NPT_XmlElementNode* response = nullptr;
+    NPT_XmlElementNode* node = nullptr;
     NPT_XmlElementNode* envelope = new NPT_XmlElementNode("s", "Envelope");
 
     NPT_CHECK_LABEL_SEVERE(res = envelope->SetNamespaceUri("s", "http://schemas.xmlsoap.org/soap/envelope/"), cleanup);
@@ -466,10 +466,10 @@ PLT_Action::FormatSoapError(unsigned int code, NPT_String desc, NPT_OutputStream
 {
     NPT_String str;
     NPT_Result res;
-    NPT_XmlElementNode* body = NULL;
-    NPT_XmlElementNode* fault = NULL;
-    NPT_XmlElementNode* detail = NULL;
-    NPT_XmlElementNode* UPnPError = NULL;
+    NPT_XmlElementNode* body = nullptr;
+    NPT_XmlElementNode* fault = nullptr;
+    NPT_XmlElementNode* detail = nullptr;
+    NPT_XmlElementNode* UPnPError = nullptr;
     NPT_XmlElementNode* envelope = new NPT_XmlElementNode("s", "Envelope");
 
     NPT_CHECK_LABEL_SEVERE(res = envelope->SetNamespaceUri("s", "http://schemas.xmlsoap.org/soap/envelope/"), cleanup);

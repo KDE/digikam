@@ -112,7 +112,7 @@ void MetadataEditPlugin::slotEditMetadata()
     if (urls.isEmpty())
         return;
 
-    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(0, iface);
+    QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(nullptr, iface);
     dialog->setPlugin(this);
     dialog->exec();
     delete dialog;

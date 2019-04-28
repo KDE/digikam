@@ -40,12 +40,12 @@ class ColorFX : public BatchTool
 
 public:
 
-    explicit ColorFX(QObject* const parent = 0);
+    explicit ColorFX(QObject* const parent = nullptr);
     ~ColorFX();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ColorFX(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ColorFX(parent); };
 
     void registerSettingsWidget();
 

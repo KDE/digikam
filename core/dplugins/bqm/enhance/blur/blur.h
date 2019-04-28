@@ -38,12 +38,12 @@ class Blur : public BatchTool
 
 public:
 
-    explicit Blur(QObject* const parent = 0);
+    explicit Blur(QObject* const parent = nullptr);
     ~Blur();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Blur(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Blur(parent); };
 
     void registerSettingsWidget();
 

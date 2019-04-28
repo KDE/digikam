@@ -58,9 +58,9 @@ public:
     {
         imagesCount = 0;
         imagesTotal = 0;
-        widget      = 0;
-        albumDlg    = 0;
-        talker      = 0;
+        widget      = nullptr;
+        albumDlg    = nullptr;
+        talker      = nullptr;
     }
 
     unsigned int  imagesCount;
@@ -76,7 +76,7 @@ public:
 
 PWindow::PWindow(DInfoInterface* const iface,
                  QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Pinterest Export Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Pinterest Export Dialog")),
       d(new Private)
 {
     d->widget = new PWidget(this, iface, QLatin1String("Pinterest"));

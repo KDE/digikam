@@ -43,7 +43,7 @@ namespace DigikamBqmChannelMixerPlugin
 ChannelMixer::ChannelMixer(QObject* const parent)
     : BatchTool(QLatin1String("ChannelMixer"), ColorTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 ChannelMixer::~ChannelMixer()
@@ -174,7 +174,7 @@ bool ChannelMixer::toolOperations()
     prm.blackGreenGain = settings()[QLatin1String("blackGreenGain")].toDouble();
     prm.blackBlueGain  = settings()[QLatin1String("blackBlueGain")].toDouble();
 
-    MixerFilter mixer(&image(), 0L, prm);
+    MixerFilter mixer(&image(), nullptr, prm);
     applyFilter(&mixer);
 
     return (savefromDImg());

@@ -49,7 +49,7 @@ public:
 
     explicit Private(ExpoBlendingManager* const m)
       : mngr(m),
-        binariesWidget(0)
+        binariesWidget(nullptr)
     {
     }
 

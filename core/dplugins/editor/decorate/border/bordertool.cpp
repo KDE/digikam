@@ -54,9 +54,9 @@ public:
     explicit Private()
       : configGroupName(QLatin1String("border Tool")),
 
-        gboxSettings(0),
-        previewWidget(0),
-        settingsView(0)
+        gboxSettings(nullptr),
+        previewWidget(nullptr),
+        settingsView(nullptr)
     {
     }
 
@@ -75,13 +75,13 @@ BorderTool::BorderTool(QObject* const parent)
     setToolName(i18n("Add Border"));
     setToolIcon(QIcon::fromTheme(QLatin1String("bordertool")));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->settingsView = new BorderSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 

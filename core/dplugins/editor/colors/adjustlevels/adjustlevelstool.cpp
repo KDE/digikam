@@ -83,25 +83,25 @@ public:
 
     explicit Private()
       : histoSegments(0),
-        pickerBox(0),
-        resetButton(0),
-        autoButton(0),
-        pickBlack(0),
-        pickGray(0),
-        pickWhite(0),
-        pickerType(0),
-        minInput(0),
-        maxInput(0),
-        minOutput(0),
-        maxOutput(0),
-        gammaInput(0),
-        levelsHistogramWidget(0),
-        inputLevels(0),
-        outputLevels(0),
-        previewWidget(0),
-        levels(0),
-        originalImage(0),
-        gboxSettings(0)
+        pickerBox(nullptr),
+        resetButton(nullptr),
+        autoButton(nullptr),
+        pickBlack(nullptr),
+        pickGray(nullptr),
+        pickWhite(nullptr),
+        pickerType(nullptr),
+        minInput(nullptr),
+        maxInput(nullptr),
+        minOutput(nullptr),
+        maxOutput(nullptr),
+        gammaInput(nullptr),
+        levelsHistogramWidget(nullptr),
+        inputLevels(nullptr),
+        outputLevels(nullptr),
+        previewWidget(nullptr),
+        levels(nullptr),
+        originalImage(nullptr),
+        gboxSettings(nullptr)
     {}
 
     static const QString configGroupName;
@@ -178,7 +178,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Load|
                                 EditorToolSettings::SaveAs|

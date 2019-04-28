@@ -233,8 +233,8 @@ public:
 |   PLT_CtrlPoint::PLT_CtrlPoint
 +---------------------------------------------------------------------*/
 PLT_CtrlPoint::PLT_CtrlPoint(const char* search_criteria /* = "upnp:rootdevice" */) :
-    m_EventHttpServer(NULL),
-    m_TaskManager(NULL),
+    m_EventHttpServer(nullptr),
+    m_TaskManager(nullptr),
     m_SearchCriteria(search_criteria),
     m_Started(false)
 {
@@ -327,8 +327,8 @@ PLT_CtrlPoint::Stop(PLT_SsdpListenTask* task)
     m_RootDevices.Clear();
     m_Subscribers.Clear();
 
-    m_EventHttpServer = NULL;
-    m_TaskManager = NULL;
+    m_EventHttpServer = nullptr;
+    m_TaskManager = nullptr;
 
     return NPT_SUCCESS;
 }
@@ -391,7 +391,7 @@ PLT_CtrlPoint::CreateSearchTask(const NPT_HttpUrl&   url,
 
     if (retries == 0) {
         NPT_LOG_SEVERE("Couldn't bind socket for Search Task");
-        return NULL;
+        return nullptr;
     }
 
     // create request
@@ -621,7 +621,7 @@ PLT_CtrlPoint::FindActionDesc(PLT_DeviceDataReference& device,
     }
 
     action_desc = service->FindActionDesc(action_name);
-    if (action_desc == NULL) {
+    if (action_desc == nullptr) {
         NPT_LOG_FINE_1("Action %s not found in service", action_name);
         return NPT_FAILURE;
     }
@@ -681,7 +681,7 @@ NPT_Result
 PLT_CtrlPoint::DecomposeLastChangeVar(NPT_List<PLT_StateVariable*>& vars)
 {
     // parse LastChange var into smaller vars
-    PLT_StateVariable* lastChangeVar = NULL;
+    PLT_StateVariable* lastChangeVar = nullptr;
     if (NPT_SUCCEEDED(NPT_ContainerFind(vars, 
                                         PLT_StateVariableNameFinder("LastChange"), 
                                         lastChangeVar))) {
@@ -689,7 +689,7 @@ PLT_CtrlPoint::DecomposeLastChangeVar(NPT_List<PLT_StateVariable*>& vars)
         PLT_Service* var_service = lastChangeVar->GetService();
         NPT_String text = lastChangeVar->GetValue();
         
-        NPT_XmlNode* xml = NULL;
+        NPT_XmlNode* xml = nullptr;
         NPT_XmlParser parser;
         if (NPT_FAILED(parser.Parse(text, xml)) || !xml || !xml->AsElementNode()) {
             delete xml;
@@ -699,7 +699,7 @@ PLT_CtrlPoint::DecomposeLastChangeVar(NPT_List<PLT_StateVariable*>& vars)
         NPT_XmlElementNode* node = xml->AsElementNode();
         if (!node->GetTag().Compare("Event", true)) {
             // look for the instance with attribute id = 0
-            NPT_XmlElementNode* instance = NULL;
+            NPT_XmlElementNode* instance = nullptr;
             for (NPT_Cardinal i=0; i<node->GetChildren().GetItemCount(); i++) {
                 NPT_XmlElementNode* child;
                 if (NPT_FAILED(PLT_XmlHelper::GetChild(node, child, i)))
@@ -717,7 +717,7 @@ PLT_CtrlPoint::DecomposeLastChangeVar(NPT_List<PLT_StateVariable*>& vars)
             }
             
             // did we find an instance with id = 0 ?
-            if (instance != NULL) {
+            if (instance != nullptr) {
                 // all the children of the Instance node are state variables
                 for (NPT_Cardinal j=0; j<instance->GetChildren().GetItemCount(); j++) {
                     NPT_XmlElementNode* var_node;
@@ -727,7 +727,7 @@ PLT_CtrlPoint::DecomposeLastChangeVar(NPT_List<PLT_StateVariable*>& vars)
                     // look for the state variable in this service
                     const NPT_String* value = var_node->GetAttribute("val");
                     PLT_StateVariable* var = var_service->FindStateVariable(var_node->GetTag());
-                    if (value != NULL && var != NULL) {
+                    if (value != nullptr && var != nullptr) {
                         // get the value and set the state variable
                         // if it succeeded, add it to the list of vars we'll event
                         if (NPT_SUCCEEDED(var->SetValue(*value))) {
@@ -754,7 +754,7 @@ PLT_CtrlPoint::ProcessEventNotification(PLT_EventSubscriberReference subscriber,
                                         PLT_EventNotification*       notification,
                                         NPT_List<PLT_StateVariable*> &vars)
 {
-    NPT_XmlElementNode* xml = NULL;
+    NPT_XmlElementNode* xml = nullptr;
     PLT_Service* service = subscriber->GetService();
     PLT_DeviceData* device  = service->GetDevice();
 
@@ -802,7 +802,7 @@ PLT_CtrlPoint::ProcessEventNotification(PLT_EventSubscriberReference subscriber,
         }
 
         var = service->FindStateVariable(property->GetTag());
-        if (var == NULL) continue;
+        if (var == nullptr) continue;
 
         if (NPT_FAILED(var->SetValue(property->GetText()?*property->GetText():""))) {
             NPT_CHECK_LABEL_WARNING(NPT_FAILURE, failure);
@@ -835,7 +835,7 @@ PLT_CtrlPoint::AddPendingEventNotification(PLT_EventNotification *notification)
 {
     // Only keep a maximum of 20 pending notifications
     while (m_PendingNotifications.GetItemCount() > 20) {
-        PLT_EventNotification *garbage = NULL;
+        PLT_EventNotification *garbage = nullptr;
         m_PendingNotifications.PopHead(garbage);
         delete garbage;
     }
@@ -853,7 +853,7 @@ PLT_CtrlPoint::ProcessPendingEventNotifications()
     NPT_Cardinal count = m_PendingNotifications.GetItemCount();
     while (count--) {
         NPT_List<PLT_StateVariable*> vars;
-        PLT_Service *service = NULL;
+        PLT_Service *service = nullptr;
         PLT_EventNotification *notification;
 
         if (NPT_SUCCEEDED(m_PendingNotifications.PopHead(notification))) {
@@ -900,7 +900,7 @@ PLT_CtrlPoint::ProcessHttpNotify(const NPT_HttpRequest&        request,
     NPT_AutoLock lock(m_Lock);
     
     NPT_List<PLT_StateVariable*> vars;
-    PLT_Service* service = NULL;
+    PLT_Service* service = nullptr;
     PLT_EventSubscriberReference sub;
     NPT_Result result;
 
@@ -1320,7 +1320,7 @@ PLT_CtrlPoint::ProcessGetDescriptionResponse(NPT_Result                    res,
 
     NPT_AutoLock lock(m_Lock);
     
-    PLT_CtrlPointGetSCPDsTask* task = NULL;
+    PLT_CtrlPointGetSCPDsTask* task = nullptr;
     NPT_String desc;
     PLT_DeviceDataReference root_device;
     PLT_DeviceDataReference device;
@@ -1469,7 +1469,7 @@ PLT_CtrlPoint::RenewSubscriber(PLT_EventSubscriberReference subscriber)
     if (NPT_FAILED(FindDevice(subscriber->GetService()->GetDevice()->GetUUID(),
                               root_device,
                               true))) {
-        return NULL;
+        return nullptr;
     }
 
     NPT_LOG_FINE_3("Renewing subscriber \"%s\" for service \"%s\" of device \"%s\"", 
@@ -1508,7 +1508,7 @@ PLT_CtrlPoint::Subscribe(PLT_Service* service,
     
     if (!m_Started) NPT_CHECK_WARNING(NPT_ERROR_INVALID_STATE);
 
-    NPT_HttpRequest* request = NULL;
+    NPT_HttpRequest* request = nullptr;
 
     // make sure service is subscribable
     if (!service->IsSubscribable()) return NPT_FAILURE;
@@ -1607,7 +1607,7 @@ PLT_CtrlPoint::ProcessSubscribeResponse(NPT_Result                    res,
 
     NPT_AutoLock lock(m_Lock);
     
-    const NPT_String*    sid = NULL;
+    const NPT_String*    sid = nullptr;
     NPT_Int32            seconds;
     PLT_EventSubscriberReference sub;
     bool                 subscription = (request.GetMethod().ToUppercase() == "SUBSCRIBE");
@@ -1621,7 +1621,7 @@ PLT_CtrlPoint::ProcessSubscribeResponse(NPT_Result                    res,
 
     // if there's a failure or it's a response to a cancellation
     // we get out (any 2xx status code ok)
-    if (NPT_FAILED(res) || response == NULL || response->GetStatusCode()/100 != 2) {
+    if (NPT_FAILED(res) || response == nullptr || response->GetStatusCode()/100 != 2) {
         goto failure;
     }
         
@@ -1699,7 +1699,7 @@ PLT_CtrlPoint::InvokeAction(PLT_ActionReference& action,
     action->FormatSoapRequest(*stream);
 
     // set the request body
-    NPT_HttpEntity* entity = NULL;
+    NPT_HttpEntity* entity = nullptr;
     PLT_HttpHelper::SetBody(*request, (NPT_InputStreamReference)stream, &entity);
 
     entity->SetContentType("text/xml; charset=\"utf-8\"");
@@ -1733,20 +1733,20 @@ PLT_CtrlPoint::ProcessActionResponse(NPT_Result                    res,
 {
     NPT_String          service_type;
     NPT_String          str;
-    NPT_XmlElementNode* xml = NULL;
+    NPT_XmlElementNode* xml = nullptr;
     NPT_String          name;
     NPT_String          soap_action_name;
     NPT_XmlElementNode* soap_action_response;
     NPT_XmlElementNode* soap_body;
     NPT_XmlElementNode* fault;
-    const NPT_String*   attr = NULL;
+    const NPT_String*   attr = nullptr;
     PLT_ActionDesc&     action_desc = action->GetActionDesc();
 
     // reset the error code and desc
     action->SetError(0, "");
 
     // check context validity
-    if (NPT_FAILED(res) || response == NULL) {
+    if (NPT_FAILED(res) || response == nullptr) {
         PLT_Service* service = action_desc.GetService();
         NPT_LOG_WARNING_4("Failed to reach %s for %s.%s (%d)",
                           request.GetUrl().ToString().GetChars(),
@@ -1781,12 +1781,12 @@ PLT_CtrlPoint::ProcessActionResponse(NPT_Result                    res,
 
     // read action
     soap_body = PLT_XmlHelper::GetChild(xml, "Body");
-    if (soap_body == NULL)
+    if (soap_body == nullptr)
         goto failure;
 
     // check if an error occurred
     fault = PLT_XmlHelper::GetChild(soap_body, "Fault");
-    if (fault != NULL) {
+    if (fault != nullptr) {
         // we have an error
         ParseFault(action, fault);
         goto failure;
@@ -1845,15 +1845,15 @@ PLT_CtrlPoint::ParseFault(PLT_ActionReference& action,
                           NPT_XmlElementNode*  fault)
 {
     NPT_XmlElementNode* detail = fault->GetChild("detail");
-    if (detail == NULL) return NPT_FAILURE;
+    if (detail == nullptr) return NPT_FAILURE;
 
     NPT_XmlElementNode *upnp_error, *error_code, *error_desc;
     upnp_error = detail->GetChild("upnp_error");
 	
 	// WMP12 Hack
-	if (upnp_error == NULL) {
+	if (upnp_error == nullptr) {
         upnp_error = detail->GetChild("UPnPError", NPT_XML_ANY_NAMESPACE);
-        if (upnp_error == NULL) return NPT_FAILURE;
+        if (upnp_error == nullptr) return NPT_FAILURE;
 	}
 
     error_code = upnp_error->GetChild("errorCode", NPT_XML_ANY_NAMESPACE);

@@ -39,12 +39,12 @@ class Crop : public BatchTool
 
 public:
 
-    explicit Crop(QObject* const parent = 0);
+    explicit Crop(QObject* const parent = nullptr);
     ~Crop();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Crop(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Crop(parent); };
 
     void registerSettingsWidget();
 

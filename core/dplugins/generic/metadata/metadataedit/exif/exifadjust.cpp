@@ -54,18 +54,18 @@ public:
 
     explicit Private()
     {
-        brightnessCheck     = 0;
-        gainControlCheck    = 0;
-        contrastCheck       = 0;
-        saturationCheck     = 0;
-        sharpnessCheck      = 0;
-        customRenderedCheck = 0;
-        brightnessEdit      = 0;
-        gainControlCB       = 0;
-        contrastCB          = 0;
-        saturationCB        = 0;
-        sharpnessCB         = 0;
-        customRenderedCB    = 0;
+        brightnessCheck     = nullptr;
+        gainControlCheck    = nullptr;
+        contrastCheck       = nullptr;
+        saturationCheck     = nullptr;
+        sharpnessCheck      = nullptr;
+        customRenderedCheck = nullptr;
+        brightnessEdit      = nullptr;
+        gainControlCB       = nullptr;
+        contrastCB          = nullptr;
+        saturationCB        = nullptr;
+        sharpnessCB         = nullptr;
+        customRenderedCB    = nullptr;
     }
 
     QCheckBox*        brightnessCheck;

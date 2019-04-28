@@ -74,17 +74,17 @@ class Q_DECL_HIDDEN AdvPrintWizard::Private
 public:
 
     explicit Private()
-      : introPage(0),
-        albumsPage(0),
-        photoPage(0),
-        captionPage(0),
-        cropPage(0),
-        outputPage(0),
-        finalPage(0),
-        settings(0),
-        previewThread(0),
-        iface(0),
-        tempPath(0)
+      : introPage(nullptr),
+        albumsPage(nullptr),
+        photoPage(nullptr),
+        captionPage(nullptr),
+        cropPage(nullptr),
+        outputPage(nullptr),
+        finalPage(nullptr),
+        settings(nullptr),
+        previewThread(nullptr),
+        iface(nullptr),
+        tempPath(nullptr)
     {
     }
 

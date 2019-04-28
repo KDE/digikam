@@ -59,8 +59,8 @@ public:
 
     explicit Private()
       : queueAccess(QMutex::Recursive),
-        netMngr(0),
-        reply(0)
+        netMngr(nullptr),
+        reply(nullptr)
     {
     }
 
@@ -146,7 +146,7 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
     d->queueAccess.lock();
 
     RajceCommand* const c = d->commandQueue.head();
-    d->reply              = 0;
+    d->reply              = nullptr;
 
     c->processResponse(response, d->session);
 
@@ -252,11 +252,11 @@ void RajceTalker::enqueueCommand(RajceCommand* const command)
 
 void RajceTalker::cancelCurrentCommand()
 {
-    if (d->reply != 0)
+    if (d->reply != nullptr)
     {
         slotFinished(d->reply);
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 }
 

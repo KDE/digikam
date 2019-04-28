@@ -39,12 +39,12 @@ class Rotate : public BatchTool
 
 public:
 
-    explicit Rotate(QObject* const parent = 0);
+    explicit Rotate(QObject* const parent = nullptr);
     ~Rotate();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Rotate(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Rotate(parent); };
 
     void registerSettingsWidget();
 

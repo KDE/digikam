@@ -51,9 +51,9 @@ class Q_DECL_HIDDEN AdvPrintCropFrame::Private
 public:
 
     explicit Private()
-      : photo(0),
+      : photo(nullptr),
         mouseDown(false),
-        image(0),
+        image(nullptr),
         imageX(0),
         imageY(0),
         color(Qt::red),

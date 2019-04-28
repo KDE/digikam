@@ -42,7 +42,7 @@ class CurvesAdjustPlugin : public DPluginBqm
 
 public:
 
-    explicit CurvesAdjustPlugin(QObject* const parent = 0);
+    explicit CurvesAdjustPlugin(QObject* const parent = nullptr);
     ~CurvesAdjustPlugin();
 
     QString name()                 const override;

@@ -42,7 +42,7 @@ class AntiVignettingToolPlugin : public DPluginEditor
 
 public:
 
-    explicit AntiVignettingToolPlugin(QObject* const parent = 0);
+    explicit AntiVignettingToolPlugin(QObject* const parent = nullptr);
     ~AntiVignettingToolPlugin();
 
     QString name()                 const override;

@@ -58,9 +58,9 @@ public:
     {
         imagesCount = 0;
         imagesTotal = 0;
-        widget      = 0;
-        albumDlg    = 0;
-        talker      = 0;
+        widget      = nullptr;
+        albumDlg    = nullptr;
+        talker      = nullptr;
     }
 
     unsigned int   imagesCount;
@@ -77,7 +77,7 @@ public:
 
 TwWindow::TwWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Twitter Export Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Twitter Export Dialog")),
       d(new Private)
 {
     d->widget      = new TwWidget(this, iface, QLatin1String("Twitter"));

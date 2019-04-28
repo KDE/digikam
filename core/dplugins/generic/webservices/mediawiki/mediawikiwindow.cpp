@@ -72,10 +72,10 @@ public:
 
     explicit Private()
     {
-        widget       = 0;
-        MediaWiki    = 0;
-        iface        = 0;
-        uploadTalker = 0;
+        widget       = nullptr;
+        MediaWiki    = nullptr;
+        iface        = nullptr;
+        uploadTalker = nullptr;
     }
 
     QString          tmpDir;
@@ -92,13 +92,13 @@ public:
 };
 
 MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("MediaWiki export dialog")),
+    : WSToolDialog(nullptr, QLatin1String("MediaWiki export dialog")),
       d(new Private)
 {
     d->tmpPath.clear();
     d->tmpDir       = WSToolUtils::makeTemporaryDir("MediaWiki").absolutePath() + QLatin1Char('/');
     d->widget       = new MediaWikiWidget(iface, this);
-    d->uploadTalker = 0;
+    d->uploadTalker = nullptr;
     d->login        = QString();
     d->pass         = QString();
     d->iface        = iface;
@@ -350,7 +350,7 @@ int MediaWikiWindow::slotLoginHandle(KJob* loginJob)
     {
         d->login.clear();
         d->pass.clear();
-        d->uploadTalker = 0;
+        d->uploadTalker = nullptr;
         QMessageBox::critical(this, i18n("Login Error"), i18n("Please check your credentials and try again."));
     }
     else

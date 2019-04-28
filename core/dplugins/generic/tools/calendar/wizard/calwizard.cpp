@@ -63,23 +63,23 @@ public:
 
     explicit Private()
     {
-        iface         = 0;
-        introPage     = 0;
-        cSettings     = 0;
-        wTemplate     = 0;
+        iface         = nullptr;
+        introPage     = nullptr;
+        cSettings     = nullptr;
+        wTemplate     = nullptr;
         wPrintLabel   = 0;
-        wFinish       = 0;
-        wTemplatePage = 0;
-        wPrintPage    = 0;
-        wFinishPage   = 0;
+        wFinish       = nullptr;
+        wTemplatePage = nullptr;
+        wPrintPage    = nullptr;
+        wFinishPage   = nullptr;
 
 #ifdef HAVE_KCALENDAR
-        wEvents       = 0;
-        wEventsPage   = 0;
+        wEvents       = nullptr;
+        wEventsPage   = nullptr;
 #endif
 
-        printer       = 0;
-        printThread   = 0;
+        printer       = nullptr;
+        printThread   = nullptr;
     }
 
     DInfoInterface*  iface;
@@ -165,8 +165,8 @@ CalWizard::CalWizard(QWidget* const parent, DInfoInterface* const iface)
 
     // ------------------------------------------
 
-    d->printThread = 0;
-    d->printer     = 0;
+    d->printThread = nullptr;
+    d->printer     = nullptr;
 
     connect(this, SIGNAL(currentIdChanged(int)),
             this, SLOT(slotPageSelected(int)));

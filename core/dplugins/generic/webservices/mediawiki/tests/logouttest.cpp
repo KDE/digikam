@@ -50,8 +50,8 @@ public:
     LogoutTest()
     {
         logoutCount = 0;
-        m_mediaWiki = 0;
-        m_server    = 0;
+        m_mediaWiki = nullptr;
+        m_server    = nullptr;
     }
 
 public Q_SLOTS:

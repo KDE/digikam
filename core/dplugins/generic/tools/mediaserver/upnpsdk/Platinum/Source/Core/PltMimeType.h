@@ -58,12 +58,12 @@ public:
     virtual ~PLT_MimeType() {}
 
     static const char* GetMimeType(const NPT_String&             filename, 
-                                   const PLT_HttpRequestContext* context = NULL);
+                                   const PLT_HttpRequestContext* context = nullptr);
     static const char* GetMimeType(const NPT_String&   filename,
                                    PLT_DeviceSignature signature = PLT_DEVICE_UNKNOWN);
     
     static const char* GetMimeTypeFromExtension(const NPT_String&             extension, 
-                                                const PLT_HttpRequestContext* context = NULL);
+                                                const PLT_HttpRequestContext* context = nullptr);
     static const char* GetMimeTypeFromExtension(const NPT_String&   extension,
                                                 PLT_DeviceSignature signature = PLT_DEVICE_UNKNOWN);
 

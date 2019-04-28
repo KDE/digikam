@@ -55,16 +55,16 @@ public:
     explicit Private()
     {
         progressPix     = DWorkingPixmap();
-        bAdd            = 0;
-        bAddAll         = 0;
-        bReplace        = 0;
-        bReplaceAll     = 0;
-        iface           = 0;
-        lbSrc           = 0;
-        lbDest          = 0;
-        netMngr         = 0;
+        bAdd            = nullptr;
+        bAddAll         = nullptr;
+        bReplace        = nullptr;
+        bReplaceAll     = nullptr;
+        iface           = nullptr;
+        lbSrc           = nullptr;
+        lbDest          = nullptr;
+        netMngr         = nullptr;
         progressCount   = 0;
-        progressTimer   = 0;
+        progressTimer   = nullptr;
         result          = -1;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
     }

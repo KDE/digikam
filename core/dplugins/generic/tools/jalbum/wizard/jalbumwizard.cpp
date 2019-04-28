@@ -56,11 +56,11 @@ class Q_DECL_HIDDEN JAlbumWizard::Private
 public:
 
     explicit Private()
-      : settings(0),
-        introPage(0),
-        selectionPage(0),
-        outputPage(0),
-        finalPage(0)
+      : settings(nullptr),
+        introPage(nullptr),
+        selectionPage(nullptr),
+        outputPage(nullptr),
+        finalPage(nullptr)
     {
     }
 

@@ -50,8 +50,8 @@ class Q_DECL_HIDDEN ItemsPage::Private
 public:
 
     explicit Private()
-      : list(0),
-        mngr(0)
+      : list(nullptr),
+        mngr(nullptr)
     {
     }
 

@@ -60,21 +60,21 @@ public:
 
     explicit Private()
     {
-        removeAccount             = 0;
-        extendedTagsButton        = 0;
-        extendedPublicationButton = 0;
-        exportHostTagsCheckBox    = 0;
-        stripSpaceTagsCheckBox    = 0;
-        addExtraTagsCheckBox      = 0;
-        familyCheckBox            = 0;
-        friendsCheckBox           = 0;
-        publicCheckBox            = 0;
-        extendedTagsBox           = 0;
-        extendedPublicationBox    = 0;
-        tagsLineEdit              = 0;
-        contentTypeComboBox       = 0;
-        safetyLevelComboBox       = 0;
-        imglst                    = 0;
+        removeAccount             = nullptr;
+        extendedTagsButton        = nullptr;
+        extendedPublicationButton = nullptr;
+        exportHostTagsCheckBox    = nullptr;
+        stripSpaceTagsCheckBox    = nullptr;
+        addExtraTagsCheckBox      = nullptr;
+        familyCheckBox            = nullptr;
+        friendsCheckBox           = nullptr;
+        publicCheckBox            = nullptr;
+        extendedTagsBox           = nullptr;
+        extendedPublicationBox    = nullptr;
+        tagsLineEdit              = nullptr;
+        contentTypeComboBox       = nullptr;
+        safetyLevelComboBox       = nullptr;
+        imglst                    = nullptr;
     }
 
     QString                 serviceName;

@@ -42,7 +42,7 @@ class MediaServerPlugin : public DPluginGeneric
 
 public:
 
-    explicit MediaServerPlugin(QObject* const parent = 0);
+    explicit MediaServerPlugin(QObject* const parent = nullptr);
     ~MediaServerPlugin();
 
     QString name()                 const override;

@@ -115,23 +115,23 @@ AdvPrintCaptionInfo::~AdvPrintCaptionInfo()
 // -----------------------------
 
 AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
-    : m_pAddInfo(0),
-      m_pAdvPrintCaptionInfo(0)
+    : m_pAddInfo(nullptr),
+      m_pAdvPrintCaptionInfo(nullptr)
 {
-    m_size          = 0;
+    m_size          = nullptr;
     m_cropRegion    = QRect(-1, -1, -1, -1);
     m_rotation      = 0;
     m_first         = false;
     m_copies        = 1;
     m_url           = QUrl();
     m_iface         = iface;
-    m_thumbnail     = 0;
+    m_thumbnail     = nullptr;
     m_thumbnailSize = thumbnailSize;
 }
 
 AdvPrintPhoto::AdvPrintPhoto(const AdvPrintPhoto& other)
-    : m_pAddInfo(0),
-      m_pAdvPrintCaptionInfo(0)
+    : m_pAddInfo(nullptr),
+      m_pAdvPrintCaptionInfo(nullptr)
 {
     m_thumbnailSize = other.m_thumbnailSize;
     m_cropRegion    = other.m_cropRegion;
@@ -150,8 +150,8 @@ AdvPrintPhoto::AdvPrintPhoto(const AdvPrintPhoto& other)
         m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo(*other.m_pAdvPrintCaptionInfo);
     }
 
-    m_size      = 0;
-    m_thumbnail = 0;
+    m_size      = nullptr;
+    m_thumbnail = nullptr;
     m_iface     = other.m_iface;
 }
 
@@ -192,7 +192,7 @@ DImg AdvPrintPhoto::loadPhoto()
 
 QSize& AdvPrintPhoto::size()
 {
-    if (m_size == 0)
+    if (m_size == nullptr)
     {
         loadInCache();
     }
@@ -212,7 +212,7 @@ int AdvPrintPhoto::height()
 
 double AdvPrintPhoto::scaleWidth(double unitToInches)
 {
-    Q_ASSERT(m_pAddInfo != 0);
+    Q_ASSERT(m_pAddInfo != nullptr);
 
     m_cropRegion = QRect(0, 0,
                          (int)(m_pAddInfo->m_printWidth  * unitToInches),
@@ -223,7 +223,7 @@ double AdvPrintPhoto::scaleWidth(double unitToInches)
 
 double AdvPrintPhoto::scaleHeight(double unitToInches)
 {
-    Q_ASSERT(m_pAddInfo != 0);
+    Q_ASSERT(m_pAddInfo != nullptr);
 
     m_cropRegion = QRect(0, 0,
                          (int)(m_pAddInfo->m_printWidth  * unitToInches),

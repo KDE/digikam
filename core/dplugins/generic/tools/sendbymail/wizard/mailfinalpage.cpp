@@ -55,13 +55,13 @@ class Q_DECL_HIDDEN MailFinalPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : progressView(0),
-        progressBar(0),
+      : progressView(nullptr),
+        progressBar(nullptr),
         complete(false),
-        processor(0),
-        wizard(0),
-        settings(0),
-        iface(0)
+        processor(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

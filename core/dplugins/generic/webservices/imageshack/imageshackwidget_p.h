@@ -65,18 +65,18 @@ public:
 
     Private()
     {
-        imgList            = 0;
-        iface              = 0;
-        session            = 0;
-        headerLbl          = 0;
-        accountNameLbl     = 0;
-        tagsFld            = 0;
-        privateImagesChb   = 0;
-        remBarChb          = 0;
-        chgRegCodeBtn      = 0;
-        reloadGalleriesBtn = 0;
-        galleriesCob       = 0;
-        progressBar        = 0;
+        imgList            = nullptr;
+        iface              = nullptr;
+        session            = nullptr;
+        headerLbl          = nullptr;
+        accountNameLbl     = nullptr;
+        tagsFld            = nullptr;
+        privateImagesChb   = nullptr;
+        remBarChb          = nullptr;
+        chgRegCodeBtn      = nullptr;
+        reloadGalleriesBtn = nullptr;
+        galleriesCob       = nullptr;
+        progressBar        = nullptr;
     }
 
     DItemsList*       imgList;

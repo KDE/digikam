@@ -56,7 +56,7 @@ namespace DigikamEditorHotPixelsToolPlugin
 BlackFrameParser::BlackFrameParser(QObject* const parent)
     : QObject(parent)
 {
-    m_imageLoaderThread = 0;
+    m_imageLoaderThread = nullptr;
 }
 
 BlackFrameParser::~BlackFrameParser()

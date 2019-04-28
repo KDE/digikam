@@ -42,7 +42,7 @@ class ColorBalancePlugin : public DPluginBqm
 
 public:
 
-    explicit ColorBalancePlugin(QObject* const parent = 0);
+    explicit ColorBalancePlugin(QObject* const parent = nullptr);
     ~ColorBalancePlugin();
 
     QString name()                 const override;

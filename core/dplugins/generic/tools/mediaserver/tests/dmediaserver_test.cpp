@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 
     if (argc <= 1)
     {
-        QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select Files to Share With Media Server"),
+        QStringList files = DFileDialog::getOpenFileNames(nullptr, QString::fromLatin1("Select Files to Share With Media Server"),
                                                           QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
                                                           QLatin1String("Image Files (*.png *.jpg *.tif *.bmp *.gif)"));
 
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 
     if (DMediaServerMngr::instance()->startMediaServer())
     {
-        QProgressDialog* const pdlg = new QProgressDialog(0);
+        QProgressDialog* const pdlg = new QProgressDialog(nullptr);
         pdlg->setLabelText(QLatin1String("Sharing files on the network"));
         pdlg->setMinimumDuration(0);
         pdlg->setCancelButtonText(QLatin1String("Close"));

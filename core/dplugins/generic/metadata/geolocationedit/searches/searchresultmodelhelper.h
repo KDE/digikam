@@ -51,7 +51,7 @@ public:
     explicit SearchResultModelHelper(SearchResultModel* const resultModel,
                                      QItemSelectionModel* const selectionModel,
                                      GPSItemModel* const imageModel,
-                                     QObject* const parent = 0);
+                                     QObject* const parent = nullptr);
     ~SearchResultModelHelper();
 
     void setVisibility(const bool state);

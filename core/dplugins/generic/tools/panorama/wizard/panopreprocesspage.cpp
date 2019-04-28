@@ -67,16 +67,16 @@ public:
 
     explicit Private()
       : progressCount(0),
-        progressLabel(0),
-        progressTimer(0),
+        progressLabel(nullptr),
+        progressTimer(nullptr),
         preprocessingDone(false),
         canceled(false),
         nbFilesProcessed(0),
-        title(0),
-        celesteCheckBox(0),
-        detailsText(0),
+        title(nullptr),
+        celesteCheckBox(nullptr),
+        detailsText(nullptr),
         progressPix(DWorkingPixmap()),
-        mngr(0)
+        mngr(nullptr)
     {
     }
 

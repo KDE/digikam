@@ -39,13 +39,13 @@ class ConvertToJPEG : public BatchTool
 
 public:
 
-    explicit ConvertToJPEG(QObject* const parent = 0);
+    explicit ConvertToJPEG(QObject* const parent = nullptr);
     ~ConvertToJPEG();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToJPEG(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToJPEG(parent); };
 
     void registerSettingsWidget();
 

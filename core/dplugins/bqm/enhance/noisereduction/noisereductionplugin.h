@@ -42,7 +42,7 @@ class NoiseReductionPlugin : public DPluginBqm
 
 public:
 
-    explicit NoiseReductionPlugin(QObject* const parent = 0);
+    explicit NoiseReductionPlugin(QObject* const parent = nullptr);
     ~NoiseReductionPlugin();
 
     QString name()                 const override;

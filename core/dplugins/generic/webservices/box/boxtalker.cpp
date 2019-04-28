@@ -80,11 +80,11 @@ public:
 
         state        = BOX_USERNAME;
 
-        parent       = 0;
-        netMngr      = 0;
-        reply        = 0;
-        settings     = 0;
-        o2           = 0;
+        parent       = nullptr;
+        netMngr      = nullptr;
+        reply        = nullptr;
+        settings     = nullptr;
+        o2           = nullptr;
     }
 
 public:
@@ -203,7 +203,7 @@ void BOXTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -274,7 +274,7 @@ bool BOXTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, bo
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -368,7 +368,7 @@ void BOXTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

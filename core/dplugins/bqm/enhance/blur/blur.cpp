@@ -45,7 +45,7 @@ namespace DigikamBqmBlurPlugin
 
 Blur::Blur(QObject* const parent)
     : BatchTool(QLatin1String("Blur"), EnhanceTool, parent),
-      m_radiusInput(0)
+      m_radiusInput(nullptr)
 {
     m_changeSettings = true;
 }
@@ -113,7 +113,7 @@ bool Blur::toolOperations()
 
     double radius = settings()[QLatin1String("Radius")].toInt();
 
-    BlurFilter blur(&image(), 0L, radius);
+    BlurFilter blur(&image(), nullptr, radius);
     applyFilter(&blur);
 
     return savefromDImg();

@@ -39,10 +39,10 @@ class Q_DECL_HIDDEN ExpoBlendingManager::Private
 public:
 
     explicit Private()
-      : thread(0),
-        plugin(0),
-        wizard(0),
-        dlg(0)
+      : thread(nullptr),
+        plugin(nullptr),
+        wizard(nullptr),
+        dlg(nullptr)
     {
     }
 
@@ -184,7 +184,7 @@ void ExpoBlendingManager::startWizard()
     {
         delete d->wizard;
         delete d->dlg;
-        d->dlg = 0;
+        d->dlg = nullptr;
 
         d->wizard = new ExpoBlendingWizard(this);
         d->wizard->setPlugin(d->plugin);

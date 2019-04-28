@@ -48,7 +48,7 @@ public:
 
     explicit Private()
     {
-        mngr = 0;
+        mngr = nullptr;
     }
 
     ExpoBlendingManager* mngr;

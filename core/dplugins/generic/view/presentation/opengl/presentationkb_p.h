@@ -57,7 +57,7 @@ public:
     explicit Private()
     {
         zoomIn              = qrand() < RAND_MAX / 2;
-        effect              = 0;
+        effect              = nullptr;
         initialized         = false;
         haveImages          = true;
         endOfShow           = false;
@@ -66,20 +66,20 @@ public:
         deskY               = 0;
         deskWidth           = 0;
         deskHeight          = 0;
-        endTexture          = 0;
-        imageLoadThread     = 0;
-        mouseMoveTimer      = 0;
-        timer               = 0;
-        image[0]            = 0;
-        image[1]            = 0;
+        endTexture          = nullptr;
+        imageLoadThread     = nullptr;
+        mouseMoveTimer      = nullptr;
+        timer               = nullptr;
+        image[0]            = nullptr;
+        image[1]            = nullptr;
         numKBEffectRepeated = 0;
         step                = 0.0;
         delay               = 0;
         disableFadeInOut    = false;
         disableCrossFade    = false;
         forceFrameRate      = 0;
-        sharedData          = 0;
-        playbackWidget      = 0;
+        sharedData          = nullptr;
+        playbackWidget      = nullptr;
     }
 
     int                      deskX;

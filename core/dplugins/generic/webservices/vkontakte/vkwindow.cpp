@@ -71,16 +71,16 @@ public:
     explicit Private()
     {
         import        = false;
-        mainWidget    = 0;
-        settingsBox   = 0;
-        headerLabel   = 0;
-        accountBox    = 0;
-        albumsBox     = 0;
-        imgList       = 0;
-        uploadWidget  = 0;
-        iface         = 0;
-        progressBar   = 0;
-        vkapi         = 0;
+        mainWidget    = nullptr;
+        settingsBox   = nullptr;
+        headerLabel   = nullptr;
+        accountBox    = nullptr;
+        albumsBox     = nullptr;
+        imgList       = nullptr;
+        uploadWidget  = nullptr;
+        iface         = nullptr;
+        progressBar   = nullptr;
+        vkapi         = nullptr;
         albumToSelect = -1;
     }
 
@@ -431,7 +431,7 @@ void VKWindow::slotPhotoUploadDone(KJob* kjob)
 
     d->jobs.removeAll(job);
 
-    if (job == 0 || job->error())
+    if (job == nullptr || job->error())
     {
         handleVkError(job);
     }

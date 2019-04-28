@@ -108,7 +108,7 @@ void FCPlugin::slotFileCopyExport()
     if (!reactivateToolDialog(m_toolDlgExport))
     {
         delete m_toolDlgExport;
-        m_toolDlgExport = new FCExportWindow(infoIface(sender()), 0);
+        m_toolDlgExport = new FCExportWindow(infoIface(sender()), nullptr);
         m_toolDlgExport->setPlugin(this);
         m_toolDlgExport->show();
     }

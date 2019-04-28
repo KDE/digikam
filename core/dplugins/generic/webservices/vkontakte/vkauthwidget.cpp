@@ -48,10 +48,10 @@ public:
 
     explicit Private()
     {
-        vkapi            = 0;
+        vkapi            = nullptr;
         userId           = -1;
-        loginLabel       = 0;
-        changeUserButton = 0;
+        loginLabel       = nullptr;
+        changeUserButton = nullptr;
     }
 
     // VK.com interface

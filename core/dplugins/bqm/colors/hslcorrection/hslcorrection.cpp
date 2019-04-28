@@ -42,7 +42,7 @@ namespace DigikamBqmHSLCorrectionPlugin
 HSLCorrection::HSLCorrection(QObject* const parent)
     : BatchTool(QLatin1String("HSLCorrection"), ColorTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 HSLCorrection::~HSLCorrection()
@@ -109,7 +109,7 @@ bool HSLCorrection::toolOperations()
     prm.lightness  = settings()[QLatin1String("Lightness")].toDouble();
     prm.vibrance   = settings()[QLatin1String("Vibrance")].toDouble();
 
-    HSLFilter hsl(&image(), 0L, prm);
+    HSLFilter hsl(&image(), nullptr, prm);
     applyFilter(&hsl);
 
     return (savefromDImg());

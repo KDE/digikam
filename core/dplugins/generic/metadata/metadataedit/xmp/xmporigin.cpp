@@ -59,27 +59,27 @@ public:
 
     explicit Private()
     {
-        cityEdit               = 0;
-        sublocationEdit        = 0;
-        provinceEdit           = 0;
-        cityCheck              = 0;
-        sublocationCheck       = 0;
-        provinceCheck          = 0;
-        countryCheck           = 0;
-        dateCreatedSel         = 0;
-        dateDigitalizedSel     = 0;
-        dateVideoSel           = 0;
-        zoneCreatedSel         = 0;
-        zoneDigitalizedSel     = 0;
-        zoneVideoSel           = 0;
-        dateCreatedCheck       = 0;
-        dateDigitalizedCheck   = 0;
-        dateVideoCheck         = 0;
-        syncEXIFDateCheck      = 0;
-        setTodayCreatedBtn     = 0;
-        setTodayDigitalizedBtn = 0;
-        setTodayVideoBtn       = 0;
-        countryCB              = 0;
+        cityEdit               = nullptr;
+        sublocationEdit        = nullptr;
+        provinceEdit           = nullptr;
+        cityCheck              = nullptr;
+        sublocationCheck       = nullptr;
+        provinceCheck          = nullptr;
+        countryCheck           = nullptr;
+        dateCreatedSel         = nullptr;
+        dateDigitalizedSel     = nullptr;
+        dateVideoSel           = nullptr;
+        zoneCreatedSel         = nullptr;
+        zoneDigitalizedSel     = nullptr;
+        zoneVideoSel           = nullptr;
+        dateCreatedCheck       = nullptr;
+        dateDigitalizedCheck   = nullptr;
+        dateVideoCheck         = nullptr;
+        syncEXIFDateCheck      = nullptr;
+        setTodayCreatedBtn     = nullptr;
+        setTodayDigitalizedBtn = nullptr;
+        setTodayVideoBtn       = nullptr;
+        countryCB              = nullptr;
     }
 
     QCheckBox*                     dateCreatedCheck;

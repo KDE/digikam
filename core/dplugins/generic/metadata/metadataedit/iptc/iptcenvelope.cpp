@@ -59,26 +59,26 @@ public:
 
     explicit Private()
     {
-        unoIDCheck       = 0;
-        unoIDEdit        = 0;
-        destinationCheck = 0;
-        destinationEdit  = 0;
-        serviceIDCheck   = 0;
-        serviceIDEdit    = 0;
-        productIDCheck   = 0;
-        productIDEdit    = 0;
-        envelopeIDCheck  = 0;
-        envelopeIDEdit   = 0;
-        priorityCB       = 0;
-        priorityCheck    = 0;
-        dateSentSel      = 0;
-        timeSentSel      = 0;
-        zoneSentSel      = 0;
-        dateSentCheck    = 0;
-        timeSentCheck    = 0;
-        setTodaySentBtn  = 0;
-        formatCB         = 0;
-        formatCheck      = 0;
+        unoIDCheck       = nullptr;
+        unoIDEdit        = nullptr;
+        destinationCheck = nullptr;
+        destinationEdit  = nullptr;
+        serviceIDCheck   = nullptr;
+        serviceIDEdit    = nullptr;
+        productIDCheck   = nullptr;
+        productIDEdit    = nullptr;
+        envelopeIDCheck  = nullptr;
+        envelopeIDEdit   = nullptr;
+        priorityCB       = nullptr;
+        priorityCheck    = nullptr;
+        dateSentSel      = nullptr;
+        timeSentSel      = nullptr;
+        zoneSentSel      = nullptr;
+        dateSentCheck    = nullptr;
+        timeSentCheck    = nullptr;
+        setTodaySentBtn  = nullptr;
+        formatCB         = nullptr;
+        formatCheck      = nullptr;
 
         // Map : "file format - version"  ==> description
 

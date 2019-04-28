@@ -48,11 +48,11 @@ class Q_DECL_HIDDEN HTMLIntroPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : imageGetOption(0),
-        hbox(0),
-        wizard(0),
-        info(0),
-        iface(0)
+      : imageGetOption(nullptr),
+        hbox(nullptr),
+        wizard(nullptr),
+        info(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<HTMLWizard*>(dialog);
 

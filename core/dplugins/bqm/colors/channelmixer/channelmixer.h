@@ -40,12 +40,12 @@ class ChannelMixer : public BatchTool
 
 public:
 
-    explicit ChannelMixer(QObject* const parent = 0);
+    explicit ChannelMixer(QObject* const parent = nullptr);
     ~ChannelMixer();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ChannelMixer(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ChannelMixer(parent); };
 
     void registerSettingsWidget();
 

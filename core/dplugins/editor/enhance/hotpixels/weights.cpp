@@ -41,7 +41,7 @@ Weights::Weights()
     mCoefficientNumber(0),
     mTwoDim(false),
     mPolynomeOrder(0),
-    mWeightMatrices(0),
+    mWeightMatrices(nullptr),
     mPositions(QList<QPoint>())
 {
 }
@@ -52,7 +52,7 @@ Weights::Weights(const Weights& w)
     mCoefficientNumber(0),
     mTwoDim(false),
     mPolynomeOrder(0),
-    mWeightMatrices(0),
+    mWeightMatrices(nullptr),
     mPositions(QList<QPoint>())
 {
     (*this) = w;

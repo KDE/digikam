@@ -66,9 +66,9 @@ public:
 public:
 
     explicit Private()
-      : correctionTools(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : correctionTools(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -109,8 +109,8 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
 
     ImageIface iface;
     DImg thumbImage       = iface.original()->smoothScale(128, 128, Qt::KeepAspectRatio);
-    PreviewListItem* item = 0;
-    d->gboxSettings       = new EditorToolSettings(0);
+    PreviewListItem* item = nullptr;
+    d->gboxSettings       = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
     d->gboxSettings->setButtons(EditorToolSettings::Default|

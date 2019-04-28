@@ -52,14 +52,14 @@ public:
 
     explicit Private()
     {
-        addSubCategoryButton = 0;
-        delSubCategoryButton = 0;
-        repSubCategoryButton = 0;
-        subCategoriesBox     = 0;
-        subCategoriesCheck   = 0;
-        categoryCheck        = 0;
-        categoryEdit         = 0;
-        subCategoryEdit      = 0;
+        addSubCategoryButton = nullptr;
+        delSubCategoryButton = nullptr;
+        repSubCategoryButton = nullptr;
+        subCategoriesBox     = nullptr;
+        subCategoriesCheck   = nullptr;
+        categoryCheck        = nullptr;
+        categoryEdit         = nullptr;
+        subCategoryEdit      = nullptr;
     }
 
     QStringList  oldSubCategories;

@@ -42,7 +42,7 @@ class LensAutoFixToolPlugin : public DPluginEditor
 
 public:
 
-    explicit LensAutoFixToolPlugin(QObject* const parent = 0);
+    explicit LensAutoFixToolPlugin(QObject* const parent = nullptr);
     ~LensAutoFixToolPlugin();
 
     QString name()                 const override;

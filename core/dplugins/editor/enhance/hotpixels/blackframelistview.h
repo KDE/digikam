@@ -50,7 +50,7 @@ class BlackFrameListView : public QTreeWidget
 
 public:
 
-    explicit BlackFrameListView(QWidget* const parent=0);
+    explicit BlackFrameListView(QWidget* const parent=nullptr);
     ~BlackFrameListView() {};
 
 Q_SIGNALS:

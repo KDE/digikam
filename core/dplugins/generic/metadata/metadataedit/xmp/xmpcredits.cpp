@@ -53,28 +53,28 @@ public:
 
     explicit Private()
     {
-        bylineEdit       = 0;
-        bylineTitleEdit  = 0;
-        creditEdit       = 0;
-        sourceEdit       = 0;
-        emailEdit        = 0;
-        urlEdit          = 0;
-        phoneEdit        = 0;
-        addressEdit      = 0;
-        postalCodeEdit   = 0;
-        cityEdit         = 0;
-        countryEdit      = 0;
-        bylineTitleCheck = 0;
-        creditCheck      = 0;
-        sourceCheck      = 0;
-        emailCheck       = 0;
-        urlCheck         = 0;
-        phoneCheck       = 0;
-        addressCheck     = 0;
-        postalCodeCheck  = 0;
-        cityCheck        = 0;
-        countryCheck     = 0;
-        contactCheck     = 0;
+        bylineEdit       = nullptr;
+        bylineTitleEdit  = nullptr;
+        creditEdit       = nullptr;
+        sourceEdit       = nullptr;
+        emailEdit        = nullptr;
+        urlEdit          = nullptr;
+        phoneEdit        = nullptr;
+        addressEdit      = nullptr;
+        postalCodeEdit   = nullptr;
+        cityEdit         = nullptr;
+        countryEdit      = nullptr;
+        bylineTitleCheck = nullptr;
+        creditCheck      = nullptr;
+        sourceCheck      = nullptr;
+        emailCheck       = nullptr;
+        urlCheck         = nullptr;
+        phoneCheck       = nullptr;
+        addressCheck     = nullptr;
+        postalCodeCheck  = nullptr;
+        cityCheck        = nullptr;
+        countryCheck     = nullptr;
+        contactCheck     = nullptr;
     }
 
     QCheckBox*        bylineTitleCheck;

@@ -41,14 +41,14 @@ class ConvertToDNG : public BatchTool
 
 public:
 
-    explicit ConvertToDNG(QObject* const parent = 0);
+    explicit ConvertToDNG(QObject* const parent = nullptr);
     ~ConvertToDNG();
 
     void cancel();
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToDNG(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToDNG(parent); };
 
     void registerSettingsWidget();
 

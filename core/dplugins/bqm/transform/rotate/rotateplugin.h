@@ -42,7 +42,7 @@ class RotatePlugin : public DPluginBqm
 
 public:
 
-    explicit RotatePlugin(QObject* const parent = 0);
+    explicit RotatePlugin(QObject* const parent = nullptr);
     ~RotatePlugin();
 
     QString name()                 const override;

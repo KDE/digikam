@@ -49,7 +49,7 @@ namespace DigikamBqmAutoCorrectionPlugin
 AutoCorrection::AutoCorrection(QObject* const parent)
     : BatchTool(QLatin1String("AutoCorrection"), ColorTool, parent)
 {
-    m_comboBox = 0;
+    m_comboBox = nullptr;
 }
 
 AutoCorrection::~AutoCorrection()

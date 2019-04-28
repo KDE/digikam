@@ -46,7 +46,7 @@ namespace DigikamBqmIccConvertPlugin
 
 IccConvert::IccConvert(QObject* const parent)
     : BatchTool(QLatin1String("IccConvert"), ColorTool, parent),
-      m_settingsView(0)
+      m_settingsView(nullptr)
 {
 }
 
@@ -112,7 +112,7 @@ bool IccConvert::toolOperations()
     transform.setInputProfile(in);
     transform.setOutputProfile(out);
 
-    IccTransformFilter icc(&image(), 0L, transform);
+    IccTransformFilter icc(&image(), nullptr, transform);
     applyFilter(&icc);
 
     image().setIccProfile(icc.getTargetImage().getIccProfile());

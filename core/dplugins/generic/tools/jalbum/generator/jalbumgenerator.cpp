@@ -55,12 +55,12 @@ class Q_DECL_HIDDEN JAlbumGenerator::Private
 public:
 
     explicit Private()
-      : that(0),
-        settings(0),
+      : that(nullptr),
+        settings(nullptr),
         warnings(false),
         cancel(false),
-        pview(0),
-        pbar(0)
+        pview(nullptr),
+        pbar(nullptr)
     {
     }
 

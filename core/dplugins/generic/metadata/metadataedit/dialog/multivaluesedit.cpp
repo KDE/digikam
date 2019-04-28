@@ -51,12 +51,12 @@ public:
 
     explicit Private()
     {
-        addValueButton = 0;
-        delValueButton = 0;
-        repValueButton = 0;
-        valueBox       = 0;
-        valueCheck     = 0;
-        dataList       = 0;
+        addValueButton = nullptr;
+        delValueButton = nullptr;
+        repValueButton = nullptr;
+        valueBox       = nullptr;
+        valueCheck     = nullptr;
+        dataList       = nullptr;
     }
 
     QStringList       oldValues;

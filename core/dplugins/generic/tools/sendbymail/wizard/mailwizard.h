@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT MailWizard : public DWizardDlg
 {
 public:
 
-    explicit MailWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit MailWizard(QWidget* const parent, DInfoInterface* const iface = nullptr);
     ~MailWizard();
 
     bool validateCurrentPage() override;

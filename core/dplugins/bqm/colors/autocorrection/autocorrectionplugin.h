@@ -42,7 +42,7 @@ class AutoCorrectionPlugin : public DPluginBqm
 
 public:
 
-    explicit AutoCorrectionPlugin(QObject* const parent = 0);
+    explicit AutoCorrectionPlugin(QObject* const parent = nullptr);
     ~AutoCorrectionPlugin();
 
     QString name()                 const override;

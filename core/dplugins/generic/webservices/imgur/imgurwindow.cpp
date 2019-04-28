@@ -72,7 +72,7 @@ public:
 };
 
 ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Imgur Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Imgur Dialog")),
       d(new Private)
 {
     d->api = new ImgurTalker(this);

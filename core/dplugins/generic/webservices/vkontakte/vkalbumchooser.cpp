@@ -57,13 +57,13 @@ public:
 
     explicit Private()
     {
-        albumsCombo        = 0;
-        newAlbumButton     = 0;
-        reloadAlbumsButton = 0;
-        editAlbumButton    = 0;
-        deleteAlbumButton  = 0;
+        albumsCombo        = nullptr;
+        newAlbumButton     = nullptr;
+        reloadAlbumsButton = nullptr;
+        editAlbumButton    = nullptr;
+        deleteAlbumButton  = nullptr;
         albumToSelect      = -1;
-        vkapi              = 0;
+        vkapi              = nullptr;
     }
 
     QComboBox*                  albumsCombo;
@@ -245,7 +245,7 @@ void VKAlbumChooser::slotAlbumCreationDone(KJob* kjob)
     Vkontakte::CreateAlbumJob* const job = dynamic_cast<Vkontakte::CreateAlbumJob*>(kjob);
     Q_ASSERT(job);
 
-    if (job == 0 || job->error())
+    if (job == nullptr || job->error())
     {
         handleVkError(job);
         updateBusyStatus(false);
@@ -441,7 +441,7 @@ void VKAlbumChooser::handleVkError(KJob* kjob)
 {
     QMessageBox::critical(this,
                           i18nc("@title:window", "Request to VKontakte failed"),
-                          kjob == 0 ? i18n("Internal error: Null pointer to KJob instance.") : kjob->errorText());
+                          kjob == nullptr ? i18n("Internal error: Null pointer to KJob instance.") : kjob->errorText());
 }
 
 } // namespace DigikamGenericVKontaktePlugin

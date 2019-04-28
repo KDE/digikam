@@ -115,7 +115,7 @@ PLT_OutputDatagramStream::PLT_OutputDatagramStream(NPT_UdpSocket*   socket,
                                                    NPT_Size         size, 
                                                    const NPT_SocketAddress* address) : 
     m_Socket(socket),
-    m_Address(address?new NPT_SocketAddress(address->GetIpAddress(), address->GetPort()):NULL)
+    m_Address(address?new NPT_SocketAddress(address->GetIpAddress(), address->GetPort()):nullptr)
 {
     m_Buffer.SetBufferSize(size);
 }

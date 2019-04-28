@@ -65,7 +65,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                     NPT_Size  bytes_to_read, 
-                    NPT_Size* bytes_read = 0) override;
+                    NPT_Size* bytes_read = nullptr) override;
 
     NPT_Result Seek(NPT_Position offset) override { NPT_COMPILER_UNUSED(offset); return NPT_FAILURE; }
     NPT_Result Skip(NPT_Size offset) override { NPT_COMPILER_UNUSED(offset); return NPT_FAILURE; }
@@ -96,11 +96,11 @@ public:
     // methods
     PLT_OutputDatagramStream(NPT_UdpSocket*           socket, 
                              NPT_Size                 size = 4096,
-                             const NPT_SocketAddress* address = NULL);
+                             const NPT_SocketAddress* address = nullptr);
     ~PLT_OutputDatagramStream() override;
 
     // NPT_OutputStream methods
-    NPT_Result Write(const void* buffer, NPT_Size bytes_to_write, NPT_Size* bytes_written = NULL) override;
+    NPT_Result Write(const void* buffer, NPT_Size bytes_to_write, NPT_Size* bytes_written = nullptr) override;
     NPT_Result Flush() override;
 
     NPT_Result Seek(NPT_Position offset) override  { NPT_COMPILER_UNUSED(offset); return NPT_FAILURE; }

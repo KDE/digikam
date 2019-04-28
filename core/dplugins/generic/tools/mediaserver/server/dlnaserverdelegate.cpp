@@ -346,7 +346,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
                                                             bool                          allip)
 {
     PLT_MediaItemResource resource;
-    PLT_MediaObject*      object = NULL;
+    PLT_MediaObject*      object = nullptr;
 
     qCDebug(DIGIKAM_MEDIASRV_LOG) << "Building didl for file \"" << filepath.GetChars() << "\"";
 
@@ -537,7 +537,7 @@ failure:
 
     delete object;
 
-    return NULL;
+    return nullptr;
 }
 
 NPT_Result DLNAMediaServerDelegate::GetFilePath(const char* object_id,

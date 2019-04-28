@@ -42,7 +42,7 @@ class BWSepiaToolPlugin : public DPluginEditor
 
 public:
 
-    explicit BWSepiaToolPlugin(QObject* const parent = 0);
+    explicit BWSepiaToolPlugin(QObject* const parent = nullptr);
     ~BWSepiaToolPlugin();
 
     QString name()                 const override;

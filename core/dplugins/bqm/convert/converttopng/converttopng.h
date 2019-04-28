@@ -39,13 +39,13 @@ class ConvertToPNG : public BatchTool
 
 public:
 
-    explicit ConvertToPNG(QObject* const parent = 0);
+    explicit ConvertToPNG(QObject* const parent = nullptr);
     ~ConvertToPNG();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToPNG(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToPNG(parent); };
 
     void registerSettingsWidget();
 

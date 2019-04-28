@@ -59,7 +59,7 @@ public:
     QueryInfoTest()
     {
         queryInfoCount = 0;
-        m_mediaWiki    = 0;
+        m_mediaWiki    = nullptr;
     }
 
 public Q_SLOTS:

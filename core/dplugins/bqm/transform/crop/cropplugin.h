@@ -42,7 +42,7 @@ class CropPlugin : public DPluginBqm
 
 public:
 
-    explicit CropPlugin(QObject* const parent = 0);
+    explicit CropPlugin(QObject* const parent = nullptr);
     ~CropPlugin();
 
     QString name()                 const override;

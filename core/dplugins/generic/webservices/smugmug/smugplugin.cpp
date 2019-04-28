@@ -125,7 +125,7 @@ void SmugPlugin::slotSmugMugExport()
     if (!reactivateToolDialog(m_toolDlgExport))
     {
         delete m_toolDlgExport;
-        m_toolDlgExport = new SmugWindow(infoIface(sender()), 0);
+        m_toolDlgExport = new SmugWindow(infoIface(sender()), nullptr);
         m_toolDlgExport->setPlugin(this);
         m_toolDlgExport->show();
     }
@@ -136,7 +136,7 @@ void SmugPlugin::slotSmugMugImport()
     if (!reactivateToolDialog(m_toolDlgImport))
     {
         delete m_toolDlgImport;
-        m_toolDlgImport = new SmugWindow(infoIface(sender()), 0, true);
+        m_toolDlgImport = new SmugWindow(infoIface(sender()), nullptr, true);
         m_toolDlgImport->setPlugin(this);
         m_toolDlgImport->show();
     }

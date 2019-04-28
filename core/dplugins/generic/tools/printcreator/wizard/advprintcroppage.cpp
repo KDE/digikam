@@ -67,8 +67,8 @@ public:
 public:
 
     explicit Private(QWizard* const dialog)
-      : settings(0),
-        iface(0)
+      : settings(nullptr),
+        iface(nullptr)
     {
         cropUi = new CropUI(dialog);
         wizard = dynamic_cast<AdvPrintWizard*>(dialog);

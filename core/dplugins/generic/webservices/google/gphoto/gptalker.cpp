@@ -96,7 +96,7 @@ public:
     explicit Private()
     {
         state           = GP_LOGOUT;
-        netMngr         = 0;
+        netMngr         = nullptr;
 
         userInfoUrl     = QLatin1String("https://www.googleapis.com/plus/v1/people/me");
 
@@ -138,7 +138,7 @@ GPTalker::GPTalker(QWidget* const parent)
                    QLatin1String("GooglePhotos")),
       d(new Private)
 {
-    m_reply    = 0;
+    m_reply    = nullptr;
     d->netMngr = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
@@ -181,7 +181,7 @@ void GPTalker::listAlbums(const QString& nextPageToken)
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list albums";
@@ -222,7 +222,7 @@ void GPTalker::getLoggedInUser()
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     QUrl url(d->userInfoUrl);
@@ -245,7 +245,7 @@ void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     QUrl url(d->apiUrl.arg(QLatin1String("mediaItems:search")));
@@ -272,7 +272,7 @@ void GPTalker::createAlbum(const GSFolder& album)
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     // Create body in json
@@ -309,7 +309,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     QUrl url(d->apiUrl.arg(QLatin1String("uploads")));
@@ -391,7 +391,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info, /*const QStr
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -518,7 +518,7 @@ void GPTalker::getPhoto(const QString& imgPath)
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -536,7 +536,7 @@ void GPTalker::cancel()
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -617,7 +617,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_reply = 0;
+    m_reply = nullptr;
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply error : " << reply->error() << " - " << reply->errorString();
 
@@ -685,7 +685,7 @@ void GPTalker::slotUploadPhoto()
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     QUrl url(d->apiUrl.arg(QLatin1String("mediaItems:batchCreate")));

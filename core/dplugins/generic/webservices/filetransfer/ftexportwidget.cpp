@@ -54,10 +54,10 @@ public:
 
     explicit Private()
     {
-        targetLabel        = 0;
-        targetDialog       = 0;
-        targetSearchButton = 0;
-        imageList          = 0;
+        targetLabel        = nullptr;
+        targetDialog       = nullptr;
+        targetSearchButton = nullptr;
+        imageList          = nullptr;
     }
 
     KUrlComboRequester* targetLabel;

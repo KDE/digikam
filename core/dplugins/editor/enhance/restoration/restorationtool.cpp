@@ -70,11 +70,11 @@ public:
 public:
 
     explicit Private()
-      : mainTab(0),
-        restorationTypeCB(0),
-        settingsWidget(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : mainTab(nullptr),
+        restorationTypeCB(nullptr),
+        settingsWidget(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -129,7 +129,7 @@ RestorationTool::RestorationTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

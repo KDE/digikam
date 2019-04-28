@@ -76,25 +76,25 @@ public:
     explicit Private()
     {
         import               = false;
-        widget               = 0;
-        loginLabel           = 0;
-        headerLabel          = 0;
-        changeUserButton     = 0;
-        albumsBox            = 0;
-        newAlbumButton       = 0;
-        reloadAlbumsButton   = 0;
-        albumsCombo          = 0;
-        accessCombo          = 0;
-        hideOriginalCheck    = 0;
-        disableCommentsCheck = 0;
-        adultCheck           = 0;
-        resizeCheck          = 0;
-        dimensionSpin        = 0;
-        imageQualitySpin     = 0;
-        policyGroup          = 0;
-        imgList              = 0;
-        progressBar          = 0;
-        iface                = 0;
+        widget               = nullptr;
+        loginLabel           = nullptr;
+        headerLabel          = nullptr;
+        changeUserButton     = nullptr;
+        albumsBox            = nullptr;
+        newAlbumButton       = nullptr;
+        reloadAlbumsButton   = nullptr;
+        albumsCombo          = nullptr;
+        accessCombo          = nullptr;
+        hideOriginalCheck    = nullptr;
+        disableCommentsCheck = nullptr;
+        adultCheck           = nullptr;
+        resizeCheck          = nullptr;
+        dimensionSpin        = nullptr;
+        imageQualitySpin     = nullptr;
+        policyGroup          = nullptr;
+        imgList              = nullptr;
+        progressBar          = nullptr;
+        iface                = nullptr;
     }
 
     bool                        import;
@@ -143,7 +143,7 @@ public:
 const char* YFWindow::Private::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
 
 YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const /*parent*/, bool import)
-    : WSToolDialog(0, QLatin1String("YandexFotki Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("YandexFotki Dialog")),
       d(new Private)
 {
     d->iface                = iface;

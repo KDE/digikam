@@ -39,12 +39,12 @@ class Sharpen : public BatchTool
 
 public:
 
-    explicit Sharpen(QObject* const parent = 0);
+    explicit Sharpen(QObject* const parent = nullptr);
     ~Sharpen();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Sharpen(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Sharpen(parent); };
 
     void registerSettingsWidget();
 

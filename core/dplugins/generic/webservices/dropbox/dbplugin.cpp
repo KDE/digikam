@@ -105,7 +105,7 @@ void DBPlugin::slotDropBox()
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new DBWindow(infoIface(sender()), 0);
+        m_toolDlg = new DBWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

@@ -46,10 +46,10 @@ namespace DigikamBqmRemoveMetadataPlugin
 RemoveMetadata::RemoveMetadata(QObject* const parent)
     : BatchTool(QLatin1String("RemoveMetadata"), MetadataTool, parent)
 {
-    m_removeExif     = 0;
-    m_removeIptc     = 0;
-    m_removeXmp      = 0;
-    m_removeXmpVideo = 0;
+    m_removeExif     = nullptr;
+    m_removeIptc     = nullptr;
+    m_removeXmp      = nullptr;
+    m_removeXmpVideo = nullptr;
 }
 
 RemoveMetadata::~RemoveMetadata()

@@ -43,12 +43,12 @@ public:
 
     explicit Private(QWizard* const dialog)
       : albumSupport(false),
-        albumSelector(0),
-        imageList(0),
-        stack(0),
-        wizard(0),
-        info(0),
-        iface(0)
+        albumSelector(nullptr),
+        imageList(nullptr),
+        stack(nullptr),
+        wizard(nullptr),
+        info(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<HTMLWizard*>(dialog);
 

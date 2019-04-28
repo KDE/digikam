@@ -123,7 +123,7 @@ void FTPlugin::slotFileTransferExport()
     if (!reactivateToolDialog(m_toolDlgExport))
     {
         delete m_toolDlgExport;
-        m_toolDlgExport = new FTExportWindow(infoIface(sender()), 0);
+        m_toolDlgExport = new FTExportWindow(infoIface(sender()), nullptr);
         m_toolDlgExport->setPlugin(this);
         m_toolDlgExport->show();
     }
@@ -134,7 +134,7 @@ void FTPlugin::slotFileTransferImport()
     if (!reactivateToolDialog(m_toolDlgImport))
     {
         delete m_toolDlgImport;
-        m_toolDlgImport = new FTImportWindow(infoIface(sender()), 0);
+        m_toolDlgImport = new FTImportWindow(infoIface(sender()), nullptr);
         m_toolDlgImport->setPlugin(this);
         m_toolDlgImport->show();
     }

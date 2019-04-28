@@ -56,13 +56,13 @@ class Q_DECL_HIDDEN VidSlideFinalPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : progressView(0),
-        progressBar(0),
+      : progressView(nullptr),
+        progressBar(nullptr),
         complete(false),
-        encoder(0),
-        wizard(0),
-        settings(0),
-        iface(0)
+        encoder(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<VidSlideWizard*>(dialog);
 

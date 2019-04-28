@@ -79,18 +79,18 @@ public:
 
     explicit Private()
     {
-        timer               = 0;
+        timer               = nullptr;
         fileIndex           = 0;
-        imageLoader         = 0;
-        texture[0]          = 0;
-        texture[1]          = 0;
-        texture[2]          = 0;
+        imageLoader         = nullptr;
+        texture[0]          = nullptr;
+        texture[1]          = nullptr;
+        texture[2]          = nullptr;
         curr                = 0;
         width               = 0;
         height              = 0;
         xMargin             = 0;
         yMargin             = 0;
-        effect              = 0;
+        effect              = nullptr;
         tex1First           = true;
         effectRunning       = false;
         timeout             = 0;
@@ -98,18 +98,18 @@ public:
         random              = false;
         i                   = 0;
         dir                 = 0;
-        slideCtrlWidget     = 0;
+        slideCtrlWidget     = nullptr;
 
 #ifdef HAVE_MEDIAPLAYER
-        playbackWidget      = 0;
+        playbackWidget      = nullptr;
 #endif
 
-        mouseMoveTimer      = 0;
+        mouseMoveTimer      = nullptr;
         deskX               = 0;
         deskY               = 0;
         deskWidth           = 0;
         deskHeight          = 0;
-        sharedData          = 0;
+        sharedData          = nullptr;
     }
 
     QMap<QString, EffectMethod>       effects;
@@ -644,7 +644,7 @@ void PresentationGL::montage(QImage& top, QImage& bot)
     int eh = bh / 2 + th / 2;
 
     unsigned int* tdata = reinterpret_cast<unsigned int*>(top.scanLine(0));
-    unsigned int* bdata = 0;
+    unsigned int* bdata = nullptr;
 
     for (int y = sh ; y < eh ; ++y)
     {

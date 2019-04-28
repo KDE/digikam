@@ -80,7 +80,7 @@ public:
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QueryImageinfo(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QueryImageinfo(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destructs a query image info job.

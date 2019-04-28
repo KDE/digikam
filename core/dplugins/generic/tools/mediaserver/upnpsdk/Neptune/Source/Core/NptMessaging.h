@@ -178,11 +178,11 @@ class NPT_MessageReceiver
 {
 public:
     // methods
-    NPT_MessageReceiver() : m_Queue(NULL), m_Handler(NULL) {}
+    NPT_MessageReceiver() : m_Queue(nullptr), m_Handler(nullptr) {}
     NPT_MessageReceiver(NPT_MessageHandler* handler) : 
-        m_Queue(NULL), m_Handler(handler) {}
+        m_Queue(nullptr), m_Handler(handler) {}
     NPT_MessageReceiver(NPT_MessageQueue* queue) : 
-        m_Queue(queue), m_Handler(NULL) {}
+        m_Queue(queue), m_Handler(nullptr) {}
     NPT_MessageReceiver(NPT_MessageHandler* handler, 
                         NPT_MessageQueue*   queue) : 
         m_Queue(queue), m_Handler(handler) {}

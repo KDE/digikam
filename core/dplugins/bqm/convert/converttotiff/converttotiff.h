@@ -39,13 +39,13 @@ class ConvertToTIFF : public BatchTool
 
 public:
 
-    explicit ConvertToTIFF(QObject* const parent = 0);
+    explicit ConvertToTIFF(QObject* const parent = nullptr);
     ~ConvertToTIFF();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToTIFF(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToTIFF(parent); };
 
     void registerSettingsWidget();
 

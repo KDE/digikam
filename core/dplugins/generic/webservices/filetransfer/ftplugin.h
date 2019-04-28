@@ -45,7 +45,7 @@ class FTPlugin : public DPluginGeneric
 
 public:
 
-    explicit FTPlugin(QObject* const parent = 0);
+    explicit FTPlugin(QObject* const parent = nullptr);
     ~FTPlugin();
 
     QString name()                 const override;

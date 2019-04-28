@@ -41,7 +41,7 @@ namespace DigikamBqmBWConvertPlugin
 
 BWConvert::BWConvert(QObject* const parent)
     : BatchTool(QLatin1String("BWConvert"), ColorTool, parent),
-      m_settingsView(0)
+      m_settingsView(nullptr)
 {
 }
 
@@ -136,7 +136,7 @@ bool BWConvert::toolOperations()
     curves.values[LuminosityChannel] = settings()[QLatin1String("curves")].value<QPolygon>();
     prm.curvesPrm                    = curves;
 
-    BWSepiaFilter bw(&image(), 0L, prm);
+    BWSepiaFilter bw(&image(), nullptr, prm);
     applyFilter(&bw);
 
     return (savefromDImg());

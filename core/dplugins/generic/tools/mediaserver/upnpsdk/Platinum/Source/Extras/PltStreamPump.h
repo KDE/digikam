@@ -51,7 +51,7 @@ public:
     virtual ~PLT_PipeInputStream() {};
 
     // methods
-    virtual NPT_Result Receive(NPT_InputStream& stream, NPT_Size max_bytes_to_read, NPT_Size* bytes_read = 0) = 0;
+    virtual NPT_Result Receive(NPT_InputStream& stream, NPT_Size max_bytes_to_read, NPT_Size* bytes_read = nullptr) = 0;
 };
 
 typedef NPT_Reference<PLT_PipeInputStream> PLT_PipeInputStreamReference;

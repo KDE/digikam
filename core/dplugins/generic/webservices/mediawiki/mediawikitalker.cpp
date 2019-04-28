@@ -56,8 +56,8 @@ public:
 
     explicit Private()
     {
-        interface = 0;
-        MediaWiki = 0;
+        interface = nullptr;
+        MediaWiki = nullptr;
     }
 
     QList<QUrl>                              urls;
@@ -101,7 +101,7 @@ void MediaWikiTalker::setImageMap(const QMap <QString,QMap <QString,QString> >& 
 
 void MediaWikiTalker::slotUploadHandle(KJob* j)
 {
-    if (j != 0)
+    if (j != nullptr)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Upload error" << j->error() << j->errorString() << j->errorText();
         emit signalUploadProgress(100);

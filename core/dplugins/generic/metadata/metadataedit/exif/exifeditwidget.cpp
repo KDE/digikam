@@ -61,19 +61,19 @@ public:
     {
         modified      = false;
         isReadOnly    = false;
-        page_caption  = 0;
-        page_datetime = 0;
-        page_lens     = 0;
-        page_device   = 0;
-        page_light    = 0;
-        page_adjust   = 0;
-        captionPage   = 0;
-        datetimePage  = 0;
-        lensPage      = 0;
-        devicePage    = 0;
-        lightPage     = 0;
-        adjustPage    = 0;
-        dlg           = 0;
+        page_caption  = nullptr;
+        page_datetime = nullptr;
+        page_lens     = nullptr;
+        page_device   = nullptr;
+        page_light    = nullptr;
+        page_adjust   = nullptr;
+        captionPage   = nullptr;
+        datetimePage  = nullptr;
+        lensPage      = nullptr;
+        devicePage    = nullptr;
+        lightPage     = nullptr;
+        adjustPage    = nullptr;
+        dlg           = nullptr;
     }
 
     bool                 modified;

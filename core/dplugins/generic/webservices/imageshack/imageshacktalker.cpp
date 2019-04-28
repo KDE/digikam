@@ -78,11 +78,11 @@ public:
         loginApiUrl     = QUrl(QLatin1String("http://my.imageshack.us/setlogin.php"));
         galleryUrl      = QUrl(QLatin1String("http://www.imageshack.us/gallery_api.php"));
         appKey          = QLatin1String("YPZ2L9WV2de2a1e08e8fbddfbcc1c5c39f94f92a");
-        session         = 0;
+        session         = nullptr;
         loginInProgress = false;
-        reply           = 0;
+        reply           = nullptr;
         state           = IMGHCK_DONOTHING;
-        netMngr         = 0;
+        netMngr         = nullptr;
     }
 
 public:
@@ -128,7 +128,7 @@ void ImageShackTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -160,7 +160,7 @@ void ImageShackTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {
@@ -214,7 +214,7 @@ void ImageShackTalker::authenticate()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -239,7 +239,7 @@ void ImageShackTalker::getGalleries()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -372,7 +372,7 @@ void ImageShackTalker::uploadItem(const QString& path, const QMap<QString, QStri
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -421,7 +421,7 @@ void ImageShackTalker::uploadItemToGallery(const QString& path, const QString& /
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);

@@ -71,16 +71,16 @@ public:
     explicit Private()
       : alignTextMode(0),
         defaultSizeFont(0),
-        borderText(0),
-        transparentText(0),
-        alignButtonGroup(0),
-        textRotation(0),
-        textOpacity(0),
-        fontColorButton(0),
-        fontChooserWidget(0),
-        textEdit(0),
-        previewWidget(0),
-        gboxSettings(0)
+        borderText(nullptr),
+        transparentText(nullptr),
+        alignButtonGroup(nullptr),
+        textRotation(nullptr),
+        textOpacity(nullptr),
+        fontColorButton(nullptr),
+        fontChooserWidget(nullptr),
+        textEdit(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -135,7 +135,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QFrame* const frame  = new QFrame(0);
+    QFrame* const frame  = new QFrame(nullptr);
     frame->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 
     QVBoxLayout* const l = new QVBoxLayout(frame);
@@ -147,14 +147,14 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->textEdit     = new QTextEdit();
     d->textEdit->setWordWrapMode(QTextOption::NoWrap);
     d->textEdit->setWhatsThis( i18n("Here, enter the text you want to insert in your image."));
 
     // -------------------------------------------------------------
 
-    d->fontChooserWidget = new DFontProperties(0, DFontProperties::NoDisplayFlags);
+    d->fontChooserWidget = new DFontProperties(nullptr, DFontProperties::NoDisplayFlags);
     d->fontChooserWidget->setSampleBoxVisible(false);
     d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
 

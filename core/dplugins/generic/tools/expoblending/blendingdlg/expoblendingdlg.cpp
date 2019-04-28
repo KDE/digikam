@@ -83,17 +83,17 @@ class Q_DECL_HIDDEN ExpoBlendingDlg::Private
 public:
 
     explicit Private()
-      : templateFileName(0),
-        previewWidget(0),
-        enfuseSettingsBox(0),
-        saveSettingsBox(0),
-        bracketStack(0),
-        enfuseStack(0),
-        mngr(0),
+      : templateFileName(nullptr),
+        previewWidget(nullptr),
+        enfuseSettingsBox(nullptr),
+        saveSettingsBox(nullptr),
+        bracketStack(nullptr),
+        enfuseStack(nullptr),
+        mngr(nullptr),
         firstImageDisplayed(false),
-        buttonBox(0),
-        previewButton(0),
-        startButton(0),
+        buttonBox(nullptr),
+        previewButton(nullptr),
+        startButton(nullptr),
         propagateReject(true)
     {
     }

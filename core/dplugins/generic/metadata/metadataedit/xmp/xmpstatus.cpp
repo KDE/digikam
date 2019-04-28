@@ -52,12 +52,12 @@ public:
 
     explicit Private()
     {
-        objectNameEdit          = 0;
-        specialInstructionEdit  = 0;
-        specialInstructionCheck = 0;
-        nicknameEdit            = 0;
-        nicknameCheck           = 0;
-        identifiersEdit         = 0;
+        objectNameEdit          = nullptr;
+        specialInstructionEdit  = nullptr;
+        specialInstructionCheck = nullptr;
+        nicknameEdit            = nullptr;
+        nicknameCheck           = nullptr;
+        identifiersEdit         = nullptr;
     }
 
     QCheckBox*          nicknameCheck;

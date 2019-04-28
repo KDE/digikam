@@ -81,7 +81,7 @@ CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
     int months        = CalSystem().monthsInYear(date);
     // span the monthWidgets over 2 rows. inRow should usually be 6 or 7 (for 12 or 13 months)
     int inRow         = (months / 2) + ((months % 2) != 0);
-    CalMonthWidget* w = 0;
+    CalMonthWidget* w = nullptr;
 
     for (int i = 0; i < d->MAX_MONTHS; ++i)
     {

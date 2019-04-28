@@ -42,7 +42,7 @@ class FilmToolPlugin : public DPluginEditor
 
 public:
 
-    explicit FilmToolPlugin(QObject* const parent = 0);
+    explicit FilmToolPlugin(QObject* const parent = nullptr);
     ~FilmToolPlugin();
 
     QString name()                 const override;

@@ -51,9 +51,9 @@ class Q_DECL_HIDDEN BlurTool::Private
 public:
 
     explicit Private()
-      : radiusInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : radiusInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -77,7 +77,7 @@ BlurTool::BlurTool(QObject* const parent)
     setObjectName(QLatin1String("gaussianblur"));
     setToolHelp(QLatin1String("blursharpentool.anchor"));
 
-    d->gboxSettings  = new EditorToolSettings(0);
+    d->gboxSettings  = new EditorToolSettings(nullptr);
     d->previewWidget = new ImageRegionWidget;
 
     // --------------------------------------------------------

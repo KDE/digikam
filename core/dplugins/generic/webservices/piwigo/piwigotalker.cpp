@@ -60,17 +60,17 @@ public:
 
     explicit Private()
     {
-        parent     = 0;
+        parent     = nullptr;
         state      = GE_LOGOUT;
-        netMngr    = 0;
-        reply      = 0;
+        netMngr    = nullptr;
+        reply      = nullptr;
         loggedIn   = false;
         chunkId    = 0;
         nbOfChunks = 0;
         version    = -1;
         albumId    = 0;
         photoId    = 0;
-        iface      = 0;
+        iface      = nullptr;
     }
 
     QWidget*               parent;
@@ -125,7 +125,7 @@ void PiwigoTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 }
 
@@ -344,7 +344,7 @@ void PiwigoTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply     = 0;
+    d->reply     = nullptr;
     State state = d->state; // Can change in the treatment itself, so we cache it
 
     if (reply->error() != QNetworkReply::NoError)

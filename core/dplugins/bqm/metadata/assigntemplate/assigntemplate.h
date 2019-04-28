@@ -41,12 +41,12 @@ class AssignTemplate : public BatchTool
 
 public:
 
-    explicit AssignTemplate(QObject* const parent = 0);
+    explicit AssignTemplate(QObject* const parent = nullptr);
     virtual ~AssignTemplate();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const
+    BatchTool* clone(QObject* const parent=nullptr) const
     { 
         return new AssignTemplate(parent);
     };

@@ -51,8 +51,8 @@ AdvPrintSettings::AdvPrintSettings()
     captionColor       = QColor(Qt::yellow);
     captionFont        = QFont(QLatin1String("Sans Serif"));
     captionSize        = 4;
-    outputLayouts      = 0;
-    outputPrinter      = 0;
+    outputLayouts      = nullptr;
+    outputPrinter      = nullptr;
     conflictRule       = FileSaveConflictBox::OVERWRITE;
     openInFileBrowser  = true;
 }

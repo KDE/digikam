@@ -51,7 +51,7 @@ class Q_DECL_HIDDEN PanoActionThread::Private
 {
 public:
 
-    explicit Private(QObject* const parent = 0)
+    explicit Private(QObject* const parent = nullptr)
       : threadQueue(new Queue(parent))
     {
         ThreadWeaver::setDebugLevel(true, 10);

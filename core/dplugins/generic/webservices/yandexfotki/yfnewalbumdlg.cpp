@@ -55,7 +55,7 @@ public:
 
     explicit Private()
     {
-        passwordEdit = 0;
+        passwordEdit = nullptr;
     }
 
     QLineEdit*       passwordEdit;

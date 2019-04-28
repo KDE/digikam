@@ -42,7 +42,7 @@ class PresentationPlugin : public DPluginGeneric
 
 public:
 
-    explicit PresentationPlugin(QObject* const parent = 0);
+    explicit PresentationPlugin(QObject* const parent = nullptr);
     ~PresentationPlugin();
 
     QString name()                 const override;

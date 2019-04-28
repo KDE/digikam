@@ -54,10 +54,10 @@ public:
 
     explicit Private()
     {
-        pUrlEdit      = 0;
-        pUsernameEdit = 0;
-        pPasswordEdit = 0;
-        pPiwigo       = 0;
+        pUrlEdit      = nullptr;
+        pUsernameEdit = nullptr;
+        pPasswordEdit = nullptr;
+        pPiwigo       = nullptr;
     }
 
     QLineEdit*     pUrlEdit;

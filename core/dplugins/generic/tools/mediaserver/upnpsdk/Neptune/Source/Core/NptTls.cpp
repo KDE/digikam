@@ -1075,7 +1075,7 @@ NPT_HttpTlsConnector::Connect(const NPT_HttpUrl&           url,
                               NPT_HttpClient::Connection*& connection)
 {
     // default values
-    connection = NULL;
+    connection = nullptr;
     
     // local reference holders
     NPT_InputStreamReference  input_stream;

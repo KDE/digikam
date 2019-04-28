@@ -53,8 +53,8 @@ public:
         w(0),
         xpos(0),
         ypos(0),
-        pixmap(0),
-        iface(0)
+        pixmap(nullptr),
+        iface(nullptr)
     {
     }
 
@@ -241,7 +241,7 @@ DImg InsertTextWidget::makeInsertText()
     int borderWidth = qMax(1, qRound(ratioW));
 
     // compose and draw result on image
-    composeImage(&image, 0, x, y,
+    composeImage(&image, nullptr, x, y,
                  d->textFont, d->textFont.pointSizeF(),
                  d->textRotation, d->textColor, d->textOpacity,
                  d->alignMode, d->textString, d->textTransparent, d->backgroundColor,

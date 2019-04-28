@@ -41,12 +41,12 @@ class RemoveMetadata : public BatchTool
 
 public:
 
-    explicit RemoveMetadata(QObject* const parent = 0);
+    explicit RemoveMetadata(QObject* const parent = nullptr);
     virtual ~RemoveMetadata();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const
+    BatchTool* clone(QObject* const parent=nullptr) const
     {
         return new RemoveMetadata(parent);
     };

@@ -45,7 +45,7 @@ class PanoWizard : public DWizardDlg
 
 public:
 
-    explicit PanoWizard(PanoManager* const mngr, QWidget* const parent=0);
+    explicit PanoWizard(PanoManager* const mngr, QWidget* const parent=nullptr);
     ~PanoWizard();
 
 private:

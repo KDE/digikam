@@ -71,35 +71,35 @@ public:
 
     explicit Private()
       : originalIsLandscape(false),
-        customLabel(0),
-        orientLabel(0),
-        colorGuideLabel(0),
-        resLabel(0),
-        centerWidth(0),
-        centerHeight(0),
-        goldenSectionBox(0),
-        goldenSpiralSectionBox(0),
-        goldenSpiralBox(0),
-        goldenTriangleBox(0),
-        flipHorBox(0),
-        flipVerBox(0),
-        autoOrientation(0),
-        preciseCrop(0),
-        ratioCB(0),
-        orientCB(0),
-        guideLinesCB(0),
-        customRatioDInput(0),
-        customRatioNInput(0),
-        guideSize(0),
-        heightInput(0),
-        widthInput(0),
-        xInput(0),
-        yInput(0),
-        guideColorBt(0),
-        imageSelectionWidget(0),
-        expbox(0),
-        gboxSettings(0),
-        histogramBox(0)
+        customLabel(nullptr),
+        orientLabel(nullptr),
+        colorGuideLabel(nullptr),
+        resLabel(nullptr),
+        centerWidth(nullptr),
+        centerHeight(nullptr),
+        goldenSectionBox(nullptr),
+        goldenSpiralSectionBox(nullptr),
+        goldenSpiralBox(nullptr),
+        goldenTriangleBox(nullptr),
+        flipHorBox(nullptr),
+        flipVerBox(nullptr),
+        autoOrientation(nullptr),
+        preciseCrop(nullptr),
+        ratioCB(nullptr),
+        orientCB(nullptr),
+        guideLinesCB(nullptr),
+        customRatioDInput(nullptr),
+        customRatioNInput(nullptr),
+        guideSize(nullptr),
+        heightInput(nullptr),
+        widthInput(nullptr),
+        xInput(nullptr),
+        yInput(nullptr),
+        guideColorBt(nullptr),
+        imageSelectionWidget(nullptr),
+        expbox(nullptr),
+        gboxSettings(nullptr),
+        histogramBox(nullptr)
     {
     }
 
@@ -234,7 +234,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default |
                                 EditorToolSettings::Ok      |
                                 EditorToolSettings::Try     |

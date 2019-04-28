@@ -42,7 +42,7 @@ class PrintCreatorPlugin : public DPluginGeneric
 
 public:
 
-    explicit PrintCreatorPlugin(QObject* const parent = 0);
+    explicit PrintCreatorPlugin(QObject* const parent = nullptr);
     ~PrintCreatorPlugin();
 
     QString name()                 const override;

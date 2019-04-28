@@ -191,7 +191,7 @@ public:
      * @brief Constructs an Edit job.
      * @param parent the QObject parent
      */
-    explicit Edit(Iface& media, QObject* const parent = 0);
+    explicit Edit(Iface& media, QObject* const parent = nullptr);
     /**
      * @brief Destroys the Edit job.
      */

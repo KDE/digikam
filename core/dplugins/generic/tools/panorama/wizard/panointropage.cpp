@@ -67,12 +67,12 @@ public:
           // TODO HDR
 //        hdrCheckBox(0),
 
-          formatGroupBox(0),
-          settingsGroupBox(0),
-          jpegRadioButton(0),
-          tiffRadioButton(0),
-          hdrRadioButton(0),
-          binariesWidget(0)
+          formatGroupBox(nullptr),
+          settingsGroupBox(nullptr),
+          jpegRadioButton(nullptr),
+          tiffRadioButton(nullptr),
+          hdrRadioButton(nullptr),
+          binariesWidget(nullptr)
     {
     }
 

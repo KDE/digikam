@@ -42,8 +42,8 @@ AtkinsPageLayoutNode::AtkinsPageLayoutNode(double aspectRatio,
       m_division(0),
       m_type(TerminalNode),
       m_index(index),
-      m_leftChild(0),
-      m_rightChild(0)
+      m_leftChild(nullptr),
+      m_rightChild(nullptr)
 {
 }
 
@@ -79,8 +79,8 @@ AtkinsPageLayoutNode &AtkinsPageLayoutNode::operator=(const AtkinsPageLayoutNode
     m_division   = other.m_division;
     m_type       = other.m_type;
     m_index      = other.m_index;
-    m_leftChild  = other.m_leftChild  ? new AtkinsPageLayoutNode(*other.m_leftChild)  : 0;
-    m_rightChild = other.m_rightChild ? new AtkinsPageLayoutNode(*other.m_rightChild) : 0;
+    m_leftChild  = other.m_leftChild  ? new AtkinsPageLayoutNode(*other.m_leftChild)  : nullptr;
+    m_rightChild = other.m_rightChild ? new AtkinsPageLayoutNode(*other.m_rightChild) : nullptr;
 
     return *this;
 }
@@ -104,7 +104,7 @@ AtkinsPageLayoutNode* AtkinsPageLayoutNode::nodeForIndex(int index)
         return this;
 
     if (m_type == TerminalNode)
-        return 0;
+        return nullptr;
 
     AtkinsPageLayoutNode* const fromLeft = m_leftChild->nodeForIndex(index);
 
@@ -117,7 +117,7 @@ AtkinsPageLayoutNode* AtkinsPageLayoutNode::nodeForIndex(int index)
 AtkinsPageLayoutNode* AtkinsPageLayoutNode::parentOf(AtkinsPageLayoutNode* const child)
 {
     if (m_type == TerminalNode)
-        return 0;
+        return nullptr;
 
     if (m_leftChild == child || m_rightChild == child)
         return this;

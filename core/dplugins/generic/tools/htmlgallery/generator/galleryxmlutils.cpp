@@ -37,7 +37,7 @@ bool XMLWriter::open(const QString& name)
 
     m_writer.assign(ptr);
 
-    int rc = xmlTextWriterStartDocument(ptr, NULL, "UTF-8", NULL);
+    int rc = xmlTextWriterStartDocument(ptr, nullptr, "UTF-8", nullptr);
 
     if (rc < 0)
     {

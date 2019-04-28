@@ -42,7 +42,7 @@ class WallpaperPlugin : public DPluginGeneric
 
 public:
 
-    explicit WallpaperPlugin(QObject* const parent = 0);
+    explicit WallpaperPlugin(QObject* const parent = nullptr);
     ~WallpaperPlugin();
 
     QString name()                 const override;

@@ -44,7 +44,7 @@ namespace DigikamGenericSendByMailPlugin
 
 ImageResizeJob::ImageResizeJob(int* count)
     : ActionJob(),
-      m_settings(0),
+      m_settings(nullptr),
       m_count(count)
 {
 }

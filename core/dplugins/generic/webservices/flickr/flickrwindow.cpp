@@ -66,33 +66,33 @@ public:
     {
         uploadCount               = 0;
         uploadTotal               = 0;
-        newAlbumBtn               = 0;
-        changeUserButton          = 0;
-        removeAccount             = 0;
-        albumsListComboBox        = 0;
-        publicCheckBox            = 0;
-        familyCheckBox            = 0;
-        friendsCheckBox           = 0;
-        exportHostTagsCheckBox    = 0;
-        stripSpaceTagsCheckBox    = 0;
-        addExtraTagsCheckBox      = 0;
-        originalCheckBox          = 0;
-        resizeCheckBox            = 0;
-        dimensionSpinBox          = 0;
-        imageQualitySpinBox       = 0;
-        extendedPublicationButton = 0;
-        extendedTagsButton        = 0;
-        contentTypeComboBox       = 0;
-        safetyLevelComboBox       = 0;
-        userNameDisplayLabel      = 0;
-        authProgressDlg           = 0;
-        tagsLineEdit              = 0;
-        widget                    = 0;
-        talker                    = 0;
-        imglst                    = 0;
-        select                    = 0;
-        albumDlg                  = 0;
-        iface                     = 0;
+        newAlbumBtn               = nullptr;
+        changeUserButton          = nullptr;
+        removeAccount             = nullptr;
+        albumsListComboBox        = nullptr;
+        publicCheckBox            = nullptr;
+        familyCheckBox            = nullptr;
+        friendsCheckBox           = nullptr;
+        exportHostTagsCheckBox    = nullptr;
+        stripSpaceTagsCheckBox    = nullptr;
+        addExtraTagsCheckBox      = nullptr;
+        originalCheckBox          = nullptr;
+        resizeCheckBox            = nullptr;
+        dimensionSpinBox          = nullptr;
+        imageQualitySpinBox       = nullptr;
+        extendedPublicationButton = nullptr;
+        extendedTagsButton        = nullptr;
+        contentTypeComboBox       = nullptr;
+        safetyLevelComboBox       = nullptr;
+        userNameDisplayLabel      = nullptr;
+        authProgressDlg           = nullptr;
+        tagsLineEdit              = nullptr;
+        widget                    = nullptr;
+        talker                    = nullptr;
+        imglst                    = nullptr;
+        select                    = nullptr;
+        albumDlg                  = nullptr;
+        iface                     = nullptr;
     }
 
     unsigned int                     uploadCount;
@@ -147,7 +147,7 @@ public:
 FlickrWindow::FlickrWindow(DInfoInterface* const iface,
                            QWidget* const /*parent*/,
                            const QString& serviceName)
-    : WSToolDialog(0, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
+    : WSToolDialog(nullptr, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
       d(new Private)
 {
     d->iface       = iface;
@@ -164,7 +164,7 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
         grp.deleteGroup();
     }
 
-    d->select                    = new WSSelectUserDlg(0, serviceName);
+    d->select                    = new WSSelectUserDlg(nullptr, serviceName);
     d->uploadCount               = 0;
     d->uploadTotal               = 0;
     d->widget                    = new FlickrWidget(this, iface, serviceName);

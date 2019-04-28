@@ -54,7 +54,7 @@ public:
         ~Cleaner() {
             if (Instance) {
                 delete Instance;
-                Instance = NULL;
+                Instance = nullptr;
             }
         }
     };

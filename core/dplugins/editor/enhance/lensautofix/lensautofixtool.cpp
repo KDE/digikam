@@ -61,12 +61,12 @@ public:
     explicit Private()
       : configGroupName(QLatin1String("Lens Auto-Correction Tool")),
         configShowGrid(QLatin1String("Show Grid")),
-        maskPreviewLabel(0),
-        showGrid(0),
-        settingsView(0),
-        cameraSelector(0),
-        previewWidget(0),
-        gboxSettings(0)
+        maskPreviewLabel(nullptr),
+        showGrid(nullptr),
+        settingsView(nullptr),
+        cameraSelector(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -92,13 +92,13 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
     setToolName(i18n("Lens Auto-Correction"));
     setToolIcon(QIcon::fromTheme(QLatin1String("lensautofix")));
 
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings         = new EditorToolSettings(0);
+    d->gboxSettings         = new EditorToolSettings(nullptr);
     QGridLayout* const grid = new QGridLayout(d->gboxSettings->plainPage());
 
     d->showGrid             = new QCheckBox(i18n("Show grid"), d->gboxSettings->plainPage());

@@ -77,27 +77,27 @@ public:
         prevH(0),
         prevWP(0.0),
         prevHP(0.0),
-        preserveRatioBox(0),
-        weightMaskBox(0),
-        preserveSkinTones(0),
-        previewWidget(0),
-        gboxSettings(0),
-        wInput(0),
-        hInput(0),
-        stepInput(0),
-        maskPenSize(0),
-        sideSwitchInput(0),
-        wpInput(0),
-        hpInput(0),
-        mixedRescaleInput(0),
-        rigidityInput(0),
-        funcInput(0),
-        resizeOrderInput(0),
-        expanderBox(0),
-        redMaskTool(0),
-        greenMaskTool(0),
-        eraseMaskTool(0),
-        maskGroup(0)
+        preserveRatioBox(nullptr),
+        weightMaskBox(nullptr),
+        preserveSkinTones(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr),
+        wInput(nullptr),
+        hInput(nullptr),
+        stepInput(nullptr),
+        maskPenSize(nullptr),
+        sideSwitchInput(nullptr),
+        wpInput(nullptr),
+        hpInput(nullptr),
+        mixedRescaleInput(nullptr),
+        rigidityInput(nullptr),
+        funcInput(nullptr),
+        resizeOrderInput(nullptr),
+        expanderBox(nullptr),
+        redMaskTool(nullptr),
+        greenMaskTool(nullptr),
+        eraseMaskTool(nullptr),
+        maskGroup(nullptr)
     {}
 
     static const QString configGroupName;
@@ -167,14 +167,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 {
     setObjectName(QLatin1String("liquidrescale"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->installEventFilter(this);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewToggleOnMouseOver);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Try|

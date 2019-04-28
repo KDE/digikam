@@ -223,7 +223,7 @@ public:
      @param code optional pointer to receive the code
      @return the error short description
      */
-    const char* GetError(unsigned int* code = NULL);
+    const char* GetError(unsigned int* code = nullptr);
     
     /**
      Return the error code for the failed action.

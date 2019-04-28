@@ -77,10 +77,10 @@ public:
 public:
 
     explicit Private()
-      : textureType(0),
-        blendGain(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : textureType(nullptr),
+        blendGain(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -108,7 +108,7 @@ TextureTool::TextureTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings  = new EditorToolSettings(0);
+    d->gboxSettings  = new EditorToolSettings(nullptr);
     d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------

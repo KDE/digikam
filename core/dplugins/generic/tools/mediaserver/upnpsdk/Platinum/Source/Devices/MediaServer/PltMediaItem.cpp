@@ -192,7 +192,7 @@ PLT_MediaObject::GetUPnPClass(const char*                   filename,
 {
     NPT_COMPILER_UNUSED(context);
 
-    const char* ret = NULL;
+    const char* ret = nullptr;
     NPT_String mime_type = PLT_MimeType::GetMimeType(filename, context);
 
     if (mime_type.StartsWith("audio")) {
@@ -789,7 +789,7 @@ PLT_MediaObject::FromDidl(NPT_XmlElementNode* entry)
         PLT_MediaItemResource resource;
 
         // extract url
-        if (children[i]->GetText() == NULL) {
+        if (children[i]->GetText() == nullptr) {
             NPT_LOG_WARNING_1("No resource text found in: %s", (const char*)PLT_XmlHelper::Serialize(*children[i]));
         } else {
             resource.m_Uri = children[i]->GetText()->SubString(0, 1024);
@@ -1101,7 +1101,7 @@ PLT_MediaContainer::FromDidl(NPT_XmlElementNode* entry)
         PLT_SearchClass search_class;
 
         // extract url
-        if (children[i]->GetText() == NULL) {
+        if (children[i]->GetText() == nullptr) {
             NPT_LOG_WARNING_1("No searchClass text found in: %s", 
 				(const char*)PLT_XmlHelper::Serialize(*children[i]));
 			continue;

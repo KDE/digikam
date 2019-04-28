@@ -96,11 +96,11 @@ public:
 
         state        = P_USERNAME;
 
-        parent       = 0;
-        netMngr      = 0;
-        reply        = 0;
-        settings     = 0;
-        view         = 0;
+        parent       = nullptr;
+        netMngr      = nullptr;
+        reply        = nullptr;
+        settings     = nullptr;
+        view         = nullptr;
     }
 
 public:
@@ -299,7 +299,7 @@ void PTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -353,7 +353,7 @@ bool PTalker::addPin(const QString& imgPath, const QString& uploadBoard, bool re
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -441,7 +441,7 @@ void PTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

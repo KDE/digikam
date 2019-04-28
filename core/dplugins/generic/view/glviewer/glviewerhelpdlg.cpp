@@ -36,7 +36,7 @@ namespace DigikamGenericGLViewerPlugin
 {
 
 GLViewerHelpDlg::GLViewerHelpDlg(DPlugin* const plugin)
-    : DPluginDialog(0, QLatin1String("GLViewerPluginHelpDlg"))
+    : DPluginDialog(nullptr, QLatin1String("GLViewerPluginHelpDlg"))
 {
     setPlugin(plugin);
     setWindowIcon(plugin->icon());

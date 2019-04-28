@@ -75,10 +75,10 @@ class Q_DECL_HIDDEN PrintOptionsPage::Private : public Ui_PrintOptionsPage
 public:
 
     explicit Private()
-      : mParent(0),
-        mConfigDialogManager(0),
-        colorManaged(0),
-        cmPreferences(0),
+      : mParent(nullptr),
+        mConfigDialogManager(nullptr),
+        colorManaged(nullptr),
+        cmPreferences(nullptr),
         cmEnabled(false)
     {
     }

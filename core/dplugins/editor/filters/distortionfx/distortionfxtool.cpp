@@ -60,14 +60,14 @@ class Q_DECL_HIDDEN DistortionFXTool::Private
 public:
 
     explicit Private()
-      : effectTypeLabel(0),
-        levelLabel(0),
-        iterationLabel(0),
-        effectType(0),
-        levelInput(0),
-        iterationInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : effectTypeLabel(nullptr),
+        levelLabel(nullptr),
+        iterationLabel(nullptr),
+        effectType(nullptr),
+        levelInput(nullptr),
+        iterationInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -108,7 +108,7 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

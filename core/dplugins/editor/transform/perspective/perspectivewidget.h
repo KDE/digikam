@@ -52,7 +52,7 @@ class PerspectiveWidget : public QWidget
 
 public:
 
-    PerspectiveWidget(int width, int height, QWidget* const parent=0);
+    PerspectiveWidget(int width, int height, QWidget* const parent=nullptr);
     ~PerspectiveWidget();
 
     QRect  getTargetSize()        const;
@@ -105,7 +105,7 @@ private:  // Widget methods.
     QPoint buildPerspective(const QPoint& orignTopLeft, const QPoint& orignBottomRight,
                             const QPoint& transTopLeft, const QPoint& transTopRight,
                             const QPoint& transBottomLeft, const QPoint& transBottomRight,
-                            DImg* const orgImage=0, DImg* const destImage=0,
+                            DImg* const orgImage=nullptr, DImg* const destImage=nullptr,
                             const DColor& background=DColor());
 
 private:

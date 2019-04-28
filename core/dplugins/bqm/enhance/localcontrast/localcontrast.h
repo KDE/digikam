@@ -40,12 +40,12 @@ class LocalContrast : public BatchTool
 
 public:
 
-    explicit LocalContrast(QObject* const parent = 0);
+    explicit LocalContrast(QObject* const parent = nullptr);
     ~LocalContrast();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new LocalContrast(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new LocalContrast(parent); };
 
     void registerSettingsWidget();
 

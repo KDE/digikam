@@ -54,7 +54,7 @@ class Q_DECL_HIDDEN HTMLParametersPage::Private
 public:
 
     explicit Private()
-      : content(0)
+      : content(nullptr)
     {
     }
 

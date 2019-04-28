@@ -101,7 +101,7 @@ public:
 
     static NPT_Result Parse(const NPT_String& xml, NPT_XmlElementNode*& tree) {
         // reset tree
-        tree = NULL;
+        tree = nullptr;
 
         // parse body
         NPT_XmlParser parser;
@@ -168,7 +168,7 @@ public:
                                    const char*         name,
                                    NPT_XmlAttribute*&  attr,
                                    const char*         namespc = "") {
-        attr = NULL;
+        attr = nullptr;
 
         if (!node) return NPT_FAILURE;
 
@@ -195,7 +195,7 @@ public:
                                    NPT_Cardinal        max_size = 1024) {
         value = "";
         
-        NPT_XmlAttribute* attribute = NULL;
+        NPT_XmlAttribute* attribute = nullptr;
         NPT_Result result = GetAttribute(node, name, attribute, namespc);
         if (NPT_FAILED(result)) return result;
         
@@ -209,7 +209,7 @@ public:
                                    const char*         name,
                                    const char*         value,
                                    const char*         namespc = "") {
-        NPT_XmlAttribute* attribute = NULL;
+        NPT_XmlAttribute* attribute = nullptr;
         NPT_CHECK(GetAttribute(node, name, attribute, namespc));
         if (!attribute) return NPT_FAILURE;
 
@@ -220,7 +220,7 @@ public:
     static NPT_Result AddChildText(NPT_XmlElementNode* node,
                                    const char*         tag,
                                    const char*         text,
-                                   const char*         prefix = NULL) {
+                                   const char*         prefix = nullptr) {
         if (!node) return NPT_FAILURE;
         NPT_XmlElementNode* child = new NPT_XmlElementNode(prefix, tag);
         child->AddText(text);
@@ -266,7 +266,7 @@ public:
             namespc = node->GetNamespace()?node->GetNamespace()->GetChars():NPT_XML_NO_NAMESPACE;
         }
 
-        const char* namespc_mapped = (namespc==NULL)?"":(namespc[0]=='*' && namespc[1]=='\0')?NULL:namespc;
+        const char* namespc_mapped = (namespc==nullptr)?"":(namespc[0]=='*' && namespc[1]=='\0')?nullptr:namespc;
 
         // get all children first
         NPT_List<NPT_XmlNode*>& allchildren = node->GetChildren();
@@ -285,7 +285,7 @@ public:
     static NPT_XmlElementNode* GetChild(NPT_XmlElementNode* node,
                                         const char*         tag,
                                         const char*         namespc = "") {
-        if (!node) return NULL;
+        if (!node) return nullptr;
 
         // special case "" means we look for the same namespace as the parent
         if (namespc && namespc[0] == '\0') {
@@ -301,7 +301,7 @@ public:
         if (!parent) return NPT_FAILURE;
 
         // reset child
-        child = NULL;
+        child = nullptr;
 
         // get all children first
         NPT_List<NPT_XmlNode*>::Iterator children = parent->GetChildren().GetFirstItem();

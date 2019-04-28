@@ -118,12 +118,12 @@ void DigitalScannerPlugin::slotDigitalScanner()
 {
     if (!m_saneWidget)
     {
-        m_saneWidget = new KSaneIface::KSaneWidget(0);
+        m_saneWidget = new KSaneIface::KSaneWidget(nullptr);
     }
 
     if (m_saneWidget)
     {
-        QString dev = m_saneWidget->selectDevice(0);
+        QString dev = m_saneWidget->selectDevice(nullptr);
 
         if (dev.isEmpty())
         {
@@ -133,7 +133,7 @@ void DigitalScannerPlugin::slotDigitalScanner()
         if (!m_saneWidget->openDevice(dev))
         {
             // could not open a scanner
-            QMessageBox::warning(0, qApp->applicationName(), i18n("Cannot open scanner device."));
+            QMessageBox::warning(nullptr, qApp->applicationName(), i18n("Cannot open scanner device."));
             return;
         }
 

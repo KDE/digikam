@@ -54,7 +54,7 @@ public:
     explicit Private(PanoramaPreprocessedUrls& urls, const QUrl& url)
         : fileUrl(url),
           preProcessedUrl(urls),
-          observer(0)
+          observer(nullptr)
     {
     }
 

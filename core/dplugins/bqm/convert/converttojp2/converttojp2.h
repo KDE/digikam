@@ -39,13 +39,13 @@ class ConvertToJP2 : public BatchTool
 
 public:
 
-    explicit ConvertToJP2(QObject* const parent = 0);
+    explicit ConvertToJP2(QObject* const parent = nullptr);
     ~ConvertToJP2();
 
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new ConvertToJP2(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new ConvertToJP2(parent); };
 
     void registerSettingsWidget();
 

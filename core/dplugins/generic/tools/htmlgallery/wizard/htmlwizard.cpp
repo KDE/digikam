@@ -61,15 +61,15 @@ class Q_DECL_HIDDEN HTMLWizard::Private
 public:
 
     explicit Private()
-      : info(0),
-        configManager(0),
-        introPage(0),
-        selectionPage(0),
-        themePage(0),
-        parametersPage(0),
-        imageSettingsPage(0),
-        outputPage(0),
-        finalPage(0)
+      : info(nullptr),
+        configManager(nullptr),
+        introPage(nullptr),
+        selectionPage(nullptr),
+        themePage(nullptr),
+        parametersPage(nullptr),
+        imageSettingsPage(nullptr),
+        outputPage(nullptr),
+        finalPage(nullptr)
     {
     }
 

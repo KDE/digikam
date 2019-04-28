@@ -42,7 +42,7 @@ namespace DigikamBqmBCGCorrectionPlugin
 BCGCorrection::BCGCorrection(QObject* const parent)
     : BatchTool(QLatin1String("BCGCorrection"), ColorTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 BCGCorrection::~BCGCorrection()
@@ -105,7 +105,7 @@ bool BCGCorrection::toolOperations()
     prm.contrast   = settings()[QLatin1String("Contrast")].toDouble();
     prm.gamma      = settings()[QLatin1String("Gamma")].toDouble();
 
-    BCGFilter bcg(&image(), 0L, prm);
+    BCGFilter bcg(&image(), nullptr, prm);
     applyFilter(&bcg);
 
     return (savefromDImg());

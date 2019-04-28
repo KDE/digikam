@@ -42,7 +42,7 @@ class FlipPlugin : public DPluginBqm
 
 public:
 
-    explicit FlipPlugin(QObject* const parent = 0);
+    explicit FlipPlugin(QObject* const parent = nullptr);
     ~FlipPlugin();
 
     QString name()                 const override;

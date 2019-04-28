@@ -54,11 +54,11 @@ class Q_DECL_HIDDEN RainDropTool::Private
 public:
 
     explicit Private()
-      : dropInput(0),
-        amountInput(0),
-        coeffInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : dropInput(nullptr),
+        amountInput(nullptr),
+        coeffInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -88,7 +88,7 @@ RainDropTool::RainDropTool(QObject* const parent)
 {
     setObjectName(QLatin1String("raindrops"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageGuideWidget(nullptr, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the preview of the Raindrop effect."
                                         "<p>Note: if you have previously selected an area in the editor, "
                                         "this will be unaffected by the filter. You can use this method to "
@@ -99,7 +99,7 @@ RainDropTool::RainDropTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Try|

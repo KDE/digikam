@@ -46,9 +46,9 @@ class Q_DECL_HIDDEN MailImagesPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : imageList(0),
-        wizard(0),
-        iface(0)
+      : imageList(nullptr),
+        wizard(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT RajceWindow : public WSToolDialog
 
 public:
 
-    explicit RajceWindow(DInfoInterface* const iface, QWidget* const parent = 0);
+    explicit RajceWindow(DInfoInterface* const iface, QWidget* const parent = nullptr);
     ~RajceWindow();
 
     void reactivate();

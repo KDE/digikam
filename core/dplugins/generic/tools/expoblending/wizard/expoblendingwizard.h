@@ -46,7 +46,7 @@ class ExpoBlendingWizard : public DWizardDlg
 
 public:
 
-    explicit ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent = 0);
+    explicit ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent = nullptr);
     ~ExpoBlendingWizard();
 
     QList<QUrl> itemUrls() const;

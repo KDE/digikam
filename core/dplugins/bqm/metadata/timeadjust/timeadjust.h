@@ -40,12 +40,12 @@ class TimeAdjust : public BatchTool
 
 public:
 
-    explicit TimeAdjust(QObject* const parent = 0);
+    explicit TimeAdjust(QObject* const parent = nullptr);
     virtual ~TimeAdjust();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const
+    BatchTool* clone(QObject* const parent=nullptr) const
     {
         return new TimeAdjust(parent);
     };

@@ -40,12 +40,12 @@ class AntiVignetting : public BatchTool
 
 public:
 
-    explicit AntiVignetting(QObject* const parent = 0);
+    explicit AntiVignetting(QObject* const parent = nullptr);
     ~AntiVignetting();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new AntiVignetting(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new AntiVignetting(parent); };
 
     void registerSettingsWidget();
 

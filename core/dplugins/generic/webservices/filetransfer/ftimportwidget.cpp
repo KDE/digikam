@@ -46,10 +46,10 @@ public:
 
     explicit Private()
     {
-        imageList       = 0;
-        uploadWidget    = 0;
-        importDlg       = 0;
-        importSearchBtn = 0;
+        imageList       = nullptr;
+        uploadWidget    = nullptr;
+        importDlg       = nullptr;
+        importSearchBtn = nullptr;
     }
 
     DItemsList* imageList;

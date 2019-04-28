@@ -37,12 +37,12 @@ class LensAutoFix : public BatchTool
 
 public:
 
-    explicit LensAutoFix(QObject* const parent = 0);
+    explicit LensAutoFix(QObject* const parent = nullptr);
     ~LensAutoFix();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new LensAutoFix(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new LensAutoFix(parent); };
 
     void registerSettingsWidget();
 

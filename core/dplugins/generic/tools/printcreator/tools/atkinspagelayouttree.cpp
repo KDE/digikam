@@ -40,7 +40,7 @@ namespace DigikamGenericPrintCreatorPlugin
 
 AtkinsPageLayoutTree::AtkinsPageLayoutTree(double aspectRatioPage,
                                            double absoluteAreaPage)
-    : m_root(0),
+    : m_root(nullptr),
       m_count(0),
       m_aspectRatioPage(aspectRatioPage),
       m_absoluteAreaPage(absoluteAreaPage)
@@ -83,7 +83,7 @@ int AtkinsPageLayoutTree::addImage(double aspectRatio,
     }
 
     // Section 2.1
-    AtkinsPageLayoutNode* bestTree = NULL;
+    AtkinsPageLayoutNode* bestTree = nullptr;
     double highScore               = 0;
 
     for (int i = 0 ; i < m_count ; ++i)

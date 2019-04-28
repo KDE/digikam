@@ -302,7 +302,7 @@ NPT_OutputStream::WriteString(const char* buffer)
 {
     // shortcut
     NPT_Size string_length;
-    if (buffer == NULL || (string_length = NPT_StringLength(buffer)) == 0) {
+    if (buffer == nullptr || (string_length = NPT_StringLength(buffer)) == 0) {
         return NPT_SUCCESS;
     }
 
@@ -528,7 +528,7 @@ NPT_StreamToStreamCopy(NPT_InputStream&  from,
     NPT_LargeSize bytes_transfered = 0;
     NPT_Byte*     buffer = new NPT_Byte[NPT_STREAM_COPY_BUFFER_SIZE];
     NPT_Result result = NPT_SUCCESS;
-    if (buffer == NULL) return NPT_ERROR_OUT_OF_MEMORY;
+    if (buffer == nullptr) return NPT_ERROR_OUT_OF_MEMORY;
 
     // copy until an error occurs or the end of stream is reached
     for (;;) {

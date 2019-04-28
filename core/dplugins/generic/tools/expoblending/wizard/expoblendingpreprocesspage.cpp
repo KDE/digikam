@@ -62,12 +62,12 @@ public:
     {
         progressPix   = DWorkingPixmap();
         progressCount = 0;
-        progressTimer = 0;
-        progressLabel = 0,
-        mngr          = 0;
-        title         = 0;
-        alignCheckBox = 0;
-        detailsText   = 0;
+        progressTimer = nullptr;
+        progressLabel = nullptr,
+        mngr          = nullptr;
+        title         = nullptr;
+        alignCheckBox = nullptr;
+        detailsText   = nullptr;
     }
 
     int                  progressCount;

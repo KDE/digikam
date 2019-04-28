@@ -73,7 +73,7 @@ public:
         drawGrid(false),
         inverseTransformation(false),
         validPerspective(true),
-        data(0),
+        data(nullptr),
         width(0),
         height(0),
         origW(0),
@@ -81,8 +81,8 @@ public:
         currentResizing(ResizingNone),
         guideSize(1),
         guideColor(Qt::red),
-        pixmap(0),
-        iface(0)
+        pixmap(nullptr),
+        iface(nullptr)
     {
     }
 
@@ -671,13 +671,13 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
 
     double tu[5],tv[5],tw[5];    // undivided source coordinates and divisor
 
-    uchar* data = 0, *newData = 0;
+    uchar* data = nullptr, *newData = nullptr;
     bool   sixteenBit;
     int    coords;
     int    width, height;
     int    bytesDepth;
     int    offset;
-    uchar* d2 = 0;
+    uchar* d2 = nullptr;
     DColor color;
 
     bytesDepth  = orgImage->bytesDepth();

@@ -77,11 +77,11 @@ public:
 
     explicit Private()
     {
-        settingsView = 0;
-        progressBar  = 0;
-        listView     = 0;
-        thread       = 0;
-        iface        = 0;
+        settingsView = nullptr;
+        progressBar  = nullptr;
+        listView     = nullptr;
+        thread       = nullptr;
+        iface        = nullptr;
     }
 
     TimeAdjustSettings*   settingsView;

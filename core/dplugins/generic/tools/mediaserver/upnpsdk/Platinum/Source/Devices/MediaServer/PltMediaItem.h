@@ -227,7 +227,7 @@ public:
     bool IsContainer() { return m_ObjectClass.type.StartsWith("object.container"); }
 
     static const char* GetUPnPClass(const char* filename, 
-                                    const PLT_HttpRequestContext* context = NULL);
+                                    const PLT_HttpRequestContext* context = nullptr);
 
     virtual NPT_Result Reset();
     virtual NPT_Result ToDidl(const NPT_String& filter, NPT_String& didl);

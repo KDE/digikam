@@ -62,12 +62,12 @@ class Q_DECL_HIDDEN HotPixelsTool::Private
 public:
 
     explicit Private()
-      : blackFrameButton(0),
-        progressBar(0),
-        filterMethodCombo(0),
-        blackFrameListView(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : blackFrameButton(nullptr),
+        progressBar(nullptr),
+        filterMethodCombo(nullptr),
+        blackFrameListView(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -104,7 +104,7 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings         = new EditorToolSettings(0);
+    d->gboxSettings         = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

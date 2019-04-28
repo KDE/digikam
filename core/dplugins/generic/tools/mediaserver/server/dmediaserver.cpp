@@ -92,9 +92,9 @@ class Q_DECL_HIDDEN DMediaServer::Private
 public:
 
     explicit Private()
-      : upnp(0),
-        logHandler(NULL),
-        serverHolder(NULL)
+      : upnp(nullptr),
+        logHandler(nullptr),
+        serverHolder(nullptr)
     {
         NPT_LogManager::GetDefault().Configure("plist:.level=INFO;.handlers=CustomHandler;");
         NPT_LogHandler::Create("digiKam", "CustomHandler", logHandler);
@@ -132,7 +132,7 @@ bool DMediaServer::init(int port)
 
     DLNAMediaServer* const device = new DLNAMediaServer(devDesc.toUtf8().data(),
                                                         false,
-                                                        NULL,
+                                                        nullptr,
                                                         port);
 
     device->m_ModelName           = "digiKam";

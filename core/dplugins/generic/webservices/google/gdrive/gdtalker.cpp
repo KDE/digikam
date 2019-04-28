@@ -87,7 +87,7 @@ public:
         apiUrl         = QLatin1String("https://www.googleapis.com/drive/v2/%1");
         uploadUrl      = QLatin1String("https://www.googleapis.com/upload/drive/v2/files");
         state          = GD_LOGOUT;
-        netMngr        = 0;
+        netMngr        = nullptr;
         rootid         = QLatin1String("root");
         rootfoldername = QLatin1String("GoogleDrive Root");
         listPhotoId    = QStringList();
@@ -178,7 +178,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     QUrl url(d->apiUrl.arg(QLatin1String("files")));
@@ -212,7 +212,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     emit signalBusy(true);
@@ -294,7 +294,7 @@ void GDTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_reply = 0;
+    m_reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {
@@ -483,7 +483,7 @@ void GDTalker::cancel()
     if (m_reply)
     {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     emit signalBusy(false);

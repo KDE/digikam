@@ -40,12 +40,12 @@ class NoiseReduction : public BatchTool
 
 public:
 
-    explicit NoiseReduction(QObject* const parent = 0);
+    explicit NoiseReduction(QObject* const parent = nullptr);
     ~NoiseReduction();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new NoiseReduction(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new NoiseReduction(parent); };
 
     void registerSettingsWidget();
 

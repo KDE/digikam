@@ -53,12 +53,12 @@ public:
 
     explicit Private()
     {
-        addKeywordButton = 0;
-        delKeywordButton = 0;
-        repKeywordButton = 0;
-        keywordsBox      = 0;
-        keywordsCheck    = 0;
-        keywordEdit      = 0;
+        addKeywordButton = nullptr;
+        delKeywordButton = nullptr;
+        repKeywordButton = nullptr;
+        keywordsBox      = nullptr;
+        keywordsCheck    = nullptr;
+        keywordEdit      = nullptr;
     }
 
     QStringList  oldKeywords;

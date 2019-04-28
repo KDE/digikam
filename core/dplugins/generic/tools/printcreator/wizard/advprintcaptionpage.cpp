@@ -68,8 +68,8 @@ public:
 public:
 
     explicit Private(QWizard* const dialog)
-      : settings(0),
-        iface(0)
+      : settings(nullptr),
+        iface(nullptr)
     {
         captionUi = new CaptionUI(dialog);
         wizard    = dynamic_cast<AdvPrintWizard*>(dialog);
@@ -228,7 +228,7 @@ void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
                  d->captionUi->m_captionType->currentIndex() == AdvPrintSettings::NONE)
         {
             delete pPhoto->m_pAdvPrintCaptionInfo;
-            pPhoto->m_pAdvPrintCaptionInfo = NULL;
+            pPhoto->m_pAdvPrintCaptionInfo = nullptr;
         }
 
         if (pPhoto->m_pAdvPrintCaptionInfo)

@@ -44,7 +44,7 @@ class PPlugin : public DPluginGeneric
 
 public:
 
-    explicit PPlugin(QObject* const parent = 0);
+    explicit PPlugin(QObject* const parent = nullptr);
     ~PPlugin();
 
     QString name()                 const override;

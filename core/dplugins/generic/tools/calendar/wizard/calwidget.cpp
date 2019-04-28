@@ -35,7 +35,7 @@ namespace DigikamGenericCalendarPlugin
 {
 
 CalWidget::CalWidget(QWidget* const parent)
-    : QWidget(parent, 0),
+    : QWidget(parent, nullptr),
       m_current(1)
 {
     setAttribute(Qt::WA_NoBackground);

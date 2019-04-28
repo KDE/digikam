@@ -83,26 +83,26 @@ public:
 
     explicit Private()
     {
-        gpsBookmarkOwner                              = 0;
-        actionBookmark                                = 0;
-        mapWidget                                     = 0;
-        gpsItemModel                                 = 0;
-        gosImageSelectionModel                        = 0;
-        searchTermLineEdit                            = 0;
-        searchButton                                  = 0;
-        searchBackend                                 = 0;
-        searchResultsModel                            = 0;
-        searchResultsSelectionModel                   = 0;
-        searchResultModelHelper                       = 0;
-        treeView                                      = 0;
-        mainVBox                                      = 0;
-        backendSelectionBox                           = 0;
-        actionClearResultsList                        = 0;
-        actionKeepOldResults                          = 0;
-        actionToggleAllResultsVisibility              = 0;
-        actionCopyCoordinates                         = 0;
-        actionMoveImagesToThisResult                  = 0;
-        actionRemovedSelectedSearchResultsFromList    = 0;
+        gpsBookmarkOwner                              = nullptr;
+        actionBookmark                                = nullptr;
+        mapWidget                                     = nullptr;
+        gpsItemModel                                 = nullptr;
+        gosImageSelectionModel                        = nullptr;
+        searchTermLineEdit                            = nullptr;
+        searchButton                                  = nullptr;
+        searchBackend                                 = nullptr;
+        searchResultsModel                            = nullptr;
+        searchResultsSelectionModel                   = nullptr;
+        searchResultModelHelper                       = nullptr;
+        treeView                                      = nullptr;
+        mainVBox                                      = nullptr;
+        backendSelectionBox                           = nullptr;
+        actionClearResultsList                        = nullptr;
+        actionKeepOldResults                          = nullptr;
+        actionToggleAllResultsVisibility              = nullptr;
+        actionCopyCoordinates                         = nullptr;
+        actionMoveImagesToThisResult                  = nullptr;
+        actionRemovedSelectedSearchResultsFromList    = nullptr;
         searchInProgress                              = false;
         actionToggleAllResultsVisibilityIconUnchecked = QIcon::fromTheme(QLatin1String("layer-visible-off"));
         actionToggleAllResultsVisibilityIconChecked   = QIcon::fromTheme(QLatin1String("layer-visible-on"));

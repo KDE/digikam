@@ -87,14 +87,14 @@ public:
 
     explicit Private()
     {
-        lightSourceCheck     = 0;
-        flashModeCheck       = 0;
-        flashEnergyCheck     = 0;
-        whiteBalanceCheck    = 0;
-        lightSourceCB        = 0;
-        flashEnergyEdit      = 0;
-        flashModeCB          = 0;
-        whiteBalanceCB       = 0;
+        lightSourceCheck     = nullptr;
+        flashModeCheck       = nullptr;
+        flashEnergyCheck     = nullptr;
+        whiteBalanceCheck    = nullptr;
+        lightSourceCB        = nullptr;
+        flashEnergyEdit      = nullptr;
+        flashModeCB          = nullptr;
+        whiteBalanceCB       = nullptr;
 
         flashModeMap.insert(0,  FlashMode( 0x00, i18n("No flash") ));
         flashModeMap.insert(1,  FlashMode( 0x01, i18n("Fired") ));

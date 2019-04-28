@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT IpfsWindow : public WSToolDialog
 
 public:
 
-    explicit IpfsWindow(DInfoInterface* const iface, QWidget* const parent = 0);
+    explicit IpfsWindow(DInfoInterface* const iface, QWidget* const parent = nullptr);
     ~IpfsWindow();
 
     void reactivate();

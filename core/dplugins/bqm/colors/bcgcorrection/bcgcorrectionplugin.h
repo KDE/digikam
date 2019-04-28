@@ -42,7 +42,7 @@ class BCGCorrectionPlugin : public DPluginBqm
 
 public:
 
-    explicit BCGCorrectionPlugin(QObject* const parent = 0);
+    explicit BCGCorrectionPlugin(QObject* const parent = nullptr);
     ~BCGCorrectionPlugin();
 
     QString name()                 const override;

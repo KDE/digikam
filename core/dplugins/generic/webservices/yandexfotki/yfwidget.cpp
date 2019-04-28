@@ -54,11 +54,11 @@ public:
 
     explicit Private()
     {
-        accessCombo          = 0;
-        hideOriginalCheck    = 0;
-        disableCommentsCheck = 0;
-        adultCheck           = 0;
-        policyGroup          = 0;
+        accessCombo          = nullptr;
+        hideOriginalCheck    = nullptr;
+        disableCommentsCheck = nullptr;
+        adultCheck           = nullptr;
+        policyGroup          = nullptr;
     }
 
     // upload settings

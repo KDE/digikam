@@ -50,8 +50,8 @@ public:
 
     explicit Private()
     {
-        importWidget = 0;
-        iface        = 0;
+        importWidget = nullptr;
+        iface        = nullptr;
     }
 
     FTImportWidget* importWidget;
@@ -59,7 +59,7 @@ public:
 };
 
 FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Kio Import Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Kio Import Dialog")),
       d(new Private)
 {
     d->iface        = iface;

@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT DMediaServerDlg : public DPluginDialog
 public:
 
     explicit DMediaServerDlg(QObject* const parent,
-                             DInfoInterface* const iface=0);
+                             DInfoInterface* const iface=nullptr);
     ~DMediaServerDlg();
 
 private:

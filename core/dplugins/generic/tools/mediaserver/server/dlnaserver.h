@@ -56,7 +56,7 @@ public:
 
     explicit DLNAMediaServer(const char*  friendly_name,
                              bool         show_ip = false,
-                             const char*  uuid = NULL,
+                             const char*  uuid = nullptr,
                              NPT_UInt16   port = 0,
                              bool         port_rebind = false);
 

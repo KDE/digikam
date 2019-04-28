@@ -55,13 +55,13 @@ public:
 
     explicit Private()
     {
-        headlineCheck        = 0;
-        captionEdit          = 0;
-        writerEdit           = 0;
-        headlineEdit         = 0;
-        captionCheck         = 0;
-        syncJFIFCommentCheck = 0;
-        syncEXIFCommentCheck = 0;
+        headlineCheck        = nullptr;
+        captionEdit          = nullptr;
+        writerEdit           = nullptr;
+        headlineEdit         = nullptr;
+        captionCheck         = nullptr;
+        syncJFIFCommentCheck = nullptr;
+        syncEXIFCommentCheck = nullptr;
     }
 
     QCheckBox*        captionCheck;

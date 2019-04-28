@@ -107,7 +107,7 @@ void HtmlGalleryPlugin::setup(QObject* const parent)
 
 void HtmlGalleryPlugin::slotHtmlGallery()
 {
-    QPointer<HTMLWizard> wzrd = new HTMLWizard(0, infoIface(sender()));
+    QPointer<HTMLWizard> wzrd = new HTMLWizard(nullptr, infoIface(sender()));
     wzrd->setPlugin(this);
     wzrd->exec();
     delete wzrd;

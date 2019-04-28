@@ -53,10 +53,10 @@ class Q_DECL_HIDDEN CharcoalTool::Private
 public:
 
     explicit Private()
-      : pencilInput(0),
-        smoothInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : pencilInput(nullptr),
+        smoothInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -87,7 +87,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

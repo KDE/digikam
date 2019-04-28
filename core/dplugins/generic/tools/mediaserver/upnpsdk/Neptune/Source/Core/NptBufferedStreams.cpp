@@ -65,7 +65,7 @@ NPT_BufferedInputStream::NPT_BufferedInputStream(NPT_InputStreamReference& sourc
     m_Eos(false)
 {
     // setup the read buffer
-    m_Buffer.data     = NULL;
+    m_Buffer.data     = nullptr;
     m_Buffer.offset   = 0;
     m_Buffer.valid    = 0;
     m_Buffer.size     = buffer_size;
@@ -86,13 +86,13 @@ NPT_BufferedInputStream::~NPT_BufferedInputStream()
 NPT_Result
 NPT_BufferedInputStream::SetBufferSize(NPT_Size size, bool force /* = false */)
 {
-    if (m_Buffer.data != NULL) {
+    if (m_Buffer.data != nullptr) {
         // we already have a buffer
         if (m_Buffer.size < size || force) {
             // the current buffer is too small or we want to move
             // existing data to the beginning of the buffer, reallocate
             NPT_Byte* buffer = new NPT_Byte[size];
-            if (buffer == NULL) return NPT_ERROR_OUT_OF_MEMORY;
+            if (buffer == nullptr) return NPT_ERROR_OUT_OF_MEMORY;
 
             // copy existing data
             NPT_Size need_to_copy = m_Buffer.valid - m_Buffer.offset;
@@ -129,9 +129,9 @@ NPT_BufferedInputStream::FillBuffer()
     NPT_ASSERT(m_Buffer.size != 0);
 
     // allocate the read buffer if it has not been done yet
-    if (m_Buffer.data == NULL) {
+    if (m_Buffer.data == nullptr) {
         m_Buffer.data = new NPT_Byte[m_Buffer.size];
-        if (m_Buffer.data == NULL) return NPT_ERROR_OUT_OF_MEMORY;
+        if (m_Buffer.data == nullptr) return NPT_ERROR_OUT_OF_MEMORY;
     }
 
     // refill the buffer
@@ -151,7 +151,7 @@ NPT_BufferedInputStream::ReleaseBuffer()
     NPT_ASSERT(m_Buffer.offset == m_Buffer.valid);
 
     delete[] m_Buffer.data;
-    m_Buffer.data = NULL;
+    m_Buffer.data = nullptr;
     m_Buffer.offset = 0;
     m_Buffer.valid = 0;
 
@@ -173,7 +173,7 @@ NPT_BufferedInputStream::ReadLine(char*     buffer,
     bool       skip_newline = false;
 
     // check parameters
-    if (buffer == NULL || size < 1) {
+    if (buffer == nullptr || size < 1) {
         if (chars_read) *chars_read = 0;
         return NPT_ERROR_INVALID_PARAMETERS;
     }
@@ -204,8 +204,8 @@ NPT_BufferedInputStream::ReadLine(char*     buffer,
 
         if (m_Buffer.size == 0 && !m_Eos) {
             // unbuffered mode
-            if (m_Buffer.data != NULL) ReleaseBuffer();
-            while (NPT_SUCCEEDED(result = m_Source->Read(buffer, 1, NULL))) {
+            if (m_Buffer.data != nullptr) ReleaseBuffer();
+            while (NPT_SUCCEEDED(result = m_Source->Read(buffer, 1, nullptr))) {
                 if (*buffer == '\r') {
                     if (break_on_cr) {
                         skip_newline = true;
@@ -291,7 +291,7 @@ NPT_BufferedInputStream::Read(void*     buffer,
     // skip a newline char if needed
     if (m_SkipNewline) {
         m_SkipNewline = false;
-        result = Read(buffer, 1, NULL);
+        result = Read(buffer, 1, nullptr);
         if (NPT_FAILED(result)) goto done;
         NPT_Byte c = *(NPT_Byte*)buffer;
         if (c != '\n') {
@@ -317,7 +317,7 @@ NPT_BufferedInputStream::Read(void*     buffer,
         // read the rest from the source
         if (m_Buffer.size == 0) {
             // unbuffered mode, read directly into the supplied buffer
-            if (m_Buffer.data != NULL) ReleaseBuffer(); // cleanup if necessary
+            if (m_Buffer.data != nullptr) ReleaseBuffer(); // cleanup if necessary
             NPT_Size local_read = 0;
             result = m_Source->Read(buffer, bytes_to_read, &local_read);
             if (NPT_SUCCEEDED(result)) {

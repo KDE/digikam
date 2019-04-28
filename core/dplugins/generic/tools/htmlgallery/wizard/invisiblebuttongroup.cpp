@@ -40,7 +40,7 @@ class Q_DECL_HIDDEN InvisibleButtonGroup::Private
 public:
 
     explicit Private()
-      : group(0)
+      : group(nullptr)
     {
     }
 

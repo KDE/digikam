@@ -64,8 +64,8 @@ public:
         client_id       = QLatin1String("bd2572bce74b73d");
         client_secret   = QLatin1String("300988683e99cb7b203a5889cf71de9ac891c1c1");
         workTimer       = 0;
-        reply           = 0;
-        image           = 0;
+        reply           = nullptr;
+        image           = nullptr;
     }
 
     /* API key and secret 
@@ -129,7 +129,7 @@ ImgurTalker::ImgurTalker(QObject* const parent)
 ImgurTalker::~ImgurTalker()
 {
     // Disconnect all signals as cancelAllWork may emit.
-    disconnect(this, 0, 0, 0);
+    disconnect(this, nullptr, nullptr, nullptr);
     cancelAllWork();
 
     delete d;

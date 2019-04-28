@@ -52,12 +52,12 @@ class Q_DECL_HIDDEN JAlbumIntroPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : imageGetOption(0),
-        hbox(0),
-        wizard(0),
-        settings(0),
-        iface(0),
-        binSearch(0)
+      : imageGetOption(nullptr),
+        hbox(nullptr),
+        wizard(nullptr),
+        settings(nullptr),
+        iface(nullptr),
+        binSearch(nullptr)
     {
         wizard = dynamic_cast<JAlbumWizard*>(dialog);
 

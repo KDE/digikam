@@ -138,7 +138,7 @@ public:
 
     explicit XMLElement(XMLWriter& writer,
                         const QString& element,
-                        const XMLAttributeList* attributeList=0);
+                        const XMLAttributeList* attributeList=nullptr);
     ~XMLElement();
 
 private:

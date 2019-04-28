@@ -85,7 +85,7 @@ public:
       : cancel(false),
         align(false),
         enfuseVersion4x(true),
-        rawObserver(0)
+        rawObserver(nullptr)
     {
     }
 
@@ -293,7 +293,7 @@ void ExpoBlendingThread::run()
 
     while (!d->cancel)
     {
-        Private::Task* t = 0;
+        Private::Task* t = nullptr;
         {
             QMutexLocker lock(&d->mutex);
 

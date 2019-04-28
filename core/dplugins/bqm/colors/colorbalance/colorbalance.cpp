@@ -42,7 +42,7 @@ namespace DigikamBqmColorBalancePlugin
 ColorBalance::ColorBalance(QObject* const parent)
     : BatchTool(QLatin1String("ColorBalance"), ColorTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 
     setToolTitle(i18n("Color Balance"));
     setToolDescription(i18n("Adjust color balance."));
@@ -109,7 +109,7 @@ bool ColorBalance::toolOperations()
     prm.green = settings()[QLatin1String("Green")].toDouble();
     prm.blue  = settings()[QLatin1String("Blue")].toDouble();
 
-    CBFilter cb(&image(), 0L, prm);
+    CBFilter cb(&image(), nullptr, prm);
     applyFilter(&cb);
 
     return (savefromDImg());

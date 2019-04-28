@@ -58,7 +58,7 @@ public:
         markerSelectedUrl = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                 QLatin1String("digikam/geolocationedit/searchmarker-selected.png")));
         markerSelected    = QPixmap(markerSelectedUrl.toLocalFile());
-        selectionModel    = 0;
+        selectionModel    = nullptr;
     }
 
     QList<SearchResultModel::SearchResultItem> searchResults;
@@ -117,7 +117,7 @@ QVariant SearchResultModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 QPixmap markerIcon;
-                getMarkerIcon(index, 0, 0, &markerIcon, 0);
+                getMarkerIcon(index, nullptr, nullptr, &markerIcon, nullptr);
                 return markerIcon;
             }
 
@@ -142,7 +142,7 @@ QModelIndex SearchResultModel::index(int row, int column, const QModelIndex& par
         return QModelIndex();
     }
 
-    return createIndex(row, column, (void*)0);
+    return createIndex(row, column, (void*)nullptr);
 }
 
 QModelIndex SearchResultModel::parent(const QModelIndex& index) const

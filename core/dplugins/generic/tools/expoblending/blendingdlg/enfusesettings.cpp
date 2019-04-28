@@ -79,17 +79,17 @@ class Q_DECL_HIDDEN EnfuseSettingsWidget::Private
 public:
 
     explicit Private()
-      : autoLevelsCB(0),
-        hardMaskCB(0),
-        ciecam02CB(0),
-        levelsLabel(0),
-        exposureLabel(0),
-        saturationLabel(0),
-        contrastLabel(0),
-        levelsInput(0),
-        exposureInput(0),
-        saturationInput(0),
-        contrastInput(0)
+      : autoLevelsCB(nullptr),
+        hardMaskCB(nullptr),
+        ciecam02CB(nullptr),
+        levelsLabel(nullptr),
+        exposureLabel(nullptr),
+        saturationLabel(nullptr),
+        contrastLabel(nullptr),
+        levelsInput(nullptr),
+        exposureInput(nullptr),
+        saturationInput(nullptr),
+        contrastInput(nullptr)
     {
     }
 

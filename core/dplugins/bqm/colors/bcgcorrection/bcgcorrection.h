@@ -40,12 +40,12 @@ class BCGCorrection : public BatchTool
 
 public:
 
-    explicit BCGCorrection(QObject* const parent = 0);
+    explicit BCGCorrection(QObject* const parent = nullptr);
     ~BCGCorrection();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new BCGCorrection(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new BCGCorrection(parent); };
 
     void registerSettingsWidget();
 

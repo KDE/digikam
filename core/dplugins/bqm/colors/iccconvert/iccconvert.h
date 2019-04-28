@@ -40,12 +40,12 @@ class IccConvert : public BatchTool
 
 public:
 
-    explicit IccConvert(QObject* const parent = 0);
+    explicit IccConvert(QObject* const parent = nullptr);
     ~IccConvert();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new IccConvert(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new IccConvert(parent); };
 
     void registerSettingsWidget();
 

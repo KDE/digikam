@@ -553,7 +553,7 @@ NPT_Result
 NPT_IpAddress::ResolveName(const char* name, NPT_Timeout)
 {
     // check parameters
-    if (name == NULL || name[0] == '\0') return NPT_ERROR_HOST_UNKNOWN;
+    if (name == nullptr || name[0] == '\0') return NPT_ERROR_HOST_UNKNOWN;
 
     // handle numerical addrs
     NPT_IpAddress numerical_address;
@@ -581,10 +581,10 @@ NPT_IpAddress::ResolveName(const char* name, NPT_Timeout)
     sceNetResolverDelete(rid);
 #elif defined(NPT_CONFIG_HAVE_GETADDRINFO)
     // get the addr list
-    struct addrinfo *infos = NULL;
+    struct addrinfo *infos = nullptr;
     int result = getaddrinfo(name,  /* hostname */
-                             NULL,  /* servname */
-                             NULL,  /* hints    */
+                             nullptr,  /* servname */
+                             nullptr,  /* hints    */
                              &infos /* res      */);
     if (result != 0) {
         return MapGetAddrInfoErrorCode(result);
@@ -786,7 +786,7 @@ NPT_BsdSocketFd::WaitForCondition(bool        wait_for_readable,
     int io_result = select(max_fd+1, 
                            &read_set, &write_set, &except_set, 
                            timeout == NPT_TIMEOUT_INFINITE ? 
-                           NULL : &timeout_value);
+                           nullptr : &timeout_value);
     NPT_LOG_FINER_1("select returned %d", io_result);
     if (m_Cancelled) return NPT_ERROR_CANCELLED;
 
@@ -1181,7 +1181,7 @@ NPT_BsdSocket::NPT_BsdSocket(SocketFd fd, NPT_Flags flags) :
 NPT_BsdSocket::~NPT_BsdSocket()
 {
     // release the socket fd reference
-    m_SocketFdReference = NULL;
+    m_SocketFdReference = nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -1285,7 +1285,7 @@ NPT_Result
 NPT_BsdSocket::GetInputStream(NPT_InputStreamReference& stream)
 {
     // default value
-    stream = NULL;
+    stream = nullptr;
 
     // check that we have a socket
     if (m_SocketFdReference.IsNull()) return NPT_ERROR_INVALID_STATE;
@@ -1303,7 +1303,7 @@ NPT_Result
 NPT_BsdSocket::GetOutputStream(NPT_OutputStreamReference& stream)
 {
     // default value
-    stream = NULL;
+    stream = nullptr;
 
     // check that the file is open
     if (m_SocketFdReference.IsNull()) return NPT_ERROR_INVALID_STATE;
@@ -1682,8 +1682,8 @@ NPT_UdpSocket::~NPT_UdpSocket()
 
     // set the delegate pointers to NULL because it is shared by the
     // base classes, and we only want to delete the object once
-    m_UdpSocketDelegate = NULL;
-    m_SocketDelegate    = NULL;
+    m_UdpSocketDelegate = nullptr;
+    m_SocketDelegate    = nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -1889,7 +1889,7 @@ NPT_BsdUdpMulticastSocket::SetTimeToLive(unsigned char ttl)
 |   NPT_UdpMulticastSocket::NPT_UdpMulticastSocket
 +---------------------------------------------------------------------*/
 NPT_UdpMulticastSocket::NPT_UdpMulticastSocket(NPT_Flags flags) :
-    NPT_UdpSocket((NPT_UdpSocketInterface*)0)
+    NPT_UdpSocket((NPT_UdpSocketInterface*)nullptr)
 {
     NPT_BsdUdpMulticastSocket* delegate = new NPT_BsdUdpMulticastSocket(flags);
     m_SocketDelegate             = delegate;
@@ -1906,9 +1906,9 @@ NPT_UdpMulticastSocket::~NPT_UdpMulticastSocket()
 
     // set the delegate pointers to NULL because it is shared by the
     // base classes, and we only want to delete the object once
-    m_SocketDelegate             = NULL;
-    m_UdpSocketDelegate          = NULL;
-    m_UdpMulticastSocketDelegate = NULL;
+    m_SocketDelegate             = nullptr;
+    m_UdpSocketDelegate          = nullptr;
+    m_UdpMulticastSocketDelegate = nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -2017,7 +2017,7 @@ NPT_TcpClientSocket::~NPT_TcpClientSocket()
 
     // set the delegate pointer to NULL because it is shared by the
     // base classes, and we only want to delete the object once
-    m_SocketDelegate = NULL;
+    m_SocketDelegate = nullptr;
 }
 
 /*----------------------------------------------------------------------
@@ -2035,12 +2035,12 @@ class NPT_BsdTcpServerSocket : public    NPT_TcpServerSocketInterface,
     // NPT_SocketInterface methods
     NPT_Result GetInputStream(NPT_InputStreamReference& stream) override {
         // no stream
-        stream = NULL;
+        stream = nullptr;
         return NPT_ERROR_NOT_SUPPORTED;
     }
     NPT_Result GetOutputStream(NPT_OutputStreamReference& stream) override {
         // no stream
-        stream = NULL;
+        stream = nullptr;
         return NPT_ERROR_NOT_SUPPORTED;
     }
 
@@ -2099,7 +2099,7 @@ NPT_BsdTcpServerSocket::WaitForNewClient(NPT_Socket*& client,
                                          NPT_Flags    flags)
 {
     // default value
-    client = NULL;
+    client = nullptr;
 
     // check that we are listening for clients
     if (m_ListenMax == 0) {
@@ -2147,6 +2147,6 @@ NPT_TcpServerSocket::~NPT_TcpServerSocket()
 
     // set the delegate pointers to NULL because it is shared by the
     // base classes, and we only want to delete the object once
-    m_SocketDelegate          = NULL;
-    m_TcpServerSocketDelegate = NULL;
+    m_SocketDelegate          = nullptr;
+    m_TcpServerSocketDelegate = nullptr;
 }

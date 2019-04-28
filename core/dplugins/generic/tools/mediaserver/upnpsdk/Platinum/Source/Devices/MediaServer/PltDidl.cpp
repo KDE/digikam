@@ -347,9 +347,9 @@ NPT_Result
 PLT_Didl::FromDidl(const char* xml, PLT_MediaObjectListReference& objects)
 {
     NPT_String          str;
-    PLT_MediaObject*    object = NULL;
-    NPT_XmlNode*        node = NULL;
-    NPT_XmlElementNode* didl = NULL;
+    PLT_MediaObject*    object = nullptr;
+    NPT_XmlNode*        node = nullptr;
+    NPT_XmlElementNode* didl = nullptr;
 	NPT_XmlParser		parser;
 
     NPT_LOG_FINE("Parsing Didl...");
@@ -392,14 +392,14 @@ PLT_Didl::FromDidl(const char* xml, PLT_MediaObjectListReference& objects)
         }
 
         objects->Add(object);
-        object = NULL; // reset to make sure it doesn't get deleted twice in case of error
+        object = nullptr; // reset to make sure it doesn't get deleted twice in case of error
     }
 
     delete node;
     return NPT_SUCCESS;
 
 cleanup:
-    objects = NULL;
+    objects = nullptr;
     delete node;
     delete object;
     return NPT_FAILURE;

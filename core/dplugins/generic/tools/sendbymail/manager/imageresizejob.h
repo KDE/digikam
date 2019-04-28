@@ -45,7 +45,7 @@ class ImageResizeJob : public ActionJob
 
 public:
 
-    explicit ImageResizeJob(int* count = 0);
+    explicit ImageResizeJob(int* count = nullptr);
     ~ImageResizeJob();
 
 public:

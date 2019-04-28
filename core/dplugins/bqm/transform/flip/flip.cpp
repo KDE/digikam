@@ -47,7 +47,7 @@ namespace DigikamBqmFlipPlugin
 Flip::Flip(QObject* const parent)
     : BatchTool(QLatin1String("Flip"), TransformTool, parent)
 {
-    m_comboBox = 0;
+    m_comboBox = nullptr;
 }
 
 void Flip::registerSettingsWidget()

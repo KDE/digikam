@@ -44,7 +44,7 @@ class FlickrPlugin : public DPluginGeneric
 
 public:
 
-    explicit FlickrPlugin(QObject* const parent = 0);
+    explicit FlickrPlugin(QObject* const parent = nullptr);
     ~FlickrPlugin();
 
     QString name()                 const override;

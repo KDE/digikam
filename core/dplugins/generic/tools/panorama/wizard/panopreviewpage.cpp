@@ -59,19 +59,19 @@ class Q_DECL_HIDDEN PanoPreviewPage::Private
 public:
 
     explicit Private(PanoManager* const m)
-      : title(0),
-        previewWidget(0),
+      : title(nullptr),
+        previewWidget(nullptr),
         previewBusy(false),
         previewDone(false),
         stitchingBusy(false),
         stitchingDone(false),
-        postProcessing(0),
-        progressBar(0),
+        postProcessing(nullptr),
+        progressBar(nullptr),
         curProgress(0),
         totalProgress(0),
         canceled(false),
         mngr(m),
-        dlg(0)
+        dlg(nullptr)
     {
     }
 

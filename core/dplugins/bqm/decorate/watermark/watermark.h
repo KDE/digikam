@@ -45,12 +45,12 @@ class WaterMark : public BatchTool
 
 public:
 
-    explicit WaterMark(QObject* const parent = 0);
+    explicit WaterMark(QObject* const parent = nullptr);
     ~WaterMark();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new WaterMark(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new WaterMark(parent); };
 
     void registerSettingsWidget();
 

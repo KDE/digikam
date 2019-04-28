@@ -60,9 +60,9 @@ class Q_DECL_HIDDEN SearchResultModelHelper::Private
 public:
 
     explicit Private()
-      : model(0),
-        selectionModel(0),
-        imageModel(0),
+      : model(nullptr),
+        selectionModel(nullptr),
+        imageModel(nullptr),
         visible(true)
     {
     }

@@ -105,14 +105,14 @@ public:
                                const char*        nt,
                                NPT_UdpSocket&     socket,
                                bool               notify,
-                               const NPT_SocketAddress* addr = NULL);
+                               const NPT_SocketAddress* addr = nullptr);
      
     static NPT_Result SendSsdp(NPT_HttpResponse&  response,
                                const char*        usn,
                                const char*        nt,
                                NPT_UdpSocket&     socket,
                                bool               notify, 
-                               const NPT_SocketAddress* addr = NULL);
+                               const NPT_SocketAddress* addr = nullptr);
 
 private:
     static NPT_Result FormatPacket(NPT_HttpMessage&   message,

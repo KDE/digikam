@@ -102,7 +102,7 @@ void ImageShackPlugin::slotImageShack()
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new ImageShackWindow(infoIface(sender()), 0);
+        m_toolDlg = new ImageShackWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

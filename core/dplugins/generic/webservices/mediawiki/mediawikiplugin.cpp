@@ -110,7 +110,7 @@ void MediaWikiPlugin::slotMediaWiki()
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new MediaWikiWindow(infoIface(sender()), 0);
+        m_toolDlg = new MediaWikiWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

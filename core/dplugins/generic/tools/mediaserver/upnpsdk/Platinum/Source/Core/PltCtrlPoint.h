@@ -130,12 +130,12 @@ public:
                                 const char*              action_name,
                                 PLT_ActionReference&     action);
     virtual NPT_Result InvokeAction(PLT_ActionReference& action,
-                                    void*                userdata = NULL);
+                                    void*                userdata = nullptr);
 
     // events
     virtual NPT_Result Subscribe(PLT_Service* service, 
                                  bool         cancel = false, 
-                                 void*        userdata = NULL);
+                                 void*        userdata = nullptr);
 
     // NPT_HttpRequestHandler methods
     NPT_Result SetupResponse(NPT_HttpRequest&              request,

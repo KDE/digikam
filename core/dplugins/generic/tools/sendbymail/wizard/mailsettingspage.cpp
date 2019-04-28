@@ -55,22 +55,22 @@ class Q_DECL_HIDDEN MailSettingsPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : labelMailAgent(0),
-        labelImagesResize(0),
-        labelImagesFormat(0),
-        labelAttachmentLimit(0),
-        labelImageCompression(0),
-        mailAgentName(0),
-        imagesFormat(0),
-        changeImagesProp(0),
-        addFileProperties(0),
-        removeMetadata(0),
-        imageCompression(0),
-        attachmentlimit(0),
-        imagesResize(0),
-        wizard(0),
-        iface(0),
-        settings(0)
+      : labelMailAgent(nullptr),
+        labelImagesResize(nullptr),
+        labelImagesFormat(nullptr),
+        labelAttachmentLimit(nullptr),
+        labelImageCompression(nullptr),
+        mailAgentName(nullptr),
+        imagesFormat(nullptr),
+        changeImagesProp(nullptr),
+        addFileProperties(nullptr),
+        removeMetadata(nullptr),
+        imageCompression(nullptr),
+        attachmentlimit(nullptr),
+        imagesResize(nullptr),
+        wizard(nullptr),
+        iface(nullptr),
+        settings(nullptr)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

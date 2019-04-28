@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT VidSlideWizard : public DWizardDlg
 
 public:
 
-    explicit VidSlideWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit VidSlideWizard(QWidget* const parent, DInfoInterface* const iface = nullptr);
     ~VidSlideWizard();
 
     bool validateCurrentPage() override;

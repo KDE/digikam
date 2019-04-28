@@ -52,8 +52,8 @@ class Q_DECL_HIDDEN LensAutoFix::Private
 public:
 
     explicit Private()
-        : settingsView(0),
-          cameraSelector(0),
+        : settingsView(nullptr),
+          cameraSelector(nullptr),
           changeSettings(true)
     {
     }
@@ -236,7 +236,7 @@ bool LensAutoFix::toolOperations()
         prm.lensModel       = settings()[QLatin1String("lensModel")].toString();
     }
 
-    LensFunFilter filter(&image(), 0L, prm);
+    LensFunFilter filter(&image(), nullptr, prm);
     applyFilter(&filter);
 
     MetaEngineData data = image().getMetadata();

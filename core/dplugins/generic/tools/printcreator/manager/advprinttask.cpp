@@ -57,7 +57,7 @@ class Q_DECL_HIDDEN AdvPrintTask::Private
 public:
 
     explicit Private()
-      : settings(0),
+      : settings(nullptr),
         mode(AdvPrintTask::PRINT),
         sizeIndex(0)
     {
@@ -293,7 +293,7 @@ QStringList AdvPrintTask::printPhotosToFile()
 
         painter.end();
 
-        if (!image.save(filename, 0, 100))
+        if (!image.save(filename, nullptr, 100))
         {
             signalMessage(i18n("Could not save file %1", filename), true);
             break;
@@ -564,7 +564,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
         ++it;
         layout = (it == layouts.end()) ? 0 : static_cast<QRect*>(*it);
 
-        if (layout == 0)
+        if (layout == nullptr)
         {
             current++;
             break;
@@ -600,7 +600,7 @@ double AdvPrintTask::getMaxDPI(const QList<AdvPrintPhoto*>& photos,
         ++it;
         layout = (it == layouts.end()) ? 0 : static_cast<QRect*>(*it);
 
-        if (layout == 0)
+        if (layout == nullptr)
         {
             break;
         }

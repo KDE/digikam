@@ -42,7 +42,7 @@ namespace DigikamBqmNoiseReductionPlugin
 
 NoiseReduction::NoiseReduction(QObject* const parent)
     : BatchTool(QLatin1String("NoiseReduction"), EnhanceTool, parent),
-      m_settingsView(0)
+      m_settingsView(nullptr)
 {
 }
 
@@ -134,7 +134,7 @@ bool NoiseReduction::toolOperations()
         prm.softness[2]   = settings()[QLatin1String("CbSoftness")].toDouble();
     }
 
-    NRFilter wnr(&image(), 0L, prm);
+    NRFilter wnr(&image(), nullptr, prm);
     applyFilter(&wnr);
 
     return (savefromDImg());

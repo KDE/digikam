@@ -94,8 +94,8 @@ public:
 
 public:
 
-    ImageSelectionWidget(int width, int height, QWidget* const parent = 0);
-    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* const parent = 0);
+    ImageSelectionWidget(int width, int height, QWidget* const parent = nullptr);
+    ImageSelectionWidget(int width, int height, bool initDrawing, QWidget* const parent = nullptr);
     ~ImageSelectionWidget();
 
     void  setBackgroundColor(const QColor& bg);

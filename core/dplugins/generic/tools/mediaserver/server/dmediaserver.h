@@ -43,7 +43,7 @@ class DMediaServer : public QObject
 
 public:
 
-    explicit DMediaServer(QObject* const parent = 0);
+    explicit DMediaServer(QObject* const parent = nullptr);
     virtual ~DMediaServer();
 
     /**

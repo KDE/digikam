@@ -40,12 +40,12 @@ class WhiteBalance : public BatchTool
 
 public:
 
-    explicit WhiteBalance(QObject* const parent = 0);
+    explicit WhiteBalance(QObject* const parent = nullptr);
     ~WhiteBalance();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new WhiteBalance(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new WhiteBalance(parent); };
 
     void registerSettingsWidget();
 

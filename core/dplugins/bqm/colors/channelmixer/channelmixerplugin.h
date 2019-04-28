@@ -42,7 +42,7 @@ class ChannelMixerPlugin : public DPluginBqm
 
 public:
 
-    explicit ChannelMixerPlugin(QObject* const parent = 0);
+    explicit ChannelMixerPlugin(QObject* const parent = nullptr);
     ~ChannelMixerPlugin();
 
     QString name()                 const override;

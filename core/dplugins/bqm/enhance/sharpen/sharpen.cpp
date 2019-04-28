@@ -50,7 +50,7 @@ namespace DigikamBqmSharpenPlugin
 Sharpen::Sharpen(QObject* const parent)
     : BatchTool(QLatin1String("Sharpen"), EnhanceTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 Sharpen::~Sharpen()
@@ -179,7 +179,7 @@ bool Sharpen::toolOperations()
                 sigma = sqrt(radius);
             }
 
-            SharpenFilter filter(&image(), 0L, radius, sigma);
+            SharpenFilter filter(&image(), nullptr, radius, sigma);
             applyFilter(&filter);
             break;
         }
@@ -191,7 +191,7 @@ bool Sharpen::toolOperations()
             double th = settings()[QLatin1String("UnsharpMaskThreshold")].toDouble();
             bool    l = settings()[QLatin1String("UnsharpMaskLuma")].toBool();
 
-            UnsharpMaskFilter filter(&image(), 0L, r, a, th, l);
+            UnsharpMaskFilter filter(&image(), nullptr, r, a, th, l);
             applyFilter(&filter);
             break;
         }
@@ -205,7 +205,7 @@ bool Sharpen::toolOperations()
             double gauss       = settings()[QLatin1String("RefocusGauss")].toDouble();
             int matrixSize     = settings()[QLatin1String("RefocusMatrixSize")].toInt();
 
-            RefocusFilter filter(&image(), 0L, matrixSize, radius, gauss, correlation, noise);
+            RefocusFilter filter(&image(), nullptr, matrixSize, radius, gauss, correlation, noise);
             applyFilter(&filter);
 #endif // HAVE_EIGEN3
             break;

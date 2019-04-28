@@ -130,8 +130,8 @@ public:
     NPT_HttpUrl(const char* host, 
                 NPT_UInt16  port, 
                 const char* path,
-                const char* query = NULL,
-                const char* fragment = NULL);
+                const char* query = nullptr,
+                const char* fragment = nullptr);
     NPT_HttpUrl(const char* url, bool ignore_scheme = false);
 
     // methods
@@ -327,7 +327,7 @@ public:
     // methods
     NPT_Result         SetStatus(NPT_HttpStatusCode status_code,
                                  const char*        reason_phrase,
-                                 const char*        protocol = NULL);
+                                 const char*        protocol = nullptr);
     NPT_Result         SetProtocol(const char* protocol);
     NPT_HttpStatusCode GetStatusCode() const { return m_StatusCode;   }
     const NPT_String&  GetReasonPhrase() const { return m_ReasonPhrase; }
@@ -436,7 +436,7 @@ public:
                                    bool                       should_persist,
                                    bool                       expect_entity,
                                    NPT_HttpResponse*&         response,
-                                   NPT_Reference<Connection>* cref = NULL);
+                                   NPT_Reference<Connection>* cref = nullptr);
 
     /**
      * @param connector Pointer to a connector instance, or NULL to use 
@@ -446,20 +446,20 @@ public:
      * itself deleted. If false, the caller keeps the ownership of the connector. 
      * This flag is ignored if the connector parameter is NULL.
      */
-    NPT_HttpClient(Connector* connector = NULL, bool transfer_ownership = true);
+    NPT_HttpClient(Connector* connector = nullptr, bool transfer_ownership = true);
 
     virtual ~NPT_HttpClient();
 
     // methods
     NPT_Result SendRequest(NPT_HttpRequest&        request,
                            NPT_HttpResponse*&      response,
-                           NPT_HttpRequestContext* context = NULL);
+                           NPT_HttpRequestContext* context = nullptr);
     NPT_Result Abort();
     const Config& GetConfig() const { return m_Config; }
     NPT_Result SetConfig(const Config& config);
     NPT_Result SetProxy(const char* http_proxy_hostname, 
                         NPT_UInt16  http_proxy_port,
-                        const char* https_proxy_hostname = NULL,
+                        const char* https_proxy_hostname = nullptr,
                         NPT_UInt16  https_proxy_port = 0);
     NPT_Result SetProxySelector(NPT_HttpProxySelector* selector);
     NPT_Result SetConnector(Connector* connector);
@@ -474,7 +474,7 @@ protected:
     NPT_Result TrackConnection(Connection* connection);
     NPT_Result SendRequestOnce(NPT_HttpRequest&        request,
                                NPT_HttpResponse*&      response,
-                               NPT_HttpRequestContext* context = NULL);
+                               NPT_HttpRequestContext* context = nullptr);
 
     // members
     Config                 m_Config;
@@ -656,7 +656,7 @@ public:
     NPT_HttpFileRequestHandler(const char* url_root,
                                const char* file_root,
                                bool        auto_dir = false,
-                               const char* auto_index = NULL);
+                               const char* auto_index = nullptr);
 
     // NPT_HttpRequestHandler methods
     NPT_Result SetupResponse(NPT_HttpRequest&              request, 
@@ -677,7 +677,7 @@ public:
     
     static NPT_Result SetupResponseBody(NPT_HttpResponse&         response,
                                         NPT_InputStreamReference& stream,
-                                        const NPT_String*         range_spec = NULL);
+                                        const NPT_String*         range_spec = nullptr);
 
 protected:
     // methods
@@ -798,7 +798,7 @@ public:
     NPT_Result SetConfig(const Config& config);
     NPT_Result SetTimeout(NPT_Timeout io_timeout);
     NPT_Result ParseRequest(NPT_HttpRequest*&        request,
-                            const NPT_SocketAddress* local_address = NULL);
+                            const NPT_SocketAddress* local_address = nullptr);
     NPT_Result SendResponseHeaders(NPT_HttpResponse& response);
 
 protected:
@@ -821,7 +821,7 @@ public:
     // NPT_InputStream methods
     NPT_Result Read(void*     buffer, 
                     NPT_Size  bytes_to_read, 
-                    NPT_Size* bytes_read = NULL) override;
+                    NPT_Size* bytes_read = nullptr) override;
     NPT_Result Seek(NPT_Position offset) override;
     NPT_Result Tell(NPT_Position& offset) override;
     NPT_Result GetSize(NPT_LargeSize& size) override;
@@ -847,7 +847,7 @@ public:
     // NPT_OutputStream methods
     NPT_Result Write(const void* buffer, 
                      NPT_Size    bytes_to_write, 
-                     NPT_Size*   bytes_written = NULL) override;
+                     NPT_Size*   bytes_written = nullptr) override;
     NPT_Result Seek(NPT_Position /*offset*/) override { return NPT_ERROR_NOT_SUPPORTED;}
     NPT_Result Tell(NPT_Position& offset) override    { return m_Stream.Tell(offset);  }
     NPT_Result Flush() override                       { return m_Stream.Flush();       }

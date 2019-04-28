@@ -54,9 +54,9 @@ public:
 
     explicit Private()
     {
-        sharedData  = 0;
+        sharedData  = nullptr;
         currIndex   = 0;
-        mediaObject = 0;
+        mediaObject = nullptr;
         canHide     = true;
         isZeroTime  = false;
         playingNext = false;

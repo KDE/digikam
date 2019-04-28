@@ -42,7 +42,7 @@ class LensAutoFixPlugin : public DPluginBqm
 
 public:
 
-    explicit LensAutoFixPlugin(QObject* const parent = 0);
+    explicit LensAutoFixPlugin(QObject* const parent = nullptr);
     ~LensAutoFixPlugin();
 
     QString name()                 const override;

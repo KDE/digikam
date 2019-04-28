@@ -42,12 +42,12 @@ class Restoration : public BatchTool
 
 public:
 
-    explicit Restoration(QObject* const parent = 0);
+    explicit Restoration(QObject* const parent = nullptr);
     ~Restoration();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new Restoration(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Restoration(parent); };
 
     void registerSettingsWidget();
 

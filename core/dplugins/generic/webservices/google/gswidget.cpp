@@ -52,7 +52,7 @@ GSWidget::GSWidget(QWidget* const parent,
     : WSSettingsWidget(parent, iface, serviceName)
 {
     m_service                = service;
-    m_tagsBGrp               = 0;
+    m_tagsBGrp               = nullptr;
     QGroupBox* const leafBox = new QGroupBox(QLatin1String(""), getSettingsBox());
 
     if (m_service == GoogleService::GPhotoExport)

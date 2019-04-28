@@ -56,14 +56,14 @@ class Q_DECL_HIDDEN BlurFXTool::Private
 public:
 
     explicit Private()
-      : effectTypeLabel(0),
-        distanceLabel(0),
-        levelLabel(0),
-        effectType(0),
-        distanceInput(0),
-        levelInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : effectTypeLabel(nullptr),
+        distanceLabel(nullptr),
+        levelLabel(nullptr),
+        effectType(nullptr),
+        distanceInput(nullptr),
+        levelInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -101,7 +101,7 @@ BlurFXTool::BlurFXTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

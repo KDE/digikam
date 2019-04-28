@@ -50,7 +50,7 @@ class ScanDialog : public DPluginDialog
 
 public:
 
-    explicit ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=0);
+    explicit ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=nullptr);
     ~ScanDialog();
 
     void setTargetDir(const QString& targetDir);

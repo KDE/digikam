@@ -115,21 +115,21 @@ public:
         prevH(0),
         prevWP(0.0),
         prevHP(0.0),
-        restorationTips(0),
-        presetCBox(0),
-        units(0),
-        preserveRatioBox(0),
-        useGreycstorationBox(0),
-        mainTab(0),
-        cimgLogoLabel(0),
-        previewWidget(0),
-        wInput(0),
-        hInput(0),
-        resolution(0),
-        wpInput(0),
-        hpInput(0),
-        gboxSettings(0),
-        settingsWidget(0)
+        restorationTips(nullptr),
+        presetCBox(nullptr),
+        units(nullptr),
+        preserveRatioBox(nullptr),
+        useGreycstorationBox(nullptr),
+        mainTab(nullptr),
+        cimgLogoLabel(nullptr),
+        previewWidget(nullptr),
+        wInput(nullptr),
+        hInput(nullptr),
+        resolution(nullptr),
+        wpInput(nullptr),
+        hpInput(nullptr),
+        gboxSettings(nullptr),
+        settingsWidget(nullptr)
     {
     }
 
@@ -280,13 +280,13 @@ ResizeTool::ResizeTool(QObject* const parent)
 {
     setObjectName(QLatin1String("resizeimage"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false);
+    d->previewWidget = new ImageGuideWidget(nullptr, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default |
                                 EditorToolSettings::Try     |
                                 EditorToolSettings::Ok      |

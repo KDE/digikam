@@ -196,7 +196,7 @@ KBImage::KBImage(KBViewTrans* const viewTrans, float aspect)
     m_pos       = 0.0;
     m_opacity   = 0.0;
     m_paint     = (m_viewTrans) ? true : false;
-    m_texture   = 0;
+    m_texture   = nullptr;
 }
 
 KBImage::~KBImage()
@@ -258,8 +258,8 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
 
     qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Frame Rate : " << frameRate;
 
-    d->image[0]        = new KBImage(0);
-    d->image[1]        = new KBImage(0);
+    d->image[0]        = new KBImage(nullptr);
+    d->image[1]        = new KBImage(nullptr);
     d->step            = 1.0 / ((float)(d->delay * frameRate));
     d->imageLoadThread = new KBImageLoader(d->sharedData, width(), height());
     d->timer           = new QTimer(this);
@@ -340,7 +340,7 @@ float PresentationKB::aspect() const
 void PresentationKB::setNewKBEffect()
 {
     KBEffect::Type type;
-    bool needFadeIn = ((d->effect == 0) || (d->effect->type() == KBEffect::Fade));
+    bool needFadeIn = ((d->effect == nullptr) || (d->effect->type() == KBEffect::Fade));
 
     // we currently only have two effects
 

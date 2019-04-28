@@ -52,7 +52,7 @@ public:
     explicit UploadPrivate(Iface& MediaWiki)
         : JobPrivate(MediaWiki)
     {
-        file = 0;
+        file = nullptr;
     }
 
     static int error(const QString& error)

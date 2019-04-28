@@ -53,15 +53,15 @@ public:
 
     explicit Private()
     {
-        copyrightCheck   = 0;
-        creditCheck      = 0;
-        sourceCheck      = 0;
-        copyrightEdit    = 0;
-        creditEdit       = 0;
-        sourceEdit       = 0;
-        bylineEdit       = 0;
-        bylineTitleEdit  = 0;
-        contactEdit      = 0;
+        copyrightCheck   = nullptr;
+        creditCheck      = nullptr;
+        sourceCheck      = nullptr;
+        copyrightEdit    = nullptr;
+        creditEdit       = nullptr;
+        sourceEdit       = nullptr;
+        bylineEdit       = nullptr;
+        bylineTitleEdit  = nullptr;
+        contactEdit      = nullptr;
     }
 
     QCheckBox*        copyrightCheck;

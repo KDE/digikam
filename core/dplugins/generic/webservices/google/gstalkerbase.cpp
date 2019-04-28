@@ -73,7 +73,7 @@ public:
 
     explicit Private()
     {
-        parent       = 0;
+        parent       = nullptr;
 
         apikey       = QLatin1String("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
         clientSecret = QLatin1String("iiIKTNM4ggBXiTdquAzbs2xw");
@@ -87,8 +87,8 @@ public:
         tokenUrl     = QLatin1String("https://accounts.google.com/o/oauth2/token");
         refreshUrl   = QLatin1String("https://accounts.google.com/o/oauth2/token");
 
-        o2           = 0;
-        settings     = 0;
+        o2           = nullptr;
+        settings     = nullptr;
     }
 
     QWidget*   parent;
@@ -107,7 +107,7 @@ public:
 GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList& scope, const QString& serviceName)
     : d(new Private)
 {
-    m_reply         = 0;
+    m_reply         = nullptr;
     m_scope         = scope;
     m_serviceName   = serviceName;
     d->parent       = parent;

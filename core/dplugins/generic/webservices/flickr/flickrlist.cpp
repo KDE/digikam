@@ -433,7 +433,7 @@ public:
         isFriends   = true;
         safetyLevel = FlickrList::SAFE;
         contentType = FlickrList::PHOTO;
-        tagLineEdit = 0;
+        tagLineEdit = nullptr;
     }
 
     bool                    is23;

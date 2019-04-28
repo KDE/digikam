@@ -75,7 +75,7 @@ public:
     ParseTest()
     {
         parseCount  = 0;
-        m_mediaWiki = 0;
+        m_mediaWiki = nullptr;
     }
 
 public Q_SLOTS:
@@ -104,7 +104,7 @@ private Q_SLOTS:
         QString scenario = QStringFromFile(QStringLiteral("./data/parsetest_result.rc"));
         QString result   = QStringFromFile(QStringLiteral("./data/parsetest_resulttrue.rc"));
 
-        Parse* const job = new Parse(*m_mediaWiki, NULL);
+        Parse* const job = new Parse(*m_mediaWiki, nullptr);
         parseCount       = 0;
         FakeServer fakeserver;
         fakeserver.setScenario(scenario);
@@ -148,7 +148,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("request");
         QTest::addColumn<Parse*>("job");
 
-        Parse* const p1 = new Parse( *m_mediaWiki, NULL);
+        Parse* const p1 = new Parse( *m_mediaWiki, nullptr);
         p1->setText(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Text")
@@ -156,7 +156,7 @@ private Q_SLOTS:
                 << QStringLiteral("/?format=xml&action=parse&text=listedecharacteres")
                 << p1;
 
-        Parse* const p2 = new Parse( *m_mediaWiki, NULL);
+        Parse* const p2 = new Parse( *m_mediaWiki, nullptr);
         p2->setPageName(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Page Name")
@@ -164,7 +164,7 @@ private Q_SLOTS:
                 << QStringLiteral("/?format=xml&action=parse&page=listedecharacteres")
                 << p2;
 
-        Parse* const p3 = new Parse( *m_mediaWiki, NULL);
+        Parse* const p3 = new Parse( *m_mediaWiki, nullptr);
         p3->setTitle(QStringLiteral("listedecharacteres"));
 
         QTest::newRow("Title")
@@ -172,7 +172,7 @@ private Q_SLOTS:
                 << QStringLiteral("/?format=xml&action=parse&title=listedecharacteres")
                 << p3;
 
-        Parse* const p4 = new Parse( *m_mediaWiki, NULL);
+        Parse* const p4 = new Parse( *m_mediaWiki, nullptr);
         p4->setUseLang(QStringLiteral("fr"));
 
         QTest::newRow("User Langue")

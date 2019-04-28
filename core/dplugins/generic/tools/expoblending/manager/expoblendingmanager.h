@@ -51,7 +51,7 @@ class DIGIKAM_EXPORT ExpoBlendingManager : public QObject
 
 public:
 
-    explicit ExpoBlendingManager(QObject* const parent = 0);
+    explicit ExpoBlendingManager(QObject* const parent = nullptr);
     ~ExpoBlendingManager();
 
     static QPointer<ExpoBlendingManager> internalPtr;

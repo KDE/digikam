@@ -99,7 +99,7 @@ public:
     void loadSpecial(const QUrl& url, const QColor& color);
 #endif
 
-    static CalSettings* instance(QObject* const parent = 0);
+    static CalSettings* instance(QObject* const parent = nullptr);
 
     ~CalSettings();
 

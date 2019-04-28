@@ -901,7 +901,7 @@ int CalSystem::year(const QDate& date) const
 
     if (isValid(date))
     {
-        d->julianDayToDate(date.toJulianDay(), &y, 0, 0);
+        d->julianDayToDate(date.toJulianDay(), &y, nullptr, nullptr);
     }
 
     return y;
@@ -913,7 +913,7 @@ int CalSystem::month(const QDate& date) const
 
     if (isValid(date))
     {
-        d->julianDayToDate(date.toJulianDay(), 0, &m, 0);
+        d->julianDayToDate(date.toJulianDay(), nullptr, &m, nullptr);
     }
 
     return m;
@@ -925,7 +925,7 @@ int CalSystem::day(const QDate& date) const
 
     if (isValid(date))
     {
-        d->julianDayToDate(date.toJulianDay(), 0, 0, &dd);
+        d->julianDayToDate(date.toJulianDay(), nullptr, nullptr, &dd);
     }
 
     return dd;
@@ -936,7 +936,7 @@ int CalSystem::quarter(const QDate& date) const
     if (isValid(date))
     {
         int month;
-        d->julianDayToDate(date.toJulianDay(), 0, &month, 0);
+        d->julianDayToDate(date.toJulianDay(), nullptr, &month, nullptr);
 
         return d->quarter(month);
     }
@@ -1167,7 +1167,7 @@ int CalSystem::daysInMonth(const QDate& date) const
     if (isValid(date))
     {
         int year, month;
-        d->julianDayToDate(date.toJulianDay(), &year, &month, 0);
+        d->julianDayToDate(date.toJulianDay(), &year, &month, nullptr);
         return d->daysInMonth(year, month);
     }
     else
@@ -1404,7 +1404,7 @@ bool CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
     {
         if (toDate < fromDate)
         {
-            dateDifference(toDate, fromDate, &dy, &dm, &dd, 0);
+            dateDifference(toDate, fromDate, &dy, &dm, &dd, nullptr);
             dir = -1;
         }
         else
@@ -1534,7 +1534,7 @@ QDate CalSystem::lastDayOfYear(int year) const
 QDate CalSystem::firstDayOfMonth(const QDate& dt) const
 {
     int year, month;
-    getDate(dt, &year, &month, 0);
+    getDate(dt, &year, &month, nullptr);
 
     return date(year, month, 1);
 }
@@ -1547,7 +1547,7 @@ QDate CalSystem::firstDayOfMonth(int year, int month) const
 QDate CalSystem::lastDayOfMonth(const QDate& dt) const
 {
     int year, month;
-    getDate(dt, &year, &month, 0);
+    getDate(dt, &year, &month, nullptr);
 
     return date(year, month, daysInMonth(year, month));
 }

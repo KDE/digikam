@@ -60,7 +60,7 @@ PLT_DeviceData::PLT_DeviceData(NPT_HttpUrl      description_url,
     m_NextBootId(0),
     m_ConfigId(-1)
 {
-    if (uuid == NULL || strlen(uuid) == 0) {
+    if (uuid == nullptr || strlen(uuid) == 0) {
         PLT_UPnPMessageHelper::GenerateGUID(m_UUID);
     }
 
@@ -471,7 +471,7 @@ NPT_Result
 PLT_DeviceData::GetDescription(NPT_String& desc)
 {
     NPT_Result res;
-    NPT_XmlElementNode* spec = NULL;
+    NPT_XmlElementNode* spec = nullptr;
     NPT_XmlElementNode* root = new NPT_XmlElementNode("root");
 
     NPT_CHECK_LABEL_SEVERE(res = root->SetNamespaceUri("", "urn:schemas-upnp-org:device-1-0"), cleanup);
@@ -506,9 +506,9 @@ PLT_DeviceData::SetDescription(PLT_DeviceDataReference&      root_device,
                                const NPT_HttpRequestContext& context)
 {
     NPT_XmlParser       parser;
-    NPT_XmlNode*        tree = NULL;
+    NPT_XmlNode*        tree = nullptr;
     NPT_Result          res;
-    NPT_XmlElementNode* root = NULL;
+    NPT_XmlElementNode* root = nullptr;
     NPT_String          URLBase;
     NPT_String          configId;
     
@@ -631,7 +631,7 @@ PLT_DeviceData::SetDescriptionDevice(PLT_DeviceDataReference&      device,
             NPT_String type, id, url;
             PLT_XmlHelper::GetChildText(services[k], "serviceType", type);
             PLT_XmlHelper::GetChildText(services[k], "serviceId", id);    
-            PLT_Service* service = new PLT_Service(device.AsPointer(), type, id, NULL);
+            PLT_Service* service = new PLT_Service(device.AsPointer(), type, id, nullptr);
             
             PLT_XmlHelper::GetChildText(services[k], "SCPDURL", url);
             service->SetSCPDURL(url);

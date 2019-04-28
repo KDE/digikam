@@ -77,7 +77,7 @@ NPT_Result
 NPT_IpAddress::Parse(const char* name)
 {
     // check the name
-    if (name == NULL) return NPT_ERROR_INVALID_PARAMETERS;
+    if (name == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
 
     // clear the address
     m_Address[0] = m_Address[1] = m_Address[2] = m_Address[3] = 0;

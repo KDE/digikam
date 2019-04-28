@@ -42,7 +42,7 @@ class ExpoBlendingPlugin : public DPluginGeneric
 
 public:
 
-    explicit ExpoBlendingPlugin(QObject* const parent = 0);
+    explicit ExpoBlendingPlugin(QObject* const parent = nullptr);
     ~ExpoBlendingPlugin();
 
     QString name()                 const override;

@@ -59,31 +59,31 @@ public:
 
     explicit Private()
     {
-        makeCheck                = 0;
-        modelCheck               = 0;
-        deviceTypeCheck          = 0;
-        exposureTimeCheck        = 0;
-        exposureProgramCheck     = 0;
-        exposureModeCheck        = 0;
-        exposureBiasCheck        = 0;
-        ISOSpeedCheck            = 0;
-        meteringModeCheck        = 0;
-        sensingMethodCheck       = 0;
-        sceneTypeCheck           = 0;
-        subjectDistanceTypeCheck = 0;
-        exposureProgramCB        = 0;
-        exposureModeCB           = 0;
-        ISOSpeedCB               = 0;
-        meteringModeCB           = 0;
-        sensingMethodCB          = 0;
-        sceneTypeCB              = 0;
-        subjectDistanceTypeCB    = 0;
-        exposureTimeNumEdit      = 0;
-        exposureTimeDenEdit      = 0;
-        exposureBiasEdit         = 0;
-        makeEdit                 = 0;
-        modelEdit                = 0;
-        deviceTypeCB             = 0;
+        makeCheck                = nullptr;
+        modelCheck               = nullptr;
+        deviceTypeCheck          = nullptr;
+        exposureTimeCheck        = nullptr;
+        exposureProgramCheck     = nullptr;
+        exposureModeCheck        = nullptr;
+        exposureBiasCheck        = nullptr;
+        ISOSpeedCheck            = nullptr;
+        meteringModeCheck        = nullptr;
+        sensingMethodCheck       = nullptr;
+        sceneTypeCheck           = nullptr;
+        subjectDistanceTypeCheck = nullptr;
+        exposureProgramCB        = nullptr;
+        exposureModeCB           = nullptr;
+        ISOSpeedCB               = nullptr;
+        meteringModeCB           = nullptr;
+        sensingMethodCB          = nullptr;
+        sceneTypeCB              = nullptr;
+        subjectDistanceTypeCB    = nullptr;
+        exposureTimeNumEdit      = nullptr;
+        exposureTimeDenEdit      = nullptr;
+        exposureBiasEdit         = nullptr;
+        makeEdit                 = nullptr;
+        modelEdit                = nullptr;
+        deviceTypeCB             = nullptr;
     }
 
     QCheckBox*        makeCheck;

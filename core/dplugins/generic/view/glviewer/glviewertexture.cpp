@@ -64,7 +64,7 @@ public:
         rotate_list[1] = DMetadata::ORIENTATION_ROT_180;
         rotate_list[2] = DMetadata::ORIENTATION_ROT_270;
         rotate_list[3] = DMetadata::ORIENTATION_ROT_180;
-        iface          = 0;
+        iface          = nullptr;
     }
 
     float                              rdx, rdy, z, ux, uy, rtx, rty;

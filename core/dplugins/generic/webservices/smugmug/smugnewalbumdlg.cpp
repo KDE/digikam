@@ -58,14 +58,14 @@ public:
          * subCategCoB  = 0;
          */
 
-        templateCoB  = 0;
-        privBox      = 0;
-        titleEdt     = 0;
-        passwdEdt    = 0;
-        hintEdt      = 0;
-        descEdt      = 0;
-        publicRBtn   = 0;
-        unlistedRBtn = 0;
+        templateCoB  = nullptr;
+        privBox      = nullptr;
+        titleEdt     = nullptr;
+        passwdEdt    = nullptr;
+        hintEdt      = nullptr;
+        descEdt      = nullptr;
+        publicRBtn   = nullptr;
+        unlistedRBtn = nullptr;
     }
 
     /**

@@ -46,8 +46,8 @@ namespace DigikamBqmCurvesAdjustPlugin
 
 CurvesAdjust::CurvesAdjust(QObject* const parent)
     : BatchTool(QLatin1String("CurvesAdjust"), ColorTool, parent),
-      m_channelCB(0),
-      m_settingsView(0)
+      m_channelCB(nullptr),
+      m_settingsView(nullptr)
 {
     setToolTitle(i18n("Curves Adjust"));
     setToolDescription(i18n("Perform curves adjustments."));
@@ -182,7 +182,7 @@ bool CurvesAdjust::toolOperations()
     prm.values[BlueChannel]       = settings()[QLatin1String("values[BlueChannel]")].value<QPolygon>();
     prm.values[AlphaChannel]      = settings()[QLatin1String("values[AlphaChannel]")].value<QPolygon>();
 
-    CurvesFilter curves(&image(), 0L, prm);
+    CurvesFilter curves(&image(), nullptr, prm);
     applyFilter(&curves);
 
     return (savefromDImg());

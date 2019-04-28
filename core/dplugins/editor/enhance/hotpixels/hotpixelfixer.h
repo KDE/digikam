@@ -66,7 +66,7 @@ public:
 
 public:
 
-    explicit HotPixelFixer(QObject* const parent = 0);
+    explicit HotPixelFixer(QObject* const parent = nullptr);
     explicit HotPixelFixer(DImg* const orgImage, QObject* const parent,
                            const QList<HotPixel>& hpList, int interpolationMethod);
     ~HotPixelFixer();

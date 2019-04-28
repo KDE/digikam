@@ -68,9 +68,9 @@ NPT_PosixQueue::NPT_PosixQueue(NPT_Cardinal max_items) :
     m_PoppersWaitingCount(0),
     m_Aborting(false)
 {
-    pthread_mutex_init(&m_Mutex, NULL);
-    pthread_cond_init(&m_CanPushCondition, NULL);
-    pthread_cond_init(&m_CanPopCondition, NULL);
+    pthread_mutex_init(&m_Mutex, nullptr);
+    pthread_cond_init(&m_CanPushCondition, nullptr);
+    pthread_cond_init(&m_CanPopCondition, nullptr);
 }
 
 /*----------------------------------------------------------------------
@@ -93,7 +93,7 @@ void
 NPT_PosixQueue::Abort()
 {
     pthread_cond_t abort_condition;
-    pthread_cond_init(&abort_condition, NULL);
+    pthread_cond_init(&abort_condition, nullptr);
 
     struct timespec timed;
     GetTimeOut(20, timed);
@@ -129,7 +129,7 @@ NPT_PosixQueue::GetTimeOut(NPT_Timeout timeout, struct timespec& timed)
     if (timeout != NPT_TIMEOUT_INFINITE) {
         // get current time from system
         struct timeval now;
-        if (gettimeofday(&now, NULL)) {
+        if (gettimeofday(&now, nullptr)) {
             return NPT_FAILURE;
         }
 

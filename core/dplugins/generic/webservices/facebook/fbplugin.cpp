@@ -112,13 +112,13 @@ void FbPlugin::slotFaceBook()
     if (!reactivateToolDialog(m_toolDlg))
     {
         // This message is not translated, and it will be removed after the review process.
-        QMessageBox::warning(0, QLatin1String("Facebook"),
+        QMessageBox::warning(nullptr, QLatin1String("Facebook"),
                                 QLatin1String("This Facebook export tool is under "
                                               "review process and only works for "
                                               "registered test users."));
 
         delete m_toolDlg;
-        m_toolDlg = new FbWindow(infoIface(sender()), 0);
+        m_toolDlg = new FbWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

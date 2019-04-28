@@ -64,19 +64,19 @@ public:
 
     explicit Private()
     {
-        headerLbl         = 0;
-        userNameLbl       = 0;
-        userName          = 0;
-        dimensionSpB      = 0;
-        imageQualitySpB   = 0;
-        albumsCoB         = 0;
-        newAlbumBtn       = 0;
-        reloadAlbumsBtn   = 0;
-        changeUserBtn     = 0;
-        iface             = 0;
-        imgList           = 0;
-        progressBar       = 0;
-        talker            = 0;
+        headerLbl         = nullptr;
+        userNameLbl       = nullptr;
+        userName          = nullptr;
+        dimensionSpB      = nullptr;
+        imageQualitySpB   = nullptr;
+        albumsCoB         = nullptr;
+        newAlbumBtn       = nullptr;
+        reloadAlbumsBtn   = nullptr;
+        changeUserBtn     = nullptr;
+        iface             = nullptr;
+        imgList           = nullptr;
+        progressBar       = nullptr;
+        talker            = nullptr;
         uploadingPhotos   = false;
         lastLoggedInState = false;
     }

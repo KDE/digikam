@@ -79,8 +79,8 @@ public:
         imageQualitySpB = widget->getImgQualitySpB();
         imagesCount     = 0;
         imagesTotal     = 0;
-        talker          = 0;
-        albumDlg        = 0;
+        talker          = nullptr;
+        albumDlg        = nullptr;
     }
 
     FbWidget*       widget;
@@ -111,7 +111,7 @@ public:
 };
 
 FbWindow::FbWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("Facebook Export Dialog")),
+    : WSToolDialog(nullptr, QLatin1String("Facebook Export Dialog")),
       d(new Private(this, iface))
 {
     d->tmpPath.clear();

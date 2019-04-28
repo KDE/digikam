@@ -63,15 +63,15 @@ public:
 
     explicit Private()
     {
-        parent          = 0;
-        netMngr         = 0;
-        reply           = 0;
-        settings        = 0;
+        parent          = nullptr;
+        netMngr         = nullptr;
+        reply           = nullptr;
+        settings        = nullptr;
         state           = FE_LOGOUT;
-        iface           = 0;
-        o1              = 0;
-        store           = 0;
-        requestor       = 0;
+        iface           = nullptr;
+        o1              = nullptr;
+        store           = nullptr;
+        requestor       = nullptr;
     }
 
     QWidget*               parent;
@@ -111,8 +111,8 @@ FlickrTalker::FlickrTalker(QWidget* const parent,
     d->parent         = parent;
     d->serviceName    = serviceName;
     d->iface          = iface;
-    m_photoSetsList   = 0;
-    m_authProgressDlg = 0;
+    m_photoSetsList   = nullptr;
+    m_authProgressDlg = nullptr;
 
     if (d->serviceName == QLatin1String("23"))
     {
@@ -275,7 +275,7 @@ void FlickrTalker::maxAllowedFileSize()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -306,7 +306,7 @@ void FlickrTalker::listPhotoSets()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -335,7 +335,7 @@ void FlickrTalker::getPhotoProperty(const QString& method, const QStringList& ar
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -374,7 +374,7 @@ void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& a
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -407,7 +407,7 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -450,7 +450,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -595,7 +595,7 @@ void FlickrTalker::setGeoLocation(const QString& photoId, const QString& lat, co
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (!d->o1->linked())
@@ -635,7 +635,7 @@ void FlickrTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     if (m_authProgressDlg && !m_authProgressDlg->isHidden())
@@ -734,7 +734,7 @@ void FlickrTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

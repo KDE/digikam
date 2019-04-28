@@ -64,7 +64,7 @@ class Q_DECL_HIDDEN GalleryTheme::Private
 public:
 
     explicit Private()
-        : desktopFile(0)
+        : desktopFile(nullptr)
     {
     }
 
@@ -137,7 +137,7 @@ public:
             QByteArray internalName           = it->toUtf8();
             KConfigGroup group                = desktopFile->group(groupName);
             QString type                      = group.readEntry(PARAMETER_TYPE_KEY);
-            AbstractThemeParameter* parameter = 0;
+            AbstractThemeParameter* parameter = nullptr;
 
             if (type == QLatin1String(STRING_PARAMETER_TYPE))
             {
@@ -240,7 +240,7 @@ GalleryTheme::Ptr GalleryTheme::findByInternalName(const QString& internalName)
         }
     }
 
-    return GalleryTheme::Ptr(0);
+    return GalleryTheme::Ptr(nullptr);
 }
 
 QString GalleryTheme::internalName() const

@@ -42,7 +42,7 @@ class CharcoalToolPlugin : public DPluginEditor
 
 public:
 
-    explicit CharcoalToolPlugin(QObject* const parent = 0);
+    explicit CharcoalToolPlugin(QObject* const parent = nullptr);
     ~CharcoalToolPlugin();
 
     QString name()                 const override;

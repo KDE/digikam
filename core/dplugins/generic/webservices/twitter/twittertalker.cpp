@@ -102,11 +102,11 @@ public:
 
         state           = TW_USERNAME;
 
-        parent          = 0;
-        netMngr         = 0;
-        reply           = 0;
-        settings        = 0;
-        o1Twitter       = 0;
+        parent          = nullptr;
+        netMngr         = nullptr;
+        reply           = nullptr;
+        settings        = nullptr;
+        o1Twitter       = nullptr;
     }
 
 public:
@@ -335,7 +335,7 @@ void TwTalker::cancel()
     if (d->reply)
     {
         d->reply->abort();
-        d->reply = 0;
+        d->reply = nullptr;
     }
 
     emit signalBusy(false);
@@ -648,7 +648,7 @@ void TwTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    d->reply = 0;
+    d->reply = nullptr;
 
     if (reply->error() != QNetworkReply::NoError)
     {

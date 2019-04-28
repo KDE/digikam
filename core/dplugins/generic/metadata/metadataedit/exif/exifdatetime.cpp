@@ -53,25 +53,25 @@ public:
 
     explicit Private()
     {
-        dateCreatedSel             = 0;
-        dateOriginalSel            = 0;
-        dateDigitalizedSel         = 0;
-        dateCreatedSubSecEdit      = 0;
-        dateOriginalSubSecEdit     = 0;
-        dateDigitalizedSubSecEdit  = 0;
+        dateCreatedSel             = nullptr;
+        dateOriginalSel            = nullptr;
+        dateDigitalizedSel         = nullptr;
+        dateCreatedSubSecEdit      = nullptr;
+        dateOriginalSubSecEdit     = nullptr;
+        dateDigitalizedSubSecEdit  = nullptr;
 
-        dateCreatedCheck           = 0;
-        dateOriginalCheck          = 0;
-        dateDigitalizedCheck       = 0;
-        dateCreatedSubSecCheck     = 0;
-        dateOriginalSubSecCheck    = 0;
-        dateDigitalizedSubSecCheck = 0;
-        syncXMPDateCheck           = 0;
-        syncIPTCDateCheck          = 0;
+        dateCreatedCheck           = nullptr;
+        dateOriginalCheck          = nullptr;
+        dateDigitalizedCheck       = nullptr;
+        dateCreatedSubSecCheck     = nullptr;
+        dateOriginalSubSecCheck    = nullptr;
+        dateDigitalizedSubSecCheck = nullptr;
+        syncXMPDateCheck           = nullptr;
+        syncIPTCDateCheck          = nullptr;
 
-        setTodayCreatedBtn         = 0;
-        setTodayOriginalBtn        = 0;
-        setTodayDigitalizedBtn     = 0;
+        setTodayCreatedBtn         = nullptr;
+        setTodayOriginalBtn        = nullptr;
+        setTodayDigitalizedBtn     = nullptr;
     }
 
     QCheckBox*       dateCreatedCheck;

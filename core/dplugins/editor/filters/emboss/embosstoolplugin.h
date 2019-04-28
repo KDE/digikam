@@ -42,7 +42,7 @@ class EmbossToolPlugin : public DPluginEditor
 
 public:
 
-    explicit EmbossToolPlugin(QObject* const parent = 0);
+    explicit EmbossToolPlugin(QObject* const parent = nullptr);
     ~EmbossToolPlugin();
 
     QString name()                 const override;

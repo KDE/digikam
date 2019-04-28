@@ -76,17 +76,17 @@ public:
 
     explicit Private()
     {
-        sharedData                   = 0;
-        imageLoader                  = 0;
+        sharedData                   = nullptr;
+        imageLoader                  = nullptr;
 
 #ifdef HAVE_MEDIAPLAYER
-        playbackWidget               = 0;
-        videoView                    = 0;
+        playbackWidget               = nullptr;
+        videoView                    = nullptr;
 #endif
 
-        timer                        = 0;
+        timer                        = nullptr;
         fileIndex                    = 0;
-        effect                       = 0;
+        effect                       = nullptr;
         effectRunning                = false;
         x                            = 0;
         y                            = 0;
@@ -108,12 +108,12 @@ public:
         fy                           = 0;
         alpha                        = 0;
         fd                           = 0;
-        intArray                     = 0;
+        intArray                     = nullptr;
         pdone                        = 0;
-        pixelMatrix                  = 0;
+        pixelMatrix                  = nullptr;
 
-        slideCtrlWidget              = 0;
-        mouseMoveTimer               = 0;
+        slideCtrlWidget              = nullptr;
+        mouseMoveTimer               = nullptr;
         deskX                        = 0;
         deskY                        = 0;
         deskWidth                    = 0;
@@ -248,9 +248,9 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     // ---------------------------------------------------------------
 
     d->fileIndex     = -1; // start with -1
-    d->effect        = 0;
+    d->effect        = nullptr;
     d->effectRunning = false;
-    d->intArray      = 0;
+    d->intArray      = nullptr;
     m_endOfShow      = false;
     m_simplyShow     = false;
     m_startPainter   = false;
@@ -1062,7 +1062,7 @@ int PresentationWidget::effectMeltdown(bool aInit)
     if (d->pdone)
     {
         delete [] d->intArray;
-        d->intArray = NULL;
+        d->intArray = nullptr;
         showCurrentImage();
         return -1;
     }

@@ -44,7 +44,7 @@ NPT_SET_LOCAL_LOGGER("platinum.core.taskmanager")
 |   PLT_TaskManager::PLT_TaskManager
 +---------------------------------------------------------------------*/
 PLT_TaskManager::PLT_TaskManager(NPT_Cardinal max_items /* = 0 */) :
-    m_Queue(NULL),
+    m_Queue(nullptr),
     m_MaxTasks(max_items),
     m_RunningTasks(0),
     m_Stopping(false)
@@ -99,11 +99,11 @@ PLT_TaskManager::Abort()
             
             // unblock the queue if any by deleting it
             if (m_Queue) {
-                int* val = NULL;
+                int* val = nullptr;
                 while(NPT_SUCCEEDED(m_Queue->Pop(val, 0))) delete val;
                 
                 delete m_Queue;
-                m_Queue = NULL;
+                m_Queue = nullptr;
             }
         }
 
@@ -139,7 +139,7 @@ NPT_Result
 PLT_TaskManager::AddTask(PLT_ThreadTask* task) 
 {
     NPT_Result result = NPT_SUCCESS;
-    int *val = NULL;
+    int *val = nullptr;
 
     // verify we're not stopping or maxed out number of running tasks
     do {
@@ -212,7 +212,7 @@ PLT_TaskManager::RemoveTask(PLT_ThreadTask* task)
         NPT_AutoLock lock(m_TasksLock);
         
         if (m_Queue) {
-            int* val = NULL;
+            int* val = nullptr;
             result = m_Queue->Pop(val, 100);
             
             // if for some reason the queue is empty, don't block forever

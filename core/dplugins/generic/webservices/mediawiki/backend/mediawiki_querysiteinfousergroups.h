@@ -53,7 +53,7 @@ public:
      * @param MediaWiki the MediaWiki concerned by the job
      * @param parent the QObject parent
      */
-    explicit QuerySiteinfoUsergroups(Iface& MediaWiki, QObject* const parent = 0);
+    explicit QuerySiteinfoUsergroups(Iface& MediaWiki, QObject* const parent = nullptr);
 
     /**
      * @brief Destroys the UserGroups job.

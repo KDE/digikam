@@ -41,7 +41,7 @@ namespace DigikamGenericRajcePlugin
 {
 
 RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0, QLatin1String("RajceExport Dialog"))
+    : WSToolDialog(nullptr, QLatin1String("RajceExport Dialog"))
 {
     m_widget = new RajceWidget(iface, this);
     m_widget->readSettings();

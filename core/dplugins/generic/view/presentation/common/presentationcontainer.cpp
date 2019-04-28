@@ -33,12 +33,12 @@ PresentationContainer::PresentationContainer()
     delayMsMinValue               = 0;
     delayMsLineStep               = 0;
     urlList                       = QList<QUrl>();
-    mainPage                      = 0;
-    captionPage                   = 0;
-    advancedPage                  = 0;
+    mainPage                      = nullptr;
+    captionPage                   = nullptr;
+    advancedPage                  = nullptr;
 
 #ifdef HAVE_MEDIAPLAYER
-    soundtrackPage                = 0;
+    soundtrackPage                = nullptr;
 #endif
 
     opengl                        = false;
@@ -54,7 +54,7 @@ PresentationContainer::PresentationContainer()
     commentsDrawOutline           = false;
     bgOpacity                     = 10;
     commentsLinesLength           = 0;
-    captionFont                   = 0;
+    captionFont                   = nullptr;
 
     soundtrackLoop                = false;
     soundtrackPlay                = false;
@@ -68,7 +68,7 @@ PresentationContainer::PresentationContainer()
     kbDisableCrossFade            = false;
     cacheSize                     = 0;
     
-    iface                         = 0;
+    iface                         = nullptr;
 }
 
 PresentationContainer::~PresentationContainer()

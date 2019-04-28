@@ -57,7 +57,7 @@ class MediaWikiTalker : public KJob
 
 public:
 
-    explicit MediaWikiTalker(DInfoInterface* const iface, Iface* const MediaWiki, QObject* const parent=0);
+    explicit MediaWikiTalker(DInfoInterface* const iface, Iface* const MediaWiki, QObject* const parent=nullptr);
     ~MediaWikiTalker();
 
 public:
@@ -75,7 +75,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotBegin();
-    void slotUploadHandle(KJob* j = 0);
+    void slotUploadHandle(KJob* j = nullptr);
     void slotUploadProgress(KJob* job, unsigned long percent);
 
 private:

@@ -40,8 +40,8 @@ public:
 
     explicit Private()
       : cancelled(false),
-        printer(0),
-        painter(0)
+        printer(nullptr),
+        painter(nullptr)
     {
     }
 

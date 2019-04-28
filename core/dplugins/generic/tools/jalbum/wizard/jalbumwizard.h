@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT JAlbumWizard : public DWizardDlg
 
 public:
 
-    explicit JAlbumWizard(QWidget* const parent, DInfoInterface* const iface = 0);
+    explicit JAlbumWizard(QWidget* const parent, DInfoInterface* const iface = nullptr);
     ~JAlbumWizard();
 
     JAlbumSettings* settings() const;

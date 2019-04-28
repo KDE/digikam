@@ -53,7 +53,7 @@ class Q_DECL_HIDDEN PrintHelper::Private
 public:
 
     explicit Private()
-      : parent(0)
+      : parent(nullptr)
     {
     }
 

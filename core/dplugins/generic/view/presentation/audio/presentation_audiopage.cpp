@@ -74,10 +74,10 @@ public:
 
     explicit Private()
     {
-        tracksTime = 0;
-        sharedData = 0;
-        soundItems = 0;
-        timeMutex  = 0;
+        tracksTime = nullptr;
+        sharedData = nullptr;
+        soundItems = nullptr;
+        timeMutex  = nullptr;
     }
 
     QList<QUrl>                             urlList;

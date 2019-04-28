@@ -438,7 +438,7 @@ public:
         jpgQuality       = 90;
         desiredDimension = 0;
         maxDimension     = 0;
-        form             = 0;
+        form             = nullptr;
     }
 
     int          jpgQuality;

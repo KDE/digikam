@@ -69,12 +69,12 @@ public:
 
     explicit Private()
     {
-        widget          = 0;
-        albumDlg        = 0;
-        gphotoAlbumDlg  = 0;
-        talker          = 0;
-        gphotoTalker    = 0;
-        iface           = 0;
+        widget          = nullptr;
+        albumDlg        = nullptr;
+        gphotoAlbumDlg  = nullptr;
+        talker          = nullptr;
+        gphotoTalker    = nullptr;
+        iface           = nullptr;
         imagesCount     = 0;
         imagesTotal     = 0;
         renamingOpt     = 0;
@@ -109,7 +109,7 @@ public:
 GSWindow::GSWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/,
                    const QString& serviceName)
-    : WSToolDialog(0, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
+    : WSToolDialog(nullptr, QString::fromLatin1("%1Export Dialog").arg(serviceName)),
       d(new Private)
 {
     d->iface       = iface;

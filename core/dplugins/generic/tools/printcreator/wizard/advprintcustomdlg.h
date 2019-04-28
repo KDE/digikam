@@ -43,7 +43,7 @@ class AdvPrintCustomLayoutDlg : public QDialog,
 
 public:
 
-    explicit AdvPrintCustomLayoutDlg(QWidget* const parent = 0);
+    explicit AdvPrintCustomLayoutDlg(QWidget* const parent = nullptr);
     ~AdvPrintCustomLayoutDlg();
 
     void readSettings();

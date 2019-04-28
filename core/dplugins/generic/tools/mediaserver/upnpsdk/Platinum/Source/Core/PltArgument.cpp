@@ -87,7 +87,7 @@ PLT_Argument::CreateArgument(PLT_ActionDesc& action_desc,
                              PLT_Argument*&  arg)
 {
     // reset output params first
-    arg = NULL;
+    arg = nullptr;
 
     PLT_ArgumentDesc* arg_desc = action_desc.GetArgumentDesc(name);
 	if (!arg_desc) {

@@ -51,9 +51,9 @@ public:
 
     explicit Private()
     {
-        selector      = 0;
-        imageList     = 0;
-        overwrite     = 0;
+        selector      = nullptr;
+        imageList     = nullptr;
+        overwrite     = nullptr;
     }
 
     DFileSelector*      selector;

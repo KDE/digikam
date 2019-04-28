@@ -42,7 +42,7 @@ class LocalContrastPlugin : public DPluginBqm
 
 public:
 
-    explicit LocalContrastPlugin(QObject* const parent = 0);
+    explicit LocalContrastPlugin(QObject* const parent = nullptr);
     ~LocalContrastPlugin();
 
     QString name()                 const override;

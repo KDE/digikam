@@ -46,8 +46,8 @@ class Q_DECL_HIDDEN SearchBackend::Private
 public:
 
     explicit Private()
-      : netReply(0),
-        mngr(0)
+      : netReply(nullptr),
+        mngr(nullptr)
     {
     }
 

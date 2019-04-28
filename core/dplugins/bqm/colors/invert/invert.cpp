@@ -55,7 +55,7 @@ bool Invert::toolOperations()
         return false;
     }
 
-    InvertFilter inv(&image(), 0L);
+    InvertFilter inv(&image(), nullptr);
     applyFilter(&inv);
 
     return (savefromDImg());

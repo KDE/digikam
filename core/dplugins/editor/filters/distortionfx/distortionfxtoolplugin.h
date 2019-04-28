@@ -42,7 +42,7 @@ class DistortionFXToolPlugin : public DPluginEditor
 
 public:
 
-    explicit DistortionFXToolPlugin(QObject* const parent = 0);
+    explicit DistortionFXToolPlugin(QObject* const parent = nullptr);
     ~DistortionFXToolPlugin();
 
     QString name()                 const override;

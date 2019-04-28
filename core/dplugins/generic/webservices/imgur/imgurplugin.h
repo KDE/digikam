@@ -44,7 +44,7 @@ class ImgUrPlugin : public DPluginGeneric
 
 public:
 
-    explicit ImgUrPlugin(QObject* const parent = 0);
+    explicit ImgUrPlugin(QObject* const parent = nullptr);
     ~ImgUrPlugin();
 
     QString name()                 const override;

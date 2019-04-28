@@ -138,7 +138,7 @@ void GSPlugin::slotExportGphoto()
     if (!reactivateToolDialog(m_toolDlgExportGphoto))
     {
         delete m_toolDlgExportGphoto;
-        m_toolDlgExportGphoto = new GSWindow(infoIface(sender()), 0, QLatin1String("googlephotoexport"));
+        m_toolDlgExportGphoto = new GSWindow(infoIface(sender()), nullptr, QLatin1String("googlephotoexport"));
         m_toolDlgExportGphoto->setPlugin(this);
         m_toolDlgExportGphoto->show();
     }
@@ -149,7 +149,7 @@ void GSPlugin::slotImportGphoto()
     if (!reactivateToolDialog(m_toolDlgImportGphoto))
     {
         delete m_toolDlgImportGphoto;
-        m_toolDlgImportGphoto = new GSWindow(infoIface(sender()), 0, QLatin1String("googlephotoimport"));
+        m_toolDlgImportGphoto = new GSWindow(infoIface(sender()), nullptr, QLatin1String("googlephotoimport"));
         m_toolDlgImportGphoto->setPlugin(this);
         m_toolDlgImportGphoto->show();
     }
@@ -160,7 +160,7 @@ void GSPlugin::slotExportGdrive()
     if (!reactivateToolDialog(m_toolDlgExportGdrive))
     {
         delete m_toolDlgExportGdrive;
-        m_toolDlgExportGdrive = new GSWindow(infoIface(sender()), 0, QLatin1String("googledriveexport"));
+        m_toolDlgExportGdrive = new GSWindow(infoIface(sender()), nullptr, QLatin1String("googledriveexport"));
         m_toolDlgExportGdrive->setPlugin(this);
         m_toolDlgExportGdrive->show();
     }

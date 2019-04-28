@@ -52,7 +52,7 @@ class Q_DECL_HIDDEN PTOFile::Private
 public:
 
     explicit Private(const QString& huginVersion)
-      : script(NULL),
+      : script(nullptr),
         huginVersion(huginVersion)
     {
     }
@@ -68,7 +68,7 @@ PTOFile::PTOFile(const QString& huginVersion)
 
 PTOFile::~PTOFile()
 {
-    if (d->script != NULL)
+    if (d->script != nullptr)
     {
         panoScriptFree(d->script);
         delete d->script;
@@ -81,11 +81,11 @@ bool PTOFile::openFile(const QString& path)
 {
 //     mtrace();
 
-    if (d->script != NULL)
+    if (d->script != nullptr)
     {
         panoScriptFree(d->script);
         delete d->script;
-        d->script = NULL;
+        d->script = nullptr;
     }
 
     d->script = new pt_script();
@@ -102,9 +102,9 @@ bool PTOFile::openFile(const QString& path)
 
 PTOType* PTOFile::getPTO()
 {
-    if (d->script == NULL)
+    if (d->script == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
 
     PTOType* const out = new PTOType(d->huginVersion);
@@ -401,7 +401,7 @@ PTOType* PTOFile::getPTO()
 
         char* const flatfield = panoScriptGetImageVignettingFlatField(d->script, i);
 
-        if (flatfield != NULL)
+        if (flatfield != nullptr)
         {
             image.vignettingFlatfieldImageName = QString::fromLocal8Bit(flatfield);
         }

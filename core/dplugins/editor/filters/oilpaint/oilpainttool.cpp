@@ -54,10 +54,10 @@ class Q_DECL_HIDDEN OilPaintTool::Private
 public:
 
     explicit Private()
-      : brushSizeInput(0),
-        smoothInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : brushSizeInput(nullptr),
+        smoothInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -86,7 +86,7 @@ OilPaintTool::OilPaintTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|

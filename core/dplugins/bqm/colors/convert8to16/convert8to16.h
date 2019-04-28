@@ -39,7 +39,7 @@ class Convert8to16 : public BatchTool
 
 public:
 
-    explicit Convert8to16(QObject* const parent = 0);
+    explicit Convert8to16(QObject* const parent = nullptr);
     ~Convert8to16();
 
     BatchToolSettings defaultSettings()
@@ -47,7 +47,7 @@ public:
         return BatchToolSettings();
     };
 
-    BatchTool* clone(QObject* const parent=0) const { return new Convert8to16(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new Convert8to16(parent); };
 
 private:
 

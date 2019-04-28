@@ -57,17 +57,17 @@ class Q_DECL_HIDDEN PanoManager::Private
 public:
 
     explicit Private()
-      : basePtoData(0),
-        cpFindPtoData(0),
-        cpCleanPtoData(0),
-        autoOptimisePtoData(0),
-        viewAndCropOptimisePtoData(0),
-        previewPtoData(0),
-        panoPtoData(0),
+      : basePtoData(nullptr),
+        cpFindPtoData(nullptr),
+        cpCleanPtoData(nullptr),
+        autoOptimisePtoData(nullptr),
+        viewAndCropOptimisePtoData(nullptr),
+        previewPtoData(nullptr),
+        panoPtoData(nullptr),
         hugin2015(false),
-        thread(0),
-        plugin(0),
-        wizard(0),
+        thread(nullptr),
+        plugin(nullptr),
+        wizard(nullptr),
         group(config.group("Panorama Settings"))
     {
         gPano    = group.readEntry("GPano", false);

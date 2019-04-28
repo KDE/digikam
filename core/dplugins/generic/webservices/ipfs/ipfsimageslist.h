@@ -57,7 +57,7 @@ public:
 
 public:
 
-    explicit IpfsImagesList(QWidget* const parent = 0);
+    explicit IpfsImagesList(QWidget* const parent = nullptr);
     ~IpfsImagesList() Q_DECL_OVERRIDE {}
 
     QList<const IpfsImagesListViewItem*> getPendingItems() const;

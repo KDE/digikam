@@ -109,7 +109,7 @@ void GeolocationEditPlugin::setup(QObject* const parent)
 
 void GeolocationEditPlugin::slotEditGeolocation()
 {
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, infoIface(sender()));
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(nullptr, infoIface(sender()));
     dialog->setPlugin(this);
     dialog->exec();
     delete dialog;

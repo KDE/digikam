@@ -73,12 +73,12 @@ public:
 public:
 
     explicit Private()
-      : that(0),
-        info(0),
+      : that(nullptr),
+        info(nullptr),
         warnings(false),
         cancel(false),
-        pview(0),
-        pbar(0)
+        pview(nullptr),
+        pbar(nullptr)
     {
     }
 
@@ -338,7 +338,7 @@ public:
             ++ptr;
         }
 
-        *ptr = 0;
+        *ptr = nullptr;
 
         // Move to the destination dir, so that external documents get correctly
         // produced

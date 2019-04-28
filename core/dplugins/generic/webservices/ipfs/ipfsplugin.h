@@ -44,7 +44,7 @@ class IpfsPlugin : public DPluginGeneric
 
 public:
 
-    explicit IpfsPlugin(QObject* const parent = 0);
+    explicit IpfsPlugin(QObject* const parent = nullptr);
     ~IpfsPlugin();
 
     QString name()                 const override;

@@ -58,7 +58,7 @@ class DIGIKAM_EXPORT PanoManager : public QObject
 
 public:
 
-    explicit PanoManager(QObject* const parent = 0);
+    explicit PanoManager(QObject* const parent = nullptr);
     ~PanoManager();
 
 public:

@@ -67,11 +67,11 @@ public:
     NPT_String(const char* str);
     NPT_String(const char* str, NPT_Size length);
     NPT_String(char c, NPT_Cardinal repeat = 1);
-    NPT_String() : m_Chars(NULL) {}
+    NPT_String() : m_Chars(nullptr) {}
    ~NPT_String() { if (m_Chars) GetBuffer()->Destroy(); }
 
     // string info and manipulations
-    bool       IsEmpty() const { return m_Chars == NULL || GetBuffer()->GetLength() == 0; }
+    bool       IsEmpty() const { return m_Chars == nullptr || GetBuffer()->GetLength() == 0; }
     NPT_Size   GetLength()   const { return m_Chars ? GetBuffer()->GetLength() : 0;    }
     NPT_Size   GetCapacity() const { return m_Chars ? GetBuffer()->GetAllocated() : 0; }
     NPT_Result SetLength(NPT_Size length, bool pad = false);
@@ -263,9 +263,9 @@ private:
         return reinterpret_cast<Buffer*>(m_Chars)-1;
     }
     void Reset() { 
-        if (m_Chars != NULL) {
+        if (m_Chars != nullptr) {
             delete GetBuffer(); 
-            m_Chars = NULL;
+            m_Chars = nullptr;
         }
     }
     char* PrepareToWrite(NPT_Size length);

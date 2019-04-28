@@ -102,7 +102,7 @@ void PPlugin::slotPinterest()
     if (!reactivateToolDialog(m_toolDlg))
     {
         delete m_toolDlg;
-        m_toolDlg = new PWindow(infoIface(sender()), 0);
+        m_toolDlg = new PWindow(infoIface(sender()), nullptr);
         m_toolDlg->setPlugin(this);
         m_toolDlg->show();
     }

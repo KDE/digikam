@@ -157,46 +157,46 @@ public:
 
     explicit Private()
     {
-        imageModel               = 0;
-        selectionModel           = 0;
+        imageModel               = nullptr;
+        selectionModel           = nullptr;
         uiEnabled                = true;
-        listViewContextMenu      = 0;
-        trackManager             = 0;
-        fileIOFutureWatcher      = 0;
+        listViewContextMenu      = nullptr;
+        trackManager             = nullptr;
+        fileIOFutureWatcher      = nullptr;
         fileIOCountDone          = 0;
         fileIOCountTotal         = 0;
         fileIOCloseAfterSaving   = false;
-        buttonBox                = 0;
-        VSplitter                = 0;
-        HSplitter                = 0;
-        treeView                 = 0;
-        stackedWidget            = 0;
-        tabBar                   = 0;
+        buttonBox                = nullptr;
+        VSplitter                = nullptr;
+        HSplitter                = nullptr;
+        treeView                 = nullptr;
+        stackedWidget            = nullptr;
+        tabBar                   = nullptr;
         splitterSize             = 0;
-        undoStack                = 0;
-        undoView                 = 0;
-        progressBar              = 0;
-        progressCancelButton     = 0;
-        progressCancelObject     = 0;
-        detailsWidget            = 0;
-        correlatorWidget         = 0;
-        rgWidget                 = 0;
-        searchWidget             = 0;
-        kmlWidget                = 0;
-        mapSplitter              = 0;
-        mapWidget                = 0;
-        mapWidget2               = 0;
-        mapDragDropHandler       = 0;
-        mapModelHelper           = 0;
-        geoifaceMarkerModel      = 0;
-        sortActionOldestFirst    = 0;
-        sortActionYoungestFirst  = 0;
-        sortMenu                 = 0;
+        undoStack                = nullptr;
+        undoView                 = nullptr;
+        progressBar              = nullptr;
+        progressCancelButton     = nullptr;
+        progressCancelObject     = nullptr;
+        detailsWidget            = nullptr;
+        correlatorWidget         = nullptr;
+        rgWidget                 = nullptr;
+        searchWidget             = nullptr;
+        kmlWidget                = nullptr;
+        mapSplitter              = nullptr;
+        mapWidget                = nullptr;
+        mapWidget2               = nullptr;
+        mapDragDropHandler       = nullptr;
+        mapModelHelper           = nullptr;
+        geoifaceMarkerModel      = nullptr;
+        sortActionOldestFirst    = nullptr;
+        sortActionYoungestFirst  = nullptr;
+        sortMenu                 = nullptr;
         mapLayout                = MapLayoutOne;
-        cbMapLayout              = 0;
-        bookmarkOwner            = 0;
-        actionBookmarkVisibility = 0;
-        iface                    = 0;
+        cbMapLayout              = nullptr;
+        bookmarkOwner            = nullptr;
+        actionBookmarkVisibility = nullptr;
+        iface                    = nullptr;
     }
 
     // General things
@@ -368,7 +368,7 @@ GeolocationEdit::GeolocationEdit(QWidget* const parent, DInfoInterface* const if
     d->sortMenu->addAction(d->sortActionYoungestFirst);
     d->sortActionYoungestFirst->setCheckable(true);
 
-    QWidget* mapVBox = 0;
+    QWidget* mapVBox = nullptr;
     d->mapWidget     = makeMapWidget(&mapVBox);
     d->searchWidget->setPrimaryMapWidget(d->mapWidget);
     d->mapSplitter   = new QSplitter(this);
@@ -865,7 +865,7 @@ void GeolocationEdit::slotSetUIEnabled(const bool enabledState,
 
 void GeolocationEdit::slotSetUIEnabled(const bool enabledState)
 {
-    slotSetUIEnabled(enabledState, 0, QString());
+    slotSetUIEnabled(enabledState, nullptr, QString());
 }
 
 void GeolocationEdit::saveChanges(const bool closeAfterwards)
@@ -980,7 +980,7 @@ void GeolocationEdit::slotProgressSetup(const int maxProgress, const QString& pr
     d->progressBar->setNotify(true);
     d->progressBar->setNotificationTitle(i18n("Edit Geolocation"), QIcon::fromTheme(QLatin1String("globe")));
     d->progressBar->setVisible(true);
-    d->progressCancelButton->setVisible(d->progressCancelObject != 0);
+    d->progressCancelButton->setVisible(d->progressCancelObject != nullptr);
 }
 
 void GeolocationEdit::slotGPSUndoCommand(GPSUndoCommand* undoCommand)
@@ -1055,14 +1055,14 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
         if (d->mapSplitter->count()>1)
         {
             delete d->mapSplitter->widget(1);
-            d->mapWidget2 = 0;
+            d->mapWidget2 = nullptr;
         }
     }
     else
     {
         if (d->mapSplitter->count() == 1)
         {
-            QWidget* mapHolder = 0;
+            QWidget* mapHolder = nullptr;
             d->mapWidget2      = makeMapWidget(&mapHolder);
             d->mapSplitter->addWidget(mapHolder);
 

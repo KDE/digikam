@@ -36,7 +36,7 @@ public:
     explicit JobPrivate(Iface& MediaWiki)
         : MediaWiki(MediaWiki),
           manager(MediaWiki.manager()),
-          reply(0)
+          reply(nullptr)
     {
     }
 

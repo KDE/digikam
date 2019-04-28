@@ -151,19 +151,19 @@ NPT_File::ListDir(const char*           path,
     entries.Clear();
     
     // check the arguments
-    if (path == NULL) return NPT_ERROR_INVALID_PARAMETERS;
+    if (path == nullptr) return NPT_ERROR_INVALID_PARAMETERS;
     
     // list the entries
     DIR *directory = opendir(path);
-    if (directory == NULL) return NPT_ERROR_NO_SUCH_ITEM;
+    if (directory == nullptr) return NPT_ERROR_NO_SUCH_ITEM;
     
     NPT_Cardinal count = 0;
     for (;;) {
-        struct dirent* entry_pointer = NULL;
+        struct dirent* entry_pointer = nullptr;
 #if defined(NPT_CONFIG_HAVE_READDIR_R)
         struct dirent entry;
         int result = readdir_r(directory, &entry, &entry_pointer);
-        if (result != 0 || entry_pointer == NULL) break;
+        if (result != 0 || entry_pointer == nullptr) break;
 #else
         entry_pointer = readdir(directory);
         if (entry_pointer == NULL) break;
@@ -207,7 +207,7 @@ NPT_File::GetWorkingDir(NPT_String& path)
 {
     char buffer[1024+1];
     char* dir = getcwd(buffer, 1024+1);
-    if (dir == NULL) return MapErrno(errno);
+    if (dir == nullptr) return MapErrno(errno);
     path = dir;
     
     return NPT_SUCCESS;

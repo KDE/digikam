@@ -40,9 +40,9 @@ public:
 
     explicit Private(QWizard* const dialog)
       : albumSupport(false),
-        albumSelector(0),
-        wizard(0),
-        iface(0)
+        albumSelector(nullptr),
+        wizard(nullptr),
+        iface(nullptr)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

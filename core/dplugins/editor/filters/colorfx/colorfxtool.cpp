@@ -65,9 +65,9 @@ class Q_DECL_HIDDEN ColorFxTool::Private
 public:
 
     explicit Private()
-      : previewWidget(0),
-        gboxSettings(0),
-        settingsView(0)
+      : previewWidget(nullptr),
+        gboxSettings(nullptr),
+        settingsView(nullptr)
     {
     }
 
@@ -101,7 +101,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
 

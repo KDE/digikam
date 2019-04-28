@@ -53,9 +53,9 @@ class Q_DECL_HIDDEN EmbossTool::Private
 public:
 
     explicit Private()
-      : depthInput(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : depthInput(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -81,7 +81,7 @@ EmbossTool::EmbossTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings  = new EditorToolSettings(0);
+    d->gboxSettings  = new EditorToolSettings(nullptr);
     d->previewWidget = new ImageRegionWidget;
 
     // -------------------------------------------------------------

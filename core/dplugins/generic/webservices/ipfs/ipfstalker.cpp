@@ -56,8 +56,8 @@ public:
     explicit Private()
     {
         workTimer = 0;
-        reply     = 0;
-        image     = 0;
+        reply     = nullptr;
+        image     = nullptr;
     }
 
     // Work queue
@@ -85,7 +85,7 @@ IpfsTalker::IpfsTalker(QObject* const parent)
 IpfsTalker::~IpfsTalker()
 {
     // Disconnect all signals as cancelAllWork may emit
-    disconnect(this, 0, 0, 0);
+    disconnect(this, nullptr, nullptr, nullptr);
     cancelAllWork();
     delete d;
 }

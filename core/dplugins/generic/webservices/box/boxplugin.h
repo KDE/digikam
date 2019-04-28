@@ -44,7 +44,7 @@ class BoxPlugin : public DPluginGeneric
 
 public:
 
-    explicit BoxPlugin(QObject* const parent = 0);
+    explicit BoxPlugin(QObject* const parent = nullptr);
     ~BoxPlugin();
 
     QString name()                 const override;

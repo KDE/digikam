@@ -80,7 +80,7 @@ public:
                 const char*     type, 
                 const char*     id,
                 const char*     name,
-                const char*     last_change_namespace = NULL);
+                const char*     last_change_namespace = nullptr);
     virtual ~PLT_Service();
     
     // methods
@@ -208,7 +208,7 @@ public:
      @param service Pointer to service XML Element node newly created so it can be
      extended with additional non standard information.
      */
-    NPT_Result GetDescription(NPT_XmlElementNode* parent, NPT_XmlElementNode** service = NULL);
+    NPT_Result GetDescription(NPT_XmlElementNode* parent, NPT_XmlElementNode** service = nullptr);
 
     /**
      Set a new value for a given state variable. The service keeps track of which

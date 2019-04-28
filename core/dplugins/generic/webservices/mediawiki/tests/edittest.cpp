@@ -54,7 +54,7 @@ public:
     EditTest()
     {
         editCount   = 0;
-        m_mediaWiki = 0;
+        m_mediaWiki = nullptr;
     }
 
 Q_SIGNALS:
@@ -113,7 +113,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("senario");
         QTest::addColumn<Edit*>("job");
 
-        Edit* const e1 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e1 = new Edit( *m_mediaWiki, nullptr);
         e1->setSection(QStringLiteral("new"));
         e1->setSummary(QStringLiteral("Hello World") );
         e1->setPageName( QStringLiteral("Talk:Main Page") );
@@ -126,7 +126,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e1;
 
-        Edit* const e2 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e2 = new Edit( *m_mediaWiki, nullptr);
         e2->setSection(QStringLiteral("new"));
         e2->setSummary(QStringLiteral("Hello World"));
         e2->setPageName( QStringLiteral("Talk:Main Page") );
@@ -139,7 +139,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e2;
 
-        Edit* const e3 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e3 = new Edit( *m_mediaWiki, nullptr);
         e3->setSection(QStringLiteral("new"));
         e3->setSummary(QStringLiteral("Hello World"));
         e3->setPageName( QStringLiteral("Talk:Main Page") );
@@ -152,7 +152,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e3;
 
-        Edit* const e4 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e4 = new Edit( *m_mediaWiki, nullptr);
         e4->setSummary(QStringLiteral("Hello World"));
         e4->setPageName( QStringLiteral("Talk:Main Page") );
         e4->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -164,7 +164,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e4;
 
-        Edit* const e5 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e5 = new Edit( *m_mediaWiki, nullptr);
         e5->setSummary(QStringLiteral("Hello World"));
         e5->setPageName( QStringLiteral("Talk:Main Page") );
         e5->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -176,7 +176,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e5;
 
-        Edit* const e6 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e6 = new Edit( *m_mediaWiki, nullptr);
         e6->setSummary(QStringLiteral("Hello World"));
         e6->setPageName( QStringLiteral("Talk:Main Page") );
         e6->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -190,7 +190,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e6;
 
-        Edit* const e7 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e7 = new Edit( *m_mediaWiki, nullptr);
         e7->setSummary(QStringLiteral("Hello World"));
         e7->setPageName( QStringLiteral("Talk:Main Page") );
         e7->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -204,7 +204,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e7;
 
-        Edit* const e8 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e8 = new Edit( *m_mediaWiki, nullptr);
         e8->setSummary(QStringLiteral("Hello World"));
         e8->setPageName( QStringLiteral("Talk:Main Page") );
         e8->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -218,7 +218,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e8;
 
-        Edit* const e9 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e9 = new Edit( *m_mediaWiki, nullptr);
         e9->setSummary(QStringLiteral("Hello World"));
         e9->setPageName( QStringLiteral("Talk:Main Page") );
         e9->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -232,7 +232,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e9;
 
-        Edit* const e10 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e10 = new Edit( *m_mediaWiki, nullptr);
         e10->setSummary(QStringLiteral("Hello World"));
         e10->setPageName( QStringLiteral("Talk:Main Page") );
         e10->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -244,7 +244,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e10;
 
-        Edit* const e11 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e11 = new Edit( *m_mediaWiki, nullptr);
         e11->setSummary(QStringLiteral("Hello World"));
         e11->setPageName( QStringLiteral("Talk:Main Page") );
         e11->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -256,7 +256,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e11;
 
-        Edit* const e12 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e12 = new Edit( *m_mediaWiki, nullptr);
         e12->setSummary(QStringLiteral("Hello World"));
         e12->setPageName( QStringLiteral("Talk:Main Page") );
         e12->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -268,7 +268,7 @@ private Q_SLOTS:
                 << QStringLiteral("<api><edit result=\"Success\" pageid=\"12\" title=\"Talk:Main Page\" oldrevid=\"465\" newrevid=\"471\" /></api>")
                 << e12;
 
-        Edit* const e13 = new Edit( *m_mediaWiki, NULL);
+        Edit* const e13 = new Edit( *m_mediaWiki, nullptr);
         e13->setSummary(QStringLiteral("Hello World"));
         e13->setPageName( QStringLiteral("Talk:Main Page") );
         e13->setToken( QStringLiteral("cecded1f35005d22904a35cc7b736e18+\\") );
@@ -297,7 +297,7 @@ private Q_SLOTS:
             fakeserver.startAndWait();
         }
 
-        Edit* const job = new Edit(MediaWiki, NULL);
+        Edit* const job = new Edit(MediaWiki, nullptr);
         job->setSection(QStringLiteral("new"));
         job->setSummary(QStringLiteral("Hello World") );
         job->setPageName( QStringLiteral("Talk:Main Page") );
@@ -410,7 +410,7 @@ private Q_SLOTS:
         fakeserver.addScenario(senario);
         fakeserver.startAndWait();
 
-        Edit edit( *m_mediaWiki, NULL);
+        Edit edit( *m_mediaWiki, nullptr);
         edit.setSection(QStringLiteral("new"));
         edit.setSummary(QStringLiteral("Hello World") );
         edit.setPageName( QStringLiteral("Talk:Main Page") );

@@ -60,17 +60,17 @@ public:
 
     explicit Private()
     {
-        priorityCB           = 0;
-        objectTypeCB         = 0;
-        priorityCheck        = 0;
-        objectAttributeCheck = 0;
-        sceneEdit            = 0;
-        objectTypeEdit       = 0;
-        objectAttributeEdit  = 0;
-        objectAttributeCB    = 0;
-        languageEdit         = 0;
-        originalTransEdit    = 0;
-        originalTransCheck   = 0;
+        priorityCB           = nullptr;
+        objectTypeCB         = nullptr;
+        priorityCheck        = nullptr;
+        objectAttributeCheck = nullptr;
+        sceneEdit            = nullptr;
+        objectTypeEdit       = nullptr;
+        objectAttributeEdit  = nullptr;
+        objectAttributeCB    = nullptr;
+        languageEdit         = nullptr;
+        originalTransEdit    = nullptr;
+        originalTransCheck   = nullptr;
 
         sceneCodeMap.insert( QLatin1String("010100"), i18n("Headshot") );
         sceneCodeMap.insert( QLatin1String("010200"), i18n("Half-length") );

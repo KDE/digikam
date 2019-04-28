@@ -44,7 +44,7 @@ namespace DigikamBqmFilmGrainPlugin
 FilmGrain::FilmGrain(QObject* const parent)
     : BatchTool(QLatin1String("FilmGrain"), FiltersTool, parent)
 {
-    m_settingsView = 0;
+    m_settingsView = nullptr;
 }
 
 FilmGrain::~FilmGrain()
@@ -164,7 +164,7 @@ bool FilmGrain::toolOperations()
     prm.chromaRedMidtones       = settings()[QLatin1String("chromaRedMidtones")].toInt();
     prm.chromaRedHighlights     = settings()[QLatin1String("chromaRedHighlights")].toInt();
 
-    FilmGrainFilter fg(&image(), 0L, prm);
+    FilmGrainFilter fg(&image(), nullptr, prm);
     applyFilter(&fg);
 
     return savefromDImg();

@@ -52,19 +52,19 @@ public:
 
     explicit Private()
     {
-        documentNameEdit     = 0;
-        imageDescEdit        = 0;
-        artistEdit           = 0;
-        copyrightEdit        = 0;
-        userCommentEdit      = 0;
-        userCommentCheck     = 0;
-        documentNameCheck    = 0;
-        imageDescCheck       = 0;
-        artistCheck          = 0;
-        copyrightCheck       = 0;
-        syncJFIFCommentCheck = 0;
-        syncXMPCaptionCheck  = 0;
-        syncIPTCCaptionCheck = 0;
+        documentNameEdit     = nullptr;
+        imageDescEdit        = nullptr;
+        artistEdit           = nullptr;
+        copyrightEdit        = nullptr;
+        userCommentEdit      = nullptr;
+        userCommentCheck     = nullptr;
+        documentNameCheck    = nullptr;
+        imageDescCheck       = nullptr;
+        artistCheck          = nullptr;
+        copyrightCheck       = nullptr;
+        syncJFIFCommentCheck = nullptr;
+        syncXMPCaptionCheck  = nullptr;
+        syncIPTCCaptionCheck = nullptr;
     }
 
     QCheckBox*      documentNameCheck;

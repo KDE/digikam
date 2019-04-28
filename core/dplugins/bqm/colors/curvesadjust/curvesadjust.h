@@ -42,12 +42,12 @@ class CurvesAdjust : public BatchTool
 
 public:
 
-    explicit CurvesAdjust(QObject* const parent = 0);
+    explicit CurvesAdjust(QObject* const parent = nullptr);
     ~CurvesAdjust();
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new CurvesAdjust(parent); };
+    BatchTool* clone(QObject* const parent=nullptr) const { return new CurvesAdjust(parent); };
 
     void registerSettingsWidget();
 

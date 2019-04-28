@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit JAlbumSettings(DInfoInterface* const iface = 0);
+    explicit JAlbumSettings(DInfoInterface* const iface = nullptr);
     ~JAlbumSettings();
 
     // Read and write settings in config file between sessions.

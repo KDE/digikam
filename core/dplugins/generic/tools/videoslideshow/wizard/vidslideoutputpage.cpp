@@ -57,12 +57,12 @@ class Q_DECL_HIDDEN VidSlideOutputPage::Private
 public:
 
     explicit Private(QWizard* const dialog)
-      : destUrl(0),
-        conflictBox(0),
-        playerVal(0),
-        formatVal(0),
-        wizard(0),
-        settings(0)
+      : destUrl(nullptr),
+        conflictBox(nullptr),
+        playerVal(nullptr),
+        formatVal(nullptr),
+        wizard(nullptr),
+        settings(nullptr)
     {
         wizard = dynamic_cast<VidSlideWizard*>(dialog);
 

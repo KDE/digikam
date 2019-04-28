@@ -58,9 +58,9 @@ class Q_DECL_HIDDEN ProfileConversionTool::Private
 public:
 
     explicit Private()
-      : profilesBox(0),
-        previewWidget(0),
-        gboxSettings(0)
+      : profilesBox(nullptr),
+        previewWidget(nullptr),
+        gboxSettings(nullptr)
     {
     }
 
@@ -112,7 +112,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
     ImageIface iface;
     d->currentProfile = iface.originalIccProfile();
 
-    d->gboxSettings = new EditorToolSettings(0);
+    d->gboxSettings = new EditorToolSettings(nullptr);
     d->gboxSettings->setButtons(EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
 
@@ -254,7 +254,7 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
 
     IccProfile currentProfile = iface.originalIccProfile();
     IccTransform transform    = Private::getTransform(currentProfile, profile);
-    IccTransformFilter filter(iface.original(), 0, transform);
+    IccTransformFilter filter(iface.original(), nullptr, transform);
     filter.startFilterDirectly();
 
     DImg imDest               = filter.getTargetImage();
