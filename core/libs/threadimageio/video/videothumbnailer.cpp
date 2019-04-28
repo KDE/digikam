@@ -82,7 +82,7 @@ public:
         thumbnailSize       = 256;
         seekPercentage      = 10;
         overlayFilmStrip    = false;
-        workAroundIssues    = false;
+        workAroundIssues    = true;
         maintainAspectRatio = true;
         smartFrameSelection = false;
     }
