@@ -98,6 +98,7 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
                                    "(.+)?([0-9]{2}[-:/]?[0-9]{2}[-:/]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{4}[-:/]?[0-9]{2}[-:/]?[0-9]{2})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{2}[-:/]?[0-9]{2}[-:/]?[0-9]{4})(.+)?");
+    regExpStrings << QLatin1String("(.+)?([0-9]{2}[0-9]{2}[0-9]{4})([0-9]{3})(.+)?");
     regExpStrings << QLatin1String("(.+)?([0-9]{2}-[0-9]{2}-[0-9]{2})"
                                    "(.+)?([0-9]{2}[0-9]{2})(.+)?");
 
@@ -105,6 +106,7 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
     formatStrings << qMakePair(QLatin1String("yyyyMMddhhmmss"), QString());
     formatStrings << qMakePair(QLatin1String("ddMMyyyyhhmmss"), QLatin1String("MMddyyyyhhmmss"));
     formatStrings << qMakePair(QLatin1String("yyyyMMdd"),       QString());
+    formatStrings << qMakePair(QLatin1String("ddMMyyyy"),       QLatin1String("MMddyyyy"));
     formatStrings << qMakePair(QLatin1String("ddMMyyyy"),       QLatin1String("MMddyyyy"));
     formatStrings << qMakePair(QLatin1String("ddMMyyhhmm"),     QString());
 
