@@ -762,6 +762,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
     }
 
     // put into cache
+    if (!pix.isNull())
     {
         LoadingCache* const cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
