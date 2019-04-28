@@ -115,13 +115,13 @@ public:
 
     // LoadSaveTask
 
-    virtual void execute()  Q_DECL_OVERRIDE;
-    virtual TaskType type() Q_DECL_OVERRIDE;
+    virtual void execute() override;
+    virtual TaskType type() override;
 
     // DImgLoaderObserver
 
-    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
-    virtual bool continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
+    virtual void progressInfo(DImg* const img, float progress) override;
+    virtual bool continueQuery(DImg* const img) override;
 
     virtual void setStatus(LoadingTaskStatus status);
 
@@ -143,29 +143,29 @@ public:
                                LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
                                LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
-    virtual void execute()                                     Q_DECL_OVERRIDE;
-    virtual void progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
-    virtual bool continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
-    virtual void setStatus(LoadingTaskStatus status);
+    virtual void execute() override;
+    virtual void progressInfo(DImg* const img, float progress) override;
+    virtual bool continueQuery(DImg* const img) override;
+    virtual void setStatus(LoadingTaskStatus status) override;
 
     virtual bool needsPostProcessing() const;
     virtual void postProcess();
 
     // LoadingProcess
 
-    virtual bool completed() const;
-    virtual QString filePath() const;
-    virtual QString cacheKey() const;
-    virtual void addListener(LoadingProcessListener* const listener);
-    virtual void removeListener(LoadingProcessListener* const listener);
-    virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description);
+    virtual bool completed() const override;
+    virtual QString filePath() const override;
+    virtual QString cacheKey() const override;
+    virtual void addListener(LoadingProcessListener* const listener) override;
+    virtual void removeListener(LoadingProcessListener* const listener) override;
+    virtual void notifyNewLoadingProcess(LoadingProcess* const process, const LoadingDescription& description) override;
 
     // LoadingProcessListener
 
-    virtual bool querySendNotifyEvent() const;
-    virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img);
-    virtual LoadSaveNotifier* loadSaveNotifier() const;
-    virtual LoadSaveThread::AccessMode accessMode();
+    virtual bool querySendNotifyEvent() const override;
+    virtual void setResult(const LoadingDescription& loadingDescription, const DImg& img) override;
+    virtual LoadSaveNotifier* loadSaveNotifier() const override;
+    virtual LoadSaveThread::AccessMode accessMode() override;
 
     DImg img() { return m_img; }
 
@@ -215,11 +215,11 @@ public:
 
 public:
 
-    virtual void     execute()                                     Q_DECL_OVERRIDE;
-    virtual TaskType type()                                        Q_DECL_OVERRIDE;
+    virtual void     execute() override;
+    virtual TaskType type() override;
 
-    virtual void     progressInfo(DImg* const img, float progress) Q_DECL_OVERRIDE;
-    virtual bool     continueQuery(DImg* const img)                Q_DECL_OVERRIDE;
+    virtual void     progressInfo(DImg* const img, float progress) override;
+    virtual bool     continueQuery(DImg* const img) override;
 
     virtual void     setStatus(SavingTaskStatus status);
 

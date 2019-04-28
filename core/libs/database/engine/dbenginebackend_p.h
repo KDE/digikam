@@ -96,8 +96,8 @@ public:
     void queryOperationWakeAll(BdEngineBackend::QueryOperationStatus status);
 
     // called by DbEngineErrorHandler, implementing DbEngineErrorAnswer
-    virtual void connectionErrorContinueQueries();
-    virtual void connectionErrorAbortQueries();
+    virtual void connectionErrorContinueQueries() override;
+    virtual void connectionErrorAbortQueries() override;
     virtual void transactionFinished();
 
 public:

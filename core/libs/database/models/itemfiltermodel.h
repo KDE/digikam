@@ -100,7 +100,7 @@ protected:
     virtual void setDirectSourceItemModel(ItemModel* const model);
 
     // made protected
-    virtual void setSourceModel(QAbstractItemModel* const model);
+    virtual void setSourceModel(QAbstractItemModel* const model) override;
 
 protected:
 
@@ -159,8 +159,8 @@ public:
     /// Enables sending imageInfosAdded and imageInfosAboutToBeRemoved
     void setSendItemInfoSignals(bool sendSignals);
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ItemFilterModel* imageFilterModel() const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual ItemFilterModel* imageFilterModel() const override;
 
 public Q_SLOTS:
 
@@ -241,12 +241,12 @@ protected:
 
     ItemFilterModel(ItemFilterModelPrivate& dd, QObject* const parent);
 
-    virtual void setDirectSourceItemModel(ItemModel* const model);
+    virtual void setDirectSourceItemModel(ItemModel* const model) override;
 
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
-    virtual int  compareCategories(const QModelIndex& left, const QModelIndex& right) const;
-    virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
+    virtual int  compareCategories(const QModelIndex& left, const QModelIndex& right) const override;
+    virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const override;
     //virtual int  categoryCount(const ItemInfo& info) const;
 
     /** Reimplement to customize category sorting,
@@ -291,7 +291,7 @@ public:
 
 protected:
 
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 };
 
 } // namespace Digikam

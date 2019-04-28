@@ -132,7 +132,7 @@ public:
 
 private:
 
-    void cancelFilter();
+    void cancelFilter() override;
     void filterImage() override;
 
     void        buildBias(const QImage& mask);

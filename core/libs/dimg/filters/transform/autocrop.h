@@ -53,7 +53,7 @@ public:
     /** Perform auto-crop analyze to find best inner crop. Use autoInnerCrop()
      *  to get computed area.
      */
-    void startAnalyse();
+    void startAnalyse() override;
 
     /** Return inner crop area detected by startAnalyse().
      */

@@ -76,7 +76,7 @@ public:
     {
     }
 
-    void process(ItemFilterModelTodoPackage package);
+    void process(ItemFilterModelTodoPackage package) override;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ public:
     {
     }
 
-    void process(ItemFilterModelTodoPackage package);
+    void process(ItemFilterModelTodoPackage package) override;
 };
 
 } // namespace Digikam

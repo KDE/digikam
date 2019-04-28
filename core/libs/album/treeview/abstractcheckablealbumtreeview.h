@@ -76,13 +76,13 @@ public:
      */
     void setRestoreCheckState(bool restore);
 
-    virtual void doLoadState();
-    virtual void doSaveState();
+    virtual void doLoadState() override;
+    virtual void doSaveState() override;
 
 protected:
 
-    virtual void middleButtonPressed(Album* a);
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    virtual void middleButtonPressed(Album* a) override;
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end) override;
 
 private:
 

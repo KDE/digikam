@@ -93,7 +93,7 @@ public:
 
     explicit SimpleCollectionScannerObserver(bool* const var);
 
-    bool continueQuery();
+    bool continueQuery() override;
 
 public:
 

@@ -83,13 +83,13 @@ public:
     AbstractItemDragDropHandler* dragDropHandler() const;
 
     #define DECLARE_MODEL_DRAG_DROP_METHODS \
-    virtual Qt::DropActions supportedDropActions() const \
+    virtual Qt::DropActions supportedDropActions() const  override \
         { return DragDropModelImplementation::supportedDropActions(); } \
-    virtual QStringList mimeTypes() const \
+    virtual QStringList mimeTypes() const  override \
         { return DragDropModelImplementation::mimeTypes(); } \
-    virtual bool dropMimeData(const QMimeData* d, Qt::DropAction a, int r, int c, const QModelIndex& p) \
+    virtual bool dropMimeData(const QMimeData* d, Qt::DropAction a, int r, int c, const QModelIndex& p)  override \
         { return DragDropModelImplementation::dropMimeData(d, a, r, c, p); } \
-    virtual QMimeData* mimeData(const QModelIndexList& indexes) const \
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const  override \
         { return DragDropModelImplementation::mimeData(indexes); }
 
 protected:

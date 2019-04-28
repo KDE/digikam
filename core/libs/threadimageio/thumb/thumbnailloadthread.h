@@ -241,7 +241,7 @@ public:
 
 protected:
 
-    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img);
+    virtual void thumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& img) override;
 
 private:
 

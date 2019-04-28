@@ -180,7 +180,7 @@ public:
     explicit DBusSignalListenerThread(CoreDbWatch* const q, CoreDbWatch::Private* const d);
     ~DBusSignalListenerThread();
 
-    virtual void run();
+    virtual void run() override;
 
 private:
 

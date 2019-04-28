@@ -55,7 +55,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void run();
+    virtual void run() override;
 
 Q_SIGNALS:
 
@@ -83,8 +83,8 @@ public:
 
 public Q_SLOTS:
 
-    virtual void connectionError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query);
-    virtual void consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query);
+    virtual void connectionError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query) override;
+    virtual void consultUserForError(DbEngineErrorAnswer* answer, const QSqlError& error, const QString& query) override;
 
 private Q_SLOTS:
 

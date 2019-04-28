@@ -241,10 +241,10 @@ protected:
      * @see setSourceAlbumModel
      * @param model source model
      */
-    virtual void setSourceModel(QAbstractItemModel* const model);
+    virtual void setSourceModel(QAbstractItemModel* const model) override;
 
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
-    virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+    virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
 protected Q_SLOTS:
 
@@ -291,14 +291,14 @@ public:
     void setFilterChecked(bool filter);
     void setFilterPartiallyChecked(bool filter);
 
-    virtual bool isFiltering() const;
+    virtual bool isFiltering() const override;
 
 protected:
 
     bool m_filterChecked;
     bool m_filterPartiallyChecked;
 
-    virtual bool matches(Album* album) const;
+    virtual bool matches(Album* album) const override;
 };
 
 // -----------------------------------------------------------------------------------
@@ -329,7 +329,7 @@ public:
     /** Sets if temporary search albums shall be listed */
     void setListTemporarySearches(bool list);
 
-    virtual bool isFiltering() const;
+    virtual bool isFiltering() const override;
 
 protected:
 
@@ -338,7 +338,7 @@ protected:
 
     void setTypeFilter(int type);
 
-    virtual bool matches(Album* album) const;
+    virtual bool matches(Album* album) const override;
 
 protected:
 
@@ -367,7 +367,7 @@ public:
     void doNotListTagsWithProperty(const QString& property);
     void removeDoNotListProperty(const QString& property);
 
-    virtual bool isFiltering() const;
+    virtual bool isFiltering() const override;
 
 protected Q_SLOTS:
 
@@ -375,7 +375,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual bool matches(Album* album) const;
+    virtual bool matches(Album* album) const override;
 
 protected:
 
@@ -397,7 +397,7 @@ public:
 
 protected:
 
-    virtual bool matches(Album* album) const;
+    virtual bool matches(Album* album) const override;
 
 protected:
 

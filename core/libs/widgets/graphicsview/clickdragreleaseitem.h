@@ -44,8 +44,8 @@ public:
     explicit ClickDragReleaseItem(QGraphicsItem* const parent);
     ~ClickDragReleaseItem();
 
-    virtual QRectF boundingRect() const;
-    virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+    virtual QRectF boundingRect() const override;
+    virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 Q_SIGNALS:
 
@@ -63,12 +63,12 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
-    virtual void keyPressEvent(QKeyEvent*);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+    virtual void keyPressEvent(QKeyEvent*) override;
 
 private:
 

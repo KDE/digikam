@@ -45,9 +45,9 @@ public:
     explicit ItemVersionsModel(QObject* const parent = 0);
     ~ItemVersionsModel();
 
-    Qt::ItemFlags flags(const QModelIndex& index) const;
-    QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    int           rowCount(const QModelIndex& parent = QModelIndex()) const;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int           rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     void setupModelData(QList<QPair<QString, int> >& data);
     void clearModelData();

@@ -53,8 +53,8 @@ public:
     QList<QUrl> currentAlbumItems()               const override;
     QList<QUrl> allAlbumItems()                   const override;
 
-    DInfoMap    itemInfo(const QUrl&)                     const;
-    void        setItemInfo(const QUrl&, const DInfoMap&) const;
+    DInfoMap    itemInfo(const QUrl&)                     const override;
+    void        setItemInfo(const QUrl&, const DInfoMap&) const override;
 
     bool        supportAlbums()                   const;
 
