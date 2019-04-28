@@ -15,12 +15,13 @@ ExternalProject_Add(ext_heif
 
     INSTALL_DIR ${PREFIX_ext_heif}
 
-    SOURCE_SUBDIR srcs
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/heif3.4.0-centos6.patch
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               -DHEIF_GCC_ALLOCATOR_FIX=1
                ${GLOBAL_PROFILE}
-
+               <SOURCE_DIR>/srcs
 
     UPDATE_COMMAND ""
     ALWAYS 0
