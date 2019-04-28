@@ -63,8 +63,8 @@ public:
     void            sizeHasChanged();
     void            clearCache();
 
-    virtual QRectF  boundingRect() const;
-    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual QRectF  boundingRect() const override;
+    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
     virtual QString userLoadingHint() const { return QString(); }
 
 Q_SIGNALS:
@@ -75,7 +75,7 @@ Q_SIGNALS:
 
 protected:
 
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e) override;
 
 public:
 

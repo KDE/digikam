@@ -176,7 +176,7 @@ protected:
      */
     virtual void aboutToDeactivate();
 
-    virtual bool event(QEvent* e);
+    virtual bool event(QEvent* e) override;
 
 private:
 

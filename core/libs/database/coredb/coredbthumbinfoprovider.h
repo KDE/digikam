@@ -38,14 +38,14 @@ class DIGIKAM_DATABASE_EXPORT ThumbsDbInfoProvider : public ThumbnailInfoProvide
 {
 public:
 
-    ThumbnailInfo thumbnailInfo(const ThumbnailIdentifier& identifier);
+    ThumbnailInfo thumbnailInfo(const ThumbnailIdentifier& identifier) override;
 };
 
 class DIGIKAM_DATABASE_EXPORT DatabaseLoadSaveFileInfoProvider : public LoadSaveFileInfoProvider
 {
 public:
 
-    virtual int orientationHint(const QString& path);
+    virtual int orientationHint(const QString& path) override;
 };
 
 } // namespace Digikam

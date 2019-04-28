@@ -44,13 +44,13 @@ public:
 
     explicit ThumbnailLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description);
 
-    virtual void execute();
+    virtual void execute() override;
     virtual void setResult(const LoadingDescription& loadingDescription, const QImage& qimage);
-    virtual void postProcess();
+    virtual void postProcess() override;
 
 private:
 
-    virtual void setResult(const LoadingDescription&, const DImg&) {};
+    virtual void setResult(const LoadingDescription&, const DImg&) override {};
     void setupCreator();
 
 private:

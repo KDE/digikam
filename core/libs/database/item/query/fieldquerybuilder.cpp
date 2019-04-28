@@ -514,7 +514,7 @@ void FieldQueryBuilder::addPosition()
                     cosLat1           = cos(lat1);
                 }
 
-                virtual bool checkPosition(double lat2Deg, double lon2Deg)
+                virtual bool checkPosition(double lat2Deg, double lon2Deg) override
                 {
                     double lat2 = Coordinates::toRadians(lat2Deg);
                     double lon2 = Coordinates::toRadians(lon2Deg);
