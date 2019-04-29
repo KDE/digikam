@@ -44,7 +44,7 @@ class Q_DECL_HIDDEN BookmarkNode::Private
 public:
 
     explicit Private()
-      : parent(0),
+      : parent(nullptr),
         type(BookmarkNode::Root)
     {
     }
@@ -71,7 +71,7 @@ BookmarkNode::~BookmarkNode()
         d->parent->remove(this);
 
     qDeleteAll(d->children);
-    d->parent = 0;
+    d->parent = nullptr;
     d->type   = BookmarkNode::Root;
 
     delete d;
@@ -136,7 +136,7 @@ void BookmarkNode::add(BookmarkNode* const child, int offset)
 
 void BookmarkNode::remove(BookmarkNode* const child)
 {
-    child->d->parent = 0;
+    child->d->parent = nullptr;
     d->children.removeAll(child);
 }
 

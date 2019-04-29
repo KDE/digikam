@@ -46,7 +46,7 @@ public:
 
     /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
      */
-    explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
+    explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = nullptr);
     ~FingerPrintsGenerator();
 
     void setUseMultiCoreCPU(bool b);

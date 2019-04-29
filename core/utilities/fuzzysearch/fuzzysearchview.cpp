@@ -100,37 +100,37 @@ public:
         // initially be active to update sketch panel when the search list is restored
         active(false),
         fingerprintsChecked(false),
-        resetButton(0),
-        saveBtnSketch(0),
-        undoBtnSketch(0),
-        redoBtnSketch(0),
-        saveBtnImage(0),
-        penSize(0),
-        resultsSketch(0),
-        similarityRange(0),
-        imageWidget(0),
-        timerSketch(0),
-        timerImage(0),
-        folderView(0),
-        nameEditSketch(0),
-        nameEditImage(0),
-        tabWidget(0),
-        hsSelector(0),
-        vSelector(0),
-        labelFile(0),
-        labelFolder(0),
-        searchFuzzyBar(0),
-        searchTreeView(0),
-        sketchWidget(0),
-        thumbLoadThread(0),
-        findDuplicatesPanel(0),
-        imageSAlbum(0),
-        sketchSAlbum(0),
-        fuzzySearchAlbumSelectors(0),
-        sketchSearchAlbumSelectors(0),
-        searchModel(0),
-        searchModificationHelper(0),
-        settings(0)
+        resetButton(nullptr),
+        saveBtnSketch(nullptr),
+        undoBtnSketch(nullptr),
+        redoBtnSketch(nullptr),
+        saveBtnImage(nullptr),
+        penSize(nullptr),
+        resultsSketch(nullptr),
+        similarityRange(nullptr),
+        imageWidget(nullptr),
+        timerSketch(nullptr),
+        timerImage(nullptr),
+        folderView(nullptr),
+        nameEditSketch(nullptr),
+        nameEditImage(nullptr),
+        tabWidget(nullptr),
+        hsSelector(nullptr),
+        vSelector(nullptr),
+        labelFile(nullptr),
+        labelFolder(nullptr),
+        searchFuzzyBar(nullptr),
+        searchTreeView(nullptr),
+        sketchWidget(nullptr),
+        thumbLoadThread(nullptr),
+        findDuplicatesPanel(nullptr),
+        imageSAlbum(nullptr),
+        sketchSAlbum(nullptr),
+        fuzzySearchAlbumSelectors(nullptr),
+        sketchSearchAlbumSelectors(nullptr),
+        searchModel(nullptr),
+        searchModificationHelper(nullptr),
+        settings(nullptr)
     {
     }
 
@@ -308,9 +308,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     // ---------------------------------------------------------------
 
     QLabel* const file   = new QLabel(i18n("<b>File</b>:"));
-    d->labelFile         = new DAdjustableLabel(0);
+    d->labelFile         = new DAdjustableLabel(nullptr);
     QLabel* const folder = new QLabel(i18n("<b>Folder</b>:"));
-    d->labelFolder       = new DAdjustableLabel(0);
+    d->labelFolder       = new DAdjustableLabel(nullptr);
     int hgt              = fontMetrics().height() - 2;
     file->setMaximumHeight(hgt);
     folder->setMaximumHeight(hgt);
@@ -321,7 +321,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"),
                                                       QLatin1String("Fuzzy Search View"),
-                                                      0, AlbumSelectors::AlbumType::PhysAlbum);
+                                                      nullptr, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 
@@ -457,7 +457,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label",
                                                        "Search in albums:"),
                                                        QLatin1String("Sketch Search View"),
-                                                       0, AlbumSelectors::AlbumType::PhysAlbum);
+                                                       nullptr, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 

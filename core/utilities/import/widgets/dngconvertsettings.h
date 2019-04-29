@@ -46,7 +46,7 @@ class DNGConvertSettings : public QWidget
 
 public:
 
-    explicit DNGConvertSettings(QWidget* const parent = 0);
+    explicit DNGConvertSettings(QWidget* const parent = nullptr);
     ~DNGConvertSettings();
 
     void readSettings(KConfigGroup& group);

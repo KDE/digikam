@@ -96,9 +96,9 @@ public:
         canceled(false),
         running(false),
         conflictRule(SetupCamera::DIFFNAME),
-        parent(0),
-        timer(0),
-        camera(0)
+        parent(nullptr),
+        timer(nullptr),
+        camera(nullptr)
     {
     }
 
@@ -370,7 +370,7 @@ void CameraController::run()
 {
     while (d->running)
     {
-        CameraCommand* command = 0;
+        CameraCommand* command = nullptr;
 
         {
             QMutexLocker lock(&d->mutex);

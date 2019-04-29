@@ -77,7 +77,7 @@ public:
 
 public:
 
-    DInfoInterface* infoIface(DPluginAction* const) { return 0; };
+    DInfoInterface* infoIface(DPluginAction* const) { return nullptr; };
 
 Q_SIGNALS:
 

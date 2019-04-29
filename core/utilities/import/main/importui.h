@@ -90,7 +90,7 @@ public:
 
 public:
 
-    DInfoInterface* infoIface(DPluginAction* const) { return 0; };
+    DInfoInterface* infoIface(DPluginAction* const) { return nullptr; };
 
 Q_SIGNALS:
 
@@ -102,7 +102,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = 0);
+    void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = nullptr);
     void slotUploadItems(const QList<QUrl>&); // public to be used in drag'n'drop
 
 protected:

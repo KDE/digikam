@@ -55,12 +55,12 @@ class Q_DECL_HIDDEN SetupTemplate::Private
 public:
 
     explicit Private() :
-        addButton(0),
-        delButton(0),
-        repButton(0),
-        titleEdit(0),
-        listView(0),
-        tview(0)
+        addButton(nullptr),
+        delButton(nullptr),
+        repButton(nullptr),
+        titleEdit(nullptr),
+        listView(nullptr),
+        tview(nullptr)
     {
     }
 

@@ -60,16 +60,16 @@ public:
         layoutMode       = InvalidLayout;
         visualStyle      = InvalidVisualStyle;
         widgetMode       = InvalidTagEntryWidgetMode;
-        comboBox         = 0;
-        lineEdit         = 0;
-        confirmButton    = 0;
-        rejectButton     = 0;
-        clickLabel       = 0;
-        layout           = 0;
+        comboBox         = nullptr;
+        lineEdit         = nullptr;
+        confirmButton    = nullptr;
+        rejectButton     = nullptr;
+        clickLabel       = nullptr;
+        layout           = nullptr;
         modelsGiven      = 0;
-        tagModel         = 0;
-        tagFilterModel   = 0;
-        tagFilteredModel = 0;
+        tagModel         = nullptr;
+        tagFilterModel   = nullptr;
+        tagFilteredModel = nullptr;
     }
 
     void         updateModes();
@@ -146,19 +146,19 @@ bool AssignNameWidget::Private::isValid() const
 void AssignNameWidget::Private::clearWidgets()
 {
     delete comboBox;
-    comboBox       = 0;
+    comboBox       = nullptr;
 
     delete lineEdit;
-    lineEdit      = 0;
+    lineEdit      = nullptr;
 
     delete confirmButton;
-    confirmButton = 0;
+    confirmButton = nullptr;
 
     delete rejectButton;
-    rejectButton  = 0;
+    rejectButton  = nullptr;
 
     delete clickLabel;
-    clickLabel    = 0;
+    clickLabel    = nullptr;
 }
 
 QToolButton* AssignNameWidget::Private::createToolButton(const QIcon& icon, const QString& text, const QString& tip) const
@@ -563,7 +563,7 @@ AssignNameWidget::~AssignNameWidget()
 
 void AssignNameWidget::setDefaultModel()
 {
-    setModel(0, 0, 0);
+    setModel(nullptr, nullptr, nullptr);
 }
 
 void AssignNameWidget::setModel(TagModel* const model,
@@ -709,7 +709,7 @@ QVariant AssignNameWidget::faceIdentifier() const
 
 void AssignNameWidget::setCurrentFace(const FaceTagsIface& face)
 {
-    TAlbum* album = 0;
+    TAlbum* album = nullptr;
 
     if (!face.isNull() && !face.isUnknownName())
     {

@@ -58,7 +58,7 @@ public:
     explicit ImageQualitySorter(QualityScanMode mode,
                                 const AlbumList& list=AlbumList(),
                                 const ImageQualityContainer& quality=ImageQualityContainer(),
-                                ProgressItem* const parent = 0);
+                                ProgressItem* const parent = nullptr);
     ~ImageQualitySorter();
 
     void setUseMultiCoreCPU(bool b);

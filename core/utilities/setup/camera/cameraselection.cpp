@@ -62,17 +62,17 @@ class Q_DECL_HIDDEN CameraSelection::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        portButtonGroup(0),
-        usbButton(0),
-        serialButton(0),
-        networkButton(0),
-        portPathComboBox(0),
-        listView(0),
-        titleEdit(0),
-        networkEdit(0),
-        umsMountURL(0),
-        searchBar(0)
+      : buttons(nullptr),
+        portButtonGroup(nullptr),
+        usbButton(nullptr),
+        serialButton(nullptr),
+        networkButton(nullptr),
+        portPathComboBox(nullptr),
+        listView(nullptr),
+        titleEdit(nullptr),
+        networkEdit(nullptr),
+        umsMountURL(nullptr),
+        searchBar(nullptr)
     {
     }
 

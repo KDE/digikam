@@ -292,7 +292,7 @@ void SetupCollectionTreeView::setModel(SetupCollectionModel* collectionModel)
 {
     if (model())
     {
-        disconnect(model(), 0, this, 0);
+        disconnect(model(), nullptr, this, nullptr);
     }
 
     // we need to do some things after the model has loaded its data
@@ -390,7 +390,7 @@ SetupCollectionModel::Item::Item(const QString& path, const QString& label, Setu
 
 SetupCollectionModel::SetupCollectionModel(QObject* const parent)
     : QAbstractItemModel(parent),
-      m_dialogParentWidget(0)
+      m_dialogParentWidget(nullptr)
 {
 }
 

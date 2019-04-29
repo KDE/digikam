@@ -49,7 +49,7 @@ public:
     explicit Private()
     {
         lowerSpacing = 0;
-        view         = 0;
+        view         = nullptr;
     }
 
     QFont                  font;
@@ -60,7 +60,7 @@ public:
 };
 
 ImportCategoryDrawer::ImportCategoryDrawer(ImportCategorizedView* const parent)
-    : DCategoryDrawer(0),
+    : DCategoryDrawer(nullptr),
       d(new Private)
 {
     d->view = parent;

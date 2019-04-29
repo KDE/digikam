@@ -45,7 +45,7 @@ public:
 
     explicit Private()
       : hasThumb(false),
-        album(0),
+        album(nullptr),
         itemCount(0)
     {
     }

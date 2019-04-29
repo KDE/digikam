@@ -54,23 +54,23 @@ class Q_DECL_HIDDEN SetupSlideShow::Private
 public:
 
     explicit Private()
-      : startWithCurrent(0),
-        loopMode(0),
-        showName(0),
-        showDate(0),
-        showApertureFocal(0),
-        showExpoSensitivity(0),
-        showMakeModel(0),
-        showLabels(0),
-        showRating(0),
-        showComment(0),
-        showTitle(0),
-        showTags(0),
-        showCapIfNoTitle(0),
-        showProgress(0),
-        screenPlacement(0),
-        captionFont(0),
-        delayInput(0)
+      : startWithCurrent(nullptr),
+        loopMode(nullptr),
+        showName(nullptr),
+        showDate(nullptr),
+        showApertureFocal(nullptr),
+        showExpoSensitivity(nullptr),
+        showMakeModel(nullptr),
+        showLabels(nullptr),
+        showRating(nullptr),
+        showComment(nullptr),
+        showTitle(nullptr),
+        showTags(nullptr),
+        showCapIfNoTitle(nullptr),
+        showProgress(nullptr),
+        screenPlacement(nullptr),
+        captionFont(nullptr),
+        delayInput(nullptr)
     {
     }
 

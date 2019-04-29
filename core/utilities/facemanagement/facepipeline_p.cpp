@@ -60,15 +60,15 @@ FacePipelineExtendedPackage::Ptr PackageLoadingDescriptionList::take(const Loadi
 FacePipeline::Private::Private(FacePipeline* const q)
     : q(q)
 {
-    databaseFilter         = 0;
-    previewThread          = 0;
-    detectionWorker        = 0;
-    parallelDetectors      = 0;
-    recognitionWorker      = 0;
-    databaseWriter         = 0;
-    trainer                = 0;
-    detectionBenchmarker   = 0;
-    recognitionBenchmarker = 0;
+    databaseFilter         = nullptr;
+    previewThread          = nullptr;
+    detectionWorker        = nullptr;
+    parallelDetectors      = nullptr;
+    recognitionWorker      = nullptr;
+    databaseWriter         = nullptr;
+    trainer                = nullptr;
+    detectionBenchmarker   = nullptr;
+    recognitionBenchmarker = nullptr;
     priority               = QThread::LowPriority;
     started                = false;
     infosForFiltering      = 0;
@@ -175,7 +175,7 @@ void FacePipeline::Private::finishProcess(FacePipelineExtendedPackage::Ptr packa
     packagesOnTheRoad--;
     emit q->processed(*package);
     emit q->progressValueChanged(float(packagesOnTheRoad + delayedPackages.size()) / totalPackagesAdded);
-    package = 0;
+    package = nullptr;
 
     if (previewThread)
     {
@@ -235,8 +235,8 @@ void FacePipeline::Private::start()
 
     emit q->scheduled();
 
-    WorkerObject*  workerObject = 0;
-    ParallelPipes* pipes        = 0;
+    WorkerObject*  workerObject = nullptr;
+    ParallelPipes* pipes        = nullptr;
 
     foreach (QObject* const element, pipeline)
     {
@@ -271,9 +271,9 @@ void FacePipeline::Private::stop()
         thread->stopAllTasks();
     }
 
-    WorkerObject* workerObject = 0;
-    ParallelPipes* pipes       = 0;
-    DynamicThread* thread      = 0;
+    WorkerObject* workerObject = nullptr;
+    ParallelPipes* pipes       = nullptr;
+    DynamicThread* thread      = nullptr;
 
     foreach (QObject* const element, pipeline)
     {
@@ -311,9 +311,9 @@ void FacePipeline::Private::wait()
         thread->wait();
     }
 
-    WorkerObject* workerObject = 0;
-    ParallelPipes* pipes       = 0;
-    DynamicThread* thread      = 0;
+    WorkerObject* workerObject = nullptr;
+    ParallelPipes* pipes       = nullptr;
+    DynamicThread* thread      = nullptr;
 
     foreach (QObject* const element, pipeline)
     {
@@ -336,8 +336,8 @@ void FacePipeline::Private::wait()
 
 void FacePipeline::Private::applyPriority()
 {
-    WorkerObject*  workerObject = 0;
-    ParallelPipes* pipes        = 0;
+    WorkerObject*  workerObject = nullptr;
+    ParallelPipes* pipes        = nullptr;
 
     foreach (QObject* const element, pipeline)
     {

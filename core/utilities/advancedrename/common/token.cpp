@@ -31,7 +31,7 @@ namespace Digikam
 {
 
 Token::Token(const QString& id, const QString& description)
-    : QObject(0),
+    : QObject(nullptr),
       m_id(id),
       m_description(description)
 {

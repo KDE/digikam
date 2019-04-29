@@ -59,9 +59,9 @@ class Q_DECL_HIDDEN MigrateFromDigikam4Page::Private
 public:
 
     explicit Private()
-      : migrateBehavior(0),
-        migrate(0),
-        createnew(0)
+      : migrateBehavior(nullptr),
+        migrate(nullptr),
+        createnew(nullptr)
     {
     }
 

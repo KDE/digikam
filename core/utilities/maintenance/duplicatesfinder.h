@@ -50,7 +50,7 @@ public:
                               int minSimilarity = 90,
                               int maxSimilarity = 100,
                               int searchResultRestriction = 0,
-                              ProgressItem* const parent = 0);
+                              ProgressItem* const parent = nullptr);
 
     /** Version to find all duplicates over a specific list to PAlbums and TAlbums
      */
@@ -60,14 +60,14 @@ public:
                      int minSimilarity = 90,
                      int maxSimilarity = 100,
                      int searchResultRestriction = 0,
-                     ProgressItem* const parent = 0);
+                     ProgressItem* const parent = nullptr);
 
     /** Version to find all duplicates over whole collections
      */
     explicit DuplicatesFinder(const int minSimilarity = 90,
                               int maxSimilarity = 100,
                               int searchResultRestriction = 0,
-                              ProgressItem* const parent = 0);
+                              ProgressItem* const parent = nullptr);
     ~DuplicatesFinder();
 
 private Q_SLOTS:

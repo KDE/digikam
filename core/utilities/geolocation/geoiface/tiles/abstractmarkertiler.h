@@ -147,7 +147,7 @@ public:
 
 public:
 
-    explicit AbstractMarkerTiler(QObject* const parent = 0);
+    explicit AbstractMarkerTiler(QObject* const parent = nullptr);
     virtual ~AbstractMarkerTiler();
 
     void tileDeleteChildren(Tile* const tile);

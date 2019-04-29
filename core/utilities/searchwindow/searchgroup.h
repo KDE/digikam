@@ -102,7 +102,7 @@ class SearchGroupLabel : public QWidget
 
 public:
 
-    SearchGroupLabel(SearchViewThemedPartsCache* const cache, SearchGroup::Type type, QWidget* const parent = 0);
+    SearchGroupLabel(SearchViewThemedPartsCache* const cache, SearchGroup::Type type, QWidget* const parent = nullptr);
     ~SearchGroupLabel();
 
     void setGroupOperator(SearchXml::Operator op);

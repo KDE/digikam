@@ -80,8 +80,8 @@ class Q_DECL_HIDDEN AdvancedRenameManager::Private
 public:
 
     explicit Private()
-      : parser(0),
-        widget(0),
+      : parser(nullptr),
+        widget(nullptr),
         parserType(AdvancedRenameManager::DefaultParser),
         sortAction(AdvancedRenameManager::SortCustom),
         sortDirection(AdvancedRenameManager::SortAscending),
@@ -176,7 +176,7 @@ void AdvancedRenameManager::setWidget(AdvancedRenameWidget* widget)
 {
     if (!widget)
     {
-        d->widget = 0;
+        d->widget = nullptr;
         return;
     }
 

@@ -59,43 +59,43 @@ public:
 
     explicit Private()
     {
-        buttons              = 0;
+        buttons              = nullptr;
         create               = 0;
-        topLabel             = 0;
-        logo                 = 0;
-        gridLayout           = 0;
-        page                 = 0;
+        topLabel             = nullptr;
+        logo                 = nullptr;
+        gridLayout           = nullptr;
+        page                 = nullptr;
 
         // NamespaceEntry variables
-        subspaceCombo        = 0;
-        specialOptsCombo     = 0;
-        altSpecialOptsCombo  = 0;
-        namespaceName        = 0;
-        alternativeName      = 0;
-        nameSpaceSeparator   = 0;
-        isPath               = 0;
-        ratingMappings       = 0;
+        subspaceCombo        = nullptr;
+        specialOptsCombo     = nullptr;
+        altSpecialOptsCombo  = nullptr;
+        namespaceName        = nullptr;
+        alternativeName      = nullptr;
+        nameSpaceSeparator   = nullptr;
+        isPath               = nullptr;
+        ratingMappings       = nullptr;
 
-        zeroStars            = 0;
-        oneStar              = 0;
-        twoStars             = 0;
-        threeStars           = 0;
-        fourStars            = 0;
-        fiveStars            = 0;
+        zeroStars            = nullptr;
+        oneStar              = nullptr;
+        twoStars             = nullptr;
+        threeStars           = nullptr;
+        fourStars            = nullptr;
+        fiveStars            = nullptr;
 
         // Labels
-        tagTipLabel          = 0;
-        ratingTipLabel       = 0;
-        commentTipLabel      = 0;
-        subspaceLabel        = 0;
-        titleLabel           = 0;
-        specialOptsLabel     = 0;
-        alternativeNameLabel = 0;
-        altspecialOptsLabel  = 0;
-        isTagLabel           = 0;
-        separatorLabel       = 0;
+        tagTipLabel          = nullptr;
+        ratingTipLabel       = nullptr;
+        commentTipLabel      = nullptr;
+        subspaceLabel        = nullptr;
+        titleLabel           = nullptr;
+        specialOptsLabel     = nullptr;
+        alternativeNameLabel = nullptr;
+        altspecialOptsLabel  = nullptr;
+        isTagLabel           = nullptr;
+        separatorLabel       = nullptr;
 
-        tipLabel2            = 0;
+        tipLabel2            = nullptr;
 
         nsType               = NamespaceEntry::TAGS;
     }

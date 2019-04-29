@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT GeoDragDropHandler : public QObject
 
 public:
 
-    explicit GeoDragDropHandler(QObject* const parent = 0);
+    explicit GeoDragDropHandler(QObject* const parent = nullptr);
     virtual ~GeoDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e) = 0;

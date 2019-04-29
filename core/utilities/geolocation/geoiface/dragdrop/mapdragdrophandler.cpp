@@ -79,7 +79,7 @@ bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoCoordinates& dr
 QMimeData* MapDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& modelIndices)
 {
     Q_UNUSED(modelIndices);
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit AlbumCustomizer(QWidget* const parent = 0);
+    explicit AlbumCustomizer(QWidget* const parent = nullptr);
     ~AlbumCustomizer();
 
     void readSettings(KConfigGroup& group);

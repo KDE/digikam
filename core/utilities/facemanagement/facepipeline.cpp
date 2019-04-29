@@ -367,7 +367,7 @@ QThread::Priority FacePipeline::priority() const
 
 void FacePipeline::activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm algorithmType)
 {
-    if (d->recognitionWorker != 0)
+    if (d->recognitionWorker != nullptr)
     {
         d->recognitionWorker->activeFaceRecognizer(algorithmType);
     }

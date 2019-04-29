@@ -52,8 +52,8 @@ class Q_DECL_HIDDEN RawImport::Private
 public:
 
     explicit Private()
-      : settingsBox(0),
-        previewWidget(0)
+      : settingsBox(nullptr),
+        previewWidget(nullptr)
     {
     }
 
@@ -67,8 +67,8 @@ RawImport::RawImport(const QUrl& url, QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    d->previewWidget = new RawPreview(url, 0);
-    d->settingsBox   = new RawSettingsBox(url, 0);
+    d->previewWidget = new RawPreview(url, nullptr);
+    d->settingsBox   = new RawSettingsBox(url, nullptr);
 
     setToolName(i18n("Raw Import"));
     setToolIcon(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));

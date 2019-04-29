@@ -49,7 +49,7 @@ public:
 
     explicit Private()
         : clicked(QDialogButtonBox::NoButton),
-          buttons(0)
+          buttons(nullptr)
     {
     }
 
@@ -97,14 +97,14 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
     // -- Icon and Header --
 
     QLabel* const warningIcon = new QLabel;
-    warningIcon->setPixmap(QIcon::fromTheme(QLatin1String("dialog-warning")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
+    warningIcon->setPixmap(QIcon::fromTheme(QLatin1String("dialog-warning")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, this)));
     QLabel* const question    = new QLabel;
     question->setTextFormat(Qt::RichText);
     question->setText(i18nc("@label",
                             "<qt>The current image has been changed.<br/>"
                             "Do you wish to save your changes?</qt>"));
     QLabel* const editIcon    = new QLabel;
-    editIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-edit")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
+    editIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-edit")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, this)));
 
     QHBoxLayout* const headerLayout = new QHBoxLayout;
     headerLayout->addWidget(warningIcon);

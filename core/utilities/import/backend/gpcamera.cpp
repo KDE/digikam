@@ -84,7 +84,7 @@ public:
 #ifdef HAVE_GPHOTO2
         context = gp_context_new();
         cancel  = false;
-        gp_context_set_cancel_func(context, cancel_func, 0);
+        gp_context_set_cancel_func(context, cancel_func, nullptr);
 #ifdef GPHOTO2_DEBUG
         gp_context_set_progress_funcs(context, start_func, update_func, stop_func, 0);
         gp_context_set_error_func(context, error_func, 0);
@@ -153,8 +153,8 @@ public:
     explicit Private()
 #ifdef HAVE_GPHOTO2
         : cameraInitialized(false),
-          camera(0),
-          status(0)
+          camera(nullptr),
+          status(nullptr)
 #endif /* HAVE_GPHOTO2 */
     {
     }
@@ -185,13 +185,13 @@ GPCamera::~GPCamera()
     if (d->status)
     {
         gp_context_unref(d->status->context);
-        d->status = 0;
+        d->status = nullptr;
     }
 
     if (d->camera)
     {
         gp_camera_unref(d->camera);
-        d->camera = 0;
+        d->camera = nullptr;
     }
 
 #endif /* HAVE_GPHOTO2 */
@@ -234,17 +234,17 @@ bool GPCamera::doConnect()
     if (d->camera)
     {
         gp_camera_unref(d->camera);
-        d->camera = 0;
+        d->camera = nullptr;
     }
 
-    CameraAbilitiesList* abilList = 0;
-    GPPortInfoList*      infoList = 0;
+    CameraAbilitiesList* abilList = nullptr;
+    GPPortInfoList*      infoList = nullptr;
     GPPortInfo           info;
 
     gp_camera_new(&d->camera);
 
     delete d->status;
-    d->status = 0;
+    d->status = nullptr;
     d->status = new GPStatus();
 
     gp_abilities_list_new(&abilList);
@@ -264,7 +264,7 @@ bool GPCamera::doConnect()
         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to set camera Abilities!";
         printGphotoErrorDescription(errorCode);
         gp_camera_unref(d->camera);
-        d->camera = 0;
+        d->camera = nullptr;
         gp_abilities_list_free(abilList);
         gp_port_info_list_free(infoList);
         return false;
@@ -280,7 +280,7 @@ bool GPCamera::doConnect()
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to set camera port!";
             printGphotoErrorDescription(errorCode);
             gp_camera_unref(d->camera);
-            d->camera = 0;
+            d->camera = nullptr;
             gp_abilities_list_free(abilList);
             gp_port_info_list_free(infoList);
             return false;
@@ -341,7 +341,7 @@ bool GPCamera::doConnect()
         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed to initialize camera!";
         printGphotoErrorDescription(errorCode);
         gp_camera_unref(d->camera);
-        d->camera = 0;
+        d->camera = nullptr;
         return false;
     }
 
@@ -372,7 +372,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
     // NOTE: This method depends of libgphoto2 2.4.0
 
     int                       nrofsinfos;
-    CameraStorageInformation* sinfos = 0;
+    CameraStorageInformation* sinfos = nullptr;
 
     d->status->cancel = false;
     int errorCode = gp_camera_get_storageinfo(d->camera, &sinfos, &nrofsinfos, d->status->context);
@@ -503,8 +503,8 @@ bool GPCamera::getPreview(QImage& preview)
 {
 #ifdef HAVE_GPHOTO2
     int               errorCode;
-    CameraFile*       cfile = 0;
-    const char*       data  = 0;
+    CameraFile*       cfile = nullptr;
+    const char*       data  = nullptr;
     unsigned long int size;
 
     d->status->cancel = false;
@@ -652,7 +652,7 @@ bool GPCamera::getFolders(const QString& folder)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
-    CameraList* clist = 0;
+    CameraList* clist = nullptr;
     gp_list_new(&clist);
 
     d->status->cancel = false;
@@ -676,7 +676,7 @@ bool GPCamera::getFolders(const QString& folder)
 
     for (int i = 0 ; i < count ; ++i)
     {
-        const char* subFolder = 0;
+        const char* subFolder = nullptr;
         errorCode             = gp_list_get_name(clist, i, &subFolder);
 
         if (errorCode != GP_OK)
@@ -706,8 +706,8 @@ bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
-    CameraList* clist = 0;
-    const char* cname = 0;
+    CameraList* clist = nullptr;
+    const char* cname = nullptr;
 
     gp_list_new(&clist);
 
@@ -753,8 +753,8 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItem
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
-    CameraList* clist = 0;
-    const char* cname = 0;
+    CameraList* clist = nullptr;
+    const char* cname = nullptr;
 
     gp_list_new(&clist);
 
@@ -929,8 +929,8 @@ bool GPCamera::getThumbnail(const QString& folder, const QString& itemName, QIma
 {
 #ifdef HAVE_GPHOTO2
     int                errorCode;
-    CameraFile*        cfile = 0;
-    const char*        data  = 0;
+    CameraFile*        cfile = nullptr;
+    const char*        data  = nullptr;
     unsigned long int  size;
 
     gp_file_new(&cfile);
@@ -975,8 +975,8 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
 {
 #ifdef HAVE_GPHOTO2
     int               errorCode;
-    CameraFile*       cfile = 0;
-    const char*       data  = 0;
+    CameraFile*       cfile = nullptr;
+    const char*       data  = nullptr;
     unsigned long int size;
 
     gp_file_new(&cfile);
@@ -1046,7 +1046,7 @@ bool GPCamera::downloadItem(const QString& folder, const QString& itemName,
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
-    CameraFile* cfile = 0;
+    CameraFile* cfile = nullptr;
 
     d->status->cancel = false;
     QFile file(saveFile);
@@ -1219,7 +1219,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
-    CameraFile* cfile = 0;
+    CameraFile* cfile = nullptr;
     errorCode         = gp_file_new(&cfile);
     d->status->cancel = false;
 
@@ -1497,8 +1497,8 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
     count                         = 0;
 
     CameraAbilities      abil;
-    CameraAbilitiesList* abilList = 0;
-    GPContext*           context  = 0;
+    CameraAbilitiesList* abilList = nullptr;
+    GPContext*           context  = nullptr;
     context                       = gp_context_new();
 
     gp_abilities_list_new(&abilList);
@@ -1534,7 +1534,7 @@ void GPCamera::getSupportedCameras(int& count, QStringList& clist)
 void GPCamera::getSupportedPorts(QStringList& plist)
 {
 #ifdef HAVE_GPHOTO2
-    GPPortInfoList* list = 0;
+    GPPortInfoList* list = nullptr;
     GPPortInfo      info;
 
     plist.clear();
@@ -1557,7 +1557,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
         {
             gp_port_info_list_get_info(list, i, &info);
 #ifdef HAVE_GPHOTO25
-            char* xpath = 0;
+            char* xpath = nullptr;
             gp_port_info_get_name (info, &xpath);
             plist.append(QString::fromUtf8(xpath));
 #else
@@ -1579,8 +1579,8 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
     plist.clear();
 
     CameraAbilities      abilities;
-    CameraAbilitiesList* abilList = 0;
-    GPContext*           context  = 0;
+    CameraAbilitiesList* abilList = nullptr;
+    GPContext*           context  = nullptr;
     context                       = gp_context_new();
 
     gp_abilities_list_new(&abilList);
@@ -1614,11 +1614,11 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
 int GPCamera::autoDetect(QString& model, QString& port)
 {
 #ifdef HAVE_GPHOTO2
-    CameraList*          camList   = 0;
-    CameraAbilitiesList* abilList  = 0;
-    GPPortInfoList*      infoList  = 0;
-    const char*          camModel_ = 0, *camPort_ = 0;
-    GPContext*           context   = 0;
+    CameraList*          camList   = nullptr;
+    CameraAbilitiesList* abilList  = nullptr;
+    GPPortInfoList*      infoList  = nullptr;
+    const char*          camModel_ = nullptr, *camPort_ = nullptr;
+    GPContext*           context   = nullptr;
     context                        = gp_context_new();
 
     gp_list_new(&camList);
@@ -1643,8 +1643,8 @@ int GPCamera::autoDetect(QString& model, QString& port)
         return -1;
     }
 
-    camModel_ = 0;
-    camPort_  = 0;
+    camModel_ = nullptr;
+    camPort_  = nullptr;
 
     for (int i = 0 ; i < count ; ++i)
     {
@@ -1683,14 +1683,14 @@ int GPCamera::autoDetect(QString& model, QString& port)
 bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& model, QString& port)
 {
 #ifdef HAVE_GPHOTO2
-    CameraAbilitiesList* abilList = 0;
-    GPPortInfoList*      list     = 0;
-    GPContext*           context  = 0;
-    CameraList*          camList  = 0;
+    CameraAbilitiesList* abilList = nullptr;
+    GPPortInfoList*      list     = nullptr;
+    GPContext*           context  = nullptr;
+    CameraList*          camList  = nullptr;
     bool                 success  = false;
     // get name and port of detected camera
-    const char* model_str         = 0;
-    const char* port_str          = 0;
+    const char* model_str         = nullptr;
+    const char* port_str          = nullptr;
     context                       = gp_context_new();
 
     // get list of all ports
@@ -1711,7 +1711,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
 
     for (int i = 0 ; i < count ; ++i)
     {
-        const char* xmodel = 0;
+        const char* xmodel = nullptr;
         gp_list_get_name(camList, i, &xmodel);
         int model          = gp_abilities_list_lookup_model (abilList, xmodel);
         CameraAbilities ab;
@@ -1728,8 +1728,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
         {
             int ret;
             GPPortInfo info;
-            const char* xport = 0;
-            GPPort* gpport    = 0;
+            const char* xport = nullptr;
+            GPPort* gpport    = nullptr;
 
             /* get the port path so we only look at this bus position */
             gp_list_get_value(camList, i, &xport);

@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT GPSItemList : public QTreeView
 
 public:
 
-    explicit GPSItemList(QWidget* const parent = 0);
+    explicit GPSItemList(QWidget* const parent = nullptr);
     ~GPSItemList();
 
     void setModelAndSelectionModel(GPSItemModel* const model, QItemSelectionModel* const selectionModel);

@@ -47,7 +47,7 @@ class SlideOSD : public QWidget
 
 public:
 
-    explicit SlideOSD(const SlideShowSettings& settings, SlideShow* const parent = 0);
+    explicit SlideOSD(const SlideShowSettings& settings, SlideShow* const parent = nullptr);
     ~SlideOSD();
 
     void setCurrentUrl(const QUrl& url);

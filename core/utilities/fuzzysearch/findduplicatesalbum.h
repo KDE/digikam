@@ -47,7 +47,7 @@ class FindDuplicatesAlbum : public QTreeWidget
 
 public:
 
-    explicit FindDuplicatesAlbum(QWidget* const parent = 0);
+    explicit FindDuplicatesAlbum(QWidget* const parent = nullptr);
     virtual ~FindDuplicatesAlbum();
 
     void updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild,

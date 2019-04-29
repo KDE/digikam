@@ -48,7 +48,7 @@ public:
         maxWidth(-1),
         hoverRole(0),
         separatorRole(0),
-        model(0)
+        model(nullptr)
     {
     }
 
@@ -281,7 +281,7 @@ class Q_DECL_HIDDEN BookmarksMenu::Private
 public:
 
     explicit Private()
-      : manager(0)
+      : manager(nullptr)
     {
     }
 

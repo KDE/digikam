@@ -74,7 +74,7 @@ class Q_DECL_HIDDEN LightTableItemListModel : public ItemListModel
 {
 public:
 
-    explicit LightTableItemListModel(QObject* const parent = 0)
+    explicit LightTableItemListModel(QObject* const parent = nullptr)
         : ItemListModel(parent), m_exclusive(false)
     {
     }
@@ -163,9 +163,9 @@ public:
     explicit Private()
     {
         navigateByPair   = false;
-        imageInfoModel   = 0;
-        imageFilterModel = 0;
-        dragDropHandler  = 0;
+        imageInfoModel   = nullptr;
+        imageFilterModel = nullptr;
+        dragDropHandler  = nullptr;
     }
 
     bool                      navigateByPair;
@@ -258,7 +258,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const ItemI
 {
     // temporary actions ----------------------------------
 
-    QAction* leftPanelAction = 0, *rightPanelAction = 0, *editAction = 0, *removeAction = 0, *clearAllAction = 0;
+    QAction* leftPanelAction = nullptr, *rightPanelAction = nullptr, *editAction = nullptr, *removeAction = nullptr, *clearAllAction = nullptr;
 
     leftPanelAction  = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),   i18n("Show on left panel"),  this);
     rightPanelAction = new QAction(QIcon::fromTheme(QLatin1String("go-next")),       i18n("Show on right panel"), this);

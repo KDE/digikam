@@ -118,11 +118,11 @@
 namespace Digikam
 {
 
-ImportUI* ImportUI::m_instance = 0;
+ImportUI* ImportUI::m_instance = nullptr;
 
 ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
                    const QString& port, const QString& path, int startIndex)
-    : DXmlGuiWindow(0),
+    : DXmlGuiWindow(nullptr),
       d(new Private)
 {
     setConfigGroupName(QLatin1String("Camera Settings"));
@@ -191,8 +191,8 @@ ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
 ImportUI::~ImportUI()
 {
     saveSettings();
-    m_instance = 0;
-    disconnect(d->view, 0, this, 0);
+    m_instance = nullptr;
+    disconnect(d->view, nullptr, this, nullptr);
 
     delete d->view;
     delete d->rightSideBar;
@@ -1410,7 +1410,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     // -- Get the destination album from digiKam library ---------------
 
-    PAlbum* pAlbum = 0;
+    PAlbum* pAlbum = nullptr;
 
     if (!album)
     {
@@ -1464,7 +1464,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
             if (album && album->type() != Album::PHYSICAL)
             {
-                album = 0;
+                album = nullptr;
             }
 
             QString header(i18nc("@info", "<p>Please select the destination album from the digiKam library to "

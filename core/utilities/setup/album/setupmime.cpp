@@ -58,12 +58,12 @@ class Q_DECL_HIDDEN SetupMime::Private
 public:
 
     explicit Private()
-      : imageFileFilterLabel(0),
-        movieFileFilterLabel(0),
-        audioFileFilterLabel(0),
-        imageFileFilterEdit(0),
-        movieFileFilterEdit(0),
-        audioFileFilterEdit(0)
+      : imageFileFilterLabel(nullptr),
+        movieFileFilterLabel(nullptr),
+        audioFileFilterLabel(nullptr),
+        imageFileFilterEdit(nullptr),
+        movieFileFilterEdit(nullptr),
+        audioFileFilterEdit(nullptr)
     {
     }
 
@@ -307,7 +307,7 @@ void SetupMime::readSettings()
 void SetupMime::slotShowCurrentImageSettings()
 {
     QStringList imageList;
-    CoreDbAccess().db()->getFilterSettings(&imageList, 0, 0);
+    CoreDbAccess().db()->getFilterSettings(&imageList, nullptr, nullptr);
     QString text = i18n("<p>Files with these extensions will be recognized as images "
                         "and included into the database:<br/> <code>%1</code></p>",
                         imageList.join(QLatin1Char(' ')));
@@ -317,7 +317,7 @@ void SetupMime::slotShowCurrentImageSettings()
 void SetupMime::slotShowCurrentMovieSettings()
 {
     QStringList movieList;
-    CoreDbAccess().db()->getFilterSettings(0, &movieList, 0);
+    CoreDbAccess().db()->getFilterSettings(nullptr, &movieList, nullptr);
     QString text = i18n("<p>Files with these extensions will be recognized as video files "
                         "and included into the database:<br/> <code>%1</code></p>",
                         movieList.join(QLatin1Char(' ')));
@@ -327,7 +327,7 @@ void SetupMime::slotShowCurrentMovieSettings()
 void SetupMime::slotShowCurrentAudioSettings()
 {
     QStringList audioList;
-    CoreDbAccess().db()->getFilterSettings(0, 0, &audioList);
+    CoreDbAccess().db()->getFilterSettings(nullptr, nullptr, &audioList);
     QString text = i18n("<p>Files with these extensions will be recognized as audio files "
                         "and included into the database:<br/> <code>%1</code></p>",
                         audioList.join(QLatin1Char(' ')));

@@ -53,7 +53,7 @@ class Q_DECL_HIDDEN SearchModificationHelper::Private
 public:
 
     explicit Private()
-      : dialogParent(0)
+      : dialogParent(nullptr)
     {
     }
 
@@ -179,14 +179,14 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     {
         if (!checkName(name))
         {
-            return 0;
+            return nullptr;
         }
     }
 
     if (dateRanges.isEmpty())
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
-        return 0;
+        return nullptr;
     }
 
     // Create an XML search query for the list of date ranges
@@ -222,7 +222,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
 {
     if (sketchWidget->isClear())
     {
-        return 0;
+        return nullptr;
     }
 
     QString name = proposedName;
@@ -231,7 +231,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     {
         if (!checkName(name))
         {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -286,7 +286,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromDropped(const QString& pr
     {
         if (!checkName(name))
         {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -338,7 +338,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
 {
     if (image.isNull())
     {
-        return 0;
+        return nullptr;
     }
 
     QString name = proposedName;
@@ -347,7 +347,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     {
         if (!checkName(name))
         {
-            return 0;
+            return nullptr;
         }
     }
 

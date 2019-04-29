@@ -60,19 +60,19 @@ public:
 
     explicit Private()
       : enabled(true),
-        actionBookmark(0),
-        bookmarkOwner(0),
-        actionCopy(0),
-        actionPaste(0),
-        actionPasteSwap(0),
-        actionRemoveCoordinates(0),
-        actionRemoveAltitude(0),
-        actionRemoveUncertainty(0),
-        actionRemoveSpeed(0),
-        actionLookupMissingAltitudes(0),
-        imagesList(0),
+        actionBookmark(nullptr),
+        bookmarkOwner(nullptr),
+        actionCopy(nullptr),
+        actionPaste(nullptr),
+        actionPasteSwap(nullptr),
+        actionRemoveCoordinates(nullptr),
+        actionRemoveAltitude(nullptr),
+        actionRemoveUncertainty(nullptr),
+        actionRemoveSpeed(nullptr),
+        actionLookupMissingAltitudes(nullptr),
+        imagesList(nullptr),
         altitudeLookup(),
-        altitudeUndoCommand(0),
+        altitudeUndoCommand(nullptr),
         altitudeRequestedCount(0),
         altitudeReceivedCount(0)
     {
@@ -549,7 +549,7 @@ bool GPSItemListContextMenu::getCurrentPosition(GPSDataContainer* position, void
 
     GPSItemListContextMenu* const me = reinterpret_cast<GPSItemListContextMenu*>(mydata);
 
-    return me->getCurrentItemPositionAndUrl(position, 0);
+    return me->getCurrentItemPositionAndUrl(position, nullptr);
 }
 
 void GPSItemListContextMenu::removeInformationFromSelectedImages(const GPSDataContainer::HasFlags flagsToClear, const QString& undoDescription)
@@ -786,7 +786,7 @@ void GPSItemListContextMenu::slotAltitudeLookupDone()
         delete d->altitudeUndoCommand;
     }
 
-    d->altitudeUndoCommand = 0;
+    d->altitudeUndoCommand = nullptr;
     d->altitudeLookup->deleteLater();
 
     emit(signalSetUIEnabled(true));

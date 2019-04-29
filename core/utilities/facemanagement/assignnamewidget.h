@@ -88,7 +88,7 @@ public:
 
     /** Please take care: you must set all four modes before usage! */
 
-    explicit AssignNameWidget(QWidget* const parent = 0);
+    explicit AssignNameWidget(QWidget* const parent = nullptr);
     ~AssignNameWidget();
 
     /** Set the tag model to use for completion. */

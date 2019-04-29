@@ -40,7 +40,7 @@ class SketchWidget : public QWidget
 
 public:
 
-    explicit SketchWidget(QWidget* const parent = 0);
+    explicit SketchWidget(QWidget* const parent = nullptr);
     virtual ~SketchWidget();
 
     QColor  penColor() const;

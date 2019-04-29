@@ -46,7 +46,7 @@ class Q_DECL_HIDDEN ItemInfoJob::Private
 public:
 
     explicit Private()
-      : jobThread(0)
+      : jobThread(nullptr)
     {
     }
 
@@ -73,7 +73,7 @@ void ItemInfoJob::allItemsFromAlbum(Album* const album)
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 
     if (!album)
@@ -129,7 +129,7 @@ void ItemInfoJob::stop()
     if (d->jobThread)
     {
         d->jobThread->cancel();
-        d->jobThread = 0;
+        d->jobThread = nullptr;
     }
 }
 
@@ -154,7 +154,7 @@ void ItemInfoJob::slotResult()
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 
-    d->jobThread = 0;
+    d->jobThread = nullptr;
 
     emit signalCompleted();
 }

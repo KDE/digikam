@@ -44,7 +44,7 @@ public:
     CameraType();
     CameraType(const QString& title, const QString& model,
                const QString& port, const QString& path,
-               int startingNumber, QAction* const action = 0);
+               int startingNumber, QAction* const action = nullptr);
     ~CameraType();
 
     CameraType(const CameraType& ctype);

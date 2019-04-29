@@ -54,8 +54,8 @@ class Q_DECL_HIDDEN CameraFolderDialog::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        folderView(0)
+      : buttons(nullptr),
+        folderView(nullptr)
     {
     }
 
@@ -145,7 +145,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     adjustSize();
 
     // make sure the ok button is properly set up
-    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(d->folderView->currentItem() != 0);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(d->folderView->currentItem() != nullptr);
 }
 
 CameraFolderDialog::~CameraFolderDialog()

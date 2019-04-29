@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN PreviewPage::Private
 public:
 
     explicit Private()
-      : loadReduced(0),
-        loadimage(0),
-        previewBehavior(0)
+      : loadReduced(nullptr),
+        loadimage(nullptr),
+        previewBehavior(nullptr)
     {
     }
 

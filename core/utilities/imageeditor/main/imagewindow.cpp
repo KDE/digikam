@@ -28,7 +28,7 @@
 namespace Digikam
 {
 
-ImageWindow* ImageWindow::m_instance = 0;
+ImageWindow* ImageWindow::m_instance = nullptr;
 
 ImageWindow* ImageWindow::imageWindow()
 {
@@ -100,7 +100,7 @@ ImageWindow::ImageWindow()
 
 ImageWindow::~ImageWindow()
 {
-    m_instance = 0;
+    m_instance = nullptr;
 
     delete d->rightSideBar;
     delete d->thumbBar;

@@ -41,8 +41,8 @@ class Q_DECL_HIDDEN ThumbsTask::Private
 public:
 
     explicit Private()
-        : catcher(0),
-          data(0)
+        : catcher(nullptr),
+          data(nullptr)
     {
     }
 

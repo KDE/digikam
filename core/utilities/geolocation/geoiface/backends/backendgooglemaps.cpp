@@ -67,7 +67,7 @@ public:
 
     GMInternalWidgetInfo()
     {
-        htmlWidget = 0;
+        htmlWidget = nullptr;
     }
 
     HTMLWidget* htmlWidget;
@@ -85,14 +85,14 @@ class Q_DECL_HIDDEN BackendGoogleMaps::Private
 public:
 
     explicit Private()
-      : htmlWidget(0),
-        htmlWidgetWrapper(0),
+      : htmlWidget(nullptr),
+        htmlWidgetWrapper(nullptr),
         isReady(false),
-        mapTypeActionGroup(0),
-        floatItemsActionGroup(0),
-        showMapTypeControlAction(0),
-        showNavigationControlAction(0),
-        showScaleControlAction(0),
+        mapTypeActionGroup(nullptr),
+        floatItemsActionGroup(nullptr),
+        showMapTypeControlAction(nullptr),
+        showNavigationControlAction(nullptr),
+        showScaleControlAction(nullptr),
         cacheMapType(QLatin1String("ROADMAP")),
         cacheShowMapTypeControl(true),
         cacheShowNavigationControl(true),
@@ -354,7 +354,7 @@ void BackendGoogleMaps::slotMapTypeActionTriggered(QAction* action)
 
 void BackendGoogleMaps::addActionsToConfigurationMenu(QMenu* const configurationMenu)
 {
-    GEOIFACE_ASSERT(configurationMenu!=0);
+    GEOIFACE_ASSERT(configurationMenu!=nullptr);
 
     if (!d->isReady)
         return;
@@ -385,7 +385,7 @@ void BackendGoogleMaps::addActionsToConfigurationMenu(QMenu* const configuration
 
 void BackendGoogleMaps::saveSettingsToGroup(KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
         return;
@@ -398,7 +398,7 @@ void BackendGoogleMaps::saveSettingsToGroup(KConfigGroup* const group)
 
 void BackendGoogleMaps::readSettingsFromGroup(const KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
         return;
@@ -757,7 +757,7 @@ void BackendGoogleMaps::updateClusters()
         {
             QPoint clusterCenterPoint;
             // TODO: who calculates the override values?
-            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(currentIndex, 0, 0, &clusterCenterPoint);
+            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(currentIndex, nullptr, nullptr, &clusterCenterPoint);
 
             setClusterPixmap(currentIndex, clusterCenterPoint, clusterPixmap);
         }
@@ -801,7 +801,7 @@ bool BackendGoogleMaps::geoCoordinates(const QPoint& point, GeoCoordinates* cons
 
 QSize BackendGoogleMaps::mapSize() const
 {
-    GEOIFACE_ASSERT(d->htmlWidgetWrapper != 0);
+    GEOIFACE_ASSERT(d->htmlWidgetWrapper != nullptr);
 
     return d->htmlWidgetWrapper->size();
 }
@@ -1029,7 +1029,7 @@ void BackendGoogleMaps::slotThumbnailAvailableForIndex(const QVariant& index, co
         {
             QPoint clusterCenterPoint;
             // TODO: who calculates the override values?
-            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(i, 0, 0, &clusterCenterPoint);
+            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(i, nullptr, nullptr, &clusterCenterPoint);
 
             setClusterPixmap(i, clusterCenterPoint, clusterPixmap);
 
@@ -1236,12 +1236,12 @@ void BackendGoogleMaps::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
     disconnect(d->htmlWidget, SIGNAL(selectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
                this, SLOT(slotSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)));
 
-    d->htmlWidget->setSharedGeoIfaceObject(0);
+    d->htmlWidget->setSharedGeoIfaceObject(nullptr);
     d->htmlWidgetWrapper->removeEventFilter(this);
 
-    d->htmlWidget        = 0;
-    d->htmlWidgetWrapper = 0;
-    info->currentOwner   = 0;
+    d->htmlWidget        = nullptr;
+    d->htmlWidgetWrapper = nullptr;
+    info->currentOwner   = nullptr;
     info->state          = GeoIfaceInternalWidgetInfo::InternalWidgetReleased;
     d->isReady           = false;
 

@@ -42,8 +42,8 @@ public:
 
     explicit Private()
       : cameraName(QLatin1String("Camera")),
-        virtualFolder(0),
-        rootFolder(0)
+        virtualFolder(nullptr),
+        rootFolder(nullptr)
     {
     }
 
@@ -130,14 +130,14 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         }
         else
         {
-            return 0;
+            return nullptr;
         }
     }
     else
     {
         qCWarning(DIGIKAM_IMPORTUI_LOG) << "Could not find parent for subfolder"
                                         << subFolder << "of folder" << folder;
-        return 0;
+        return nullptr;
     }
 }
 
@@ -157,14 +157,14 @@ CameraFolderItem* CameraFolderView::findFolder(const QString& folderPath)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void CameraFolderView::slotCurrentChanged(QTreeWidgetItem* item, int)
 {
     if (!item)
     {
-        emit signalFolderChanged(0);
+        emit signalFolderChanged(nullptr);
     }
     else
     {
@@ -185,8 +185,8 @@ CameraFolderItem* CameraFolderView::rootFolder() const
 void CameraFolderView::clear()
 {
     QTreeWidget::clear();
-    d->virtualFolder = 0;
-    d->rootFolder    = 0;
+    d->virtualFolder = nullptr;
+    d->rootFolder    = nullptr;
     emit signalCleared();
 }
 

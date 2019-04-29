@@ -47,8 +47,8 @@ namespace Digikam
 
 MetadataOptionDialog::MetadataOptionDialog(Rule* const parent)
     : RuleDialog(parent),
-      metadataPanel(0),
-      separatorLineEdit(0)
+      metadataPanel(nullptr),
+      separatorLineEdit(nullptr)
 {
     QWidget* const mainWidget = new QWidget(this);
     QTabWidget* const tab     = new QTabWidget(this);

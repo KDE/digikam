@@ -59,13 +59,13 @@ public:
 
     explicit Private()
       : switchOn(false),
-        deviceProfileBox(0),
-        infoProofProfiles(0),
-        buttons(0),
-        gamutCheckBox(0),
-        maskColorLabel(0),
-        maskColorBtn(0),
-        proofingIntentBox(0)
+        deviceProfileBox(nullptr),
+        infoProofProfiles(nullptr),
+        buttons(nullptr),
+        gamutCheckBox(nullptr),
+        maskColorLabel(nullptr),
+        maskColorBtn(nullptr),
+        proofingIntentBox(nullptr)
     {
     }
 

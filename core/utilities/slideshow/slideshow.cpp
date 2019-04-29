@@ -73,14 +73,14 @@ public:
     explicit Private()
         : fileIndex(-1),
           screenSaverCookie(-1),
-          mouseMoveTimer(0),
-          imageView(0),
+          mouseMoveTimer(nullptr),
+          imageView(nullptr),
 #ifdef HAVE_MEDIAPLAYER
-          videoView(0),
+          videoView(nullptr),
 #endif
-          errorView(0),
-          endView(0),
-          osd(0)
+          errorView(nullptr),
+          endView(nullptr),
+          osd(nullptr)
     {
     }
 
@@ -101,7 +101,7 @@ public:
 };
 
 SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& settings)
-    : QStackedWidget(0),
+    : QStackedWidget(nullptr),
       d(new Private)
 {
     d->settings       = settings;

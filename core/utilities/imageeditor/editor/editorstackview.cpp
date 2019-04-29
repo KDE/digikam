@@ -40,8 +40,8 @@ class Q_DECL_HIDDEN EditorStackView::Private
 public:
 
     explicit Private()
-      : toolView(0),
-        canvas(0)
+      : toolView(nullptr),
+        canvas(nullptr)
     {
     }
 
@@ -325,7 +325,7 @@ GraphicsDImgView* EditorStackView::previewWidget() const
         return preview;
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool EditorStackView::isZoomablePreview() const

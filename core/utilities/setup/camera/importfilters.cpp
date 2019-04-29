@@ -57,16 +57,16 @@ public:
 
     explicit Private()
     {
-        buttons          = 0;
-        filterName       = 0;
-        mimeCheckBox     = 0;
-        mimeLabel        = 0;
-        mimeButton       = 0;
-        fileNameCheckBox = 0;
-        fileNameEdit     = 0;
-        pathCheckBox     = 0;
-        pathEdit         = 0;
-        newFilesCheckBox = 0;
+        buttons          = nullptr;
+        filterName       = nullptr;
+        mimeCheckBox     = nullptr;
+        mimeLabel        = nullptr;
+        mimeButton       = nullptr;
+        fileNameCheckBox = nullptr;
+        fileNameEdit     = nullptr;
+        pathCheckBox     = nullptr;
+        pathEdit         = nullptr;
+        newFilesCheckBox = nullptr;
     }
 
     QDialogButtonBox*   buttons;
@@ -95,9 +95,9 @@ ImportFilters::ImportFilters(QWidget* const parent)
 
     QWidget* const page               = new QWidget(this);
     QVBoxLayout* const verticalLayout = new QVBoxLayout(page);
-    QLabel* label                     = 0;
-    QHBoxLayout* horizontalLayout     = 0;
-    QSpacerItem* spacer               = 0;
+    QLabel* label                     = nullptr;
+    QHBoxLayout* horizontalLayout     = nullptr;
+    QSpacerItem* spacer               = nullptr;
 
     label            = new QLabel(page);
     label->setText(i18n("Name:"));

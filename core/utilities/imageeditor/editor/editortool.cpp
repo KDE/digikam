@@ -57,11 +57,11 @@ public:
     explicit Private()
       : initPreview(false),
         version(0),
-        view(0),
-        timer(0),
-        settings(0),
+        view(nullptr),
+        timer(nullptr),
+        settings(nullptr),
         category(FilterAction::ReproducibleFilter),
-        plugin(0)
+        plugin(nullptr)
     {
     }
 
@@ -388,8 +388,8 @@ public:
     explicit Private()
       : delFilter(true),
         currentRenderingMode(EditorToolThreaded::NoneRendering),
-        threadedFilter(0),
-        threadedAnalyser(0)
+        threadedFilter(nullptr),
+        threadedAnalyser(nullptr)
     {
     }
 
@@ -645,7 +645,7 @@ void EditorToolThreaded::slotOk()
     if (d->delFilter && d->threadedFilter)
     {
         delete d->threadedFilter;
-        d->threadedFilter = 0;
+        d->threadedFilter = nullptr;
     }
 
     prepareFinal();
@@ -675,7 +675,7 @@ void EditorToolThreaded::slotPreview()
     if (d->delFilter && d->threadedFilter)
     {
         delete d->threadedFilter;
-        d->threadedFilter = 0;
+        d->threadedFilter = nullptr;
     }
 
     preparePreview();

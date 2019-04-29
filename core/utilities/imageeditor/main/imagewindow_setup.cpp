@@ -240,8 +240,8 @@ void ImageWindow::slotContextMenu()
         addServicesMenu();
         m_contextMenu->addSeparator();
 
-        TagsPopupMenu* assignTagsMenu = 0;
-        TagsPopupMenu* removeTagsMenu = 0;
+        TagsPopupMenu* assignTagsMenu = nullptr;
+        TagsPopupMenu* removeTagsMenu = nullptr;
 
         // Bulk assignment/removal of tags --------------------------
 

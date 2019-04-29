@@ -98,7 +98,7 @@ class DIGIKAM_EXPORT AdvancedRenameDialog : public QDialog
 
 public:
 
-    explicit AdvancedRenameDialog(QWidget* const parent = 0);
+    explicit AdvancedRenameDialog(QWidget* const parent = nullptr);
     ~AdvancedRenameDialog();
 
     NewNamesList newNames() const;

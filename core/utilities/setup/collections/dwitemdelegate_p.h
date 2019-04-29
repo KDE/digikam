@@ -47,7 +47,7 @@ class Q_DECL_HIDDEN DWItemDelegatePrivate : public QObject
 
 public:
 
-    explicit DWItemDelegatePrivate(DWItemDelegate* const q, QObject* const parent = 0);
+    explicit DWItemDelegatePrivate(DWItemDelegate* const q, QObject* const parent = nullptr);
     ~DWItemDelegatePrivate();
 
     void updateRowRange(const QModelIndex& parent, int start, int end, bool isRemoving);

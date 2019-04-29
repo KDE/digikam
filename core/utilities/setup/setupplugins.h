@@ -46,7 +46,7 @@ public:
 
 public:
 
-    explicit SetupPlugins(QWidget* const parent = 0);
+    explicit SetupPlugins(QWidget* const parent = nullptr);
     ~SetupPlugins();
 
     void applySettings();

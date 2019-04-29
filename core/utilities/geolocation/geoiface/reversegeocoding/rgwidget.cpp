@@ -89,47 +89,47 @@ public:
         : currentlyAskingCancelQuestion(false),
           hideOptions(true),
           UIEnabled(true),
-          label(0),
-          imageModel(0),
-          selectionModel(0),
-          buttonRGSelected(0),
-          undoCommand(0),
-          serviceComboBox(0),
-          languageEdit(0),
-          currentBackend(0),
+          label(nullptr),
+          imageModel(nullptr),
+          selectionModel(nullptr),
+          buttonRGSelected(nullptr),
+          undoCommand(nullptr),
+          serviceComboBox(nullptr),
+          languageEdit(nullptr),
+          currentBackend(nullptr),
           requestedRGCount(0),
           receivedRGCount(0),
-          buttonHideOptions(0),
-          iptc(0),
-          xmpLoc(0),
-          xmpKey(0),
-          UGridContainer(0),
-          LGridContainer(0),
-          serviceLabel(0),
-          languageLabel(0),
-          separator(0),
-          tagModel(0),
-          tagTreeView(0),
-          tagSelectionModel(0),
-          actionAddCountry(0),
-          actionAddState(0),
-          actionAddStateDistrict(0),
-          actionAddCounty(0),
-          actionAddCity(0),
-          actionAddCityDistrict(0),
-          actionAddSuburb(0),
-          actionAddTown(0),
-          actionAddVillage(0),
-          actionAddHamlet(0),
-          actionAddStreet(0),
-          actionAddHouseNumber(0),
-          actionAddPlace(0),
-          actionAddLAU2(0),
-          actionAddLAU1(0),
-          actionAddCustomizedSpacer(0),
-          actionRemoveTag(0),
-          actionRemoveAllSpacers(0),
-          actionAddAllAddressElementsToTag(0)
+          buttonHideOptions(nullptr),
+          iptc(nullptr),
+          xmpLoc(nullptr),
+          xmpKey(nullptr),
+          UGridContainer(nullptr),
+          LGridContainer(nullptr),
+          serviceLabel(nullptr),
+          languageLabel(nullptr),
+          separator(nullptr),
+          tagModel(nullptr),
+          tagTreeView(nullptr),
+          tagSelectionModel(nullptr),
+          actionAddCountry(nullptr),
+          actionAddState(nullptr),
+          actionAddStateDistrict(nullptr),
+          actionAddCounty(nullptr),
+          actionAddCity(nullptr),
+          actionAddCityDistrict(nullptr),
+          actionAddSuburb(nullptr),
+          actionAddTown(nullptr),
+          actionAddVillage(nullptr),
+          actionAddHamlet(nullptr),
+          actionAddStreet(nullptr),
+          actionAddHouseNumber(nullptr),
+          actionAddPlace(nullptr),
+          actionAddLAU2(nullptr),
+          actionAddLAU1(nullptr),
+          actionAddCustomizedSpacer(nullptr),
+          actionRemoveTag(nullptr),
+          actionRemoveAllSpacers(nullptr),
+          actionAddAllAddressElementsToTag(nullptr)
     {
     }
 
@@ -210,7 +210,7 @@ RGWidget::RGWidget(GPSItemModel* const imageModel, QItemSelectionModel* const se
     d->tagTreeView->setHeaderHidden(true);
     vBoxLayout->addWidget(d->tagTreeView);
 
-    Q_ASSERT(d->tagTreeView != 0);
+    Q_ASSERT(d->tagTreeView != nullptr);
 
     if (!externTagModel)
         externTagModel = new SimpleTreeModel(1, this);
@@ -578,7 +578,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
         else
         {
             emit signalUndoCommand(d->undoCommand);
-            d->undoCommand = 0;
+            d->undoCommand = nullptr;
 
             emit signalSetUIEnabled(true);
         }
@@ -955,7 +955,7 @@ void RGWidget::slotRGCanceled()
                 if (d->undoCommand)
                 {
                     emit(signalUndoCommand(d->undoCommand));
-                    d->undoCommand = 0;
+                    d->undoCommand = nullptr;
                 }
 
                 // unlock the UI
@@ -976,7 +976,7 @@ void RGWidget::slotRGCanceled()
             if (d->undoCommand)
             {
                 emit signalUndoCommand(d->undoCommand);
-                d->undoCommand = 0;
+                d->undoCommand = nullptr;
             }
         }
     }
@@ -987,7 +987,7 @@ void RGWidget::slotRGCanceled()
     if (d->undoCommand)
     {
         delete d->undoCommand;
-        d->undoCommand = 0;
+        d->undoCommand = nullptr;
     }
 
     emit signalSetUIEnabled(true);

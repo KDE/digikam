@@ -37,7 +37,7 @@ class SetupEditor : public QScrollArea
 
 public:
 
-    explicit SetupEditor(QWidget* const parent = 0);
+    explicit SetupEditor(QWidget* const parent = nullptr);
     ~SetupEditor();
 
     void applySettings();

@@ -55,14 +55,14 @@ class Q_DECL_HIDDEN SetupIOFiles::Private
 public:
 
     explicit Private()
-      : JPEGOptions(0),
-        PNGOptions(0),
-        TIFFOptions(0),
+      : JPEGOptions(nullptr),
+        PNGOptions(nullptr),
+        TIFFOptions(nullptr),
 #ifdef HAVE_JASPER
-        JPEG2000Options(0),
+        JPEG2000Options(nullptr),
 #endif // HAVE_JASPER
-        PGFOptions(0),
-        showImageSettingsDialog(0)
+        PGFOptions(nullptr),
+        showImageSettingsDialog(nullptr)
     {
     }
 

@@ -54,7 +54,7 @@ public:
                        bool cleanFacesDb = false,
                        bool cleanSimilarityDb = false,
                        bool shrinkDatabases = false,
-                       ProgressItem* const parent = 0);
+                       ProgressItem* const parent = nullptr);
     virtual ~DbCleaner();
 
     void setUseMultiCoreCPU(bool b);

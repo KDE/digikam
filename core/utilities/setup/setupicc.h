@@ -50,7 +50,7 @@ class SetupICC : public QScrollArea
 
 public:
 
-    explicit SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent = 0);
+    explicit SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent = nullptr);
     virtual ~SetupICC();
 
     void applySettings();

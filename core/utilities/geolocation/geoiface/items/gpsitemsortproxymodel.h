@@ -86,8 +86,8 @@ public:
 
     GPSLinkItemSelectionModel(QAbstractItemModel* const targetModel,
                               QItemSelectionModel* const linkedItemSelectionModel,
-                              QObject* const parent = 0);
-    explicit GPSLinkItemSelectionModel(QObject* const parent = 0);
+                              QObject* const parent = nullptr);
+    explicit GPSLinkItemSelectionModel(QObject* const parent = nullptr);
     ~GPSLinkItemSelectionModel();
 
     QItemSelectionModel* linkedItemSelectionModel() const;
@@ -150,7 +150,7 @@ public:
 
     explicit GPSModelIndexProxyMapper(const QAbstractItemModel* const leftModel,
                                       const QAbstractItemModel* const rightModel,
-                                      QObject* const parent = 0);
+                                      QObject* const parent = nullptr);
     ~GPSModelIndexProxyMapper();
 
     /**

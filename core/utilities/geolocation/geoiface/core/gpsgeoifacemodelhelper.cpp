@@ -59,8 +59,8 @@ public:
 
     explicit Private()
     {
-        model          = 0;
-        selectionModel = 0;
+        model          = nullptr;
+        selectionModel = nullptr;
     }
 
     GPSItemModel*         model;

@@ -43,9 +43,9 @@ class Q_DECL_HIDDEN EditableSearchTreeView::Private
 public:
 
     explicit Private()
-      : searchModificationHelper(0),
-        renameSearchAction(0),
-        deleteSearchAction(0)
+      : searchModificationHelper(nullptr),
+        renameSearchAction(nullptr),
+        deleteSearchAction(nullptr)
     {
     }
 

@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN TooltipsPage::Private
 public:
 
     explicit Private()
-      : showTooltips(0),
-        hideTooltips(0),
-        tooltipsBehavior(0)
+      : showTooltips(nullptr),
+        hideTooltips(nullptr),
+        tooltipsBehavior(nullptr)
     {
     }
 

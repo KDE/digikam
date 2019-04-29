@@ -72,8 +72,8 @@ public:
     explicit Private()
       : status(StatusSuccess),
         currentMergedRequestIndex(0),
-        netReply(0),
-        mngr(0)
+        netReply(nullptr),
+        mngr(nullptr)
 
     {
     }

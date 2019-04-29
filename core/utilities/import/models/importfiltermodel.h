@@ -45,7 +45,7 @@ class ImportSortFilterModel : public DCategorizedSortFilterProxyModel
 
 public:
 
-    explicit ImportSortFilterModel(QObject* const parent = 0);
+    explicit ImportSortFilterModel(QObject* const parent = nullptr);
     ~ImportSortFilterModel();
 
     void setSourceImportModel(ImportItemModel* const sourceModel);
@@ -121,7 +121,7 @@ public:
 
 public:
 
-    explicit ImportFilterModel(QObject* const parent = 0);
+    explicit ImportFilterModel(QObject* const parent = nullptr);
     ~ImportFilterModel();
 
     CamItemSortSettings camItemSortSettings() const;
@@ -217,7 +217,7 @@ class NoDuplicatesImportFilterModel : public ImportSortFilterModel
 
 public:
 
-    explicit NoDuplicatesImportFilterModel(QObject* const parent = 0);
+    explicit NoDuplicatesImportFilterModel(QObject* const parent = nullptr);
 
 protected:
 

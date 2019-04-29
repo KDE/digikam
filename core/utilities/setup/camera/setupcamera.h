@@ -51,7 +51,7 @@ public:
 
 public:
 
-    explicit SetupCamera(QWidget* const parent = 0);
+    explicit SetupCamera(QWidget* const parent = nullptr);
     ~SetupCamera();
 
     void applySettings();

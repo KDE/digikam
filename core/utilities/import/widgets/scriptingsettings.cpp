@@ -52,10 +52,10 @@ class Q_DECL_HIDDEN ScriptingSettings::Private
 public:
 
     explicit Private()
-        : scriptLabel(0),
-          script(0),
-          tooltipDialog(0),
-          tooltipToggleButton(0)
+        : scriptLabel(nullptr),
+          script(nullptr),
+          tooltipDialog(nullptr),
+          tooltipToggleButton(nullptr)
     {
     }
 

@@ -61,7 +61,7 @@ class Q_DECL_HIDDEN BenchmarkMessageDisplay : public QWidget
 public:
 
     explicit BenchmarkMessageDisplay(const QString& richText)
-        : QWidget(0)
+        : QWidget(nullptr)
     {
         setAttribute(Qt::WA_DeleteOnClose);
 
@@ -347,7 +347,7 @@ void FacesDetector::slotContinueAlbumListing()
     }
 
     // list can have null pointer if album was deleted recently
-    Album* album = 0;
+    Album* album = nullptr;
 
     do
     {

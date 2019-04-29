@@ -47,7 +47,7 @@ class ItemViewImportDelegate : public DItemDelegate, public ItemDelegateOverlayC
 
 public:
 
-    explicit ItemViewImportDelegate(QObject* const parent = 0);
+    explicit ItemViewImportDelegate(QObject* const parent = nullptr);
     ~ItemViewImportDelegate();
 
     ThumbnailSize thumbnailSize() const;
@@ -62,9 +62,9 @@ public:
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect* tooltipRect = 0) const;
+                                const QModelIndex& index, QRect* tooltipRect = nullptr) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect* activationRect = 0) const;
+                                   const QModelIndex& index, QRect* activationRect = nullptr) const;
 
     /** Returns the area where the pixmap is drawn,
      *  or null if not supported

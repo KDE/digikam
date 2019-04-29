@@ -42,7 +42,7 @@ class Q_DECL_HIDDEN GPSItemDelegate::Private
 public:
 
     explicit Private()
-      : imageList(0),
+      : imageList(nullptr),
         thumbnailSize(60)
     {
     }

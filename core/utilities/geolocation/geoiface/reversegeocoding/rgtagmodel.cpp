@@ -51,8 +51,8 @@ class Q_DECL_HIDDEN RGTagModel::Private
 public:
 
     explicit Private()
-      : tagModel(0),
-        rootTag(0),
+      : tagModel(nullptr),
+        rootTag(nullptr),
         startInsert(-1),
         endInsert(-1),
         newTags(),
@@ -1097,7 +1097,7 @@ QList<TagData> RGTagModel::getSpacerAddress(TreeBranch* currentBranch)
 {
     QList<TagData> spacerAddress;
 
-    while (currentBranch->parent != NULL)
+    while (currentBranch->parent != nullptr)
     {
         TagData currentTag;
         currentTag.tagName = currentBranch->data;

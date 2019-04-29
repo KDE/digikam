@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT PlaceholderWidget : public QFrame
 
 public:
 
-    explicit PlaceholderWidget(QWidget* const parent = 0);
+    explicit PlaceholderWidget(QWidget* const parent = nullptr);
     ~PlaceholderWidget();
 
     void setMessage(const QString& message);

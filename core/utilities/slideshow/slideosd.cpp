@@ -62,16 +62,16 @@ public:
         video(false),
         blink(false),
         refresh(1000),       // Progress bar refresh in ms
-        progressBar(0),
-        progressTimer(0),
-        labelsBox(0),
-        progressBox(0),
-        parent(0),
-        slideProps(0),
-        toolBar(0),
-        ratingWidget(0),
-        clWidget(0),
-        plWidget(0)
+        progressBar(nullptr),
+        progressTimer(nullptr),
+        labelsBox(nullptr),
+        progressBox(nullptr),
+        parent(nullptr),
+        slideProps(nullptr),
+        toolBar(nullptr),
+        ratingWidget(nullptr),
+        clWidget(nullptr),
+        plWidget(nullptr)
     {
     }
 

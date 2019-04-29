@@ -218,8 +218,8 @@ public:
 
     explicit Private()
       : progressCount(0),
-        progressTimer(0),
-        wrapper(0)
+        progressTimer(nullptr),
+        wrapper(nullptr)
     {
         progressPix = DWorkingPixmap();
     }
@@ -289,7 +289,7 @@ PreviewListItem* PreviewList::addItem(DImgThreadedFilter* const filter, const QS
 {
     if (!filter)
     {
-        return 0;
+        return nullptr;
     }
 
     d->wrapper->registerFilter(id, filter);
@@ -318,7 +318,7 @@ PreviewListItem* PreviewList::findItem(int id) const
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void PreviewList::setCurrentId(int id)
@@ -363,7 +363,7 @@ void PreviewList::slotProgressTimerDone()
 
     int busy                      = 0;
     int it                        = 0;
-    PreviewListItem* selectedItem = 0;
+    PreviewListItem* selectedItem = nullptr;
 
     while (it <= this->count())
     {

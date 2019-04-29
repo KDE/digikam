@@ -41,7 +41,7 @@ class SetupIOFiles : public QScrollArea
 
 public:
 
-    explicit SetupIOFiles(QWidget* const parent = 0);
+    explicit SetupIOFiles(QWidget* const parent = nullptr);
     ~SetupIOFiles();
 
     void applySettings();

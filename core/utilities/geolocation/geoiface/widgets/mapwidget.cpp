@@ -104,52 +104,52 @@ public:
 
     explicit Private()
       : loadedBackends(),
-        currentBackend(0),
+        currentBackend(nullptr),
         currentBackendName(),
-        stackedLayout(0),
+        stackedLayout(nullptr),
         cacheCenterCoordinate(52.0,6.0),
         cacheZoom(QLatin1String("marble:900")),
-        configurationMenu(0),
-        actionGroupBackendSelection(0),
-        actionZoomIn(0),
-        actionZoomOut(0),
-        actionShowThumbnails(0),
-        mouseModesHolder(0),
-        controlWidget(0),
-        actionPreviewSingleItems(0),
-        actionPreviewGroupedItems(0),
-        actionShowNumbersOnItems(0),
+        configurationMenu(nullptr),
+        actionGroupBackendSelection(nullptr),
+        actionZoomIn(nullptr),
+        actionZoomOut(nullptr),
+        actionShowThumbnails(nullptr),
+        mouseModesHolder(nullptr),
+        controlWidget(nullptr),
+        actionPreviewSingleItems(nullptr),
+        actionPreviewGroupedItems(nullptr),
+        actionShowNumbersOnItems(nullptr),
         lazyReclusteringRequested(false),
-        dragDropHandler(0),
-        sortMenu(0),
-        actionIncreaseThumbnailSize(0),
-        actionDecreaseThumbnailSize(0),
-        hBoxForAdditionalControlWidgetItems(0),
-        mouseModeActionGroup(0),
-        actionRemoveCurrentRegionSelection(0),
-        actionSetRegionSelectionMode(0),
-        actionSetPanMode(0),
-        actionSetZoomIntoGroupMode(0),
-        actionSetRegionSelectionFromIconMode(0),
-        actionSetFilterMode(0),
-        actionRemoveFilter(0),
-        actionSetSelectThumbnailMode(0),
-        setPanModeButton(0),
-        setSelectionModeButton(0),
-        removeCurrentSelectionButton(0),
-        setZoomModeButton(0),
-        setRegionSelectionFromIconModeButton(0),
-        setFilterModeButton(0),
-        removeFilterModeButton(0),
-        setSelectThumbnailMode(0),
-        thumbnailTimer(0),
+        dragDropHandler(nullptr),
+        sortMenu(nullptr),
+        actionIncreaseThumbnailSize(nullptr),
+        actionDecreaseThumbnailSize(nullptr),
+        hBoxForAdditionalControlWidgetItems(nullptr),
+        mouseModeActionGroup(nullptr),
+        actionRemoveCurrentRegionSelection(nullptr),
+        actionSetRegionSelectionMode(nullptr),
+        actionSetPanMode(nullptr),
+        actionSetZoomIntoGroupMode(nullptr),
+        actionSetRegionSelectionFromIconMode(nullptr),
+        actionSetFilterMode(nullptr),
+        actionRemoveFilter(nullptr),
+        actionSetSelectThumbnailMode(nullptr),
+        setPanModeButton(nullptr),
+        setSelectionModeButton(nullptr),
+        removeCurrentSelectionButton(nullptr),
+        setZoomModeButton(nullptr),
+        setRegionSelectionFromIconModeButton(nullptr),
+        setFilterModeButton(nullptr),
+        removeFilterModeButton(nullptr),
+        setSelectThumbnailMode(nullptr),
+        thumbnailTimer(nullptr),
         thumbnailTimerCount(0),
         thumbnailsHaveBeenLoaded(false),
-        availableExtraActions(0),
-        visibleExtraActions(0),
-        actionStickyMode(0),
-        buttonStickyMode(0),
-        placeholderWidget(0)
+        availableExtraActions(nullptr),
+        visibleExtraActions(nullptr),
+        actionStickyMode(nullptr),
+        buttonStickyMode(nullptr),
+        placeholderWidget(nullptr)
     {
     }
 
@@ -401,7 +401,7 @@ MapWidget::~MapWidget()
 QStringList MapWidget::availableBackends() const
 {
     QStringList result;
-    MapBackend* backend = 0;
+    MapBackend* backend = nullptr;
 
     foreach(backend, d->loadedBackends)
     {
@@ -455,7 +455,7 @@ bool MapWidget::setBackend(const QString& backendName)
 
     }
 
-    MapBackend* backend = 0;
+    MapBackend* backend = nullptr;
 
     foreach(backend, d->loadedBackends)
     {
@@ -614,7 +614,7 @@ void MapWidget::stopThumbnailTimer()
 
 void MapWidget::saveSettingsToGroup(KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
         return;
@@ -648,7 +648,7 @@ void MapWidget::saveSettingsToGroup(KConfigGroup* const group)
 
 void MapWidget::readSettingsFromGroup(const KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
     {
@@ -755,7 +755,7 @@ QAction* MapWidget::getControlAction(const QString& actionName)
         return d->actionRemoveFilter;
     }
 
-    return 0;
+    return nullptr;
 }
 
 /**
@@ -959,7 +959,7 @@ void MapWidget::slotUpdateActionsEnabled()
 
 void MapWidget::slotChangeBackend(QAction* action)
 {
-    GEOIFACE_ASSERT(action != 0);
+    GEOIFACE_ASSERT(action != nullptr);
 
     if (!action)
         return;
@@ -1696,7 +1696,7 @@ QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId,
     }
 
     /// @todo This check is strange, there can be no clusters without a markerModel?
-    bool displayThumbnail = (s->markerModel != 0);
+    bool displayThumbnail = (s->markerModel != nullptr);
 
     if (displayThumbnail)
     {

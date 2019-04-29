@@ -139,7 +139,7 @@ public:
      *  if setPreview has not been called) on the given paint device.
      *  at x|y, with given maximum width and height taken from rectangle rect.
      */
-    void paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter = 0);
+    void paint(QPaintDevice* const device, const QRect& rect, QPainter* const painter = nullptr);
 
     /** Set the color profile of the original image.
      */

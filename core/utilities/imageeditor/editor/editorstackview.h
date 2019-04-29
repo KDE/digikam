@@ -52,7 +52,7 @@ public:
 
 public:
 
-    explicit EditorStackView(QWidget* const parent = 0);
+    explicit EditorStackView(QWidget* const parent = nullptr);
     ~EditorStackView();
 
     void     setCanvas(Canvas* const canvas);

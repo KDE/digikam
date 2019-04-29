@@ -49,7 +49,7 @@ class HTMLWidgetPage : public QWebEnginePage
 
 public:
 
-    explicit HTMLWidgetPage(HTMLWidget* const parent = 0);
+    explicit HTMLWidgetPage(HTMLWidget* const parent = nullptr);
     virtual ~HTMLWidgetPage();
 
 Q_SIGNALS:
@@ -78,7 +78,7 @@ class HTMLWidget : public QWebEngineView
 
 public:
 
-    explicit HTMLWidget(QWidget* const parent = 0);
+    explicit HTMLWidget(QWidget* const parent = nullptr);
     ~HTMLWidget();
 
     void loadInitialHTML(const QString& initialHTML);

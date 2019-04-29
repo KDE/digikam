@@ -37,8 +37,8 @@ class Q_DECL_HIDDEN TrackCorrelator::Private
 public:
 
     explicit Private()
-      : trackManager(0),
-        thread(0)
+      : trackManager(nullptr),
+        thread(nullptr)
     {
     }
 
@@ -91,7 +91,7 @@ void TrackCorrelator::slotThreadFinished()
 {
     const bool threadCanceled = d->thread->canceled;
     delete d->thread;
-    d->thread                 = 0;
+    d->thread                 = nullptr;
 
     if (threadCanceled)
     {

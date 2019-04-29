@@ -50,8 +50,8 @@ public:
 
     explicit Private()
       : origin(0),
-        undoCache(0),
-        core(0)
+        undoCache(nullptr),
+        core(nullptr)
     {
     }
 
@@ -467,7 +467,7 @@ void UndoManager::clear(bool clearCache)
 
 void UndoManager::clearUndoActions()
 {
-    UndoAction* action = 0;
+    UndoAction* action = nullptr;
     QList<UndoAction*>::const_iterator it;
 
     for (it = d->undoActions.constBegin(); it != d->undoActions.constEnd(); ++it)

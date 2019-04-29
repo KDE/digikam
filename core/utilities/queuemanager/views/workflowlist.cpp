@@ -167,7 +167,7 @@ WorkflowItem* WorkflowList::findByTitle(const QString& title)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)

@@ -67,7 +67,7 @@ class DIGIKAM_EXPORT CameraItemList : public QTreeWidget
 
 public:
 
-    explicit CameraItemList(QWidget* const parent = 0);
+    explicit CameraItemList(QWidget* const parent = nullptr);
     virtual ~CameraItemList();
 
     void setThumbCtrl(CameraThumbsCtrl* const ctrl);

@@ -85,27 +85,27 @@ public:
         optionSettingsPageEntry(QLatin1String("Settings Page")),
         optionDecodingSettingsTabEntry(QLatin1String("Decoding Settings Tab"))
     {
-        infoBox                = 0;
-        advExposureBox         = 0;
-        gammaLabel             = 0;
-        gammaInput             = 0;
-        saturationLabel        = 0;
-        saturationInput        = 0;
-        fineExposureLabel      = 0;
-        mainExposureInput      = 0;
-        contrastInput          = 0;
-        contrastLabel          = 0;
-        curveBox               = 0;
-        curveWidget            = 0;
-        resetCurveBtn          = 0;
-        decodingSettingsBox    = 0;
-        postProcessSettingsBox = 0;
-        tabView                = 0;
-        abortBtn               = 0;
-        updateBtn              = 0;
-        rawdecodingBox         = 0;
-        brightnessLabel        = 0;
-        brightnessInput        = 0;
+        infoBox                = nullptr;
+        advExposureBox         = nullptr;
+        gammaLabel             = nullptr;
+        gammaInput             = nullptr;
+        saturationLabel        = nullptr;
+        saturationInput        = nullptr;
+        fineExposureLabel      = nullptr;
+        mainExposureInput      = nullptr;
+        contrastInput          = nullptr;
+        contrastLabel          = nullptr;
+        curveBox               = nullptr;
+        curveWidget            = nullptr;
+        resetCurveBtn          = nullptr;
+        decodingSettingsBox    = nullptr;
+        postProcessSettingsBox = nullptr;
+        tabView                = nullptr;
+        abortBtn               = nullptr;
+        updateBtn              = nullptr;
+        rawdecodingBox         = nullptr;
+        brightnessLabel        = nullptr;
+        brightnessInput        = nullptr;
     }
 
     const QString        optionGroupName;

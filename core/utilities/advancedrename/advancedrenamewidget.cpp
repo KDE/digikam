@@ -61,15 +61,15 @@ public:
 
     explicit Private() :
         configExpandedStateDefault(true),
-        tooltipToggleButton(0),
-        modifiersToolButton(0),
-        optionsButton(0),
-        modifiersButton(0),
-        btnContainer(0),
-        tooltipDialog(0),
-        renameInput(0),
-        parser(0),
-        optionsLabel(0),
+        tooltipToggleButton(nullptr),
+        modifiersToolButton(nullptr),
+        optionsButton(nullptr),
+        modifiersButton(nullptr),
+        btnContainer(nullptr),
+        tooltipDialog(nullptr),
+        renameInput(nullptr),
+        parser(nullptr),
+        optionsLabel(nullptr),
         controlWidgetsMask(AdvancedRenameWidget::DefaultControls),
         layoutStyle(AdvancedRenameWidget::LayoutNormal)
     {
@@ -213,7 +213,7 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, const RulesList& rules)
 {
     QMenu* const menu = new QMenu(parent);
-    QAction* action   = 0;
+    QAction* action   = nullptr;
 
     foreach(Rule* const rule, rules)
     {
@@ -243,7 +243,7 @@ void AdvancedRenameWidget::registerParserControls()
         if (d->layoutStyle == LayoutNormal)
         {
             // register options
-            QPushButton* btn      = 0;
+            QPushButton* btn      = nullptr;
             DynamicLayout* const layout = new DynamicLayout(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin),
                                                             QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
 

@@ -56,14 +56,14 @@ public:
 };
 
 Rule::Rule(const QString& name)
-    : QObject(0),
+    : QObject(nullptr),
       d(new Private)
 {
     setObjectName(name);
 }
 
 Rule::Rule(const QString& name, const QString& icon)
-    : QObject(0),
+    : QObject(nullptr),
       d(new Private)
 {
     setObjectName(name);
@@ -166,7 +166,7 @@ QPushButton* Rule::registerButton(QWidget* parent)
 
 QAction* Rule::registerMenu(QMenu* parent)
 {
-    QAction* action = 0;
+    QAction* action = nullptr;
 
     if (d->tokens.count() > 1 && d->useTokenMenu)
     {
@@ -184,7 +184,7 @@ QAction* Rule::registerMenu(QMenu* parent)
     else if (!d->tokens.isEmpty())
     {
         action = d->tokens.first()->action();
-        parent->insertAction(0, action);
+        parent->insertAction(nullptr, action);
     }
 
     if (action)

@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN EditorToolIface::Private
 public:
 
     explicit Private()
-      : toolsIconView(0),
-        tool(0),
-        editor(0),
+      : toolsIconView(nullptr),
+        tool(nullptr),
+        editor(nullptr),
         sidebarWasExpanded(false),
         toolsViewSelected(false)
     {
@@ -65,7 +65,7 @@ public:
     bool              toolsViewSelected;
 };
 
-EditorToolIface* EditorToolIface::m_iface = 0;
+EditorToolIface* EditorToolIface::m_iface = nullptr;
 
 EditorToolIface* EditorToolIface::editorToolIface()
 {
@@ -87,7 +87,7 @@ EditorToolIface::~EditorToolIface()
 
     if (m_iface == this)
     {
-        m_iface = 0;
+        m_iface = nullptr;
     }
 }
 
@@ -201,7 +201,7 @@ void EditorToolIface::unLoadTool()
     }
 
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
-    d->editor->editorStackView()->setToolView(0);
+    d->editor->editorStackView()->setToolView(nullptr);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->rightSideBar()->appendTab(d->toolsIconView,
                                          QIcon::fromTheme(QLatin1String("document-edit")),
@@ -223,7 +223,7 @@ void EditorToolIface::unLoadTool()
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
 
     delete d->tool;
-    d->tool = 0;
+    d->tool = nullptr;
 
     // Reset info label in status bar with canvas selection info.
     d->editor->slotSelected(!d->editor->m_canvas->getSelectedArea().isNull());

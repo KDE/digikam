@@ -71,10 +71,10 @@ public:
         flicker(0),
         renderingPreviewMode(PreviewToolBar::NoPreviewMode),
         penWidth(10),
-        pixmap(0),
-        maskPixmap(0),
-        previewPixmap(0),
-        iface(0)
+        pixmap(nullptr),
+        maskPixmap(nullptr),
+        previewPixmap(nullptr),
+        iface(nullptr)
     {
     }
 

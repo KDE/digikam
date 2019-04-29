@@ -51,7 +51,7 @@ class Q_DECL_HIDDEN AdvancedRenameProcessDialog::Private
 public:
 
     explicit Private()
-        : thumbLoadThread(0),
+        : thumbLoadThread(nullptr),
           overwrite(false),
           cancel(false)
     {

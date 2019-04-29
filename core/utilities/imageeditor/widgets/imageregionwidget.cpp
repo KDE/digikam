@@ -58,8 +58,8 @@ public:
       : capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        delay(0),
-        item(0)
+        delay(nullptr),
+        item(nullptr)
     {
     }
 

@@ -58,7 +58,7 @@ class DIGIKAM_EXPORT Canvas : public GraphicsDImgView
 
 public:
 
-    explicit Canvas(QWidget* const parent = 0);
+    explicit Canvas(QWidget* const parent = nullptr);
     ~Canvas();
 
     void load(const QString& filename, IOFileSettings* const IOFileSettings);

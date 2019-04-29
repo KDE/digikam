@@ -72,7 +72,7 @@ public:
      * @param actionCollection the actionCollection that should be used. If not set, the standard
      * action from DigikamApp is used
      */
-    explicit ImportContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection = 0);
+    explicit ImportContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection = nullptr);
     virtual ~ImportContextMenuHelper();
 
     /**
@@ -222,7 +222,7 @@ public:
      * @param at the action that should be at the position pos
      * @return the triggered action
      */
-    QAction* exec(const QPoint& pos, QAction* at = 0);
+    QAction* exec(const QPoint& pos, QAction* at = nullptr);
 
 private Q_SLOTS:
 

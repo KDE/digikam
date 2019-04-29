@@ -46,15 +46,15 @@ public:
 
     explicit ImportDelegatePrivate()
     {
-        categoryDrawer      = 0;
+        categoryDrawer      = nullptr;
         contentWidth        = 0;
         drawImageFormat     = false;
         drawCoordinates     = false;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
         ratingOverThumbnail = false;
-        currentModel        = 0;
-        currentView         = 0;
+        currentModel        = nullptr;
+        currentView         = nullptr;
 
         actualPixmapRectCache.setMaxCost(250);
     }

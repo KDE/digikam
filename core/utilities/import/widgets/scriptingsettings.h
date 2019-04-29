@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT ScriptingSettings : public QWidget
 
 public:
 
-    explicit ScriptingSettings(QWidget* const parent = 0);
+    explicit ScriptingSettings(QWidget* const parent = nullptr);
     virtual ~ScriptingSettings();
 
     void readSettings(KConfigGroup& group);

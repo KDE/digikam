@@ -48,7 +48,7 @@ class ModelMenu : public QMenu
 
 public:
 
-    explicit ModelMenu(QWidget* const parent = 0);
+    explicit ModelMenu(QWidget* const parent = nullptr);
     ~ModelMenu();
 
     void setModel(QAbstractItemModel* model);
@@ -85,7 +85,7 @@ protected:
     virtual void postPopulated();
 
     // put all of the children of parent into menu up to max
-    void createMenu(const QModelIndex& parent, int max, QMenu* parentMenu = 0, QMenu* menu = 0);
+    void createMenu(const QModelIndex& parent, int max, QMenu* parentMenu = nullptr, QMenu* menu = nullptr);
 
 private Q_SLOTS:
 
@@ -113,7 +113,7 @@ class BookmarksMenu : public ModelMenu
 
 public:
 
-    explicit BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent = 0);
+    explicit BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent = nullptr);
     ~BookmarksMenu();
 
     void setInitialActions(const QList<QAction*>& actions);

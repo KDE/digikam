@@ -46,7 +46,7 @@ class ImportOverlayWidget : public QAbstractButton
 
 public:
 
-    explicit ImportOverlayWidget(QWidget* const parent = 0);
+    explicit ImportOverlayWidget(QWidget* const parent = nullptr);
 
 protected:
 

@@ -127,7 +127,7 @@ public:
 
 public:
 
-    explicit BookmarksModel(BookmarksManager* const mngr, QObject* const parent = 0);
+    explicit BookmarksModel(BookmarksManager* const mngr, QObject* const parent = nullptr);
     ~BookmarksModel();
 
     BookmarksManager* bookmarksManager()                                                      const;
@@ -173,7 +173,7 @@ class AddBookmarkProxyModel : public QSortFilterProxyModel
 
 public:
 
-    explicit AddBookmarkProxyModel(QObject* const parent = 0);
+    explicit AddBookmarkProxyModel(QObject* const parent = nullptr);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
@@ -190,7 +190,7 @@ class TreeProxyModel : public QSortFilterProxyModel
 
 public:
 
-    explicit TreeProxyModel(QObject* const parent = 0);
+    explicit TreeProxyModel(QObject* const parent = nullptr);
 
     int columnCount(const QModelIndex&) const;
 
@@ -216,7 +216,7 @@ class BookmarksManager : public QObject
 
 public:
 
-    explicit BookmarksManager(const QString& bookmarksFile, QObject* const parent = 0);
+    explicit BookmarksManager(const QString& bookmarksFile, QObject* const parent = nullptr);
     ~BookmarksManager();
 
     void addBookmark(BookmarkNode* const parent, BookmarkNode* const node, int row = -1);

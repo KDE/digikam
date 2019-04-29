@@ -65,7 +65,7 @@ class Q_DECL_HIDDEN CameraThumbsCtrl::Private
 public:
 
     explicit Private()
-        : controller(0)
+        : controller(nullptr)
     {
     }
 

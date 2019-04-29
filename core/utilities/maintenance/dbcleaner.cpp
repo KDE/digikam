@@ -51,14 +51,14 @@ class Q_DECL_HIDDEN DbCleaner::Private
 public:
 
     explicit Private()
-      : thread(0),
+      : thread(nullptr),
         cleanThumbsDb(false),
         cleanFacesDb(false),
         cleanSimilarityDb(false),
         shrinkDatabases(false),
         databasesToAnalyseCount(1),
         databasesToShrinkCount(0),
-        shrinkDlg(0)
+        shrinkDlg(nullptr)
     {
     }
 
@@ -447,9 +447,9 @@ public:
 
     explicit Private()
       : active(-1),
-        progressTimer(0),
+        progressTimer(nullptr),
         progressIndex(1),
-        statusList(0)
+        statusList(nullptr)
     {
     }
 

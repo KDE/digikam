@@ -58,9 +58,9 @@ class Q_DECL_HIDDEN WorkflowDlg::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        titleEdit(0),
-        descEdit(0)
+      : buttons(nullptr),
+        titleEdit(nullptr),
+        descEdit(nullptr)
     {
     }
 
@@ -70,7 +70,7 @@ public:
 };
 
 WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
-    : QDialog(0),
+    : QDialog(nullptr),
       d(new Private)
 {
     setModal(true);

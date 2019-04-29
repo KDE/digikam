@@ -57,7 +57,7 @@ class Q_DECL_HIDDEN CollectionPage::Private
 public:
 
     explicit Private()
-      : rootAlbumPathRequester(0)
+      : rootAlbumPathRequester(nullptr)
     {
     }
 

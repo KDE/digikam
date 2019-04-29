@@ -75,7 +75,7 @@ public:
 
 public:
 
-    explicit BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = 0);
+    explicit BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = nullptr);
     ~BatchTool();
 
     void setPlugin(DPluginBqm* const plugin);
@@ -233,7 +233,7 @@ public:
     /** Clone this tool without to create settings widget.
      *  It's a safe construction of tools instance used in multithreading (ActionThread) to process items in parallel.
      */
-    virtual BatchTool* clone(QObject* const parent=0) const = 0;
+    virtual BatchTool* clone(QObject* const parent=nullptr) const = 0;
 
 Q_SIGNALS:
 

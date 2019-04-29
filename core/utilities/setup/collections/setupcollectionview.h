@@ -96,7 +96,7 @@ public:
 
 public:
 
-    explicit SetupCollectionModel(QObject* const parent = 0);
+    explicit SetupCollectionModel(QObject* const parent = nullptr);
     ~SetupCollectionModel();
 
     /// Read collections from CollectionManager
@@ -198,7 +198,7 @@ class SetupCollectionTreeView : public QTreeView
 
 public:
 
-    explicit SetupCollectionTreeView(QWidget* const parent = 0);
+    explicit SetupCollectionTreeView(QWidget* const parent = nullptr);
 
     void setModel(SetupCollectionModel* model);
 
@@ -222,7 +222,7 @@ class SetupCollectionDelegate : public DWItemDelegate
 
 public:
 
-    explicit SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = 0);
+    explicit SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = nullptr);
     ~SetupCollectionDelegate();
 
     virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;

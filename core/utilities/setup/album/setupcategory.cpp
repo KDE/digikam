@@ -58,11 +58,11 @@ class Q_DECL_HIDDEN SetupCategory::Private
 public:
 
     explicit Private()
-      : addCategoryButton(0),
-        delCategoryButton(0),
-        repCategoryButton(0),
-        albumCategoryBox(0),
-        categoryEdit(0)
+      : addCategoryButton(nullptr),
+        delCategoryButton(nullptr),
+        repCategoryButton(nullptr),
+        albumCategoryBox(nullptr),
+        categoryEdit(nullptr)
     {
     }
 

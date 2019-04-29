@@ -42,7 +42,7 @@ class MaintenanceDlg : public QDialog
 
 public:
 
-    explicit MaintenanceDlg(QWidget* const parent = 0);
+    explicit MaintenanceDlg(QWidget* const parent = nullptr);
     ~MaintenanceDlg();
 
     MaintenanceSettings settings() const;

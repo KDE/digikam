@@ -37,7 +37,7 @@ class GPSDataContainer
 public:
 
     GPSDataContainer()
-      : m_hasFlags(0),
+      : m_hasFlags(nullptr),
         m_coordinates(),
         m_nSatellites(-1),
         m_dop(-1),
@@ -116,7 +116,7 @@ public:
 
     inline void clear()
     {
-        m_hasFlags = 0;
+        m_hasFlags = nullptr;
         m_coordinates.clear();
     }
 

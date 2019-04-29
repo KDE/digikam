@@ -45,7 +45,7 @@ class FaceScanDialog : public QDialog,
 
 public:
 
-    explicit FaceScanDialog(QWidget* const parent = 0);
+    explicit FaceScanDialog(QWidget* const parent = nullptr);
     ~FaceScanDialog();
 
     FaceScanSettings settings() const;

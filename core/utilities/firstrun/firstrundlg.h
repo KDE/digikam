@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT FirstRunDlg : public QWizard
 
 public:
 
-    explicit FirstRunDlg(QWidget* const parent = 0);
+    explicit FirstRunDlg(QWidget* const parent = nullptr);
     ~FirstRunDlg();
 
     QString firstAlbumPath() const;

@@ -59,16 +59,16 @@ public:
     explicit Private()
       : needDispatchSelection(false),
         thumbSize(ThumbnailSize::Medium),
-        dockArea(0),
-        splitter(0),
-        selectionTimer(0),
-        thumbSizeTimer(0),
-        parent(0),
-        iconView(0),
+        dockArea(nullptr),
+        splitter(nullptr),
+        selectionTimer(nullptr),
+        thumbSizeTimer(nullptr),
+        parent(nullptr),
+        iconView(nullptr),
 #ifdef HAVE_MARBLE
-        mapView(0),
+        mapView(nullptr),
 #endif // HAVE_MARBLE
-        stackedView(0),
+        stackedView(nullptr),
         lastViewMode(ImportStackedView::PreviewCameraMode)
         //FIXME: filterWidget(0)
     {

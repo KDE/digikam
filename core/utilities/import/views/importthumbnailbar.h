@@ -38,7 +38,7 @@ class ImportThumbnailBar : public ImportCategorizedView
 
 public:
 
-    explicit ImportThumbnailBar(QWidget* const parent = 0);
+    explicit ImportThumbnailBar(QWidget* const parent = nullptr);
     ~ImportThumbnailBar();
 
     /**

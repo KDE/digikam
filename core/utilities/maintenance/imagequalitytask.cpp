@@ -41,8 +41,8 @@ class Q_DECL_HIDDEN ImageQualityTask::Private
 public:
 
     explicit Private()
-        : imgqsort(0),
-          data(0)
+        : imgqsort(nullptr),
+          data(nullptr)
     {
     }
 
@@ -125,7 +125,7 @@ void ImageQualityTask::run()
             info.setPickLabel(pick);
 
             delete d->imgqsort; //delete image data after setting label
-            d->imgqsort = 0;
+            d->imgqsort = nullptr;
         }
  
         // Dispatch progress to Progress Manager

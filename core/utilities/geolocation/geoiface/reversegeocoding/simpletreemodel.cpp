@@ -32,7 +32,7 @@ class Q_DECL_HIDDEN SimpleTreeModel::Private
 public:
 
     explicit Private()
-        : rootItem(0),
+        : rootItem(nullptr),
           columnCount(1)
     {
     }
@@ -134,7 +134,7 @@ QModelIndex SimpleTreeModel::parent(const QModelIndex& index) const
     if (!item)
         return QModelIndex();
 
-    if ((item->parent==0)||(item->parent==d->rootItem))
+    if ((item->parent==nullptr)||(item->parent==d->rootItem))
         return QModelIndex();
 
     return itemToIndex(item->parent);
@@ -202,7 +202,7 @@ SimpleTreeModel::Item* SimpleTreeModel::indexToItem(const QModelIndex& itemIndex
     const int row    = itemIndex.row();
 
     if ((row < 0) || (row >= item->children.count()))
-        return 0;
+        return nullptr;
 
     return item->children.at(row);
 }

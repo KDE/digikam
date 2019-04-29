@@ -95,7 +95,7 @@ private:
     {
         startIndex               = 1;
         useOriginalFileExtension = true;
-        manager                  = 0;
+        manager                  = nullptr;
         str2Modify.clear();
     }
 

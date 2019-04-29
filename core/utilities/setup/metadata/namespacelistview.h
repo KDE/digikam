@@ -40,7 +40,7 @@ class NamespaceListView : public QListView
 
 public:
 
-    explicit NamespaceListView(QWidget* const parent = 0);
+    explicit NamespaceListView(QWidget* const parent = nullptr);
     QModelIndexList mySelectedIndexes();
 
 protected:

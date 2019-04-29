@@ -47,12 +47,12 @@ class Q_DECL_HIDDEN RuleDialog::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        container(0),
-        dialogTitle(0),
-        dialogDescription(0),
-        dialogIcon(0),
-        settingsWidget(0)
+      : buttons(nullptr),
+        container(nullptr),
+        dialogTitle(nullptr),
+        dialogDescription(nullptr),
+        dialogIcon(nullptr),
+        settingsWidget(nullptr)
     {
     }
 
@@ -65,7 +65,7 @@ public:
 };
 
 RuleDialog::RuleDialog(Rule* const parent)
-    : QDialog(0),
+    : QDialog(nullptr),
       d(new Private)
 {
     d->buttons           = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);

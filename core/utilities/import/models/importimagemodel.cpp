@@ -47,8 +47,8 @@ public:
         reAdding                    = false;
         incrementalRefreshRequested = false;
         sendRemovalSignals          = false;
-        incrementalUpdater          = 0;
-        controller                  = 0;
+        incrementalUpdater          = nullptr;
+        controller                  = nullptr;
     }
 
     inline bool isValid(const QModelIndex& index)
@@ -462,7 +462,7 @@ void ImportItemModel::clearCamItemInfos()
 
     delete d->incrementalUpdater;
 
-    d->incrementalUpdater          = 0;
+    d->incrementalUpdater          = nullptr;
     d->reAdding                    = false;
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
@@ -690,7 +690,7 @@ void ImportItemModel::finishIncrementalRefresh()
     appendInfos(d->incrementalUpdater->newInfos);
 
     delete d->incrementalUpdater;
-    d->incrementalUpdater = 0;
+    d->incrementalUpdater = nullptr;
 }
 
 template <class List, typename T>
@@ -1048,7 +1048,7 @@ Qt::ItemFlags ImportItemModel::flags(const QModelIndex& index) const
 {
     if (!d->isValid(index))
     {
-        return 0;
+        return nullptr;
     }
 
     Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;

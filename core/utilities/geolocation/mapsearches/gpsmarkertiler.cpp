@@ -92,7 +92,7 @@ public:
 
         InternalJobs()
             : level(0),
-              jobThread(0),
+              jobThread(nullptr),
               dataFromDatabase()
         {
         }
@@ -104,7 +104,7 @@ public:
 
     explicit Private()
         : jobs(),
-          thumbnailLoadThread(0),
+          thumbnailLoadThread(nullptr),
           thumbnailMap(),
           rectList(),
           rectLevel(),
@@ -290,13 +290,13 @@ AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const TileIndex& tileIndex, c
     for (int level = 0 ; level < tileIndex.indexCount() ; ++level)
     {
         const int currentIndex = tileIndex.linearIndex(level);
-        MyTile* childTile      = 0;
+        MyTile* childTile      = nullptr;
 
         if (tile->childrenEmpty())
         {
             if (stopIfEmpty)
             {
-                return 0;
+                return nullptr;
             }
 
             for (int i = 0 ; i < tile->imagesId.count() ; ++i)
@@ -308,7 +308,7 @@ AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const TileIndex& tileIndex, c
 
                 MyTile* const newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
 
-                if (newTile == 0)
+                if (newTile == nullptr)
                 {
                     MyTile* const newTile = static_cast<MyTile*>(tileNew());
                     newTile->imagesId.append(currentImageId);
@@ -326,12 +326,12 @@ AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const TileIndex& tileIndex, c
 
         childTile = static_cast<MyTile*>(tile->getChild(currentIndex));
 
-        if (childTile == 0)
+        if (childTile == nullptr)
         {
             if (stopIfEmpty)
             {
                 // there will be no markers in this tile, therefore stop
-                return 0;
+                return nullptr;
             }
 
             childTile = static_cast<MyTile*>(tileNew());
@@ -519,7 +519,7 @@ void GPSMarkerTiler::slotMapImagesJobData(const QList<ItemListerRecord>& records
         return;
     }
 
-    Private::InternalJobs* internalJob = 0;
+    Private::InternalJobs* internalJob = nullptr;
 
     for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
@@ -596,7 +596,7 @@ void GPSMarkerTiler::slotMapImagesJobResult()
 
     // remove the finished job
     d->jobs[foundIndex].jobThread->cancel();
-    d->jobs[foundIndex].jobThread = 0;
+    d->jobs[foundIndex].jobThread = nullptr;
     d->jobs.removeAt(foundIndex);
 
     if (returnedItemInfo.isEmpty())
@@ -679,7 +679,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             const GeoCoordinates oldCoordinates = oldInfo.coordinates;
             const TileIndex oldTileIndex        = TileIndex::fromCoordinates(oldCoordinates, TileIndex::MaxLevel);
 
-            removeMarkerFromTileAndChildren(id, oldTileIndex, static_cast<MyTile*>(rootTile()), 0, 0);
+            removeMarkerFromTileAndChildren(id, oldTileIndex, static_cast<MyTile*>(rootTile()), 0, nullptr);
 
             d->imagesHash.remove(id);
 
@@ -739,7 +739,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
                 const int tileIndex        = oldTileIndex.at(level);
                 MyTile* const childTileOld = static_cast<MyTile*>(currentTileOld->getChild(tileIndex));
 
-                if (childTileOld == 0)
+                if (childTileOld == nullptr)
                 {
                     break;
                 }

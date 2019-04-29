@@ -54,7 +54,7 @@ public:
 
     explicit NewItemsFinder(const FinderMode mode = CompleteCollectionScan,
                             const QStringList& foldersToScan = QStringList(),
-                            ProgressItem* const parent = 0);
+                            ProgressItem* const parent = nullptr);
     ~NewItemsFinder();
 
 private Q_SLOTS:

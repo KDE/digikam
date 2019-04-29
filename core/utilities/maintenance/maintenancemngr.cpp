@@ -60,14 +60,14 @@ public:
     explicit Private()
     {
         running               = false;
-        newItemsFinder        = 0;
-        thumbsGenerator       = 0;
-        fingerPrintsGenerator = 0;
-        duplicatesFinder      = 0;
-        metadataSynchronizer  = 0;
-        imageQualitySorter    = 0;
-        facesDetector         = 0;
-        databaseCleaner       = 0;
+        newItemsFinder        = nullptr;
+        thumbsGenerator       = nullptr;
+        fingerPrintsGenerator = nullptr;
+        duplicatesFinder      = nullptr;
+        metadataSynchronizer  = nullptr;
+        imageQualitySorter    = nullptr;
+        facesDetector         = nullptr;
+        databaseCleaner       = nullptr;
     }
 
     bool                   running;
@@ -124,42 +124,42 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
 
     if (tool == dynamic_cast<ProgressItem*>(d->newItemsFinder))
     {
-        d->newItemsFinder = 0;
+        d->newItemsFinder = nullptr;
         stage2();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->databaseCleaner))
     {
-        d->databaseCleaner = 0;
+        d->databaseCleaner = nullptr;
         stage3();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator))
     {
-        d->thumbsGenerator = 0;
+        d->thumbsGenerator = nullptr;
         stage4();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator))
     {
-        d->fingerPrintsGenerator = 0;
+        d->fingerPrintsGenerator = nullptr;
         stage5();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder))
     {
-        d->duplicatesFinder = 0;
+        d->duplicatesFinder = nullptr;
         stage6();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->facesDetector))
     {
-        d->facesDetector = 0;
+        d->facesDetector = nullptr;
         stage7();
     }
    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
-        d->imageQualitySorter = 0;
+        d->imageQualitySorter = nullptr;
         stage8();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
-        d->metadataSynchronizer = 0;
+        d->metadataSynchronizer = nullptr;
         done();
     }
 }

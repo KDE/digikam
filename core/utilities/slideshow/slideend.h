@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT SlideEnd : public QWidget
 
 public:
 
-    explicit SlideEnd(QWidget* const parent = 0);
+    explicit SlideEnd(QWidget* const parent = nullptr);
     virtual ~SlideEnd();
 };
 

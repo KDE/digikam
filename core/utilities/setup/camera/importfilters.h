@@ -42,7 +42,7 @@ class ImportFilters : public QDialog
 
 public:
 
-    explicit ImportFilters(QWidget* const parent = 0);
+    explicit ImportFilters(QWidget* const parent = nullptr);
     ~ImportFilters();
 
     void setData(const Filter& filter);

@@ -150,17 +150,17 @@ public:
     explicit Private()
       : singleFileMode(false),
         minSizeDialog(450),
-        sortActionName(0),
-        sortActionDate(0),
-        sortActionSize(0),
-        sortActionAscending(0),
-        sortActionDescending(0),
-        sortGroupActions(0),
-        sortGroupDirections(0),
-        listView(0),
-        buttons(0),
-        advancedRenameManager(0),
-        advancedRenameWidget(0)
+        sortActionName(nullptr),
+        sortActionDate(nullptr),
+        sortActionSize(nullptr),
+        sortActionAscending(nullptr),
+        sortActionDescending(nullptr),
+        sortGroupActions(nullptr),
+        sortGroupDirections(nullptr),
+        listView(nullptr),
+        buttons(nullptr),
+        advancedRenameManager(nullptr),
+        advancedRenameWidget(nullptr)
     {
     }
 

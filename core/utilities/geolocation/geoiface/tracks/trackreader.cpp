@@ -44,7 +44,7 @@ class Q_DECL_HIDDEN TrackReader::Private
 public:
 
     explicit Private()
-        : fileData(0),
+        : fileData(nullptr),
           verifyFoundGPXElement(false)
     {
     }

@@ -49,7 +49,7 @@
 namespace Digikam
 {
 
-CameraList* CameraList::m_defaultList = 0;
+CameraList* CameraList::m_defaultList = nullptr;
 
 CameraList* CameraList::defaultList()
 {
@@ -92,7 +92,7 @@ CameraList::~CameraList()
 
     if (m_defaultList == this)
     {
-        m_defaultList = 0;
+        m_defaultList = nullptr;
     }
 }
 
@@ -266,7 +266,7 @@ CameraType* CameraList::find(const QString& title) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 CameraType* CameraList::autoDetect(bool& retry)
@@ -284,7 +284,7 @@ CameraType* CameraList::autoDetect(bool& retry)
                                            "Would you like to try again?"),
                                       QMessageBox::Yes | QMessageBox::No)
                  == QMessageBox::Yes);
-        return 0;
+        return nullptr;
     }
 
     // Check if the camera is already in the list

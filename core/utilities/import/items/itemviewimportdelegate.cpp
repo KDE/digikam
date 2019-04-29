@@ -52,7 +52,7 @@ namespace Digikam
 
 ItemViewImportDelegatePrivate::ItemViewImportDelegatePrivate()
 {
-    q             = 0;
+    q             = nullptr;
     spacing       = 0;
     thumbSize     = ThumbnailSize(0);
 

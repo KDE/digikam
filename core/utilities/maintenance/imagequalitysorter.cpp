@@ -51,7 +51,7 @@ public:
 
     explicit Private()
       : mode(ImageQualitySorter::NonAssignedItems),
-        thread(0)
+        thread(nullptr)
     {
     }
 

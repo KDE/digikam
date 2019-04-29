@@ -159,8 +159,8 @@ class Q_DECL_HIDDEN DbKeySelectorView::Private
 public:
 
     explicit Private() :
-        selector(0),
-        searchBar(0)
+        selector(nullptr),
+        searchBar(nullptr)
     {
     }
 

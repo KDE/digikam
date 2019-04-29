@@ -90,7 +90,7 @@ void AbstractSearchGroupContainer::startReadingGroups(SearchXmlCachingReader&)
 
 void AbstractSearchGroupContainer::readGroup(SearchXmlCachingReader& reader)
 {
-    SearchGroup* group = 0;
+    SearchGroup* group = nullptr;
 
     if (m_groupIndex >= m_groups.size())
     {
@@ -154,9 +154,9 @@ public:
 
     explicit Private()
       : needAnimationForReadIn(false),
-        layout(0),
-        timeline(0),
-        bar(0)
+        layout(nullptr),
+        timeline(nullptr),
+        bar(nullptr)
     {
     }
 

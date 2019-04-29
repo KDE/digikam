@@ -45,8 +45,8 @@ public:
 
     explicit Private()
       : deskSize(1024),
-        previewThread(0),
-        previewPreloadThread(0)
+        previewThread(nullptr),
+        previewPreloadThread(nullptr)
     {
     }
 

@@ -46,10 +46,10 @@ class Q_DECL_HIDDEN SetupPlugins::Private
 public:
 
     explicit Private()
-      : tab(0),
-        setupGeneric(0),
-        setupEditor(0),
-        setupBqm(0)
+      : tab(nullptr),
+        setupGeneric(nullptr),
+        setupEditor(nullptr),
+        setupBqm(nullptr)
     {
     }
 

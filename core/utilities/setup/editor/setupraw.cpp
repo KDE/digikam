@@ -50,13 +50,13 @@ class Q_DECL_HIDDEN SetupRaw::Private
 public:
 
     explicit Private()
-      : tab(0),
-        behaviorPanel(0),
-        settingsPanel(0),
-        openSimple(0),
-        openDefault(0),
-        openTool(0),
-        rawSettings(0)
+      : tab(nullptr),
+        behaviorPanel(nullptr),
+        settingsPanel(nullptr),
+        openSimple(nullptr),
+        openDefault(nullptr),
+        openTool(nullptr),
+        rawSettings(nullptr)
     {
     }
 
@@ -136,7 +136,7 @@ SetupRaw::SetupRaw(QTabWidget* const tab)
     d->settingsPanel                  = new QWidget;
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
-    d->rawSettings                    = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
+    d->rawSettings                    = new DRawDecoderWidget(nullptr, 0 /* no advanced settings shown */);
     d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
     d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
     d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));

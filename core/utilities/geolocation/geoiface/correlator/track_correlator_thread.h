@@ -42,7 +42,7 @@ class TrackCorrelatorThread : public QThread
 
 public:
 
-    explicit TrackCorrelatorThread(QObject* const parent = 0);
+    explicit TrackCorrelatorThread(QObject* const parent = nullptr);
     virtual ~TrackCorrelatorThread();
 
 public:

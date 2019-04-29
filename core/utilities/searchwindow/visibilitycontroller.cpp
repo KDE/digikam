@@ -32,7 +32,7 @@ public:
 
     explicit Private()
       : status(VisibilityController::Unknown),
-        containerWidget(0)
+        containerWidget(nullptr)
     {
     }
 

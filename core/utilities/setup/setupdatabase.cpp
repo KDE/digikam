@@ -73,11 +73,11 @@ class Q_DECL_HIDDEN SetupDatabase::Private
 public:
 
     explicit Private()
-      : databaseWidget(0),
-        updateBox(0),
-        hashesButton(0),
-        ignoreEdit(0),
-        ignoreLabel(0)
+      : databaseWidget(nullptr),
+        updateBox(nullptr),
+        hashesButton(nullptr),
+        ignoreEdit(nullptr),
+        ignoreLabel(nullptr)
     {
     }
 

@@ -252,7 +252,7 @@ ToolListViewGroup* ToolsListView::findToolGroup(BatchTool::BatchToolGroup group)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool ToolsListView::hasTool(BatchTool* const tool)
@@ -276,7 +276,7 @@ ToolListViewItem* ToolsListView::findTool(BatchTool* const tool)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)

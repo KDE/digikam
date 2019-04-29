@@ -40,7 +40,7 @@ public:
     explicit Private()
         : tagsOnly(false),
           direction(MetadataSynchronizer::WriteFromDatabaseToFile),
-          data(0)
+          data(nullptr)
     {
     }
 

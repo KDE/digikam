@@ -50,7 +50,7 @@ class Q_DECL_HIDDEN DatabasePage::Private
 public:
 
     explicit Private()
-      : dbsettingswidget(0)
+      : dbsettingswidget(nullptr)
     {
     }
 

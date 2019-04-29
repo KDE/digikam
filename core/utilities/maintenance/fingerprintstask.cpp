@@ -46,7 +46,7 @@ class Q_DECL_HIDDEN FingerprintsTask::Private
 public:
 
     explicit Private()
-        : data(0)
+        : data(nullptr)
     {
     }
 

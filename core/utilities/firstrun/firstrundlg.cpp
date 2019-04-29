@@ -53,16 +53,16 @@ class Q_DECL_HIDDEN FirstRunDlg::Private
 public:
 
     explicit Private()
-      : welcomePage(0),
-        migrateFromDigikam4Page(0),
-        collectionPage(0),
-        databasePage(0),
-        rawPage(0),
-        metadataPage(0),
-        previewPage(0),
-        openFilePage(0),
-        tooltipsPage(0),
-        startScanPage(0)
+      : welcomePage(nullptr),
+        migrateFromDigikam4Page(nullptr),
+        collectionPage(nullptr),
+        databasePage(nullptr),
+        rawPage(nullptr),
+        metadataPage(nullptr),
+        previewPage(nullptr),
+        openFilePage(nullptr),
+        tooltipsPage(nullptr),
+        startScanPage(nullptr)
     {
     }
 

@@ -51,7 +51,7 @@ public:
 
     explicit GPSGeoIfaceModelHelper(GPSItemModel* const model,
                                     QItemSelectionModel* const selectionModel,
-                                    QObject* const parent = 0);
+                                    QObject* const parent = nullptr);
     virtual ~GPSGeoIfaceModelHelper();
 
     virtual QAbstractItemModel*  model()          const;

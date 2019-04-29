@@ -89,7 +89,7 @@ public:
     explicit AssignedBatchTools();
     ~AssignedBatchTools();
 
-    QString targetSuffix(bool* const extSet = 0) const;
+    QString targetSuffix(bool* const extSet = nullptr) const;
 
 public:
 

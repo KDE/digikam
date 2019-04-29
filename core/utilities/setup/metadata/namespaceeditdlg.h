@@ -46,7 +46,7 @@ public:
 
     explicit NamespaceEditDlg(bool create,
                               NamespaceEntry& entry,
-                              QWidget* const parent = 0);
+                              QWidget* const parent = nullptr);
     ~NamespaceEditDlg();
 
     void saveData(NamespaceEntry& entry);

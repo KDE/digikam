@@ -117,7 +117,7 @@ BatchTool* BatchToolsFactory::findTool(const QString& name, BatchTool::BatchTool
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Digikam

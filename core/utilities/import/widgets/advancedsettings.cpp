@@ -54,14 +54,14 @@ class Q_DECL_HIDDEN AdvancedSettings::Private
 public:
 
     explicit Private()
-        : formatLabel(0),
-          autoRotateCheck(0),
-          convertJpegCheck(0),
-          fixDateTimeCheck(0),
-          documentNameCheck(0),
-          losslessFormat(0),
-          dateTimeEdit(0),
-          templateSelector(0)
+        : formatLabel(nullptr),
+          autoRotateCheck(nullptr),
+          convertJpegCheck(nullptr),
+          fixDateTimeCheck(nullptr),
+          documentNameCheck(nullptr),
+          losslessFormat(nullptr),
+          dateTimeEdit(nullptr),
+          templateSelector(nullptr)
     {
     }
 

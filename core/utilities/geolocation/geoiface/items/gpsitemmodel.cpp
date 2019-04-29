@@ -38,7 +38,7 @@ public:
     explicit Private()
       : items(),
         columnCount(0),
-        thumbnailLoadThread(0)
+        thumbnailLoadThread(nullptr)
     {
     }
 
@@ -109,7 +109,7 @@ QModelIndex GPSItemModel::index(int row, int column, const QModelIndex& parent) 
        )
         return QModelIndex();
 
-    return createIndex(row, column, (void*)0);
+    return createIndex(row, column, (void*)nullptr);
 }
 
 QModelIndex GPSItemModel::parent(const QModelIndex& /*index*/) const
@@ -142,8 +142,8 @@ void GPSItemModel::itemChanged(GPSItemContainer* const changedItem)
     if (itemIndex < 0)
         return;
 
-    const QModelIndex itemModelIndexStart = createIndex(itemIndex, 0, (void*)0);
-    const QModelIndex itemModelIndexEnd   = createIndex(itemIndex, d->columnCount - 1, (void*)0);
+    const QModelIndex itemModelIndexStart = createIndex(itemIndex, 0, (void*)nullptr);
+    const QModelIndex itemModelIndexEnd   = createIndex(itemIndex, d->columnCount - 1, (void*)nullptr);
 
     emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
 }
@@ -156,12 +156,12 @@ GPSItemContainer* GPSItemModel::itemFromIndex(const QModelIndex& index) const
     }
 
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     const int row = index.row();
 
     if ((row < 0) || (row >= d->items.count()))
-        return 0;
+        return nullptr;
 
     return d->items.at(row);
 }
@@ -217,7 +217,7 @@ Qt::ItemFlags GPSItemModel::flags(const QModelIndex& index) const
     }
 
     if (!index.isValid())
-        return 0;
+        return nullptr;
 
     return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
@@ -230,7 +230,7 @@ GPSItemContainer* GPSItemModel::itemFromUrl(const QUrl& url) const
             return d->items.at(i);
     }
 
-    return 0;
+    return nullptr;
 }
 
 QModelIndex GPSItemModel::indexFromUrl(const QUrl& url) const

@@ -46,7 +46,7 @@ class CameraSelection : public QDialog
 
 public:
 
-    explicit CameraSelection(QWidget* const parent = 0);
+    explicit CameraSelection(QWidget* const parent = nullptr);
     virtual ~CameraSelection();
 
     void setCamera(const QString& title, const QString& model,

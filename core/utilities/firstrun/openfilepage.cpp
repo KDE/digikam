@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN OpenFilePage::Private
 public:
 
     explicit Private()
-      : openAsPreview(0),
-        openInEditor(0),
-        openFileBehavior(0)
+      : openAsPreview(nullptr),
+        openInEditor(nullptr),
+        openFileBehavior(nullptr)
     {
     }
 

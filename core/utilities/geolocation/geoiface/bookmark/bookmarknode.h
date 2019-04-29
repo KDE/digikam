@@ -51,7 +51,7 @@ public:
 
 public:
 
-    explicit BookmarkNode(Type type = Root, BookmarkNode* const parent = 0);
+    explicit BookmarkNode(Type type = Root, BookmarkNode* const parent = nullptr);
     ~BookmarkNode();
 
     bool operator==(const BookmarkNode& other) const;

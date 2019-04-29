@@ -170,7 +170,7 @@ QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void QueuePool::setItemBusy(qlonglong id)

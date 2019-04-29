@@ -50,7 +50,7 @@ class Q_DECL_HIDDEN GeonamesInternalJobs
 public:
 
     GeonamesInternalJobs()
-      : netReply(0)
+      : netReply(nullptr)
     {
     }
 
@@ -74,7 +74,7 @@ public:
     explicit Private()
       : itemCounter(0),
         itemCount(0),
-        mngr(0)
+        mngr(nullptr)
     {
     }
 

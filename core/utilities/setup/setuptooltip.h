@@ -37,7 +37,7 @@ class SetupToolTip : public QScrollArea
 
 public:
 
-    explicit SetupToolTip(QWidget* const parent = 0);
+    explicit SetupToolTip(QWidget* const parent = nullptr);
     ~SetupToolTip();
 
     void applySettings();

@@ -50,9 +50,9 @@ class Q_DECL_HIDDEN RawPage::Private
 public:
 
     explicit Private()
-      : openDirectly(0),
-        useRawImport(0),
-        rawHandling(0)
+      : openDirectly(nullptr),
+        useRawImport(nullptr),
+        rawHandling(nullptr)
     {
     }
 

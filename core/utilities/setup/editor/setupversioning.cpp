@@ -56,25 +56,25 @@ class Q_DECL_HIDDEN SetupVersioning::Private
 public:
 
     explicit Private()
-        : tab(0),
-          nonDestructivePanel(0),
-          workspaceGB(0),
-          closingGB(0),
-          snapshotGB(0),
-          viewGB(0),
-          enableNonDestructive(0),
-          snapshotAfterRaw(0),
-          snapshotSession(0),
-          snapshotComplex(0),
-          viewShowOriginal(0),
-          viewShowSnapshots(0),
-          formatBox(0),
-          askToSave(0),
-          autoSave(0),
-          infoNonDestructive(0),
-          infoFormat(0),
-          infoSnapshot(0),
-          infoView(0)
+        : tab(nullptr),
+          nonDestructivePanel(nullptr),
+          workspaceGB(nullptr),
+          closingGB(nullptr),
+          snapshotGB(nullptr),
+          viewGB(nullptr),
+          enableNonDestructive(nullptr),
+          snapshotAfterRaw(nullptr),
+          snapshotSession(nullptr),
+          snapshotComplex(nullptr),
+          viewShowOriginal(nullptr),
+          viewShowSnapshots(nullptr),
+          formatBox(nullptr),
+          askToSave(nullptr),
+          autoSave(nullptr),
+          infoNonDestructive(nullptr),
+          infoFormat(nullptr),
+          infoSnapshot(nullptr),
+          infoView(nullptr)
     {
     }
 

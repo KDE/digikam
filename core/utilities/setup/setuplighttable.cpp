@@ -51,10 +51,10 @@ class Q_DECL_HIDDEN SetupLightTable::Private
 public:
 
     explicit Private()
-      : autoSyncPreview(0),
-        autoLoadOnRightPanel(0),
-        clearOnClose(0),
-        fullScreenSettings(0)
+      : autoSyncPreview(nullptr),
+        autoLoadOnRightPanel(nullptr),
+        clearOnClose(nullptr),
+        fullScreenSettings(nullptr)
     {
     }
 

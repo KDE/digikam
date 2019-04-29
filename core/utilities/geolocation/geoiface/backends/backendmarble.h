@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT BackendMarble : public MapBackend
 public:
 
     explicit BackendMarble(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
-                           QObject* const parent = 0);
+                           QObject* const parent = nullptr);
     virtual ~BackendMarble();
 
     virtual QString backendName() const;

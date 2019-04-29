@@ -41,7 +41,7 @@ class SetupTemplate : public QScrollArea
 
 public:
 
-    explicit SetupTemplate(QWidget* const parent = 0);
+    explicit SetupTemplate(QWidget* const parent = nullptr);
     ~SetupTemplate();
 
     void applySettings();

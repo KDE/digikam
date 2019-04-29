@@ -58,7 +58,7 @@ public:
         albumTagRelation(0),
         searchResultRestriction(0),
         isAlbumUpdate(false),
-        job(0)
+        job(nullptr)
     {
     }
 
@@ -188,7 +188,7 @@ void DuplicatesFinder::slotDone()
     ApplicationSettings::instance()->setDuplicatesAlbumTagRelation(d->albumTagRelation);
     ApplicationSettings::instance()->setDuplicatesSearchRestrictions(d->searchResultRestriction);
 
-    d->job = 0;
+    d->job = nullptr;
     MaintenanceTool::slotDone();
 }
 
@@ -197,7 +197,7 @@ void DuplicatesFinder::slotCancel()
     if (d->job)
     {
         d->job->cancel();
-        d->job = 0;
+        d->job = nullptr;
     }
 
     MaintenanceTool::slotCancel();

@@ -60,10 +60,10 @@ class Q_DECL_HIDDEN ImportContextMenuHelper::Private
 public:
 
     explicit Private(ImportContextMenuHelper* const q)
-      : importFilterModel(0),
-        parent(0),
-        ABCmenu(0),
-        stdActionCollection(0),
+      : importFilterModel(nullptr),
+        parent(nullptr),
+        ABCmenu(nullptr),
+        stdActionCollection(nullptr),
         q(q)
     {
     }
@@ -91,7 +91,7 @@ public:
 
         if (!mainAction)
         {
-            return 0;
+            return nullptr;
         }
 
         QAction* const action = new QAction(mainAction->icon(), mainAction->text(), q);
@@ -257,7 +257,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 void ImportContextMenuHelper::slotOpenWith()
 {
     // call the slot with an "empty" action
-    slotOpenWith(0);
+    slotOpenWith(nullptr);
 }
 
 void ImportContextMenuHelper::slotOpenWith(QAction* action)

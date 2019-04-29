@@ -63,13 +63,13 @@ public:
 public:
 
     explicit Private()
-      : messageView(0),
-        settingsViewIcon(0),
-        settingsViewTitle(0),
-        settingsViewReset(0),
-        settingsViewAbout(0),
-        settingsView(0),
-        tool(0)
+      : messageView(nullptr),
+        settingsViewIcon(nullptr),
+        settingsViewTitle(nullptr),
+        settingsViewReset(nullptr),
+        settingsViewAbout(nullptr),
+        settingsView(nullptr),
+        tool(nullptr)
     {
     }
 
@@ -198,7 +198,7 @@ void ToolSettingsView::setBusy(bool b)
 
 void ToolSettingsView::setToolSettingsWidget(QWidget* const w)
 {
-    QWidget* wdt = 0;
+    QWidget* wdt = nullptr;
 
     if (!w)
     {
@@ -289,7 +289,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
         d->settingsViewIcon->clear();
         d->settingsViewTitle->clear();
         d->settingsViewReset->setEnabled(false);
-        setToolSettingsWidget(0);
+        setToolSettingsWidget(nullptr);
     }
 }
 

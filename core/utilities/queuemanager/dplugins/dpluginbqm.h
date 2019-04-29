@@ -47,7 +47,7 @@ public:
     /**
      * Constructor with optional parent object
      */
-    explicit DPluginBqm(QObject* const parent = 0);
+    explicit DPluginBqm(QObject* const parent = nullptr);
 
     /**
      * Destructor

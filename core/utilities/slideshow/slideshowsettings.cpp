@@ -79,7 +79,7 @@ SlideShowSettings::SlideShowSettings()
     slideScreen           = -2;
     autoPlayEnabled       = true;
     captionFont           = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    iface                 = 0;
+    iface                 = nullptr;
 }
 
 SlideShowSettings::~SlideShowSettings()

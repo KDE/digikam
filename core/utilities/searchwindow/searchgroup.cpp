@@ -53,9 +53,9 @@ namespace Digikam
 SearchGroup::SearchGroup(SearchView* const parent)
     : AbstractSearchGroupContainer(parent),
       m_view(parent),
-      m_layout(0),
-      m_label(0),
-      m_subgroupLayout(0),
+      m_layout(nullptr),
+      m_label(nullptr),
+      m_subgroupLayout(nullptr),
       m_groupType(FirstGroup)
 {
 }
@@ -74,8 +74,8 @@ void SearchGroup::setup(Type type)
     connect(m_label, SIGNAL(removeClicked()),
             this, SIGNAL(removeRequested()));
 
-    SearchFieldGroup*      group = 0;
-    SearchFieldGroupLabel* label = 0;
+    SearchFieldGroup*      group = nullptr;
+    SearchFieldGroupLabel* label = nullptr;
 
     // ----- //
 
@@ -281,8 +281,8 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
         {
             QString name = reader.fieldName();
 
-            SearchField* field = 0;
-            SearchFieldGroup* fieldGroup = 0;
+            SearchField* field = nullptr;
+            SearchFieldGroup* fieldGroup = nullptr;
             foreach(fieldGroup, m_fieldGroups)
             {
                 if ((field = fieldGroup->fieldForName(name)))
@@ -409,16 +409,16 @@ public:
       : extended(false),
         groupOp(SearchXml::And),
         fieldOp(SearchXml::And),
-        layout(0),
-        groupOpLabel(0),
-        allBox(0),
-        anyBox(0),
-        noneBox(0),
-        oneNotBox(0),
-        optionsLabel(0),
-        removeLabel(0),
-        stackedLayout(0),
-        themeCache(0)
+        layout(nullptr),
+        groupOpLabel(nullptr),
+        allBox(nullptr),
+        anyBox(nullptr),
+        noneBox(nullptr),
+        oneNotBox(nullptr),
+        optionsLabel(nullptr),
+        removeLabel(nullptr),
+        stackedLayout(nullptr),
+        themeCache(nullptr)
     {
     }
 

@@ -62,16 +62,16 @@ public:
 
     explicit Private()
       : startIndex(1),
-        buttonGroup(0),
-        renameDefaultCase(0),
-        renameDefault(0),
-        renameCustom(0),
-        changedTimer(0),
-        renameDefaultBox(0),
-        renameDefaultCaseType(0),
-        fileMetadataLabel(0),
-        advancedRenameWidget(0),
-        advancedRenameManager(0)
+        buttonGroup(nullptr),
+        renameDefaultCase(nullptr),
+        renameDefault(nullptr),
+        renameCustom(nullptr),
+        changedTimer(nullptr),
+        renameDefaultBox(nullptr),
+        renameDefaultCaseType(nullptr),
+        fileMetadataLabel(nullptr),
+        advancedRenameWidget(nullptr),
+        advancedRenameManager(nullptr)
     {
     }
 

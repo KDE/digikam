@@ -52,7 +52,7 @@ class DIGIKAM_EXPORT GPSItemListContextMenu : public QObject
 public:
 
     explicit GPSItemListContextMenu(GPSItemList* const imagesList,
-                                     GPSBookmarkOwner* const bookmarkOwner = 0);
+                                     GPSBookmarkOwner* const bookmarkOwner = nullptr);
     ~GPSItemListContextMenu();
 
     void setEnabled(const bool state);

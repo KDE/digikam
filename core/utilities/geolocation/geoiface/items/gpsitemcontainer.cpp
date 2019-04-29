@@ -119,7 +119,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
 }
 
 GPSItemContainer::GPSItemContainer(const QUrl& url)
-    : m_model(0),
+    : m_model(nullptr),
       m_url(url),
       m_dateTime(),
       m_dirty(false),
@@ -146,7 +146,7 @@ DMetadata* GPSItemContainer::getMetadataForFile() const
         // If writing to sidecar file is activated, we ignore the loading error of the metadata.
         if (MetaEngineSettings::instance()->settings().metadataWritingMode == DMetadata::WRITE_TO_FILE_ONLY)
         {
-            return 0;
+            return nullptr;
         }
     }
 
@@ -737,7 +737,7 @@ QString GPSItemContainer::saveChanges()
             }
             else
             {
-                success = meta->setGPSInfo(const_cast<double*>(static_cast<double*>(0)),
+                success = meta->setGPSInfo(nullptr,
                                            p.latitude, p.longitude);
             }
 

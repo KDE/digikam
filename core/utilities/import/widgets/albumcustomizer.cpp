@@ -56,14 +56,14 @@ class Q_DECL_HIDDEN AlbumCustomizer::Private
 public:
 
     explicit Private()
-        : autoAlbumDateCheck(0),
-          autoAlbumExtCheck(0),
-          folderDateLabel(0),
-          customizer(0),
-          tooltipToggleButton(0),
-          customExample(0),
-          folderDateFormat(0),
-          tooltipDialog(0)
+        : autoAlbumDateCheck(nullptr),
+          autoAlbumExtCheck(nullptr),
+          folderDateLabel(nullptr),
+          customizer(nullptr),
+          tooltipToggleButton(nullptr),
+          customExample(nullptr),
+          folderDateFormat(nullptr),
+          tooltipDialog(nullptr)
     {
     }
 

@@ -27,7 +27,7 @@
 namespace Digikam
 {
 
-LightTableWindow* LightTableWindow::m_instance = 0;
+LightTableWindow* LightTableWindow::m_instance = nullptr;
 
 LightTableWindow* LightTableWindow::lightTableWindow()
 {
@@ -45,7 +45,7 @@ bool LightTableWindow::lightTableWindowCreated()
 }
 
 LightTableWindow::LightTableWindow()
-    : DXmlGuiWindow(0),
+    : DXmlGuiWindow(nullptr),
       d(new Private)
 {
     setConfigGroupName(QLatin1String("LightTable Settings"));
@@ -81,7 +81,7 @@ LightTableWindow::LightTableWindow()
 
 LightTableWindow::~LightTableWindow()
 {
-    m_instance = 0;
+    m_instance = nullptr;
 
     delete d->thumbView;
     delete d->rightSideBar;

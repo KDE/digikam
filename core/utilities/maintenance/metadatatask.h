@@ -50,7 +50,7 @@ public:
 
     void setTagsOnly(bool value);
     void setDirection(MetadataSynchronizer::SyncDirection dir);
-    void setMaintenanceData(MaintenanceData* const data=0);
+    void setMaintenanceData(MaintenanceData* const data=nullptr);
 
 Q_SIGNALS:
 

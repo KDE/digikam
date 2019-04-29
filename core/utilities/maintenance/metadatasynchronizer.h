@@ -55,11 +55,11 @@ public:
 
     /** Constructor which sync all pictures metadata from an Albums list. If list is empty, whole Albums collection is processed.
      */
-    explicit MetadataSynchronizer(const AlbumList& list=AlbumList(), SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(const AlbumList& list=AlbumList(), SyncDirection direction = WriteFromDatabaseToFile, ProgressItem* const parent = nullptr);
 
     /** Constructor which sync all pictures metadata from an Images list
      */
-    explicit MetadataSynchronizer(const ItemInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+    explicit MetadataSynchronizer(const ItemInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = nullptr);
 
     void setTagsOnly(bool value);
 

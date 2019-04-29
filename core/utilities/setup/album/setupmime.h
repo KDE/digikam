@@ -37,7 +37,7 @@ class SetupMime : public QScrollArea
 
 public:
 
-    explicit SetupMime(QWidget* const parent = 0);
+    explicit SetupMime(QWidget* const parent = nullptr);
     virtual ~SetupMime();
 
     void applySettings();

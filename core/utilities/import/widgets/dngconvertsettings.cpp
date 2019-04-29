@@ -49,8 +49,8 @@ class Q_DECL_HIDDEN DNGConvertSettings::Private
 public:
 
     explicit Private()
-        : convertDng(0),
-          dngSettings(0)
+        : convertDng(nullptr),
+          dngSettings(nullptr)
     {
     }
 

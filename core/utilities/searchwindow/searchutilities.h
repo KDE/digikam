@@ -51,7 +51,7 @@ class AnimatedClearButton : public QWidget
 
 public:
 
-    explicit AnimatedClearButton(QWidget* const parent = 0);
+    explicit AnimatedClearButton(QWidget* const parent = nullptr);
 
     QSize sizeHint() const;
 
@@ -114,7 +114,7 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-    explicit CustomStepsDoubleSpinBox(QWidget* const parent = 0);
+    explicit CustomStepsDoubleSpinBox(QWidget* const parent = nullptr);
     ~CustomStepsDoubleSpinBox();
 
     /** Set a list of values that are usually applicable for the
@@ -165,7 +165,7 @@ public:
      *  customize the stepping behavior, for cases where
      *  linear steps are not applicable
      */
-    explicit CustomStepsIntSpinBox(QWidget* const parent = 0);
+    explicit CustomStepsIntSpinBox(QWidget* const parent = nullptr);
     ~CustomStepsIntSpinBox();
 
     /** Set a list of values that are usually applicable for the

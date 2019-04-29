@@ -53,7 +53,7 @@ public:
     explicit Private()
     {
         cancel = false;
-        tool   = 0;
+        tool   = nullptr;
     }
 
     bool               cancel;
@@ -192,7 +192,7 @@ void Task::run()
         tmp2del.append(outUrl);
 
         delete d->tool;
-        d->tool = 0;
+        d->tool = nullptr;
 
         if (d->cancel)
         {

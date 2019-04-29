@@ -68,10 +68,10 @@ public:
         branchHistory(true),
         cancel(false),
         last(false),
-        observer(0),
+        observer(nullptr),
         toolGroup(BaseTool),
         rawLoadingRule(QueueSettings::DEMOSAICING),
-        plugin(0)
+        plugin(nullptr)
     {
     }
 
@@ -141,7 +141,7 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 {
     d->observer      = new BatchToolObserver(d);
     d->toolGroup     = group;
-    m_settingsWidget = 0;
+    m_settingsWidget = nullptr;
     setObjectName(name);
 }
 
@@ -596,7 +596,7 @@ QWidget* BatchTool::settingsWidget() const
 void BatchTool::deleteSettingsWidget()
 {
     delete m_settingsWidget;
-    m_settingsWidget = 0;
+    m_settingsWidget = nullptr;
 }
 
 void BatchTool::registerSettingsWidget()

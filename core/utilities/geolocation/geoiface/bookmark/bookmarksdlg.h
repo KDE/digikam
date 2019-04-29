@@ -48,8 +48,8 @@ public:
 
     explicit AddBookmarkDialog(const QString& url,
                                const QString& title,
-                               QWidget* const parent = 0,
-                               BookmarksManager* const mngr = 0);
+                               QWidget* const parent = nullptr,
+                               BookmarksManager* const mngr = nullptr);
     ~AddBookmarkDialog();
 
 private Q_SLOTS:
@@ -70,7 +70,7 @@ class DIGIKAM_EXPORT BookmarksDialog : public QDialog
 
 public:
 
-    explicit BookmarksDialog(QWidget* const parent = 0, BookmarksManager* const mngr = 0);
+    explicit BookmarksDialog(QWidget* const parent = nullptr, BookmarksManager* const mngr = nullptr);
     ~BookmarksDialog();
 
 private Q_SLOTS:

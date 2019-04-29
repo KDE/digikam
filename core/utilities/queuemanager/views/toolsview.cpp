@@ -49,9 +49,9 @@ class Q_DECL_HIDDEN ToolsView::Private
 public:
 
     explicit Private()
-      : baseTools(0),
-        historyView(0),
-        workflow(0)
+      : baseTools(nullptr),
+        historyView(nullptr),
+        workflow(nullptr)
     {
     }
 

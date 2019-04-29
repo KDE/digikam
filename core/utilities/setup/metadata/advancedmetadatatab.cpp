@@ -58,17 +58,17 @@ public:
 
     explicit Private()
     {
-        metadataType     = 0;
-        operationType    = 0;
-        addButton        = 0;
-        editButton       = 0;
-        deleteButton     = 0;
-        moveUpButton     = 0;
-        moveDownButton   = 0;
-        revertChanges    = 0;
-        resetButton      = 0;
-        unifyReadWrite   = 0;
-        namespaceView    = 0;
+        metadataType     = nullptr;
+        operationType    = nullptr;
+        addButton        = nullptr;
+        editButton       = nullptr;
+        deleteButton     = nullptr;
+        moveUpButton     = nullptr;
+        moveDownButton   = nullptr;
+        revertChanges    = nullptr;
+        resetButton      = nullptr;
+        unifyReadWrite   = nullptr;
+        namespaceView    = nullptr;
         metadataTypeSize = 0;
         changed          = false;
     }

@@ -84,7 +84,7 @@ public:
      * p and the closest point of the returned item's bounding rectangle.
      * In particular, if p is inside the item's rectangle, manhattanLength is 0.
      */
-    RegionFrameItem* closestItem(const QPointF& p, qreal* const manhattanLength = 0) const;
+    RegionFrameItem* closestItem(const QPointF& p, qreal* const manhattanLength = nullptr) const;
 
     bool acceptsMouseClick(const QPointF& scenePos);
     void itemHoverEnterEvent(QGraphicsSceneHoverEvent* event);

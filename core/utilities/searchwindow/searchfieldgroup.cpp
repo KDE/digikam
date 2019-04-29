@@ -43,7 +43,7 @@ namespace Digikam
 SearchFieldGroup::SearchFieldGroup(SearchGroup* const parent)
     : QWidget(parent)
 {
-    m_label      = 0;
+    m_label      = nullptr;
     m_layout     = new QGridLayout;
     setLayout(m_layout);
     m_controller = new VisibilityController(this);
@@ -90,7 +90,7 @@ SearchField* SearchFieldGroup::fieldForName(const QString& fieldName) const
             return field;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void SearchFieldGroup::write(SearchXmlWriter& writer)

@@ -63,7 +63,7 @@ public:
         typedef QList<UndoInfo> List;
     };
 
-    explicit GPSUndoCommand(QUndoCommand* const parent = 0);
+    explicit GPSUndoCommand(QUndoCommand* const parent = nullptr);
 
     void addUndoInfo(const UndoInfo& info);
     void changeItemData(const bool redoIt);

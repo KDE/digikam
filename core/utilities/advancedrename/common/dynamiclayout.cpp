@@ -72,7 +72,7 @@ DynamicLayout::DynamicLayout(int margin, int hSpacing, int vSpacing)
 
 DynamicLayout::~DynamicLayout()
 {
-    QLayoutItem* item = 0;
+    QLayoutItem* item = nullptr;
 
     while ((item = takeAt(0)))
     {
@@ -126,7 +126,7 @@ QLayoutItem* DynamicLayout::itemAt(int index) const
 
 QLayoutItem* DynamicLayout::takeAt(int index)
 {
-    QLayoutItem* item = 0;
+    QLayoutItem* item = nullptr;
 
     if (index >= 0 && index < d->itemList.size())
     {
@@ -138,7 +138,7 @@ QLayoutItem* DynamicLayout::takeAt(int index)
 
 Qt::Orientations DynamicLayout::expandingDirections() const
 {
-    return 0;
+    return nullptr;
 }
 
 bool DynamicLayout::hasHeightForWidth() const

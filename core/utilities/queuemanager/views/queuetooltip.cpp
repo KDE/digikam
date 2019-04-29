@@ -44,8 +44,8 @@ class Q_DECL_HIDDEN QueueToolTip::Private
 public:
 
     explicit Private()
-      : view(0),
-        item(0)
+      : view(nullptr),
+        item(nullptr)
     {
     }
 

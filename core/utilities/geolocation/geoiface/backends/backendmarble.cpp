@@ -66,7 +66,7 @@ public:
 
     explicit BMInternalWidgetInfo()
     {
-        bmLayer = 0;
+        bmLayer = nullptr;
     }
 
     BackendMarbleLayer* bmLayer;
@@ -84,14 +84,14 @@ class Q_DECL_HIDDEN BackendMarble::Private
 public:
 
     explicit Private()
-      : marbleWidget(0),
-        actionGroupMapTheme(0),
-        actionGroupProjection(0),
-        actionGroupFloatItems(0),
-        actionShowCompass(0),
-        actionShowScaleBar(0),
-        actionShowNavigation(0),
-        actionShowOverviewMap(0),
+      : marbleWidget(nullptr),
+        actionGroupMapTheme(nullptr),
+        actionGroupProjection(nullptr),
+        actionGroupFloatItems(nullptr),
+        actionShowCompass(nullptr),
+        actionShowScaleBar(nullptr),
+        actionShowNavigation(nullptr),
+        actionShowOverviewMap(nullptr),
         cacheMapTheme(QLatin1String("atlas")),
         cacheProjection(QLatin1String("spherical")),
         cacheShowCompass(false),
@@ -117,7 +117,7 @@ public:
         widgetIsDocked(false),
         blockingZoomWhileChangingTheme(false),
         trackCache(),
-        bmLayer(0)
+        bmLayer(nullptr)
     {
     }
 
@@ -263,16 +263,16 @@ void BackendMarble::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
 
     if (intInfo.bmLayer)
     {
-        intInfo.bmLayer->setBackend(0);
+        intInfo.bmLayer->setBackend(nullptr);
     }
 
     disconnect(d->marbleWidget, SIGNAL(zoomChanged(int)),
                this, SLOT(slotMarbleZoomChanged()));
 
-    info->currentOwner = 0;
+    info->currentOwner = nullptr;
     info->state        = GeoIfaceInternalWidgetInfo::InternalWidgetReleased;
-    d->marbleWidget    = 0;
-    d->bmLayer         = 0;
+    d->marbleWidget    = nullptr;
+    d->bmLayer         = nullptr;
 
     emit(signalBackendReadyChanged(backendName()));
 }
@@ -300,7 +300,7 @@ void BackendMarble::setCenter(const GeoCoordinates& coordinate)
 
 bool BackendMarble::isReady() const
 {
-    return d->marbleWidget != 0;
+    return d->marbleWidget != nullptr;
 }
 
 void BackendMarble::zoomIn()
@@ -396,7 +396,7 @@ void BackendMarble::createActions()
 
 void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu)
 {
-    GEOIFACE_ASSERT(configurationMenu != 0);
+    GEOIFACE_ASSERT(configurationMenu != nullptr);
 
     configurationMenu->addSeparator();
 
@@ -499,7 +499,7 @@ void BackendMarble::setMapTheme(const QString& newMapTheme)
 
 void BackendMarble::saveSettingsToGroup(KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
     {
@@ -516,7 +516,7 @@ void BackendMarble::saveSettingsToGroup(KConfigGroup* const group)
 
 void BackendMarble::readSettingsFromGroup(const KConfigGroup* const group)
 {
-    GEOIFACE_ASSERT(group != 0);
+    GEOIFACE_ASSERT(group != nullptr);
 
     if (!group)
     {
@@ -749,8 +749,8 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             QPoint markerOffsetPoint;
             QPixmap markerPixmap;
             const bool haveMarkerPixmap = modelHelper->itemIcon(currentIndex,
-                                                                &markerOffsetPoint, 0,
-                                                                &markerPixmap, 0);
+                                                                &markerOffsetPoint, nullptr,
+                                                                &markerPixmap, nullptr);
 
             if (!haveMarkerPixmap || markerPixmap.isNull())
             {
@@ -1416,7 +1416,7 @@ bool BackendMarble::eventFilter(QObject* object, QEvent* event)
                 QPoint newMarkerPoint               = mouseEvent->pos() - d->mouseMoveCenterOffset;
                 QPoint snapPoint;
 
-                if (findSnapPoint(newMarkerPoint, &snapPoint, 0, 0))
+                if (findSnapPoint(newMarkerPoint, &snapPoint, nullptr, nullptr))
                 {
                     newMarkerPoint = snapPoint;
                 }
@@ -1465,7 +1465,7 @@ bool BackendMarble::eventFilter(QObject* object, QEvent* event)
 
             QPair<int, QModelIndex> snapTargetIndex(-1, QModelIndex());
             GeoCoordinates newCoordinates;
-            bool haveValidPoint          = findSnapPoint(dropMarkerPoint, 0,
+            bool haveValidPoint          = findSnapPoint(dropMarkerPoint, nullptr,
                                                          &newCoordinates,
                                                          &snapTargetIndex);
 

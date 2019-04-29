@@ -62,19 +62,19 @@ class Q_DECL_HIDDEN GPSSearchView::Private
 public:
 
     explicit Private()
-      : saveBtn(0),
-        nameEdit(0),
+      : saveBtn(nullptr),
+        nameEdit(nullptr),
         imageInfoJob(),
-        searchGPSBar(0),
-        searchTreeView(0),
-        splitter(0),
-        mapSearchWidget(0),
-        gpsMarkerTiler(0),
-        imageAlbumModel(0),
-        imageFilterModel(0),
-        selectionModel(0),
-        searchModel(0),
-        sortOrderOptionsHelper(0)
+        searchGPSBar(nullptr),
+        searchTreeView(nullptr),
+        splitter(nullptr),
+        mapSearchWidget(nullptr),
+        gpsMarkerTiler(nullptr),
+        imageAlbumModel(nullptr),
+        imageFilterModel(nullptr),
+        selectionModel(nullptr),
+        searchModel(nullptr),
+        sortOrderOptionsHelper(nullptr)
     {
     }
 

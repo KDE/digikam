@@ -134,7 +134,7 @@ namespace Digikam
 {
 
 EditorWindow::EditorWindow(const QString& name)
-    : DXmlGuiWindow(0),
+    : DXmlGuiWindow(nullptr),
       d(new Private)
 {
     setConfigGroupName(QLatin1String("ImageViewer Settings"));
@@ -143,35 +143,35 @@ EditorWindow::EditorWindow(const QString& name)
     setFullScreenOptions(FS_EDITOR);
 
     m_nonDestructive               = true;
-    m_contextMenu                  = 0;
-    m_servicesMenu                 = 0;
-    m_serviceAction                = 0;
-    m_canvas                       = 0;
-    m_openVersionAction            = 0;
-    m_saveAction                   = 0;
-    m_saveAsAction                 = 0;
-    m_saveCurrentVersionAction     = 0;
-    m_saveNewVersionAction         = 0;
-    m_saveNewVersionAsAction       = 0;
-    m_saveNewVersionInFormatAction = 0;
-    m_resLabel                     = 0;
-    m_nameLabel                    = 0;
-    m_exportAction                 = 0;
-    m_revertAction                 = 0;
-    m_discardChangesAction         = 0;
-    m_fileDeleteAction             = 0;
-    m_forwardAction                = 0;
-    m_backwardAction               = 0;
-    m_firstAction                  = 0;
-    m_lastAction                   = 0;
-    m_applyToolAction              = 0;
-    m_closeToolAction              = 0;
-    m_undoAction                   = 0;
-    m_redoAction                   = 0;
-    m_showBarAction                = 0;
-    m_splitter                     = 0;
-    m_vSplitter                    = 0;
-    m_stackView                    = 0;
+    m_contextMenu                  = nullptr;
+    m_servicesMenu                 = nullptr;
+    m_serviceAction                = nullptr;
+    m_canvas                       = nullptr;
+    m_openVersionAction            = nullptr;
+    m_saveAction                   = nullptr;
+    m_saveAsAction                 = nullptr;
+    m_saveCurrentVersionAction     = nullptr;
+    m_saveNewVersionAction         = nullptr;
+    m_saveNewVersionAsAction       = nullptr;
+    m_saveNewVersionInFormatAction = nullptr;
+    m_resLabel                     = nullptr;
+    m_nameLabel                    = nullptr;
+    m_exportAction                 = nullptr;
+    m_revertAction                 = nullptr;
+    m_discardChangesAction         = nullptr;
+    m_fileDeleteAction             = nullptr;
+    m_forwardAction                = nullptr;
+    m_backwardAction               = nullptr;
+    m_firstAction                  = nullptr;
+    m_lastAction                   = nullptr;
+    m_applyToolAction              = nullptr;
+    m_closeToolAction              = nullptr;
+    m_undoAction                   = nullptr;
+    m_redoAction                   = nullptr;
+    m_showBarAction                = nullptr;
+    m_splitter                     = nullptr;
+    m_vSplitter                    = nullptr;
+    m_stackView                    = nullptr;
     m_setExifOrientationTag        = true;
     m_editingOriginalImage         = true;
     m_actionEnabledState           = false;
@@ -1658,7 +1658,7 @@ void EditorWindow::finishSaving(bool success)
     m_savingContext.synchronousSavingResult = success;
 
     delete m_savingContext.saveTempFile;
-    m_savingContext.saveTempFile = 0;
+    m_savingContext.saveTempFile = nullptr;
 
     // Exit of internal Qt event loop to unlock promptUserSave() method.
     if (m_savingContext.synchronizingState == SavingContext::SynchronousSaving)
@@ -1714,7 +1714,7 @@ void EditorWindow::setupTempSaveFile(const QUrl& url)
 
     m_savingContext.saveTempFileName = m_savingContext.saveTempFile->fileName();
     delete m_savingContext.saveTempFile;
-    m_savingContext.saveTempFile = 0;
+    m_savingContext.saveTempFile = nullptr;
 }
 
 void EditorWindow::startingSave(const QUrl& url)
@@ -1805,7 +1805,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         imageFileSaveDialog->setWindowModality(Qt::WindowModal);
         d->currentWindowModalDialog = imageFileSaveDialog;
         result                      = imageFileSaveDialog->exec();
-        d->currentWindowModalDialog = 0;
+        d->currentWindowModalDialog = nullptr;
     }
 
     if (result != QDialog::Accepted || !imageFileSaveDialog)
@@ -1864,7 +1864,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
             fileSaveOptionsDialog->setWindowModality(Qt::WindowModal);
             d->currentWindowModalDialog = fileSaveOptionsDialog;
             result                      = fileSaveOptionsDialog->exec();
-            d->currentWindowModalDialog = 0;
+            d->currentWindowModalDialog = nullptr;
         }
 
         if (result != QDialog::Accepted || !fileSaveOptionsDialog)
@@ -2651,13 +2651,13 @@ void EditorWindow::addServicesMenuForUrl(const QUrl& url)
     if (m_servicesMenu)
     {
         delete m_servicesMenu;
-        m_servicesMenu = 0;
+        m_servicesMenu = nullptr;
     }
 
     if (m_serviceAction)
     {
         delete m_serviceAction;
-        m_serviceAction = 0;
+        m_serviceAction = nullptr;
     }
 
     if (!offers.isEmpty())

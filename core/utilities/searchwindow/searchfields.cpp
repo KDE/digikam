@@ -908,7 +908,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         qCWarning(DIGIKAM_GENERAL_LOG) << "SearchField::createField: cannot create SearchField for" << name;
     }
 
-    return 0;
+    return nullptr;
 }
 
 // -------------------------------------------------------------------------------------------
@@ -1060,7 +1060,7 @@ void SearchField::setValidValueState(bool valueIsValid)
 
 SearchFieldText::SearchFieldText(QObject* const parent)
     : SearchField(parent),
-      m_edit(0)
+      m_edit(nullptr)
 {
 }
 
@@ -1145,10 +1145,10 @@ void SearchFieldKeyword::write(SearchXmlWriter& writer)
 
 SearchFieldRangeDate::SearchFieldRangeDate(QObject* const parent, Type type)
     : SearchField(parent),
-      m_firstTimeEdit(0),
-      m_firstDateEdit(0),
-      m_secondTimeEdit(0),
-      m_secondDateEdit(0),
+      m_firstTimeEdit(nullptr),
+      m_firstDateEdit(nullptr),
+      m_secondTimeEdit(nullptr),
+      m_secondDateEdit(nullptr),
       m_type(type)
 {
     m_betweenLabel = new QLabel;
@@ -1432,8 +1432,8 @@ SearchFieldRangeInt::SearchFieldRangeInt(QObject* const parent)
       m_min(0),
       m_max(100),
       m_reciprocal(false),
-      m_firstBox(0),
-      m_secondBox(0)
+      m_firstBox(nullptr),
+      m_secondBox(nullptr)
 {
     m_betweenLabel = new QLabel;
     m_firstBox     = new CustomStepsIntSpinBox;
@@ -1795,8 +1795,8 @@ SearchFieldRangeDouble::SearchFieldRangeDouble(QObject* const parent)
       m_min(0),
       m_max(100),
       m_factor(1),
-      m_firstBox(0),
-      m_secondBox(0)
+      m_firstBox(nullptr),
+      m_secondBox(nullptr)
 {
     m_betweenLabel = new QLabel;
     m_firstBox     = new CustomStepsDoubleSpinBox;
@@ -2013,7 +2013,7 @@ QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
 
 SearchFieldChoice::SearchFieldChoice(QObject* const parent)
     : SearchField(parent),
-      m_comboBox(0),
+      m_comboBox(nullptr),
       m_type(QVariant::Invalid)
 {
     m_model   = new ChoiceSearchModel(this);
@@ -2402,12 +2402,12 @@ QList<int> SearchFieldChoice::values() const
 
 SearchFieldAlbum::SearchFieldAlbum(QObject* const parent, Type type)
     : SearchField(parent),
-      m_wrapperBox(0),
-      m_albumComboBox(0),
-      m_tagComboBox(0),
-      m_operation(0),
+      m_wrapperBox(nullptr),
+      m_albumComboBox(nullptr),
+      m_tagComboBox(nullptr),
+      m_operation(nullptr),
       m_type(type),
-      m_model(0)
+      m_model(nullptr)
 {
 }
 
@@ -2428,7 +2428,7 @@ void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int colum
     }
     else if (m_type == TypeTag)
     {
-        m_wrapperBox  = new DHBox(0);
+        m_wrapperBox  = new DHBox(nullptr);
         m_tagComboBox = new TagTreeViewSelectComboBox(m_wrapperBox);
 
         m_operation   = new SqueezedComboBox(m_wrapperBox);
@@ -2458,7 +2458,7 @@ void SearchFieldAlbum::updateState()
 void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 {
     QList<int> ids = reader.valueToIntOrIntList();
-    Album* a       = 0;
+    Album* a       = nullptr;
 
     if (m_type == TypeAlbum)
     {
@@ -2492,7 +2492,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
             // Ignore internal tags here.
             if (a && TagsCache::instance()->isInternalTag(a->id()))
             {
-                a = 0;
+                a = nullptr;
             }
 
             if (!a)
@@ -2748,7 +2748,7 @@ QList<QRect> SearchFieldRating::valueWidgetRects() const
 
 SearchFieldComboBox::SearchFieldComboBox(QObject* const parent)
     : SearchField(parent),
-      m_comboBox(0)
+      m_comboBox(nullptr)
 {
 }
 
@@ -2805,7 +2805,7 @@ void SearchFieldComboBox::indexChanged(int index)
 
 SearchFieldCheckBox::SearchFieldCheckBox(QObject* const parent)
     : SearchField(parent),
-      m_checkBox(0)
+      m_checkBox(nullptr)
 {
 }
 
@@ -2946,8 +2946,8 @@ void SearchFieldPageOrientation::read(SearchXmlCachingReader& reader)
 
 SearchFieldLabels::SearchFieldLabels(QObject* const parent)
     : SearchField(parent),
-      m_pickLabelFilter(0),
-      m_colorLabelFilter(0)
+      m_pickLabelFilter(nullptr),
+      m_colorLabelFilter(nullptr)
 {
 }
 
@@ -2978,7 +2978,7 @@ void SearchFieldLabels::updateState()
 
 void SearchFieldLabels::read(SearchXmlCachingReader& reader)
 {
-    TAlbum* a      = 0;
+    TAlbum* a      = nullptr;
     QList<int> ids = reader.valueToIntOrIntList();
     QList<ColorLabel> clabels;
     QList<PickLabel>  plabels;

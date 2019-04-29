@@ -63,7 +63,7 @@ class Q_DECL_HIDDEN KeywordLineEdit : public QLineEdit
 {
 public:
 
-    explicit KeywordLineEdit(QWidget* const parent = 0)
+    explicit KeywordLineEdit(QWidget* const parent = nullptr)
         : QLineEdit(parent)
     {
         m_hasAdvanced             = false;
@@ -171,23 +171,23 @@ class Q_DECL_HIDDEN SearchTabHeader::Private
 public:
 
     explicit Private() :
-        newSearchWidget(0),
-        saveAsWidget(0),
-        editSimpleWidget(0),
-        editAdvancedWidget(0),
-        lowerArea(0),
-        keywordEdit(0),
-        advancedEditLabel(0),
-        saveNameEdit(0),
-        saveButton(0),
-        storedKeywordEditName(0),
-        storedKeywordEdit(0),
-        storedAdvancedEditName(0),
-        storedAdvancedEditLabel(0),
-        keywordEditTimer(0),
-        storedKeywordEditTimer(0),
-        searchWindow(0),
-        currentAlbum(0)
+        newSearchWidget(nullptr),
+        saveAsWidget(nullptr),
+        editSimpleWidget(nullptr),
+        editAdvancedWidget(nullptr),
+        lowerArea(nullptr),
+        keywordEdit(nullptr),
+        advancedEditLabel(nullptr),
+        saveNameEdit(nullptr),
+        saveButton(nullptr),
+        storedKeywordEditName(nullptr),
+        storedKeywordEdit(nullptr),
+        storedAdvancedEditName(nullptr),
+        storedAdvancedEditLabel(nullptr),
+        keywordEditTimer(nullptr),
+        storedKeywordEditTimer(nullptr),
+        searchWindow(nullptr),
+        currentAlbum(nullptr)
     {
     }
 

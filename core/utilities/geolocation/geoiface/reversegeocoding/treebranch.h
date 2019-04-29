@@ -39,7 +39,7 @@ public:
 
     explicit TreeBranch()
       : sourceIndex(),
-        parent(0),
+        parent(nullptr),
         data(),
         type(),
         oldChildren(),

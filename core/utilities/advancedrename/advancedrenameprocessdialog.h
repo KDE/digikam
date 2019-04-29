@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT AdvancedRenameProcessDialog : public DProgressDlg
 
 public:
 
-    explicit AdvancedRenameProcessDialog(const NewNamesList& list, QWidget* const parent = 0);
+    explicit AdvancedRenameProcessDialog(const NewNamesList& list, QWidget* const parent = nullptr);
     ~AdvancedRenameProcessDialog();
 
     QList<QUrl> failedUrls() const;

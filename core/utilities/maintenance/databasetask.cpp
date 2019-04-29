@@ -53,7 +53,7 @@ public:
           scanRecognitionDb(false),
           scanSimilarityDb(false),
           mode(Mode::Unknown),
-          data(0)
+          data(nullptr)
     {
     }
 

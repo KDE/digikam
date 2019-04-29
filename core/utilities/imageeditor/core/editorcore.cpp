@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-EditorCore* EditorCore::m_defaultInstance = 0;
+EditorCore* EditorCore::m_defaultInstance = nullptr;
 
 EditorCore* EditorCore::defaultInstance()
 {
@@ -87,7 +87,7 @@ EditorCore::~EditorCore()
 
     if (m_defaultInstance == this)
     {
-        m_defaultInstance = 0;
+        m_defaultInstance = nullptr;
     }
 }
 
@@ -644,7 +644,7 @@ DImg* EditorCore::getImg() const
     else
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "d->image is NULL";
-        return 0;
+        return nullptr;
     }
 }
 

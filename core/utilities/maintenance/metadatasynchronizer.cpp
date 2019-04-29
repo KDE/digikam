@@ -48,8 +48,8 @@ class Q_DECL_HIDDEN MetadataSynchronizer::Private
 public:
 
     explicit Private()
-      : imageInfoJob(0),
-        thread(0),
+      : imageInfoJob(nullptr),
+        thread(nullptr),
         direction(MetadataSynchronizer::WriteFromDatabaseToFile),
         tagsOnly(false)
     {

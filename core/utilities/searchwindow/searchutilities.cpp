@@ -617,7 +617,7 @@ void CustomStepsIntSpinBox::slotValueChanged(int val)
 // ------------------------------------------------------------------------
 
 StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
-    : QWidget(0),
+    : QWidget(nullptr),
       m_widget(object)
 {
     setAttribute(Qt::WA_DeleteOnClose);

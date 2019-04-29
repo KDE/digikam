@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT BackendGoogleMaps : public MapBackend
 public:
 
     explicit BackendGoogleMaps(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
-                               QObject* const parent = 0);
+                               QObject* const parent = nullptr);
     virtual ~BackendGoogleMaps();
 
     virtual QString backendName() const;

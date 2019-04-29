@@ -46,7 +46,7 @@ public:
 
 public:
 
-    explicit SetupDatabase(QWidget* const parent = 0);
+    explicit SetupDatabase(QWidget* const parent = nullptr);
     virtual ~SetupDatabase();
 
     void applySettings();

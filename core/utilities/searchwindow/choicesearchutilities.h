@@ -52,7 +52,7 @@ public:
 
 public:
 
-    explicit ChoiceSearchModel(QObject* const parent = 0);
+    explicit ChoiceSearchModel(QObject* const parent = nullptr);
 
     /** Sets the data from the given map, with integer keys and QString user displayable value.
      */
@@ -198,7 +198,7 @@ public:
      *  After constructing the object, call setModel
      *  with your model.
      */
-    explicit ChoiceSearchComboBox(QWidget* const parent = 0);
+    explicit ChoiceSearchComboBox(QWidget* const parent = nullptr);
 
     /** Sets the model and initializes the widget.
      *  Can only be called once for a widget.
@@ -222,7 +222,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void installView(QAbstractItemView* view = 0);
+    virtual void installView(QAbstractItemView* view = nullptr);
 
 protected:
 

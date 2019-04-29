@@ -76,7 +76,7 @@ class Q_DECL_HIDDEN SetupCameraItem : public QTreeWidgetItem
 public:
 
     explicit SetupCameraItem(QTreeWidget* const parent, CameraType* const ctype)
-        : QTreeWidgetItem(parent), m_ctype(0)
+        : QTreeWidgetItem(parent), m_ctype(nullptr)
     {
         setCameraType(ctype);
     };
@@ -167,41 +167,41 @@ class Q_DECL_HIDDEN SetupCamera::Private
 public:
 
     explicit Private()
-      : addButton(0),
-        removeButton(0),
-        editButton(0),
-        autoDetectButton(0),
-        importAddButton(0),
-        importRemoveButton(0),
-        importEditButton(0),
-        storeDiffButton(0),
-        overwriteButton(0),
-        skipFileButton(0),
-        conflictButtonGroup(0),
-        useFileMetadata(0),
-        turnHighQualityThumbs(0),
-        useDefaultTargetAlbum(0),
-        iconShowNameBox(0),
-        iconShowSizeBox(0),
-        iconShowDateBox(0),
-        iconShowResolutionBox(0),
-        iconShowTagsBox(0),
-        iconShowOverlaysBox(0),
-        iconShowRatingBox(0),
-        iconShowFormatBox(0),
-        iconShowCoordinatesBox(0),
-        previewLoadFullImageSize(0),
-        previewItemsWhileDownload(0),
-        previewShowIcons(0),
-        leftClickActionComboBox(0),
-        iconViewFontSelect(0),
-        target1AlbumSelector(0),
-        listView(0),
-        importListView(0),
-        tab(0),
-        ignoreNamesEdit(0),
-        ignoreExtensionsEdit(0),
-        fullScreenSettings(0)
+      : addButton(nullptr),
+        removeButton(nullptr),
+        editButton(nullptr),
+        autoDetectButton(nullptr),
+        importAddButton(nullptr),
+        importRemoveButton(nullptr),
+        importEditButton(nullptr),
+        storeDiffButton(nullptr),
+        overwriteButton(nullptr),
+        skipFileButton(nullptr),
+        conflictButtonGroup(nullptr),
+        useFileMetadata(nullptr),
+        turnHighQualityThumbs(nullptr),
+        useDefaultTargetAlbum(nullptr),
+        iconShowNameBox(nullptr),
+        iconShowSizeBox(nullptr),
+        iconShowDateBox(nullptr),
+        iconShowResolutionBox(nullptr),
+        iconShowTagsBox(nullptr),
+        iconShowOverlaysBox(nullptr),
+        iconShowRatingBox(nullptr),
+        iconShowFormatBox(nullptr),
+        iconShowCoordinatesBox(nullptr),
+        previewLoadFullImageSize(nullptr),
+        previewItemsWhileDownload(nullptr),
+        previewShowIcons(nullptr),
+        leftClickActionComboBox(nullptr),
+        iconViewFontSelect(nullptr),
+        target1AlbumSelector(nullptr),
+        listView(nullptr),
+        importListView(nullptr),
+        tab(nullptr),
+        ignoreNamesEdit(nullptr),
+        ignoreExtensionsEdit(nullptr),
+        fullScreenSettings(nullptr)
     {
     }
 

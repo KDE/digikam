@@ -64,19 +64,19 @@ class Q_DECL_HIDDEN ColorCorrectionDlg::Private
 public:
 
     explicit Private()
-      : imageProfileTitle(0),
-        imageProfileDesc(0),
-        previewTarget(0),
-        keepProfile(0),
-        convertToWorkingSpace(0),
-        thirdOption(0),
-        thirdCheckBox(0),
-        imageSRGB(0),
-        imageWorkingSpace(0),
-        imageOtherSpace(0),
-        buttons(0),
-        otherProfileBox(0),
-        imageProfileBox(0),
+      : imageProfileTitle(nullptr),
+        imageProfileDesc(nullptr),
+        previewTarget(nullptr),
+        keepProfile(nullptr),
+        convertToWorkingSpace(nullptr),
+        thirdOption(nullptr),
+        thirdCheckBox(nullptr),
+        imageSRGB(nullptr),
+        imageWorkingSpace(nullptr),
+        imageOtherSpace(nullptr),
+        buttons(nullptr),
+        otherProfileBox(nullptr),
+        imageProfileBox(nullptr),
         mode(ColorCorrectionDlg::ProfileMismatch)
     {
     }

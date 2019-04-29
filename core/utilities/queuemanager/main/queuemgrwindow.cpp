@@ -76,7 +76,7 @@
 namespace Digikam
 {
 
-QueueMgrWindow* QueueMgrWindow::m_instance = 0;
+QueueMgrWindow* QueueMgrWindow::m_instance = nullptr;
 
 QueueMgrWindow* QueueMgrWindow::queueManagerWindow()
 {
@@ -94,7 +94,7 @@ bool QueueMgrWindow::queueManagerWindowCreated()
 }
 
 QueueMgrWindow::QueueMgrWindow()
-    : DXmlGuiWindow(0),
+    : DXmlGuiWindow(nullptr),
       d(new Private)
 {
     setConfigGroupName(QLatin1String("Batch Queue Manager Settings"));
@@ -136,7 +136,7 @@ QueueMgrWindow::QueueMgrWindow()
 
 QueueMgrWindow::~QueueMgrWindow()
 {
-    m_instance = 0;
+    m_instance = nullptr;
     delete d;
 }
 

@@ -50,11 +50,11 @@ class Q_DECL_HIDDEN SlideToolBar::Private
 public:
 
     explicit Private()
-      : playBtn(0),
-        stopBtn(0),
-        nextBtn(0),
-        prevBtn(0),
-        screenSelectBtn(0),
+      : playBtn(nullptr),
+        stopBtn(nullptr),
+        nextBtn(nullptr),
+        prevBtn(nullptr),
+        screenSelectBtn(nullptr),
         desktop(qApp->desktop())
     {
     }

@@ -44,7 +44,7 @@ class Q_DECL_HIDDEN OsmInternalJobs
 public:
 
     OsmInternalJobs()
-      : netReply(0)
+      : netReply(nullptr)
     {
     }
 
@@ -66,7 +66,7 @@ class Q_DECL_HIDDEN BackendOsmRG::Private
 public:
 
     explicit Private()
-      : mngr(0)
+      : mngr(nullptr)
     {
     }
 

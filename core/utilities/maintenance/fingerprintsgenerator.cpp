@@ -53,7 +53,7 @@ public:
 
     explicit Private()
       : rebuildAll(true),
-        thread(0)
+        thread(nullptr)
     {
     }
 

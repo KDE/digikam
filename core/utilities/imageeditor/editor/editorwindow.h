@@ -195,7 +195,7 @@ protected:
     void toggleStandardActions(bool val);
     void toggleZoomActions(bool val);
     void toggleNonDestructiveActions();
-    void toggleToolActions(EditorTool* tool = 0);
+    void toggleToolActions(EditorTool* tool = nullptr);
 
     bool promptForOverWrite();
 
@@ -305,7 +305,7 @@ protected Q_SLOTS:
     virtual void slotContextMenu() = 0;
     virtual void slotRevert() = 0;
     virtual void slotAddedDropedItems(QDropEvent* e) = 0;
-    virtual void slotOpenWith(QAction* action=0) = 0;
+    virtual void slotOpenWith(QAction* action=nullptr) = 0;
 
 private Q_SLOTS:
 

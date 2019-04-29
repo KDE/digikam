@@ -63,7 +63,7 @@ public:
     {
         savingState             = SavingStateNone;
         synchronizingState      = NormalSaving;
-        saveTempFile            = 0;
+        saveTempFile            = nullptr;
         destinationExisted      = false;
         synchronousSavingResult = false;
         abortingSaving          = false;

@@ -67,11 +67,11 @@ class Q_DECL_HIDDEN AddBookmarkDialog::Private
 public:
 
     explicit Private()
-      : manager(0),
-        proxyModel(0),
-        location(0),
-        title(0),
-        desc(0)
+      : manager(nullptr),
+        proxyModel(nullptr),
+        location(nullptr),
+        title(nullptr),
+        desc(nullptr)
     {
     }
 
@@ -94,7 +94,7 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
     d->manager = mngr;
 
     setWindowFlags(Qt::Sheet);
-    setWindowTitle(tr2i18n("Add Bookmark", 0));
+    setWindowTitle(tr2i18n("Add Bookmark", nullptr));
     setObjectName(QLatin1String("AddBookmarkDialog"));
     resize(350, 300);
 
@@ -186,12 +186,12 @@ class Q_DECL_HIDDEN BookmarksDialog::Private
 public:
 
     explicit Private()
-      : manager(0),
-        bookmarksModel(0),
-        proxyModel(0),
-        search(0),
-        tree(0),
-        mapView(0)
+      : manager(nullptr),
+        bookmarksModel(nullptr),
+        proxyModel(nullptr),
+        search(nullptr),
+        tree(nullptr),
+        mapView(nullptr)
     {
     }
 

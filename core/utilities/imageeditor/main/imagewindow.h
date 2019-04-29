@@ -168,7 +168,7 @@ private Q_SLOTS:
     void slotDBStat();
 
     void slotAddedDropedItems(QDropEvent*);
-    void slotOpenWith(QAction* action=0);
+    void slotOpenWith(QAction* action=nullptr);
 
     void slotRightSideBarActivateTitles();
     void slotRightSideBarActivateComments();

@@ -62,10 +62,10 @@ public:
 
     explicit Private()
     {
-        rubber     = 0;
-        wrapItem   = 0;
-        canvasItem = 0;
-        core       = 0;
+        rubber     = nullptr;
+        wrapItem   = nullptr;
+        canvasItem = nullptr;
+        core       = nullptr;
     }
 
     QString               errorMessage;
@@ -644,7 +644,7 @@ void Canvas::cancelAddItem()
     {
         this->scene()->removeItem(d->wrapItem);
         d->wrapItem->deleteLater();
-        d->wrapItem = 0;
+        d->wrapItem = nullptr;
     }
 
     emit signalSelected(true);

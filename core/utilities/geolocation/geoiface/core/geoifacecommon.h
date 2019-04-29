@@ -76,8 +76,8 @@ public:
           widget(),
           backendData(),
           backendName(),
-          currentOwner(0),
-          deleteFunction(0)
+          currentOwner(nullptr),
+          deleteFunction(nullptr)
     {
     }
 
@@ -212,11 +212,11 @@ public:
 
     GeoIfaceSharedData()
         : QSharedData(),
-          worldMapWidget(0),
-          tileGrouper(0),
-          markerModel(0),
+          worldMapWidget(nullptr),
+          tileGrouper(nullptr),
+          markerModel(nullptr),
           clusterList(),
-          trackManager(0),
+          trackManager(nullptr),
           showThumbnails(true),
           thumbnailSize(GeoIfaceMinThumbnailSize),
           thumbnailGroupingRadius(GeoIfaceMinThumbnailGroupingRadius),
@@ -228,9 +228,9 @@ public:
           modificationsAllowed(true),
           selectionRectangle(),
           haveMovingCluster(false),
-          currentMouseMode(0),
-          availableMouseModes(0),
-          visibleMouseModes(0),
+          currentMouseMode(nullptr),
+          availableMouseModes(nullptr),
+          visibleMouseModes(nullptr),
           activeState(false)
     {
     }

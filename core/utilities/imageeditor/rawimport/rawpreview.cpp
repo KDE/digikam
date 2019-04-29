@@ -55,8 +55,8 @@ public:
 
     explicit Private()
       : currentFitWindowZoom(0.0),
-        thread(0),
-        item(0)
+        thread(nullptr),
+        item(nullptr)
     {
     }
 

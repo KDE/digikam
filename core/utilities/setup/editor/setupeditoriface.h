@@ -41,7 +41,7 @@ class SetupEditorIface : public QScrollArea
 
 public:
 
-    explicit SetupEditorIface(QWidget* const parent = 0);
+    explicit SetupEditorIface(QWidget* const parent = nullptr);
     virtual ~SetupEditorIface();
 
     void applySettings();

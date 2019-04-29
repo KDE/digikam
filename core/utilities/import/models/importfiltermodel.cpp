@@ -32,7 +32,7 @@ namespace Digikam
 
 ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
     : DCategorizedSortFilterProxyModel(parent),
-      m_chainedModel(0)
+      m_chainedModel(nullptr)
 {
 }
 
@@ -207,7 +207,7 @@ ImportFilterModel* ImportSortFilterModel::importFilterModel() const
         return m_chainedModel->importFilterModel();
     }
 
-    return 0;
+    return nullptr;
 }
 
 void ImportSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
@@ -229,9 +229,9 @@ public:
 
     ImportFilterModelPrivate()
     {
-        q               = 0;
-        importItemModel = 0;
-        filter          = 0;
+        q               = nullptr;
+        importItemModel = nullptr;
+        filter          = nullptr;
     }
 
     void init(ImportFilterModel* const _q);

@@ -158,17 +158,17 @@ public:
     Private()
       : configShowThumbbarEntry(QLatin1String("Show Thumbbar")),
         configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar")),
-        viewContainer(0),
-        toMainWindowAction(0),
-        fileDeletePermanentlyAction(0),
-        fileDeletePermanentlyDirectlyAction(0),
-        fileTrashDirectlyAction(0),
-        imageInfoModel(0),
-        imageFilterModel(0),
-        dragDropHandler(0),
-        thumbBar(0),
-        thumbBarDock(0),
-        rightSideBar(0)
+        viewContainer(nullptr),
+        toMainWindowAction(nullptr),
+        fileDeletePermanentlyAction(nullptr),
+        fileDeletePermanentlyDirectlyAction(nullptr),
+        fileTrashDirectlyAction(nullptr),
+        imageInfoModel(nullptr),
+        imageFilterModel(nullptr),
+        dragDropHandler(nullptr),
+        thumbBar(nullptr),
+        thumbBarDock(nullptr),
+        rightSideBar(nullptr)
     {
     }
 

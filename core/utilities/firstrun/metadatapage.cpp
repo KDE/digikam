@@ -49,9 +49,9 @@ class Q_DECL_HIDDEN MetadataPage::Private
 public:
 
     explicit Private()
-      : doNothing(0),
-        storeInFiles(0),
-        metadataStorage(0)
+      : doNothing(nullptr),
+        storeInFiles(nullptr),
+        metadataStorage(nullptr)
     {
     }
 

@@ -96,7 +96,7 @@ void ImportDelegate::setView(ImportCategorizedView* view)
 
     d->currentView = view;
 
-    setModel(view ? view->model() : 0);
+    setModel(view ? view->model() : nullptr);
 
     if (d->currentView)
     {
@@ -119,7 +119,7 @@ void ImportDelegate::setModel(QAbstractItemModel* model)
 
     if (d->currentModel)
     {
-        disconnect(d->currentModel, 0, this, 0);
+        disconnect(d->currentModel, nullptr, this, nullptr);
     }
 
     d->currentModel = model;
@@ -488,7 +488,7 @@ void ImportDelegate::modelChanged()
 {
     Q_D(ImportDelegate);
     clearModelDataCaches();
-    setModel(d->currentView ? d->currentView->model() : 0);
+    setModel(d->currentView ? d->currentView->model() : nullptr);
 }
 
 void ImportDelegate::modelContentsChanged()

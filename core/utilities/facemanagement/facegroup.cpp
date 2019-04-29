@@ -66,7 +66,7 @@ class Q_DECL_HIDDEN FaceItem : public RegionFrameItem
 {
 public:
 
-    explicit FaceItem(QGraphicsItem* const parent = 0);
+    explicit FaceItem(QGraphicsItem* const parent = nullptr);
 
     void setFace(const FaceTagsIface& face);
     FaceTagsIface face() const;
@@ -87,8 +87,8 @@ protected:
 
 FaceItem::FaceItem(QGraphicsItem* const parent)
     : RegionFrameItem(parent),
-      m_widget(0),
-      m_changer(0)
+      m_widget(nullptr),
+      m_changer(nullptr)
 {
 }
 
@@ -174,16 +174,16 @@ public:
     explicit Private(FaceGroup* const q)
         : q(q)
     {
-        view                 = 0;
+        view                 = nullptr;
         autoSuggest          = false;
         showOnHover          = false;
-        manuallyAddWrapItem  = 0;
-        manuallyAddedItem    = 0;
-        visibilityController = 0;
+        manuallyAddWrapItem  = nullptr;
+        manuallyAddedItem    = nullptr;
+        visibilityController = nullptr;
         state                = NoFaces;
-        tagModel             = 0;
-        filterModel          = 0;
-        filteredModel        = 0;
+        tagModel             = nullptr;
+        filterModel          = nullptr;
+        filteredModel        = nullptr;
     }
 
     void                       applyVisible();
@@ -412,7 +412,7 @@ static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
 
 RegionFrameItem* FaceGroup::closestItem(const QPointF& p, qreal* const manhattanLength) const
 {
-    RegionFrameItem* closestItem = 0;
+    RegionFrameItem* closestItem = nullptr;
     qreal minDistance            = 0;
     qreal minCenterDistance      = 0;
 
@@ -499,7 +499,7 @@ void FaceGroup::itemHoverMoveEvent(QGraphicsSceneHoverEvent* e)
                 }
             }
 
-            setVisibleItem(0);
+            setVisibleItem(nullptr);
         }
     }
 }
@@ -516,7 +516,7 @@ void FaceGroup::leaveEvent(QEvent*)
 {
     if (d->showOnHover && !isVisible())
     {
-        setVisibleItem(0);
+        setVisibleItem(nullptr);
     }
 }
 
@@ -823,13 +823,13 @@ void FaceGroup::slotAddItemFinished(const QRectF& rect)
 void FaceGroup::cancelAddItem()
 {
     delete d->manuallyAddedItem;
-    d->manuallyAddedItem = 0;
+    d->manuallyAddedItem = nullptr;
 
     if (d->manuallyAddWrapItem)
     {
         d->view->scene()->removeItem(d->manuallyAddWrapItem);
         d->manuallyAddWrapItem->deleteLater();
-        d->manuallyAddWrapItem = 0;
+        d->manuallyAddWrapItem = nullptr;
     }
 }
 

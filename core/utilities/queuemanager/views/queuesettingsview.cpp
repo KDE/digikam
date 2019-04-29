@@ -81,27 +81,27 @@ public:
 public:
 
     explicit Private()
-      : rawLoadingLabel(0),
-        renamingButtonGroup(0),
-        rawLoadingButtonGroup(0),
-        renameOriginal(0),
-        renameManual(0),
-        extractJPEGButton(0),
-        demosaicingButton(0),
-        useOrgAlbum(0),
-        useMutiCoreCPU(0),
-        conflictBox(0),
-        albumSel(0),
-        advancedRenameManager(0),
-        advancedRenameWidget(0),
-        rawSettings(0),
-        jpgSettings(0),
-        pngSettings(0),
-        tifSettings(0),
+      : rawLoadingLabel(nullptr),
+        renamingButtonGroup(nullptr),
+        rawLoadingButtonGroup(nullptr),
+        renameOriginal(nullptr),
+        renameManual(nullptr),
+        extractJPEGButton(nullptr),
+        demosaicingButton(nullptr),
+        useOrgAlbum(nullptr),
+        useMutiCoreCPU(nullptr),
+        conflictBox(nullptr),
+        albumSel(nullptr),
+        advancedRenameManager(nullptr),
+        advancedRenameWidget(nullptr),
+        rawSettings(nullptr),
+        jpgSettings(nullptr),
+        pngSettings(nullptr),
+        tifSettings(nullptr),
 #ifdef HAVE_JASPER
-        j2kSettings(0),
+        j2kSettings(nullptr),
 #endif // HAVE_JASPER
-        pgfSettings(0)
+        pgfSettings(nullptr)
     {
     }
 

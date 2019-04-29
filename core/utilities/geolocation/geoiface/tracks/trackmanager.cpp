@@ -51,7 +51,7 @@ class Q_DECL_HIDDEN TrackManager::Private
 public:
 
     explicit Private()
-      : trackLoadFutureWatcher(0),
+      : trackLoadFutureWatcher(nullptr),
         trackLoadFuture(),
         trackList(),
         loadErrorFiles(),

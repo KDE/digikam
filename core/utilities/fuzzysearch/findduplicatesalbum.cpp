@@ -49,7 +49,7 @@ public:
     explicit Private()
         : iconSize(64)
     {
-        thumbLoadThread = 0;
+        thumbLoadThread = nullptr;
     }
 
     const int            iconSize;
@@ -103,7 +103,7 @@ QTreeWidgetItem* FindDuplicatesAlbum::firstItem()
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void FindDuplicatesAlbum::selectFirstItem()

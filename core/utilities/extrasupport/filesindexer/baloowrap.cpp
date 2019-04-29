@@ -83,17 +83,17 @@ BalooWrap* BalooWrap::instance()
 
 void BalooWrap::setTags(const QUrl& url, QStringList* const tags)
 {
-    setAllData(url,tags, NULL, -1);
+    setAllData(url,tags, nullptr, -1);
 }
 
 void BalooWrap::setComment(const QUrl& url, QString* const comment)
 {
-    setAllData(url, NULL, comment, -1);
+    setAllData(url, nullptr, comment, -1);
 }
 
 void BalooWrap::setRating(const QUrl& url, int rating)
 {
-    setAllData(url, NULL, NULL, rating);
+    setAllData(url, nullptr, nullptr, rating);
 }
 
 void BalooWrap::setAllData(const QUrl& url,
@@ -108,12 +108,12 @@ void BalooWrap::setAllData(const QUrl& url,
 
     KFileMetaData::UserMetaData md(url.toLocalFile());
 
-    if (tags != NULL)
+    if (tags != nullptr)
     {
         md.setTags(*tags);
     }
 
-    if (comment != NULL)
+    if (comment != nullptr)
     {
         md.setUserComment(*comment);
     }

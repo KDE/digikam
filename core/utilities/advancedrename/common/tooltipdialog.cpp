@@ -46,8 +46,8 @@ class Q_DECL_HIDDEN TooltipDialog::Private
 public:
 
     explicit Private()
-      : buttons(0),
-        textBrowser(0)
+      : buttons(nullptr),
+        textBrowser(nullptr)
     {
     }
 

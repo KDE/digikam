@@ -38,7 +38,7 @@ class SetupImageQualitySorter : public QScrollArea
 
 public:
 
-    explicit SetupImageQualitySorter(QWidget* const parent = 0);
+    explicit SetupImageQualitySorter(QWidget* const parent = nullptr);
     ~SetupImageQualitySorter();
 
     void applySettings();

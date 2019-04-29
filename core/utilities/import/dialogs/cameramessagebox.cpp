@@ -124,7 +124,7 @@ public:
     explicit Private()
         : iconSize(64)
     {
-        ctrl = 0;
+        ctrl = nullptr;
     }
 
     const int         iconSize;

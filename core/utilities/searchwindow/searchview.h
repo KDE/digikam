@@ -65,7 +65,7 @@ public:
     // To contain common code of SearchView and SearchGroup,
     // as SearchGroups can have subgroups.
 
-    explicit AbstractSearchGroupContainer(QWidget* const parent = 0);
+    explicit AbstractSearchGroupContainer(QWidget* const parent = nullptr);
 
 public Q_SLOTS:
 
@@ -164,7 +164,7 @@ class SearchViewBottomBar : public QWidget
 
 public:
 
-    explicit SearchViewBottomBar(SearchViewThemedPartsCache* const cache, QWidget* const parent = 0);
+    explicit SearchViewBottomBar(SearchViewThemedPartsCache* const cache, QWidget* const parent = nullptr);
 
 Q_SIGNALS:
 

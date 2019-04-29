@@ -233,7 +233,7 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const pre
 
     if (!tool)
     {
-        return 0;
+        return nullptr;
     }
 
     removeTool(set);
@@ -247,7 +247,7 @@ AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const pre
 
 AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
-    AssignedListViewItem* item = 0;
+    AssignedListViewItem* item = nullptr;
 
     if (preceding)
     {
@@ -276,7 +276,7 @@ AssignedListViewItem* AssignedListView::insertTool(AssignedListViewItem* const p
 
 AssignedListViewItem* AssignedListView::addTool(const BatchToolSet& set)
 {
-    return insertTool(0, set);
+    return insertTool(nullptr, set);
 }
 
 bool AssignedListView::removeTool(const BatchToolSet& set)
@@ -316,7 +316,7 @@ AssignedListViewItem* AssignedListView::findTool(const BatchToolSet& set)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 Qt::DropActions AssignedListView::supportedDropActions() const
@@ -496,7 +496,7 @@ void AssignedListView::slotAssignTools(const QMap<int, QString>& map)
         return;
     }
 
-    assignTools(map, 0);
+    assignTools(map, nullptr);
 }
 
 void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListViewItem* const preceding)

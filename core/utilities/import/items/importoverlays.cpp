@@ -306,7 +306,7 @@ void ImportRatingOverlay::setActive(bool active)
 
         if (view() && view()->model())
         {
-            disconnect(view()->model(), 0, this, 0);
+            disconnect(view()->model(), nullptr, this, nullptr);
         }
     }
 }

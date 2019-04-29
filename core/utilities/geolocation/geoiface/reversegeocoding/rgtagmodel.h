@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT RGTagModel : public QAbstractItemModel
 public:
 
     explicit RGTagModel(QAbstractItemModel* const externalTagModel,
-                        QObject* const parent = 0);
+                        QObject* const parent = nullptr);
     ~RGTagModel();
 
     // QAbstractItemModel:

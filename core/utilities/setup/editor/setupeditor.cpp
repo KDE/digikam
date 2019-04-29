@@ -46,11 +46,11 @@ class Q_DECL_HIDDEN SetupEditor::Private
 public:
 
     explicit Private()
-      : tab(0),
-        iface(0),
-        iofiles(0),
-        versioning(0),
-        raw(0)
+      : tab(nullptr),
+        iface(nullptr),
+        iofiles(nullptr),
+        versioning(nullptr),
+        raw(nullptr)
     {
     }
 

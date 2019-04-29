@@ -47,19 +47,19 @@ public:
 
     explicit Private()
     {
-        dockArea            = 0;
-        splitter            = 0;
-        thumbBar            = 0;
-        thumbBarDock        = 0;
-        importIconView      = 0;
-        importPreviewView   = 0;
+        dockArea            = nullptr;
+        splitter            = nullptr;
+        thumbBar            = nullptr;
+        thumbBarDock        = nullptr;
+        importIconView      = nullptr;
+        importPreviewView   = nullptr;
 
 #ifdef HAVE_MARBLE
-        mapWidgetView       = 0;
+        mapWidgetView       = nullptr;
 #endif // HAVE_MARBLE
 
 #ifdef HAVE_MEDIAPLAYER
-        mediaPlayerView     = 0;
+        mediaPlayerView     = nullptr;
 #endif // HAVE_MEDIAPLAYER
 
         syncingSelection    = false;

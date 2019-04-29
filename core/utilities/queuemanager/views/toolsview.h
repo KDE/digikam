@@ -48,7 +48,7 @@ public:
 
 public:
 
-    explicit ToolsView(QWidget* const parent = 0);
+    explicit ToolsView(QWidget* const parent = nullptr);
     ~ToolsView();
 
     void addTool(BatchTool* const tool);

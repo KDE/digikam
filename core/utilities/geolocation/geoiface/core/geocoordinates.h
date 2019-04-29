@@ -98,7 +98,7 @@ public:
     bool sameLonLatAs(const GeoCoordinates& other)   const;
     Marble::GeoDataCoordinates toMarbleCoordinates() const;
 
-    static GeoCoordinates fromGeoUrl(const QString& url, bool* const parsedOkay = 0);
+    static GeoCoordinates fromGeoUrl(const QString& url, bool* const parsedOkay = nullptr);
     static GeoCoordinates fromMarbleCoordinates(const Marble::GeoDataCoordinates& marbleCoordinates);
     static Pair makePair(const qreal lat1, const qreal lon1, const qreal lat2, const qreal lon2);
 

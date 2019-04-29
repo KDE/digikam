@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ImportCategorizedView : public ItemViewCategorized
 
 public:
 
-    explicit ImportCategorizedView(QWidget* const parent = 0);
+    explicit ImportCategorizedView(QWidget* const parent = nullptr);
     ~ImportCategorizedView();
 
     void setModels(ImportItemModel* model, ImportSortFilterModel* filterModel);
@@ -96,10 +96,10 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ItemDelegateOverlay* overlay, ImportDelegate* delegate = 0);
+    void addOverlay(ItemDelegateOverlay* overlay, ImportDelegate* delegate = nullptr);
     void removeOverlay(ItemDelegateOverlay* overlay);
 
-    void addSelectionOverlay(ImportDelegate* delegate = 0);
+    void addSelectionOverlay(ImportDelegate* delegate = nullptr);
 
     ThumbnailSize thumbnailSize() const;
 

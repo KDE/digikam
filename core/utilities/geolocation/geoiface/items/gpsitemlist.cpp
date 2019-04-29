@@ -52,11 +52,11 @@ public:
     explicit Private()
       : editEnabled(true),
         dragEnabled(false),
-        model(0),
-        selectionModel(0),
-        itemDelegate(0),
-        imageSortProxyModel(0),
-        dragDropHandler(0)
+        model(nullptr),
+        selectionModel(nullptr),
+        itemDelegate(nullptr),
+        imageSortProxyModel(nullptr),
+        dragDropHandler(nullptr)
     {
     }
 

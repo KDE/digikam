@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT GPSItemModel : public QAbstractItemModel
 
 public:
 
-    explicit GPSItemModel(QObject* const parent = 0);
+    explicit GPSItemModel(QObject* const parent = nullptr);
     ~GPSItemModel();
 
     // own functions:

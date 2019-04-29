@@ -59,8 +59,8 @@ public:
     explicit Private()
       : allowDirectoryCreation(false),
         verticalSliderPosition(INVALID),
-        parseTimer(0),
-        parser(0)
+        parseTimer(nullptr),
+        parser(nullptr)
     {
     }
 
@@ -251,9 +251,9 @@ public:
     explicit Private()
       : maxVisibleItems(10),
         maxHistoryItems(30),
-        lineEdit(0),
-        proxy(0),
-        highlighter(0)
+        lineEdit(nullptr),
+        proxy(nullptr),
+        highlighter(nullptr)
     {
     }
 
@@ -340,7 +340,7 @@ void AdvancedRenameInput::enableHighlighter(bool enable)
     delete d->highlighter;
     d->highlighter = enable
                      ? new Highlighter(d->lineEdit->document(), d->lineEdit->parser())
-                     : 0;
+                     : nullptr;
 }
 
 void AdvancedRenameInput::setupWidgets()

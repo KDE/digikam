@@ -76,18 +76,18 @@ public:
           configSettingsVisible(QLatin1String("Settings Widget Visible")),
           configRecognizeAlgorithm(QLatin1String("Recognize Algorithm")) 
     {
-        buttons                    = 0;
-        optionGroupBox             = 0;
-        detectAndRecognizeButton   = 0;
-        detectButton               = 0;
-        alreadyScannedBox          = 0;
-        reRecognizeButton          = 0;
-        tabWidget                  = 0;
-        albumSelectors             = 0;
-        accuracyInput              = 0;
-        useFullCpuButton           = 0;
-        retrainAllButton           = 0;
-        recognizeBox               = 0;
+        buttons                    = nullptr;
+        optionGroupBox             = nullptr;
+        detectAndRecognizeButton   = nullptr;
+        detectButton               = nullptr;
+        alreadyScannedBox          = nullptr;
+        reRecognizeButton          = nullptr;
+        tabWidget                  = nullptr;
+        albumSelectors             = nullptr;
+        accuracyInput              = nullptr;
+        useFullCpuButton           = nullptr;
+        retrainAllButton           = nullptr;
+        recognizeBox               = nullptr;
     }
 
     QDialogButtonBox*            buttons;

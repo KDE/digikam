@@ -59,17 +59,17 @@ class Q_DECL_HIDDEN SetupEditorIface::Private
 public:
 
     explicit Private()
-      : themebackgroundColor(0),
-        expoIndicatorMode(0),
-        expoPreview(0),
-        colorBox(0),
-        backgroundColor(0),
-        underExposureColor(0),
-        overExposureColor(0),
-        expoPreviewHisto(0),
-        fullScreenSettings(0),
-        underExposurePcents(0),
-        overExposurePcents(0)
+      : themebackgroundColor(nullptr),
+        expoIndicatorMode(nullptr),
+        expoPreview(nullptr),
+        colorBox(nullptr),
+        backgroundColor(nullptr),
+        underExposureColor(nullptr),
+        overExposureColor(nullptr),
+        expoPreviewHisto(nullptr),
+        fullScreenSettings(nullptr),
+        underExposurePcents(nullptr),
+        overExposurePcents(nullptr)
     {
     }
 

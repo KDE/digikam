@@ -92,7 +92,7 @@ BatchTool* DPluginBqm::findToolByName(const QString& name, QObject* const parent
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void DPluginBqm::addTool(BatchTool* const t)

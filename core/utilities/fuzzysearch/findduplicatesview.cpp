@@ -68,19 +68,19 @@ public:
 
     explicit Private()
     {
-        includeAlbumsLabel      = 0;
-        listView                = 0;
-        scanDuplicatesBtn       = 0;
-        updateFingerPrtBtn      = 0;
-        progressItem            = 0;
-        similarityLabel         = 0;
-        similarityRange         = 0;
-        restrictResultsLabel    = 0;
-        albumTagRelationLabel   = 0;
-        searchResultRestriction = 0;
-        albumTagRelation        = 0;
-        albumSelectors          = 0;
-        settings                = 0;
+        includeAlbumsLabel      = nullptr;
+        listView                = nullptr;
+        scanDuplicatesBtn       = nullptr;
+        updateFingerPrtBtn      = nullptr;
+        progressItem            = nullptr;
+        similarityLabel         = nullptr;
+        similarityRange         = nullptr;
+        restrictResultsLabel    = nullptr;
+        albumTagRelationLabel   = nullptr;
+        searchResultRestriction = nullptr;
+        albumTagRelation        = nullptr;
+        albumSelectors          = nullptr;
+        settings                = nullptr;
         active                  = false;
     }
 

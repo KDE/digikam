@@ -58,7 +58,7 @@ public:
     explicit RGWidget(GPSItemModel* const imageModel,
                       QItemSelectionModel* const selectionModel,
                       QAbstractItemModel* externTagModel,
-                      QWidget* const parent = 0);
+                      QWidget* const parent = nullptr);
     ~RGWidget();
 
     void setUIEnabled(const bool state);

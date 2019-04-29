@@ -49,9 +49,9 @@ class Q_DECL_HIDDEN GPSBookmarkModelHelper::Private
 public:
 
     explicit Private()
-      : model(0),
-        bookmarkManager(0),
-        imageModel(0),
+      : model(nullptr),
+        bookmarkManager(nullptr),
+        imageModel(nullptr),
         visible(false)
     {
     }
@@ -141,7 +141,7 @@ QAbstractItemModel* GPSBookmarkModelHelper::model() const
 
 QItemSelectionModel* GPSBookmarkModelHelper::selectionModel() const
 {
-    return 0;
+    return nullptr;
 }
 
 bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index,

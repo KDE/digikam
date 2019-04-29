@@ -40,7 +40,7 @@ class ImportIconView : public ImportCategorizedView
 
 public:
 
-    explicit ImportIconView(QWidget* const parent = 0);
+    explicit ImportIconView(QWidget* const parent = nullptr);
     ~ImportIconView();
 
     ItemViewUtilities* utilities() const;

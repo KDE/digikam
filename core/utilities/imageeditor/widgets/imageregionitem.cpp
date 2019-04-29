@@ -55,8 +55,8 @@ public:
     explicit Private()
       : onMouseMovePreviewToggled(true),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        view(0),
-        iface(0)
+        view(nullptr),
+        iface(nullptr)
     {
     }
 

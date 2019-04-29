@@ -61,7 +61,7 @@ class Q_DECL_HIDDEN TrackListModel::Private
 public:
 
     explicit Private()
-      : trackManager(0)
+      : trackManager(nullptr)
     {
     }
 
@@ -234,7 +234,7 @@ Qt::ItemFlags TrackListModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     if (index.isValid())

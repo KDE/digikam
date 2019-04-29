@@ -57,10 +57,10 @@ namespace Digikam
 
 DWItemDelegatePrivate::DWItemDelegatePrivate(DWItemDelegate* const q, QObject* const parent)
     : QObject(parent),
-      itemView(0),
+      itemView(nullptr),
       widgetPool(new DWItemDelegatePool(q)),
-      model(0),
-      selectionModel(0),
+      model(nullptr),
+      selectionModel(nullptr),
       viewDestroyed(false),
       q(q)
 {

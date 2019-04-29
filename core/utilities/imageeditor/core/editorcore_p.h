@@ -89,11 +89,11 @@ public:
         selW(0),
         selH(0),
         zoom(1.0),
-        displayingWidget(0),
+        displayingWidget(nullptr),
         currentFileToSave(0),
-        undoMan(0),
-        expoSettings(0),
-        thread(0)
+        undoMan(nullptr),
+        expoSettings(nullptr),
+        thread(nullptr)
     {
     }
 

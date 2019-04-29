@@ -49,16 +49,16 @@ class Q_DECL_HIDDEN PreviewToolBar::Private
 public:
 
     explicit Private()
-      : previewOriginalButton(0),
-        previewBothButtonVert(0),
-        previewBothButtonHorz(0),
-        previewDuplicateBothButtonVert(0),
-        previewDupplicateBothButtonHorz(0),
-        previewtargetButton(0),
-        previewToggleMouseOverButton(0),
-        previewButtons(0),
-        actionsGroup(0),
-        actionsMenu(0)
+      : previewOriginalButton(nullptr),
+        previewBothButtonVert(nullptr),
+        previewBothButtonHorz(nullptr),
+        previewDuplicateBothButtonVert(nullptr),
+        previewDupplicateBothButtonHorz(nullptr),
+        previewtargetButton(nullptr),
+        previewToggleMouseOverButton(nullptr),
+        previewButtons(nullptr),
+        actionsGroup(nullptr),
+        actionsMenu(nullptr)
     {
     }
 

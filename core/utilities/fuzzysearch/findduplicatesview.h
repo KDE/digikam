@@ -46,7 +46,7 @@ class FindDuplicatesView : public QWidget
 
 public:
 
-    explicit FindDuplicatesView(QWidget* const parent = 0);
+    explicit FindDuplicatesView(QWidget* const parent = nullptr);
     virtual ~FindDuplicatesView();
 
     QList<SAlbum*> currentFindDuplicatesAlbums() const;

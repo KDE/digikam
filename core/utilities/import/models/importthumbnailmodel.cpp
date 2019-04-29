@@ -41,7 +41,7 @@ class Q_DECL_HIDDEN ImportThumbnailModel::Private
 public:
 
     explicit Private()
-      : thumbsCtrl(0),
+      : thumbsCtrl(nullptr),
         thumbSize(0),
         lastGlobalThumbSize(0),
         emitDataChanged(true)

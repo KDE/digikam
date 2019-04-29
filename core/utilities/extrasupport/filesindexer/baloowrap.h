@@ -71,7 +71,7 @@ class DIGIKAM_DATABASE_EXPORT BalooWrap : public QObject
 
 public:
 
-    explicit BalooWrap(QObject* const parent = 0);
+    explicit BalooWrap(QObject* const parent = nullptr);
     ~BalooWrap();
 
     /**

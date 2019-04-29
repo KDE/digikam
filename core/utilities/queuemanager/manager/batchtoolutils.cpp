@@ -91,7 +91,7 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
             {
                 suffix = s;
 
-                if (extSet != 0)
+                if (extSet != nullptr)
                 {
                     *extSet = true;
                 }
@@ -101,7 +101,7 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
 
     if (suffix.isEmpty())
     {
-        if (extSet != 0)
+        if (extSet != nullptr)
         {
             *extSet = false;
         }

@@ -36,7 +36,7 @@ class Q_DECL_HIDDEN SetupImageQualitySorter::Private
 public:
 
     explicit Private()
-      : settingsWidget(0)
+      : settingsWidget(nullptr)
     {
     }
 

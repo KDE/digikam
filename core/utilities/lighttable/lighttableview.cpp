@@ -49,11 +49,11 @@ public:
 
     explicit Private()
       : syncPreview(false),
-        grid(0),
-        leftFrame(0),
-        rightFrame(0),
-        leftPreview(0),
-        rightPreview(0)
+        grid(nullptr),
+        leftFrame(nullptr),
+        rightFrame(nullptr),
+        leftPreview(nullptr),
+        rightPreview(nullptr)
     {
     }
 

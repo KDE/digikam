@@ -32,7 +32,7 @@ public:
 
     explicit Private()
     {
-        canvas = 0;
+        canvas = nullptr;
     }
 
     Canvas* canvas;

@@ -41,9 +41,9 @@ public:
 
     explicit Private()
     {
-        imageModel             = 0;
-        sourceSelectionModel   = 0;
-        linkItemSelectionModel = 0;
+        imageModel             = nullptr;
+        sourceSelectionModel   = nullptr;
+        linkItemSelectionModel = nullptr;
     }
 
     GPSItemModel*             imageModel;
@@ -96,9 +96,9 @@ public:
 
     explicit GPSLinkItemSelectionModelPrivate(GPSLinkItemSelectionModel* const proxySelectionModel)
         : q_ptr(proxySelectionModel),
-          m_linkedItemSelectionModel(0),
+          m_linkedItemSelectionModel(nullptr),
           m_ignoreCurrentChanged(false),
-          m_indexMapper(0)
+          m_indexMapper(nullptr)
     {
         QObject::connect(q_ptr, &QItemSelectionModel::currentChanged, q_ptr,
                          [this](const QModelIndex& idx) { slotCurrentChanged(idx); } );
@@ -134,7 +134,7 @@ public:
     void reinitializeIndexMapper()
     {
         delete m_indexMapper;
-        m_indexMapper = 0;
+        m_indexMapper = nullptr;
 
         if (!q_ptr->model() || !m_linkedItemSelectionModel || !m_linkedItemSelectionModel->model())
         {
@@ -167,7 +167,7 @@ GPSLinkItemSelectionModel::GPSLinkItemSelectionModel(QAbstractItemModel* const m
 }
 
 GPSLinkItemSelectionModel::GPSLinkItemSelectionModel(QObject* const parent)
-    : QItemSelectionModel(0, parent),
+    : QItemSelectionModel(nullptr, parent),
       d_ptr(new GPSLinkItemSelectionModelPrivate(this))
 {
 }

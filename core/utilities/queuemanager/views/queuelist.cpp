@@ -72,7 +72,7 @@ public:
         done(false),
         hasThumb(false),
         progressIndex(0),
-        view(0)
+        view(nullptr)
     {
     }
 
@@ -259,10 +259,10 @@ public:
         : iconSize(64)
     {
         showTips        = false;
-        toolTipTimer    = 0;
-        progressTimer   = 0;
-        toolTip         = 0;
-        toolTipItem     = 0;
+        toolTipTimer    = nullptr;
+        progressTimer   = nullptr;
+        toolTip         = nullptr;
+        toolTipItem     = nullptr;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
         progressPix     = DWorkingPixmap();
     }
@@ -593,7 +593,7 @@ void QueueListView::setEnableToolTips(bool val)
 
 void QueueListView::hideToolTip()
 {
-    d->toolTipItem = 0;
+    d->toolTipItem = nullptr;
     d->toolTipTimer->stop();
     slotToolTip();
 }
@@ -690,7 +690,7 @@ void QueueListView::slotAddItems(const ItemInfoList& list)
         // Check if the new item already exist in the list.
 
         bool find               = false;
-        QueueListViewItem* item = 0;
+        QueueListViewItem* item = nullptr;
 
         QTreeWidgetItemIterator iter(this);
 
@@ -886,7 +886,7 @@ QueueListViewItem* QueueListView::findItemById(qlonglong id)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QueueListViewItem* QueueListView::findItemByUrl(const QUrl& url)
@@ -905,7 +905,7 @@ QueueListViewItem* QueueListView::findItemByUrl(const QUrl& url)
         ++it;
     }
 
-    return 0;
+    return nullptr;
 }
 
 int QueueListView::itemsCount()

@@ -50,10 +50,10 @@ public:
 
     explicit Private()
       : stopPreview(false),
-        timer(0),
-        buttons(0),
-        controller(0),
-        captureWidget(0)
+        timer(nullptr),
+        buttons(nullptr),
+        controller(nullptr),
+        captureWidget(nullptr)
     {
     }
 

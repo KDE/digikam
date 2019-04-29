@@ -62,7 +62,7 @@ public:
 
     explicit FuzzySearchView(SearchModel* const searchModel,
                              SearchModificationHelper* const searchModificationHelper,
-                             QWidget* const parent = 0);
+                             QWidget* const parent = nullptr);
     virtual ~FuzzySearchView();
 
     SAlbum* currentAlbum() const;

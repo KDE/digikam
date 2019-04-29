@@ -388,7 +388,7 @@ void GeoIfaceGlobalObject::updatePooledWidgetState(const QWidget* const widget,
 
             if (newState == GeoIfaceInternalWidgetInfo::InternalWidgetReleased)
             {
-                info.currentOwner = 0;
+                info.currentOwner = nullptr;
             }
 
             break;

@@ -66,7 +66,7 @@ public:
 
 public:
 
-    explicit AdvancedRenameWidget(QWidget* const parent = 0);
+    explicit AdvancedRenameWidget(QWidget* const parent = nullptr);
     ~AdvancedRenameWidget();
 
     /**

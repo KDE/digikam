@@ -42,7 +42,7 @@ public:
     explicit Private()
       : valid(false),
         startingNumber(1),
-        action(0)
+        action(nullptr)
     {
     }
 

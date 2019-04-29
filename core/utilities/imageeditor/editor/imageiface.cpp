@@ -109,7 +109,7 @@ uchar* ImageIface::Private::previewImageData()
 {
     if (previewImage.isNull())
     {
-        DImg* im = 0;
+        DImg* im = nullptr;
 
         if (previewType == FullImage)
         {
@@ -117,7 +117,7 @@ uchar* ImageIface::Private::previewImageData()
 
             if (!im || im->isNull())
             {
-                return 0;
+                return nullptr;
             }
         }
         else  // ImageSelection
@@ -126,13 +126,13 @@ uchar* ImageIface::Private::previewImageData()
 
             if (!im)
             {
-                return 0;
+                return nullptr;
             }
 
             if (im->isNull())
             {
                 delete im;
-                return 0;
+                return nullptr;
             }
 
             im->setIccProfile(core->getEmbeddedICC());
@@ -353,7 +353,7 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
     int       y = rect.y();
     int       w = rect.width();
     int       h = rect.height();
-    QPainter* p = 0;
+    QPainter* p = nullptr;
     QPainter  localPainter;
 
     if (painter)

@@ -63,34 +63,34 @@ class Q_DECL_HIDDEN Setup::Private
 public:
 
     explicit Private()
-      : page_database(0),
-        page_collections(0),
-        page_albumView(0),
-        page_tooltip(0),
-        page_metadata(0),
-        page_template(0),
-        page_lighttable(0),
-        page_editor(0),
-        page_slideshow(0),
-        page_imagequalitysorter(0),
-        page_icc(0),
-        page_camera(0),
-        page_plugins(0),
-        page_misc(0),
-        databasePage(0),
-        collectionsPage(0),
-        albumViewPage(0),
-        tooltipPage(0),
-        metadataPage(0),
-        templatePage(0),
-        lighttablePage(0),
-        editorPage(0),
-        slideshowPage(0),
-        imageQualitySorterPage(0),
-        iccPage(0),
-        cameraPage(0),
-        pluginsPage(0),
-        miscPage(0)
+      : page_database(nullptr),
+        page_collections(nullptr),
+        page_albumView(nullptr),
+        page_tooltip(nullptr),
+        page_metadata(nullptr),
+        page_template(nullptr),
+        page_lighttable(nullptr),
+        page_editor(nullptr),
+        page_slideshow(nullptr),
+        page_imagequalitysorter(nullptr),
+        page_icc(nullptr),
+        page_camera(nullptr),
+        page_plugins(nullptr),
+        page_misc(nullptr),
+        databasePage(nullptr),
+        collectionsPage(nullptr),
+        albumViewPage(nullptr),
+        tooltipPage(nullptr),
+        metadataPage(nullptr),
+        templatePage(nullptr),
+        lighttablePage(nullptr),
+        editorPage(nullptr),
+        slideshowPage(nullptr),
+        imageQualitySorterPage(nullptr),
+        iccPage(nullptr),
+        cameraPage(nullptr),
+        pluginsPage(nullptr),
+        miscPage(nullptr)
     {
     }
 
@@ -337,7 +337,7 @@ QSize Setup::sizeHint() const
 
 bool Setup::execDialog(Page page)
 {
-    return execDialog(0, page);
+    return execDialog(nullptr, page);
 }
 
 bool Setup::execDialog(QWidget* const parent, Page page)
@@ -351,7 +351,7 @@ bool Setup::execDialog(QWidget* const parent, Page page)
 
 bool Setup::execSinglePage(Page page)
 {
-    return execSinglePage(0, page);
+    return execSinglePage(nullptr, page);
 }
 
 bool Setup::execSinglePage(QWidget* const parent, Page page)
@@ -448,7 +448,7 @@ void Setup::slotOkClicked()
 
 void Setup::showPage(Setup::Page page)
 {
-    DConfigDlgWdgItem* item = 0;
+    DConfigDlgWdgItem* item = nullptr;
 
     if (page == LastPageUsed)
     {
@@ -589,7 +589,7 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
             return page_misc;
 
         default:
-            return 0;
+            return nullptr;
     }
 }
 

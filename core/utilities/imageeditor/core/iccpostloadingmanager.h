@@ -50,7 +50,7 @@ public:
      * Carries out color management asking the user for his decision.
      * Afterwards, needsPostLoadingManagement will return false.
      */
-    IccTransform postLoadingManage(QWidget* const parent = 0);
+    IccTransform postLoadingManage(QWidget* const parent = nullptr);
 
 protected:
 

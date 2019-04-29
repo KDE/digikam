@@ -61,8 +61,8 @@ public:
 
     explicit Private()
       : rootsPathChanged(false),
-        collectionView(0),
-        collectionModel(0)
+        collectionView(nullptr),
+        collectionModel(nullptr)
     {
     }
 

@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 SlideHelp::SlideHelp()
-    : QDialog(0)
+    : QDialog(nullptr)
 {
     setWindowTitle(i18n("Slideshow Usage"));
 

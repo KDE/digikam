@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT SetupCollections : public QScrollArea
 
 public:
 
-    explicit SetupCollections(QWidget* const parent = 0);
+    explicit SetupCollections(QWidget* const parent = nullptr);
     ~SetupCollections();
 
     void applySettings();

@@ -49,10 +49,10 @@ public:
     explicit Private()
       : mapWidgets(),
         sortOrder(GPSItemInfoSorter::SortYoungestFirst),
-        sortMenu(0),
-        sortActionOldestFirst(0),
-        sortActionYoungestFirst(0),
-        sortActionRating(0)
+        sortMenu(nullptr),
+        sortActionOldestFirst(nullptr),
+        sortActionYoungestFirst(nullptr),
+        sortActionRating(nullptr)
     {
     }
 

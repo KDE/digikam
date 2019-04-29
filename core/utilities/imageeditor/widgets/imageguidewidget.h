@@ -68,7 +68,7 @@ public:
 
 public:
 
-    explicit ImageGuideWidget(QWidget* const parent = 0,
+    explicit ImageGuideWidget(QWidget* const parent = nullptr,
                               bool spotVisible = true,
                               int guideMode = PickColorMode,
                               const QColor& guideColor = Qt::red,

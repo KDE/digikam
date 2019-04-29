@@ -66,26 +66,26 @@ class Q_DECL_HIDDEN EditorToolSettings::Private
 public:
 
     explicit Private()
-      : scaleBG(0),
-        linHistoButton(0),
-        logHistoButton(0),
-        settingsArea(0),
-        plainPage(0),
-        toolName(0),
-        toolIcon(0),
-        toolAbout(0),
-        guideBox(0),
-        okBtn(0),
-        cancelBtn(0),
-        tryBtn(0),
-        defaultBtn(0),
-        saveAsBtn(0),
-        loadBtn(0),
-        guideColorBt(0),
-        hGradient(0),
-        histogramBox(0),
-        guideSize(0),
-        tool(0)
+      : scaleBG(nullptr),
+        linHistoButton(nullptr),
+        logHistoButton(nullptr),
+        settingsArea(nullptr),
+        plainPage(nullptr),
+        toolName(nullptr),
+        toolIcon(nullptr),
+        toolAbout(nullptr),
+        guideBox(nullptr),
+        okBtn(nullptr),
+        cancelBtn(nullptr),
+        tryBtn(nullptr),
+        defaultBtn(nullptr),
+        saveAsBtn(nullptr),
+        loadBtn(nullptr),
+        guideColorBt(nullptr),
+        hGradient(nullptr),
+        histogramBox(nullptr),
+        guideSize(nullptr),
+        tool(nullptr)
     {
     }
 
@@ -368,7 +368,7 @@ QPushButton* EditorToolSettings::button(int buttonCode) const
         return d->saveAsBtn;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void EditorToolSettings::enableButton(int buttonCode, bool state)

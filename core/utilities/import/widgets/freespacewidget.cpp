@@ -90,8 +90,8 @@ public:
         kBSize(0),
         kBUsed(0),
         kBAvail(0),
-        timer(0),
-        toolTip(0),
+        timer(nullptr),
+        toolTip(nullptr),
         mode(FreeSpaceWidget::AlbumLibrary)
     {
     }
