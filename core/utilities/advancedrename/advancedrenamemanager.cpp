@@ -472,7 +472,7 @@ QString AdvancedRenameManager::newName(const QString& filename) const
     // we need to replace unsupported characters.
     QStorageInfo info(QFileInfo(filename).path());
 
-    QString regExpStr = QLatin1String("[?*\\\\/");
+    QString regExpStr = QLatin1String("[?*");
     QString newName   = d->renamedFiles.value(filename, filename);
     QString sysType   = QString::fromLatin1(info.fileSystemType()).toUpper();
 
@@ -480,7 +480,7 @@ QString AdvancedRenameManager::newName(const QString& filename) const
         sysType.contains(QLatin1String("NTFS")) ||
         sysType.contains(QLatin1String("FUSEBLK")))
     {
-        regExpStr.append(QLatin1String("<>,+:=\";|"));
+        regExpStr.append(QLatin1String("<>,+:=\";|\\\\/"));
     }
 
     QRegExp regExp(regExpStr + QLatin1Char(']'));
