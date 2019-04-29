@@ -46,7 +46,7 @@ public:
 
 public:
 
-    explicit ShowfotoCategorizedView(QWidget* const parent = 0);
+    explicit ShowfotoCategorizedView(QWidget* const parent = nullptr);
     ~ShowfotoCategorizedView();
 
     void setModels(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel);
@@ -98,7 +98,7 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate = 0);
+    void addOverlay(ItemDelegateOverlay* overlay, ShowfotoDelegate* delegate = nullptr);
     void removeOverlay(ItemDelegateOverlay* overlay);
 
     //TODO: Implement This

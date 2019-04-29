@@ -88,7 +88,7 @@ void ShowfotoDelegate::setView(ShowfotoThumbnailBar* view)
 
     d->currentView = view;
 
-    setModel(view ? view->model() : 0);
+    setModel(view ? view->model() : nullptr);
 
     if (d->currentView)
     {
@@ -111,7 +111,7 @@ void ShowfotoDelegate::setModel(QAbstractItemModel* model)
 
     if (d->currentModel)
     {
-        disconnect(d->currentModel, 0, this, 0);
+        disconnect(d->currentModel, nullptr, this, nullptr);
     }
 
     d->currentModel = model;
@@ -371,7 +371,7 @@ void ShowfotoDelegate::modelChanged()
 {
     Q_D(ShowfotoDelegate);
     clearModelDataCaches();
-    setModel(d->currentView ? d->currentView->model() : 0);
+    setModel(d->currentView ? d->currentView->model() : nullptr);
 }
 
 void ShowfotoDelegate::modelContentsChanged()

@@ -86,7 +86,7 @@ private Q_SLOTS:
     void slotLast();
     void slotFirst();
     void slotFileWithDefaultApplication();
-    void slotOpenWith(QAction* action=0);
+    void slotOpenWith(QAction* action=nullptr);
     void slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info);
 
     void slotOpenFile();

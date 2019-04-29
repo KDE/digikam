@@ -49,24 +49,24 @@ class Q_DECL_HIDDEN SetupToolTip::Private
 public:
 
     explicit Private()
-      : showFileDateBox(0),
-        showFileNameBox(0),
-        showFileSizeBox(0),
-        showImageDimBox(0),
-        showImageTypeBox(0),
-        showPhotoDateBox(0),
-        showPhotoExpoBox(0),
-        showPhotoFlashBox(0),
-        showPhotoFocalBox(0),
-        showPhotoMakeBox(0),
-        showPhotoLensBox(0),
-        showPhotoModeBox(0),
-        showPhotoWbBox(0),
-        showToolTipsBox(0),
-        fileSettingBox(0),
-        photoSettingBox(0),
-        fontSelect(0),
-        settings(0)
+      : showFileDateBox(nullptr),
+        showFileNameBox(nullptr),
+        showFileSizeBox(nullptr),
+        showImageDimBox(nullptr),
+        showImageTypeBox(nullptr),
+        showPhotoDateBox(nullptr),
+        showPhotoExpoBox(nullptr),
+        showPhotoFlashBox(nullptr),
+        showPhotoFocalBox(nullptr),
+        showPhotoMakeBox(nullptr),
+        showPhotoLensBox(nullptr),
+        showPhotoModeBox(nullptr),
+        showPhotoWbBox(nullptr),
+        showToolTipsBox(nullptr),
+        fileSettingBox(nullptr),
+        photoSettingBox(nullptr),
+        fontSelect(nullptr),
+        settings(nullptr)
     {}
 
     QCheckBox*            showFileDateBox;

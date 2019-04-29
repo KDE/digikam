@@ -40,7 +40,7 @@ class ShowfotoThumbnailBar : public ShowfotoCategorizedView
 
 public:
 
-    explicit ShowfotoThumbnailBar(QWidget* const parent = 0);
+    explicit ShowfotoThumbnailBar(QWidget* const parent = nullptr);
     ~ShowfotoThumbnailBar();
 
     /**

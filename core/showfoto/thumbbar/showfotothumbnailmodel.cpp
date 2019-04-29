@@ -43,8 +43,8 @@ class Q_DECL_HIDDEN ShowfotoThumbnailModel::Private
 public:
 
     explicit Private()
-      : thread(0),
-        preloadThread(0),
+      : thread(nullptr),
+        preloadThread(nullptr),
         thumbSize(0),
         lastGlobalThumbSize(0),
         preloadThumbSize(0),

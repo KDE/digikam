@@ -49,8 +49,8 @@ public:
         drawImageFormat     = true;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
-        currentModel        = 0;
-        currentView         = 0;
+        currentModel        = nullptr;
+        currentView         = nullptr;
 
         actualPixmapRectCache.setMaxCost(250);
     }

@@ -55,24 +55,24 @@ class Q_DECL_HIDDEN Setup::Private
 public:
 
     explicit Private()
-      : page_editorIface(0),
-        page_metadata(0),
-        page_tooltip(0),
-        page_raw(0),
-        page_iofiles(0),
-        page_slideshow(0),
-        page_icc(0),
-        page_plugins(0),
-        page_misc(0),
-        metadataPage(0),
-        toolTipPage(0),
-        miscPage(0),
-        rawPage(0),
-        pluginsPage(0),
-        editorIfacePage(0),
-        iofilesPage(0),
-        slideshowPage(0),
-        iccPage(0)
+      : page_editorIface(nullptr),
+        page_metadata(nullptr),
+        page_tooltip(nullptr),
+        page_raw(nullptr),
+        page_iofiles(nullptr),
+        page_slideshow(nullptr),
+        page_icc(nullptr),
+        page_plugins(nullptr),
+        page_misc(nullptr),
+        metadataPage(nullptr),
+        toolTipPage(nullptr),
+        miscPage(nullptr),
+        rawPage(nullptr),
+        pluginsPage(nullptr),
+        editorIfacePage(nullptr),
+        iofilesPage(nullptr),
+        slideshowPage(nullptr),
+        iccPage(nullptr)
     {
     }
 
@@ -339,7 +339,7 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::MiscellaneousPage:
             return page_misc;
         default:
-            return 0;
+            return nullptr;
     }
 }
 

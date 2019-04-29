@@ -43,7 +43,7 @@ class ShowfotoKineticScroller: public QObject
 
 public:
 
-    explicit ShowfotoKineticScroller(QObject* const parent = 0);
+    explicit ShowfotoKineticScroller(QObject* const parent = nullptr);
     ~ShowfotoKineticScroller();
 
     //! enabled for one widget only, new calls remove previous association

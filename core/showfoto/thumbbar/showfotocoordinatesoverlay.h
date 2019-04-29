@@ -46,7 +46,7 @@ class ShowfotoCoordinatesOverlayWidget : public QAbstractButton
 
 public:
 
-    explicit ShowfotoCoordinatesOverlayWidget(QWidget* const parent = 0);
+    explicit ShowfotoCoordinatesOverlayWidget(QWidget* const parent = nullptr);
 
 protected:
 

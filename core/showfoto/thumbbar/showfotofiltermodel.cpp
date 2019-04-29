@@ -32,7 +32,7 @@ namespace ShowFoto
 
 ShowfotoSortFilterModel::ShowfotoSortFilterModel(QObject* const parent)
     : DCategorizedSortFilterProxyModel(parent),
-      m_chainedModel(0)
+      m_chainedModel(nullptr)
 {
 }
 
@@ -189,7 +189,7 @@ ShowfotoFilterModel* ShowfotoSortFilterModel::showfotoFilterModel() const
         return m_chainedModel->showfotoFilterModel();
     }
 
-    return 0;
+    return nullptr;
 }
 
 void ShowfotoSortFilterModel::setSourceModel(QAbstractItemModel* sourceModel)
@@ -211,8 +211,8 @@ public:
 
     ShowfotoFilterModelPrivate()
     {
-        q                  = 0;
-        showfotoItemModel = 0;
+        q                  = nullptr;
+        showfotoItemModel = nullptr;
     }
 
     void init(ShowfotoFilterModel* const _q);

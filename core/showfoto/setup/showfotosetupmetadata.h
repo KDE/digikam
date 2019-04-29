@@ -48,7 +48,7 @@ public:
 
 public:
 
-    explicit SetupMetadata(QWidget* const parent = 0);
+    explicit SetupMetadata(QWidget* const parent = nullptr);
     ~SetupMetadata();
 
     void applySettings();

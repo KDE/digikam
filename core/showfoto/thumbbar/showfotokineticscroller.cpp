@@ -66,7 +66,7 @@ public:
 
     explicit Private()
     {
-        scrollArea            = 0;
+        scrollArea            = nullptr;
         isPressed             = false;
         isMoving              = false;
         lastMouseYPos         = 0;
@@ -127,7 +127,7 @@ void ShowfotoKineticScroller::enableKineticScrollFor(QAbstractScrollArea* const 
     {
         d->scrollArea->viewport()->removeEventFilter(this);
         d->scrollArea->removeEventFilter(this);
-        d->scrollArea = 0;
+        d->scrollArea = nullptr;
     }
 
     // associate

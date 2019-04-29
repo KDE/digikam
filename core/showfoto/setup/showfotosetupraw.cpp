@@ -39,8 +39,8 @@ class Q_DECL_HIDDEN SetupRaw::Private
 public:
 
     explicit Private()
-      : tab(0),
-        raw(0)
+      : tab(nullptr),
+        raw(nullptr)
     {
     }
 

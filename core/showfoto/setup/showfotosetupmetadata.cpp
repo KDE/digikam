@@ -57,10 +57,10 @@ class Q_DECL_HIDDEN SetupMetadata::Private
 public:
 
     explicit Private()
-      : exifRotateBox(0),
-        exifSetOrientationBox(0),
-        tab(0),
-        tagsCfgPanel(0)
+      : exifRotateBox(nullptr),
+        exifSetOrientationBox(nullptr),
+        tab(nullptr),
+        tagsCfgPanel(nullptr)
     {
     }
 

@@ -60,21 +60,21 @@ class Q_DECL_HIDDEN SetupMisc::Private
 public:
 
     explicit Private()
-      : tab(0),
-        sidebarTypeLabel(0),
-        applicationStyleLabel(0),
-        applicationIconLabel(0),
-        showSplash(0),
-        nativeFileDialog(0),
-        itemCenter(0),
-        showMimeOverImage(0),
-        showCoordinates(0),
-        sortReverse(0),
-        sidebarType(0),
-        sortOrderComboBox(0),
-        applicationStyle(0),
-        applicationIcon(0),
-        applicationFont(0),
+      : tab(nullptr),
+        sidebarTypeLabel(nullptr),
+        applicationStyleLabel(nullptr),
+        applicationIconLabel(nullptr),
+        showSplash(nullptr),
+        nativeFileDialog(nullptr),
+        itemCenter(nullptr),
+        showMimeOverImage(nullptr),
+        showCoordinates(nullptr),
+        sortReverse(nullptr),
+        sidebarType(nullptr),
+        sortOrderComboBox(nullptr),
+        applicationStyle(nullptr),
+        applicationIcon(nullptr),
+        applicationFont(nullptr),
         settings(ShowfotoSettings::instance())
     {
     }

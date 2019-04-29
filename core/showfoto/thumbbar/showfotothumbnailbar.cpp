@@ -51,8 +51,8 @@ public:
     explicit Private()
     {
         scrollPolicy     = Qt::ScrollBarAlwaysOn;
-        duplicatesFilter = 0;
-        kScroller        = 0;
+        duplicatesFilter = nullptr;
+        kScroller        = nullptr;
     }
 
     Qt::ScrollBarPolicy              scrollPolicy;

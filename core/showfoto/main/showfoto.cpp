@@ -135,7 +135,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 ShowFoto::~ShowFoto()
 {
     delete m_canvas;
-    m_canvas = 0;
+    m_canvas = nullptr;
 
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
@@ -174,7 +174,7 @@ void ShowFoto::show()
     {
         d->splash->finish(this);
         delete d->splash;
-        d->splash = 0;
+        d->splash = nullptr;
     }
 
     // Display application window.

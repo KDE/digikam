@@ -45,7 +45,7 @@ class ShowfotoSortFilterModel : public DCategorizedSortFilterProxyModel
     Q_OBJECT
 
 public:
-    explicit ShowfotoSortFilterModel(QObject* const parent = 0);
+    explicit ShowfotoSortFilterModel(QObject* const parent = nullptr);
     ~ShowfotoSortFilterModel();
 
     void setSourceShowfotoModel(ShowfotoItemModel* const sourceModel);
@@ -118,7 +118,7 @@ public:
 
 public:
 
-    explicit ShowfotoFilterModel(QObject* const parent = 0);
+    explicit ShowfotoFilterModel(QObject* const parent = nullptr);
     ~ShowfotoFilterModel();
 
     ShowfotoItemSortSettings showfotoItemSortSettings() const;
@@ -210,7 +210,7 @@ class NoDuplicatesShowfotoFilterModel : public ShowfotoSortFilterModel
 
 public:
 
-    explicit NoDuplicatesShowfotoFilterModel(QObject* const parent = 0);
+    explicit NoDuplicatesShowfotoFilterModel(QObject* const parent = nullptr);
 
 protected:
 

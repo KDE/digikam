@@ -47,7 +47,7 @@ class ShowfotoDelegate : public ItemViewShowfotoDelegate
     Q_OBJECT
 
 public:
-    explicit ShowfotoDelegate(QObject* const parent = 0);
+    explicit ShowfotoDelegate(QObject* const parent = nullptr);
     ~ShowfotoDelegate();
 
     void setView(ShowfotoThumbnailBar* view);
@@ -61,9 +61,9 @@ public:
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect* tooltipRect = 0) const;
+                                const QModelIndex& index, QRect* tooltipRect = nullptr) const;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect* activationRect = 0) const;
+                                   const QModelIndex& index, QRect* activationRect = nullptr) const;
 
     virtual QRect pixmapRect() const;
     virtual QRect imageInformationRect() const;

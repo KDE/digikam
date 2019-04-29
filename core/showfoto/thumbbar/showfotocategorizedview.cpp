@@ -68,13 +68,13 @@ class Q_DECL_HIDDEN ShowfotoCategorizedView::Private
 public:
 
     explicit Private()
-      : model(0),
-        filterModel(0),
-        delegate(0),
+      : model(nullptr),
+        filterModel(nullptr),
+        delegate(nullptr),
         showToolTip(false),
         scrollToItemId(0),
-        delayedEnterTimer(0),
-        currentMouseEvent(0)
+        delayedEnterTimer(nullptr),
+        currentMouseEvent(nullptr)
     {
     }
 
@@ -188,7 +188,7 @@ void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
     {
         hideIndexNotification();
         d->delegate->setAllOverlaysActive(false);
-        d->delegate->setViewOnAllOverlays(0);
+        d->delegate->setViewOnAllOverlays(nullptr);
 
         // Note: Be precise, no wildcard disconnect!
         disconnect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
@@ -483,7 +483,7 @@ void ShowfotoCategorizedView::removeOverlay(ItemDelegateOverlay* overlay)
         delegate->removeOverlay(overlay);
     }
 
-    overlay->setView(0);
+    overlay->setView(nullptr);
 }
 
 void ShowfotoCategorizedView::updateGeometries()

@@ -106,7 +106,7 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
 
     if (urls.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     QMimeData* const mimeData = new QMimeData();

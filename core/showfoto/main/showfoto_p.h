@@ -111,21 +111,21 @@ public:
     explicit Private()
       : validIccPath(true),
         itemsNb(0),
-        vSplitter(0),
-        fileOpenAction(0),
-        openFilesInFolderAction(0),
-        mediaServerAction(0),
-        first(0),
-        model(0),
-        dDHandler(0),
-        filterModel(0),
-        thumbLoadThread(0),
-        thumbBar(0),
-        thumbBarDock(0),
-        normalDelegate(0),
-        rightSideBar(0),
-        splash(0),
-        settings(0)
+        vSplitter(nullptr),
+        fileOpenAction(nullptr),
+        openFilesInFolderAction(nullptr),
+        mediaServerAction(nullptr),
+        first(nullptr),
+        model(nullptr),
+        dDHandler(nullptr),
+        filterModel(nullptr),
+        thumbLoadThread(nullptr),
+        thumbBar(nullptr),
+        thumbBarDock(nullptr),
+        normalDelegate(nullptr),
+        rightSideBar(nullptr),
+        splash(nullptr),
+        settings(nullptr)
     {
     }
 
