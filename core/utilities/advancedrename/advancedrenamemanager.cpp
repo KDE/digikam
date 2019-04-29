@@ -468,24 +468,23 @@ int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 
 QString AdvancedRenameManager::newName(const QString& filename) const
 {
-    // For the Windows file system, we need to replace unsupported characters.
+    // For the Linux or Windows file system,
+    // we need to replace unsupported characters.
     QStorageInfo info(QFileInfo(filename).path());
 
-    QString newName = d->renamedFiles.value(filename, filename);
-    QString sysType = QString::fromLatin1(info.fileSystemType()).toUpper();
+    QString regExpStr = QLatin1String("[?*\\\\/");
+    QString newName   = d->renamedFiles.value(filename, filename);
+    QString sysType   = QString::fromLatin1(info.fileSystemType()).toUpper();
 
     if (sysType.contains(QLatin1String("FAT"))  ||
         sysType.contains(QLatin1String("NTFS")) ||
-        sysType.contains(QLatin1String("fuseblk")))
+        sysType.contains(QLatin1String("FUSEBLK")))
     {
-        QRegExp regexp(QLatin1String("[?*<>,\\\\+:=/\";|]"));
-        newName.replace(regexp, QLatin1String("_"));
+        regExpStr.append(QLatin1String("<>,+:=\";|"));
     }
-    else
-    {
-        QRegExp regexp(QLatin1String("[?*\\\\/]"));
-        newName.replace(regexp, QLatin1String("_"));
-    }
+
+    QRegExp regExp(regExpStr + QLatin1Char(']'));
+    newName.replace(regExp, QLatin1String("_"));
 
     return newName;
 }
