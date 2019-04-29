@@ -169,6 +169,7 @@ void AdvancedRenameLineEdit::keyPressEvent(QKeyEvent* e)
 
         // the key "/" should not be allowed (QTextEdit is not able to use a QValidator, so we must do it in here)
         case Qt::Key_Slash:
+        case Qt::Key_Backslash:
         {
             if (!d->allowDirectoryCreation)
             {

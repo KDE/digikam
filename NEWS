@@ -20,4 +20,5 @@ BUGFIXES:
 011 ==> 406938 - Face region is not saved after resizing.
 012 ==> 406942 - Thumbnails does not get saved for videofiles over 2^64b, mysql.
 013 ==> 406981 - GoPro video thumbnails are just noise.
-014 ==> 
+014 ==> 407043 - Image rename to folder fails on Windows.
+015 ==> 

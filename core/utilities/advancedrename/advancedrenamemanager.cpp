@@ -474,10 +474,16 @@ QString AdvancedRenameManager::newName(const QString& filename) const
     QString newName = d->renamedFiles.value(filename, filename);
     QString sysType = QString::fromLatin1(info.fileSystemType()).toUpper();
 
-    if (sysType.contains(QLatin1String("FAT")) ||
-        sysType.contains(QLatin1String("NTFS")))
+    if (sysType.contains(QLatin1String("FAT"))  ||
+        sysType.contains(QLatin1String("NTFS")) ||
+        sysType.contains(QLatin1String("fuseblk")))
     {
-        QRegExp regexp(QLatin1String("[?*<>,\\+:=/\";|]"));
+        QRegExp regexp(QLatin1String("[?*<>,\\\\+:=/\";|]"));
+        newName.replace(regexp, QLatin1String("_"));
+    }
+    else
+    {
+        QRegExp regexp(QLatin1String("[?*\\\\/]"));
         newName.replace(regexp, QLatin1String("_"));
     }
 
