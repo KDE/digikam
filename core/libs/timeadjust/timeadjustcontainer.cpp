@@ -109,7 +109,7 @@ QDateTime TimeAdjustContainer::getDateTimeFromUrl(const QUrl& url) const
     formatStrings << qMakePair(QLatin1String("yyyyMMdd"),       QString());
     formatStrings << qMakePair(QLatin1String("ddMMyyyy"),       QLatin1String("MMddyyyy"));
     formatStrings << qMakePair(QLatin1String("ddMMyyyy"),       QLatin1String("MMddyyyy"));
-    formatStrings << qMakePair(QLatin1String("ddMM yy"),        QLatin1String("MMdd yy"));
+    formatStrings << qMakePair(QLatin1String("ddMM yy"),        QString());
     formatStrings << qMakePair(QLatin1String("ddMMyyhhmm"),     QString());
 
     QDateTime dateTime;
