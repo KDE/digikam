@@ -43,13 +43,13 @@ class FancyRect : public QGraphicsRectItem
 
 public:
 
-    explicit FancyRect(QGraphicsItem* const parent = 0);
-    explicit FancyRect(const QRectF& rect, QGraphicsItem* const parent = 0);
+    explicit FancyRect(QGraphicsItem* const parent = nullptr);
+    explicit FancyRect(const QRectF& rect, QGraphicsItem* const parent = nullptr);
 
-    FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* const parent = 0);
+    FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* const parent = nullptr);
     FancyRect(QGraphicsRectItem* const other, QGraphicsItem* const parent);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr);
 };
 
 } // namespace Digikam

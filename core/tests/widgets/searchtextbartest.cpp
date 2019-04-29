@@ -45,7 +45,7 @@ SearchTextBarTest::SearchTextBarTest()
 
 void SearchTextBarTest::testHighlighting()
 {
-    SearchTextBar textBar(0, QLatin1String("test"));
+    SearchTextBar textBar(nullptr, QLatin1String("test"));
     QCOMPARE(textBar.getCurrentHighlightState(), SearchTextBar::NEUTRAL);
 
     // highlighting shall only occur if text is entered
@@ -80,7 +80,7 @@ void SearchTextBarTest::testHighlighting()
 
 void SearchTextBarTest::testSearchTextSettings()
 {
-    SearchTextBar textBar(0, QLatin1String("test"));
+    SearchTextBar textBar(nullptr, QLatin1String("test"));
 
     SearchTextSettings defaultSettings;
     QCOMPARE(textBar.searchTextSettings(), defaultSettings);

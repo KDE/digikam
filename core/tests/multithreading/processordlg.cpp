@@ -52,12 +52,12 @@ public:
     explicit Private()
     {
         count        = 0;
-        page         = 0;
-        items        = 0;
-        buttons      = 0;
-        progressView = 0;
-        usedCore     = 0;
-        thread       = 0;
+        page         = nullptr;
+        items        = nullptr;
+        buttons      = nullptr;
+        progressView = nullptr;
+        usedCore     = nullptr;
+        thread       = nullptr;
     }
 
     int                  count;
@@ -74,7 +74,7 @@ public:
 };
 
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
-    : QDialog(0),
+    : QDialog(nullptr),
       d(new Private)
 {
     setModal(false);
@@ -202,7 +202,7 @@ QProgressBar* ProcessorDlg::findProgressBar(const QUrl& url) const
     }
 
     qWarning() << "Cannot found relevant progress bar for " << url.toLocalFile();
-    return 0;
+    return nullptr;
 }
 
 void ProcessorDlg::slotStarting(const QUrl& url)

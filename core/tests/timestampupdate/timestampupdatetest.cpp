@@ -70,7 +70,7 @@ void TimeStampUpdateTest::initTestCase()
     dbFile = tempFilePath(QLatin1String("database"));
     DbEngineParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
-    QVERIFY(CoreDbAccess::checkReadyForUse(0));
+    QVERIFY(CoreDbAccess::checkReadyForUse(nullptr));
     QVERIFY(QFile(dbFile).exists());
 
     // Add collection and scan

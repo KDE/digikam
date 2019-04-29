@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 
     if (ret == LensFunIface::MetadataExactMatch)
     {
-        LensFunFilter filter(&img, 0L, iface.settings());
+        LensFunFilter filter(&img, nullptr, iface.settings());
         filter.startFilterDirectly();
         img.putImageData(filter.getTargetImage().bits());
 

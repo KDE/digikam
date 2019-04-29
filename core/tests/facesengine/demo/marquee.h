@@ -45,7 +45,7 @@ class Marquee : public QObject, public QGraphicsItemGroup
 
 public:
 
-    explicit Marquee(FancyRect* const rect, QGraphicsItem* const parent = 0);
+    explicit Marquee(FancyRect* const rect, QGraphicsItem* const parent = nullptr);
     ~Marquee();
 
     QRectF boundingRect() const;

@@ -43,7 +43,7 @@ class CalibratorModelHelper : public GeoModelHelper
 
 public:
 
-    explicit CalibratorModelHelper(QStandardItemModel* const model, QObject* const parent = 0);
+    explicit CalibratorModelHelper(QStandardItemModel* const model, QObject* const parent = nullptr);
     ~CalibratorModelHelper();
 
     void setItemCoordinates(const QModelIndex& index, const GeoCoordinates& coordinates);

@@ -58,12 +58,12 @@ public:
     explicit Private()
       : handleSize(10)
     {
-        htl        = 0;
-        rect       = 0;
-        htr        = 0;
-        hbr        = 0;
-        hbl        = 0;
-        label      = 0;
+        htl        = nullptr;
+        rect       = nullptr;
+        htr        = nullptr;
+        hbr        = nullptr;
+        hbl        = nullptr;
+        label      = nullptr;
         moving     = false;
         resizing   = false;
         resizeType = 0;
@@ -91,7 +91,7 @@ public:
 };
 
 Marquee::Marquee(FancyRect* const rect, QGraphicsItem* const parent)
-    : QObject(0), QGraphicsItemGroup(parent),
+    : QObject(nullptr), QGraphicsItemGroup(parent),
       d(new Private)
 {
     d->rect    = rect;

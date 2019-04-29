@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         QString filter = QString::fromLatin1("Raw Files") + QString::fromLatin1(" (%1)").arg(QString::fromLatin1(Digikam::raw_file_extentions));
         qDebug() << filter;
 
-        QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select RAW files to process"),
+        QStringList files = DFileDialog::getOpenFileNames(nullptr, QString::fromLatin1("Select RAW files to process"),
                                                          QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
                                                          filter);
 

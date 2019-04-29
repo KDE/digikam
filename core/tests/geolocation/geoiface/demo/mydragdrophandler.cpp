@@ -73,5 +73,5 @@ bool MyDragDropHandler::dropEvent(const QDropEvent* e, const GeoCoordinates& dro
 
 QMimeData* MyDragDropHandler::createMimeData(const QList<QPersistentModelIndex>& /*modelIndices*/)
 {
-    return 0;
+    return nullptr;
 }

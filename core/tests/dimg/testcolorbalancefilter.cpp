@@ -53,10 +53,10 @@ int main(int argc, char** argv)
     settings.RGBInterpolate4Colors = false;
     settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
-    DImg img(input.filePath(), 0, DRawDecoding(settings));
+    DImg img(input.filePath(), nullptr, DRawDecoding(settings));
     CBContainer prm;
     prm.blue = -55.0;
-    CBFilter filter(&img, 0, prm);
+    CBFilter filter(&img, nullptr, prm);
     filter.startFilterDirectly();
     img.putImageData(filter.getTargetImage().bits());
     img.save(outFilePath, QLatin1String("PNG"));

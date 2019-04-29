@@ -103,7 +103,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    explicit MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const parent = 0);
+    explicit MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const parent = nullptr);
     ~MainWindow();
 
 public Q_SLOTS:

@@ -57,7 +57,7 @@ class MyDragDropHandler : public GeoDragDropHandler
 
 public:
 
-    explicit MyDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent = 0);
+    explicit MyDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent = nullptr);
     virtual ~MyDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);

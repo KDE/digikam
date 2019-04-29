@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     settings.RGBInterpolate4Colors = false;
     settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
-    DImg img(input.filePath(), 0, DRawDecoding(settings));
+    DImg img(input.filePath(), nullptr, DRawDecoding(settings));
     EqualizeFilter filter(&img, &img);
     filter.startFilterDirectly();
     img.putImageData(filter.getTargetImage().bits());

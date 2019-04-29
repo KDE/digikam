@@ -43,13 +43,13 @@ class Button : public QObject,
 
 public:
 
-    explicit Button(QGraphicsItem* const parent = 0);
-    explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* const parent = 0);
-    Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* const parent = 0);
+    explicit Button(QGraphicsItem* const parent = nullptr);
+    explicit Button(const QString& normal, const QString& pressed = QString(), QGraphicsItem* const parent = nullptr);
+    Button(const QPixmap& normal, const QPixmap& pressed, QGraphicsItem* const parent = nullptr);
     ~Button();
 
     QRectF boundingRect() const;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr);
     void setPixmap(const QString& normal, const QString& pressed = QString());
     void setPixmap(const QPixmap& normal, const QPixmap& pressed);
 

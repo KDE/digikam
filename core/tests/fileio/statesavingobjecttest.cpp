@@ -163,7 +163,7 @@ void StateSavingObjectTest::testDirectCalling()
 
 void StateSavingObjectTest::testDirectChildrenLoading()
 {
-    StubStateSaver* const parentSaver      = new StubStateSaver(0);
+    StubStateSaver* const parentSaver      = new StubStateSaver(nullptr);
     QPointer<StubStateSaver> directChild1  = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> directChild2  = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> indirectChild = new StubStateSaver(directChild1);
@@ -186,7 +186,7 @@ void StateSavingObjectTest::testDirectChildrenLoading()
 
 void StateSavingObjectTest::testDirectChildrenSaving()
 {
-    StubStateSaver* const parentSaver      = new StubStateSaver(0);
+    StubStateSaver* const parentSaver      = new StubStateSaver(nullptr);
     QPointer<StubStateSaver> directChild1  = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> directChild2  = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> indirectChild = new StubStateSaver(directChild1);
@@ -209,7 +209,7 @@ void StateSavingObjectTest::testDirectChildrenSaving()
 
 void StateSavingObjectTest::testRecursiveChildrenLoading()
 {
-    StubStateSaver* const parentSaver               = new StubStateSaver(0);
+    StubStateSaver* const parentSaver               = new StubStateSaver(nullptr);
     QPointer<StubStateSaver> directChild1           = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> directChild2           = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> indirectChild1         = new StubStateSaver(directChild1);
@@ -247,7 +247,7 @@ void StateSavingObjectTest::testRecursiveChildrenLoading()
 
 void StateSavingObjectTest::testRecursiveChildrenSaving()
 {
-    StubStateSaver* const parentSaver               = new StubStateSaver(0);
+    StubStateSaver* const parentSaver               = new StubStateSaver(nullptr);
     QPointer<StubStateSaver> directChild1           = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> directChild2           = new StubStateSaver(parentSaver);
     QPointer<StubStateSaver> indirectChild1         = new StubStateSaver(directChild1);

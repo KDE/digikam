@@ -70,7 +70,7 @@ void DImgHistoryGraphTest::initTestCase()
 
     DbEngineParameters params(QLatin1String("QSQLITE"), dbFile, QLatin1String("QSQLITE"), dbFile);
     CoreDbAccess::setParameters(params, CoreDbAccess::MainApplication);
-    QVERIFY(CoreDbAccess::checkReadyForUse(0));
+    QVERIFY(CoreDbAccess::checkReadyForUse(nullptr));
     QVERIFY(QFile(dbFile).exists());
     CollectionManager::instance()->addLocation(QUrl::fromLocalFile(collectionDir.path()));
     CollectionManager::instance()->addLocation(QUrl::fromLocalFile(imagePath()));

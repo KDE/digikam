@@ -63,7 +63,7 @@ class Q_DECL_HIDDEN CalibratorModelHelper::Private
 public:
 
     explicit Private()
-        : model(0)
+        : model(nullptr)
     {
     }
 
@@ -90,7 +90,7 @@ QAbstractItemModel* CalibratorModelHelper::model() const
 
 QItemSelectionModel* CalibratorModelHelper::selectionModel() const
 {
-    return 0;
+    return nullptr;
 }
 
 bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index,
@@ -129,14 +129,14 @@ class Q_DECL_HIDDEN Calibrator::Private
 public:
 
     explicit Private()
-     : hBoxLayout(0),
-       model(0),
-       modelHelper(0),
-       markerTiler(0),
-       groupingMode(0),
-       sbLevel(0),
-       zoomDisplay(0),
-       zoomDisplayTimer(0)
+     : hBoxLayout(nullptr),
+       model(nullptr),
+       modelHelper(nullptr),
+       markerTiler(nullptr),
+       groupingMode(nullptr),
+       sbLevel(nullptr),
+       zoomDisplay(nullptr),
+       zoomDisplayTimer(nullptr)
     {
     }
 
@@ -249,7 +249,7 @@ void Calibrator::updateGroupingMode()
         }
         else
         {
-            mapWidget->setGroupedModel(0);
+            mapWidget->setGroupedModel(nullptr);
             mapWidget->addUngroupedModel(d->modelHelper);
         }
     }

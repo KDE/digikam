@@ -183,12 +183,12 @@ public:
 
     explicit Private()
     {
-        page        = 0;
-        buttons     = 0;
-        progressBar = 0;
-        applyBtn    = 0;
-        listView    = 0;
-        thread      = 0;
+        page        = nullptr;
+        buttons     = nullptr;
+        progressBar = nullptr;
+        applyBtn    = nullptr;
+        listView    = nullptr;
+        thread      = nullptr;
     }
 
     QWidget*          page;

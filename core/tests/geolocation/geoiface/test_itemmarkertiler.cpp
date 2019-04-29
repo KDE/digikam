@@ -128,14 +128,14 @@ void TestItemMarkerTiler::testIndices()
 void TestItemMarkerTiler::testAddMarkers1()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
 
     const int maxLevel = TileIndex::MaxLevel;
 
     // there should be no tiles in the model yet:
     for (int l = 0 ; l <= maxLevel ; ++l)
     {
-        QVERIFY(mm.getTile(TileIndex::fromCoordinates(coord_50_60, l), true) == 0);
+        QVERIFY(mm.getTile(TileIndex::fromCoordinates(coord_50_60, l), true) == nullptr);
     }
 
     itemModel->appendRow(MakeItemAt(coord_50_60));
@@ -175,7 +175,7 @@ void TestItemMarkerTiler::testAddMarkers1()
 void TestItemMarkerTiler::testRemoveMarkers2()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
 
     const int maxLevel = TileIndex::MaxLevel;
 
@@ -217,7 +217,7 @@ void TestItemMarkerTiler::testRemoveMarkers2()
 void TestItemMarkerTiler::testMoveMarkers1()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel  = TileIndex::MaxLevel;
     const int fillLevel = maxLevel - 2;
 
@@ -249,9 +249,9 @@ void TestItemMarkerTiler::testMoveMarkers1()
     {
         // make sure the marker can not be found at the old position any more
         TileIndex tileIndex = TileIndex::fromCoordinates(coord_1_2, l);
-        QVERIFY(mm.getTile(tileIndex, true) == 0);
+        QVERIFY(mm.getTile(tileIndex, true) == nullptr);
         QCOMPARE(mm.getTileMarkerCount(tileIndex), 0);
-        QVERIFY(mm.getTile(tileIndex, true) == 0);
+        QVERIFY(mm.getTile(tileIndex, true) == nullptr);
 
         // find it at the new position:
         tileIndex                           = TileIndex::fromCoordinates(coord_50_60, l);
@@ -272,7 +272,7 @@ void TestItemMarkerTiler::testMoveMarkers1()
 void TestItemMarkerTiler::testMoveMarkers2()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel  = TileIndex::MaxLevel;
     const int fillLevel = maxLevel - 2;
 
@@ -351,7 +351,7 @@ void TestItemMarkerTiler::testMoveMarkers2()
 void TestItemMarkerTiler::testIteratorWholeWorldNoBackingModel()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel = TileIndex::MaxLevel;
 
     for (int l = 0 ; l <= maxLevel ; ++l)
@@ -364,7 +364,7 @@ void TestItemMarkerTiler::testIteratorWholeWorldNoBackingModel()
 void TestItemMarkerTiler::testIteratorWholeWorld()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel = TileIndex::MaxLevel;
 
     for (int l = 0 ; l <= maxLevel ; ++l)
@@ -387,7 +387,7 @@ void TestItemMarkerTiler::testIteratorWholeWorld()
 void TestItemMarkerTiler::testIteratorPartial1()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel = TileIndex::MaxLevel;
 
     itemModel->appendRow(MakeItemAt(coord_1_2));
@@ -455,7 +455,7 @@ void TestItemMarkerTiler::testIteratorPartial1()
 void TestItemMarkerTiler::testIteratorPartial2()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel = TileIndex::MaxLevel;
 
     GeoCoordinates::PairList boundsList;
@@ -482,7 +482,7 @@ void TestItemMarkerTiler::testIteratorPartial2()
 void TestItemMarkerTiler::testRemoveMarkers1()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
     const int maxLevel = TileIndex::MaxLevel;
 
     for (int l = 0 ; l <= maxLevel ; ++l)
@@ -527,7 +527,7 @@ void TestItemMarkerTiler::testPreExistingMarkers()
 {
     QScopedPointer<QStandardItemModel> itemModel(new QStandardItemModel());
     itemModel->appendRow(MakeItemAt(coord_50_60));
-    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), 0));
+    ItemMarkerTiler mm(new MarkerModelHelper(itemModel.data(), nullptr));
 
     const int maxLevel = TileIndex::MaxLevel;
 

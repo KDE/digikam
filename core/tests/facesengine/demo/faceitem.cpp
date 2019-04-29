@@ -58,16 +58,16 @@ public:
         y1(0),
         y2(0),
         name(),
-        faceMarquee(0),
-        faceName(0),
-        nameRect(0),
+        faceMarquee(nullptr),
+        faceName(nullptr),
+        nameRect(nullptr),
         origRect(),
         origScale(0.0),
         scale(0.0),
-        rejectButton(0),
-        acceptButton(0),
-        suggestionRejectButton(0),
-        suggestionAcceptButton(0)
+        rejectButton(nullptr),
+        acceptButton(nullptr),
+        suggestionRejectButton(nullptr),
+        suggestionAcceptButton(nullptr)
     {
     }
 
@@ -123,10 +123,10 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     scene->addItem(d->faceMarquee);
 
     // Make a new QGraphicsTextItem for writing the name text, and a new QGraphicsRectItem to draw a good-looking, semi-transparent bounding box.
-    d->nameRect = new QGraphicsRectItem(0);
+    d->nameRect = new QGraphicsRectItem(nullptr);
     scene->addItem(d->nameRect);
 
-    d->faceName = new QGraphicsTextItem(name, 0);
+    d->faceName = new QGraphicsTextItem(name, nullptr);
     scene->addItem(d->faceName);
 
     // Make the bounding box for the name update itself to cover all the text whenever contents are changed

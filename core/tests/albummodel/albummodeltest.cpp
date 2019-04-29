@@ -52,21 +52,21 @@ QTEST_MAIN(AlbumModelTest)
 
 AlbumModelTest::AlbumModelTest()
     : albumCategory(QLatin1String("DummyCategory")),
-      palbumRoot0(0),
-      palbumRoot1(0),
-      palbumRoot2(0),
-      palbumChild0Root0(0),
-      palbumChild1Root0(0),
-      palbumChild2Root0(0),
-      palbumChild0Root1(0),
-      rootTag(0),
-      talbumRoot0(0),
-      talbumRoot1(0),
-      talbumChild0Root0(0),
-      talbumChild1Root0(0),
-      talbumChild0Child1Root0(0),
-      talbumChild0Root1(0),
-      startModel(0)
+      palbumRoot0(nullptr),
+      palbumRoot1(nullptr),
+      palbumRoot2(nullptr),
+      palbumChild0Root0(nullptr),
+      palbumChild1Root0(nullptr),
+      palbumChild2Root0(nullptr),
+      palbumChild0Root1(nullptr),
+      rootTag(nullptr),
+      talbumRoot0(nullptr),
+      talbumRoot1(nullptr),
+      talbumChild0Root0(nullptr),
+      talbumChild1Root0(nullptr),
+      talbumChild0Child1Root0(nullptr),
+      talbumChild0Root1(nullptr),
+      startModel(nullptr)
 {
 }
 
@@ -278,7 +278,7 @@ void AlbumModelTest::init()
     // ensure that there is a root date album
     DAlbum* const rootFromAlbumManager = AlbumManager::instance()->findDAlbum(0);
     QVERIFY(rootFromAlbumManager);
-    DAlbum* rootFromList               = 0;
+    DAlbum* rootFromList               = nullptr;
 
     foreach(Album* const album, AlbumManager::instance()->allDAlbums())
     {
@@ -440,12 +440,12 @@ void AlbumModelTest::testPAlbumModel()
     qDebug() << "Start AlbumModelTest::testPAlbumModel()";
 
     AlbumModel* albumModel = new AlbumModel();
-    ModelTest* test        = new ModelTest(albumModel, 0);
+    ModelTest* test        = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 
     albumModel = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum);
-    test       = new ModelTest(albumModel, 0);
+    test       = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 }
@@ -515,7 +515,7 @@ void AlbumModelTest::testDAlbumModel()
 
     DateAlbumModel* const albumModel = new DateAlbumModel();
     ensureItemCounts();
-    ModelTest* const test            = new ModelTest(albumModel, 0);
+    ModelTest* const test            = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 }
@@ -790,12 +790,12 @@ void AlbumModelTest::testTAlbumModel()
     qDebug() << "Start AlbumModelTest::testTAlbumModel()";
 
     TagModel* albumModel = new TagModel();
-    ModelTest* test      = new ModelTest(albumModel, 0);
+    ModelTest* test      = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 
     albumModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum);
-    test       = new ModelTest(albumModel, 0);
+    test       = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 }
@@ -805,7 +805,7 @@ void AlbumModelTest::testSAlbumModel()
     qDebug() << "Start AlbumModelTest::testSAlbumModel()";
 
     SearchModel* const albumModel = new SearchModel();
-    ModelTest* const test         = new ModelTest(albumModel, 0);
+    ModelTest* const test         = new ModelTest(albumModel, nullptr);
     delete test;
     delete albumModel;
 }

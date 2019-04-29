@@ -58,7 +58,7 @@ class StubStateSaver: public QObject,
 
 public:
 
-    explicit StubStateSaver(QObject* const parent = 0);
+    explicit StubStateSaver(QObject* const parent = nullptr);
     virtual ~StubStateSaver();
 
     KConfigGroup getGroup();

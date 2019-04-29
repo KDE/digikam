@@ -67,7 +67,7 @@ GPSItemContainer* ItemFromFile(const QUrl& url)
         return imageItem.take();
     }
 
-    return 0;
+    return nullptr;
 }
 
 /**

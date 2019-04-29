@@ -184,23 +184,23 @@ class Q_DECL_HIDDEN MainWindow::Private
 public:
 
     explicit Private()
-      : splitter(0),
-        mapWidget(0),
+      : splitter(nullptr),
+        mapWidget(nullptr),
         lookupAltitudeList(),
-        treeWidget(0),
-        progressBar(0),
+        treeWidget(nullptr),
+        progressBar(nullptr),
         imageLoadingRunningFutures(),
         imageLoadingFutureWatchers(),
         imageLoadingTotalCount(0),
         imageLoadingCurrentCount(0),
         imageLoadingBuncher(),
-        imageLoadingBunchTimer(0),
-        cmdLineArgs(0),
+        imageLoadingBunchTimer(nullptr),
+        cmdLineArgs(nullptr),
         lastImageOpenDir(),
-        displayMarkersModel(0),
-        selectionModel(0),
-        markerModelHelper(0),
-        trackModelHelper(0)
+        displayMarkersModel(nullptr),
+        selectionModel(nullptr),
+        markerModelHelper(nullptr),
+        trackModelHelper(nullptr)
     {
     }
 
@@ -407,9 +407,9 @@ void MainWindow::slotFutureResultsReadyAt(int startIndex, int endIndex)
     // determine the sender:
     QFutureWatcher<MyImageData>* const futureSender = reinterpret_cast<QFutureWatcher<MyImageData>*>(sender());
 
-    GEOIFACE_ASSERT(futureSender != 0);
+    GEOIFACE_ASSERT(futureSender != nullptr);
 
-    if (futureSender == 0)
+    if (futureSender == nullptr)
         return;
 
     int futureIndex = -1;

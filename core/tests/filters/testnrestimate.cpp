@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     settings.RGBInterpolate4Colors = false;
     settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
-    DImg img(input.filePath(), 0, DRawDecoding(settings));
+    DImg img(input.filePath(), nullptr, DRawDecoding(settings));
     NREstimate nre(&img);
     nre.setLogFilesPath(input.filePath());
     nre.startFilterDirectly();
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 
     qDebug() << prm;
 
-    NRFilter nrf(&img, 0, prm);
+    NRFilter nrf(&img, nullptr, prm);
     nrf.startFilterDirectly();
     img.putImageData(nrf.getTargetImage().bits());
     img.save(outFilePath, QLatin1String("PNG"));

@@ -53,11 +53,11 @@ public:
 
     explicit Private()
     {
-        ui            = 0;
-        myScene       = 0;
-        myView        = 0;
-        lastPhotoItem = 0;
-        detector      = 0;
+        ui            = nullptr;
+        myScene       = nullptr;
+        myView        = nullptr;
+        lastPhotoItem = nullptr;
+        detector      = nullptr;
         scale         = 0.0;
     }
 
@@ -213,7 +213,7 @@ void MainWindow::slotDetectFaces()
     for (int i = 0 ; i < currentFaces.size() ; ++i)
     {
         QRect face = d->detector->toAbsoluteRect(currentFaces[i], d->currentPhoto.size());
-        d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));
+        d->faceitems.append(new FaceItem(nullptr, d->myScene, face, d->scale));
         qDebug() << face;
     }
 
