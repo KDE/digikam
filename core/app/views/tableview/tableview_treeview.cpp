@@ -52,8 +52,8 @@ public:
 
     explicit Private()
       : headerContextMenuActiveColumn(-1),
-        actionHeaderContextMenuRemoveColumn(0),
-        actionHeaderContextMenuConfigureColumn(0),
+        actionHeaderContextMenuRemoveColumn(nullptr),
+        actionHeaderContextMenuConfigureColumn(nullptr),
         dragDropThumbnailSize()
     {
     }
@@ -305,7 +305,7 @@ Album* TableViewTreeView::albumAt(const QPoint& pos) const
             return albumModel->currentAlbums().first();
     }
 
-    return 0;
+    return nullptr;
 }
 
 void TableViewTreeView::wheelEvent(QWheelEvent* event)

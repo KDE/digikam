@@ -118,7 +118,7 @@ Q_SIGNALS:
                                const QList<QAction*>& actions);
     void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                      const QList<QAction*>& actions,
-                                     ItemFilterModel* filterModel = 0);
+                                     ItemFilterModel* filterModel = nullptr);
 
 private:
 

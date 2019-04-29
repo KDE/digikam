@@ -104,7 +104,7 @@ public:
       : readOnly(false),
         textChanged(false),
         discardNextMousePress(false),
-        popup(0)
+        popup(nullptr)
     {
     }
 
@@ -171,7 +171,7 @@ DDateEdit::DDateEdit(QWidget* const parent, const QString& name)
 DDateEdit::~DDateEdit()
 {
     delete d->popup;
-    d->popup = 0;
+    d->popup = nullptr;
     delete d;
 }
 

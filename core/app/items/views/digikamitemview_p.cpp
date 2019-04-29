@@ -37,12 +37,12 @@ DigikamItemView::Private::Private(DigikamItemView* const qq)
       fullscreenActive(false),
       q_ptr(qq)
 {
-    utilities          = 0;
-    rotateLeftOverlay  = 0;
-    rotateRightOverlay = 0;
-    fullscreenOverlay  = 0;
-    normalDelegate     = 0;
-    faceDelegate       = 0;
+    utilities          = nullptr;
+    rotateLeftOverlay  = nullptr;
+    rotateRightOverlay = nullptr;
+    fullscreenOverlay  = nullptr;
+    normalDelegate     = nullptr;
+    faceDelegate       = nullptr;
     faceMode           = false;
 }
 

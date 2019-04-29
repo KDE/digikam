@@ -77,9 +77,9 @@ class Q_DECL_HIDDEN AlbumFolderViewSideBarWidget::Private
 public:
 
     explicit Private()
-      : albumModificationHelper(0),
-        albumFolderView(0),
-        searchTextBar(0)
+      : albumModificationHelper(nullptr),
+        albumFolderView(nullptr),
+        searchTextBar(nullptr)
     {
     }
 
@@ -190,12 +190,12 @@ public:
 public:
 
     explicit Private()
-      : openTagMngr(0),
-        tagSearchBar(0),
-        tagFolderView(0),
-        btnGroup(0),
-        noTagsBtn(0),
-        tagsBtn(0),
+      : openTagMngr(nullptr),
+        tagSearchBar(nullptr),
+        tagFolderView(nullptr),
+        btnGroup(nullptr),
+        noTagsBtn(nullptr),
+        tagsBtn(nullptr),
         noTagsWasChecked(false),
         ExistingTagsWasChecked(false)
     {
@@ -439,7 +439,7 @@ class Q_DECL_HIDDEN LabelsSideBarWidget::Private
 public:
 
     explicit Private()
-      : labelsTree(0)
+      : labelsTree(nullptr)
     {
     }
 
@@ -523,7 +523,7 @@ class Q_DECL_HIDDEN DateFolderViewSideBarWidget::Private
 public:
 
     explicit Private()
-      : dateFolderView(0)
+      : dateFolderView(nullptr)
     {
     }
 
@@ -607,19 +607,19 @@ class Q_DECL_HIDDEN TimelineSideBarWidget::Private
 public:
 
     explicit Private()
-      : scaleBG(0),
-        cursorCountLabel(0),
-        scrollBar(0),
-        timer(0),
-        resetButton(0),
-        saveButton(0),
-        timeUnitCB(0),
-        nameEdit(0),
-        cursorDateLabel(0),
-        searchDateBar(0),
-        timeLineFolderView(0),
-        timeLineWidget(0),
-        searchModificationHelper(0)
+      : scaleBG(nullptr),
+        cursorCountLabel(nullptr),
+        scrollBar(nullptr),
+        timer(nullptr),
+        resetButton(nullptr),
+        saveButton(nullptr),
+        timeUnitCB(nullptr),
+        nameEdit(nullptr),
+        cursorDateLabel(nullptr),
+        searchDateBar(nullptr),
+        timeLineFolderView(nullptr),
+        timeLineWidget(nullptr),
+        searchModificationHelper(nullptr)
     {
     }
 
@@ -1089,9 +1089,9 @@ class Q_DECL_HIDDEN SearchSideBarWidget::Private
 public:
 
     explicit Private()
-      : searchSearchBar(0),
-        searchTreeView(0),
-        searchTabHeader(0)
+      : searchSearchBar(nullptr),
+        searchTreeView(nullptr),
+        searchTabHeader(nullptr)
     {
     }
 
@@ -1202,8 +1202,8 @@ class Q_DECL_HIDDEN FuzzySearchSideBarWidget::Private
 {
 public:
     explicit Private()
-      : fuzzySearchView(0),
-        searchModificationHelper(0)
+      : fuzzySearchView(nullptr),
+        searchModificationHelper(nullptr)
     {
     }
 
@@ -1312,7 +1312,7 @@ class Q_DECL_HIDDEN GPSSearchSideBarWidget::Private
 public:
 
     explicit Private()
-      : gpsSearchView(0)
+      : gpsSearchView(nullptr)
     {
     }
 
@@ -1396,10 +1396,10 @@ public:
 
     explicit Private()
     {
-        personIcon               = 0;
-        textLabel                = 0;
-        rescanButton             = 0;
-        searchModificationHelper = 0;
+        personIcon               = nullptr;
+        textLabel                = nullptr;
+        rescanButton             = nullptr;
+        searchModificationHelper = nullptr;
     }
 
     QLabel*                   personIcon;

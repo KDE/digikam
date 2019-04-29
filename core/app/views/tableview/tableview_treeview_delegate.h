@@ -50,7 +50,7 @@ class TableViewItemDelegate : public QItemDelegate
 
 public:
 
-    explicit TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* const parent = 0);
+    explicit TableViewItemDelegate(TableViewShared* const tableViewShared, QObject* const parent = nullptr);
     virtual ~TableViewItemDelegate();
 
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const;

@@ -52,9 +52,9 @@ public:
 
     explicit Private()
       : columnIndex(0),
-        buttons(0),
-        columnObject(0),
-        columnConfigurationWidget(0)
+        buttons(nullptr),
+        columnObject(nullptr),
+        columnConfigurationWidget(nullptr)
     {
     }
 

@@ -44,7 +44,7 @@ class CoordinatesOverlayWidget : public QAbstractButton
 
 public:
 
-    explicit CoordinatesOverlayWidget(QWidget* const parent = 0);
+    explicit CoordinatesOverlayWidget(QWidget* const parent = nullptr);
 
 protected:
 

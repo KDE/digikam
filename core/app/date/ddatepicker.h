@@ -58,12 +58,12 @@ public:
     /**
      * The constructor. The current date will be displayed initially.
      */
-    explicit DDatePicker(QWidget* const parent = 0);
+    explicit DDatePicker(QWidget* const parent = nullptr);
 
     /**
      * The constructor. The given date will be displayed initially.
      */
-    explicit DDatePicker(const QDate& dt, QWidget* const parent = 0);
+    explicit DDatePicker(const QDate& dt, QWidget* const parent = nullptr);
 
     /**
      * The destructor.

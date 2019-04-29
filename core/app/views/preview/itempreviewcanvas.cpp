@@ -43,7 +43,7 @@ public:
 
     explicit Private()
     {
-        group = 0;
+        group = nullptr;
     }
 
     FaceGroup*        group;

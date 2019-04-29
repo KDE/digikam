@@ -87,7 +87,7 @@ public:
 
 public:
 
-    explicit TableViewModel(TableViewShared* const sharedObject, QObject* const parent = 0);
+    explicit TableViewModel(TableViewShared* const sharedObject, QObject* const parent = nullptr);
     virtual ~TableViewModel();
 
     void                    addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);

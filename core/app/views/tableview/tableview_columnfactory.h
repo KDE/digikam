@@ -179,7 +179,7 @@ public:
 
     explicit TableViewColumnConfigurationWidget(TableViewShared* const sharedObject,
                                                 const TableViewColumnConfiguration& currentConfiguration,
-                                                QWidget* const parent = 0);
+                                                QWidget* const parent = nullptr);
     virtual ~TableViewColumnConfigurationWidget();
 
     virtual TableViewColumnConfiguration getNewConfiguration() = 0;
@@ -223,7 +223,7 @@ public:
 
     explicit TableViewColumn(TableViewShared* const tableViewShared,
                              const TableViewColumnConfiguration& pConfiguration,
-                             QObject* const parent = 0);
+                             QObject* const parent = nullptr);
     virtual ~TableViewColumn();
 
     virtual TableViewColumnConfiguration getConfiguration() const;
@@ -300,7 +300,7 @@ class TableViewColumnFactory : public QObject
 
 public:
 
-    explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* const parent = 0);
+    explicit TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* const parent = nullptr);
 
     static QList<TableViewColumnDescription> getColumnDescriptionList();
     TableViewColumn* getColumn(const TableViewColumnConfiguration& columnConfiguration);

@@ -58,7 +58,7 @@ class DDateEdit : public QComboBox
 
 public:
 
-    explicit DDateEdit(QWidget* const parent=0, const QString& name=QString());
+    explicit DDateEdit(QWidget* const parent=nullptr, const QString& name=QString());
     virtual ~DDateEdit();
 
     /**
@@ -133,7 +133,7 @@ protected:
 
 private:
 
-    QDate parseDate(bool* = 0) const;
+    QDate parseDate(bool* = nullptr) const;
     void updateView();
 
 private:

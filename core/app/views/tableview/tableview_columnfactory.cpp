@@ -56,7 +56,7 @@ TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewS
 
 TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColumnConfiguration& columnConfiguration)
 {
-    TableViewColumn* newColumn = 0;
+    TableViewColumn* newColumn = nullptr;
 
     if (TableViewColumns::ColumnThumbnail::CreateFromConfiguration(s, columnConfiguration, &newColumn, this))
     {
@@ -93,7 +93,7 @@ TableViewColumn* TableViewColumnFactory::getColumn(const Digikam::TableViewColum
         return newColumn;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QList<TableViewColumnDescription> TableViewColumnFactory::getColumnDescriptionList()
@@ -166,7 +166,7 @@ TableViewColumnConfigurationWidget* TableViewColumn::getConfigurationWidget(QWid
 {
     Q_UNUSED(parentWidget)
 
-    return 0;
+    return nullptr;
 }
 
 void TableViewColumn::setConfiguration(const TableViewColumnConfiguration& newConfiguration)

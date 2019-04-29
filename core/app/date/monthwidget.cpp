@@ -72,8 +72,8 @@ public:
 
     explicit Private()
       : active(true),
-        model(0),
-        timer(0),
+        model(nullptr),
+        timer(nullptr),
         year(0),
         month(0),
         width(0),
@@ -404,7 +404,7 @@ void MonthWidget::setActive(bool val)
         if (d->model)
         {
             d->model->setDayFilter(QList<QDateTime>());
-            disconnect(d->model, 0, this, 0);
+            disconnect(d->model, nullptr, this, nullptr);
         }
     }
 }
@@ -413,7 +413,7 @@ void MonthWidget::setItemModel(ItemFilterModel* model)
 {
     if (d->model)
     {
-        disconnect(d->model, 0, this, 0);
+        disconnect(d->model, nullptr, this, nullptr);
     }
 
     d->model = model;
@@ -512,7 +512,7 @@ void MonthWidget::updateDays()
 
 void MonthWidget::slotModelDestroyed()
 {
-    d->model = 0;
+    d->model = nullptr;
     resetDayCounts();
     update();
 }

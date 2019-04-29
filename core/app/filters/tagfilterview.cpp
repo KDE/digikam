@@ -48,14 +48,14 @@ class Q_DECL_HIDDEN TagFilterView::Private
 public:
 
     explicit Private()
-      : onRestoreTagFiltersAction(0),
-        offRestoreTagFiltersAction(0),
-        ignoreTagAction(0),
-        includeTagAction(0),
-        excludeTagAction(0),
-        restoreTagFiltersAction(0),
-        tagFilterModeAction(0),
-        tagFilterModel(0)
+      : onRestoreTagFiltersAction(nullptr),
+        offRestoreTagFiltersAction(nullptr),
+        ignoreTagAction(nullptr),
+        includeTagAction(nullptr),
+        excludeTagAction(nullptr),
+        restoreTagFiltersAction(nullptr),
+        tagFilterModeAction(nullptr),
+        tagFilterModel(nullptr)
     {
     }
 

@@ -32,10 +32,10 @@
 namespace Digikam
 {
 
-DigikamApp* DigikamApp::m_instance = 0;
+DigikamApp* DigikamApp::m_instance = nullptr;
 
 DigikamApp::DigikamApp()
-    : DXmlGuiWindow(0),
+    : DXmlGuiWindow(nullptr),
       d(new Private)
 {
     setObjectName(QLatin1String("Digikam"));
@@ -249,7 +249,7 @@ DigikamApp::~DigikamApp()
 
     AlbumManager::instance()->removeFakeConnection();
 
-    m_instance = 0;
+    m_instance = nullptr;
 
     delete d->modelCollection;
 
@@ -274,7 +274,7 @@ void DigikamApp::show()
     {
         d->splashScreen->finish(this);
         delete d->splashScreen;
-        d->splashScreen = 0;
+        d->splashScreen = nullptr;
     }
 
     // Display application window.

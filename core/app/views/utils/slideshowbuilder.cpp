@@ -49,7 +49,7 @@ public:
 
     explicit Private()
       : cancel(false),
-        album(0),
+        album(nullptr),
         autoPlayEnabled(true)
     {
     }
@@ -62,7 +62,7 @@ public:
 };
 
 SlideShowBuilder::SlideShowBuilder(const ItemInfoList& infoList)
-    : ProgressItem(0, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
+    : ProgressItem(nullptr, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
       d(new Private)
 {
     d->infoList = infoList;
@@ -71,7 +71,7 @@ SlideShowBuilder::SlideShowBuilder(const ItemInfoList& infoList)
 }
 
 SlideShowBuilder::SlideShowBuilder(Album* const album)
-    : ProgressItem(0, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
+    : ProgressItem(nullptr, QLatin1String("SlideShowBuilder"), QString(), QString(), true, true),
       d(new Private)
 {
     d->album = album;

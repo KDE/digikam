@@ -157,7 +157,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             else
             {
                 QMenu popMenu(view);
-                QAction* setAction = 0;
+                QAction* setAction = nullptr;
 
                 if (imageIDs.count() == 1)
                 {
@@ -201,7 +201,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             QMenu popMenu(view);
             QAction* const moveAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")),   i18n("&Move Here"));
             QAction* const copyAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
-            QAction* thumbnailAction  = 0;
+            QAction* thumbnailAction  = nullptr;
 
             if (imageIDs.count() == 1)
             {
@@ -411,7 +411,7 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     if (albums.size() > 1)
@@ -424,7 +424,7 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
     // Root and Trash Albums are not dragable
     if (!palbum || palbum->isRoot() || palbum->isTrashAlbum())
     {
-        return 0;
+        return nullptr;
     }
 
     return (new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(), palbum->fileUrl()));

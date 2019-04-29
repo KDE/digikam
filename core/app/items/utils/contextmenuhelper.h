@@ -116,7 +116,7 @@ public:
      * @param actionCollection the actionCollection that should be used. If not set, the standard
      * action from DigikamApp is used
      */
-    explicit ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = 0);
+    explicit ContextMenuHelper(QMenu* parent, KActionCollection* actionCollection = nullptr);
     virtual ~ContextMenuHelper();
 
     /**
@@ -257,7 +257,7 @@ public:
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
      */
-    void addActionNewTag(TagModificationHelper* helper, TAlbum* parentTag = 0);
+    void addActionNewTag(TagModificationHelper* helper, TAlbum* parentTag = nullptr);
     void addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag);
     void addActionDeleteTags(TagModificationHelper* helper, QList< TAlbum* > tags);
     void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
@@ -279,7 +279,7 @@ public:
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
      */
-    void addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum = 0);
+    void addActionNewAlbum(AlbumModificationHelper* helper, PAlbum* parentAlbum = nullptr);
     void addActionDeleteAlbum(AlbumModificationHelper* helper, PAlbum* album);
     void addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album);
     void addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album);
@@ -400,7 +400,7 @@ public:
      * @param at the action that should be at the position pos
      * @return the triggered action
      */
-    QAction* exec(const QPoint& pos, QAction* at = 0);
+    QAction* exec(const QPoint& pos, QAction* at = nullptr);
 
 private Q_SLOTS:
 

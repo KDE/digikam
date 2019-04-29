@@ -203,7 +203,7 @@ public Q_SLOTS:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
-    void slotNewDuplicatesSearch(PAlbum* album = 0);
+    void slotNewDuplicatesSearch(PAlbum* album = nullptr);
     void slotNewDuplicatesSearch(const QList<PAlbum*>& albums);
     void slotNewDuplicatesSearch(const QList<TAlbum*>& albums);
 
@@ -325,11 +325,11 @@ private Q_SLOTS:
 
     void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info,
                                    const QList<QAction*>& extraGroupingActions = QList<QAction*>(),
-                                   ItemFilterModel* imageFilterModel = 0);
+                                   ItemFilterModel* imageFilterModel = nullptr);
 
     void slotShowGroupContextMenu(QContextMenuEvent* event,
                                   const QList<ItemInfo>& selectedInfos,
-                                  ItemFilterModel* imageFilterModel = 0);
+                                  ItemFilterModel* imageFilterModel = nullptr);
 
 private:
 

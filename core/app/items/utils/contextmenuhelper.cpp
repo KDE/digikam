@@ -90,13 +90,13 @@ class Q_DECL_HIDDEN ContextMenuHelper::Private
 public:
 
     explicit Private(ContextMenuHelper* const q)
-      : gotoAlbumAction(0),
-        gotoDateAction(0),
-        setThumbnailAction(0),
-        imageFilterModel(0),
-        albumModel(0),
-        parent(0),
-        stdActionCollection(0),
+      : gotoAlbumAction(nullptr),
+        gotoDateAction(nullptr),
+        setThumbnailAction(nullptr),
+        imageFilterModel(nullptr),
+        albumModel(nullptr),
+        parent(nullptr),
+        stdActionCollection(nullptr),
         q(q)
     {
     }
@@ -124,7 +124,7 @@ public:
 
     QModelIndex indexForAlbumFromAction(QObject* sender) const
     {
-        QAction* action = 0;
+        QAction* action = nullptr;
 
         if ((action = qobject_cast<QAction*>(sender)))
         {
@@ -141,7 +141,7 @@ public:
 
         if (!mainAction)
         {
-            return 0;
+            return nullptr;
         }
 
         QAction* const action = new QAction(mainAction->icon(), mainAction->text(), q);
@@ -214,7 +214,7 @@ void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* sl
 
 void ContextMenuHelper::addStandardActionLightTable()
 {
-    QAction* action = 0;
+    QAction* action = nullptr;
     QStringList ltActionNames;
     ltActionNames << QLatin1String("image_add_to_lighttable")
                   << QLatin1String("image_lighttable");
@@ -327,7 +327,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 void ContextMenuHelper::slotOpenWith()
 {
     // call the slot with an "empty" action
-    slotOpenWith(0);
+    slotOpenWith(nullptr);
 }
 
 void ContextMenuHelper::slotOpenWith(QAction* action)
@@ -753,7 +753,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
      * TODO:tags to be ported to multiple selection
      */
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* currentAlbum     = 0;
+    Album* currentAlbum     = nullptr;
 
     if (!albumList.isEmpty())
     {

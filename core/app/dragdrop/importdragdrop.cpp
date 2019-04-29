@@ -91,7 +91,7 @@ ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropE
 
     QMenu popMenu(view);
 
-    QAction* moveAction = 0;
+    QAction* moveAction = nullptr;
 
     if (allowMove)
     {
@@ -101,7 +101,7 @@ ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropE
     QAction* const copyAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
     popMenu.addSeparator();
 
-    QAction* groupAction = 0;
+    QAction* groupAction = nullptr;
 
     if (askForGrouping)
     {
@@ -232,7 +232,7 @@ QMimeData* ImportDragDropHandler::createMimeData(const QList<QModelIndex>& index
 
     if (lst.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return (new DCameraItemListDrag(lst));

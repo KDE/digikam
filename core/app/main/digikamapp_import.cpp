@@ -57,9 +57,9 @@ void DigikamApp::updateQuickImportAction()
     }
     else
     {
-        disconnect(d->quickImportMenu->menuAction(), SIGNAL(triggered()), 0, 0);
+        disconnect(d->quickImportMenu->menuAction(), SIGNAL(triggered()), nullptr, nullptr);
 
-        QAction*  primaryAction = 0;
+        QAction*  primaryAction = nullptr;
         QDateTime latest;
 
         foreach (QAction* const action, d->quickImportMenu->actions())
@@ -140,7 +140,7 @@ void DigikamApp::slotImportAddFolders()
     }
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album            = 0;
+    Album* album            = nullptr;
 
     if (!albumList.isEmpty())
     {
@@ -149,7 +149,7 @@ void DigikamApp::slotImportAddFolders()
 
     if (album && album->type() != Album::PHYSICAL)
     {
-        album = 0;
+        album = nullptr;
     }
 
     QString header(i18n("<p>Please select the destination album from the digiKam library to "

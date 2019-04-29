@@ -44,7 +44,7 @@ class DigikamItemView : public ItemCategorizedView, public GroupingViewImplement
 
 public:
 
-    explicit DigikamItemView(QWidget* const parent = 0);
+    explicit DigikamItemView(QWidget* const parent = nullptr);
     ~DigikamItemView();
 
     ItemViewUtilities* utilities() const;
@@ -98,8 +98,8 @@ protected Q_SLOTS:
 
 protected:
 
-    void addRejectionOverlay(ItemDelegate* delegate = 0);
-    void addAssignNameOverlay(ItemDelegate* delegate = 0);
+    void addRejectionOverlay(ItemDelegate* delegate = nullptr);
+    void addAssignNameOverlay(ItemDelegate* delegate = nullptr);
 
     virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info);

@@ -56,7 +56,7 @@ namespace Digikam
 
 TableViewModel::Item::Item()
   : imageId(0),
-    parent(0),
+    parent(nullptr),
     children()
 {
 }
@@ -102,7 +102,7 @@ TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ public:
 
     explicit Private()
       : columnObjects(),
-        rootItem(0),
+        rootItem(nullptr),
         imageFilterSettings(),
         sortColumn(0),
         sortOrder(Qt::AscendingOrder),
@@ -926,7 +926,7 @@ TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
 {
     if (!i.isValid())
     {
-        return 0;
+        return nullptr;
     }
 
     Q_ASSERT(i.model() == this);

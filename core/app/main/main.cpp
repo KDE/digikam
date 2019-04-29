@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     tryInitDrMingw();
 
 #ifdef HAVE_IMAGE_MAGICK
-    InitializeMagick(NULL);
+    InitializeMagick(nullptr);
 #endif
 
 #ifdef Q_OS_LINUX

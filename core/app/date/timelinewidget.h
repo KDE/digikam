@@ -70,7 +70,7 @@ public:
 
 public:
 
-    explicit TimeLineWidget(QWidget* const parent = 0);
+    explicit TimeLineWidget(QWidget* const parent = nullptr);
     ~TimeLineWidget();
 
     void      setTimeUnit(TimeUnit timeUnit);

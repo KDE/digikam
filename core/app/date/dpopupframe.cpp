@@ -65,9 +65,9 @@ class Q_DECL_HIDDEN DPopupFrame::Private::OutsideClickCatcher : public QObject
 {
 public:
 
-    explicit OutsideClickCatcher(QObject* const parent = 0)
+    explicit OutsideClickCatcher(QObject* const parent = nullptr)
         : QObject(parent),
-          m_popup(0)
+          m_popup(nullptr)
     {
     }
 
@@ -106,7 +106,7 @@ public:
 DPopupFrame::Private::Private(DPopupFrame* const qq)
     : q(qq),
       result(0),   // rejected
-      main(0),
+      main(nullptr),
       outsideClickCatcher(new OutsideClickCatcher)
 {
     outsideClickCatcher->setPopupFrame(q);

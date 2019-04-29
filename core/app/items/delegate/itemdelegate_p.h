@@ -54,9 +54,9 @@ public:
         drawImageFormatTop  = false;
         drawMouseOverFrame  = true;
         ratingOverThumbnail = false;
-        categoryDrawer      = 0;
-        currentView         = 0;
-        currentModel        = 0;
+        categoryDrawer      = nullptr;
+        currentView         = nullptr;
+        currentModel        = nullptr;
 
         actualPixmapRectCache.setMaxCost(250);
     }

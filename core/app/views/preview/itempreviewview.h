@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit ItemPreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = 0);
+    explicit ItemPreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = nullptr);
     ~ItemPreviewView();
 
     void setItemInfo(const ItemInfo& info     = ItemInfo(),

@@ -57,16 +57,16 @@ class Q_DECL_HIDDEN TrashView::Private
 public:
 
     explicit Private()
-        : model(0),
-          thumbDelegate(0),
-          mainLayout(0),
-          btnsLayout(0),
-          tableView(0),
-          undoButton(0),
-          restoreButton(0),
-          deleteButton(0),
-          deleteAction(0),
-          deleteAllAction(0),
+        : model(nullptr),
+          thumbDelegate(nullptr),
+          mainLayout(nullptr),
+          btnsLayout(nullptr),
+          tableView(nullptr),
+          undoButton(nullptr),
+          restoreButton(nullptr),
+          deleteButton(nullptr),
+          deleteAction(nullptr),
+          deleteAllAction(nullptr),
           thumbSize(ThumbnailSize::Large)
     {
     }

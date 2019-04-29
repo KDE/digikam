@@ -570,7 +570,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             int returnCode = d->eventLoop->exec(QEventLoop::ExcludeUserInputEvents);
 
             delete d->eventLoop;
-            d->eventLoop = 0;
+            d->eventLoop = nullptr;
             QApplication::restoreOverrideCursor();
 
             if (returnCode == 1)

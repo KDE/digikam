@@ -77,7 +77,7 @@ public:
      */
     explicit DDatePickerPopup(Items items,
                               const QDate& date = QDate::currentDate(),
-                              QWidget* const parent = 0);
+                              QWidget* const parent = nullptr);
     ~DDatePickerPopup();
 
     /**

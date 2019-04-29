@@ -79,7 +79,7 @@ class Q_DECL_HIDDEN DDatePickerPopup::Private
 public:
 
     explicit Private()
-      : datePicker(0)
+      : datePicker(nullptr)
     {
     }
 

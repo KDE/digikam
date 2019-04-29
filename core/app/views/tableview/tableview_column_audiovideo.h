@@ -58,7 +58,7 @@ public:
     explicit ColumnAudioVideoProperties(TableViewShared* const tableViewShared,
                                         const TableViewColumnConfiguration& pConfiguration,
                                         const SubColumn pSubColumn,
-                                        QObject* const parent = 0);
+                                        QObject* const parent = nullptr);
     virtual ~ColumnAudioVideoProperties();
 
     virtual QString getTitle() const;

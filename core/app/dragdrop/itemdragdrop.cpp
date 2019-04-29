@@ -114,7 +114,7 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 
     QMenu popMenu(view);
 
-    QAction* moveAction = 0;
+    QAction* moveAction = nullptr;
 
     if (allowMove)
     {
@@ -124,8 +124,8 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
     QAction* const copyAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
     popMenu.addSeparator();
 
-    QAction* groupAction        = 0;
-    QAction* groupAndMoveAction = 0;
+    QAction* groupAction        = nullptr;
+    QAction* groupAndMoveAction = nullptr;
 
     if (askForGrouping)
     {
@@ -164,7 +164,7 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
     QMenu popMenu(view);
     QAction* const tagAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
                                                  i18n("Assign Tag to Dropped Items"));
-    QAction* groupAction     = 0;
+    QAction* groupAction     = nullptr;
 
     if (askForGrouping)
     {
@@ -196,7 +196,7 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     int sortOrder                       = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
-    QAction* sortAction        = 0;
+    QAction* sortAction        = nullptr;
 
     if (imgView && sortOrder == ItemSortSettings::SortByManualOrder)
     {
@@ -248,7 +248,7 @@ void ItemDragDropHandler::setReadOnlyDrop(bool readOnly)
 
 bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)
 {
-    Album* album = 0;
+    Album* album = nullptr;
 
     // Note that the drop event does not have to be in an ItemCategorizedView.
     // It can also be a TableViewTreeView.
@@ -274,12 +274,12 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
         return false;
     }
 
-    PAlbum* palbum = 0;
-    TAlbum* talbum = 0;
+    PAlbum* palbum = nullptr;
+    TAlbum* talbum = nullptr;
 
     if (album)
     {
-        Album* currentAlbum = 0;
+        Album* currentAlbum = nullptr;
 
         if (albumModel() && !(albumModel()->currentAlbums().isEmpty()))
         {
@@ -545,14 +545,14 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
         QMenu popMenu(view);
 
         QList<ItemInfo> selectedInfos  = view->selectedItemInfosCurrentFirst();
-        QAction* assignToSelectedAction = 0;
+        QAction* assignToSelectedAction = nullptr;
 
         if (selectedInfos.count() > 1)
         {
             assignToSelectedAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tags to &Selected Items"));
         }
 
-        QAction* assignToThisAction = 0;
+        QAction* assignToThisAction = nullptr;
 
         if (droppedOn.isValid())
         {
@@ -689,7 +689,7 @@ QMimeData* ItemDragDropHandler::createMimeData(const QList<QModelIndex>& indexes
 
     if (urls.isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return new DItemDrag(urls, albumIDs, imageIDs);

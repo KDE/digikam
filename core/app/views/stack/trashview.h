@@ -40,7 +40,7 @@ class TrashView : public QWidget
 
 public:
 
-    explicit TrashView(QWidget* const parent = 0);
+    explicit TrashView(QWidget* const parent = nullptr);
     ~TrashView();
 
     /**
@@ -99,7 +99,7 @@ class ThumbnailAligningDelegate : public QStyledItemDelegate
 
 public:
 
-    explicit ThumbnailAligningDelegate(QObject* const parent = 0);
+    explicit ThumbnailAligningDelegate(QObject* const parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };

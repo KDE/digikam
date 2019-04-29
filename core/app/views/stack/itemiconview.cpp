@@ -111,42 +111,42 @@ public:
         useAlbumHistory(false),
         initialAlbumID(0),
         thumbSize(ThumbnailSize::Medium),
-        dockArea(0),
-        splitter(0),
-        selectionTimer(0),
-        thumbSizeTimer(0),
-        albumFolderSideBar(0),
-        tagViewSideBar(0),
-        labelsSideBar(0),
-        dateViewSideBar(0),
-        timelineSideBar(0),
-        searchSideBar(0),
-        fuzzySearchSideBar(0),
+        dockArea(nullptr),
+        splitter(nullptr),
+        selectionTimer(nullptr),
+        thumbSizeTimer(nullptr),
+        albumFolderSideBar(nullptr),
+        tagViewSideBar(nullptr),
+        labelsSideBar(nullptr),
+        dateViewSideBar(nullptr),
+        timelineSideBar(nullptr),
+        searchSideBar(nullptr),
+        fuzzySearchSideBar(nullptr),
 
 #ifdef HAVE_MARBLE
-        gpsSearchSideBar(0),
-        mapView(0),
+        gpsSearchSideBar(nullptr),
+        mapView(nullptr),
 #endif // HAVE_MARBLE
 
-        peopleSideBar(0),
-        parent(0),
-        iconView(0),
-        tableView(0),
-        trashView(0),
-        utilities(0),
-        albumManager(0),
-        albumHistory(0),
-        stackedview(0),
+        peopleSideBar(nullptr),
+        parent(nullptr),
+        iconView(nullptr),
+        tableView(nullptr),
+        trashView(nullptr),
+        utilities(nullptr),
+        albumManager(nullptr),
+        albumHistory(nullptr),
+        stackedview(nullptr),
         lastViewMode(StackedView::IconViewMode),
-        albumModificationHelper(0),
-        tagModificationHelper(0),
-        searchModificationHelper(0),
-        leftSideBar(0),
-        rightSideBar(0),
-        filterWidget(0),
+        albumModificationHelper(nullptr),
+        tagModificationHelper(nullptr),
+        searchModificationHelper(nullptr),
+        leftSideBar(nullptr),
+        rightSideBar(nullptr),
+        filterWidget(nullptr),
         optionAlbumViewPrefix(QLatin1String("AlbumView")),
-        modelCollection(0),
-        labelsSearchHandler(0)
+        modelCollection(nullptr),
+        labelsSearchHandler(nullptr)
     {
     }
 
@@ -761,7 +761,7 @@ void ItemIconView::saveViewState()
     group.writeEntry(QLatin1String("ThumbbarState"), d->dockArea->saveState().toBase64());
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album            = 0;
+    Album* album            = nullptr;
 
     if (!albumList.isEmpty())
     {
@@ -1043,13 +1043,13 @@ void ItemIconView::slotNewDuplicatesSearch(const QList<TAlbum*>& albums)
 
 void ItemIconView::slotAlbumsCleared()
 {
-    emit signalAlbumSelected(0);
+    emit signalAlbumSelected(nullptr);
 }
 
 void ItemIconView::slotAlbumHistoryBack(int steps)
 {
     QList<Album*> albums;
-    QWidget* widget = 0;
+    QWidget* widget = nullptr;
 
     d->albumHistory->back(albums, &widget, steps);
 
@@ -1059,7 +1059,7 @@ void ItemIconView::slotAlbumHistoryBack(int steps)
 void ItemIconView::slotAlbumHistoryForward(int steps)
 {
     QList<Album*> albums;
-    QWidget* widget = 0;
+    QWidget* widget = nullptr;
 
     d->albumHistory->forward(albums, &widget, steps);
 
@@ -1206,14 +1206,14 @@ void ItemIconView::slotSelectAlbum(const QUrl& url)
 void ItemIconView::slotAlbumSelected(const QList<Album*>& albums)
 {
     emit signalNoCurrentItem();
-    emit signalAlbumSelected(0);
+    emit signalAlbumSelected(nullptr);
 
     if (albums.isEmpty() || !albums.first())
     {
         d->iconView->openAlbum(QList<Album*>());
 
 #ifdef HAVE_MARBLE
-        d->mapView->openAlbum(0);
+        d->mapView->openAlbum(nullptr);
 #endif // HAVE_MARBLE
 
         slotTogglePreviewMode(ItemInfo());
@@ -2137,7 +2137,7 @@ void ItemIconView::slotSlideShowSelection()
 void ItemIconView::slotSlideShowRecursive()
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album            = 0;
+    Album* album            = nullptr;
 
     if (!albumList.isEmpty())
     {
@@ -2401,7 +2401,7 @@ Album* ItemIconView::currentAlbum() const
             // all of these modes use the same selection model and data as the IconViewMode
             return d->iconView->currentAlbum();
         default:
-            return 0;
+            return nullptr;
     }
 }
 

@@ -40,8 +40,8 @@ class Q_DECL_HIDDEN DDateTimeEdit::Private
 public:
 
     explicit Private()
-      : timePopUp(0),
-        datePopUp(0)
+      : timePopUp(nullptr),
+        datePopUp(nullptr)
     {
     }
 
@@ -70,10 +70,10 @@ DDateTimeEdit::DDateTimeEdit(QWidget* const parent, const QString& name)
 DDateTimeEdit::~DDateTimeEdit()
 {
     delete d->datePopUp;
-    d->datePopUp = 0;
+    d->datePopUp = nullptr;
 
     delete d->timePopUp;
-    d->timePopUp = 0;
+    d->timePopUp = nullptr;
 
     delete d;
 }

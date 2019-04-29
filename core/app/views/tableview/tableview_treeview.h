@@ -56,7 +56,7 @@ class TableViewTreeView : public QTreeView, public DragDropViewImplementation, p
 
 public:
 
-    explicit TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent = 0);
+    explicit TableViewTreeView(TableViewShared* const tableViewShared, QWidget* const parent = nullptr);
     virtual ~TableViewTreeView();
 
     Album* albumAt(const QPoint& pos) const;

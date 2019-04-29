@@ -38,7 +38,7 @@ class ItemThumbnailBar : public ItemCategorizedView
 
 public:
 
-    explicit ItemThumbnailBar(QWidget* const parent = 0);
+    explicit ItemThumbnailBar(QWidget* const parent = nullptr);
     ~ItemThumbnailBar();
 
     /// Sets the policy always for the one scroll bar which is relevant, depending on orientation

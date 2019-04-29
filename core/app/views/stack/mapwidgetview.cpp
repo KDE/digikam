@@ -68,15 +68,15 @@ class Q_DECL_HIDDEN MapWidgetView::Private
 public:
 
     explicit Private()
-       : vbox(0),
-         mapWidget(0),
-         imageFilterModel(0),
-         imageModel(0),
-         importFilterModel(0),
-         importModel(0),
-         selectionModel(0),
-         mapViewModelHelper(0),
-         gpsItemInfoSorter(0),
+       : vbox(nullptr),
+         mapWidget(nullptr),
+         imageFilterModel(nullptr),
+         imageModel(nullptr),
+         importFilterModel(nullptr),
+         importModel(nullptr),
+         selectionModel(nullptr),
+         mapViewModelHelper(nullptr),
+         gpsItemInfoSorter(nullptr),
          application(MapWidgetView::ApplicationDigikam)
     {
     }
@@ -207,10 +207,10 @@ class Q_DECL_HIDDEN MapViewModelHelper::Private
 public:
 
     explicit Private()
-        : model(0),
-          importModel(0),
-          selectionModel(0),
-          thumbnailLoadThread(0),
+        : model(nullptr),
+          importModel(nullptr),
+          selectionModel(nullptr),
+          thumbnailLoadThread(nullptr),
           application(MapWidgetView::ApplicationDigikam)
     {
     }
@@ -279,7 +279,7 @@ QAbstractItemModel* MapViewModelHelper::model() const
             return d->importModel;
     }
 
-    return 0;
+    return nullptr;
 }
 
 /**

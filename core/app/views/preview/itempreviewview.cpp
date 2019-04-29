@@ -78,21 +78,21 @@ public:
     {
         fullSize            = 0;
         scale               = 1.0;
-        item                = 0;
+        item                = nullptr;
         isValid             = false;
         rotationLock        = false;
-        toolBar             = 0;
-        prevAction          = 0;
-        nextAction          = 0;
-        rotLeftAction       = 0;
-        rotRightAction      = 0;
+        toolBar             = nullptr;
+        prevAction          = nullptr;
+        nextAction          = nullptr;
+        rotLeftAction       = nullptr;
+        rotRightAction      = nullptr;
         mode                = ItemPreviewView::IconViewPreview;
-        faceGroup           = 0;
-        peopleToggleAction  = 0;
-        addPersonAction     = 0;
-        forgetFacesAction   = 0;
-        fullscreenAction    = 0;
-        currAlbum           = 0;
+        faceGroup           = nullptr;
+        peopleToggleAction  = nullptr;
+        addPersonAction     = nullptr;
+        forgetFacesAction   = nullptr;
+        fullscreenAction    = nullptr;
+        currAlbum           = nullptr;
     }
 
     bool                   fullSize;

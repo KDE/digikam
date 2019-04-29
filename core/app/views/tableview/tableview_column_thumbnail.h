@@ -43,7 +43,7 @@ private:
 
     explicit ColumnThumbnail(TableViewShared* const tableViewShared,
                              const TableViewColumnConfiguration& pConfiguration,
-                             QObject* const parent = 0);
+                             QObject* const parent = nullptr);
     virtual ~ColumnThumbnail();
 
 public:
@@ -58,7 +58,7 @@ public:
     static bool CreateFromConfiguration(TableViewShared* const tableViewShared,
                                         const TableViewColumnConfiguration& pConfiguration,
                                         TableViewColumn** const pNewColumn,
-                                        QObject* const parent = 0);
+                                        QObject* const parent = nullptr);
 
     static TableViewColumnDescription getDescription();
 

@@ -56,7 +56,7 @@ public:
     explicit Private()
     {
         lowerSpacing = 0;
-        view         = 0;
+        view         = nullptr;
     }
 
     QFont                 font;
@@ -67,7 +67,7 @@ public:
 };
 
 ItemCategoryDrawer::ItemCategoryDrawer(ItemCategorizedView* const parent)
-    : DCategoryDrawer(0),
+    : DCategoryDrawer(nullptr),
       d(new Private)
 {
     d->view = parent;
@@ -202,7 +202,7 @@ void ItemCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* heade
     if (albumModel)
     {
         QList<Album*> albums = albumModel->currentAlbums();
-        Album* album         = 0;
+        Album* album         = nullptr;
 
         if (albums.isEmpty())
         {

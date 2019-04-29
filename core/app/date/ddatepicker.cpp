@@ -348,7 +348,7 @@ void DDatePicker::selectMonthClicked()
     }
 
     // cancelled
-    if ((item = popup.exec(d->selectMonth->mapToGlobal(QPoint(0, 0)), item)) == 0)
+    if ((item = popup.exec(d->selectMonth->mapToGlobal(QPoint(0, 0)), item)) == nullptr)
     {
         return;
     }
@@ -544,7 +544,7 @@ int DDatePicker::fontSize() const
 
 void DDatePicker::setCloseButton(bool enable)
 {
-    if (enable == (d->closeButton != 0L))
+    if (enable == (d->closeButton != nullptr))
     {
         return;
     }
@@ -565,7 +565,7 @@ void DDatePicker::setCloseButton(bool enable)
     else
     {
         delete d->closeButton;
-        d->closeButton = 0L;
+        d->closeButton = nullptr;
     }
 
     updateGeometry();

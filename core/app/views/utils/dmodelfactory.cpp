@@ -42,13 +42,13 @@ public:
 
     explicit Private()
     {
-        albumModel        = 0;
-        tagModel          = 0;
-        tagFilterModel    = 0;
-        tagFacesModel     = 0;
-        searchModel       = 0;
-        dateAlbumModel    = 0;
-        imageVersionModel = 0;
+        albumModel        = nullptr;
+        tagModel          = nullptr;
+        tagFilterModel    = nullptr;
+        tagFacesModel     = nullptr;
+        searchModel       = nullptr;
+        dateAlbumModel    = nullptr;
+        imageVersionModel = nullptr;
     }
 
     AlbumModel*         albumModel;

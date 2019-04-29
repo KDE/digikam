@@ -51,7 +51,7 @@ class ItemCategorizedView : public ItemViewCategorized
 
 public:
 
-    explicit ItemCategorizedView(QWidget* const parent = 0);
+    explicit ItemCategorizedView(QWidget* const parent = nullptr);
     ~ItemCategorizedView();
 
     void setModels(ItemModel* model, ImageSortFilterModel* filterModel);
@@ -118,11 +118,11 @@ public:
 
     /// Add and remove an overlay. It will as well be removed automatically when destroyed.
     /// Unless you pass a different delegate, the current delegate will be used.
-    void addOverlay(ItemDelegateOverlay* overlay, ItemDelegate* delegate = 0);
+    void addOverlay(ItemDelegateOverlay* overlay, ItemDelegate* delegate = nullptr);
 
     void removeOverlay(ItemDelegateOverlay* overlay);
 
-    void addSelectionOverlay(ItemDelegate* delegate = 0);
+    void addSelectionOverlay(ItemDelegate* delegate = nullptr);
 
 public Q_SLOTS:
 

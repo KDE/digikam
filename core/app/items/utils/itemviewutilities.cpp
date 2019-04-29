@@ -195,7 +195,7 @@ void ItemViewUtilities::createNewAlbumForInfos(const QList<ItemInfo>& infos,
 
     if (currentAlbum && currentAlbum->type() != Album::PHYSICAL)
     {
-        currentAlbum = 0;
+        currentAlbum = nullptr;
     }
 
     QString header(i18n("<p>Please select the destination album from the digiKam library to "

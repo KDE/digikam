@@ -60,7 +60,7 @@ public:
     explicit Private()
         : tagModel(AbstractAlbumModel::IgnoreRootAlbum)
     {
-        assignNameWidget = 0;
+        assignNameWidget = nullptr;
     }
 
     bool isChildWidget(QWidget* widget, QWidget* const parent) const

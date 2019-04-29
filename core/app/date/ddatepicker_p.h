@@ -66,7 +66,7 @@ class Q_DECL_HIDDEN DatePickerYearSelector : public QLineEdit
 
 public:
 
-    explicit DatePickerYearSelector(const QDate& currentDate, QWidget* const parent = 0);
+    explicit DatePickerYearSelector(const QDate& currentDate, QWidget* const parent = nullptr);
 
     int  year() const;
     void setYear(int year);

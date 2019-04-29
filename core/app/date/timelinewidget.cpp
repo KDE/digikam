@@ -71,8 +71,8 @@ public:
         barWidth(20),
         nbItems(10),
         startPos(96),
-        slotNextTimer(0),
-        slotPreviousTimer(0),
+        slotNextTimer(nullptr),
+        slotPreviousTimer(nullptr),
         timeUnit(TimeLineWidget::Month),
         scaleMode(TimeLineWidget::LinScale)
     {

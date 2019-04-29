@@ -380,8 +380,8 @@ ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(TableViewShared* 
                                                                QWidget* const parentWidget)
     : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
       subColumn(ColumnPhotoProperties::SubColumnExposure),
-      selectorExposureTimeFormat(0),
-      selectorExposureTimeUnit(0)
+      selectorExposureTimeFormat(nullptr),
+      selectorExposureTimeUnit(nullptr)
 {
     ColumnPhotoProperties::getSubColumnIndex<ColumnPhotoProperties>(configuration.columnId, &subColumn);
 

@@ -57,24 +57,24 @@ class Q_DECL_HIDDEN FilterSideBarWidget::Private
 public:
 
     explicit Private()
-      : space(0),
-        expanderVlay(0),
-        tagFilterView(0),
-        tagFilterSearchBar(0),
-        tagOptionsBtn(0),
-        tagOptionsMenu(0),
-        tagFilterModel(0),
-        tagOrCondAction(0),
-        tagAndCondAction(0),
+      : space(nullptr),
+        expanderVlay(nullptr),
+        tagFilterView(nullptr),
+        tagFilterSearchBar(nullptr),
+        tagOptionsBtn(nullptr),
+        tagOptionsMenu(nullptr),
+        tagFilterModel(nullptr),
+        tagOrCondAction(nullptr),
+        tagAndCondAction(nullptr),
         tagMatchCond(ItemFilterSettings::OrCondition),
-        colorLabelFilter(0),
-        geolocationFilter(0),
-        pickLabelFilter(0),
-        ratingFilter(0),
-        mimeFilter(0),
-        textFilter(0),
-        withoutTagCheckBox(0),
-        expbox(0)
+        colorLabelFilter(nullptr),
+        geolocationFilter(nullptr),
+        pickLabelFilter(nullptr),
+        ratingFilter(nullptr),
+        mimeFilter(nullptr),
+        textFilter(nullptr),
+        withoutTagCheckBox(nullptr),
+        expbox(nullptr)
     {
     }
 

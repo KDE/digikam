@@ -203,7 +203,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(TableViewShared* co
                                                              QWidget* const parentWidget)
     : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
       subColumn(ColumnFileProperties::SubColumnName),
-      selectorSizeType(0)
+      selectorSizeType(nullptr)
 {
     ColumnFileProperties::getSubColumnIndex<ColumnFileProperties>(configuration.columnId, &subColumn);
 

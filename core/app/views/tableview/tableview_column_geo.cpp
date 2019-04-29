@@ -233,7 +233,7 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(TableViewShared* cons
                                                            QWidget* const parentWidget)
     : TableViewColumnConfigurationWidget(sharedObject, columnConfiguration, parentWidget),
       subColumn(ColumnGeoProperties::SubColumnHasCoordinates),
-      selectorAltitudeUnit(0)
+      selectorAltitudeUnit(nullptr)
 {
     ColumnGeoProperties::getSubColumnIndex<ColumnGeoProperties>(configuration.columnId, &subColumn);
 

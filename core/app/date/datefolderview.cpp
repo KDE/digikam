@@ -49,8 +49,8 @@ public:
     explicit Private()
       : active(false),
         selected(),
-        dateTreeView(0),
-        monthview(0)
+        dateTreeView(nullptr),
+        monthview(nullptr)
     {
     }
 

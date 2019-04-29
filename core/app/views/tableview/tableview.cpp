@@ -64,7 +64,7 @@ public:
     explicit Private()
       : columnProfiles(),
         thumbnailSize(),
-        imageViewUtilities(0)
+        imageViewUtilities(nullptr)
     {
     }
 
@@ -244,12 +244,12 @@ Album* TableView::currentAlbum() const
 
     if (!albumModel)
     {
-        return 0;
+        return nullptr;
     }
 
     if (albumModel->currentAlbums().isEmpty())
     {
-        return 0;
+        return nullptr;
     }
 
     return albumModel->currentAlbums().first();

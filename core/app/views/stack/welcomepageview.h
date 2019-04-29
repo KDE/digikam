@@ -56,7 +56,7 @@ class WelcomePageViewPage : public QWebEnginePage
 
 public:
 
-    explicit WelcomePageViewPage(QObject* const parent = 0);
+    explicit WelcomePageViewPage(QObject* const parent = nullptr);
     virtual ~WelcomePageViewPage();
 
     bool acceptNavigationRequest(const QUrl&, QWebEnginePage::NavigationType, bool);

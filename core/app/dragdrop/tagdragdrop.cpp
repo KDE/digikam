@@ -105,7 +105,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
             if (choice == gotoAction)
             {
-                TAlbum* newParentTag = 0;
+                TAlbum* newParentTag = nullptr;
 
                 if (!destAlbum)
                 {
@@ -183,7 +183,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             else
             {
                 QMenu popMenu(view);
-                QAction* setAction = 0;
+                QAction* setAction = nullptr;
 
                 if (imageIDs.count() == 1)
                 {
@@ -352,7 +352,7 @@ QMimeData* TagDragDropHandler::createMimeData(const QList<Album*>& albums)
     if (albums.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot drag no tag";
-        return 0;
+        return nullptr;
     }
 
     QList<int> ids;

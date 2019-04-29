@@ -63,8 +63,8 @@ public:
 
 public:
 
-    explicit DDateTable(QWidget* const parent = 0);
-    explicit DDateTable(const QDate& dt, QWidget* const parent = 0);
+    explicit DDateTable(QWidget* const parent = nullptr);
+    explicit DDateTable(const QDate& dt, QWidget* const parent = nullptr);
     ~DDateTable();
 
     /**
