@@ -67,7 +67,7 @@ public:
         introPage     = nullptr;
         cSettings     = nullptr;
         wTemplate     = nullptr;
-        wPrintLabel   = 0;
+        wPrintLabel   = nullptr;
         wFinish       = nullptr;
         wTemplatePage = nullptr;
         wPrintPage    = nullptr;

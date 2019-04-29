@@ -562,7 +562,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
 
         // iterate to the next position
         ++it;
-        layout = (it == layouts.end()) ? 0 : static_cast<QRect*>(*it);
+        layout = (it == layouts.end()) ? nullptr : static_cast<QRect*>(*it);
 
         if (layout == nullptr)
         {
@@ -598,7 +598,7 @@ double AdvPrintTask::getMaxDPI(const QList<AdvPrintPhoto*>& photos,
 
         // iterate to the next position
         ++it;
-        layout = (it == layouts.end()) ? 0 : static_cast<QRect*>(*it);
+        layout = (it == layouts.end()) ? nullptr : static_cast<QRect*>(*it);
 
         if (layout == nullptr)
         {

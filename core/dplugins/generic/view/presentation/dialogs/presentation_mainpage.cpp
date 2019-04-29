@@ -454,8 +454,8 @@ void PresentationMainPage::slotThumbnail(const LoadingDescription& /*desc*/, con
         m_previewLabel->setPixmap(pix.scaled(ICONSIZE, ICONSIZE, Qt::KeepAspectRatio));
     }
 
-    disconnect(ThumbnailLoadThread::defaultThread(), 0,
-               this, 0);
+    disconnect(ThumbnailLoadThread::defaultThread(), nullptr,
+               this, nullptr);
 }
 
 void PresentationMainPage::slotPrintCommentsToggled()
