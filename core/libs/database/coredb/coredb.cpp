@@ -173,7 +173,7 @@ CoreDB::~CoreDB()
     delete d;
 }
 
-QList<AlbumRootInfo> CoreDB::getAlbumRoots()
+QList<AlbumRootInfo> CoreDB::getAlbumRoots() const
 {
     QList<AlbumRootInfo> list;
     QList<QVariant>      values;
@@ -202,7 +202,7 @@ QList<AlbumRootInfo> CoreDB::getAlbumRoots()
     return list;
 }
 
-int CoreDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const QString& specificPath, const QString& label)
+int CoreDB::addAlbumRoot(AlbumRoot::Type type, const QString& identifier, const QString& specificPath, const QString& label) const
 {
     QVariant id;
     d->db->execSql(QString::fromUtf8("REPLACE INTO AlbumRoots (type, label, status, identifier, specificPath) "
@@ -256,7 +256,7 @@ void CoreDB::setAlbumRootPath(int rootId, const QString& newPath)
     d->db->recordChangeset(AlbumRootChangeset(rootId, AlbumRootChangeset::PropertiesChanged));
 }
 
-AlbumInfo::List CoreDB::scanAlbums()
+AlbumInfo::List CoreDB::scanAlbums() const
 {
     AlbumInfo::List aList;
 
@@ -292,7 +292,7 @@ AlbumInfo::List CoreDB::scanAlbums()
     return aList;
 }
 
-TagInfo::List CoreDB::scanTags()
+TagInfo::List CoreDB::scanTags() const
 {
     TagInfo::List tList;
 
@@ -321,7 +321,7 @@ TagInfo::List CoreDB::scanTags()
     return tList;
 }
 
-TagInfo CoreDB::getTagInfo(int tagId)
+TagInfo CoreDB::getTagInfo(int tagId) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id, pid, name, icon, iconkde WHERE id=? FROM Tags;"),
@@ -348,7 +348,7 @@ TagInfo CoreDB::getTagInfo(int tagId)
     return info;
 }
 
-SearchInfo::List CoreDB::scanSearches()
+SearchInfo::List CoreDB::scanSearches() const
 {
     SearchInfo::List searchList;
     QList<QVariant>  values;
@@ -375,7 +375,7 @@ SearchInfo::List CoreDB::scanSearches()
     return searchList;
 }
 
-QList<AlbumShortInfo> CoreDB::getAlbumShortInfos()
+QList<AlbumShortInfo> CoreDB::getAlbumShortInfos() const
 {
     QList<QVariant> values;
 
@@ -401,7 +401,7 @@ QList<AlbumShortInfo> CoreDB::getAlbumShortInfos()
     return albumList;
 }
 
-QList<TagShortInfo> CoreDB::getTagShortInfos()
+QList<TagShortInfo> CoreDB::getTagShortInfos() const
 {
     QList<QVariant> values;
 
@@ -488,7 +488,7 @@ int CoreDB::addAlbum(const QString& albumRoot, const QString& relativePath,
 
 int CoreDB::addAlbum(int albumRootId, const QString& relativePath,
                      const QString& caption,
-                     const QDate& date, const QString& collection)
+                     const QDate& date, const QString& collection) const
 {
     QVariant        id;
     QList<QVariant> boundValues;
@@ -607,7 +607,7 @@ void CoreDB::deleteStaleAlbums()
     // deliberately no changeset here, is done above
 }
 
-int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE, qlonglong iconID)
+int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE, qlonglong iconID) const
 {
     QVariant                id;
     QMap<QString, QVariant> parameters;
@@ -703,7 +703,7 @@ void CoreDB::setTagParentID(int tagID, int newParentTagID)
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 
-QList<TagProperty> CoreDB::getTagProperties(int tagId)
+QList<TagProperty> CoreDB::getTagProperties(int tagId) const
 {
     QList<QVariant> values;
 
@@ -734,7 +734,7 @@ QList<TagProperty> CoreDB::getTagProperties(int tagId)
     return properties;
 }
 
-QList<TagProperty> CoreDB::getTagProperties(const QString& property)
+QList<TagProperty> CoreDB::getTagProperties(const QString& property) const
 {
     QList<QVariant> values;
 
@@ -765,7 +765,7 @@ QList<TagProperty> CoreDB::getTagProperties(const QString& property)
     return properties;
 }
 
-QList<TagProperty> CoreDB::getTagProperties()
+QList<TagProperty> CoreDB::getTagProperties() const
 {
     QList<QVariant> values;
 
@@ -796,7 +796,7 @@ QList<TagProperty> CoreDB::getTagProperties()
     return properties;
 }
 
-QList< int > CoreDB::getTagsWithProperty(const QString& property)
+QList< int > CoreDB::getTagsWithProperty(const QString& property) const
 {
     QList<QVariant> values;
 
@@ -847,7 +847,7 @@ void CoreDB::removeTagProperties(int tagId, const QString& property, const QStri
     d->db->recordChangeset(TagChangeset(tagId, TagChangeset::PropertiesChanged));
 }
 
-int CoreDB::addSearch(DatabaseSearch::Type type, const QString& name, const QString& query)
+int CoreDB::addSearch(DatabaseSearch::Type type, const QString& name, const QString& query) const
 {
     QVariant id;
 
@@ -883,7 +883,7 @@ void CoreDB::deleteSearches(DatabaseSearch::Type type)
     d->db->recordChangeset(SearchChangeset(0, SearchChangeset::Deleted));
 }
 
-QString CoreDB::getSearchQuery(int searchId)
+QString CoreDB::getSearchQuery(int searchId) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT query FROM Searches WHERE id=?;"),
@@ -899,7 +899,7 @@ QString CoreDB::getSearchQuery(int searchId)
     }
 }
 
-SearchInfo CoreDB::getSearchInfo(int searchId)
+SearchInfo CoreDB::getSearchInfo(int searchId) const
 {
     SearchInfo info;
 
@@ -929,7 +929,7 @@ void CoreDB::setSetting(const QString& keyword, const QString& value)
                    keyword, value);
 }
 
-QString CoreDB::getSetting(const QString& keyword)
+QString CoreDB::getSetting(const QString& keyword) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT value FROM Settings "
@@ -1078,7 +1078,7 @@ QUuid CoreDB::databaseUuid()
     return uuid;
 }
 
-int CoreDB::getUniqueHashVersion()
+int CoreDB::getUniqueHashVersion() const
 {
     if (d->uniqueHashVersion == -1)
     {
@@ -1097,7 +1097,7 @@ int CoreDB::getUniqueHashVersion()
     return d->uniqueHashVersion;
 }
 
-bool CoreDB::isUniqueHashV2()
+bool CoreDB::isUniqueHashV2() const
 {
     return (getUniqueHashVersion() == 2);
 }
@@ -1171,7 +1171,7 @@ QDateTime CoreDB::getItemDate(int albumID, const QString& name)
 }
 */
 
-qlonglong CoreDB::getImageId(int albumID, const QString& name)
+qlonglong CoreDB::getImageId(int albumID, const QString& name) const
 {
     QList<QVariant> values;
 
@@ -1189,7 +1189,7 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name)
     }
 }
 
-QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseItem::Status status)
+QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseItem::Status status) const
 {
     QList<QVariant> values;
 
@@ -1216,7 +1216,7 @@ QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseI
     return items;
 }
 
-QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
+QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
@@ -1233,7 +1233,7 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
     return imageIds;
 }
 
-QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::Category category)
+QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::Category category) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
@@ -1254,7 +1254,7 @@ qlonglong CoreDB::findImageId(int albumID, const QString& name,
                               DatabaseItem::Status status,
                               DatabaseItem::Category category,
                               qlonglong fileSize,
-                              const QString& uniqueHash)
+                              const QString& uniqueHash) const
 {
     QList<QVariant> values;
     QVariantList boundValues;
@@ -1295,7 +1295,7 @@ qlonglong CoreDB::findImageId(int albumID, const QString& name,
     }
 }
 
-QStringList CoreDB::getItemTagNames(qlonglong imageID)
+QStringList CoreDB::getItemTagNames(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -1315,7 +1315,7 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
     return names;
 }
 
-QList<int> CoreDB::getItemTagIDs(qlonglong imageID)
+QList<int> CoreDB::getItemTagIDs(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -1337,7 +1337,7 @@ QList<int> CoreDB::getItemTagIDs(qlonglong imageID)
     return ids;
 }
 
-QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
+QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds) const
 {
     if (imageIds.isEmpty())
     {
@@ -1362,7 +1362,7 @@ QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     return results;
 }
 
-QList<ImageTagProperty> CoreDB::getImageTagProperties(qlonglong imageId, int tagId)
+QList<ImageTagProperty> CoreDB::getImageTagProperties(qlonglong imageId, int tagId) const
 {
     QList<QVariant> values;
 
@@ -1405,7 +1405,7 @@ QList<ImageTagProperty> CoreDB::getImageTagProperties(qlonglong imageId, int tag
     return properties;
 }
 
-QList<int> CoreDB::getTagIdsWithProperties(qlonglong imageId)
+QList<int> CoreDB::getTagIdsWithProperties(qlonglong imageId) const
 {
     QList<QVariant> values;
 
@@ -1466,7 +1466,7 @@ void CoreDB::removeImageTagProperties(qlonglong imageId, int tagId, const QStrin
     d->db->recordChangeset(ImageTagChangeset(imageId, tagId, ImageTagChangeset::PropertiesChanged));
 }
 
-ItemShortInfo CoreDB::getItemShortInfo(qlonglong imageID)
+ItemShortInfo CoreDB::getItemShortInfo(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -1490,7 +1490,7 @@ ItemShortInfo CoreDB::getItemShortInfo(qlonglong imageID)
     return info;
 }
 
-ItemShortInfo CoreDB::getItemShortInfo(int albumRootId, const QString& relativePath, const QString& name)
+ItemShortInfo CoreDB::getItemShortInfo(int albumRootId, const QString& relativePath, const QString& name) const
 {
     QList<QVariant> values;
 
@@ -1513,7 +1513,7 @@ ItemShortInfo CoreDB::getItemShortInfo(int albumRootId, const QString& relativeP
     return info;
 }
 
-bool CoreDB::hasTags(const QList<qlonglong>& imageIDList)
+bool CoreDB::hasTags(const QList<qlonglong>& imageIDList) const
 {
     QList<int> ids;
 
@@ -1551,7 +1551,7 @@ bool CoreDB::hasTags(const QList<qlonglong>& imageIDList)
     }
 }
 
-QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
+QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList) const
 {
     QList<int> ids;
 
@@ -1592,7 +1592,7 @@ QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     return ids;
 }
 
-QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images fields)
+QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images fields) const
 {
     QVariantList values;
 
@@ -1616,7 +1616,7 @@ QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images f
     return values;
 }
 
-QVariantList CoreDB::getItemInformation(qlonglong imageID, DatabaseFields::ItemInformation fields)
+QVariantList CoreDB::getItemInformation(qlonglong imageID, DatabaseFields::ItemInformation fields) const
 {
     QVariantList values;
 
@@ -1646,7 +1646,7 @@ QVariantList CoreDB::getItemInformation(qlonglong imageID, DatabaseFields::ItemI
     return values;
 }
 
-QVariantList CoreDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageMetadata fields)
+QVariantList CoreDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageMetadata fields) const
 {
     QVariantList values;
 
@@ -1665,7 +1665,7 @@ QVariantList CoreDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageMe
     return values;
 }
 
-QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMetadata fields)
+QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMetadata fields) const
 {
     QVariantList values;
 
@@ -1706,7 +1706,7 @@ QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMe
     return values;
 }
 
-QVariantList CoreDB::getItemPosition(qlonglong imageID, DatabaseFields::ItemPositions fields)
+QVariantList CoreDB::getItemPosition(qlonglong imageID, DatabaseFields::ItemPositions fields) const
 {
     QVariantList values;
 
@@ -1752,7 +1752,7 @@ QVariantList CoreDB::getItemPosition(qlonglong imageID, DatabaseFields::ItemPosi
     return values;
 }
 
-QVariantList CoreDB::getItemPositions(QList<qlonglong> imageIDs, DatabaseFields::ItemPositions fields)
+QVariantList CoreDB::getItemPositions(QList<qlonglong> imageIDs, DatabaseFields::ItemPositions fields) const
 {
     QVariantList values;
 
@@ -2006,7 +2006,7 @@ void CoreDB::removeItemPositionAltitude(qlonglong imageid)
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::Altitude)));
 }
 
-QList<CommentInfo> CoreDB::getItemComments(qlonglong imageID)
+QList<CommentInfo> CoreDB::getItemComments(qlonglong imageID) const
 {
     QList<CommentInfo> list;
 
@@ -2040,7 +2040,7 @@ QList<CommentInfo> CoreDB::getItemComments(qlonglong imageID)
 }
 
 int CoreDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseComment::Type type,
-                            const QString& language, const QString& author, const QDateTime& date)
+                            const QString& language, const QString& author, const QDateTime& date) const
 {
     QVariantList boundValues;
     boundValues << imageID << (int)type << language << author << date << comment;
@@ -2085,7 +2085,7 @@ void CoreDB::removeImageComment(int commentid, qlonglong imageid)
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Set(DatabaseFields::ItemCommentsAll)));
 }
 
-QString CoreDB::getImageProperty(qlonglong imageID, const QString& property)
+QString CoreDB::getImageProperty(qlonglong imageID, const QString& property) const
 {
     QList<QVariant> values;
 
@@ -2123,7 +2123,7 @@ void CoreDB::removeImagePropertyByName(const QString& property)
                    property);
 }
 
-QList<CopyrightInfo> CoreDB::getItemCopyright(qlonglong imageID, const QString& property)
+QList<CopyrightInfo> CoreDB::getItemCopyright(qlonglong imageID, const QString& property) const
 {
     QList<CopyrightInfo> list;
     QList<QVariant>      values;
@@ -2228,7 +2228,7 @@ void CoreDB::removeItemCopyrightProperties(qlonglong imageID, const QString& pro
     }
 }
 
-QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, const QDateTime& creationDate)
+QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, const QDateTime& creationDate) const
 {
     QList<QVariant> values;
 
@@ -2247,7 +2247,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
     return ids;
 }
 
-bool CoreDB::hasImageHistory(qlonglong imageId)
+bool CoreDB::hasImageHistory(qlonglong imageId) const
 {
     QList<QVariant> values;
 
@@ -2257,7 +2257,7 @@ bool CoreDB::hasImageHistory(qlonglong imageId)
     return !values.isEmpty();
 }
 
-ImageHistoryEntry CoreDB::getItemHistory(qlonglong imageId)
+ImageHistoryEntry CoreDB::getItemHistory(qlonglong imageId) const
 {
     QList<QVariant> values;
 
@@ -2282,7 +2282,7 @@ ImageHistoryEntry CoreDB::getItemHistory(qlonglong imageId)
     return entry;
 }
 
-QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid)
+QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid) const
 {
     QList<QVariant> values;
 
@@ -2306,7 +2306,7 @@ QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid)
     return imageIds;
 }
 
-QString CoreDB::getImageUuid(qlonglong imageId)
+QString CoreDB::getImageUuid(qlonglong imageId) const
 {
     QList<QVariant> values;
 
@@ -2393,7 +2393,7 @@ void CoreDB::removeImageRelation(const ImageRelation& relation)
     removeImageRelation(relation.subjectId, relation.objectId, relation.type);
 }
 
-QList<qlonglong> CoreDB::removeAllImageRelationsTo(qlonglong objectId, DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::removeAllImageRelationsTo(qlonglong objectId, DatabaseRelation::Type type) const
 {
     QList<qlonglong> affected = getImagesRelatingTo(objectId, type);
 
@@ -2410,7 +2410,7 @@ QList<qlonglong> CoreDB::removeAllImageRelationsTo(qlonglong objectId, DatabaseR
     return affected;
 }
 
-QList<qlonglong> CoreDB::removeAllImageRelationsFrom(qlonglong subjectId, DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::removeAllImageRelationsFrom(qlonglong subjectId, DatabaseRelation::Type type) const
 {
     QList<qlonglong> affected = getImagesRelatedFrom(subjectId, type);
 
@@ -2427,39 +2427,39 @@ QList<qlonglong> CoreDB::removeAllImageRelationsFrom(qlonglong subjectId, Databa
     return affected;
 }
 
-QList<qlonglong> CoreDB::getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::getImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type) const
 {
     return getRelatedImages(subjectId, true, type, false);
 }
 
-QVector<QList<qlonglong> > CoreDB::getImagesRelatedFrom(QList<qlonglong> subjectIds, DatabaseRelation::Type type)
+QVector<QList<qlonglong> > CoreDB::getImagesRelatedFrom(QList<qlonglong> subjectIds, DatabaseRelation::Type type) const
 {
     return getRelatedImages(subjectIds, true, type, false);
 }
 
-bool CoreDB::hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type)
+bool CoreDB::hasImagesRelatedFrom(qlonglong subjectId, DatabaseRelation::Type type) const
 {
     // returns 0 or 1 item in list
     return !getRelatedImages(subjectId, true, type, true).isEmpty();
 }
 
-QList<qlonglong> CoreDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::getImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type) const
 {
     return getRelatedImages(objectId, false, type, false);
 }
 
-QVector<QList<qlonglong> > CoreDB::getImagesRelatingTo(QList<qlonglong> objectIds, DatabaseRelation::Type type)
+QVector<QList<qlonglong> > CoreDB::getImagesRelatingTo(QList<qlonglong> objectIds, DatabaseRelation::Type type) const
 {
     return getRelatedImages(objectIds, false, type, false);
 }
 
-bool CoreDB::hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type)
+bool CoreDB::hasImagesRelatingTo(qlonglong objectId, DatabaseRelation::Type type) const
 {
     // returns 0 or 1 item in list
     return !getRelatedImages(objectId, false, type, true).isEmpty();
 }
 
-QList<qlonglong> CoreDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+QList<qlonglong> CoreDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseRelation::Type type, bool boolean) const
 {
     QString sql = d->constructRelatedImagesSQL(fromOrTo, type, boolean);
     DbEngineSqlQuery query = d->db->prepareQuery(sql);
@@ -2467,7 +2467,7 @@ QList<qlonglong> CoreDB::getRelatedImages(qlonglong id, bool fromOrTo, DatabaseR
 }
 
 QVector<QList<qlonglong> > CoreDB::getRelatedImages(QList<qlonglong> ids,
-                                                     bool fromOrTo, DatabaseRelation::Type type, bool boolean)
+                                                    bool fromOrTo, DatabaseRelation::Type type, bool boolean) const
 {
     if (ids.isEmpty())
     {
@@ -2487,7 +2487,7 @@ QVector<QList<qlonglong> > CoreDB::getRelatedImages(QList<qlonglong> ids,
     return result;
 }
 
-QList<QPair<qlonglong, qlonglong> > CoreDB::getRelationCloud(qlonglong imageId, DatabaseRelation::Type type)
+QList<QPair<qlonglong, qlonglong> > CoreDB::getRelationCloud(qlonglong imageId, DatabaseRelation::Type type) const
 {
     QSet<qlonglong> todo, done;
     QSet<QPair<qlonglong, qlonglong> > pairs;
@@ -2555,7 +2555,7 @@ QList<QPair<qlonglong, qlonglong> > CoreDB::getRelationCloud(qlonglong imageId, 
     return pairs.toList();
 }
 
-QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, DatabaseRelation::Type type) const
 {
     QString sql = QString::fromUtf8("SELECT subject, object FROM ImageRelations "
                                     "INNER JOIN Images AS SubjectImages "
@@ -2609,7 +2609,7 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
     return result.toList();
 }
 
-QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type)
+QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type) const
 {
     QList<QVariant> values;
 
@@ -2638,7 +2638,7 @@ QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type)
     return imageIds;
 }
 
-QStringList CoreDB::getItemsURLsWithTag(int tagId)
+QStringList CoreDB::getItemsURLsWithTag(int tagId) const
 {
     QList<QVariant> values;
 
@@ -2673,7 +2673,7 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId)
     return urls;
 }
 
-QStringList CoreDB::getDirtyOrMissingFaceImageUrls()
+QStringList CoreDB::getDirtyOrMissingFaceImageUrls() const
 {
     QList<QVariant> values;
 
@@ -2711,7 +2711,7 @@ QStringList CoreDB::getDirtyOrMissingFaceImageUrls()
     return urls;
 }
 
-QList<ItemScanInfo> CoreDB::getIdenticalFiles(qlonglong id)
+QList<ItemScanInfo> CoreDB::getIdenticalFiles(qlonglong id) const
 {
     if (!id)
     {
@@ -2735,7 +2735,7 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(qlonglong id)
     return getIdenticalFiles(uniqueHash, fileSize, id);
 }
 
-QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglong fileSize, qlonglong sourceId)
+QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglong fileSize, qlonglong sourceId) const
 {
     // enforce validity
     if (uniqueHash.isEmpty() || fileSize <= 0)
@@ -3127,7 +3127,7 @@ void CoreDB::addBoundValuePlaceholders(QString& query, int count)
     query += questionMarks;
 }
 
-int CoreDB::findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
+int CoreDB::findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date) const
 {
     QList<QVariant> values;
     QVariantList boundValues;
@@ -3147,7 +3147,7 @@ int CoreDB::findInDownloadHistory(const QString& identifier, const QString& name
     return values.first().toInt();
 }
 
-int CoreDB::addToDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
+int CoreDB::addToDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date) const
 {
     QVariant id;
     d->db->execSql(QString::fromUtf8("REPLACE INTO DownloadHistory "
@@ -3303,7 +3303,7 @@ void CoreDB::removeTagsFromItems(QList<qlonglong> imageIDs, const QList<int>& ta
     d->db->recordChangeset(ImageTagChangeset(imageIDs, tagIDs, ImageTagChangeset::Removed));
 }
 
-QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive)
+QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive) const
 {
     QList<QVariant> values;
 
@@ -3334,7 +3334,7 @@ QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive)
     return names;
 }
 
-qlonglong CoreDB::getItemFromAlbum(int albumID, const QString& fileName)
+qlonglong CoreDB::getItemFromAlbum(int albumID, const QString& fileName) const
 {
     QList<QVariant> values;
 
@@ -3373,7 +3373,7 @@ QStringList CoreDB::getAllItemURLsWithoutDate()
 }
 */
 
-QList<QDateTime> CoreDB::getAllCreationDates()
+QList<QDateTime> CoreDB::getAllCreationDates() const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
@@ -3394,7 +3394,7 @@ QList<QDateTime> CoreDB::getAllCreationDates()
     return list;
 }
 
-QMap<QDateTime, int> CoreDB::getAllCreationDatesAndNumberOfImages()
+QMap<QDateTime, int> CoreDB::getAllCreationDatesAndNumberOfImages() const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
@@ -3430,7 +3430,7 @@ QMap<QDateTime, int> CoreDB::getAllCreationDatesAndNumberOfImages()
     return datesStatMap;
 }
 
-QMap<int, int> CoreDB::getNumberOfImagesInAlbums()
+QMap<int, int> CoreDB::getNumberOfImagesInAlbums() const
 {
     QList<QVariant> values, allAbumIDs;
     QMap<int, int>  albumsStatMap;
@@ -3470,7 +3470,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInAlbums()
     return albumsStatMap;
 }
 
-QMap<int, int> CoreDB::getNumberOfImagesInTags()
+QMap<int, int> CoreDB::getNumberOfImagesInTags() const
 {
     QList<QVariant> values, allTagIDs;
     QMap<int, int>  tagsStatMap;
@@ -3511,7 +3511,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInTags()
     return tagsStatMap;
 }
 
-QMap<int, int> CoreDB::getNumberOfImagesInTagProperties(const QString& property)
+QMap<int, int> CoreDB::getNumberOfImagesInTagProperties(const QString& property) const
 {
     QList<QVariant> values;
     QMap<int, int>  tagsStatMap;
@@ -3536,7 +3536,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInTagProperties(const QString& property)
     return tagsStatMap;
 }
 
-int CoreDB::getNumberOfImagesInTagProperties(int tagId, const QString& property)
+int CoreDB::getNumberOfImagesInTagProperties(int tagId, const QString& property) const
 {
     QList<QVariant> values;
 
@@ -3549,7 +3549,7 @@ int CoreDB::getNumberOfImagesInTagProperties(int tagId, const QString& property)
     return values.first().toInt();
 }
 
-QList<qlonglong> CoreDB::getImagesWithImageTagProperty(int tagId, const QString& property)
+QList<qlonglong> CoreDB::getImagesWithImageTagProperty(int tagId, const QString& property) const
 {
     QList<QVariant> values;
     QList<qlonglong> imageIds;
@@ -3567,12 +3567,12 @@ QList<qlonglong> CoreDB::getImagesWithImageTagProperty(int tagId, const QString&
     return imageIds;
 }
 
-QMap<QString, int> CoreDB::getFormatStatistics()
+QMap<QString, int> CoreDB::getFormatStatistics() const
 {
     return getFormatStatistics(DatabaseItem::UndefinedCategory);
 }
 
-QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
+QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category) const
 {
     QMap<QString, int>  map;
 
@@ -3610,7 +3610,7 @@ QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
     return map;
 }
 
-QStringList CoreDB::getListFromImageMetadata(DatabaseFields::ImageMetadata field)
+QStringList CoreDB::getListFromImageMetadata(DatabaseFields::ImageMetadata field) const
 {
     QStringList list;
     QList<QVariant> values;
@@ -3676,7 +3676,7 @@ int CoreDB::getAlbumForPath(const QString& albumRoot, const QString& folder, boo
 }
 */
 
-int CoreDB::getAlbumForPath(int albumRootId, const QString& folder, bool create)
+int CoreDB::getAlbumForPath(int albumRootId, const QString& folder, bool create) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Albums WHERE albumRoot=? AND relativePath=?;"),
@@ -3699,7 +3699,7 @@ int CoreDB::getAlbumForPath(int albumRootId, const QString& folder, bool create)
     return albumID;
 }
 
-QList<int> CoreDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath)
+QList<int> CoreDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& relativePath) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id, relativePath FROM Albums "
@@ -3729,7 +3729,7 @@ QList<int> CoreDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& r
     return albumIds;
 }
 
-QList<int> CoreDB::getAlbumsOnAlbumRoot(int albumRootId)
+QList<int> CoreDB::getAlbumsOnAlbumRoot(int albumRootId) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Albums WHERE albumRoot=?;"),
@@ -3750,7 +3750,7 @@ qlonglong CoreDB::addItem(int albumID, const QString& name,
                           DatabaseItem::Category category,
                           const QDateTime& modificationDate,
                           qlonglong fileSize,
-                          const QString& uniqueHash)
+                          const QString& uniqueHash) const
 {
     QVariantList boundValues;
     boundValues << albumID << name << (int)status << (int)category
@@ -4013,7 +4013,7 @@ QList<int> CoreDB::getTagsFromTagPaths(const QStringList& keywordsList, bool cre
 }
 */
 
-int CoreDB::getItemAlbum(qlonglong imageID)
+int CoreDB::getItemAlbum(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -4030,7 +4030,7 @@ int CoreDB::getItemAlbum(qlonglong imageID)
     }
 }
 
-QString CoreDB::getItemName(qlonglong imageID)
+QString CoreDB::getItemName(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -4109,7 +4109,7 @@ int CoreDB::getItemRating(qlonglong imageID)
 }
 */
 
-QStringList CoreDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
+QStringList CoreDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder) const
 {
     QList<QVariant> values;
 
@@ -4179,7 +4179,7 @@ QStringList CoreDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     return urls;
 }
 
-QList<qlonglong> CoreDB::getItemIDsInAlbum(int albumID)
+QList<qlonglong> CoreDB::getItemIDsInAlbum(int albumID) const
 {
     QList<qlonglong> itemIDs;
     QList<QVariant>  values;
@@ -4195,7 +4195,7 @@ QList<qlonglong> CoreDB::getItemIDsInAlbum(int albumID)
     return itemIDs;
 }
 
-QMap<qlonglong, QString> CoreDB::getItemIDsAndURLsInAlbum(int albumID)
+QMap<qlonglong, QString> CoreDB::getItemIDsAndURLsInAlbum(int albumID) const
 {
     int albumRootId = getAlbumRootId(albumID);
 
@@ -4247,7 +4247,7 @@ QMap<qlonglong, QString> CoreDB::getItemIDsAndURLsInAlbum(int albumID)
     return itemsMap;
 }
 
-QList<qlonglong> CoreDB::getAllItems()
+QList<qlonglong> CoreDB::getAllItems() const
 {
     QList<QVariant> values;
 
@@ -4264,7 +4264,7 @@ QList<qlonglong> CoreDB::getAllItems()
     return items;
 }
 
-QList<ItemScanInfo> CoreDB::getItemScanInfos(int albumID)
+QList<ItemScanInfo> CoreDB::getItemScanInfos(int albumID) const
 {
     QList<QVariant> values;
 
@@ -4301,7 +4301,7 @@ QList<ItemScanInfo> CoreDB::getItemScanInfos(int albumID)
     return list;
 }
 
-ItemScanInfo CoreDB::getItemScanInfo(qlonglong imageID)
+ItemScanInfo CoreDB::getItemScanInfo(qlonglong imageID) const
 {
     QList<QVariant> values;
 
@@ -4336,7 +4336,7 @@ ItemScanInfo CoreDB::getItemScanInfo(qlonglong imageID)
     return info;
 }
 
-QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
+QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive) const
 {
     QList<QVariant>         values;
     QMap<QString, QVariant> bindingMap;
@@ -4378,7 +4378,7 @@ QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
     return urls;
 }
 
-QList<qlonglong> CoreDB::getItemIDsInTag(int tagID, bool recursive)
+QList<qlonglong> CoreDB::getItemIDsInTag(int tagID, bool recursive) const
 {
     QList<qlonglong>        itemIDs;
     QList<QVariant>         values;
@@ -4418,7 +4418,7 @@ QString CoreDB::getAlbumPath(int albumID)
 }
 */
 
-QString CoreDB::getAlbumRelativePath(int albumID)
+QString CoreDB::getAlbumRelativePath(int albumID) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?;"),
@@ -4434,7 +4434,7 @@ QString CoreDB::getAlbumRelativePath(int albumID)
     }
 }
 
-int CoreDB::getAlbumRootId(int albumID)
+int CoreDB::getAlbumRootId(int albumID) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT albumRoot FROM Albums WHERE id=?;"),
@@ -4450,7 +4450,7 @@ int CoreDB::getAlbumRootId(int albumID)
     }
 }
 
-QDate CoreDB::getAlbumLowestDate(int albumID)
+QDate CoreDB::getAlbumLowestDate(int albumID) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT MIN(creationDate) FROM ImageInformation "
@@ -4468,7 +4468,7 @@ QDate CoreDB::getAlbumLowestDate(int albumID)
     }
 }
 
-QDate CoreDB::getAlbumHighestDate(int albumID)
+QDate CoreDB::getAlbumHighestDate(int albumID) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT MAX(creationDate) FROM ImageInformation "
@@ -4486,7 +4486,7 @@ QDate CoreDB::getAlbumHighestDate(int albumID)
     }
 }
 
-QDate CoreDB::getAlbumAverageDate(int albumID)
+QDate CoreDB::getAlbumAverageDate(int albumID) const
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT creationDate FROM ImageInformation "
@@ -4858,7 +4858,7 @@ void CoreDB::copyImageTags(qlonglong srcId, qlonglong dstId)
                                              ImageTagChangeset::PropertiesChanged));
 }
 
-bool CoreDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
+bool CoreDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID) const
 {
     if (srcAlbumID == dstAlbumID)
     {
@@ -4887,7 +4887,7 @@ bool CoreDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 }
 
 QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, qreal lng2, int /*sortMode*/,
-                                             const QString& /*sortBy*/)
+                                             const QString& /*sortBy*/) const
 {
     QList<QVariant> values;
     QList<QVariant> boundValues;
@@ -4962,7 +4962,7 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
     }
 }
 
-bool CoreDB::integrityCheck()
+bool CoreDB::integrityCheck() const
 {
     QList<QVariant> values;
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkCoreDbIntegrity")), &values);
