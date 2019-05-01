@@ -19,6 +19,12 @@ ExternalProject_Add(de265
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                ${GLOBAL_PROFILE}
 
+    INSTALL_COMMAND mkdir -p /usr/include/libde265/ &&
+                    cp -fv <BINARY_DIR>/libde265/de265-version.h /usr/include/libde265/ &&
+                    cp -fv <SOURCE_DIR>/libde265/de265.h /usr/include/libde265/ &&
+                    cp -fv <BINARY_DIR>/libde265/libde265.so /usr/lib/ &&
+                    cp -fv ${CMAKE_CURRENT_SOURCE_DIR}/libde265.pc /usr/lib/pkgconfig/
+
     UPDATE_COMMAND ""
     ALWAYS 0
 )
@@ -35,6 +41,14 @@ ExternalProject_Add(ext_heif
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                ${GLOBAL_PROFILE}
+
+    INSTALL_COMMAND mkdir -p /usr/include/libheif/ &&
+                    cp -fv <SOURCE_DIR>/libheif/heif_version.h /usr/include/libheif/ &&
+                    cp -fv <SOURCE_DIR>/libheif/heif.h /usr/include/libheif/ &&
+                    cp -fv <SOURCE_DIR>/libheif/heif_cxx.h /usr/include/libheif/ &&
+                    cp -fv <SOURCE_DIR>/libheif/heif_plugin.h /usr/include/libheif/ &&
+                    cp -fv <BINARY_DIR>/libheif/libheif.so /usr/lib/ &&
+                    cp -fv ${CMAKE_CURRENT_SOURCE_DIR}/libheif.pc /usr/lib/pkgconfig/
 
     UPDATE_COMMAND ""
     ALWAYS 0
