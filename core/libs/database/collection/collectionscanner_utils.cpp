@@ -199,9 +199,9 @@ int CollectionScanner::countItemsInFolder(const QString& directory)
         return 0;
     }
 
-    const QFileInfoList list = dir.entryInfoList(QDir::Files   |
-                                                 QDir::AllDirs |
-                                                 QDir::NoDotAndDotDot);
+    const QFileInfoList& list = dir.entryInfoList(QDir::Dirs    |
+                                                  QDir::Files   |
+                                                  QDir::NoDotAndDotDot);
 
     items += list.count();
 
