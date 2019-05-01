@@ -28,12 +28,13 @@
 
 // Qt includes
 
-#include <QCoreApplication>
 #include <QDir>
-#include <QThread>
+#include <QDirIterator>
+#include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QReadWriteLock>
 #include <QUrlQuery>
+#include <QThread>
 
 // KDE includes
 
