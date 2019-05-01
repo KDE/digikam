@@ -6,19 +6,18 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-SET(PREFIX_ext_de265 "${EXTPREFIX}")
 SET(PREFIX_ext_heif "${EXTPREFIX}")
 
-ExternalProject_Add(ext_de265
+ExternalProject_Add(de265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/strukturag/libde265/archive/v1.0.3.tar.gz
     URL_MD5 189b4deb376ff879f8cbb2b7ffc24f97
 
-    INSTALL_DIR ${PREFIX_ext_de265}
+    INSTALL_DIR ${EXTPREFIX}
 
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_de265}
-                                       -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-                                       ${GLOBAL_PROFILE}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
     ALWAYS 0
@@ -33,9 +32,9 @@ ExternalProject_Add(ext_heif
 
     INSTALL_DIR ${PREFIX_ext_heif}
 
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
-                                       -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-                                       ${GLOBAL_PROFILE}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
     ALWAYS 0
