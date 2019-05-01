@@ -579,10 +579,10 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
     }
 
     int albumID                          = checkAlbum(location, album);
-    QList<ItemScanInfo> scanInfos        = CoreDbAccess().db()->getItemScanInfos(albumID);
     MetaEngineSettingsContainer settings = MetaEngineSettings::instance()->settings();
+    const QList<ItemScanInfo>& scanInfos = CoreDbAccess().db()->getItemScanInfos(albumID);
 
-    // create a hash filename -> index in list
+    // create a QHash filename -> index in list
     QHash<QString, int> fileNameIndexHash;
     QSet<qlonglong> itemIdSet;
 
@@ -592,10 +592,10 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         itemIdSet << scanInfos.at(i).id;
     }
 
-    const QStringList list = dir.entryList(QDir::Files   |
-                                           QDir::AllDirs |
-                                           QDir::NoDotAndDotDot,
-                                           QDir::Name | QDir::DirsLast);
+    const QStringList& list = dir.entryList(QDir::Dirs    |
+                                            QDir::Files   |
+                                            QDir::NoDotAndDotDot,
+                                            QDir::Name | QDir::DirsLast);
 
     int counter = -1;
 
@@ -649,11 +649,8 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                     QString fileForLR = info.fileName();
                     fileForLR.chop(info.suffix().size());
 
-                    if (list.contains(fileForLR + QLatin1String("xmp")))
-                    {
-                        hasSidecar = true;
-                    }
-                    else  if (list.contains(info.fileName() + QLatin1String(".xmp")))
+                    if (list.contains(fileForLR + QLatin1String("xmp")) ||
+                        list.contains(info.fileName() + QLatin1String(".xmp")))
                     {
                         hasSidecar = true;
                     }
@@ -696,18 +693,14 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 continue;
             }
 
-            QString subalbum;
+            QString subAlbum = album;
 
-            if (album == QLatin1String("/"))
+            if (subAlbum != QLatin1String("/"))
             {
-                subalbum = QLatin1Char('/') + info.fileName();
-            }
-            else
-            {
-                subalbum = album + QLatin1Char('/') + info.fileName();
+                subAlbum += QLatin1Char('/');
             }
 
-            scanAlbum(location, subalbum);
+            scanAlbum(location, subAlbum + info.fileName());
         }
     }
 
