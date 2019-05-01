@@ -6,22 +6,36 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+SET(PREFIX_ext_de265 "${EXTPREFIX}")
 SET(PREFIX_ext_heif "${EXTPREFIX}")
 
-ExternalProject_Add(ext_heif
+ExternalProject_Add(ext_de265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/nokiatech/heif/archive/v3.4.0.tar.gz
-    URL_MD5 177d34823bb4ed3ac735ca0931782ae6
+    URL https://github.com/strukturag/libde265/archive/v1.0.3.tar.gz
+    URL_MD5 189b4deb376ff879f8cbb2b7ffc24f97
+
+    INSTALL_DIR ${PREFIX_ext_de265}
+
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_de265}
+                                       -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+                                       ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
+    ALWAYS 0
+)
+
+ExternalProject_Add(ext_heif
+    DEPENDS de265
+
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/strukturag/libheif/archive/v1.4.0.tar.gz
+    URL_MD5 05dea500c105289c74270791cb5f8942
 
     INSTALL_DIR ${PREFIX_ext_heif}
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/heif3.4.0-centos6.patch
-
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_heif}
-               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-               -DHEIF_GCC_ALLOCATOR_FIX=1
-               ${GLOBAL_PROFILE}
-               <SOURCE_DIR>/srcs
+                                       -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+                                       ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
     ALWAYS 0
