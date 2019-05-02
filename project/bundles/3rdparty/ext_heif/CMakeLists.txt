@@ -13,6 +13,8 @@ ExternalProject_Add(de265
     URL https://github.com/strukturag/libde265/archive/v1.0.3.tar.gz
     URL_MD5 189b4deb376ff879f8cbb2b7ffc24f97
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/de265-sse-centos6.patch
+
     INSTALL_DIR ${EXTPREFIX}
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX}
