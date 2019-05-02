@@ -222,25 +222,25 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
 fi
 
-yum -y install libass-devel \
-               fdk-aac-devel \
-               faac-devel \
-               libfribidi-devel \
-               lame-devel \
-               opencore-amr-devel \
-               opus-devel \
-               librtmp-devel \
-               speex-devel \
-               libtheora-devel \
-               libvorbis-devel \
-               libvpx-devel \
-               x264-devel \
-               x265-devel \
-               xvidcore-devel \
-               libwebp-devel \
-               OpenEXR-devel \
-               jbigkit-devel \
-               yasm
+yum -y --nogpgcheck install libass-devel \
+                            fdk-aac-devel \
+                            faac-devel \
+                            libfribidi-devel \
+                            lame-devel \
+                            opencore-amr-devel \
+                            opus-devel \
+                            librtmp-devel \
+                            speex-devel \
+                            libtheora-devel \
+                            libvorbis-devel \
+                            libvpx-devel \
+                            x264-devel \
+                            x265-devel \
+                            xvidcore-devel \
+                            libwebp-devel \
+                            OpenEXR-devel \
+                            jbigkit-devel \
+                            yasm
 
 #################################################################################################
 
