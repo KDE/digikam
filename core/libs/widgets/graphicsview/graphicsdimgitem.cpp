@@ -194,7 +194,7 @@ QRectF GraphicsDImgItem::boundingRect() const
     return QRectF(QPointF(0, 0), d->zoomSettings.zoomedSize()).toAlignedRect();
 }
 
-void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_D(GraphicsDImgItem);
 
@@ -224,11 +224,13 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
        pixmap.
     */
 #ifdef USE_QT_SCALING
+    Q_UNUSED(widget);
     double xratio = double(d->image.width()) / completeSize.width();
     double yratio = double(d->image.height()) / completeSize.height();
     double ratio = qMax(qMin(xratio, yratio), 1.0);
 #else
-    double ratio = 1.0;
+    // Maybe we can use it for Mac OS X as well.
+    double ratio = widget->devicePixelRatio();
 #endif
 
     QRect  scaledDrawRect = QRectF(ratio*drawRect.x(), ratio*drawRect.y(),
