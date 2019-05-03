@@ -47,15 +47,17 @@ PGM      yes        yes        Portable graymap format                  KIMG | I
 PPM      yes        yes        Portable pixmap format                   KIMG | IM
 XBM      yes        yes        X Windows system bitmap                  KIMG | IM
 XPM      yes        yes        X Windows system pixmap                  KIMG | IM
-PCD      yes        yes        PhotoCD                                  IM
-SGI      yes        yes        Irix RGB image                           IM
-ICO      yes        no         Windows icon format                      IM
-MNG      yes        yes        Multiple-image Network Graphics          IM
-SVG      yes        yes        Scalable Vector Graphics                 IM
-WEBP     yes        yes        Weppy image format                       IM
-HEIF     yes        yes        Apple High efficiency Image Format       IM
-FIT/FITS yes        yes        Flexible Image Transport System          IM
-
+PCD      yes        yes        PhotoCD                                         IM
+SGI      yes        yes        Irix RGB image                                  IM
+ICO      yes        no         Windows icon format                             IM
+MNG      yes        yes        Multiple-image Network Graphics                 IM
+SVG      yes        yes        Scalable Vector Graphics                        IM
+WEBP     yes        yes        Weppy image format                              IM
+HEIF     yes        yes        Apple High efficiency Image Format              IM
+FIT/FITS yes        yes        Flexible Image Transport System                 IM
+FLIF     yes        yes        Free Lossless Image Format                      IM
+JBIG     yes        yes        Joint Bi-level Image                            IM
+BPG                            Better Portable Graphics
 -----------------------------------------------------------------------------------
 
 TODO :
