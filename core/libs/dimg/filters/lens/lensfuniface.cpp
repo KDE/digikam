@@ -219,22 +219,17 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
     return nullptr;
 }
 
-LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera, const QString& lensDesc,
+LensFunIface::LensList LensFunIface::findLenses(const lfCamera* const lfCamera,
+                                                const QString& lensDesc,
                                                 const QString& lensMaker) const
 {
     LensList lensList;
-    const lfLens** lfLens = nullptr;
 
     if (lfCamera)
     {
-        if (!lensMaker.isEmpty())
-        {
-            lfLens = d->lfDb->FindLenses(lfCamera, lensMaker.toLatin1().constData(), lensDesc.toLatin1().constData());
-        }
-        else
-        {
-            lfLens = d->lfDb->FindLenses(lfCamera, nullptr, lensDesc.toLatin1().constData());
-        }
+        const auto maker = lensMaker.isEmpty() ? nullptr : lensMaker.toLatin1().constData();
+        const auto model = lensDesc.isEmpty() ? nullptr : lensDesc.toLatin1().constData();
+        const lfLens *const *lfLens = d->lfDb->FindLenses(lfCamera, maker, model);
 
         while (lfLens && *lfLens)
         {
@@ -303,9 +298,10 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
             // ------------------------------------------------------------------------------------------------
             // -- Performing lens description searches.
 
+            LensList lensMatches;
+
             if (!d->lensDescription.isEmpty())
             {
-                LensList lensMatches;
                 QString  lensCutted;
                 LensList lensList;
 
@@ -341,58 +337,68 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 // Remove all duplicate lenses in the list by using QSet.
                 lensMatches = lensMatches.toSet().toList();
-
-                // Display the results.
-
-                if (lensMatches.isEmpty())
-                {
-                    qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : NOT FOUND";
-                    exactMatch &= false;
-                }
-                else
-                {
-                    // Best case for an exact match is to have only one item returned by Lensfun searches.
-                    if (lensMatches.count() == 1)
-                    {
-                        setUsedLens(lensMatches.first());
-                        qCDebug(DIGIKAM_DIMG_LOG) << "Lens found     : " << d->settings.lensModel;
-                        qCDebug(DIGIKAM_DIMG_LOG) << "Crop Factor    : " << d->settings.cropFactor;
-                    }
-                    else
-                    {
-                        qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : more than one...";
-                        const lfLens* exact = nullptr;
-
-                        foreach (const lfLens* const l, lensMatches)
-                        {
-                            if (QLatin1String(l->Model) == d->lensDescription)
-                            {
-                                qCDebug(DIGIKAM_DIMG_LOG) << "found exact match from" << lensMatches.count() << "possibilities:" << l->Model;
-                                exact = l;
-                            }
-                        }
-
-                        if (exact)
-                        {
-                            setUsedLens(exact);
-                        }
-                        else
-                        {
-                            exactMatch &= false;
-                        }
-                    }
-                }
             }
             else
             {
                 qCDebug(DIGIKAM_DIMG_LOG) << "Lens description string is empty";
-                exactMatch &= false;
+
+                const auto lensList = findLenses(d->usedCamera, QString{});
+                if (lensList.count() == 1)
+                {
+                    // NOTE: see bug #407157
+                    qCDebug(DIGIKAM_DIMG_LOG) << "For the camera " << d->settings.cameraModel
+                                              << " there is exactly one lens in the database: "
+                                              << lensList.first()->Model;
+                    lensMatches.append(lensList);
+                }
+                else
+                {
+                    exactMatch = false;
+                }
+            }
+
+            // Display the results.
+
+            if (lensMatches.isEmpty())
+            {
+                qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : NOT FOUND";
+                exactMatch = false;
+            }
+            else if (lensMatches.count() == 1)
+            {
+                // Best case for an exact match is to have only one item returned by Lensfun searches.
+                setUsedLens(lensMatches.first());
+                qCDebug(DIGIKAM_DIMG_LOG) << "Lens found     : " << d->settings.lensModel;
+                qCDebug(DIGIKAM_DIMG_LOG) << "Crop Factor    : " << d->settings.cropFactor;
+            }
+            else
+            {
+                qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : more than one...";
+                const lfLens* exact = nullptr;
+
+                foreach (const lfLens* const l, lensMatches)
+                {
+                    if (QLatin1String(l->Model) == d->lensDescription)
+                    {
+                        qCDebug(DIGIKAM_DIMG_LOG) << "found exact match from" << lensMatches.count() << "possibilities:" << l->Model;
+                        exact = l;
+                    }
+                }
+
+                if (exact)
+                {
+                    setUsedLens(exact);
+                }
+                else
+                {
+                    exactMatch = false;
+                }
             }
         }
         else
         {
             qCDebug(DIGIKAM_DIMG_LOG) << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
-            exactMatch &= false;
+            exactMatch = false;
         }
     }
 
@@ -404,7 +410,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     if (temp.isEmpty())
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Focal Length   : NOT FOUND";
-        exactMatch &= false;
+        exactMatch = false;
     }
 
     d->settings.focalLength = temp.mid(0, temp.length() - 3).toDouble(); // HACK: strip the " mm" at the end ...
@@ -417,7 +423,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     if (temp.isEmpty())
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Aperture       : NOT FOUND";
-        exactMatch &= false;
+        exactMatch = false;
     }
 
     d->settings.aperture = temp.mid(1).toDouble();

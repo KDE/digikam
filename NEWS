@@ -21,4 +21,5 @@ BUGFIXES:
 012 ==> 406942 - Thumbnails does not get saved for videofiles over 2^64b, mysql.
 013 ==> 406981 - GoPro video thumbnails are just noise.
 014 ==> 407043 - Image rename to folder fails on Windows.
-015 ==> 
+015 ==> 407157 - Lens Auto-Correction for fixed-lens cameras
+016 ==>
