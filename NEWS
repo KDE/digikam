@@ -22,4 +22,5 @@ BUGFIXES:
 013 ==> 406981 - GoPro video thumbnails are just noise.
 014 ==> 407043 - Image rename to folder fails on Windows.
 015 ==> 407157 - Lens Auto-Correction for fixed-lens cameras
-016 ==>
+016 ==> 407197 - Target album does not exist.
+017 ==> 
