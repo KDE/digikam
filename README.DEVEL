@@ -1,5 +1,5 @@
 See The API documentation to generate with Doxygen. You will find all information about the dependencies,
-the configuration options, the rules to compile and install, and all pointers to contribute to the project as developer.
+the configuration options, the rules to compile and install, and all pointers to contribute to the project as a developer.
 
 Install Doxygen and Graphviz, and then run make doc from build directory. You can also run doxygen command line tool
 directly from this folder or consult the Mainpage.dox file.
