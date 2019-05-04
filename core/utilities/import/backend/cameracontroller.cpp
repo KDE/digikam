@@ -452,7 +452,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!d->camera->getFreeSpace(kBSize, kBAvail))
             {
-                sendLogMsg(i18n("Failed to get free space from camera"), DHistoryView::ErrorEntry);
+                sendLogMsg(i18n("Failed to get free space from camera"),
+                           DHistoryView::ErrorEntry);
             }
 
             emit signalFreeSpace(kBSize, kBAvail);
@@ -465,7 +466,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!d->camera->getPreview(preview))
             {
-                sendLogMsg(i18n("Failed to get preview from camera"), DHistoryView::ErrorEntry);
+                sendLogMsg(i18n("Failed to get preview from camera"),
+                           DHistoryView::ErrorEntry);
             }
 
             emit signalPreview(preview);
@@ -478,7 +480,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!d->camera->capture(itemInfo))
             {
-                sendLogMsg(i18n("Failed to process capture from camera"), DHistoryView::ErrorEntry);
+                sendLogMsg(i18n("Failed to process capture from camera"),
+                           DHistoryView::ErrorEntry);
             }
 
             emit signalUploaded(itemInfo);
@@ -491,7 +494,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!d->camera->getFolders(folder))
             {
-                sendLogMsg(xi18n("Failed to list folder <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
+                sendLogMsg(xi18n("Failed to list folder <filename>%1</filename>", folder),
+                           DHistoryView::ErrorEntry);
             }
 
             break;
@@ -506,7 +510,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!d->camera->getItemsInfoList(folder, useMetadata, itemsList))
             {
-                sendLogMsg(xi18n("Failed to list files in <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
+                sendLogMsg(xi18n("Failed to list files in <filename>%1</filename>", folder),
+                           DHistoryView::ErrorEntry);
             }
 
             // TODO would it be okay to pass this to the ImportItemModel and let it filter it for us?
@@ -533,7 +538,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QList<QVariant> list = cmd->map[QLatin1String("list")].toList();
             int thumbSize        = cmd->map[QLatin1String("thumbSize")].toInt();
 
-            for (QList<QVariant>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+            for (QList<QVariant>::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
             {
                 if (d->canceled)
                 {
@@ -550,12 +555,14 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))
                 {
-                    thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
+                    thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio,
+                                                                       Qt::SmoothTransformation);
                     emit signalThumbInfo(folder, file, info, thumbnail);
                 }
                 else
                 {
-                    sendLogMsg(xi18n("Failed to get thumbnail for <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+                    sendLogMsg(xi18n("Failed to get thumbnail for <filename>%1</filename>", file),
+                               DHistoryView::ErrorEntry, folder, file);
                     emit signalThumbInfoFailed(folder, file, info);
                 }
             }
@@ -571,7 +578,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             DMetadata meta;
 
             if (!d->camera->getMetadata(folder, file, meta))
-                sendLogMsg(xi18n("Failed to get Metadata for <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+                sendLogMsg(xi18n("Failed to get Metadata for <filename>%1</filename>", file),
+                           DHistoryView::ErrorEntry, folder, file);
 
             emit signalMetadata(folder, file, meta);
 
@@ -617,7 +625,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             if (!result)
             {
                 QFile::remove(temp);
-                sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+                sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file),
+                           DHistoryView::ErrorEntry, folder, file);
                 emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 break;
             }
@@ -702,7 +711,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         // convert failed. delete the temp file
                         QFile::remove(temp);
                         QFile::remove(temp2);
-                        sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to JPEG", file), DHistoryView::ErrorEntry, folder, file);
+                        sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to JPEG", file),
+                                   DHistoryView::ErrorEntry, folder, file);
                     }
                     else
                     {
@@ -735,7 +745,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         // convert failed. delete the temp file
                         QFile::remove(temp);
                         QFile::remove(temp2);
-                        sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file), DHistoryView::ErrorEntry, folder, file);
+                        sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file),
+                                   DHistoryView::ErrorEntry, folder, file);
                     }
                     else
                     {
@@ -748,7 +759,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 else
                 {
                     qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert skipped to DNG";
-                    sendLogMsg(xi18n("Skipped to convert file <filename>%1</filename> to DNG", file), DHistoryView::WarningEntry, folder, file);
+                    sendLogMsg(xi18n("Skipped to convert file <filename>%1</filename> to DNG", file),
+                               DHistoryView::WarningEntry, folder, file);
                 }
             }
 
@@ -852,7 +864,8 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     if (info.exists() && d->conflictRule == SetupCamera::SKIPFILE)
     {
         QFile::remove(temp);
-        sendLogMsg(xi18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
+        sendLogMsg(xi18n("Skipped file <filename>%1</filename>", file),
+                   DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
     }
@@ -864,7 +877,8 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
         if (newurl)
         {
-            sendLogMsg(xi18n("Rename file to <filename>%1</filename>", info.fileName()), DHistoryView::WarningEntry, folder, file);
+            sendLogMsg(xi18n("Rename file to <filename>%1</filename>", info.fileName()),
+                       DHistoryView::WarningEntry, folder, file);
         }
     }
 
@@ -884,7 +898,8 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
         if (!DFileOperations::renameFile(sctemp, scdest))
         {
-            sendLogMsg(xi18n("Failed to save sidecar file for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+            sendLogMsg(xi18n("Failed to save sidecar file for <filename>%1</filename>", file),
+                       DHistoryView::ErrorEntry,  folder, file);
         }
     }
 
@@ -900,11 +915,13 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // rename failed. delete the temp file
         QFile::remove(temp);
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
-        sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+        sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file),
+                   DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Rename done, emitting downloaded signals:" << file << " info.filename: " << info.fileName();
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Rename done, emitting downloaded signals:"
+                                      << file << " info.filename: " << info.fileName();
         // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
@@ -940,13 +957,15 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
             if (!process.waitForFinished(60000))
             {
-                sendLogMsg(xi18n("Timeout from script for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+                sendLogMsg(xi18n("Timeout from script for <filename>%1</filename>", file),
+                           DHistoryView::ErrorEntry,  folder, file);
                 process.kill();
             }
 
             if (process.exitCode() != 0)
             {
-                sendLogMsg(xi18n("Failed to run script for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+                sendLogMsg(xi18n("Failed to run script for <filename>%1</filename>", file),
+                           DHistoryView::ErrorEntry,  folder, file);
             }
 
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "stdout" << process.readAllStandardOutput();
@@ -957,18 +976,21 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
 void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
-    sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file),
+               DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            QMessageBox::critical(d->parent, qApp->applicationName(), i18n("Failed to download file <b>%1</b>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(),
+                                  i18n("Failed to download file <b>%1</b>.", file));
         }
         else
         {
             const QString msg = i18n("Failed to download file <b>%1</b>. Do you want to continue?", file);
-            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(),
+                                                     msg, QMessageBox::Yes | QMessageBox::Cancel);
 
             if (result != QMessageBox::Yes)
             {
@@ -983,18 +1005,21 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     Q_UNUSED(folder);
     Q_UNUSED(src);
 
-    sendLogMsg(xi18n("Failed to upload <filename>%1</filename>", file), DHistoryView::ErrorEntry);
+    sendLogMsg(xi18n("Failed to upload <filename>%1</filename>", file),
+               DHistoryView::ErrorEntry);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            QMessageBox::critical(d->parent, qApp->applicationName(), i18n("Failed to upload file <b>%1</b>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(),
+                                  i18n("Failed to upload file <b>%1</b>.", file));
         }
         else
         {
             const QString msg = i18n("Failed to upload file <b>%1</b>. Do you want to continue?", file);
-            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(),
+                                                     msg, QMessageBox::Yes | QMessageBox::Cancel);
 
             if (result != QMessageBox::Yes)
             {
@@ -1007,18 +1032,21 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
-    sendLogMsg(xi18n("Failed to delete <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(xi18n("Failed to delete <filename>%1</filename>", file),
+               DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            QMessageBox::critical(d->parent, qApp->applicationName(), i18n("Failed to delete file <b>%1</b>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(),
+                                  i18n("Failed to delete file <b>%1</b>.", file));
         }
         else
         {
             const QString msg = i18n("Failed to delete file <b>%1</b>. Do you want to continue?", file);
-            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(),
+                                                     msg, QMessageBox::Yes | QMessageBox::Cancel);
 
             if (result != QMessageBox::Yes)
             {
@@ -1031,18 +1059,21 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
-    sendLogMsg(xi18n("Failed to lock <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(xi18n("Failed to lock <filename>%1</filename>", file),
+               DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            QMessageBox::critical(d->parent, qApp->applicationName(), i18n("Failed to toggle lock file <b>%1</b>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(),
+                                  i18n("Failed to toggle lock file <b>%1</b>.", file));
         }
         else
         {
             const QString msg = i18n("Failed to toggle lock file <b>%1</b>. Do you want to continue?", file);
-            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(),
+                                                     msg, QMessageBox::Yes | QMessageBox::Cancel);
 
             if (result != QMessageBox::Yes)
             {
@@ -1177,8 +1208,9 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
     cmd->map.insert(QLatin1String("destFile"),    QVariant(destFile));
     cmd->map.insert(QLatin1String("destFolder"),  QVariant(destFolder));
     addCommand(cmd);
-    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Uploading '" << srcFileInfo.filePath() << "' into camera : '" << destFolder
-                          << "' (" << destFile << ")";
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Uploading '" << srcFileInfo.filePath()
+                                  << "' into camera : '" << destFolder
+                                  << "' (" << destFile << ")";
 }
 
 void CameraController::downloadPrep(const SetupCamera::ConflictRule& rule)
