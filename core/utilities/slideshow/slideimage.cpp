@@ -165,7 +165,7 @@ void SlideImage::updatePixmap()
     double ratio   = qMax(qMin(xratio, yratio), 1.0);
 #else
     // Maybe we can use it for Mac OS X as well.
-    double ratio   = devicePixelRatio();
+    double ratio   = devicePixelRatioF();
 #endif
 
     QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
