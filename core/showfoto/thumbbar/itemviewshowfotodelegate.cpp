@@ -230,7 +230,6 @@ QRect ItemViewShowfotoDelegate::drawThumbnail(QPainter* p, const QRect& thumbRec
 
     if (thumbnail.isNull())
     {
-        using namespace Digikam;
         return QRect();
     }
 

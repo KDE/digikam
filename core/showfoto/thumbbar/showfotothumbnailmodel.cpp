@@ -147,15 +147,15 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(QVariant::Pixmap);
         }
 
-        if (pixmapForItem(path,pixmap))
+        if (pixmapForItem(path, pixmap))
         {
             return pixmap;
         }
 
         //if pixmapForItem Failed
-        if (getThumbnail(info,thumbnailImage))
+        if (getThumbnail(info, thumbnailImage))
         {
-            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(),d->thumbSize.size(), Qt::KeepAspectRatio);
+            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio);
             emit signalThumbInfo(info, thumbnailImage);
             return thumbnailImage;
         }
