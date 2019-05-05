@@ -24,7 +24,7 @@
 |├── COPYING-CMAKE-SCRIPTS                                    | Cmake files license                                                     |
 |├── COPYING.LIB                                              | Internal shared libraries license                                       |
 |├── download-repos                                           | Script to download all source code including extra repositories         |
-|├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
+|├── gits                                                     | Script to perform git in recursive mode over multiple repositories     |
 |├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
 |├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
 |├── Messages.sh                                              | Script to extract strings for translators                               |
