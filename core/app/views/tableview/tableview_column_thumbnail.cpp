@@ -25,6 +25,8 @@
 // Qt includes
 
 #include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QStyleOptionViewItem>
 
 // KDE includes
@@ -113,10 +115,9 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
     if (!info.isNull())
     {
-
-        const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
-        const QSize imageSize     = info.dimensions();
-        int maxSize               = m_thumbnailSize;
+        QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
+        QSize imageSize     = info.dimensions();
+        int maxSize         = m_thumbnailSize;
 
         if (imageSize.isValid() && (imageSize.width() > imageSize.height()))
         {
@@ -129,23 +130,29 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         // The idea here is that for landscape images, we adjust the height to
         // to be as high as the row height as long as the width can stretch enough
         // because the column is wider than the thumbnail size.
-        maxSize = qMin(maxSize, availableSize.width());
+        maxSize       = qMin(maxSize, availableSize.width());
 
         // However, digiKam limits the thumbnail size, so we also do that here
-        maxSize = qMin(maxSize, (int)ThumbnailSize::maxThumbsSize());
+        maxSize       = qMin(maxSize, (int)ThumbnailSize::maxThumbsSize());
+        double ratio  = QApplication::desktop()->devicePixelRatioF();
+        maxSize       = qRound((double)maxSize * ratio);
+
         QPixmap thumbnail;
 
         if (s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, maxSize))
         {
+            thumbnail.setDevicePixelRatio(ratio);
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
-            /// @todo Remove borders - but they actually look nice in the table
-            const QSize alignSize  = option.rect.size();
-//          thumbnail              = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
-            const QSize pixmapSize = thumbnail.size().boundedTo(availableSize);
+            QSize pixmapSize = (QSizeF(thumbnail.size()) / ratio).toSize();
+            pixmapSize       = pixmapSize.boundedTo(availableSize);
+            QSize alignSize  = option.rect.size();
+
             QPoint startPoint((alignSize.width()  - pixmapSize.width())  / 2,
                               (alignSize.height() - pixmapSize.height()) / 2);
             startPoint            += option.rect.topLeft();
-            painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
+
+            painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail,
+                                QRect(QPoint(0, 0), thumbnail.size()));
 
             return true;
         }

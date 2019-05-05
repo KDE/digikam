@@ -26,4 +26,5 @@ BUGFIXES:
 016 ==> 407197 - Target album does not exist.
 017 ==> 371005 - Zoom function doesn't work properly on HiDPI Display
 018 ==> 407233 - Pictures distribution on Light Table.
-019 ==> 
+019 ==> 403197 - Thumbnails in icon and preview views are not HiDPI (macOS).
+020 ==> 
