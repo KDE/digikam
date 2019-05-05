@@ -121,7 +121,6 @@ make MXE_TARGETS=$MXE_BUILD_TARGETS \
      zlib \
      mman-win32 \
      pthreads \
-     imagemagick \
      qtbase \
      qttranslations \
      qtimageformats \
@@ -178,8 +177,17 @@ ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_qtav  
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
 #${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_libgphoto2 -- -j$CPU_CORES
 ${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_drmingw    -- -j$CPU_CORES
+${MXE_BUILD_TARGETS}-cmake --build . --config RelWithDebInfo --target ext_heif       -- -j$CPU_CORES
 
 #################################################################################################
+
+cd $MXE_BUILDROOT
+
+echo -e "\n"
+echo "---------- Building digiKam extra dependencies with MXE"
+
+make MXE_TARGETS=$MXE_BUILD_TARGETS \
+     imagemagick
 
 export PATH=$ORIG_PATH
 
