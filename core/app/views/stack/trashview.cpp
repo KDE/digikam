@@ -437,8 +437,9 @@ ThumbnailAligningDelegate::ThumbnailAligningDelegate(QObject* const parent)
 void ThumbnailAligningDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QPixmap pixmap;
-    pixmap     = index.data(Qt::DecorationRole).value<QPixmap>();
-    QPoint loc = option.rect.center() - pixmap.rect().center();
+    pixmap        = index.data(Qt::DecorationRole).value<QPixmap>();
+    QSize pixSize = (QSizeF(pixmap.size()) / pixmap.devicePixelRatio()).toSize();
+    QPoint loc    = option.rect.center() - QRect(0, 0, pixSize.width(), pixSize.height()).center();
 
     painter->save();
 

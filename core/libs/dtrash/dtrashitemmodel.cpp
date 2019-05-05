@@ -29,7 +29,9 @@
 #include <QTimer>
 #include <QPixmap>
 #include <QMimeType>
+#include <QApplication>
 #include <QMimeDatabase>
+#include <QDesktopWidget>
 #include <QPersistentModelIndex>
 
 // KDE includes
@@ -215,7 +217,13 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
 
 bool DTrashItemModel::pixmapForItem(const QString& path, QPixmap& pix) const
 {
-    return d->thumbnailThread->find(ThumbnailIdentifier(path), pix, d->thumbSize);
+    double ratio  = QApplication::desktop()->devicePixelRatioF();
+    int thumbSize = qRound((double)d->thumbSize * ratio);
+
+    bool ret      = d->thumbnailThread->find(ThumbnailIdentifier(path), pix, thumbSize);
+    pix.setDevicePixelRatio(ratio);
+
+    return ret;
 }
 
 QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, int role) const
