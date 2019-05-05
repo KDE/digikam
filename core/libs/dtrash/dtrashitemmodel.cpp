@@ -218,7 +218,7 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
 bool DTrashItemModel::pixmapForItem(const QString& path, QPixmap& pix) const
 {
     double ratio  = QApplication::desktop()->devicePixelRatioF();
-    int thumbSize = qRound((double)d->thumbSize * ratio);
+    int thumbSize = qMin(qRound((double)d->thumbSize * ratio), (int)ThumbnailSize::HD);
 
     bool ret      = d->thumbnailThread->find(ThumbnailIdentifier(path), pix, thumbSize);
     pix.setDevicePixelRatio(ratio);

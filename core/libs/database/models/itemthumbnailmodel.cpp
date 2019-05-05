@@ -230,7 +230,7 @@ QVariant ItemThumbnailModel::data(const QModelIndex& index, int role) const
         }
 
         double ratio  = QApplication::desktop()->devicePixelRatioF();
-        int thumbSize = qMin(qRound((double)d->thumbSize.size() * ratio), (int)ThumbnailSize::HD);
+        int thumbSize = qRound((double)d->thumbSize.size() * ratio);
 
         if (!d->detailRect.isNull())
         {
