@@ -37,6 +37,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QApplication>
+#include <QDesktopWidget>
 
 // KDE includes
 
@@ -267,7 +268,7 @@ void ItemViewDelegate::invalidatePaintingCache()
 }
 
 QRect ItemViewDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
-                                           const QPixmap& thumbnail, bool isGrouped) const
+                                      const QPixmap& thumbnail, bool isGrouped) const
 {
     Q_D(const ItemViewDelegate);
 
@@ -278,58 +279,49 @@ QRect ItemViewDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const
         return QRect();
     }
 
-    QRect r = thumbRect;
-/*
-    p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                  r.y() + (r.height()-thumbnail.height())/2,
-                  thumbnail);
-*/
+    QRect r      = thumbRect;
+    double ratio = QApplication::desktop()->devicePixelRatioF();
+    int thumbW   = qRound((double)thumbnail.width()  / ratio);
+    int thumbH   = qRound((double)thumbnail.height() / ratio);
 
-    QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
-                           r.y() + (r.height()-thumbnail.height())/2,
-                           thumbnail.width(), thumbnail.height());
-/*
-    p->save();
-    QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-    p->setClipRegion(pixmapClipRegion);
+    QRect actualPixmapRect(r.x() + (r.width()  - thumbW) / 2,
+                           r.y() + (r.height() - thumbH) / 2,
+                           thumbW, thumbH);
 
-    p->drawPixmap(0, 0, background);
-*/
-    QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size(), isGrouped);
+    QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size(),
+                                              isGrouped);
 
     if (isGrouped)
     {
-        const int xPadding = (borderPix.width()-actualPixmapRect.width())/2;
-        const int yPadding = (borderPix.height()-actualPixmapRect.height())/2;
+        const int xPadding = (borderPix.width()  - actualPixmapRect.width())  / 2;
+        const int yPadding = (borderPix.height() - actualPixmapRect.height()) / 2;
 
-        p->drawPixmap(actualPixmapRect.x()-xPadding,
-                      actualPixmapRect.y()-yPadding, borderPix);
+        p->drawPixmap(actualPixmapRect.x() - xPadding,
+                      actualPixmapRect.y() - yPadding, borderPix);
 
-        QPixmap groupThumbnail = thumbnail.scaled(thumbnail.width()-10,
-                                                  thumbnail.height()-10,
+        QPixmap groupThumbnail = thumbnail.scaled(thumbW - 10, thumbH - 10,
                                                   Qt::KeepAspectRatio,
                                                   Qt::SmoothTransformation);
 
-        p->drawPixmap(r.x() + (r.width()-groupThumbnail.width())/2,
-                      r.y() + (r.height()-groupThumbnail.height())/2,
-                      groupThumbnail);
+        p->drawPixmap(r.x() + (r.width()  - (thumbW - 10)) / 2,
+                      r.y() + (r.height() - (thumbH - 10)) / 2,
+                      thumbW - 10, thumbH - 10, groupThumbnail);
     }
     else
     {
-        p->drawPixmap(actualPixmapRect.x()-d->radius,
-                      actualPixmapRect.y()-d->radius, borderPix);
+        p->drawPixmap(actualPixmapRect.x() - d->radius,
+                      actualPixmapRect.y() - d->radius, borderPix);
 
-        p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                      r.y() + (r.height()-thumbnail.height())/2,
-                      thumbnail);
+        p->drawPixmap(r.x() + (r.width()  - thumbW) / 2,
+                      r.y() + (r.height() - thumbH) / 2,
+                      thumbW, thumbH, thumbnail);
     }
 
-    //p->restore();
     return actualPixmapRect;
 }
 
 void ItemViewDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
-                                       int rating, bool isSelected) const
+                                  int rating, bool isSelected) const
 {
     Q_D(const ItemViewDelegate);
 

@@ -27,6 +27,8 @@
 // Qt includes
 
 #include <QHash>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -227,16 +229,19 @@ QVariant ItemThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(QVariant::Pixmap);
         }
 
+        double ratio  = QApplication::desktop()->devicePixelRatioF();
+        int thumbSize = qMin(qRound((double)d->thumbSize.size() * ratio), (int)ThumbnailSize::HD);
+
         if (!d->detailRect.isNull())
         {
-            if (d->thread->find(info.thumbnailIdentifier(), d->detailRect, thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), d->detailRect, thumbnail, thumbSize))
             {
                 return thumbnail;
             }
         }
         else
         {
-            if (d->thread->find(info.thumbnailIdentifier(), thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), thumbnail, thumbSize))
             {
                 return thumbnail;
             }

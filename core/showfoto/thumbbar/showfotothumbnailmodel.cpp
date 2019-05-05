@@ -23,6 +23,11 @@
 
 #include "showfotothumbnailmodel.h"
 
+// Qt includes
+
+#include <QApplication>
+#include <QDesktopWidget>
+
 // Local includes
 
 #include "drawdecoder.h"
@@ -152,10 +157,15 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
             return pixmap;
         }
 
+        double ratio  = QApplication::desktop()->devicePixelRatioF();
+        int thumbSize = qRound((double)d->thumbSize.size() * ratio);
+
         //if pixmapForItem Failed
         if (getThumbnail(info, thumbnailImage))
         {
-            thumbnailImage = thumbnailImage.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio);
+            thumbnailImage = thumbnailImage.scaled(thumbSize, thumbSize,
+                                                   Qt::KeepAspectRatio,
+                                                   Qt::SmoothTransformation);
             emit signalThumbInfo(info, thumbnailImage);
             return thumbnailImage;
         }
@@ -313,7 +323,10 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
 bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
 {
-    if (d->thumbSize.size() > d->maxThumbSize)
+    double ratio  = QApplication::desktop()->devicePixelRatioF();
+    int thumbSize = qRound((double)d->thumbSize.size() * ratio);
+
+    if (thumbSize > d->maxThumbSize)
     {
         //TODO: Install a widget maximum size to prevent this situation
 
@@ -321,12 +334,13 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
 
         if (hasPixmap)
         {
-
+/*
             qCWarning(DIGIKAM_GENERAL_LOG) << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
                                            << "is larger than the maximum thumbnail size" << d->maxThumbSize
                                            << ". Returning a scaled-up image.";
-
-            pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+*/
+            pix = pix.scaled(thumbSize, thumbSize,
+                             Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
             return true;
         }
@@ -337,7 +351,7 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
     }
     else
     {
-        return d->thread->find(ThumbnailIdentifier(url), pix, d->thumbSize.size());
+        return d->thread->find(ThumbnailIdentifier(url), pix, thumbSize);
     }
 }
 

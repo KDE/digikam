@@ -35,7 +35,9 @@
 #include <QIODevice>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QApplication>
 #include <QMimeDatabase>
+#include <QDesktopWidget>
 #include <QTemporaryFile>
 
 // KDE includes
@@ -122,13 +124,29 @@ int ThumbnailCreator::Private::storageSize() const
 {
     // on-disk thumbnail sizes according to freedesktop spec
     // for thumbnail db it's always max size
+    double ratio = QApplication::desktop()->devicePixelRatioF();
+
     if (onlyLargeThumbnails)
     {
-        return ThumbnailSize::maxThumbsSize();
+        if (ratio > 1.0 && thumbnailStorage == ThumbnailDatabase)
+        {
+            return ThumbnailSize::HD;
+        }
+        else
+        {
+            return ThumbnailSize::maxThumbsSize();
+        }
     }
     else
     {
-        return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium : ThumbnailSize::Huge;
+        if (ratio > 1.0 && thumbnailStorage == ThumbnailDatabase)
+        {
+            return (thumbnailSize <= ThumbnailSize::Small) ? ThumbnailSize::Huge : ThumbnailSize::HD;
+        }
+        else
+        {
+            return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium : ThumbnailSize::Huge;
+        }
     }
 }
 
@@ -300,7 +318,8 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     }
 
     // Prepare for usage in digikam
-    image.qimage = image.qimage.scaled(d->thumbnailSize, d->thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    image.qimage = image.qimage.scaled(d->thumbnailSize, d->thumbnailSize,
+                                       Qt::KeepAspectRatio, Qt::SmoothTransformation);
     image.qimage = handleAlphaChannel(image.qimage);
 
     if (d->thumbnailStorage == ThumbnailDatabase)
@@ -331,7 +350,8 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
         int cheatSize = maxSize - (3*(maxSize - d->storageSize()) / 4);
         qimage        = qimage.scaled(cheatSize, cheatSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 */
-        QImage scaledThumb = qimage.scaled(d->storageSize(), d->storageSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage scaledThumb = qimage.scaled(d->storageSize(), d->storageSize(),
+                                           Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         return scaledThumb;
     }

@@ -35,6 +35,7 @@
 #include <QIcon>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QDesktopWidget>
 
 // KDE includes
 
@@ -669,17 +670,20 @@ QList<LoadingDescription> ThumbnailLoadThread::lastDescriptions() const
 
 bool ThumbnailLoadThread::checkSize(int size)
 {
-    size = d->thumbnailSizeForPixmapSize(size);
+    size             = d->thumbnailSizeForPixmapSize(size);
+    double ratio     = QApplication::desktop()->devicePixelRatioF();
+    int maxThumbSize = (ratio > 1.0) ? ThumbnailSize::HD
+                                     : ThumbnailSize::maxThumbsSize();
 
     if (size <= 0)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
-    else if (size > ThumbnailSize::maxThumbsSize())
+    else if (size > maxThumbSize)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "ThumbnailLoadThread::load: Thumbnail size " << size
-                                     << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
+                                     << " is larger than " << maxThumbSize << ". Refusing to load.";
         return false;
     }
 

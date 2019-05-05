@@ -26,8 +26,9 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // KDE includes
 
@@ -233,18 +234,24 @@ QRect ItemViewShowfotoDelegate::drawThumbnail(QPainter* p, const QRect& thumbRec
         return QRect();
     }
 
-    QRect r = thumbRect;
+    QRect r      = thumbRect;
+    double ratio = QApplication::desktop()->devicePixelRatioF();
+    int thumbW   = qRound((double)thumbnail.width()  / ratio);
+    int thumbH   = qRound((double)thumbnail.height() / ratio);
 
-    QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
-                           r.y() + (r.height()-thumbnail.height())/2,
-                           thumbnail.width(), thumbnail.height());
+    QRect actualPixmapRect(r.x() + (r.width()  - thumbW) / 2,
+                           r.y() + (r.height() - thumbH) / 2,
+                           thumbW, thumbH);
 
-    QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
-    p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
+     QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
 
-    p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                  r.y() + (r.height()-thumbnail.height())/2,
-                  thumbnail);
+    p->drawPixmap(actualPixmapRect.x() - 3,
+                  actualPixmapRect.y() - 3, borderPix);
+
+    p->drawPixmap(r.x() + (r.width()  - thumbW) / 2,
+                  r.y() + (r.height() - thumbH) / 2,
+                  thumbW, thumbH, thumbnail);
+
     return actualPixmapRect;
 }
 
