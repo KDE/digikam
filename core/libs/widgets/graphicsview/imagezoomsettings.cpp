@@ -30,6 +30,8 @@
 // Qt includes
 
 #include <QList>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -40,13 +42,15 @@ namespace Digikam
 
 ImageZoomSettings::ImageZoomSettings()
     : m_zoom(1),
-      m_zoomConst(1)
+      m_zoomConst(1),
+      m_zoomRatio(QApplication::desktop()->devicePixelRatioF())
 {
 }
 
 ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& originalSize)
     : m_zoom(1),
-      m_zoomConst(1)
+      m_zoomConst(1),
+      m_zoomRatio(QApplication::desktop()->devicePixelRatioF())
 {
     setImageSize(imageSize, originalSize);
 }
@@ -82,7 +86,7 @@ QSizeF ImageZoomSettings::originalImageSize() const
 
 QSizeF ImageZoomSettings::zoomedSize() const
 {
-    return m_size / m_zoomConst * m_zoom;
+    return m_size / (m_zoomConst * m_zoomRatio) * m_zoom;
 }
 
 QRectF ImageZoomSettings::sourceRect(const QRectF& imageRect) const
@@ -116,11 +120,11 @@ double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSize
 
     if (frameSize.width() / frameSize.height() < m_size.width() / m_size.height())
     {
-        zoom = m_zoomConst * frameSize.width() / m_size.width();
+        zoom = m_zoomConst * m_zoomRatio * frameSize.width() / m_size.width();
     }
     else
     {
-        zoom = m_zoomConst * frameSize.height() / m_size.height();
+        zoom = m_zoomConst * m_zoomRatio * frameSize.height() / m_size.height();
     }
 
     // Zoom rounding down and scroll bars are never activated.
@@ -140,24 +144,24 @@ double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSize
 
 QRectF ImageZoomSettings::mapZoomToImage(const QRectF& zoomedRect) const
 {
-    return QRectF(zoomedRect.topLeft() / (m_zoom / m_zoomConst),
-                  zoomedRect.size()    / (m_zoom / m_zoomConst));
+    return QRectF(zoomedRect.topLeft() / (m_zoom / (m_zoomConst * m_zoomRatio)),
+                  zoomedRect.size()    / (m_zoom / (m_zoomConst * m_zoomRatio)));
 }
 
 QRectF ImageZoomSettings::mapImageToZoom(const QRectF& imageRect) const
 {
-    return QRectF(imageRect.topLeft() * (m_zoom / m_zoomConst),
-                  imageRect.size()    * (m_zoom / m_zoomConst));
+    return QRectF(imageRect.topLeft() * (m_zoom / (m_zoomConst * m_zoomRatio)),
+                  imageRect.size()    * (m_zoom / (m_zoomConst * m_zoomRatio)));
 }
 
 QPointF ImageZoomSettings::mapZoomToImage(const QPointF& zoomedPoint) const
 {
-    return zoomedPoint / (m_zoom / m_zoomConst);
+    return zoomedPoint / (m_zoom / (m_zoomConst * m_zoomRatio));
 }
 
 QPointF ImageZoomSettings::mapImageToZoom(const QPointF& imagePoint) const
 {
-    return imagePoint * (m_zoom / m_zoomConst);
+    return imagePoint * (m_zoom / (m_zoomConst * m_zoomRatio));
 }
 
 inline static bool lessThanLimitedPrecision(double a, double b)
@@ -183,7 +187,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
 
     if (currentZoom < nextZoom)
     {
-        foreach(double z, snapValues)
+        foreach (double z, snapValues)
         {
             if (lessThanLimitedPrecision(currentZoom, z) && lessThanLimitedPrecision(z, nextZoom))
             {
@@ -193,7 +197,7 @@ double ImageZoomSettings::snappedZoomStep(double nextZoom, const QSizeF& frameSi
     }
     else
     {
-        foreach(double z, snapValues)
+        foreach (double z, snapValues)
         {
             if (lessThanLimitedPrecision(z, currentZoom) && lessThanLimitedPrecision(nextZoom, z))
             {
@@ -216,7 +220,7 @@ double ImageZoomSettings::snappedZoomFactor(double zoom, const QSizeF& frameSize
         snapValues << fitToSizeZoomFactor(frameSize);
     }
 
-    foreach(double z, snapValues)
+    foreach (double z, snapValues)
     {
         if (fabs(zoom - z) < 0.05)
         {

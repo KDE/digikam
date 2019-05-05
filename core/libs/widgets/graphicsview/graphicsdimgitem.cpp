@@ -227,10 +227,10 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     Q_UNUSED(widget);
     double xratio = double(d->image.width()) / completeSize.width();
     double yratio = double(d->image.height()) / completeSize.height();
-    double ratio = qMax(qMin(xratio, yratio), 1.0);
+    double ratio  = qMax(qMin(xratio, yratio), 1.0);
 #else
     // Maybe we can use it for Mac OS X as well.
-    double ratio = widget->devicePixelRatioF();
+    double ratio  = widget->devicePixelRatioF();
 #endif
 
     QRect  scaledDrawRect = QRectF(ratio*drawRect.x(), ratio*drawRect.y(),

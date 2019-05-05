@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QSizeF>
-#include <QPointF>
 #include <QRectF>
+#include <QPointF>
 
 // Local includes
 
@@ -144,6 +144,7 @@ protected:
     QSizeF m_size;
     double m_zoom;
     double m_zoomConst;
+    double m_zoomRatio;
 };
 
 } // namespace Digikam

@@ -26,6 +26,8 @@
 // Qt includes
 
 #include <QUrl>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -496,6 +498,8 @@ void GLViewerTexture::zoomToOriginal()
         //image touches upper and lower edge of window
         zoomfactorToOriginal = float(d->display_y) / d->qimage.height();
     }
+
+    zoomfactorToOriginal *= QApplication::desktop()->devicePixelRatioF();
 
     zoom(zoomfactorToOriginal, QPoint(d->display_x / 2, d->display_y / 2));
 }

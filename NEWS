@@ -23,4 +23,5 @@ BUGFIXES:
 014 ==> 407043 - Image rename to folder fails on Windows.
 015 ==> 407157 - Lens Auto-Correction for fixed-lens cameras
 016 ==> 407197 - Target album does not exist.
-017 ==> 
+017 ==> 371005 - Zoom function doesn't work properly on HiDPI Display
+018 ==> 
