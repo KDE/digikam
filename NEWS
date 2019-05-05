@@ -25,4 +25,5 @@ BUGFIXES:
 015 ==> 407157 - Lens Auto-Correction for fixed-lens cameras
 016 ==> 407197 - Target album does not exist.
 017 ==> 371005 - Zoom function doesn't work properly on HiDPI Display
-018 ==> 
+018 ==> 407233 - Pictures distribution on Light Table.
+019 ==> 
