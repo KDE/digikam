@@ -366,15 +366,16 @@ void PresentationWidget::loadNextImage()
 
     QImage img = d->imageLoader->getCurrent();
 
-    QPixmap newPixmap = QPixmap(QPixmap::fromImage(img));
+    QPixmap newPixmap = QPixmap::fromImage(img);
     QPixmap pixmap(width(), height());
     pixmap.fill(Qt::black);
     QPainter p(&pixmap);
+
     p.drawPixmap((width() - newPixmap.width()) / 2,
                  (height() - newPixmap.height()) / 2, newPixmap,
                  0, 0, newPixmap.width(), newPixmap.height());
 
-    d->currImage = QPixmap(pixmap);
+    d->currImage = pixmap;
 
     if (img.isNull())
     {
@@ -412,15 +413,16 @@ void PresentationWidget::loadPrevImage()
 
     QImage img = d->imageLoader->getCurrent();
 
-    QPixmap newPixmap = QPixmap(QPixmap::fromImage(img));
+    QPixmap newPixmap = QPixmap::fromImage(img);
     QPixmap pixmap(width(), height());
     pixmap.fill(Qt::black);
     QPainter p(&pixmap);
+
     p.drawPixmap((width() - newPixmap.width()) / 2,
                  (height() - newPixmap.height()) / 2, newPixmap,
                  0, 0, newPixmap.width(), newPixmap.height());
 
-    d->currImage = QPixmap(pixmap);
+    d->currImage = pixmap;
 
     if (img.isNull())
     {
@@ -729,8 +731,14 @@ void PresentationWidget::paintEvent(QPaintEvent*)
         if (d->sharedData->printFileComments)
             printComments();
 
-        p.drawPixmap(0, 0, d->currImage,
-                     0, 0, d->currImage.width(), d->currImage.height());
+        double ratio   = devicePixelRatioF();
+        QSize fullSize = QSizeF(ratio * width(), ratio * height()).toSize();
+
+        QPixmap pixmap = d->currImage.scaled(fullSize, Qt::KeepAspectRatio,
+                                                       Qt::SmoothTransformation);
+
+        p.drawPixmap(0, 0, width(), height(), pixmap,
+                     0, 0, pixmap.width(), pixmap.height());
 
         p.end();
 
