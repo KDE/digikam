@@ -130,7 +130,8 @@ int ThumbnailCreator::Private::storageSize() const
     {
         if (ratio > 1.0 && thumbnailStorage == ThumbnailDatabase)
         {
-            return ThumbnailSize::HD;
+            return ThumbnailSize::getUseLargeThumbs() ? ThumbnailSize::MAX
+                                                      : ThumbnailSize::HD;
         }
         else
         {
@@ -141,11 +142,13 @@ int ThumbnailCreator::Private::storageSize() const
     {
         if (ratio > 1.0 && thumbnailStorage == ThumbnailDatabase)
         {
-            return (thumbnailSize <= ThumbnailSize::Small) ? ThumbnailSize::Huge : ThumbnailSize::HD;
+            return (thumbnailSize <= ThumbnailSize::Small) ? ThumbnailSize::Huge
+                                                           : ThumbnailSize::HD;
         }
         else
         {
-            return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium : ThumbnailSize::Huge;
+            return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium
+                                                            : ThumbnailSize::Huge;
         }
     }
 }

@@ -57,7 +57,8 @@ public:
         Medium      = 142,
         Large       = 160,
         Huge        = 256,
-        HD          = 512
+        HD          = 512,
+        MAX         = 1024
     };
 
 public:

@@ -672,7 +672,7 @@ bool ThumbnailLoadThread::checkSize(int size)
 {
     size             = d->thumbnailSizeForPixmapSize(size);
     double ratio     = QApplication::desktop()->devicePixelRatioF();
-    int maxThumbSize = (ratio > 1.0) ? (ThumbnailSize::HD * 2)
+    int maxThumbSize = (ratio > 1.0) ? ThumbnailSize::MAX
                                      : ThumbnailSize::maxThumbsSize();
 
     if (size <= 0)
