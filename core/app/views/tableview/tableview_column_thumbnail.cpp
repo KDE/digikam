@@ -39,6 +39,7 @@
 #include "tableview.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "metaengine.h"
 
 namespace
 {
@@ -118,6 +119,12 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
         QSize imageSize     = info.dimensions();
         int maxSize         = m_thumbnailSize;
+
+        // When the image is rotated, swap width and height.
+        if (info.orientation() > MetaEngine::ORIENTATION_VFLIP)
+        {
+            imageSize.transpose();
+        }
 
         if (imageSize.isValid() && (imageSize.width() > imageSize.height()))
         {
