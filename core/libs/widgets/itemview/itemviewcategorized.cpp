@@ -374,21 +374,31 @@ void ItemViewCategorized::updateDelegateSizes()
 void ItemViewCategorized::slotActivated(const QModelIndex& index)
 {
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
+    Qt::MouseButtons buttons        = Qt::NoButton;
 
     if (d->currentMouseEvent)
     {
-        // Ignore activation if Ctrl or Shift is pressed (for selection)
-        modifiers                    = d->currentMouseEvent->modifiers();
-        Qt::MouseButton button       = d->currentMouseEvent->button();
-        const bool shiftKeyPressed   = modifiers & Qt::ShiftModifier;
-        const bool controlKeyPressed = modifiers & Qt::ControlModifier;
-        const bool rightClickPressed = button & Qt::RightButton;
+        modifiers = d->currentMouseEvent->modifiers();
+        buttons   = d->currentMouseEvent->buttons();
+    }
+    else
+    {
+        modifiers = QApplication::queryKeyboardModifiers();
+        buttons   = QApplication::mouseButtons();
+    }
 
-        if (shiftKeyPressed || controlKeyPressed || rightClickPressed)
-        {
-            return;
-        }
+    // Ignore activation if Ctrl or Shift is pressed (for selection)
+    const bool shiftKeyPressed   = modifiers & Qt::ShiftModifier;
+    const bool controlKeyPressed = modifiers & Qt::ControlModifier;
+    const bool rightClickPressed = buttons & Qt::RightButton;
 
+    if (shiftKeyPressed || controlKeyPressed || rightClickPressed)
+    {
+        return;
+    }
+
+    if (d->currentMouseEvent)
+    {
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
         if (d->currentMouseEvent->isAccepted() &&

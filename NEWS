@@ -28,4 +28,5 @@ BUGFIXES:
 018 ==> 407233 - Pictures distribution on Light Table.
 019 ==> 403197 - Thumbnails in icon and preview views are not HiDPI (macOS).
 020 ==> 370705 - Current Album is deselected when clearing search bar.
-021 ==> 
+021 ==> 407232 - Swith from list to display with enter.
+022 ==> 
