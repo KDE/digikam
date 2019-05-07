@@ -76,7 +76,13 @@ public:
      * This can be used to supersede the Exif information in the file.
      * Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value)
      */
-    virtual int orientationHint(const QString& path) = 0;
+    virtual int   orientationHint(const QString& path) = 0;
+
+    /**
+     * Gives a hint at the size of the image.
+     * This can be used to supersede the Exif information in the file.
+     */
+    virtual QSize dimensionsHint(const QString& path) = 0;
 };
 
 // -------------------------------------------------------------------------------------------------------

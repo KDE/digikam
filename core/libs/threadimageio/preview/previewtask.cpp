@@ -506,11 +506,32 @@ void PreviewLoadingTask::convertQImageToDImg()
     // convert from QImage
     m_img               = DImg(m_qimage);
     DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+
     m_img.setAttribute(QLatin1String("detectedFileFormat"), format);
     m_img.setAttribute(QLatin1String("originalFilePath"),   m_loadingDescription.filePath);
 
     DMetadata metadata(m_loadingDescription.filePath);
-    m_img.setAttribute(QLatin1String("originalSize"),       metadata.getPixelSize());
+    QSize orgSize = metadata.getPixelSize();
+
+    // Set the ratio of width and height of the
+    // original size to the same ratio of the loaded image.
+    // Because a half RAW preview was probably already rotated.
+    if (format == DImg::RAW && !m_fromRawEmbeddedPreview)
+    {
+        if (LoadSaveThread::infoProvider())
+        {
+            orgSize = LoadSaveThread::infoProvider()->dimensionsHint(m_loadingDescription.filePath);
+        }
+
+        if ((m_img.width() < m_img.height() && orgSize.width() > orgSize.height()) ||
+            (m_img.width() > m_img.height() && orgSize.width() < orgSize.height()))
+        {
+            orgSize.transpose();
+        }
+    }
+
+    m_img.setAttribute(QLatin1String("originalSize"),   orgSize);
+
     m_img.setMetadata(metadata.data());
 
     // mark as embedded preview (for Exif rotation)

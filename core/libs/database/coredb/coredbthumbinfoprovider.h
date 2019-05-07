@@ -45,7 +45,8 @@ class DIGIKAM_DATABASE_EXPORT DatabaseLoadSaveFileInfoProvider : public LoadSave
 {
 public:
 
-    virtual int orientationHint(const QString& path) override;
+    virtual int   orientationHint(const QString& path) override;
+    virtual QSize dimensionsHint(const QString& path) override;
 };
 
 } // namespace Digikam

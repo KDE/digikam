@@ -68,4 +68,10 @@ int DatabaseLoadSaveFileInfoProvider::orientationHint(const QString& path)
     return info.orientation();
 }
 
+QSize DatabaseLoadSaveFileInfoProvider::dimensionsHint(const QString& path)
+{
+    ItemInfo info = ItemInfo::fromLocalFile(path);
+    return info.dimensions();
+}
+
 } // namespace Digikam
