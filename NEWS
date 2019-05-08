@@ -30,4 +30,5 @@ BUGFIXES:
 020 ==> 370705 - Current Album is deselected when clearing search bar.
 021 ==> 407232 - Swith from list to display with enter.
 022 ==> 407262 - Face tagging doesn't work with rotation.
-023 ==> 
+023 ==> 407345 - Verbose debug messages.
+024 ==> 
