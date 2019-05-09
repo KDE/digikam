@@ -32,4 +32,5 @@ BUGFIXES:
 022 ==> 407262 - Face tagging doesn't work with rotation.
 023 ==> 407345 - Verbose debug messages.
 024 ==> 407334 - Accented characters not taken into account google photos.
-025 ==> 
+025 ==> 406594 - Interface becomes irresponsive for a while after editing metadata in search panel.
+026 ==> 
