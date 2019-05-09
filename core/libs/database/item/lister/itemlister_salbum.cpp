@@ -101,8 +101,6 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
     int       width, height;
     double    lat, lon;
 
-    CoreDbAccess access;
-
     for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ItemListerRecord record;
@@ -136,7 +134,8 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
         lon                      = (*it).toDouble();
         ++it;
 
-        record.currentSimilarity = SimilarityDbAccess().db()->getImageSimilarity(record.imageID, referenceImageId);
+        record.currentSimilarity = SimilarityDbAccess().db()->getImageSimilarity(record.imageID,
+                                                                                 referenceImageId);
 
         if (record.currentSimilarity < 0)
         {
@@ -144,7 +143,7 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
             record.currentSimilarity = 0.0;
         }
 
-        record.currentFuzzySearchReferenceImage  = referenceImageId;
+        record.currentFuzzySearchReferenceImage = referenceImageId;
 
         if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
@@ -156,7 +155,7 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
             continue;
         }
 
-        record.imageSize         = QSize(width, height);
+        record.imageSize = QSize(width, height);
 
         receiver->receive(record);
     }
@@ -173,7 +172,8 @@ void ItemLister::listHaarSearch(ItemListerReceiver* const receiver,
 
     if (reader.fieldName() != QLatin1String("similarity"))
     {
-        receiver->error(QLatin1String("Unsupported field name \"") + reader.fieldName() + QLatin1String("\" in Haar search"));
+        receiver->error(QLatin1String("Unsupported field name \"") +
+                        reader.fieldName() + QLatin1String("\" in Haar search"));
         return;
     }
 
