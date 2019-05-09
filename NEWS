@@ -31,4 +31,5 @@ BUGFIXES:
 021 ==> 407232 - Swith from list to display with enter.
 022 ==> 407262 - Face tagging doesn't work with rotation.
 023 ==> 407345 - Verbose debug messages.
-024 ==> 
+024 ==> 407334 - Accented characters not taken into account google photos.
+025 ==> 

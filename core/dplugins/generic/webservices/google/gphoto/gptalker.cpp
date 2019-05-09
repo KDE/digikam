@@ -279,7 +279,7 @@ void GPTalker::createAlbum(const GSFolder& album)
     QByteArray data;
     data += "{\"album\":";
     data += "{\"title\":\"";
-    data += album.title.toLatin1();
+    data += album.title.toUtf8();
     data += "\"}}";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
@@ -373,7 +373,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
-    netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toLatin1());
+    netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toUtf8());
     netRequest.setRawHeader("X-Goog-Upload-Protocol", "raw");
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
