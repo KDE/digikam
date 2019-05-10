@@ -6,7 +6,7 @@
  * Date        : 2012-04-04
  * Description : a tool to show image using an OpenGL interface.
  *
- * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,8 +120,8 @@ GLViewerHelpDlg::GLViewerHelpDlg(DPlugin* const plugin)
                             "s</li>\n"
         "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">ctrl + scrollwheel</li></ul>\n"
         "<p style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:x-large; font-weight:600; color:#5500ff;\"><span style=\" font-size:x-large;\">Panning</span></p>\n"
-        "<ul style=\"-qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">move mouse while pressing the left button</li></ul></body></html>",
-    0));
+        "<ul style=\"-qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">move mouse while pressing the left button</li></ul></body></html>"
+    ));
 
     brw->setProperty("text", QVariant(i18n(
         "<b><font color=\"#5500ff\">"
@@ -179,8 +179,8 @@ GLViewerHelpDlg::GLViewerHelpDlg(DPlugin* const plugin)
         "<b><font color=\"#5500ff\" size=\"+2\">Panning</font></b><br>\n"
         "<UL> \n"
         "<LI>move mouse while pressing the left button\n"
-        "</UL>",
-    0)));
+        "</UL>"
+    )));
 
     resize(700, 550);
 }
