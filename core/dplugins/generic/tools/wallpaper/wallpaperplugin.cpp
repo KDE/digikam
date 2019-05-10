@@ -24,15 +24,14 @@
 
 // Qt includes
 
-#include <QtDBus>
+#include <QDBusMessage>
+#include <QDBusConnection>
 #include <QString>
 #include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-// Local includes
 
 namespace DigikamGenericWallpaperPlugin
 {
