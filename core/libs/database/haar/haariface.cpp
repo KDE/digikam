@@ -257,13 +257,13 @@ public:
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id and status of the item with the ItemInfo.
-            ItemInfo info(imageid);
+            // Get the album id and status of the item with the ItemShortInfo.
+            ItemShortInfo info = CoreDbAccess().db()->getItemShortInfo(imageid);
 
-            if (!info.isNull() && info.isVisible())
+            if (!info.isNull() && info.albumID > 0)
             {
                 blob.read(query.value(1).toByteArray(), &targetSig);
-                albumid = info.albumId();
+                albumid                 = info.albumID;
                 signatureCache[imageid] = targetSig;
                 albumCache[imageid]     = albumid;
             }
@@ -755,14 +755,14 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id, album root id and status of the item with the ItemInfo.
-            ItemInfo info(imageid);
+            // Get the album id, album root id and status of the item with the ItemShortInfo.
+            ItemShortInfo info = CoreDbAccess().db()->getItemShortInfo(imageid);
 
-            if (!info.isNull() && info.isVisible())
+            if (!info.isNull() && info.albumID > 0)
             {
                 if (filterByAlbumRoots)
                 {
-                    albumRootId = info.albumRootId();
+                    albumRootId = info.albumRootID;
 
                     if (!d->albumRootsToSearch.contains(albumRootId))
                     {
@@ -771,7 +771,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
                 }
 
                 blob.read(query.value(1).toByteArray(), &targetSig);
-                albumid = info.albumId();
+                albumid = info.albumID;
 
                 if (d->useSignatureCache)
                 {
