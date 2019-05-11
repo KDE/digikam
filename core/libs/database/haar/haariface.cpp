@@ -237,7 +237,6 @@ public:
         }
 
         // Variables for data read from DB
-        SimilarityDbAccess  similarityDbAccess;
         DatabaseBlob        blob;
         qlonglong           imageid;
         int                 albumid;
@@ -247,9 +246,9 @@ public:
         SignatureCache& signatureCache = *this->signatureCache;
         AlbumCache&     albumCache     = *this->albumCache;
 
-        DbEngineSqlQuery query = similarityDbAccess.backend()->prepareQuery(signatureQuery);
+        DbEngineSqlQuery query = SimilarityDbAccess().backend()->prepareQuery(signatureQuery);
 
-        if (!similarityDbAccess.backend()->exec(query))
+        if (!SimilarityDbAccess().backend()->exec(query))
         {
             return;
         }
@@ -377,18 +376,17 @@ bool HaarIface::indexImage(qlonglong imageid)
     Haar::SignatureData sig;
     haar.calcHaar(d->data, &sig);
 
-    SimilarityDbAccess access;
-
     // Store main entry
     {
+        SimilarityDbAccess access;
         // prepare blob
         DatabaseBlob blob;
         QByteArray array = blob.write(&sig);
 
         ItemInfo info(imageid);
 
-        if (!info.isNull() && info.isVisible()) {
-
+        if (!info.isNull() && info.isVisible())
+        {
             access.backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
                                                         " (imageid, modificationDate, uniqueHash, matrix) "
                                                         " VALUES(?, ?, ?, ?);"),
@@ -632,8 +630,7 @@ QPair<double, QMap<qlonglong, double> > HaarIface::bestMatchesWithThreshold(qlon
     QMap<qlonglong, double> bestMatches;
     double score, percentage, avgPercentage = 0.0;
     QPair<double, QMap<qlonglong, double> > result;
-    qlonglong          id;
-    SimilarityDbAccess access;
+    qlonglong id;
 
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin() ; it != scores.constEnd() ; ++it)
     {
@@ -655,7 +652,7 @@ QPair<double, QMap<qlonglong, double> > HaarIface::bestMatchesWithThreshold(qlon
                     // Store the similarity if the reference image has a valid image id
                     if (imageid > 0)
                     {
-                        access.db()->setImageSimilarity(id,imageid,percentage);
+                        SimilarityDbAccess().db()->setImageSimilarity(id, imageid, percentage);
                     }
 
                     avgPercentage += percentage;
@@ -729,7 +726,6 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     QMap<qlonglong, double> scores;
 
     // Variables for data read from DB
-    SimilarityDbAccess  access;
     DatabaseBlob        blob;
     qlonglong           imageid;
     int                 albumid;
@@ -744,9 +740,9 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     // if no cache is used or the cache signature map is empty, query the database
     if (!d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache))
     {
-        DbEngineSqlQuery query = access.backend()->prepareQuery(d->signatureQuery);
+        DbEngineSqlQuery query = SimilarityDbAccess().backend()->prepareQuery(d->signatureQuery);
 
-        if (!access.backend()->exec(query))
+        if (!SimilarityDbAccess().backend()->exec(query))
         {
             return scores;
         }
