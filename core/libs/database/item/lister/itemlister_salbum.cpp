@@ -134,16 +134,18 @@ void ItemLister::listSearch(ItemListerReceiver* const receiver,
         lon                      = (*it).toDouble();
         ++it;
 
-        record.currentSimilarity = SimilarityDbAccess().db()->getImageSimilarity(record.imageID,
-                                                                                 referenceImageId);
-
-        if (record.currentSimilarity < 0)
-        {
-            // Ignore nonexistence and invalid db entry.
-            record.currentSimilarity = 0.0;
-        }
-
+        record.currentSimilarity                = 0.0;
         record.currentFuzzySearchReferenceImage = referenceImageId;
+
+        if (referenceImageId != -1)
+        {
+            double current = SimilarityDbAccess().db()->getImageSimilarity(record.imageID,
+                                                                           referenceImageId);
+            if (current > 0.0)
+            {
+                record.currentSimilarity = current;
+            }
+        }
 
         if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
