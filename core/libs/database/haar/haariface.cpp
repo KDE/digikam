@@ -449,7 +449,7 @@ QPair<double, QMap<qlonglong, double> > HaarIface::bestMatchesForImageWithThresh
                                                                                     double maximumPercentage,
                                                                                     QList<int>& targetAlbums,
                                                                                     DuplicatesSearchRestrictions
-                                                                                    searchResultRestriction,
+                                                                                      searchResultRestriction,
                                                                                     SketchType type)
 {
     d->createLoadingBuffer();
@@ -480,7 +480,7 @@ QPair<double, QMap<qlonglong, double> > HaarIface::bestMatchesForImageWithThresh
                                                                                     double maximumPercentage,
                                                                                     QList<int>& targetAlbums,
                                                                                     DuplicatesSearchRestrictions
-                                                                                    searchResultRestriction,
+                                                                                      searchResultRestriction,
                                                                                     SketchType type)
 {
     if (!d->useSignatureCache || (d->signatureCache->isEmpty() && d->useSignatureCache))
@@ -606,7 +606,7 @@ QPair<double, QMap<qlonglong, double> > HaarIface::bestMatchesWithThreshold(qlon
                                                                             double maximumPercentage,
                                                                             QList<int>& targetAlbums,
                                                                             DuplicatesSearchRestrictions
-                                                                            searchResultRestriction,
+                                                                              searchResultRestriction,
                                                                             SketchType type)
 {
     int albumId = CoreDbAccess().db()->getItemAlbum(imageid);
@@ -1033,7 +1033,7 @@ QMap<double, QMap<qlonglong, QList<qlonglong> > > HaarIface::findDuplicatesInAlb
                                                                                            double requiredPercentage,
                                                                                            double maximumPercentage,
                                                                                            DuplicatesSearchRestrictions
-                                                                                           searchResultRestriction,
+                                                                                             searchResultRestriction,
                                                                                            HaarProgressObserver* const observer)
 {
     QSet<qlonglong> imagesFromAlbums;
@@ -1110,7 +1110,7 @@ QMap<double, QMap<qlonglong, QList<qlonglong> > > HaarIface::findDuplicates(cons
                                                                             double requiredPercentage,
                                                                             double maximumPercentage,
                                                                             DuplicatesSearchRestrictions
-                                                                            searchResultRestriction,
+                                                                              searchResultRestriction,
                                                                             HaarProgressObserver* const observer)
 {
     QMap<double, QMap<qlonglong, QList<qlonglong> > > resultsMap;
