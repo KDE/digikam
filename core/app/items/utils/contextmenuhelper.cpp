@@ -28,6 +28,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QDesktopServices>
 #include <QClipboard>
 #include <QDir>
 #include <QIcon>
@@ -256,10 +257,22 @@ void ContextMenuHelper::addStandardActionThumbnail(const imageIds& ids, Album* a
     }
 }
 
-void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids) {
+void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids)
+{
     addAction(QLatin1String("image_edit"));
     addServicesMenu(ItemInfoList(ids).toImageUrlList());
     addAction(QLatin1String("move_selection_to_album"));
+
+    // addServicesMenu() has stored d->selectedItems
+    if (d->selectedItems.length() == 1)
+    {
+        QAction* const openFileMngr = new QAction(i18n("Open in File Manager"), this);
+        addAction(openFileMngr);
+
+        connect(openFileMngr, SIGNAL(triggered()),
+                this, SLOT(slotOpenInFileManager()));
+    }
+
     addGotoMenu(ids);
 }
 
@@ -396,6 +409,17 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     DFileOperations::runFiles(service.data(), list);
 
 #endif // Q_OS_WIN
+}
+
+void ContextMenuHelper::slotOpenInFileManager()
+{
+    if (d->selectedItems.length() == 1)
+    {
+        QUrl url = d->selectedItems.first().adjusted(QUrl::RemoveFilename |
+                                                     QUrl::StripTrailingSlash);
+
+        QDesktopServices::openUrl(url);
+    }
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

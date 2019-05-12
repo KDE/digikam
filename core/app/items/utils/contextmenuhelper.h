@@ -406,6 +406,7 @@ private Q_SLOTS:
 
     void slotOpenWith();
     void slotOpenWith(QAction* action);
+    void slotOpenInFileManager();
     void slotDeselectAllAlbumItems();
     void slotOpenGroups();
     void slotCloseGroups();
