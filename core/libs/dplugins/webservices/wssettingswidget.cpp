@@ -65,6 +65,7 @@ public:
           reloadAlbumsBtn(nullptr),
           originalChB(nullptr),
           resizeChB(nullptr),
+          photoIdChB(nullptr),
           dimensionSpB(nullptr),
           imageQualitySpB(nullptr),
           mainLayout(nullptr),
@@ -101,6 +102,7 @@ public:
 
     QCheckBox*                     originalChB;
     QCheckBox*                     resizeChB;
+    QCheckBox*                     photoIdChB;
     QSpinBox*                      dimensionSpB;
     QSpinBox*                      imageQualitySpB;
 
@@ -161,6 +163,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->optionsBoxLayout   = new QGridLayout(d->optionsBox);
     d->originalChB        = new QCheckBox(d->optionsBox);
     d->resizeChB          = new QCheckBox(d->optionsBox);
+    d->photoIdChB         = new QCheckBox(d->optionsBox);
     d->dimensionSpB       = new QSpinBox(d->optionsBox);
     d->imageQualitySpB    = new QSpinBox(d->optionsBox);
     d->progressBar        = new DProgressWdg(d->settingsBox);
@@ -172,7 +175,8 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->imgList->setObjectName(QLatin1String("WebService ImagesList"));
     d->imgList->setControlButtonsPlacement(DItemsList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
-    d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->toolName));
+    d->imgList->listView()->setWhatsThis(i18n("This is the list of images "
+                                              "to upload to your %1 account.", d->toolName));
     d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();
 
@@ -203,7 +207,8 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     //-------------------------------------------------------------
 
-    d->albBox->setWhatsThis(i18n("This is the %1 folder to/from which selected photos will be uploaded/downloaded.", d->toolName));
+    d->albBox->setWhatsThis(i18n("This is the %1 folder to/from which selected "
+                                 "photos will be uploaded/downloaded.", d->toolName));
 
     QLabel* const albLbl = new QLabel(i18n("Album:"), d->albBox);
 
@@ -224,7 +229,8 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     //----------------------------------------------------------
 
-    d->sizeBox->setWhatsThis(i18n("This is the maximum dimension of the images. Images larger than this will be scaled down."));
+    d->sizeBox->setWhatsThis(i18n("This is the maximum dimension of the images. "
+                                  "Images larger than this will be scaled down."));
     d->dlDimensionCoB->addItem(i18n("Original Size"), QLatin1String("d"));
     d->dlDimensionCoB->addItem(i18n("1600 px"), QLatin1String("1600"));
     d->dlDimensionCoB->addItem(i18n("1440 px"), QLatin1String("1440"));
@@ -236,12 +242,14 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     // ------------------------------------------------------------------------
 
-    d->uploadBox->setWhatsThis(i18n("This is the location where %1 images will be downloaded.", d->toolName));
+    d->uploadBox->setWhatsThis(i18n("This is the location where %1 "
+                                    "images will be downloaded.", d->toolName));
     d->uploadBoxLayout->addWidget(d->uploadWidget);
 
     //-----------------------------------------------------------
 
-    d->optionsBox->setWhatsThis(i18n("These are the options that would be applied to photos before upload."));
+    d->optionsBox->setWhatsThis(i18n("These are the options that would "
+                                     "be applied to photos before upload."));
 
     d->originalChB->setText(i18n("Upload original image file"));
     d->originalChB->setChecked(false);
@@ -250,11 +258,17 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->resizeChB->setText(i18n("Resize photos before uploading"));
     d->resizeChB->setChecked(false);
 
+    d->photoIdChB->setText(i18n("Write the photo ID to the source image"));
+    d->photoIdChB->setWhatsThis(i18n("Write the photo ID as metadata in "
+                                     "the source image after uploading."));
+    d->photoIdChB->setChecked(false);
+    d->photoIdChB->hide();
+
     d->dimensionSpB->setMinimum(0);
     d->dimensionSpB->setMaximum(5000);
     d->dimensionSpB->setSingleStep(10);
     d->dimensionSpB->setValue(1600);
-    d->dimensionSpB->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    d->dimensionSpB->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     d->dimensionSpB->setEnabled(false);
 
     QLabel* const dimensionLbl = new QLabel(i18n("Maximum Dimension:"), d->optionsBox);
@@ -263,7 +277,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->imageQualitySpB->setMaximum(100);
     d->imageQualitySpB->setSingleStep(1);
     d->imageQualitySpB->setValue(90);
-    d->imageQualitySpB->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    d->imageQualitySpB->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     QLabel* const imageQualityLbl = new QLabel(i18n("JPEG Quality:"), d->optionsBox);
 
@@ -273,7 +287,8 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->optionsBoxLayout->addWidget(d->imageQualitySpB, 2, 2, 1, 1);
     d->optionsBoxLayout->addWidget(dimensionLbl,       3, 1, 1, 1);
     d->optionsBoxLayout->addWidget(d->dimensionSpB,    3, 2, 1, 1);
-    d->optionsBoxLayout->setRowStretch(4, 10);
+    d->optionsBoxLayout->addWidget(d->photoIdChB,      4, 0, 1, 5);
+    d->optionsBoxLayout->setRowStretch(5, 10);
     d->optionsBoxLayout->setSpacing(spacing);
     d->optionsBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
 
@@ -452,6 +467,11 @@ QCheckBox* WSSettingsWidget::getOriginalCheckBox() const
 QCheckBox* WSSettingsWidget::getResizeCheckBox() const
 {
     return d->resizeChB;
+}
+
+QCheckBox* WSSettingsWidget::getPhotoIdCheckBox() const
+{
+    return d->photoIdChB;
 }
 
 QSpinBox* WSSettingsWidget::getDimensionSpB() const

@@ -35,4 +35,5 @@ BUGFIXES:
 025 ==> 406594 - Interface becomes irresponsive for a while after editing metadata in search panel.
 026 ==> 407357 - Print Creator Gimp 2.10. not recgonized.
 027 ==> 397865 - Current GIMP version cannot be selected.
-028 ==> 
+028 ==> 407440 - After export to google photo, metadata are written to sidecar files (and perhaps to picture file too).
+029 ==> 

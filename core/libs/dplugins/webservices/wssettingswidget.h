@@ -96,6 +96,7 @@ public:
     QPushButton*      getReloadBtn()         const;
     QCheckBox*        getOriginalCheckBox()  const;
     QCheckBox*        getResizeCheckBox()    const;
+    QCheckBox*        getPhotoIdCheckBox()   const;
     QSpinBox*         getDimensionSpB()      const;
     QSpinBox*         getImgQualitySpB()     const;
     QComboBox*        getAlbumsCoB()         const;

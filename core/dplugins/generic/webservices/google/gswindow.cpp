@@ -296,7 +296,7 @@ void GSWindow::readSettings()
             break;
     }
 
-    d->currentAlbumId = grp.readEntry("Current Album",QString());
+    d->currentAlbumId = grp.readEntry("Current Album", QString());
 
     if (grp.readEntry("Resize", false))
     {
@@ -309,8 +309,9 @@ void GSWindow::readSettings()
         d->widget->getDimensionSpB()->setEnabled(false);
     }
 
-    d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
-    d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
+    d->widget->getPhotoIdCheckBox()->setChecked(grp.readEntry("Write PhotoID", true));
+    d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",      1600));
+    d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality",     90));
 
     if (d->service == GoogleService::GPhotoExport && d->widget->m_tagsBGrp)
     {
@@ -341,6 +342,7 @@ void GSWindow::writeSettings()
 
     grp.writeEntry("Current Album", d->currentAlbumId);
     grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
+    grp.writeEntry("Write PhotoID", d->widget->getPhotoIdCheckBox()->isChecked());
     grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
     grp.writeEntry("Image Quality", d->widget->getImgQualitySpB()->value());
 
@@ -658,11 +660,11 @@ void GSWindow::uploadNextPhoto()
         case GoogleService::GDrive:
         {
             res = d->talker->addPhoto(pathComments.first.toLocalFile(),
-                                     info,
-                                     d->currentAlbumId,
-                                     d->widget->getResizeCheckBox()->isChecked(),
-                                     d->widget->getDimensionSpB()->value(),
-                                     d->widget->getImgQualitySpB()->value());
+                                      info,
+                                      d->currentAlbumId,
+                                      d->widget->getResizeCheckBox()->isChecked(),
+                                      d->widget->getDimensionSpB()->value(),
+                                      d->widget->getImgQualitySpB()->value());
             break;
         }
 
@@ -991,7 +993,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg)
                          i18n("Warning"),
                          i18n("Failed to upload photo to %1.\n%2\n"
                               "Do you want to continue?",
-                              d->toolName,msg),
+                              d->toolName, msg),
                          QMessageBox::Yes | QMessageBox::No);
 
         (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
@@ -1040,7 +1042,7 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
                                                      i18n("Warning"),
                                                      i18n("Failed to finish uploading photo to %1.\n%2\n"
                                                           "No image uploaded to your account.",
-                                                          d->toolName,msg),
+                                                          d->toolName, msg),
                                                      QMessageBox::Yes);
 
         (warn->button(QMessageBox::Yes))->setText(i18n("OK"));
@@ -1062,10 +1064,11 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
 
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID: " << photoId;
 
-            if (d->meta.supportXmp()                       &&
-                d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
-                d->meta.load(fileUrl.toLocalFile())
-                && !photoId.isEmpty())
+            if (d->widget->getPhotoIdCheckBox()->isChecked() &&
+                d->meta.supportXmp()                         &&
+                d->meta.canWriteXmp(fileUrl.toLocalFile())   &&
+                d->meta.load(fileUrl.toLocalFile())          &&
+                !photoId.isEmpty())
             {
                 d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
                 d->meta.save(fileUrl.toLocalFile());

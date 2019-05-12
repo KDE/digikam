@@ -100,6 +100,7 @@ GSWidget::GSWidget(QWidget* const parent,
             getUploadBox()->hide();
             getSizeBox()->hide();
             leafBox->hide();    // Google has removed this function in the current API V3.
+            getPhotoIdCheckBox()->show();
             break;
     }
 }
