@@ -28,7 +28,6 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QClipboard>
 #include <QDir>
 #include <QIcon>
@@ -415,10 +414,7 @@ void ContextMenuHelper::slotOpenInFileManager()
 {
     if (d->selectedItems.length() == 1)
     {
-        QUrl url = d->selectedItems.first().adjusted(QUrl::RemoveFilename |
-                                                     QUrl::StripTrailingSlash);
-
-        QDesktopServices::openUrl(url);
+        DFileOperations::openInFileManager(d->selectedItems.first().toLocalFile());
     }
 }
 

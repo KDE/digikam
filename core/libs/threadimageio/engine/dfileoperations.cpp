@@ -49,6 +49,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "digikam_globals.h"
 #include "metaenginesettings.h"
 
@@ -410,6 +411,53 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
     }
 
     return offers;
+}
+
+void DFileOperations::openInFileManager(const QString& path)
+{
+#ifdef Q_OS_WIN
+
+    QFileInfo info(path);
+    QStringList args;
+
+    if (!info.isDir())
+    {
+        args << QLatin1String("/select,");
+    }
+
+    args << QDir::toNativeSeparators(path);
+
+    if (QProcess::startDetached(QLatin1String("explorer"), args))
+    {
+        return;
+    }
+
+#elif defined Q_OS_OSX
+
+    QStringList args;
+    args << QLatin1String("-e");
+    args << QLatin1String("tell application \"Finder\"");
+    args << QLatin1String("-e");
+    args << QLatin1String("activate");
+    args << QLatin1String("-e");
+    args << QString::fromUtf8("select POSIX file \"%1\"").arg(path);
+    args << QLatin1String("-e");
+    args << QLatin1String("end tell");
+    args << QLatin1String("-e");
+    args << QLatin1String("return");
+
+    if (QProcess::execute(QLatin1String("/usr/bin/osascript"), args) == 0)
+    {
+        return;
+    }
+
+#endif
+
+    QUrl url(QUrl::fromLocalFile(path));
+    url = url.adjusted(QUrl::RemoveFilename |
+                       QUrl::StripTrailingSlash);
+
+    QDesktopServices::openUrl(url);
 }
 
 bool DFileOperations::copyFolderRecursively(const QString& srcPath,

@@ -76,6 +76,10 @@ public:
      */
     static KService::List servicesForOpenWith(const QList<QUrl>& urls);
 
+    /** Open system file manager and select the item.
+     */
+    static void openInFileManager(const QString& path);
+
     /** Copy recursively a directory contents to another one.
      */
     static bool copyFolderRecursively(const QString& srcPath,
