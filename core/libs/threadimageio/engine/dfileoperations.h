@@ -78,7 +78,7 @@ public:
 
     /** Open system file manager and select the item.
      */
-    static void openInFileManager(const QString& path);
+    static void openInFileManager(const QList<QUrl>& urls);
 
     /** Copy recursively a directory contents to another one.
      */

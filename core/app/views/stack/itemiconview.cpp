@@ -34,7 +34,6 @@
 #include <QTimer>
 #include <QShortcut>
 #include <QApplication>
-#include <QDesktopServices>
 
 // KDE includes
 
@@ -52,6 +51,7 @@
 #include "digikam_globals.h"
 #include "digikamapp.h"
 #include "digikamitemview.h"
+#include "dfileoperations.h"
 #include "dmessagebox.h"
 #include "dzoombar.h"
 #include "dtrashitemmodel.h"
@@ -1292,12 +1292,9 @@ void ItemIconView::slotAlbumOpenInFileManager()
         return;
     }
 
-    PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
+    QList<QUrl> urls = selectedInfoList(true, true).toImageUrlList();
 
-    if (palbum)
-    {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(palbum->folderPath()));
-    }
+    DFileOperations::openInFileManager(urls);
 }
 
 void ItemIconView::slotRefresh()

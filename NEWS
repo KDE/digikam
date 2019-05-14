@@ -37,4 +37,5 @@ BUGFIXES:
 027 ==> 397865 - Current GIMP version cannot be selected.
 028 ==> 407440 - After export to google photo, metadata are written to sidecar files (and perhaps to picture file too).
 029 ==> 401100 - Release plan text not readable.
-030 ==> 
+030 ==> 360475 - Open in file manager for individual images.
+031 ==> 

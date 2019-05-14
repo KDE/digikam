@@ -418,12 +418,43 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
     return offers;
 }
 
-void DFileOperations::openInFileManager(const QString& path)
+void DFileOperations::openInFileManager(const QList<QUrl>& urls)
 {
+    if (urls.isEmpty())
+    {
+        return;
+    }
+
+    bool equal = true;
+    QUrl first = urls.first();
+    first      = first.adjusted(QUrl::RemoveFilename);
+
+    foreach (const QUrl& url, urls)
+    {
+        if (first != url.adjusted(QUrl::RemoveFilename))
+        {
+            equal = false;
+            break;
+        }
+    }
+
+    QList<QUrl> fileUrls;
+
+    if (equal)
+    {
+        fileUrls = urls;
+    }
+    else
+    {
+        fileUrls = QList<QUrl>() << urls.first();
+    }
+
+    QString path = fileUrls.first().toLocalFile();
+
 #ifdef Q_OS_WIN
 
-    QFileInfo info(path);
     QStringList args;
+    QFileInfo info(path);
 
     if (!info.isDir())
     {
@@ -466,7 +497,11 @@ void DFileOperations::openInFileManager(const QString& path)
     if (iface.isValid())
     {
         QStringList uris;
-        uris << QUrl::fromLocalFile(path).toString();
+
+        foreach (const QUrl& url, fileUrls)
+        {
+            uris << url.toString();
+        }
 
         iface.asyncCall(QLatin1String("ShowItems"), uris, QString());
 
@@ -475,9 +510,9 @@ void DFileOperations::openInFileManager(const QString& path)
 
 #endif
 
-    QUrl url(QUrl::fromLocalFile(path));
-    url = url.adjusted(QUrl::RemoveFilename |
-                       QUrl::StripTrailingSlash);
+    QUrl url = fileUrls.first();
+    url      = url.adjusted(QUrl::RemoveFilename |
+                            QUrl::StripTrailingSlash);
 
     QDesktopServices::openUrl(url);
 }

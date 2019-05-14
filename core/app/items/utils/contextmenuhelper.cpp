@@ -111,7 +111,7 @@ public:
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
 
-    ItemFilterModel*            imageFilterModel;
+    ItemFilterModel*             imageFilterModel;
     AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
@@ -263,7 +263,7 @@ void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids)
     addAction(QLatin1String("move_selection_to_album"));
 
     // addServicesMenu() has stored d->selectedItems
-    if (d->selectedItems.length() == 1)
+    if (!d->selectedItems.isEmpty())
     {
         QAction* const openFileMngr = new QAction(i18n("Open in File Manager"), this);
         addAction(openFileMngr);
@@ -412,10 +412,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 
 void ContextMenuHelper::slotOpenInFileManager()
 {
-    if (d->selectedItems.length() == 1)
-    {
-        DFileOperations::openInFileManager(d->selectedItems.first().toLocalFile());
-    }
+    DFileOperations::openInFileManager(d->selectedItems);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)
