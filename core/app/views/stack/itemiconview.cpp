@@ -1288,13 +1288,27 @@ void ItemIconView::slotAlbumOpenInFileManager()
 
     if (album->isRoot())
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot open the root album. It is not a physical location."));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Cannot open the root album. It is not a physical location."));
         return;
     }
 
     QList<QUrl> urls = selectedInfoList(true, true).toImageUrlList();
 
-    DFileOperations::openInFileManager(urls);
+    if (!urls.isEmpty())
+    {
+        DFileOperations::openInFileManager(urls);
+    }
+    else
+    {
+        PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
+
+        if (palbum)
+        {
+            QUrl url(QUrl::fromLocalFile(palbum->folderPath()));
+            DFileOperations::openInFileManager(QList<QUrl>() << url);
+        }
+    }
 }
 
 void ItemIconView::slotRefresh()
