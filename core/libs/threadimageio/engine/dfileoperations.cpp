@@ -74,10 +74,8 @@ bool DFileOperations::localFileRename(const QString& source,
     {
         dest = info.symLinkTarget();
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Target filePath"
-                                     << QDir::toNativeSeparators(dest)
-                                     << "is a symlink pointing to"
-                                     << QDir::toNativeSeparators(dest)
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Target filePath" << destPath
+                                     << "is a symlink pointing to" << dest
                                      << ". Storing image there.";
     }
 
@@ -119,7 +117,7 @@ bool DFileOperations::localFileRename(const QString& source,
 
             if (::utime(QFile::encodeName(orgPath).constData(), &ut) != 0)
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file "
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file"
                                                << dest;
             }
         }
@@ -141,7 +139,7 @@ bool DFileOperations::localFileRename(const QString& source,
     // restore permissions
     if (::chmod(dstFileName.constData(), filePermissions) != 0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file"
                                        << dstFileName;
     }
 
@@ -374,7 +372,8 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
 
     foreach (const QUrl& item, urls)
     {
-        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.toLocalFile(), QMimeDatabase::MatchExtension).name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.toLocalFile(),
+                                                                 QMimeDatabase::MatchExtension).name();
 
         if (!mimeTypes.contains(mimeType))
         {
@@ -394,7 +393,9 @@ KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)
             constraints << constraintTemplate.arg(mimeType);
         }
 
-        offers = KMimeTypeTrader::self()->query(firstMimeType, QLatin1String("Application"), constraints.join(QLatin1String(" and ")));
+        offers = KMimeTypeTrader::self()->query(firstMimeType,
+                                                QLatin1String("Application"),
+                                                constraints.join(QLatin1String(" and ")));
 
         // remove duplicate service entries
         QSet<QString> seenApps;
@@ -580,7 +581,7 @@ bool DFileOperations::renameFile(const QString& srcFile,
 
         if (::utime(QFile::encodeName(dstFile).constData(), &ut) != 0)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file "
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file"
                                            << dstFile;
         }
     }
@@ -619,7 +620,7 @@ bool DFileOperations::copyFile(const QString& srcFile,
 
         if (::utime(QFile::encodeName(dstFile).constData(), &ut) != 0)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file "
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file"
                                            << dstFile;
         }
     }
