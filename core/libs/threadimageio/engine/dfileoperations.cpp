@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "dfileoperations.h"
+#include "digikam_config.h"
 
 // C ANSI includes
 
@@ -42,6 +43,11 @@
 #include <QFileInfo>
 #include <qplatformdefs.h>
 
+#ifdef HAVE_DBUS
+#   include <QDBusInterface>
+#   include <QDBusPendingCall>
+#endif
+
 // KDE includes
 
 #include <kmimetypetrader.h>
@@ -49,7 +55,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "digikam_globals.h"
 #include "metaenginesettings.h"
 
@@ -448,6 +453,23 @@ void DFileOperations::openInFileManager(const QString& path)
 
     if (QProcess::execute(QLatin1String("/usr/bin/osascript"), args) == 0)
     {
+        return;
+    }
+
+#elif HAVE_DBUS
+
+    QDBusInterface iface(QLatin1String("org.freedesktop.FileManager1"),
+                         QLatin1String("/org/freedesktop/FileManager1"),
+                         QLatin1String("org.freedesktop.FileManager1"),
+                         QDBusConnection::sessionBus());
+
+    if (iface.isValid())
+    {
+        QStringList uris;
+        uris << QUrl::fromLocalFile(path).toString();
+
+        iface.asyncCall(QLatin1String("ShowItems"), uris, QString());
+
         return;
     }
 
