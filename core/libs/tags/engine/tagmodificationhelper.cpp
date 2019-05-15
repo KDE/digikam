@@ -151,8 +151,14 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
     if (errMap.isEmpty() && !tList.isEmpty())
     {
-        TAlbum* const tag = static_cast<TAlbum*>(tList.last());
-        emit tagCreated(tag);
+        TAlbum* tag = nullptr;
+
+        foreach (Album* const album, tList)
+        {
+            tag = static_cast<TAlbum*>(album);
+            emit tagCreated(tag);
+        }
+
         return tag;
     }
     else
