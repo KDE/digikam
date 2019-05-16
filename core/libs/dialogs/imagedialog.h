@@ -51,7 +51,7 @@ public:
     explicit ImageDialogPreview(QWidget* const parent=nullptr);
     ~ImageDialogPreview();
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 public Q_SLOTS:
 
@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 private:
 
-    void resizeEvent(QResizeEvent* e);
+    void resizeEvent(QResizeEvent* e) override;
 
 private:
 
@@ -83,8 +83,8 @@ public:
     explicit DFileIconProvider();
     ~DFileIconProvider();
 
-    virtual QIcon icon(IconType type) const;
-    virtual QIcon icon(const QFileInfo& info) const;
+    virtual QIcon icon(IconType type) const override;
+    virtual QIcon icon(const QFileInfo& info) const override;
 /*
 private:
 

@@ -73,7 +73,7 @@ private Q_SLOTS:
 
 private:
 
-    void mouseMoveEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*) override;
 };
 
 } // namespace Digikam

@@ -56,7 +56,7 @@ public:
         previousPriority = QThread::InheritPriority;
     };
 
-    virtual void run();
+    virtual void run() override;
     void         takingThread();
     bool         transitionToRunning();
     void         transitionToInactive();

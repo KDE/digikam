@@ -62,7 +62,7 @@ private Q_SLOTS:
 
 protected:
 
-    void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel, const QString&, int, const QString&);
+    void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel, const QString&, int, const QString&) override;
 
 private:
 
@@ -99,7 +99,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) override;
 
 protected Q_SLOTS:
 

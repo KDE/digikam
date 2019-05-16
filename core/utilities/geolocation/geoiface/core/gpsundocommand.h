@@ -73,8 +73,8 @@ public:
         return undoList.count();
     }
 
-    virtual void redo();
-    virtual void undo();
+    virtual void redo() override;
+    virtual void undo() override;
 
 private:
 

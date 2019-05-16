@@ -84,8 +84,8 @@ public:
 public:
 
     // Graphics Item methods
-    QRectF boundingRect() const;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    QRectF boundingRect() const override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
 
@@ -167,14 +167,14 @@ public Q_SLOTS:
 
 protected:
 
-    void wheelEvent(QWheelEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-    bool eventFilter(QObject*, QEvent*);
-    void resizeEvent(QResizeEvent*);
+    void wheelEvent(QWheelEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void enterEvent(QEvent*) override;
+    void leaveEvent(QEvent*) override;
+    bool eventFilter(QObject*, QEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
     void updateSelVisibility();
     void updateHighlight();

@@ -67,7 +67,7 @@ private Q_SLOTS:
 
 private:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    bool eventFilter(QObject* obj, QEvent* ev) override;
 
 private:
 

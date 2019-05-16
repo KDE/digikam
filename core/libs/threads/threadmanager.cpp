@@ -97,7 +97,7 @@ public:
         }
     }
 
-    virtual void run()
+    virtual void run() override
     {
         /* The quirk here is that this thread never runs an event loop.
          * That means events queued for parked object are only emitted when
@@ -152,7 +152,7 @@ protected:
 
 protected:
 
-    virtual void run();
+    virtual void run() override;
 };
 
 // --------------------------------------------------------------------------------------------------

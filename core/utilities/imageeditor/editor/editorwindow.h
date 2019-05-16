@@ -94,13 +94,13 @@ public:
 
     const static QString CONFIG_GROUP_NAME;
 
-    void registerExtraPluginsActions(QString& dom);
+    void registerExtraPluginsActions(QString& dom) override;
     void loadTool(EditorTool* const tool);
     bool actionEnabledState() const;
 
 public Q_SLOTS:
 
-    virtual void slotSetup()    = 0;
+    virtual void slotSetup()  override = 0;
     virtual void slotSetupICC() = 0;
 
 Q_SIGNALS:
@@ -282,7 +282,7 @@ protected Q_SLOTS:
     virtual void slotLoadingFinished(const QString& filename, bool success);
     virtual void slotSavingStarted(const QString& filename);
     virtual void slotFileOriginChanged(const QString& filePath);
-    virtual void slotComponentsInfo();
+    virtual void slotComponentsInfo() override;
     virtual void slotDiscardChanges();
     virtual void slotOpenOriginal();
 
@@ -305,7 +305,7 @@ protected Q_SLOTS:
     virtual void slotContextMenu() = 0;
     virtual void slotRevert() = 0;
     virtual void slotAddedDropedItems(QDropEvent* e) = 0;
-    virtual void slotOpenWith(QAction* action=nullptr) = 0;
+    virtual void slotOpenWith(QAction* action = nullptr) = 0;
 
 private Q_SLOTS:
 
@@ -330,9 +330,9 @@ private Q_SLOTS:
     void slotApplyTool();
     void slotUndoStateChanged();
     void slotThemeChanged();
-    void slotToggleRightSideBar();
-    void slotPreviousRightSideBarTab();
-    void slotNextRightSideBarTab();
+    void slotToggleRightSideBar() override;
+    void slotPreviousRightSideBarTab() override;
+    void slotNextRightSideBarTab() override;
     void slotToolDone();
 
     void slotRotateLeftIntoQue();
@@ -344,10 +344,10 @@ private:
 
     void enterWaitingLoop();
     void quitWaitingLoop();
-    void showSideBars(bool visible);
-    void showThumbBar(bool visible);
-    void customizedFullScreenMode(bool set);
-    bool thumbbarVisibility() const;
+    void showSideBars(bool visible) override;
+    void showThumbBar(bool visible) override;
+    void customizedFullScreenMode(bool set) override;
+    bool thumbbarVisibility() const override;
     void setColorManagedViewIndicatorToolTip(bool available, bool cmv);
     void setUnderExposureToolTip(bool uei);
     void setOverExposureToolTip(bool oei);

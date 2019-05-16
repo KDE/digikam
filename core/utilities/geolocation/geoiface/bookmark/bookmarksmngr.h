@@ -50,8 +50,8 @@ public:
                                     int row);
     ~RemoveBookmarksCommand();
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 protected:
 
@@ -73,8 +73,8 @@ public:
                                     BookmarkNode* const node,
                                     int row);
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 };
 
 //---------------------------------------------------------------------------------
@@ -98,8 +98,8 @@ public:
                                    BookmarkData type);
     ~ChangeBookmarkCommand();
 
-    void undo();
-    void redo();
+    void undo() override;
+    void redo() override;
 
 private:
 
@@ -131,25 +131,25 @@ public:
     ~BookmarksModel();
 
     BookmarksManager* bookmarksManager()                                                      const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole)                       const;
-    int columnCount(const QModelIndex& parent = QModelIndex())                                const;
-    int rowCount(const QModelIndex& parent = QModelIndex())                                   const;
-    QModelIndex index(int, int, const QModelIndex& = QModelIndex())                           const;
-    QModelIndex parent(const QModelIndex& index= QModelIndex())                               const;
-    Qt::ItemFlags flags(const QModelIndex& index)                                             const;
-    Qt::DropActions supportedDropActions ()                                                   const;
-    QMimeData* mimeData(const QModelIndexList& indexes)                                       const;
-    QStringList mimeTypes()                                                                   const;
-    bool hasChildren(const QModelIndex& parent = QModelIndex())                               const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole)                       const override;
+    int columnCount(const QModelIndex& parent = QModelIndex())                                const override;
+    int rowCount(const QModelIndex& parent = QModelIndex())                                   const override;
+    QModelIndex index(int, int, const QModelIndex& = QModelIndex())                           const override;
+    QModelIndex parent(const QModelIndex& index= QModelIndex())                               const override;
+    Qt::ItemFlags flags(const QModelIndex& index)                                             const override;
+    Qt::DropActions supportedDropActions ()                                                   const override;
+    QMimeData* mimeData(const QModelIndexList& indexes)                                       const override;
+    QStringList mimeTypes()                                                                   const override;
+    bool hasChildren(const QModelIndex& parent = QModelIndex())                               const override;
     BookmarkNode* node(const QModelIndex& index)                                              const;
     QModelIndex index(BookmarkNode* node)                                                     const;
 
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row,
-                      int column, const QModelIndex& parent);
+                      int column, const QModelIndex& parent) override;
 
-    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
-    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
 public Q_SLOTS:
 
@@ -175,11 +175,11 @@ public:
 
     explicit AddBookmarkProxyModel(QObject* const parent = nullptr);
 
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 protected:
 
-    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const;
+    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const override;
 };
 
 //---------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ public:
 
     explicit TreeProxyModel(QObject* const parent = nullptr);
 
-    int columnCount(const QModelIndex&) const;
+    int columnCount(const QModelIndex&) const override;
 
 Q_SIGNALS:
 
@@ -200,7 +200,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const;
+    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const override;
 
 private:
 

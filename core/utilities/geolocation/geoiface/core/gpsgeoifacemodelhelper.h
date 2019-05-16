@@ -54,20 +54,20 @@ public:
                                     QObject* const parent = nullptr);
     virtual ~GPSGeoIfaceModelHelper();
 
-    virtual QAbstractItemModel*  model()          const;
-    virtual QItemSelectionModel* selectionModel() const;
+    virtual QAbstractItemModel*  model()          const override;
+    virtual QItemSelectionModel* selectionModel() const override;
     virtual bool itemCoordinates(const QModelIndex& index,
-                                 GeoCoordinates* const coordinates) const;
-    virtual PropertyFlags modelFlags() const;
+                                 GeoCoordinates* const coordinates) const override;
+    virtual PropertyFlags modelFlags() const override;
 
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
-                                                  const QSize& size);
+                                                  const QSize& size) override;
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
-                                                                  const int sortKey);
+                                                                  const int sortKey) override;
 
     virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
                                 const GeoCoordinates& targetCoordinates,
-                                const QPersistentModelIndex& targetSnapIndex);
+                                const QPersistentModelIndex& targetSnapIndex) override;
 
     void addUngroupedModelHelper(GeoModelHelper* const newModelHelper);
 

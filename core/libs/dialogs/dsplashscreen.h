@@ -52,7 +52,7 @@ public:
 
 protected:
 
-    void drawContents(QPainter*);
+    void drawContents(QPainter*) override;
 
 private Q_SLOTS:
 

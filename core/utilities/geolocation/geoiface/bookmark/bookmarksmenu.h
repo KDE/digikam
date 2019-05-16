@@ -124,7 +124,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool prePopulated();
+    bool prePopulated() override;
 
 private Q_SLOTS:
 

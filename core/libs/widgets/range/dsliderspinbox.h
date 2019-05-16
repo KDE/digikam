@@ -67,22 +67,22 @@ public:
      */
     void setBlockUpdateSignalOnDrag(bool block);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const override;
+    virtual QSize minimumSizeHint() const override;
     virtual QSize minimumSize() const;
 
     bool isDragging() const;
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void wheelEvent(QWheelEvent* e);
-    virtual void focusInEvent(QFocusEvent* e);
-    virtual bool eventFilter(QObject* recv, QEvent* e);
+    virtual void paintEvent(QPaintEvent* e) override;
+    virtual void mousePressEvent(QMouseEvent* e) override;
+    virtual void mouseReleaseEvent(QMouseEvent* e) override;
+    virtual void mouseMoveEvent(QMouseEvent* e) override;
+    virtual void keyPressEvent(QKeyEvent* e) override;
+    virtual void wheelEvent(QWheelEvent* e) override;
+    virtual void focusInEvent(QFocusEvent* e) override;
+    virtual bool eventFilter(QObject* recv, QEvent* e) override;
 
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
@@ -102,7 +102,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
     void editLostFocus();
 
 protected:
@@ -114,7 +114,7 @@ protected:
     // QWidget interface
 protected:
 
-    virtual void changeEvent(QEvent* e);
+    virtual void changeEvent(QEvent* e) override;
     void paint(QPainter& painter);
     void paintFusion(QPainter& painter);
     void paintPlastique(QPainter& painter);
@@ -159,8 +159,8 @@ public Q_SLOTS:
 
 protected:
 
-    virtual QString valueString() const;
-    virtual void setInternalValue(int value, bool blockUpdateSignal);
+    virtual QString valueString() const override;
+    virtual void setInternalValue(int value, bool blockUpdateSignal) override;
 
 Q_SIGNALS:
 
@@ -197,8 +197,8 @@ public Q_SLOTS:
 
 protected:
 
-    virtual QString valueString() const;
-    virtual void setInternalValue(int value, bool blockUpdateSignal);
+    virtual QString valueString() const override;
+    virtual void setInternalValue(int value, bool blockUpdateSignal) override;
 
 Q_SIGNALS:
 

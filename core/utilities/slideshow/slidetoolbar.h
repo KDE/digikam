@@ -59,7 +59,7 @@ public:
 
 protected:
 
-    void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent* e) override;
 
 Q_SIGNALS:
 

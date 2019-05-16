@@ -65,7 +65,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool event(QEvent* e);
+    bool event(QEvent* e) override;
 
 private Q_SLOTS:
 

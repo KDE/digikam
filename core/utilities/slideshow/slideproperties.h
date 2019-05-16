@@ -53,7 +53,7 @@ private:
     void printComments(QPainter& p, int& offset, const QString& comments);
     void printTags(QPainter& p, int& offset, QStringList& tags);
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
 private:
 

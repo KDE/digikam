@@ -70,7 +70,7 @@ protected:
     void connectSingleItem();
     void activateSingleItemMode();
 
-    virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*) override;
 
 private:
 

@@ -83,28 +83,28 @@ protected:
     /**
      * load the last view state from disk - called by StateSavingObject#loadState()
      */
-    void doLoadState();
+    void doLoadState() override;
 
     /**
      * save the view state to disk - called by StateSavingObject#saveState()
      */
-    void doSaveState();
+    void doSaveState() override;
 
     virtual void setImagePropertiesInformation(const QUrl& url);
 
 protected:
 
-    bool                        m_dirtyPropertiesTab;
-    bool                        m_dirtyMetadataTab;
-    bool                        m_dirtyColorTab;
-    bool                        m_dirtyGpsTab;
-    bool                        m_dirtyHistoryTab;
+    bool                       m_dirtyPropertiesTab;
+    bool                       m_dirtyMetadataTab;
+    bool                       m_dirtyColorTab;
+    bool                       m_dirtyGpsTab;
+    bool                       m_dirtyHistoryTab;
 
-    QRect                       m_currentRect;
+    QRect                      m_currentRect;
 
-    QUrl                        m_currentURL;
+    QUrl                       m_currentURL;
 
-    DImg*                       m_image;
+    DImg*                      m_image;
 
     ItemPropertiesTab*         m_propertiesTab;
     ItemPropertiesMetadataTab* m_metadataTab;

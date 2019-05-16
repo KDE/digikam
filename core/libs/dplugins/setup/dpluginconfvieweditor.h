@@ -45,7 +45,7 @@ public:
     explicit DPluginConfViewEditor(QWidget* const parent=nullptr);
     ~DPluginConfViewEditor();
 
-    void loadPlugins();
+    void loadPlugins() override;
 };
 
 } // namespace Digikam

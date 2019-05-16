@@ -91,8 +91,8 @@ public:
 
     TransactionItem* addTransactionItem(ProgressItem* item, bool first);
 
-    QSize sizeHint()        const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint()        const override;
+    QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
 
@@ -104,7 +104,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void resizeEvent(QResizeEvent* event);
+    virtual void resizeEvent(QResizeEvent* event) override;
 
 private:
 
@@ -122,7 +122,7 @@ public:
     explicit ProgressView(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
     ~ProgressView();
 
-    void setVisible(bool b);
+    void setVisible(bool b) override;
 
 public Q_SLOTS:
 
@@ -148,7 +148,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual void closeEvent(QCloseEvent*);
+    virtual void closeEvent(QCloseEvent*) override;
 
 private:
 

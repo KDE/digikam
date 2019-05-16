@@ -120,15 +120,15 @@ class Q_DECL_HIDDEN DefaultVersionNamingScheme : public VersionNamingScheme
 public:
 
     virtual QString baseName(const QString& currentPath, const QString& filename,
-                             QVariant* counter, QVariant* intermediateCounter);
+                             QVariant* counter, QVariant* intermediateCounter) override;
     virtual QString versionFileName(const QString& currentPath, const QString& filename,
-                                    const QVariant& counter);
+                                    const QVariant& counter) override;
     virtual QString intermediateFileName(const QString& currentPath, const QString& filename,
-                                         const QVariant& version, const QVariant& counter);
-    virtual QString directory(const QString& currentPath, const QString& filename);
-    virtual QString intermediateDirectory(const QString& currentPath, const QString& fileName);
-    virtual QVariant initialCounter();
-    virtual QVariant incrementedCounter(const QVariant& counter);
+                                         const QVariant& version, const QVariant& counter) override;
+    virtual QString directory(const QString& currentPath, const QString& filename) override;
+    virtual QString intermediateDirectory(const QString& currentPath, const QString& fileName) override;
+    virtual QVariant initialCounter() override;
+    virtual QVariant incrementedCounter(const QVariant& counter) override;
 };
 
 QVariant DefaultVersionNamingScheme::initialCounter()

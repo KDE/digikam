@@ -90,8 +90,8 @@ public:
     void setSettings(const DRawDecoderSettings& settings);
     DRawDecoderSettings settings() const;
 
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    void readSettings(KConfigGroup& group) override;
+    void writeSettings(KConfigGroup& group) override;
 
     static void readSettings(DRawDecoderSettings& setting, KConfigGroup& group);
     static void writeSettings(const DRawDecoderSettings& setting, KConfigGroup& group);

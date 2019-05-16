@@ -82,9 +82,9 @@ private Q_SLOTS:
 
 protected:
 
-    virtual bool eventFilter(QObject* watched, QEvent* event);
-    virtual void startDrag(Qt::DropActions supportedActions);
-    virtual void wheelEvent(QWheelEvent* we);
+    virtual bool eventFilter(QObject* watched, QEvent* event) override;
+    virtual void startDrag(Qt::DropActions supportedActions) override;
+    virtual void wheelEvent(QWheelEvent* we) override;
 
 private:
 

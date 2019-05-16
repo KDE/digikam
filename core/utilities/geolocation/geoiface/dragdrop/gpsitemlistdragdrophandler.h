@@ -60,7 +60,7 @@ public:
     explicit GPSItemListDragDropHandler(QObject* const parent = nullptr);
     ~GPSItemListDragDropHandler();
 
-    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
+    virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) override;
 };
 
 } // namespace Digikam

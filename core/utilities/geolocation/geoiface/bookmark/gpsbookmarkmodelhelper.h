@@ -62,17 +62,17 @@ public:
 
     void setVisible(const bool state);
 
-    virtual QAbstractItemModel* model() const;
-    virtual QItemSelectionModel* selectionModel() const;
+    virtual QAbstractItemModel* model() const override;
+    virtual QItemSelectionModel* selectionModel() const override;
     virtual bool itemCoordinates(const QModelIndex& index,
-                                 GeoCoordinates* const coordinates) const;
+                                 GeoCoordinates* const coordinates) const override;
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset,
                           QSize* const size, QPixmap* const pixmap,
-                          QUrl* const url) const;
-    virtual PropertyFlags modelFlags() const;
-    virtual PropertyFlags itemFlags(const QModelIndex& index) const;
+                          QUrl* const url) const override;
+    virtual PropertyFlags modelFlags() const override;
+    virtual PropertyFlags itemFlags(const QModelIndex& index) const override;
     virtual void snapItemsTo(const QModelIndex& targetIndex,
-                             const QList<QModelIndex>& snappedIndices);
+                             const QList<QModelIndex>& snappedIndices) override;
 
 private Q_SLOTS:
 

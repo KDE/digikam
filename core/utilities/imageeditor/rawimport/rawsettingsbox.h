@@ -47,18 +47,18 @@ public:
     explicit RawSettingsBox(const QUrl& url, QWidget* const parent);
     ~RawSettingsBox();
 
-    void setBusy(bool b);
+    void setBusy(bool b) override;
 
     CurvesWidget* curvesWidget() const;
     DRawDecoding  settings()     const;
 
-    void writeSettings();
-    void readSettings();
+    void writeSettings() override;
+    void readSettings() override;
 
     void setDemosaicedImage(DImg& img);
     void setPostProcessedImage(DImg& img);
 
-    void resetSettings();
+    void resetSettings() override;
 
     void enableUpdateBtn(bool b);
     bool updateBtnEnabled() const;

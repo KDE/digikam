@@ -177,13 +177,13 @@ public Q_SLOTS:
 
 protected:
 
-    void keyPressEvent(QKeyEvent*);
-    void mousePressEvent(QMouseEvent*);
+    void keyPressEvent(QKeyEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
     void addRubber();
 
-    void dragMoveEvent(QDragMoveEvent*);
-    void dragEnterEvent(QDragEnterEvent*);
-    void dropEvent(QDropEvent*);
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dropEvent(QDropEvent*) override;
 
 private:
 

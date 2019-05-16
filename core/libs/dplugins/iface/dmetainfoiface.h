@@ -56,12 +56,12 @@ public:
     DInfoMap    itemInfo(const QUrl&)                     const override;
     void        setItemInfo(const QUrl&, const DInfoMap&) const override;
 
-    bool        supportAlbums()                   const;
+    bool        supportAlbums()                   const override;
 
-    QWidget* uploadWidget(QWidget* const parent)  const;
-    QUrl     uploadUrl()                          const;
+    QWidget* uploadWidget(QWidget* const parent)  const override;
+    QUrl     uploadUrl()                          const override;
 
-    QUrl     defaultUploadUrl()                   const;
+    QUrl     defaultUploadUrl()                   const override;
 
 private:
 

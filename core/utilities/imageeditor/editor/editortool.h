@@ -201,10 +201,10 @@ protected Q_SLOTS:
      */
     void slotProgress(int progress);
 
-    virtual void slotInit();
-    virtual void slotOk();
-    virtual void slotCancel();
-    virtual void slotPreview();
+    virtual void slotInit() override;
+    virtual void slotOk() override;
+    virtual void slotCancel() override;
+    virtual void slotPreview() override;
 
 private Q_SLOTS:
 

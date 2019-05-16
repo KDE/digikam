@@ -53,7 +53,7 @@ Q_SIGNALS:
 protected:
 
     /// Reimplement this method with your code to run in a separate thread.
-    virtual void run() {};
+    virtual void run() override {};
 };
 
 // ----------------------------------------------------------------------------------

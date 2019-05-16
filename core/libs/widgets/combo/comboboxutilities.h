@@ -75,24 +75,24 @@ private Q_SLOTS:
 
 protected:
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint()        const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint()        const override;
 
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void mouseDoubleClickEvent(QMouseEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void focusInEvent(QFocusEvent* event);
-    virtual void focusOutEvent(QFocusEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void dragEnterEvent(QDragEnterEvent* event);
-    virtual void dragMoveEvent(QDragMoveEvent* e);
-    virtual void dragLeaveEvent(QDragLeaveEvent* e);
-    virtual void dropEvent(QDropEvent* event);
-    virtual void changeEvent(QEvent* event);
-    virtual void contextMenuEvent(QContextMenuEvent* event);
-    virtual void inputMethodEvent(QInputMethodEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void focusInEvent(QFocusEvent* event) override;
+    virtual void focusOutEvent(QFocusEvent* event) override;
+    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void dragEnterEvent(QDragEnterEvent* event) override;
+    virtual void dragMoveEvent(QDragMoveEvent* e) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent* e) override;
+    virtual void dropEvent(QDropEvent* event) override;
+    virtual void changeEvent(QEvent* event) override;
+    virtual void contextMenuEvent(QContextMenuEvent* event) override;
+    virtual void inputMethodEvent(QInputMethodEvent* event) override;
 
 protected:
 
@@ -122,7 +122,7 @@ Q_SIGNALS:
 
 protected:
 
-    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event) override;
 };
 
 // -------------------------------------------------------------------------
@@ -142,8 +142,8 @@ public:
     QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& index);
 
-    virtual void hidePopup();
-    virtual void showPopup();
+    virtual void hidePopup() override;
+    virtual void showPopup() override;
 
 protected:
 
@@ -187,7 +187,7 @@ protected:
      */
     virtual void sendViewportEventToView(QEvent* e) = 0;
 
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject* watched, QEvent* event) override;
 
 protected:
 
@@ -220,7 +220,7 @@ public:
 
 protected:
 
-    virtual void sendViewportEventToView(QEvent* e);
+    virtual void sendViewportEventToView(QEvent* e) override;
 };
 
 // -------------------------------------------------------------------------
@@ -251,7 +251,7 @@ public:
 
 protected:
 
-    virtual void sendViewportEventToView(QEvent* e);
+    virtual void sendViewportEventToView(QEvent* e) override;
 };
 
 // -------------------------------------------------------------------------
@@ -283,7 +283,7 @@ public:
     /** Replace the standard combo box list view with a QTreeView.
      *  Call this after installing an appropriate model.
      */
-    virtual void installView(QAbstractItemView* view = nullptr);
+    virtual void installView(QAbstractItemView* view = nullptr) override;
 
 protected:
 

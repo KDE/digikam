@@ -54,7 +54,7 @@ public:
 
 private Q_SLOTS:
 
-    void accept();
+    void accept() override;
 
 private:
 
@@ -76,14 +76,14 @@ public:
 private Q_SLOTS:
 
     void slotCustomContextMenuRequested(const QPoint&);
-    void accept();
+    void accept() override;
     void slotOpenInMap(const QModelIndex&);
     void slotNewFolder();
     void slotRemoveOne();
 
 protected:
 
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
 private:
 

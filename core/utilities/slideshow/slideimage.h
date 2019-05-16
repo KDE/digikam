@@ -62,7 +62,7 @@ private Q_SLOTS:
 
 private:
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
     void updatePixmap();
 
 private:

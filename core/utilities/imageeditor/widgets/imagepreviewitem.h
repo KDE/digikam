@@ -44,7 +44,7 @@ public:
     explicit ImagePreviewItem();
     virtual ~ImagePreviewItem();
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 };
 
 } // namespace Digikam
