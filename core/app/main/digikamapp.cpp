@@ -233,11 +233,10 @@ DigikamApp::~DigikamApp()
     ApplicationSettings::instance()->saveSettings();
 
     ScanController::instance()->shutDown();
-    DPluginLoader::instance()->cleanUp();
     AlbumManager::instance()->cleanUp();
     ItemAttributesWatch::cleanUp();
-    ThumbnailLoadThread::cleanUp();
     AlbumThumbnailLoader::instance()->cleanUp();
+    ThumbnailLoadThread::cleanUp();
     LoadingCacheInterface::cleanUp();
     DIO::cleanUp();
 
@@ -249,9 +248,11 @@ DigikamApp::~DigikamApp()
 
     AlbumManager::instance()->removeFakeConnection();
 
-    m_instance = nullptr;
+    DPluginLoader::instance()->cleanUp();
 
     delete d->modelCollection;
+
+    m_instance = nullptr;
 
     delete d;
 }
