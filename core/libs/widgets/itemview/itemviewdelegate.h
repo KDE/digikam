@@ -55,15 +55,17 @@ public:
      */
     void setRatingEdited(const QModelIndex& index);
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize gridSize()                                                             const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    virtual QSize gridSize()                                                             const override;
 
     // reimplemented from DItemDelegate
-    virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
-    virtual void setSpacing(int spacing);
-    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* tooltipRect = nullptr)       const;
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* activationRect = nullptr) const;
+    virtual void setThumbnailSize(const ThumbnailSize& thumbSize) override;
+    virtual void setSpacing(int spacing) override;
+    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option) override;
+    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
+                                const QModelIndex& index, QRect* tooltipRect = nullptr)       const override;
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
+                                   const QModelIndex& index, QRect* activationRect = nullptr) const override;
 
     /** Returns the area where the pixmap is drawn,
      *  or null if not supported.
@@ -83,14 +85,14 @@ public:
      */
     virtual QRect ratingRect() const;
 
-    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
+    virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index) override;
 
 protected Q_SLOTS:
 
     void slotThemeChanged();
     void slotSetupChanged();
 
-    virtual void overlayDestroyed(QObject* o);
+    virtual void overlayDestroyed(QObject* o) override;
 
 Q_SIGNALS:
 
@@ -129,7 +131,7 @@ protected:
      */
     QPixmap ratingPixmap(int rating, bool selected) const;
 
-    virtual QAbstractItemDelegate* asDelegate();
+    virtual QAbstractItemDelegate* asDelegate() override;
 
     // reimplement these in subclasses
     virtual void invalidatePaintingCache();

@@ -138,16 +138,16 @@ protected:
     void startDrag(Qt::DropActions supportedActions);
 
     #define DECLARE_VIEW_DRAG_DROP_METHODS(ParentViewClass) \
-    virtual QAbstractItemView* asView() { return this; } \
-    void dragEnterEvent(QDragEnterEvent* e) \
+    virtual QAbstractItemView* asView() override { return this; } \
+    void dragEnterEvent(QDragEnterEvent* e) override \
         { DragDropViewImplementation::dragEnterEvent(e); } \
-    void dragMoveEvent(QDragMoveEvent* e) \
+    void dragMoveEvent(QDragMoveEvent* e) override \
         { ParentViewClass::dragMoveEvent(e); \
           DragDropViewImplementation::dragMoveEvent(e); } \
-    void dropEvent(QDropEvent* e) \
+    void dropEvent(QDropEvent* e) override \
         { ParentViewClass::dropEvent(e); \
           DragDropViewImplementation::dropEvent(e); } \
-    void startDrag(Qt::DropActions supportedActions) \
+    void startDrag(Qt::DropActions supportedActions) override \
         { DragDropViewImplementation::startDrag(supportedActions); } \
 
     void encodeIsCutSelection(QMimeData* mime, bool isCutSelection);

@@ -105,7 +105,7 @@ protected:
 
     void loadLangAltListEntries();
 
-    virtual void changeEvent(QEvent* e);
+    virtual void changeEvent(QEvent* e) override;
 
 private:
 

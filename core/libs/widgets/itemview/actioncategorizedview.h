@@ -52,8 +52,8 @@ protected:
 
     int  autoScrollDuration(float relativeDifference, QPropertyAnimation* animation);
     void autoScroll(float relativePos, QScrollBar* scrollBar, QPropertyAnimation* animation);
-    void mouseMoveEvent(QMouseEvent* e);
-    void leaveEvent(QEvent* e);
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void leaveEvent(QEvent* e) override;
 
 protected:
 

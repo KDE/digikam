@@ -131,7 +131,7 @@ public:
      *  and setup connections for the virtual slots.
      *  If active is false, this will delete the widget and
      *  disconnect all signal from model and view to this object (!) */
-    virtual void setActive(bool active);
+    virtual void setActive(bool active) override;
 
 protected:
 
@@ -182,7 +182,7 @@ protected Q_SLOTS:
 
 protected:
 
-    bool eventFilter(QObject* obj, QEvent* event);
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 protected:
 
@@ -202,7 +202,7 @@ public:
     explicit HoverButtonDelegateOverlay(QObject* const parent);
 
     /** Will call createButton(). */
-    virtual void setActive(bool active);
+    virtual void setActive(bool active) override;
 
     ItemViewHoverButton* button() const;
 
@@ -215,13 +215,13 @@ protected:
      *  adjust and store state. */
     virtual void updateButton(const QModelIndex& index) = 0;
 
-    virtual QWidget* createWidget();
-    virtual void visualChange();
+    virtual QWidget* createWidget() override;
+    virtual void visualChange() override;
 
 protected Q_SLOTS:
 
-    virtual void slotEntered(const QModelIndex& index);
-    virtual void slotReset();
+    virtual void slotEntered(const QModelIndex& index) override;
+    virtual void slotReset() override;
 };
 
 // -------------------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ public:
     explicit PersistentWidgetDelegateOverlay(QObject* const parent);
     ~PersistentWidgetDelegateOverlay();
 
-    virtual void setActive(bool active);
+    virtual void setActive(bool active) override;
 
 public Q_SLOTS:
 
@@ -267,13 +267,13 @@ protected:
      * This class instead provides showOnIndex() which you shall
      * use for this purpose.
      */
-    virtual void slotEntered(const QModelIndex& index);
-    virtual void slotReset();
-    virtual void slotViewportEntered();
-    virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end);
-    virtual void slotLayoutChanged();
-    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
-    virtual void hide();
+    virtual void slotEntered(const QModelIndex& index) override;
+    virtual void slotReset() override;
+    virtual void slotViewportEntered() override;
+    virtual void slotRowsRemoved(const QModelIndex& parent, int start, int end) override;
+    virtual void slotLayoutChanged() override;
+    virtual void viewportLeaveEvent(QObject* obj, QEvent* event) override;
+    virtual void hide() override;
 
     /**
      * Reimplement to set the focus on the correct subwidget.

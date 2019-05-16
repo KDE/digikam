@@ -83,16 +83,16 @@ public:
     void setScrollStepGranularity(int factor);
 
     virtual QSortFilterProxyModel* filterModel() const = 0;
-    virtual void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible);
+    virtual void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible) override;
 
 public Q_SLOTS:
 
     void showIndexNotification(const QModelIndex& index, const QString& message);
     void hideIndexNotification();
 
-    virtual void cut()   { DragDropViewImplementation::cut();   }
-    virtual void copy()  { DragDropViewImplementation::copy();  }
-    virtual void paste() { DragDropViewImplementation::paste(); }
+    virtual void cut()   override { DragDropViewImplementation::cut();   }
+    virtual void copy()  override { DragDropViewImplementation::copy();  }
+    virtual void paste() override { DragDropViewImplementation::paste(); }
 
 Q_SIGNALS:
 
@@ -145,21 +145,21 @@ protected:
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
 
     // reimplemented from parent class
-    void contextMenuEvent(QContextMenuEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void leaveEvent(QEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void resizeEvent(QResizeEvent* e);
-    void reset();
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void rowsInserted(const QModelIndex& parent, int start, int end);
-    void rowsRemoved(const QModelIndex& parent, int start, int end);
-    void selectionChanged(const QItemSelection&, const QItemSelection&);
-    bool viewportEvent(QEvent* event);
-    void wheelEvent(QWheelEvent* event);
-    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+    void contextMenuEvent(QContextMenuEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void leaveEvent(QEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* e) override;
+    void reset() override;
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
+    void rowsInserted(const QModelIndex& parent, int start, int end) override;
+    void rowsRemoved(const QModelIndex& parent, int start, int end) override;
+    void selectionChanged(const QItemSelection&, const QItemSelection&) override;
+    bool viewportEvent(QEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
 
     /// Reimplement these in a subclass
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
@@ -175,8 +175,8 @@ protected:
     DECLARE_VIEW_DRAG_DROP_METHODS(DCategorizedView)
 
     /// Note: pure virtual dragDropHandler() still open from DragDropViewImplementation
-    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
-    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const override;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const override;
 
     /**
      * Assuming the given indexes would be removed (hypothetically!),

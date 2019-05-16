@@ -100,16 +100,16 @@ Q_SIGNALS:
 
 protected:
 
-    void drawForeground(QPainter* painter, const QRectF& rect);
+    void drawForeground(QPainter* painter, const QRectF& rect) override;
 
     void installPanIcon();
 
-    void mouseDoubleClickEvent(QMouseEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void wheelEvent(QWheelEvent*);
-    void resizeEvent(QResizeEvent*);
+    void mouseDoubleClickEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
     void startPanning(const QPoint& pos);
     void continuePanning(const QPoint& pos);
@@ -118,7 +118,7 @@ protected:
     void setShowText(bool value);
 
     virtual bool acceptsMouseClick(QMouseEvent* e);
-    virtual void scrollContentsBy(int dx, int dy);
+    virtual void scrollContentsBy(int dx, int dy) override;
 
 protected Q_SLOTS:
 

@@ -103,7 +103,7 @@ public:
         popup->installEventFilter(this);
     }
 
-    bool eventFilter(QObject* object, QEvent* event)
+    bool eventFilter(QObject* object, QEvent* event) override
     {
         Q_UNUSED(object);
 

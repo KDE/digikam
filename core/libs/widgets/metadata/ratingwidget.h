@@ -64,7 +64,7 @@ public:
     void stopFading();
     void setVisibleImmediately();
 
-    void setVisible(bool visible);
+    void setVisible(bool visible) override;
     int  maximumVisibleWidth() const;
 
     /** Pre-computed star polygon for a 15x15 pixmap.
@@ -89,10 +89,10 @@ protected:
     void setupTimeLine();
     void applyFading(QPixmap& pix);
 
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*) override;
+    virtual void mouseMoveEvent(QMouseEvent*) override;
+    virtual void mouseReleaseEvent(QMouseEvent*) override;
+    virtual void paintEvent(QPaintEvent*) override;
 
 protected Q_SLOTS:
 

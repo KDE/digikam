@@ -68,8 +68,8 @@ protected:
     QRgb colorByCoord(double x, double y);
     void drawSmallElipse(LPcmsCIExyY xyY, BYTE r, BYTE g, BYTE b, int sz);
 
-    void resizeEvent(QResizeEvent* event);
-    void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent* event) override;
+    void paintEvent(QPaintEvent*) override;
 
 private:
 

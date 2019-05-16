@@ -74,7 +74,7 @@ public:
     QStringList checkedTagsList();
 
     void clearSelection();
-    void selectAll();
+    void selectAll() override;
 };
 
 // ------------------------------------------------------------------------------------

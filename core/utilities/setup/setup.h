@@ -83,7 +83,7 @@ public:
 
     static bool execMetadataFilters(QWidget* const parent, int tab);
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 private Q_SLOTS:
 

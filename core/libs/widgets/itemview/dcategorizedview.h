@@ -69,9 +69,9 @@ public:
      */
     void setDrawDraggedItems(bool drawDraggedItems);
 
-    virtual void        setModel(QAbstractItemModel* model);
-    virtual QRect       visualRect(const QModelIndex& index) const;
-    virtual QModelIndex indexAt(const QPoint& point) const;
+    virtual void        setModel(QAbstractItemModel* model) override;
+    virtual QRect       visualRect(const QModelIndex& index) const override;
+    virtual QModelIndex indexAt(const QPoint& point) const override;
 
     /**
      * This method will return all indexes whose visual rect intersects @p rect.
@@ -103,47 +103,47 @@ public:
 
 public Q_SLOTS:
 
-    virtual void reset();
+    virtual void reset() override;
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent* event) override;
 
-    virtual void resizeEvent(QResizeEvent* event);
+    virtual void resizeEvent(QResizeEvent* event) override;
 
-    virtual void setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags flags);
+    virtual void setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags flags) override;
 
-    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
 
-    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event) override;
 
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
-    virtual void leaveEvent(QEvent* event);
+    virtual void leaveEvent(QEvent* event) override;
 
-    virtual void startDrag(Qt::DropActions supportedActions);
+    virtual void startDrag(Qt::DropActions supportedActions) override;
 
-    virtual void dragMoveEvent(QDragMoveEvent* event);
+    virtual void dragMoveEvent(QDragMoveEvent* event) override;
 
-    virtual void dragLeaveEvent(QDragLeaveEvent* event);
+    virtual void dragLeaveEvent(QDragLeaveEvent* event) override;
 
-    virtual void dropEvent(QDropEvent* event);
+    virtual void dropEvent(QDropEvent* event) override;
 
-    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
 
 protected Q_SLOTS:
 
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end) override;
 
     virtual void rowsInsertedArtifficial(const QModelIndex& parent, int start, int end);
 
     virtual void rowsRemoved(const QModelIndex& parent, int start, int end);
 
-    virtual void updateGeometries();
+    virtual void updateGeometries() override;
 
     virtual void slotLayoutChanged();
 
-    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous);
+    virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) override;
 
 private:
 

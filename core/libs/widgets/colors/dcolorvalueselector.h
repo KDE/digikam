@@ -104,11 +104,11 @@ protected:
     */
     virtual void drawArrow(QPainter* painter, const QPoint& pos);
 
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-    virtual void wheelEvent(QWheelEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
+    virtual void mousePressEvent(QMouseEvent* e) override;
+    virtual void mouseMoveEvent(QMouseEvent* e) override;
+    virtual void mouseReleaseEvent(QMouseEvent* e) override;
+    virtual void wheelEvent(QWheelEvent*) override;
 
 private:
 
@@ -211,14 +211,14 @@ protected:
      * which is used for buffering.
      */
     virtual void drawPalette(QPixmap*);
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
 
     /**
      * Reimplemented from DSelector. The drawing is
      * buffered in a pixmap here. As real drawing
      * routine, drawPalette() is used.
      */
-    virtual void drawContents(QPainter*);
+    virtual void drawContents(QPainter*) override;
 
 private:
 

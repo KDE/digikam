@@ -48,14 +48,14 @@ public:
     explicit ICCProfileWidget(QWidget* const parent, int w=256, int h=256);
     ~ICCProfileWidget();
 
-    bool    loadFromURL(const QUrl& url);
+    bool    loadFromURL(const QUrl& url) override;
     bool    loadFromProfileData(const QString& fileName, const QByteArray& data);
     bool    loadProfile(const QString& fileName, const IccProfile& data);
 
-    QString getTagDescription(const QString& key);
-    QString getTagTitle(const QString& key);
+    QString getTagDescription(const QString& key) override;
+    QString getTagTitle(const QString& key) override;
 
-    QString getMetadataTitle();
+    QString getMetadataTitle() override;
 
     void    setLoadingFailed();
     void    setDataLoading();
@@ -66,12 +66,12 @@ public:
 
 protected Q_SLOTS:
 
-    virtual void slotSaveMetadataToFile();
+    virtual void slotSaveMetadataToFile() override;
 
 private:
 
-    bool decodeMetadata();
-    void buildView();
+    bool decodeMetadata() override;
+    void buildView() override;
 
 private:
 

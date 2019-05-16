@@ -50,10 +50,10 @@ public:
     void reset();
     void setIndex(const QModelIndex& index);
     QModelIndex index() const;
-    void setVisible(bool visible);
+    void setVisible(bool visible) override;
 
     /// Reimplement to match the size of your icon
-    virtual QSize sizeHint() const = 0;
+    virtual QSize sizeHint() const override = 0;
 
 protected:
 
@@ -62,9 +62,9 @@ protected:
      */
     void setup();
 
-    void enterEvent(QEvent* event);
-    void leaveEvent(QEvent* event);
-    void paintEvent(QPaintEvent* event);
+    void enterEvent(QEvent* event) override;
+    void leaveEvent(QEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
     /// Return your icon here. Will be queried again on toggle.
     virtual QIcon icon() = 0;
