@@ -162,7 +162,7 @@ public:
         albumCache        = nullptr;
         useSignatureCache = false;
 
-        signatureQuery    = QString::fromUtf8("SELECT M.imageid, M.matrix FROM ImageHaarMatrix AS M;");
+        signatureQuery    = QString::fromUtf8("SELECT imageid, matrix FROM ImageHaarMatrix;");
     }
 
     ~Private()
@@ -253,17 +253,16 @@ public:
             return;
         }
 
+        const QHash<qlonglong, QPair<int, int> >& itemAlbumHash = CoreDbAccess().db()->getAllItemsWithAlbum();
+
         while (query.next())
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id and status of the item with the ItemShortInfo.
-            ItemShortInfo info = CoreDbAccess().db()->getItemShortInfo(imageid);
-
-            if (!info.isNull() && info.albumID > 0)
+            if (itemAlbumHash.contains(imageid))
             {
                 blob.read(query.value(1).toByteArray(), &targetSig);
-                albumid                 = info.albumID;
+                albumid                 = itemAlbumHash.value(imageid).second;
                 signatureCache[imageid] = targetSig;
                 albumCache[imageid]     = albumid;
             }
@@ -747,31 +746,28 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
             return scores;
         }
 
+        const QHash<qlonglong, QPair<int, int> >& itemAlbumHash = CoreDbAccess().db()->getAllItemsWithAlbum();
+
         // We don't use SimilarityDb's convenience calls, as the result set is large
         // and we try to avoid copying in a temporary QList<QVariant>
-        int albumRootId = 0;
-
         while (query.next())
         {
             imageid = query.value(0).toLongLong();
 
-            // Get the album id, album root id and status of the item with the ItemShortInfo.
-            ItemShortInfo info = CoreDbAccess().db()->getItemShortInfo(imageid);
-
-            if (!info.isNull() && info.albumID > 0)
+            if (itemAlbumHash.contains(imageid))
             {
+                QPair<int, int> albumPair = itemAlbumHash.value(imageid);
+
                 if (filterByAlbumRoots)
                 {
-                    albumRootId = info.albumRootID;
-
-                    if (!d->albumRootsToSearch.contains(albumRootId))
+                    if (!d->albumRootsToSearch.contains(albumPair.first))
                     {
                         continue;
                     }
                 }
 
                 blob.read(query.value(1).toByteArray(), &targetSig);
-                albumid = info.albumID;
+                albumid = albumPair.second;
 
                 if (d->useSignatureCache)
                 {

@@ -4264,6 +4264,33 @@ QList<qlonglong> CoreDB::getAllItems() const
     return items;
 }
 
+QHash<qlonglong, QPair<int, int> > CoreDB::getAllItemsWithAlbum() const
+{
+    QList<QVariant> values;
+
+    d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.albumRoot, Albums.id "
+                                     "FROM Images "
+                                     " LEFT JOIN Albums ON Albums.id=Images.album "
+                                     "  WHERE Images.status<3;"),
+                   &values);
+
+    QHash<qlonglong, QPair<int, int> > itemAlbumHash;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; )
+    {
+        qlonglong id  = (*it).toLongLong();
+        ++it;
+        int albumRoot = (*it).toInt();
+        ++it;
+        int album     = (*it).toInt();
+        ++it;
+
+        itemAlbumHash[id] = qMakePair(albumRoot, album);
+    }
+
+    return itemAlbumHash;
+}
+
 QList<ItemScanInfo> CoreDB::getItemScanInfos(int albumID) const
 {
     QList<QVariant> values;

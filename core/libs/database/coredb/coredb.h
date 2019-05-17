@@ -638,6 +638,13 @@ public:
     QList<qlonglong> getAllItems() const;
 
     /**
+     * Returns all ids of items with album ids in images table.
+     * QPair.first  == albumRootID
+     * QPair.second == albumID
+     */
+    QHash<qlonglong, QPair<int, int> > getAllItemsWithAlbum() const;
+
+    /**
      * Returns the id of the item with the given filename in
      * the album with the given id.
      * @param albumId The albumId in which we search the item.
