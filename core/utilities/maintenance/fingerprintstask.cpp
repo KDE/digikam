@@ -95,6 +95,7 @@ void FingerprintsTask::run()
         ItemInfo info(id);
 
         if ((info.isVisible() && info.category() == DatabaseItem::Category::Image) &&
+            !m_cancel                                                              &&
             (d->data->getRebuildAllFingerprints()                                  ||
              SimilarityDbAccess().db()->hasDirtyOrMissingFingerprint(info)))
         {
