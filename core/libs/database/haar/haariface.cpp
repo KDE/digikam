@@ -376,21 +376,17 @@ bool HaarIface::indexImage(qlonglong imageid)
     haar.calcHaar(d->data, &sig);
 
     // Store main entry
+    DatabaseBlob blob;
+    QByteArray array = blob.write(&sig);
+
+    ItemInfo info(imageid);
+
+    if (!info.isNull() && info.isVisible())
     {
-        SimilarityDbAccess access;
-        // prepare blob
-        DatabaseBlob blob;
-        QByteArray array = blob.write(&sig);
-
-        ItemInfo info(imageid);
-
-        if (!info.isNull() && info.isVisible())
-        {
-            access.backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
-                                                        " (imageid, modificationDate, uniqueHash, matrix) "
-                                                        " VALUES(?, ?, ?, ?);"),
-                                      imageid, info.modDateTime(), info.uniqueHash(), array);
-        }
+        SimilarityDbAccess().backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
+                                                                  " (imageid, modificationDate, uniqueHash, matrix) "
+                                                                  " VALUES(?, ?, ?, ?);"),
+                                                imageid, info.modDateTime(), info.uniqueHash(), array);
     }
 
     return true;

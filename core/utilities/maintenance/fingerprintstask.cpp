@@ -108,7 +108,7 @@ void FingerprintsTask::run()
             {
                 // compute Haar fingerprint and store it to DB
                 HaarIface haarIface;
-                haarIface.indexImage(info.filePath(), dimg);
+                haarIface.indexImage(info.id(), dimg);
             }
 
             QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
