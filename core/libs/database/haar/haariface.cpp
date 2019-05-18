@@ -1153,13 +1153,13 @@ QMap<double, QMap<qlonglong, QList<qlonglong> > > HaarIface::findDuplicates(cons
                     // Else, create a new similarity entry.
                     if (similarity_it != resultsMap.end())
                     {
-                        similarity_it->insert(*it,imageIdList);
+                        similarity_it->insert(*it, imageIdList);
                     }
                     else
                     {
                         QMap<qlonglong, QList<qlonglong> > result;
                         result.insert(*it, imageIdList);
-                        resultsMap.insert(bestMatches.first,result);
+                        resultsMap.insert(bestMatches.first, result);
                     }
 
                     resultsCandidates << *it;
