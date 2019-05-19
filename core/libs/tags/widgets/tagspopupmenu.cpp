@@ -534,7 +534,13 @@ void TagsPopupMenu::slotAboutToShow()
 
                     if (parent)
                     {
-                        QString t               = album->title() + QLatin1String(" (") + parent->prettyUrl() + QLatin1Char(')');
+                        QString p               = parent->prettyUrl().section(QLatin1Char('/'), 1, -1);
+                        p.replace(QLatin1Char('/'), QLatin1String(" / "));
+
+                        if (!p.isEmpty())
+                            p                   = QLatin1String(" (") + p + QLatin1Char(')');
+
+                        QString t               = album->title() + p;
                         t.replace(QLatin1Char('&'), QLatin1String("&&"));
                         TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
                         action->setData(album->id());
