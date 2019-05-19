@@ -27,7 +27,6 @@
 // Local includes
 
 #include "dbjobinfo.h"
-#include "dbjobsthread.h"
 #include "itemlisterrecord.h"
 #include "duplicatesprogressobserver.h"
 #include "actionthreadbase.h"
