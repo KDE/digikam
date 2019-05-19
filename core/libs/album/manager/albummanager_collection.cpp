@@ -159,7 +159,10 @@ void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation&
     if (handleCollectionStatusChange(location, oldStatus))
     {
         // a change occurred. Possibly albums have appeared or disappeared
-        scanPAlbums();
+        if (!d->scanPAlbumsTimer->isActive())
+        {
+            d->scanPAlbumsTimer->start();
+        }
     }
 }
 
