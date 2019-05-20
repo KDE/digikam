@@ -225,7 +225,9 @@ DigikamApp::~DigikamApp()
     }
 #endif
 
-    delete d->view;
+    DPluginLoader::instance()->cleanUp();
+
+    //delete d->view;
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     ApplicationSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
@@ -247,8 +249,6 @@ DigikamApp::~DigikamApp()
     }
 
     AlbumManager::instance()->removeFakeConnection();
-
-    DPluginLoader::instance()->cleanUp();
 
     delete d->modelCollection;
 
