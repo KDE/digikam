@@ -227,6 +227,7 @@ DigikamApp::~DigikamApp()
 
     DPluginLoader::instance()->cleanUp();
 
+    d->view->saveViewState();
     //delete d->view;
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());

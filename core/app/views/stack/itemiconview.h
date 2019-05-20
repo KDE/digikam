@@ -135,6 +135,8 @@ public:
     QList<SidebarWidget*>        leftSidebarWidgets() const;
     StackedView::StackedViewMode viewMode()           const;
 
+    void saveViewState();
+
 Q_SIGNALS:
 
     void signalAlbumSelected(Album*);
@@ -273,7 +275,7 @@ private:
     void toggleZoomActions();
     void setupConnections();
     void loadViewState();
-    void saveViewState();
+    //void saveViewState();
     void changeAlbumFromHistory(const QList<Album*>& album, QWidget* const widget);
     void slideShow(const ItemInfoList& infoList);
 
