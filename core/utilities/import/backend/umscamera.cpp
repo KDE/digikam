@@ -41,6 +41,7 @@ extern "C"
 #include <QFileInfo>
 #include <QMatrix>
 #include <QStringList>
+#include <QDirIterator>
 #include <QTextDocument>
 #include <QtGlobal>
 #include <QCryptographicHash>
@@ -159,28 +160,14 @@ bool UMSCamera::getFolders(const QString& folder)
         return false;
     }
 
-    QDir dir(folder);
-    dir.setFilter(QDir::Dirs | QDir::Executable);
+    QDirIterator it(folder, QDir::Dirs |
+                            QDir::NoDotAndDotDot);
 
-    const QFileInfoList list = dir.entryInfoList();
-
-    if (list.isEmpty())
-    {
-        return true;
-    }
-
-    QFileInfoList::const_iterator fi;
     QStringList subFolderList;
 
-    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
+    while (it.hasNext() && !m_cancel)
     {
-        if (fi->fileName() == QLatin1String(".") || fi->fileName() == QLatin1String(".."))
-        {
-            continue;
-        }
-
-        QString subFolder = folder + QString(folder.endsWith(QLatin1Char('/')) ? QLatin1String("") : QLatin1String("/")) + fi->fileName();
-        subFolderList.append(subFolder);
+        subFolderList << it.next();
     }
 
     if (subFolderList.isEmpty())
@@ -198,25 +185,14 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamIte
     m_cancel = false;
     infoList.clear();
 
-    QDir dir(folder);
-    dir.setFilter(QDir::Files);
+    QDirIterator it(folder, QDir::Files |
+                            QDir::NoDotAndDotDot);
 
-    if (!dir.exists())
+    while (it.hasNext() && !m_cancel)
     {
-        return false;
-    }
-
-    const QFileInfoList list = dir.entryInfoList();
-
-    if (list.isEmpty())
-    {
-        return true;    // Nothing to do.
-    }
-
-    for (QFileInfoList::const_iterator fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
-    {
+        it.next();
         CamItemInfo info;
-        getItemInfo(folder, fi->fileName(), info, useMetadata);
+        getItemInfo(folder, it.fileName(), info, useMetadata);
         infoList.append(info);
     }
 
