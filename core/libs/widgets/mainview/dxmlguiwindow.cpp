@@ -82,28 +82,29 @@ public:
 
     explicit Private()
     {
-        fsOptions              = FS_NONE;
-        fullScreenAction       = nullptr;
-        fullScreenBtn          = nullptr;
-        dirtyMainToolBar       = false;
-        fullScreenHideToolBars = false;
-        fullScreenHideThumbBar = true;
-        fullScreenHideSideBars = false;
-        thumbbarVisibility     = true;
-        menubarVisibility      = true;
-        statusbarVisibility    = true;
-        libsInfoAction         = nullptr;
-        showMenuBarAction      = nullptr;
-        showStatusBarAction    = nullptr;
-        about                  = nullptr;
-        dbStatAction           = nullptr;
-        anim                   = nullptr;
+        fsOptions               = FS_NONE;
+        fullScreenAction        = nullptr;
+        fullScreenBtn           = nullptr;
+        dirtyMainToolBar        = false;
+        fullScreenHideToolBars  = false;
+        fullScreenHideThumbBar  = true;
+        fullScreenHideSideBars  = false;
+        fullScreenHideStatusBar = false;
+        thumbbarVisibility      = true;
+        menubarVisibility       = true;
+        statusbarVisibility     = true;
+        libsInfoAction          = nullptr;
+        showMenuBarAction       = nullptr;
+        showStatusBarAction     = nullptr;
+        about                   = nullptr;
+        dbStatAction            = nullptr;
+        anim                    = nullptr;
     }
 
 public:
 
     /**
-     * Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+     * Settings taken from managed window configuration to handle toolbar visibility in full-screen mode
      */
     bool                     fullScreenHideToolBars;
 
@@ -113,9 +114,14 @@ public:
     bool                     fullScreenHideThumbBar;
 
     /**
-     * Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+     * Settings taken from managed window configuration to handle toolbar visibility in full-screen mode
      */
     bool                     fullScreenHideSideBars;
+
+    /**
+     * Settings taken from managed window configuration to handle statusbar visibility in full-screen mode
+     */
+    bool                     fullScreenHideStatusBar;
 
     /**
      * Full-Screen options. See FullScreenOptions enum and setFullScreenOptions() for details.
@@ -444,10 +450,13 @@ void DXmlGuiWindow::readFullScreenSettings(const KConfigGroup& group)
         d->fullScreenHideToolBars  = group.readEntry(s_configFullScreenHideToolBarsEntry,  false);
 
     if (d->fsOptions & FS_THUMBBAR)
-        d->fullScreenHideThumbBar = group.readEntry(s_configFullScreenHideThumbBarEntry, true);
+        d->fullScreenHideThumbBar  = group.readEntry(s_configFullScreenHideThumbBarEntry,  true);
 
     if (d->fsOptions & FS_SIDEBARS)
         d->fullScreenHideSideBars  = group.readEntry(s_configFullScreenHideSideBarsEntry,  false);
+
+    if (d->fsOptions & FS_STATUSBAR)
+        d->fullScreenHideStatusBar = group.readEntry(s_configFullScreenHideStatusBarEntry, false);
 }
 
 void DXmlGuiWindow::slotToggleFullScreen(bool set)
@@ -467,8 +476,8 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // restore statusbar
 
-        if (d->statusbarVisibility)
-            statusBar()->setVisible(true);
+        if ((d->fsOptions & FS_STATUSBAR) && d->fullScreenHideStatusBar)
+            statusBar()->setVisible(d->statusbarVisibility);
 
         // restore sidebars
 
@@ -515,7 +524,9 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 #else
         d->statusbarVisibility = statusBar()->isVisible();
 #endif
-        statusBar()->setVisible(false);
+
+        if ((d->fsOptions & FS_STATUSBAR) && d->fullScreenHideStatusBar)
+            statusBar()->setVisible(false);
 
         // hide sidebars
 

@@ -48,10 +48,11 @@ public:
 
     explicit Private()
     {
-        options      = FS_NONE;
-        hideToolBars = nullptr;
-        hideThumbBar = nullptr;
-        hideSideBars = nullptr;
+        options       = FS_NONE;
+        hideToolBars  = nullptr;
+        hideThumbBar  = nullptr;
+        hideSideBars  = nullptr;
+        hideStatusBar = nullptr;
     }
 
     int        options;
@@ -59,6 +60,7 @@ public:
     QCheckBox* hideToolBars;
     QCheckBox* hideThumbBar;
     QCheckBox* hideSideBars;
+    QCheckBox* hideStatusBar;
 };
 
 FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
@@ -72,21 +74,26 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     d->hideToolBars          = new QCheckBox(i18n("H&ide toolbars"),  this);
     d->hideToolBars->setWhatsThis(i18n("Hide all toolbars when window switch in full-screen mode."));
 
-    d->hideThumbBar          = new QCheckBox(i18n("Hide &thumbbar"), this);
+    d->hideThumbBar          = new QCheckBox(i18n("Hide &thumbbar"),  this);
     d->hideThumbBar->setWhatsThis(i18n("Hide thumbbar view when window switch in full-screen mode."));
 
-    d->hideSideBars          = new QCheckBox(i18n("Hide &sidebars"), this);
+    d->hideSideBars          = new QCheckBox(i18n("Hide &sidebars"),  this);
     d->hideSideBars->setWhatsThis(i18n("Hide all side-bars when window switch in full-screen mode."));
+
+    d->hideStatusBar         = new QCheckBox(i18n("Hide st&atusbar"), this);
+    d->hideStatusBar->setWhatsThis(i18n("Hide statusbar when window switch in full-screen mode."));
 
     vlay->addWidget(d->hideToolBars);
     vlay->addWidget(d->hideThumbBar);
     vlay->addWidget(d->hideSideBars);
+    vlay->addWidget(d->hideStatusBar);
     vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(0);
 
-    if (!(options & FS_TOOLBARS)) d->hideToolBars->hide();
-    if (!(options & FS_THUMBBAR)) d->hideThumbBar->hide();
-    if (!(options & FS_SIDEBARS)) d->hideSideBars->hide();
+    if (!(options & FS_TOOLBARS))  d->hideToolBars->hide();
+    if (!(options & FS_THUMBBAR))  d->hideThumbBar->hide();
+    if (!(options & FS_SIDEBARS))  d->hideSideBars->hide();
+    if (!(options & FS_STATUSBAR)) d->hideStatusBar->hide();
 }
 
 FullScreenSettings::~FullScreenSettings()
@@ -97,13 +104,16 @@ FullScreenSettings::~FullScreenSettings()
 void FullScreenSettings::readSettings(const KConfigGroup& group)
 {
     if (d->options & FS_TOOLBARS)
-        d->hideToolBars->setChecked(group.readEntry(s_configFullScreenHideToolBarsEntry,  false));
+        d->hideToolBars->setChecked(group.readEntry(s_configFullScreenHideToolBarsEntry,   false));
 
     if (d->options & FS_THUMBBAR)
-        d->hideThumbBar->setChecked(group.readEntry(s_configFullScreenHideThumbBarEntry, true));
+        d->hideThumbBar->setChecked(group.readEntry(s_configFullScreenHideThumbBarEntry,   true));
 
     if (d->options & FS_SIDEBARS)
-        d->hideSideBars->setChecked(group.readEntry(s_configFullScreenHideSideBarsEntry, false));
+        d->hideSideBars->setChecked(group.readEntry(s_configFullScreenHideSideBarsEntry,   false));
+
+    if (d->options & FS_STATUSBAR)
+        d->hideStatusBar->setChecked(group.readEntry(s_configFullScreenHideStatusBarEntry, false));
 }
 
 void FullScreenSettings::saveSettings(KConfigGroup& group)
@@ -112,10 +122,13 @@ void FullScreenSettings::saveSettings(KConfigGroup& group)
         group.writeEntry(s_configFullScreenHideToolBarsEntry,  d->hideToolBars->isChecked());
 
     if (d->options & FS_THUMBBAR)
-        group.writeEntry(s_configFullScreenHideThumbBarEntry, d->hideThumbBar->isChecked());
+        group.writeEntry(s_configFullScreenHideThumbBarEntry,  d->hideThumbBar->isChecked());
 
     if (d->options & FS_SIDEBARS)
         group.writeEntry(s_configFullScreenHideSideBarsEntry,  d->hideSideBars->isChecked());
+
+    if (d->options & FS_STATUSBAR)
+        group.writeEntry(s_configFullScreenHideStatusBarEntry, d->hideStatusBar->isChecked());
 
     group.sync();
 }

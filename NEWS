@@ -41,4 +41,5 @@ BUGFIXES:
 031 ==> 407565 - Entering multi tags to the same photo failed.
 032 ==> 378112 - No progress bar while maint initializes.
 033 ==> 407699 - Text format for "add tag" and "remove tag" is inconsistent.
-034 ==> 
+034 ==> 407736 - Status Bar Not Visible in Full Screen.
+035 ==> 

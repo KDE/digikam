@@ -57,15 +57,16 @@ namespace Digikam
  */
 enum FullScreenOptions
 {
-    FS_TOOLBARS   = 0x00000001,                                 /// Manage Tools bar in full-screen mode.
-    FS_THUMBBAR   = 0x00000002,                                 /// Manage Thumb bar in full-screen mode.
-    FS_SIDEBARS   = 0x00000004,                                 /// Manage Side bars in full-screen mode.
-    FS_NONE       = 0x00000008,                                 /// No full-screen options.
+    FS_TOOLBARS   = 0x00000001,                                                /// Manage Tools bar in full-screen mode.
+    FS_THUMBBAR   = 0x00000002,                                                /// Manage Thumb bar in full-screen mode.
+    FS_SIDEBARS   = 0x00000004,                                                /// Manage Side bars in full-screen mode.
+    FS_STATUSBAR  = 0x00000008,                                                /// Manage Status bar in full-screen mode.
+    FS_NONE       = 0x00000010,                                                /// No full-screen options.
 
-    FS_ALBUMGUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Album GUI Config.
-    FS_EDITOR     = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS,    /// Image Editor Config.
-    FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS,                  /// Light Table Config.
-    FS_IMPORTUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS     /// Import UI Config.
+    FS_ALBUMGUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS | FS_STATUSBAR,    /// Album GUI Config.
+    FS_EDITOR     = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS | FS_STATUSBAR,    /// Image Editor Config.
+    FS_LIGHTTABLE = FS_TOOLBARS | FS_SIDEBARS | FS_STATUSBAR,                  /// Light Table Config.
+    FS_IMPORTUI   = FS_TOOLBARS | FS_THUMBBAR | FS_SIDEBARS | FS_STATUSBAR     /// Import UI Config.
 };
 
 enum StdActionType
@@ -88,6 +89,7 @@ enum StdActionType
 static const QString s_configFullScreenHideToolBarsEntry(QLatin1String("FullScreen Hide ToolBars"));
 static const QString s_configFullScreenHideThumbBarEntry(QLatin1String("FullScreen Hide ThumbBar"));
 static const QString s_configFullScreenHideSideBarsEntry(QLatin1String("FullScreen Hide SideBars"));
+static const QString s_configFullScreenHideStatusBarEntry(QLatin1String("FullScreen Hide StatusBar"));
 
 /** Data container to use in managed window.
  */
