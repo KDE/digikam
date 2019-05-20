@@ -185,6 +185,11 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamIte
     m_cancel = false;
     infoList.clear();
 
+    if (!QFileInfo::exists(folder))
+    {
+        return false;
+    }
+
     QDirIterator it(folder, QDir::Files |
                             QDir::NoDotAndDotDot);
 
