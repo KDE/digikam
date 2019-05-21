@@ -674,4 +674,17 @@ QAbstractItemModel* DBInfoIface::tagFilterModel()
     return filterModel;
 }
 
+QList<GPSItemContainer*> DBInfoIface::currentGPSItems() const
+{
+    ItemInfoList infos;
+
+    foreach (const QUrl& url, currentSelectedItems())
+    {
+        ItemInfo info = ItemInfo::fromUrl(url);
+        infos << info;
+    }
+
+    return ItemGPS::infosToItems(infos);
+}
+
 } // namespace Digikam

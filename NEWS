@@ -42,4 +42,5 @@ BUGFIXES:
 032 ==> 378112 - No progress bar while maint initializes.
 033 ==> 407699 - Text format for "add tag" and "remove tag" is inconsistent.
 034 ==> 407736 - Status Bar Not Visible in Full Screen.
-035 ==> 
+035 ==> 407806 - Applied reverse geocoding are not saved.
+036 ==> 

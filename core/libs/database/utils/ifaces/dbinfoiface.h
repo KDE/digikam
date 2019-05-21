@@ -30,6 +30,7 @@
 #include "applicationsettings.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
+#include "itemgps.h"
 
 namespace Digikam
 {
@@ -76,7 +77,9 @@ public:
 
     QUrl        defaultUploadUrl()                        const override;
 
-    QAbstractItemModel* tagFilterModel() override;
+    QAbstractItemModel* tagFilterModel()                        override;
+
+    QList<GPSItemContainer*> currentGPSItems()            const override;
 
 private:
 

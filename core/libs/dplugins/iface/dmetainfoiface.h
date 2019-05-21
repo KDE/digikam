@@ -63,6 +63,8 @@ public:
 
     QUrl     defaultUploadUrl()                   const override;
 
+    QList<GPSItemContainer*> currentGPSItems()    const override;
+
 private:
 
     class Private;

@@ -135,6 +135,11 @@ QAbstractItemModel* DInfoInterface::tagFilterModel()
     return nullptr;
 }
 
+QList<GPSItemContainer*> DInfoInterface::currentGPSItems() const
+{
+    return QList<GPSItemContainer*>();
+}
+
 // -----------------------------------------------------------------
 
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)
