@@ -80,7 +80,6 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "dbinfoiface.h"
-#include "itemgps.h"
 #include "categorizeditemmodel.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"

@@ -46,7 +46,7 @@ bool ItemGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
     ItemPosition pos = m_info.imagePosition();
-    m_dateTime        = m_info.dateTime();
+    m_dateTime       = m_info.dateTime();
 
     if (!pos.isEmpty() && pos.hasCoordinates())
     {
@@ -106,13 +106,13 @@ QString ItemGPS::saveChanges()
         QMap<QString, QVariant> attributes;
         QStringList tagsPath;
 
-        for (int i = 0; i < m_tagList.count(); ++i)
+        for (int i = 0 ; i < m_tagList.count() ; ++i)
         {
 
             QString singleTagPath;
             QList<TagData> currentTagPath = m_tagList[i];
 
-            for (int j = 0; j < currentTagPath.count(); ++j)
+            for (int j = 0 ; j < currentTagPath.count() ; ++j)
             {
                 singleTagPath.append(QLatin1Char('/') + currentTagPath[j].tagName);
 

@@ -96,7 +96,6 @@
 #include "itemdragdrop.h"
 #include "itemdescedittab.h"
 #include "iteminfo.h"
-#include "itemgps.h"
 #include "itemlistmodel.h"
 #include "itempropertiessidebardb.h"
 #include "itempropertiesversionstab.h"
