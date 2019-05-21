@@ -49,8 +49,6 @@ public:
     QString saveChanges() override;
     bool loadImageData() override;
 
-    static QList<GPSItemContainer*> infosToItems(const ItemInfoList& infos);
-
 private:
 
     ItemInfo m_info;
