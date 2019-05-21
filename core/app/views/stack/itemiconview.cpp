@@ -418,7 +418,7 @@ ItemIconView::ItemIconView(QWidget* const parent, DModelFactory* const modelColl
 
 ItemIconView::~ItemIconView()
 {
-    //saveViewState();
+    saveViewState();
 
     delete d->labelsSearchHandler;
     delete d->albumHistory;
