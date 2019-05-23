@@ -53,6 +53,7 @@ const QString ApplicationSettings::Private::configGroupFaceDetection(QLatin1Stri
 const QString ApplicationSettings::Private::configGroupDuplicatesSearch(QLatin1String("Find Duplicates View"));
 const QString ApplicationSettings::Private::configGroupGrouping(QLatin1String("Grouping Behaviour"));
 const QString ApplicationSettings::Private::configAlbumCollectionsEntry(QLatin1String("Album Collections"));
+const QString ApplicationSettings::Private::configAlbumMonitoringEntry(QLatin1String("Album Monitoring"));
 const QString ApplicationSettings::Private::configAlbumSortRoleEntry(QLatin1String("Album Sort Role"));
 const QString ApplicationSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
 const QString ApplicationSettings::Private::configImageSortingEntry(QLatin1String("Image Sorting"));
@@ -232,6 +233,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       scanAtStart(true),
       cleanAtStart(true),
       databaseDirSetAtCmd(false),
+      albumMonitoring(false),
       sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
@@ -377,6 +379,7 @@ void ApplicationSettings::Private::init()
     scanAtStart                          = true;
     cleanAtStart                         = true;
     databaseDirSetAtCmd                  = false;
+    albumMonitoring                      = false;
     stringComparisonType                 = ApplicationSettings::Natural;
 
     applicationStyle                     = qApp->style()->objectName();

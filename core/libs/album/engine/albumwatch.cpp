@@ -39,6 +39,7 @@
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "dbengineparameters.h"
+#include "applicationsettings.h"
 #include "scancontroller.h"
 #include "dio.h"
 
@@ -150,25 +151,32 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
 {
     d->dirWatch = new QFileSystemWatcher(this);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
+    if (ApplicationSettings::instance()->getAlbumMonitoring())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
 
-    connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
-            this, SLOT(slotQFSWatcherDirty(QString)));
+        connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
+                this, SLOT(slotQFSWatcherDirty(QString)));
 
-    connect(d->dirWatch, SIGNAL(fileChanged(QString)),
-            this, SLOT(slotQFSWatcherDirty(QString)));
+        connect(d->dirWatch, SIGNAL(fileChanged(QString)),
+                this, SLOT(slotQFSWatcherDirty(QString)));
 
-    connect(parent, SIGNAL(signalAlbumAdded(Album*)),
-            this, SLOT(slotAlbumAdded(Album*)));
+        connect(parent, SIGNAL(signalAlbumAdded(Album*)),
+                this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(parent, SIGNAL(signalAlbumRenamed(Album*)),
-            this, SLOT(slotAlbumAdded(Album*)));
+        connect(parent, SIGNAL(signalAlbumRenamed(Album*)),
+                this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(parent, SIGNAL(signalAlbumNewPath(Album*)),
-            this, SLOT(slotAlbumAdded(Album*)));
+        connect(parent, SIGNAL(signalAlbumNewPath(Album*)),
+                this, SLOT(slotAlbumAdded(Album*)));
 
-    connect(parent, SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
-            this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
+        connect(parent, SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
+                this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
+    }
+    else
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch is disabled";
+    }
 }
 
 AlbumWatch::~AlbumWatch()

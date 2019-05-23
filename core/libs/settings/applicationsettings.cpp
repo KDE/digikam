@@ -143,6 +143,7 @@ void ApplicationSettings::readSettings()
     d->ratingFilterCond                  = group.readEntry(d->configRatingFilterConditionEntry,
                                                                                                        (int)ItemFilterSettings::GreaterEqualCondition);
 
+    d->albumMonitoring                   = group.readEntry(d->configAlbumMonitoringEntry,              false);
     d->recursiveAlbums                   = group.readEntry(d->configRecursiveAlbumsEntry,              false);
     d->recursiveTags                     = group.readEntry(d->configRecursiveTagsEntry,                true);
 
@@ -332,6 +333,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configDefaultTreeIconSizeEntry,                QString::number(d->treeThumbnailSize));
     group.writeEntry(d->configTreeViewFontEntry,                       d->treeviewFont);
     group.writeEntry(d->configRatingFilterConditionEntry,              d->ratingFilterCond);
+    group.writeEntry(d->configAlbumMonitoringEntry,                    d->albumMonitoring);
     group.writeEntry(d->configRecursiveAlbumsEntry,                    d->recursiveAlbums);
     group.writeEntry(d->configRecursiveTagsEntry,                      d->recursiveTags);
     group.writeEntry(d->configThemeEntry,                              d->currentTheme);
