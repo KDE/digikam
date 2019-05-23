@@ -71,7 +71,7 @@ public:
 bool AlbumWatch::Private::inBlackList(const QString& path) const
 {
     // Filter out dirty signals triggered by changes on the database file
-    foreach(const QString& bannedFile, fileNameBlackList)
+    foreach (const QString& bannedFile, fileNameBlackList)
     {
         if (path.endsWith(bannedFile))
         {
@@ -126,11 +126,13 @@ QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbF
     // Retrieve modification dates
 
     QList<QDateTime> modList;
-    QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    QFileInfoList    fileInfoList = dbFile.dir().entryInfoList(QDir::Dirs    |
+                                                               QDir::Files   |
+                                                               QDir::NoDotAndDotDot);
 
     // Build the list
 
-    foreach(const QFileInfo& info, fileInfoList)
+    foreach (const QFileInfo& info, fileInfoList)
     {
         // Ignore digikam4.db and journal and other temporary files
 
@@ -194,12 +196,12 @@ void AlbumWatch::clear()
 
 void AlbumWatch::removeWatchedPAlbums(const PAlbum* const album)
 {
-    if (!album)
+    if (!album || d->dirWatch->directories().isEmpty())
     {
         return;
     }
 
-    foreach(const QString& dir, d->dirWatch->directories())
+    foreach (const QString& dir, d->dirWatch->directories())
     {
         if (dir.startsWith(album->folderPath()))
         {
@@ -217,11 +219,14 @@ void AlbumWatch::setDbEngineParameters(const DbEngineParameters& params)
     // filter out notifications caused by database operations
     if (params.isSQLite())
     {
-        d->fileNameBlackList << QLatin1String("thumbnails-digikam.db") << QLatin1String("thumbnails-digikam.db-journal");
-        d->fileNameBlackList << QLatin1String("recognition.db") << QLatin1String("recognition.db-journal");
+        d->fileNameBlackList << QLatin1String("thumbnails-digikam.db")
+                             << QLatin1String("thumbnails-digikam.db-journal");
+        d->fileNameBlackList << QLatin1String("recognition.db")
+                             << QLatin1String("recognition.db-journal");
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
-        d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + QLatin1String("-journal");
+        d->fileNameBlackList << dbFile.fileName()
+                             << dbFile.fileName() + QLatin1String("-journal");
 
         // ensure this is done after setting up the black list
         d->dbPathModificationDateList = d->buildDirectoryModList(dbFile);
