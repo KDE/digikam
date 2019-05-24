@@ -113,6 +113,11 @@ ItemFilterModel* ImageSortFilterModel::imageFilterModel() const
 
 QModelIndex ImageSortFilterModel::mapToSourceItemModel(const QModelIndex& index) const
 {
+    if (!index.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceItemModel(mapToSource(index));
@@ -123,6 +128,11 @@ QModelIndex ImageSortFilterModel::mapToSourceItemModel(const QModelIndex& index)
 
 QModelIndex ImageSortFilterModel::mapFromSourceItemModel(const QModelIndex& albummodel_index) const
 {
+    if (!albummodel_index.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return mapFromSource(m_chainedModel->mapFromSourceItemModel(albummodel_index));
@@ -134,6 +144,11 @@ QModelIndex ImageSortFilterModel::mapFromSourceItemModel(const QModelIndex& albu
 
 QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceItemModel(const QModelIndex& sourceModel_index) const
 {
+    if (!sourceModel_index.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceItemModel(sourceModel_index);

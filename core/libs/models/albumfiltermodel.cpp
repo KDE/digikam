@@ -191,6 +191,11 @@ AlbumFilterModel* AlbumFilterModel::sourceFilterModel() const
 
 QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) const
 {
+    if (!index.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceAlbumModel(mapToSource(index));
@@ -201,6 +206,11 @@ QModelIndex AlbumFilterModel::mapToSourceAlbumModel(const QModelIndex& index) co
 
 QModelIndex AlbumFilterModel::mapFromSourceAlbumModel(const QModelIndex& albummodel_index) const
 {
+    if (!albummodel_index.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return mapFromSource(m_chainedModel->mapFromSourceAlbumModel(albummodel_index));
