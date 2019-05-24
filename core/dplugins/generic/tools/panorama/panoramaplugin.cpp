@@ -73,8 +73,11 @@ QString PanoramaPlugin::description() const
 QString PanoramaPlugin::details() const
 {
     return i18n("<p>This tool permit to assemble images together to create large panorama.</p>"
-                "<p>To create panorama image, you need to use images taken from same point of view with a tripod and exposed with same settings.</p>"
-                "<p>The tool is able to assemble shot taken horizontally, vertically, or as a matrix. Take a care that target image will become huge and require a lots of memory to be processed.</p>");
+                "<p>To create panorama image, you need to use images taken from same point of "
+                "view with a tripod and exposed with same settings.</p>"
+                "<p>The tool is able to assemble shot taken horizontally, vertically, or as a "
+                "matrix. Take a care that target image will become huge and require a lots of "
+                "memory to be processed.</p>");
 }
 
 QList<DPluginAuthor> PanoramaPlugin::authors() const
