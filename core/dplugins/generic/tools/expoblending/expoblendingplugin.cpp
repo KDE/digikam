@@ -109,9 +109,19 @@ void ExpoBlendingPlugin::setup(QObject* const parent)
 
 void ExpoBlendingPlugin::slotExpoBlending()
 {
+    DInfoInterface* const iface = infoIface(sender());
+    bool created                = ExpoBlendingManager::isCreated();
+
     ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(infoIface(sender())->currentSelectedItems());
+    ExpoBlendingManager::instance()->setItemsList(iface->currentSelectedItems());
     ExpoBlendingManager::instance()->setPlugin(this);
+
+    if (!created)
+    {
+        connect(ExpoBlendingManager::instance(), SIGNAL(updateHostApp(QUrl)),
+                iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+    }
+
     ExpoBlendingManager::instance()->run();
 }
 

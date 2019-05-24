@@ -68,7 +68,7 @@ public:
     static bool                  isCreated();
 
 public:
-    
+
     bool checkBinaries();
 
     void checkForHugin2015();
@@ -89,7 +89,7 @@ public:
     QList<QUrl>& itemsList() const;
 
     void setPlugin(DPlugin* const plugin);
-        
+
     QUrl&                   basePtoUrl() const;
     QSharedPointer<PTOType> basePtoData();
     void                    resetBasePto();
@@ -134,6 +134,10 @@ public:
     HuginExecutorBinary&    huginExecutorBinary() const;
 
     void run();
+
+Q_SIGNALS:
+
+    void updateHostApp(const QUrl& url);
 
 private Q_SLOTS:
 

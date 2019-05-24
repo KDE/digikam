@@ -106,9 +106,19 @@ void PanoramaPlugin::setup(QObject* const parent)
 
 void PanoramaPlugin::slotPanorama()
 {
+    DInfoInterface* const iface = infoIface(sender());
+    bool created                = PanoManager::isCreated();
+
     PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(infoIface(sender())->currentSelectedItems());
+    PanoManager::instance()->setItemsList(iface->currentSelectedItems());
     PanoManager::instance()->setPlugin(this);
+
+    if (!created)
+    {
+        connect(PanoManager::instance(), SIGNAL(updateHostApp(QUrl)),
+                iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+    }
+
     PanoManager::instance()->run();
 }
 

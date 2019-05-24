@@ -172,6 +172,8 @@ void PanoLastPage::copyFiles()
                                  d->savePtoCheckBox->isChecked(),
                                  d->mngr->gPano()
                                 );
+
+    emit d->mngr->updateHostApp(panoUrl);
 }
 
 QString PanoLastPage::panoFileName(const QString& fileTemplate) const
