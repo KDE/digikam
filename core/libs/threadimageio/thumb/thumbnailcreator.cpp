@@ -513,7 +513,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     {
         QMimeDatabase mimeDB;
 
-        if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+        if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
         {
             if (qimage.isNull())
             {
