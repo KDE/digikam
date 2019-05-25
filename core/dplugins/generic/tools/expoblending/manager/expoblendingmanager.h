@@ -79,6 +79,10 @@ public:
      */
     void cleanUp();
 
+Q_SIGNALS:
+
+    void updateHostApp(const QUrl& url);
+
 private Q_SLOTS:
 
     void slotStartDialog();

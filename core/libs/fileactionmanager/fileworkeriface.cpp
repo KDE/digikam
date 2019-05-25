@@ -288,14 +288,14 @@ void FileActionMngrFileWorker::transform(FileActionItemInfoList infos, int actio
             }
         }
 
-        // DB rotation
-        ItemInfo(info).setOrientation(finalOrientation);
-
         if (!failedItems.contains(info.name()))
         {
             emit imageDataChanged(path, true, true);
             ItemAttributesWatch::instance()->fileMetadataChanged(info.fileUrl());
         }
+
+        // DB rotation
+        ItemInfo(info).setOrientation(finalOrientation);
 
         infos.writtenToOne();
     }

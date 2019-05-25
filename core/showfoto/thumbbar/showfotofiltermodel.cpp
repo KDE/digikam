@@ -85,6 +85,11 @@ ShowfotoSortFilterModel* ShowfotoSortFilterModel::sourceFilterModel() const
 
 QModelIndex ShowfotoSortFilterModel::mapToSourceShowfotoModel(const QModelIndex& proxyIndex) const
 {
+    if (!proxyIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceShowfotoModel(mapToSource(proxyIndex));
@@ -93,18 +98,28 @@ QModelIndex ShowfotoSortFilterModel::mapToSourceShowfotoModel(const QModelIndex&
     return mapToSource(proxyIndex);
 }
 
-QModelIndex ShowfotoSortFilterModel::mapFromSourceShowfotoModel(const QModelIndex& ShowfotoModelIndex) const
+QModelIndex ShowfotoSortFilterModel::mapFromSourceShowfotoModel(const QModelIndex& showfotoModelIndex) const
 {
-    if (m_chainedModel)
+    if (!showfotoModelIndex.isValid())
     {
-        return mapFromSource(m_chainedModel->mapFromSourceShowfotoModel(ShowfotoModelIndex));
+        return QModelIndex();
     }
 
-    return mapFromSource(ShowfotoModelIndex);
+    if (m_chainedModel)
+    {
+        return mapFromSource(m_chainedModel->mapFromSourceShowfotoModel(showfotoModelIndex));
+    }
+
+    return mapFromSource(showfotoModelIndex);
 }
 
 QModelIndex ShowfotoSortFilterModel::mapFromDirectSourceToSourceShowfotoModel(const QModelIndex& sourceModelIndex) const
 {
+    if (!sourceModelIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceShowfotoModel(sourceModelIndex);

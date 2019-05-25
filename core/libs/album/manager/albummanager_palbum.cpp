@@ -42,10 +42,10 @@ void AlbumManager::scanPAlbums()
         oldAlbums[a->id()] = a;
         ++it;
     }
-    qCDebug(DIGIKAM_GENERAL_LOG) << "In:  CoreDbAccess().db()->scanAlbums()";
+
     // scan db and get a list of all albums
     QList<AlbumInfo> currentAlbums = CoreDbAccess().db()->scanAlbums();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Out: CoreDbAccess().db()->scanAlbums()";
+
     // sort by relative path so that parents are created before children
     std::sort(currentAlbums.begin(), currentAlbums.end());
 
@@ -163,9 +163,9 @@ void AlbumManager::scanPAlbums()
         album->m_category = info.category;
         album->m_date     = info.date;
         album->m_iconId   = info.iconId;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "In:  insertPAlbum()" << album->isAlbumRoot();
+
         insertPAlbum(album, parent);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Out: insertPAlbum()";
+
         if (album->isAlbumRoot())
         {
             // Inserting virtual Trash PAlbum for AlbumsRootAlbum using special constructor

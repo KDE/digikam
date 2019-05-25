@@ -512,6 +512,8 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
         busy(false);
         d->previewWidget->setBusy(false);
     }
+
+    emit d->mngr->updateHostApp(newUrl);
 }
 
 void ExpoBlendingDlg::slotExpoBlendingAction(const DigikamGenericExpoBlendingPlugin::ExpoBlendingActionData& ad)

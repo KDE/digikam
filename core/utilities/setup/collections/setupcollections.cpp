@@ -25,22 +25,12 @@
 
 // Qt includes
 
-#include <QGroupBox>
 #include <QLabel>
-#include <QDir>
-#include <QList>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QIntValidator>
-#include <QSpinBox>
-#include <QFormLayout>
-#include <QApplication>
 #include <QStyle>
-#include <QUrl>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QApplication>
 
 // KDE includes
 
@@ -62,7 +52,8 @@ public:
     explicit Private()
       : rootsPathChanged(false),
         collectionView(nullptr),
-        collectionModel(nullptr)
+        collectionModel(nullptr),
+        monitoringBox(nullptr)
     {
     }
 
@@ -70,6 +61,8 @@ public:
 
     SetupCollectionTreeView* collectionView;
     SetupCollectionModel*    collectionModel;
+
+    QCheckBox*               monitoringBox;
 };
 
 SetupCollections::SetupCollections(QWidget* const parent)
@@ -108,9 +101,12 @@ SetupCollections::SetupCollections(QWidget* const parent)
     d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);
 
+    d->monitoringBox   = new QCheckBox(i18n("Monitor the albums for external changes (requires restart)"), panel);
+
     QVBoxLayout* const albumPathBoxLayout = new QVBoxLayout;
     albumPathBoxLayout->addWidget(albumPathLabel);
     albumPathBoxLayout->addWidget(d->collectionView);
+    albumPathBoxLayout->addWidget(d->monitoringBox);
     albumPathBox->setLayout(albumPathBoxLayout);
     albumPathBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     albumPathBoxLayout->setSpacing(0);
@@ -136,11 +132,17 @@ SetupCollections::~SetupCollections()
 void SetupCollections::applySettings()
 {
     d->collectionModel->apply();
+
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+    settings->setAlbumMonitoring(d->monitoringBox->isChecked());
 }
 
 void SetupCollections::readSettings()
 {
     d->collectionModel->loadCollections();
+
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+    d->monitoringBox->setChecked(settings->getAlbumMonitoring());
 }
 
 } // namespace Digikam

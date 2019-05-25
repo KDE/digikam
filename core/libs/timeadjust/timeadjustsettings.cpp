@@ -159,12 +159,23 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->useButtonGroup              = new QButtonGroup(d->useSettingsBox);
     d->useButtonGroup->setExclusive(true);
 
-    QString applDateLabelString = i18n("%1 timestamp", QApplication::applicationName());
+    QString appName = QApplication::applicationName();
+
+    if (appName == QLatin1String("digikam"))
+    {
+        appName = i18n("DigiKam");
+    }
+    else if (appName == QLatin1String("showfoto"))
+    {
+        appName = i18n("Showfoto");
+    }
+
+    QString applDateLabelString = i18n("%1 timestamp", appName);
     d->useApplDateBtn           = new QRadioButton(d->useSettingsBox);
     d->useApplDateLbl           = new QLabel(applDateLabelString);
 
     d->useFileNameBtn           = new QRadioButton(d->useSettingsBox);
-    QLabel* const fileNameLbl   = new QLabel(i18n("Try to get from filename"), d->useSettingsBox);
+    QLabel* const fileNameLbl   = new QLabel(i18n("File name timestamp"), d->useSettingsBox);
 
     d->useFileDateBtn           = new QRadioButton(d->useSettingsBox);
     d->useFileDateTypeChooser   = new QComboBox(d->useSettingsBox);

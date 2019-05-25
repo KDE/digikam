@@ -85,6 +85,11 @@ ImportSortFilterModel* ImportSortFilterModel::sourceFilterModel() const
 
 QModelIndex ImportSortFilterModel::mapToSourceImportModel(const QModelIndex& proxyIndex) const
 {
+    if (!proxyIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceImportModel(mapToSource(proxyIndex));
@@ -95,6 +100,11 @@ QModelIndex ImportSortFilterModel::mapToSourceImportModel(const QModelIndex& pro
 
 QModelIndex ImportSortFilterModel::mapFromSourceImportModel(const QModelIndex& importModelIndex) const
 {
+    if (!importModelIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return mapFromSource(m_chainedModel->mapFromSourceImportModel(importModelIndex));
@@ -105,6 +115,11 @@ QModelIndex ImportSortFilterModel::mapFromSourceImportModel(const QModelIndex& i
 
 QModelIndex ImportSortFilterModel::mapFromDirectSourceToSourceImportModel(const QModelIndex& sourceModelIndex) const
 {
+    if (!sourceModelIndex.isValid())
+    {
+        return QModelIndex();
+    }
+
     if (m_chainedModel)
     {
         return m_chainedModel->mapToSourceImportModel(sourceModelIndex);
