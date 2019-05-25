@@ -328,7 +328,7 @@ void GPSSearchView::doLoadState()
 
     d->searchTreeView->loadState();
 
-    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    AlbumManager::instance()->clearCurrentAlbums();
 
     d->searchTreeView->clearSelection();
 }
@@ -429,7 +429,7 @@ void GPSSearchView::slotRegionSelectionChanged()
  */
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-    //AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    //AlbumManager::instance()->clearCurrentAlbums();
 
     // We query the database here
 

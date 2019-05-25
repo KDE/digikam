@@ -43,4 +43,5 @@ BUGFIXES:
 033 ==> 407699 - Text format for "add tag" and "remove tag" is inconsistent.
 034 ==> 407736 - Status Bar Not Visible in Full Screen.
 035 ==> 407806 - Applied reverse geocoding are not saved.
-036 ==> 
+036 ==> 407946 - Duplicates search should perform the search automatically.
+037 ==> 

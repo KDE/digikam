@@ -737,15 +737,15 @@ void FuzzySearchView::slotTabChanged(int tab)
 
         default:  // DUPLICATES
         {
-            d->findDuplicatesPanel->setActive(true);
             QList<SAlbum*> sAlbums = d->findDuplicatesPanel->currentFindDuplicatesAlbums();
 
-            foreach(SAlbum* const album, sAlbums)
+            foreach (SAlbum* const album, sAlbums)
             {
                 albums << album;
             }
 
             AlbumManager::instance()->setCurrentAlbums(albums);
+            d->findDuplicatesPanel->setActive(true);
             d->folderView->setVisible(false);
             break;
         }
@@ -889,7 +889,7 @@ void FuzzySearchView::slotTimerSketchDone()
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, bool force)
 {
-    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    AlbumManager::instance()->clearCurrentAlbums();
 
     QList<int> albums = d->sketchSearchAlbumSelectors->selectedAlbumIds();
 
@@ -903,7 +903,7 @@ void FuzzySearchView::slotClearSketch()
 {
     d->sketchWidget->slotClear();
     slotCheckNameEditSketchConditions();
-    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    AlbumManager::instance()->clearCurrentAlbums();
 }
 
 void FuzzySearchView::slotCheckNameEditSketchConditions()
@@ -1012,7 +1012,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
 
                 d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-                AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+                AlbumManager::instance()->clearCurrentAlbums();
                 QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
 
                 QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
@@ -1059,7 +1059,7 @@ void FuzzySearchView::slotTimerImageDone()
 {
     if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty())
     {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+        AlbumManager::instance()->clearCurrentAlbums();
         QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
 
         QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
@@ -1111,7 +1111,7 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
-    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    AlbumManager::instance()->clearCurrentAlbums();
     QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
 
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo,

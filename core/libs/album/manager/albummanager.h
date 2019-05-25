@@ -196,8 +196,7 @@ private Q_SLOTS:
 public:
 
     /**
-     * set current album to @p albums. It's similar to setCurrentAlbum,
-     * but supports multiple selected albums
+     * set current album to @p albums.
      */
     void setCurrentAlbums(const QList<Album*>& albums);
 
@@ -205,6 +204,11 @@ public:
      * @returns current albums, previously set up by setCurrentAlbums
      */
     AlbumList currentAlbums() const;
+
+    /**
+     * clear current albums.
+     */
+    void clearCurrentAlbums();
 
     /**
      * @return a Album with the given globalID

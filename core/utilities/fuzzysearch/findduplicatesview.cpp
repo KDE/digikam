@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QApplication>
 #include <QStyle>
+#include <QTimer>
 
 // KDE includes
 
@@ -271,6 +272,7 @@ void FindDuplicatesView::initAlbumUpdateConnections()
 void FindDuplicatesView::setActive(bool val)
 {
     d->active = val;
+    QTimer::singleShot(250, this, SLOT(slotSelectFirstItem()));
 }
 
 void FindDuplicatesView::populateTreeView()
@@ -289,12 +291,16 @@ void FindDuplicatesView::populateTreeView()
     }
 
     d->listView->setSortingEnabled(true);
-    d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
+    d->listView->sortByColumn(1, Qt::DescendingOrder);
 
     d->albumSelectors->loadState();
+}
 
+void FindDuplicatesView::slotSelectFirstItem()
+{
     d->listView->selectFirstItem();
+    slotDuplicatesAlbumActived();
 }
 
 QList<SAlbum*> FindDuplicatesView::currentFindDuplicatesAlbums() const
@@ -443,6 +449,8 @@ void FindDuplicatesView::slotFindDuplicates()
         tags   = d->albumSelectors->selectedTags();
     }
 
+    AlbumManager::instance()->clearCurrentAlbums();
+
     DuplicatesFinder* const finder = new DuplicatesFinder(albums, tags,
                                                           d->albumTagRelation->itemData(d->albumTagRelation->currentIndex()).toInt(),
                                                           d->similarityRange->minValue(), d->similarityRange->maxValue(),
@@ -470,6 +478,8 @@ void FindDuplicatesView::slotComplete()
     enableControlWidgets(true);
     slotCheckForValidSettings();
     populateTreeView();
+
+    QTimer::singleShot(250, this, SLOT(slotSelectFirstItem()));
 }
 
 void FindDuplicatesView::slotDuplicatesAlbumActived()
@@ -521,7 +531,14 @@ void FindDuplicatesView::slotSetSelectedAlbum(PAlbum* album)
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     d->albumSelectors->setAlbumSelected(album, true);
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
+    d->albumTagRelation->setCurrentIndex(d->albumTagRelation->findData(HaarIface::AlbumTagRelation::NoMix));
+    d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(HaarIface::DuplicatesSearchRestrictions::None));
     slotCheckForValidSettings();
+
+    if (d->scanDuplicatesBtn->isEnabled())
+    {
+        slotFindDuplicates();
+    }
 }
 
 void FindDuplicatesView::slotSetSelectedAlbums(const QList<PAlbum*>& albums)
@@ -535,7 +552,14 @@ void FindDuplicatesView::slotSetSelectedAlbums(const QList<PAlbum*>& albums)
     }
 
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
+    d->albumTagRelation->setCurrentIndex(d->albumTagRelation->findData(HaarIface::AlbumTagRelation::NoMix));
+    d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(HaarIface::DuplicatesSearchRestrictions::None));
     slotCheckForValidSettings();
+
+    if (d->scanDuplicatesBtn->isEnabled())
+    {
+        slotFindDuplicates();
+    }
 }
 
 void FindDuplicatesView::slotSetSelectedAlbums(const QList<TAlbum*>& albums)
@@ -548,7 +572,14 @@ void FindDuplicatesView::slotSetSelectedAlbums(const QList<TAlbum*>& albums)
     }
 
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::TagsAlbum);
+    d->albumTagRelation->setCurrentIndex(d->albumTagRelation->findData(HaarIface::AlbumTagRelation::NoMix));
+    d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(HaarIface::DuplicatesSearchRestrictions::None));
     slotCheckForValidSettings();
+
+    if (d->scanDuplicatesBtn->isEnabled())
+    {
+        slotFindDuplicates();
+    }
 }
 
 void FindDuplicatesView::resetAlbumsAndTags()
