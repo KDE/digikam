@@ -236,9 +236,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
             this, SLOT(slotCheckForValidSettings()));
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
-            this, SLOT(populateTreeView()));
-
-    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(initAlbumUpdateConnections()));
 
     connect(d->settings, SIGNAL(setupChanged()),
@@ -277,6 +274,11 @@ void FindDuplicatesView::setActive(bool val)
 
 void FindDuplicatesView::populateTreeView()
 {
+    if (d->listView->topLevelItemCount() > 0)
+    {
+        return;
+    }
+
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
 
     for (AlbumList::const_iterator it = aList.constBegin() ; it != aList.constEnd() ; ++it)

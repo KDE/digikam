@@ -745,6 +745,7 @@ void FuzzySearchView::slotTabChanged(int tab)
             }
 
             AlbumManager::instance()->setCurrentAlbums(albums);
+            d->findDuplicatesPanel->populateTreeView();
             d->findDuplicatesPanel->setActive(true);
             d->folderView->setVisible(false);
             break;
