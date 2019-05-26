@@ -55,7 +55,7 @@ public:
     SAlbum*   album;
     int       itemCount;
 
-    ItemInfo refImgInfo;
+    ItemInfo  refImgInfo;
 };
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album)
@@ -134,7 +134,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
             }
             else
             {
-                avgSim = avgSim / (d->itemCount - 1 );
+                avgSim = avgSim / (d->itemCount - 1);
             }
         }
         else
@@ -157,6 +157,7 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)
     int iconSize = treeWidget()->iconSize().width();
     QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
+
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()  / 2) - (pix.width()  / 2),
                  (pixmap.height() / 2) - (pix.height() / 2), pix);
