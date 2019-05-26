@@ -280,9 +280,6 @@ void MaintenanceThread::cleanSimilarityDb(const QList<qlonglong>& imageIds)
         connect(t, SIGNAL(signalFinished()),
                 this, SIGNAL(signalAdvance()));
 
-        connect(this, SIGNAL(signalCanceled()),
-                t, SLOT(slotCancel()), Qt::QueuedConnection);
-
         collection.insert(t, 0);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale image id entries from similarity db.";
