@@ -93,20 +93,19 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
     {
         qlonglong refImage = d->album->title().toLongLong();
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album " << QString::number(refImage);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album" << refImage;
 
         SearchXmlReader reader(d->album->query());
         reader.readToFirstField();
 
         // Get the defined image ids.
-        QList<int> list;
-        list << reader.valueToIntList();
+        const QList<qlonglong>& list = reader.valueToLongLongList();
 
         // only images that are not removed/obsolete should be shown.
-        double avgSim = 0.00;
-        QList<int> filteredList;
+        QList<qlonglong> filteredList;
+        double avgSim = 0.0;
 
-        foreach (int imageId, list)
+        foreach (const qlonglong& imageId, list)
         {
             ItemInfo info(imageId);
 
@@ -125,7 +124,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
 
         d->itemCount = filteredList.count();
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count: " << QString::number(d->itemCount);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count:" << d->itemCount;
 
         if (d->itemCount > 1)
         {

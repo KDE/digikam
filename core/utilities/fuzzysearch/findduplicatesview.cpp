@@ -428,8 +428,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 void FindDuplicatesView::slotFindDuplicates()
 {
     d->albumSelectors->saveState();
-    slotClear();
     enableControlWidgets(false);
+    slotClear();
 
     AlbumList albums;
     AlbumList tags;
