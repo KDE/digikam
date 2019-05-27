@@ -47,4 +47,5 @@ BUGFIXES:
 037 ==> 407947 - Crash while updating fingerprints.
 038 ==> 407993 - Feature request: feedback when deleting unassigned tags in Tag Manager.
 039 ==> 407958 - In Thumbnail View Creation date is not correct.
-040 ==> 
+040 ==> 407948 - Option to configure temp directory.
+041 ==> 
