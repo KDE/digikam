@@ -975,6 +975,8 @@ void TagsManager::slotRemoveNotAssignedTags()
         }
     }
 
+    int deleteCounter = 0;
+
     foreach(TAlbum* const elem, toRemove)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << elem->title();
@@ -984,7 +986,15 @@ void TagsManager::slotRemoveNotAssignedTags()
         {
             QMessageBox::critical(this, qApp->applicationName(), errMsg);
         }
+        else
+        {
+            ++deleteCounter;
+        }
     }
+
+    QMessageBox::information(this, qApp->applicationName(),
+                             i18np("%1 unused tag were removed.",
+                                   "%1 unused tags were removed.", deleteCounter));
 }
 
 } // namespace Digikam

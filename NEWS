@@ -45,4 +45,5 @@ BUGFIXES:
 035 ==> 407806 - Applied reverse geocoding are not saved.
 036 ==> 407946 - Duplicates search should perform the search automatically.
 037 ==> 407947 - Crash while updating fingerprints.
-038 ==> 
+038 ==> 407993 - Feature request: feedback when deleting unassigned tags in Tag Manager.
+039 ==> 
