@@ -50,4 +50,5 @@ BUGFIXES:
 040 ==> 407948 - Option to configure temp directory.
 041 ==> 387770 - Plugin Instructions Unreadable in Some Themes.
 042 ==> 397599 - Usability deteriorated.
-043 ==> 
+043 ==> 388359 - Icons on the toolbar are not visible when background is dark.
+044 ==> 
