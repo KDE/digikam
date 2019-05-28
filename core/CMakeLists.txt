@@ -701,6 +701,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
         string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
+    # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
