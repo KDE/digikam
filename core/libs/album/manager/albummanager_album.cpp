@@ -31,7 +31,9 @@ namespace Digikam
 void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
+    {
         return;
+    }
 
     d->currentAlbums.clear();
     /**
@@ -55,6 +57,12 @@ void AlbumManager::setCurrentAlbums(const QList<Album*>& albums)
 AlbumList AlbumManager::currentAlbums() const
 {
     return d->currentAlbums;
+}
+
+void AlbumManager::clearCurrentAlbums()
+{
+    d->currentAlbums.clear();
+    emit signalAlbumCurrentChanged(d->currentAlbums);
 }
 
 Album* AlbumManager::findAlbum(int gid) const

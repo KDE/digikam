@@ -73,8 +73,10 @@ QString ExpoBlendingPlugin::description() const
 QString ExpoBlendingPlugin::details() const
 {
     return i18n("<p>This tool permit to blend bracketed images together to create pseudo HDR photo.</p>"
-                "<p>To create high definition range image, you need to use images from same subject taken with a tripod and exposed with different exposure settings.</p>"
-                "<p>To create image with better results, you can use RAW images instead JPEG, where colors depth is higher and are well adapted for merging pixels by pixels.</p>");
+                "<p>To create high definition range image, you need to use images from same subject "
+                "taken with a tripod and exposed with different exposure settings.</p>"
+                "<p>To create image with better results, you can use RAW images instead JPEG, where "
+                "colors depth is higher and are well adapted for merging pixels by pixels.</p>");
 }
 
 QList<DPluginAuthor> ExpoBlendingPlugin::authors() const
@@ -109,9 +111,19 @@ void ExpoBlendingPlugin::setup(QObject* const parent)
 
 void ExpoBlendingPlugin::slotExpoBlending()
 {
+    DInfoInterface* const iface = infoIface(sender());
+    bool created                = ExpoBlendingManager::isCreated();
+
     ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(infoIface(sender())->currentSelectedItems());
+    ExpoBlendingManager::instance()->setItemsList(iface->currentSelectedItems());
     ExpoBlendingManager::instance()->setPlugin(this);
+
+    if (!created)
+    {
+        connect(ExpoBlendingManager::instance(), SIGNAL(updateHostApp(QUrl)),
+                iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+    }
+
     ExpoBlendingManager::instance()->run();
 }
 

@@ -42,6 +42,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "gpsitemcontainer.h"
 
 namespace Digikam
 {
@@ -111,6 +112,8 @@ public:
 
     // Return an instance of tag filter model if host application support this feature, else null pointer.
     virtual QAbstractItemModel* tagFilterModel();
+
+    virtual QList<GPSItemContainer*> currentGPSItems()   const;
 };
 
 // -----------------------------------------------------------------

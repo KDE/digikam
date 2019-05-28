@@ -502,7 +502,7 @@ GeolocationEdit::GeolocationEdit(QWidget* const parent, DInfoInterface* const if
 
     d->mapWidget->setActive(true);
 
-    setImages(d->iface->currentSelectedItems());
+    setItems(d->iface->currentGPSItems());
 }
 
 GeolocationEdit::~GeolocationEdit()

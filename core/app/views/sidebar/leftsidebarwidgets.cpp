@@ -1058,7 +1058,7 @@ void TimelineSideBarWidget::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
     slotCheckAboutSelection();
-    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    AlbumManager::instance()->clearCurrentAlbums();
 }
 
 void TimelineSideBarWidget::slotCheckAboutSelection()

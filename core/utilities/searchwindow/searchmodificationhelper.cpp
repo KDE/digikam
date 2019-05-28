@@ -185,7 +185,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 
     if (dateRanges.isEmpty())
     {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+        AlbumManager::instance()->clearCurrentAlbums();
         return nullptr;
     }
 

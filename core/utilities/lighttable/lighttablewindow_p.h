@@ -66,7 +66,6 @@
 #include "deletedialog.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
-#include "itemgps.h"
 #include "itemdescedittab.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"

@@ -55,7 +55,7 @@ public:
     SAlbum*   album;
     int       itemCount;
 
-    ItemInfo refImgInfo;
+    ItemInfo  refImgInfo;
 };
 
 FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album)
@@ -93,20 +93,19 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
     {
         qlonglong refImage = d->album->title().toLongLong();
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album " << QString::number(refImage);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album" << refImage;
 
         SearchXmlReader reader(d->album->query());
         reader.readToFirstField();
 
         // Get the defined image ids.
-        QList<int> list;
-        list << reader.valueToIntList();
+        const QList<qlonglong>& list = reader.valueToLongLongList();
 
         // only images that are not removed/obsolete should be shown.
-        double avgSim = 0.00;
-        QList<int> filteredList;
+        QList<qlonglong> filteredList;
+        double avgSim = 0.0;
 
-        foreach (int imageId, list)
+        foreach (const qlonglong& imageId, list)
         {
             ItemInfo info(imageId);
 
@@ -125,7 +124,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
 
         d->itemCount = filteredList.count();
 
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count: " << QString::number(d->itemCount);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count:" << d->itemCount;
 
         if (d->itemCount > 1)
         {
@@ -135,7 +134,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
             }
             else
             {
-                avgSim = avgSim / (d->itemCount - 1 );
+                avgSim = avgSim / (d->itemCount - 1);
             }
         }
         else
@@ -158,6 +157,7 @@ void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)
     int iconSize = treeWidget()->iconSize().width();
     QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
+
     QPainter p(&pixmap);
     p.drawPixmap((pixmap.width()  / 2) - (pix.width()  / 2),
                  (pixmap.height() / 2) - (pix.height() / 2), pix);

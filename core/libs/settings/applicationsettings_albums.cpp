@@ -64,6 +64,16 @@ ApplicationSettings::AlbumSortRole ApplicationSettings::getAlbumSortRole() const
     return d->albumSortRole;
 }
 
+void ApplicationSettings::setAlbumMonitoring(bool val)
+{
+    d->albumMonitoring = val;
+}
+
+bool ApplicationSettings::getAlbumMonitoring() const
+{
+    return d->albumMonitoring;
+}
+
 void ApplicationSettings::setRecurseAlbums(bool val)
 {
     d->recursiveAlbums = val;

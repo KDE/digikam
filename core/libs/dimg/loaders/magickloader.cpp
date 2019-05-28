@@ -23,6 +23,10 @@
 
 #include "magickloader.h"
 
+// Qt includes
+
+#include <QMimeDatabase>
+
 // ImageMagick includes
 
 #include <Magick++.h>
@@ -46,6 +50,13 @@ MagickLoader::MagickLoader(DImg* const image)
 
 bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
+    QMimeDatabase mimeDB;
+
+    if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("image/")))
+    {
+        return false;
+    }
+
     readMetadata(filePath, DImg::QIMAGE);
 
     // Loading is opaque to us. No support for stopping from observer,

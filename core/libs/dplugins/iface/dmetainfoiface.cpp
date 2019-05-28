@@ -249,4 +249,16 @@ QUrl DMetaInfoIface::defaultUploadUrl() const
     return place;
 }
 
+QList<GPSItemContainer*> DMetaInfoIface::currentGPSItems() const
+{
+    QList<GPSItemContainer*> items;
+
+    foreach (const QUrl& url, currentSelectedItems())
+    {
+        items << new GPSItemContainer(url);
+    }
+
+    return items;
+}
+
 } // namespace Digikam

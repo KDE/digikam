@@ -225,10 +225,9 @@ DigikamApp::~DigikamApp()
     }
 #endif
 
-    DPluginLoader::instance()->cleanUp();
+    delete d->view;
 
-    d->view->saveViewState();
-    //delete d->view;
+    DPluginLoader::instance()->cleanUp();
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
     ApplicationSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());

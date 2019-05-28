@@ -63,6 +63,7 @@ public:
     static const QString configGroupDuplicatesSearch;
     static const QString configGroupGrouping;
     static const QString configAlbumCollectionsEntry;
+    static const QString configAlbumMonitoringEntry;
     static const QString configAlbumSortRoleEntry;
     static const QString configImageSortOrderEntry;
     static const QString configImageSortingEntry;
@@ -260,6 +261,8 @@ public:
     bool                                         databaseDirSetAtCmd;
 
     // album settings
+    bool                                         albumMonitoring;
+
     QStringList                                  albumCategoryNames;
 
     KSharedConfigPtr                             config;

@@ -51,9 +51,11 @@ public:
 
     QList<SAlbum*> currentFindDuplicatesAlbums() const;
     void setActive(bool val);
+    void populateTreeView();
 
 public Q_SLOTS:
 
+    void slotSelectFirstItem();
     void slotSetSelectedAlbum(PAlbum* album);
     void slotSetSelectedAlbums(const QList<PAlbum*>& albums);
     void slotSetSelectedAlbums(const QList<TAlbum*>& albums);
@@ -61,7 +63,6 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void initAlbumUpdateConnections();
-    void populateTreeView();
     void slotAlbumAdded(Album* a);
     void slotAlbumDeleted(Album* a);
     void slotSearchUpdated(SAlbum* a);

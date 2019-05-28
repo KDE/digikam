@@ -46,7 +46,7 @@ bool ItemGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
     ItemPosition pos = m_info.imagePosition();
-    m_dateTime        = m_info.dateTime();
+    m_dateTime       = m_info.dateTime();
 
     if (!pos.isEmpty() && pos.hasCoordinates())
     {
@@ -66,7 +66,8 @@ bool ItemGPS::loadImageData()
         return true;
     }
 
-    // If item do not have any GPS data in databse, we will try to load it from file using standard implementation from GPSItemContainer.
+    // If item do not have any GPS data in databse, we will try to load
+    // it from file using standard implementation from GPSItemContainer.
 
     return GPSItemContainer::loadImageData();
 }
@@ -106,13 +107,13 @@ QString ItemGPS::saveChanges()
         QMap<QString, QVariant> attributes;
         QStringList tagsPath;
 
-        for (int i = 0; i < m_tagList.count(); ++i)
+        for (int i = 0 ; i < m_tagList.count() ; ++i)
         {
 
             QString singleTagPath;
             QList<TagData> currentTagPath = m_tagList[i];
 
-            for (int j = 0; j < currentTagPath.count(); ++j)
+            for (int j = 0 ; j < currentTagPath.count() ; ++j)
             {
                 singleTagPath.append(QLatin1Char('/') + currentTagPath[j].tagName);
 
@@ -132,18 +133,6 @@ QString ItemGPS::saveChanges()
     // Save info to file.
 
     return GPSItemContainer::saveChanges();
-}
-
-QList<GPSItemContainer*> ItemGPS::infosToItems(const ItemInfoList& infos)
-{
-    QList<GPSItemContainer*> items;
-
-    foreach(const ItemInfo& inf, infos)
-    {
-        items << new ItemGPS(inf);
-    }
-
-    return items;
 }
 
 } // namespace Digikam

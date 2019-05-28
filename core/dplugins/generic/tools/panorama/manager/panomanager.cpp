@@ -116,7 +116,7 @@ public:
     PanoActionThread*              thread;
 
     DPlugin*                       plugin;
-    
+
     AutoOptimiserBinary            autoOptimiserBinary;
     CPCleanBinary                  cpCleanBinary;
     CPFindBinary                   cpFindBinary;

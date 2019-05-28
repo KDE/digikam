@@ -57,7 +57,7 @@ public:
     /// Convenience methods mapped to ShowfotoItemModel.
     /// Mentioned indexes returned come from the source Showfoto image model.
     QModelIndex mapToSourceShowfotoModel(const QModelIndex& proxyIndex)                       const;
-    QModelIndex mapFromSourceShowfotoModel(const QModelIndex& ShowfotoModelIndex)             const;
+    QModelIndex mapFromSourceShowfotoModel(const QModelIndex& showfotoModelIndex)             const;
     QModelIndex mapFromDirectSourceToSourceShowfotoModel(const QModelIndex& sourceModelIndex) const;
 
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes)         const;

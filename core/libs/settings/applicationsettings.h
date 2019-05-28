@@ -178,6 +178,9 @@ public:
     void setShowFolderTreeViewItemsCount(bool val);
     bool getShowFolderTreeViewItemsCount() const;
 
+    void setAlbumMonitoring(bool val);
+    bool getAlbumMonitoring() const;
+
     void setRecurseAlbums(bool val);
     bool getRecurseAlbums() const;
 

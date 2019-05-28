@@ -42,4 +42,13 @@ BUGFIXES:
 032 ==> 378112 - No progress bar while maint initializes.
 033 ==> 407699 - Text format for "add tag" and "remove tag" is inconsistent.
 034 ==> 407736 - Status Bar Not Visible in Full Screen.
-035 ==> 
+035 ==> 407806 - Applied reverse geocoding are not saved.
+036 ==> 407946 - Duplicates search should perform the search automatically.
+037 ==> 407947 - Crash while updating fingerprints.
+038 ==> 407993 - Feature request: feedback when deleting unassigned tags in Tag Manager.
+039 ==> 407958 - In Thumbnail View Creation date is not correct.
+040 ==> 407948 - Option to configure temp directory.
+041 ==> 387770 - Plugin Instructions Unreadable in Some Themes.
+042 ==> 397599 - Usability deteriorated.
+043 ==> 388359 - Icons on the toolbar are not visible when background is dark.
+044 ==> 
