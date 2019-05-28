@@ -702,7 +702,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endwhile()
 
     # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
 
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
