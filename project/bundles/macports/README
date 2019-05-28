@@ -1,4 +1,4 @@
-RESUME
+RESUMEé
 ------
 Scripts to build binary digiKam package for MacOS
 
@@ -109,7 +109,7 @@ See this url for details : http://guide.macports.org/#installing.xcode.
 
 For all other Macports requirement, see http://www.macports.org/install.php.
 
-You will also need to install Packages software from which does the actual packaging of the files needed to install digiKam:
+You will also need to install Packages software which does the actual packaging of the files needed to install digiKam:
 
 http://s.sudre.free.fr/Software/Packages/about.html
 
