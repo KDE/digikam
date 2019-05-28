@@ -38,7 +38,6 @@ elseif(APPLE)
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
         URL_MD5 ${KF5_APPLICATION_MD5SUM}
         INSTALL_DIR ${EXTPREFIX_kcalcore}
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-macports.patch
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.macports ${EXTPREFIX_kcalcore} RelWithDebInfo x86_64 "${BASH_OPTIONS}"
