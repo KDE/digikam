@@ -107,7 +107,7 @@ ${MXE_BUILD_TARGETS}-cmake -G "Unix Makefiles" . \
                            -DENABLE_MEDIAPLAYER=ON \
                            -DENABLE_DBUS=OFF \
                            -DENABLE_KIO=OFF \
-                           -DENABLE_APPSTYLES=OFF \
+                           -DENABLE_APPSTYLES=ON \
                            -DENABLE_QWEBENGINE=OFF \
                            -DENABLE_FACESENGINE_DNN=ON \
                            -DENABLE_DRMINGW=ON \
