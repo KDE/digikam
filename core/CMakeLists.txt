@@ -709,7 +709,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     if(CMAKE_COMPILER_IS_GNUCXX)
         exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
 
-        if (${GCC_VERSION} VERSION_GREATER_EQUAL "9.0.0")
+        if (${GCC_VERSION} VERSION_GREATER "8.99.99")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
         endif()
     endif()
