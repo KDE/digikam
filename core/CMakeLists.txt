@@ -155,8 +155,12 @@ endif()
 # Dependencies For unit tests and CLI test tools
 
 if(BUILD_TESTING)
-    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS
+    find_package(Qt5 ${QT_MIN_VERSION}
+                 NO_MODULE COMPONENTS
                  Test
+    )
+    find_package(Qt5 ${QT_MIN_VERSION}
+                 OPTIONAL_COMPONENTS
                  Qml WebView  # Optional, for 'sialis' O2 library test tool.
     )
 endif()
