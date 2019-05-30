@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <Solid/SolidNamespace>
+#include <Solid/solidnamespace.h>
 
 // Local includes
 
