@@ -515,7 +515,7 @@ FilterAction BWSepiaFilter::filterAction()
     d->settings.curvesPrm.writeToFilterAction(action);
     d->settings.bcgPrm.writeToFilterAction(action);
 
-    return action;
+    return std::move(action);
 }
 
 void BWSepiaFilter::readParameters(const FilterAction& action)

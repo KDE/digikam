@@ -53,6 +53,11 @@
 // NOTE: All Exiv2 header must be stay there to not expose external source code to Exiv2 API
 //       and reduce Exiv2 dependency to client code.
 
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 // The pragmas are required to be able to catch exceptions thrown by libexiv2:
 // See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
 // They are needed for all libexiv2 versions that do not care about visibility.
@@ -88,7 +93,6 @@
 // With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.
 // See Exiv2 bugzilla entry http://dev.exiv2.org/issues/719
 // and wiki topic           http://dev.exiv2.org/boards/3/topics/583
-
 #ifdef Q_CC_GNU
 #   pragma GCC visibility pop
 #endif
@@ -182,5 +186,9 @@ public:
 };
 
 } // namespace Digikam
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 #endif // DIGIKAM_META_ENGINE_PRIVATE_H

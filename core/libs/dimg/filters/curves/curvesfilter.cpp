@@ -102,10 +102,9 @@ void CurvesFilter::filterImage()
 FilterAction CurvesFilter::filterAction()
 {
     DefaultFilterAction<CurvesFilter> action(m_settings.isStoredLosslessly());
-
     m_settings.writeToFilterAction(action);
 
-    return action;
+    return std::move(action);
 }
 
 void CurvesFilter::readParameters(const FilterAction& action)

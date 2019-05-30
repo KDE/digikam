@@ -49,12 +49,12 @@ extern "C"
 #include "metaengine_data_p.h"
 
 // Pragma directives to reduce warnings from Exiv2.
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
+#if defined(Q_CC_CLANG)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -807,10 +807,10 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 } // namespace Digikam
 
 // Restore warnings
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #   pragma GCC diagnostic pop
 #endif
 
-#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
+#if defined(Q_CC_CLANG)
 #   pragma clang diagnostic pop
 #endif
