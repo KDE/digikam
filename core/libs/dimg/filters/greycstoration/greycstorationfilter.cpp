@@ -54,6 +54,8 @@
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #   pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#   pragma GCC diagnostic ignored "-Wshift-negative-value"
+#   pragma GCC diagnostic ignored "-Wmisleading-indentation"
 #endif
 
 #if defined(Q_CC_CLANG)
