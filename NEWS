@@ -52,4 +52,5 @@ BUGFIXES:
 042 ==> 397599 - Usability deteriorated.
 043 ==> 388359 - Icons on the toolbar are not visible when background is dark.
 044 ==> 408147 - From LightTable, "Open" picture does not open the right one.
-045 ==> 
+045 ==> 408157 - "Tone Color Picker" cursor is not correctly positionned vs Mouse.
+046 ==> 
