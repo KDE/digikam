@@ -97,7 +97,6 @@ public:
         imageFilterModel(nullptr),
         albumModel(nullptr),
         parent(nullptr),
-        utilities(nullptr),
         stdActionCollection(nullptr),
         q(q)
     {
@@ -117,8 +116,6 @@ public:
     AbstractCheckableAlbumModel* albumModel;
 
     QMenu*                       parent;
-
-    ItemViewUtilities*           utilities;
 
     KActionCollection*           stdActionCollection;
 
@@ -173,7 +170,6 @@ ContextMenuHelper::ContextMenuHelper(QMenu* const parent, KActionCollection* con
 
 ContextMenuHelper::~ContextMenuHelper()
 {
-    delete d->utilities;
     delete d;
 }
 
@@ -445,10 +441,8 @@ void ContextMenuHelper::slotOpenImageFile()
         return;
     }
 
-    d->utilities       = new ItemViewUtilities(nullptr);
     ItemInfoList infos = ItemInfoList(d->selectedIds);
-
-    d->utilities->openInfos(infos.first(), infos, nullptr);
+    ItemViewUtilities(d->parent).openInfos(infos.first(), infos, nullptr);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)
