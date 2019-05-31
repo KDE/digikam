@@ -51,4 +51,5 @@ BUGFIXES:
 041 ==> 387770 - Plugin Instructions Unreadable in Some Themes.
 042 ==> 397599 - Usability deteriorated.
 043 ==> 388359 - Icons on the toolbar are not visible when background is dark.
-044 ==> 
+044 ==> 408147 - From LightTable, "Open" picture does not open the right one.
+045 ==> 
