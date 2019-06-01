@@ -775,6 +775,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
 
     QString wildcard(QLatin1String("*."));
     QChar dot(QLatin1Char('.'));
+    Q_UNUSED(dot);
 
     QChar sep(QLatin1Char(';'));
     int i = filterString.indexOf( sep );
