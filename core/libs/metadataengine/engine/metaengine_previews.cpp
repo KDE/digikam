@@ -53,8 +53,11 @@ public:
 
         try
         {
+#if EXIV2_TEST_VERSION(0,27,99)
+            image                              = std::move(image_);
+#else
             image                              = image_;
-
+#endif
             image->readMetadata();
 
             manager                            = new Exiv2::PreviewManager(*image);
@@ -93,7 +96,11 @@ MetaEnginePreviews::MetaEnginePreviews(const QString& filePath)
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath).constData()));
+#if EXIV2_TEST_VERSION(0,27,99)
+        d->load(std::move(image));
+#else
         d->load(image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -113,7 +120,11 @@ MetaEnginePreviews::MetaEnginePreviews(const QByteArray& imgData)
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+#if EXIV2_TEST_VERSION(0,27,99)
+        d->load(std::move(image));
+#else
         d->load(image);
+#endif
     }
     catch( Exiv2::Error& e )
     {

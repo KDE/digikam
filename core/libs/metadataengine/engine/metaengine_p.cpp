@@ -154,7 +154,11 @@ bool MetaEngine::Private::saveToXMPSidecar(const QFileInfo& finfo) const
         image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp,
                                             (const char*)(QFile::encodeName(filePath).constData()));
 
+#if EXIV2_TEST_VERSION(0,27,99)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -240,7 +244,11 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
         Exiv2::Image::AutoPtr image;
         image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath()).constData()));
 
+#if EXIV2_TEST_VERSION(0,27,99)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
