@@ -725,7 +725,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
                 case Exiv2::signedShort:
                 case Exiv2::signedLong:
                 {
-                    if (it->count() > component)
+                    if ((int)it->count() > component)
                         return QVariant((int)it->toLong(component));
                     else
                         return QVariant(QVariant::Int);
@@ -734,10 +734,9 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
                 {
-
                     if (rationalAsListOfInts)
                     {
-                        if (it->count() <= component)
+                        if ((int)it->count() <= component)
                             return QVariant(QVariant::List);
 
                         QList<QVariant> list;
@@ -748,7 +747,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
                     }
                     else
                     {
-                        if (it->count() <= component)
+                        if ((int)it->count() <= component)
                             return QVariant(QVariant::Double);
 
                         // prefer double precision
