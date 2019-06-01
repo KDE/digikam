@@ -89,6 +89,34 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
 )
 
 if(ENABLE_FACESENGINE_DNN)
+
+    if(NOT MSVC)
+
+    message(STATUS "Before:${CMAKE_C_FLAGS}")
+    message(STATUS "Before:${CMAKE_CXX_FLAGS}")
+
+        # Dlib DNN generate plenty of wrong warnings. Remove these workaround later when code will be ported to OpenCV DNN.
+        while(CMAKE_CXX_FLAGS MATCHES "-Wcast-align")
+            string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        endwhile()
+
+        while(CMAKE_CXX_FLAGS MATCHES "-Wextra")
+            string(REPLACE "-Wextra" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        endwhile()
+
+        while(CMAKE_CXX_FLAGS MATCHES "-Wundef")
+            string(REPLACE "-Wundef" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        endwhile()
+
+        while(CMAKE_CXX_FLAGS MATCHES "-Wall")
+            string(REPLACE "-Wall" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        endwhile()
+
+    message(STATUS "After:${CMAKE_C_FLAGS}")
+    message(STATUS "After:${CMAKE_CXX_FLAGS}")
+
+    endif()
+
     set(facesengine_database_LIB_SRCS ${facesengine_database_LIB_SRCS}
                                       # Neural NetWork Faces recognition module based on Dlib
                                       recognition/dlib-dnn/dnnfacemodel.cpp
