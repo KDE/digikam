@@ -92,9 +92,6 @@ if(ENABLE_FACESENGINE_DNN)
 
     if(NOT MSVC)
 
-    message(STATUS "Before:${CMAKE_C_FLAGS}")
-    message(STATUS "Before:${CMAKE_CXX_FLAGS}")
-
         # Dlib DNN generate plenty of wrong warnings. Remove these workaround later when code will be ported to OpenCV DNN.
         while(CMAKE_CXX_FLAGS MATCHES "-Wcast-align")
             string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -111,9 +108,6 @@ if(ENABLE_FACESENGINE_DNN)
         while(CMAKE_CXX_FLAGS MATCHES "-Wall")
             string(REPLACE "-Wall" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         endwhile()
-
-    message(STATUS "After:${CMAKE_C_FLAGS}")
-    message(STATUS "After:${CMAKE_CXX_FLAGS}")
 
     endif()
 
