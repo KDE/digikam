@@ -592,8 +592,6 @@ static const quint8 videoStrip64[64 * 64 * 3] =
 };
 
 static const quint32 SMALLEST_FILM_STRIP_WIDTH = 4;
-static const int FILMHOLE_WIDTH                = 12;
-static const int FILMHOLE_HEIGHT               = 10;
 
 static const quint8* determineFilmStrip(quint32 videoWidth, quint32& videoStripWidth, quint32& videoStripHeight)
 {
