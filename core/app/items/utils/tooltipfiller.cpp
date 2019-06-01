@@ -100,8 +100,6 @@ QString ToolTipFiller::imageInfoTipContents(const ItemInfo& info)
             tip                   += str + cnt.cellEnd;
         }
 
-        QSize dims;
-
         if (settings->getToolTipsShowImageType())
         {
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + commonInfo.format + cnt.cellEnd;
