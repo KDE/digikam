@@ -714,6 +714,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
         endif()
     endif()
 
+    # Remove -Winconsistent-missing-override Clang warnings which generate a lots of compile warnings
+    if(CMAKE_CXX_COMPILER MATCHES ".*clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
+    endif()
+
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
