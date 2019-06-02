@@ -616,6 +616,20 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
             return false;
         }
 
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit status : " << d->alignProcess->exitStatus();
+        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit code   : " << d->alignProcess->exitCode();
+
+        if (d->alignProcess->exitStatus() != QProcess::NormalExit)
+        {
+            return false;
+        }
+
+        if (d->alignProcess->exitCode() != 0)
+        {
+            errors = getProcessError(*(d->alignProcess));
+            return false;
+        }
+
         uint    i = 0;
         QString temp;
         d->preProcessedUrlsMap.clear();
@@ -629,12 +643,6 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
                                                   QString::number(i).rightJustified(4, QLatin1Char('0')) +
                                                   QLatin1String(".tif"));
 
-            if (!QFileInfo::exists(alignedUrl.toLocalFile()))
-            {
-                errors = getProcessError(*(d->alignProcess));
-                return false;
-            }
-
             if (!computePreview(alignedUrl, previewUrl))
             {
                 return false;
@@ -647,27 +655,12 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
             qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Pre-processed output urls map: "
-                                         << inputUrl << "=>"
-                                         << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
-                                         << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
+                                                 << inputUrl << "=>"
+                                                 << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
+                                                 << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
         }
 
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit status    : " << d->alignProcess->exitStatus();
-        qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Align exit code      : " << d->alignProcess->exitCode();
-
-        if (d->alignProcess->exitStatus() != QProcess::NormalExit)
-        {
-            return false;
-        }
-
-        if (d->alignProcess->exitCode() == 0)
-        {
-            // Process finished successfully !
-            return true;
-        }
-
-        errors = getProcessError(*(d->alignProcess));
-        return false;
+        return true;
     }
     else
     {
