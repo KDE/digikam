@@ -482,7 +482,7 @@ QString AdvancedRenameManager::newName(const QString& filename) const
     {
         regExpStr.append(QLatin1String("<>,:=\";|\\\\/"));
 
-        if (!sysType.contains(QLatin1String("NTFS")))
+        if (sysType.contains(QLatin1String("FAT")))
         {
             regExpStr.append(QLatin1Char('+'));
         }
