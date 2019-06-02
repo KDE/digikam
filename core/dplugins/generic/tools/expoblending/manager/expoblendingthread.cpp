@@ -649,7 +649,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
             }
 
             d->preProcessedUrlsMap.insert(url, ExpoBlendingItemPreprocessedUrls(alignedUrl, previewUrl));
-            i++;
+            ++i;
         }
 
         foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
@@ -657,7 +657,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
             qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Pre-processed output urls map: "
                                                  << inputUrl << "=>"
                                                  << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
-                                                 << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
+                                                 << d->preProcessedUrlsMap[inputUrl].previewUrl;
         }
 
         return true;
@@ -667,9 +667,9 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         foreach (const QUrl& inputUrl, d->preProcessedUrlsMap.keys())
         {
             qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Pre-processed output urls map: "
-                                         << inputUrl << "=>"
-                                         << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
-                                         << d->preProcessedUrlsMap[inputUrl].previewUrl << ";";
+                                                 << inputUrl << "=>"
+                                                 << d->preProcessedUrlsMap[inputUrl].preprocessedUrl << ","
+                                                 << d->preProcessedUrlsMap[inputUrl].previewUrl;
         }
 
         qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "Alignment not performed.";
