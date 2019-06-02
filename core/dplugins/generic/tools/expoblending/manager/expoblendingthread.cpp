@@ -629,6 +629,12 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
                                                   QString::number(i).rightJustified(4, QLatin1Char('0')) +
                                                   QLatin1String(".tif"));
 
+            if (!QFileInfo::exists(alignedUrl.toLocalFile()))
+            {
+                errors = getProcessError(*(d->alignProcess));
+                return false;
+            }
+
             if (!computePreview(alignedUrl, previewUrl))
             {
                 return false;
