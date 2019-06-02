@@ -60,12 +60,12 @@ bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoCoordinates& dr
 
     QList<QPersistentModelIndex> droppedIndices;
 
-    for (int i=0; i<mimeData->draggedIndices.count(); ++i)
+    for (int i = 0 ; i < mimeData->draggedIndices.count() ; ++i)
     {
         // TODO: correctly handle items with multiple columns
         QModelIndex itemIndex = mimeData->draggedIndices.at(i);
 
-        if (itemIndex.column()==0)
+        if (itemIndex.column() == 0)
         {
             droppedIndices << itemIndex;
         }
