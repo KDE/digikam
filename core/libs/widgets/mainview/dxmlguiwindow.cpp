@@ -850,7 +850,8 @@ void DXmlGuiWindow::setupIconTheme()
     // this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data".
 
     bool hasBreeze                = false;
-    const QString breezeIcons     = QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("breeze.rcc"));
+    const QString breezeIcons     = QStandardPaths::locate(QStandardPaths::DataLocation,
+                                                           QLatin1String("breeze.rcc"));
 
     if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons))
     {
@@ -859,7 +860,8 @@ void DXmlGuiWindow::setupIconTheme()
     }
 
     bool hasBreezeDark            = false;
-    const QString breezeDarkIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("breeze-dark.rcc"));
+    const QString breezeDarkIcons = QStandardPaths::locate(QStandardPaths::DataLocation,
+                                                           QLatin1String("breeze-dark.rcc"));
 
     if (!breezeDarkIcons.isEmpty() && QFile::exists(breezeDarkIcons))
     {
@@ -871,6 +873,15 @@ void DXmlGuiWindow::setupIconTheme()
     {
         // Tell Qt about the theme
         QIcon::setThemeSearchPaths(QStringList() << QLatin1String(":/icons"));
+
+        const QString iconsDir = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                        QLatin1String("icons"),
+                                                        QStandardPaths::LocateDirectory);
+
+        if (!iconsDir.isEmpty() && QFile::exists(iconsDir))
+        {
+            QIcon::setThemeSearchPaths(QStringList() << QIcon::themeSearchPaths() << iconsDir);
+        }
 
         // Tell icons loader an co. about the theme
         KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
@@ -887,12 +898,12 @@ void DXmlGuiWindow::setupIconTheme()
             cg.writeEntry("Theme", "breeze-dark");
             qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons resource file found";
         }
-        else
-        {
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "No icons resource file found";
-        }
 
         cg.sync();
+    }
+    else
+    {
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Use icons from system";
     }
 }
 
