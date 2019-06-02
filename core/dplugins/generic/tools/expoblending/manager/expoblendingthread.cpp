@@ -589,8 +589,8 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         // Re-align images
 
         d->alignProcess.reset(new QProcess());
-        d->alignProcess->setWorkingDirectory(d->preprocessingTmpDir->path());
         d->alignProcess->setProcessChannelMode(QProcess::MergedChannels);
+        d->alignProcess->setWorkingDirectory(d->preprocessingTmpDir->path());
         d->alignProcess->setProcessEnvironment(adjustedEnvironmentForAppImage());
 
         QStringList args;
