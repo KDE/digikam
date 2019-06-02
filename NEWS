@@ -55,5 +55,5 @@ BUGFIXES:
 045 ==> 408157 - "Tone Color Picker" cursor is not correctly positionned vs Mouse.
 046 ==> 408095 - Sort items by manual.
 047 ==> 378364 - Sequence number options need date-aware modifier.
-048 ==> 
-
+048 ==> 408213 - '+' symbol is a legitimate win10 file character but unable to enter it into digiKam via Rename.
+049 ==> 
