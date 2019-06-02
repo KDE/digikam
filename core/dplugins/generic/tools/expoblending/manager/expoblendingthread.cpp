@@ -595,6 +595,8 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
         QStringList args;
         args << QLatin1String("-v");
+        args << QLatin1String("-c");
+        args << QLatin1String("16");
         args << QLatin1String("-a");
         args << QLatin1String("aligned");
 
