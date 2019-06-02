@@ -40,6 +40,13 @@
 
 #include <klocalizedstring.h>
 
+// Solid includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wnonportable-include-path"
+#endif
+
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
@@ -48,6 +55,10 @@
 #include <solid/storagevolume.h>
 #include <solid/opticaldisc.h>
 #include <solid/predicate.h>
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 // Local includes
 
