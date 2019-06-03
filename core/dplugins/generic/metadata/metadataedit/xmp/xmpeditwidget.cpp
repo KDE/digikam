@@ -86,7 +86,6 @@ public:
     bool                  isReadOnly;
 
     QByteArray            exifData;
-    QByteArray            iptcData;
     QByteArray            xmpData;
 
     DConfigDlgWdgItem*      page_content;
@@ -235,7 +234,6 @@ void XMPEditWidget::slotItemChanged()
     meta.load((*d->dlg->currentItem()).toLocalFile());
 
     d->exifData = meta.getExifEncoded();
-    d->iptcData = meta.getIptc();
     d->xmpData  = meta.getXmp();
 
     d->contentPage->readMetadata(d->xmpData);
@@ -268,7 +266,6 @@ void XMPEditWidget::apply()
         meta.load((*d->dlg->currentItem()).toLocalFile());
 
         d->exifData = meta.getExifEncoded();
-        d->iptcData = meta.getIptc();
         d->xmpData  = meta.getXmp();
 
         d->contentPage->applyMetadata(d->exifData, d->xmpData);
@@ -281,7 +278,6 @@ void XMPEditWidget::apply()
         d->propertiesPage->applyMetadata(d->xmpData);
 
         meta.setExif(d->exifData);
-        meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);
         meta.save((*d->dlg->currentItem()).toLocalFile());
 
