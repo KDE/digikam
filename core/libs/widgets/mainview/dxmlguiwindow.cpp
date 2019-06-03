@@ -874,13 +874,13 @@ void DXmlGuiWindow::setupIconTheme()
         // Tell Qt about the theme
         QIcon::setThemeSearchPaths(QStringList() << QLatin1String(":/icons"));
 
-        const QString iconsDir = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                        QLatin1String("icons"),
-                                                        QStandardPaths::LocateDirectory);
+        const QStringList iconsDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                                QLatin1String("icons"),
+                                                                QStandardPaths::LocateDirectory);
 
-        if (!iconsDir.isEmpty() && QFile::exists(iconsDir))
+        if (!iconsDirs.isEmpty())
         {
-            QIcon::setThemeSearchPaths(QStringList() << QIcon::themeSearchPaths() << iconsDir);
+            QIcon::setThemeSearchPaths(QStringList() << QIcon::themeSearchPaths() << iconsDirs);
         }
 
         // Tell icons loader an co. about the theme
@@ -903,7 +903,7 @@ void DXmlGuiWindow::setupIconTheme()
     }
     else
     {
-        qCDebug(DIGIKAM_WIDGETS_LOG) << "Use icons from system";
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Use installed icons";
     }
 }
 
