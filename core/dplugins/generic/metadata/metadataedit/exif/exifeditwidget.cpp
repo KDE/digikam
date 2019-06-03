@@ -222,6 +222,13 @@ void EXIFEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
+        DMetadata meta;
+        meta.load((*d->dlg->currentItem()).toLocalFile());
+
+        d->exifData = meta.getExifEncoded();
+        d->iptcData = meta.getIptc();
+        d->xmpData  = meta.getXmp();
+
         d->captionPage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
         d->datetimePage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
 
@@ -230,9 +237,6 @@ void EXIFEditWidget::apply()
         d->lightPage->applyMetadata(d->exifData);
         d->adjustPage->applyMetadata(d->exifData);
 
-        DMetadata meta;
-
-        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);

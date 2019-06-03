@@ -271,6 +271,12 @@ void IPTCEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
+        DMetadata meta;
+        meta.load((*d->dlg->currentItem()).toLocalFile());
+
+        d->exifData = meta.getExifEncoded();
+        d->iptcData = meta.getIptc();
+
         d->contentPage->applyMetadata(d->exifData, d->iptcData);
         d->originPage->applyMetadata(d->exifData, d->iptcData);
         d->creditsPage->applyMetadata(d->iptcData);
@@ -281,12 +287,10 @@ void IPTCEditWidget::apply()
         d->propertiesPage->applyMetadata(d->iptcData);
         d->envelopePage->applyMetadata(d->iptcData);
 
-        DMetadata meta;
-
-        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.save((*d->dlg->currentItem()).toLocalFile());
+
         d->modified = false;
     }
 }

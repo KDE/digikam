@@ -264,6 +264,13 @@ void XMPEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
+        DMetadata meta;
+        meta.load((*d->dlg->currentItem()).toLocalFile());
+
+        d->exifData = meta.getExifEncoded();
+        d->iptcData = meta.getIptc();
+        d->xmpData  = meta.getXmp();
+
         d->contentPage->applyMetadata(d->exifData, d->xmpData);
         d->originPage->applyMetadata(d->exifData, d->xmpData);
         d->subjectsPage->applyMetadata(d->xmpData);
@@ -273,13 +280,11 @@ void XMPEditWidget::apply()
         d->statusPage->applyMetadata(d->xmpData);
         d->propertiesPage->applyMetadata(d->xmpData);
 
-        DMetadata meta;
-
-        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);
         meta.save((*d->dlg->currentItem()).toLocalFile());
+
         d->modified = false;
     }
 }
