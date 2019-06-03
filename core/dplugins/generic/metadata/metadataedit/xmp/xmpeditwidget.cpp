@@ -88,14 +88,14 @@ public:
     QByteArray            exifData;
     QByteArray            xmpData;
 
-    DConfigDlgWdgItem*      page_content;
-    DConfigDlgWdgItem*      page_origin;
-    DConfigDlgWdgItem*      page_subjects;
-    DConfigDlgWdgItem*      page_keywords;
-    DConfigDlgWdgItem*      page_categories;
-    DConfigDlgWdgItem*      page_credits;
-    DConfigDlgWdgItem*      page_status;
-    DConfigDlgWdgItem*      page_properties;
+    DConfigDlgWdgItem*    page_content;
+    DConfigDlgWdgItem*    page_origin;
+    DConfigDlgWdgItem*    page_subjects;
+    DConfigDlgWdgItem*    page_keywords;
+    DConfigDlgWdgItem*    page_categories;
+    DConfigDlgWdgItem*    page_credits;
+    DConfigDlgWdgItem*    page_status;
+    DConfigDlgWdgItem*    page_properties;
 
     QList<QUrl>           urls;
 

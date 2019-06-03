@@ -76,28 +76,28 @@ public:
         dlg           = nullptr;
     }
 
-    bool                 modified;
-    bool                 isReadOnly;
+    bool                modified;
+    bool                isReadOnly;
 
-    QByteArray           exifData;
-    QByteArray           iptcData;
-    QByteArray           xmpData;
+    QByteArray          exifData;
+    QByteArray          iptcData;
+    QByteArray          xmpData;
 
-    DConfigDlgWdgItem*     page_caption;
-    DConfigDlgWdgItem*     page_datetime;
-    DConfigDlgWdgItem*     page_lens;
-    DConfigDlgWdgItem*     page_device;
-    DConfigDlgWdgItem*     page_light;
-    DConfigDlgWdgItem*     page_adjust;
+    DConfigDlgWdgItem*  page_caption;
+    DConfigDlgWdgItem*  page_datetime;
+    DConfigDlgWdgItem*  page_lens;
+    DConfigDlgWdgItem*  page_device;
+    DConfigDlgWdgItem*  page_light;
+    DConfigDlgWdgItem*  page_adjust;
 
-    EXIFCaption*         captionPage;
-    EXIFDateTime*        datetimePage;
-    EXIFLens*            lensPage;
-    EXIFDevice*          devicePage;
-    EXIFLight*           lightPage;
-    EXIFAdjust*          adjustPage;
+    EXIFCaption*        captionPage;
+    EXIFDateTime*       datetimePage;
+    EXIFLens*           lensPage;
+    EXIFDevice*         devicePage;
+    EXIFLight*          lightPage;
+    EXIFAdjust*         adjustPage;
 
-    MetadataEditDialog*  dlg;
+    MetadataEditDialog* dlg;
 };
 
 EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)

@@ -91,27 +91,27 @@ public:
     QByteArray            exifData;
     QByteArray            iptcData;
 
-    DConfigDlgWdgItem*     page_content;
-    DConfigDlgWdgItem*     page_properties;
-    DConfigDlgWdgItem*     page_subjects;
-    DConfigDlgWdgItem*     page_keywords;
-    DConfigDlgWdgItem*     page_categories;
-    DConfigDlgWdgItem*     page_credits;
-    DConfigDlgWdgItem*     page_status;
-    DConfigDlgWdgItem*     page_origin;
-    DConfigDlgWdgItem*     page_envelope;
+    DConfigDlgWdgItem*    page_content;
+    DConfigDlgWdgItem*    page_properties;
+    DConfigDlgWdgItem*    page_subjects;
+    DConfigDlgWdgItem*    page_keywords;
+    DConfigDlgWdgItem*    page_categories;
+    DConfigDlgWdgItem*    page_credits;
+    DConfigDlgWdgItem*    page_status;
+    DConfigDlgWdgItem*    page_origin;
+    DConfigDlgWdgItem*    page_envelope;
 
-    IPTCContent*         contentPage;
-    IPTCProperties*      propertiesPage;
-    IPTCSubjects*        subjectsPage;
-    IPTCKeywords*        keywordsPage;
-    IPTCCategories*      categoriesPage;
-    IPTCCredits*         creditsPage;
-    IPTCStatus*          statusPage;
-    IPTCOrigin*          originPage;
-    IPTCEnvelope*        envelopePage;
+    IPTCContent*          contentPage;
+    IPTCProperties*       propertiesPage;
+    IPTCSubjects*         subjectsPage;
+    IPTCKeywords*         keywordsPage;
+    IPTCCategories*       categoriesPage;
+    IPTCCredits*          creditsPage;
+    IPTCStatus*           statusPage;
+    IPTCOrigin*           originPage;
+    IPTCEnvelope*         envelopePage;
 
-    MetadataEditDialog*  dlg;
+    MetadataEditDialog*   dlg;
 };
 
 IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
