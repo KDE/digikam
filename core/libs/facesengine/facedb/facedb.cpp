@@ -715,7 +715,7 @@ DNNFaceModel FaceDb::dnnFaceModel() const
 
                 float* const it = (float *)new_vec.data();
 
-                for (int i = 0; i < 128; ++i)
+                for (int i = 0; i < new_vec.size() / sizeof(float); ++i)
                 {
                     vecdata.push_back(*(it+i));
                 }
