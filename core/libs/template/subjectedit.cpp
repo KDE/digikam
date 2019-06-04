@@ -38,6 +38,8 @@ namespace Digikam
 SubjectEdit::SubjectEdit(QWidget* const parent)
     : SubjectWidget(parent)
 {
+    m_iprDefault = QLatin1String("XMP");
+
     // Subject string do not accept these characters:
     // - '*' (\x2A)
     // - ':' (\x3A)
@@ -47,7 +49,7 @@ SubjectEdit::SubjectEdit(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    m_iprEdit->setText(QLatin1String("XMP"));
+    m_iprEdit->setText(m_iprDefault);
     m_iprEdit->setValidator(subjectValidator);
     m_iprEdit->setWhatsThis(i18n("Enter the Informative Provider Reference here. "
                                  "I.P.R is a name registered with the XMP/NAA, identifying the "

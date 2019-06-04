@@ -104,6 +104,8 @@ protected:
     QLineEdit* m_matterEdit;
     QLineEdit* m_detailEdit;
 
+    QString    m_iprDefault;
+
 private:
 
     class Private;

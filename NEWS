@@ -58,4 +58,5 @@ BUGFIXES:
 048 ==> 408213 - '+' symbol is a legitimate win10 file character but unable to enter it into digiKam via Rename.
 049 ==> 408261 - In Metadata editor, "Ok" and "Apply" buttons should save changes for all tabs, not just the active one.
 050 ==> 408265 - The stacked images tool appears to be non-functional.
-051 ==> 
+051 ==> 369657 - XMP subject matter code can be added twice.
+052 ==> 
