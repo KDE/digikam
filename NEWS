@@ -60,4 +60,5 @@ BUGFIXES:
 050 ==> 408265 - The stacked images tool appears to be non-functional.
 051 ==> 369657 - XMP subject matter code can be added twice.
 052 ==> 408311 - Opening and closing downloading windows.
-053 ==> 
+053 ==> 408334 - Windows elements design changed?
+054 ==> 
