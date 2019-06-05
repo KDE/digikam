@@ -189,8 +189,8 @@ ActionSortFilterProxyModel::ActionSortFilterProxyModel(QObject* const parent)
 
 bool ActionSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    QModelIndex idx       = sourceModel()->index(source_row, 0, source_parent);
-    QAction* const action = static_cast<QAction*>(sourceModel()->data(idx, ActionItemModel::ItemActionRole).value<QObject*>());
+    QModelIndex index     = sourceModel()->index(source_row, 0, source_parent);
+    QAction* const action = ActionItemModel::actionForIndex(index);
 
     return (action && action->isVisible());
 }
