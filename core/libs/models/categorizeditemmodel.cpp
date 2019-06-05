@@ -202,9 +202,9 @@ QStandardItem* ActionItemModel::addAction(QAction* action, const QString& catego
     return item;
 }
 
-ActionSortFilterProxyModel* ActionItemModel::createActionFilterModel()
+DCategorizedSortFilterProxyModel* ActionItemModel::createFilterModel()
 {
-    ActionSortFilterProxyModel* const filterModel = new ActionSortFilterProxyModel(this);
+    DCategorizedSortFilterProxyModel* const filterModel = new ActionSortFilterProxyModel(this);
     filterModel->setCategorizedModel(true);
     filterModel->setSortRole(ItemOrderRole);
     filterModel->setSourceModel(this);

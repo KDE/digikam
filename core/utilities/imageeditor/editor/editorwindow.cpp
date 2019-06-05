@@ -2544,7 +2544,7 @@ void EditorWindow::setupSelectToolsAction()
     }
 
     // setup categorized view
-    ActionSortFilterProxyModel* const filterModel = actionModel->createActionFilterModel();
+    DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
     ActionCategorizedView* const selectToolsActionView  = new ActionCategorizedView;
     selectToolsActionView->setupIconMode();
