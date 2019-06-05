@@ -70,7 +70,7 @@ void DigikamApp::setupSelectToolsAction()
     }
 
     // setup categorized view
-    DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
+    ActionSortFilterProxyModel* const filterModel = actionModel->createActionFilterModel();
 
     ActionCategorizedView* const selectToolsActionView  = new ActionCategorizedView;
     selectToolsActionView->setupIconMode();

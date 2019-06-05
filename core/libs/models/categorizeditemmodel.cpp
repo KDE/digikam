@@ -175,7 +175,8 @@ protected:
 
 ActionItemModel::ActionItemModel(QObject* const parent)
     : CategorizedItemModel(parent),
-      m_mode(ToplevelMenuCategory | SortCategoriesAlphabetically)
+      m_mode(ToplevelMenuCategory | SortCategoriesAlphabetically),
+      m_filterModel(nullptr)
 {
 }
 
@@ -199,6 +200,16 @@ QStandardItem* ActionItemModel::addAction(QAction* action, const QString& catego
             this, SLOT(slotActionChanged()));
 
     return item;
+}
+
+ActionSortFilterProxyModel* ActionItemModel::createActionFilterModel()
+{
+    ActionSortFilterProxyModel* const filterModel = new ActionSortFilterProxyModel(this);
+    filterModel->setCategorizedModel(true);
+    filterModel->setSortRole(ItemOrderRole);
+    filterModel->setSourceModel(this);
+    m_filterModel = filterModel;
+    return filterModel;
 }
 
 void ActionItemModel::setPropertiesFromAction(QStandardItem* item, QAction* action)
@@ -285,6 +296,11 @@ void ActionItemModel::slotActionChanged()
     if (item)
     {
         setPropertiesFromAction(item, action);
+    }
+
+    if (m_filterModel)
+    {
+        m_filterModel->invalidate();
     }
 }
 

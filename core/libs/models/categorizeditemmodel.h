@@ -106,6 +106,8 @@ public:
     void addActions(QWidget* widget);
     void addActions(QWidget* widget, const QList<QAction*>& actionWhiteList);
 
+    ActionSortFilterProxyModel* createActionFilterModel();
+
     /**
      * Returns the action for the given index.
      * Note: these methods perform O(n).
@@ -140,7 +142,8 @@ protected:
 
 protected:
 
-    MenuCategoryMode m_mode;
+    MenuCategoryMode            m_mode;
+    ActionSortFilterProxyModel* m_filterModel;
 };
 
 } // namespace Digikam

@@ -31,8 +31,13 @@
 
 #include <QItemSelection>
 #include <QStringList>
-#include <QSize>
 #include <QCollator>
+#include <QAction>
+#include <QSize>
+
+// Local includes
+
+#include "categorizeditemmodel.h"
 
 namespace Digikam
 {
@@ -173,6 +178,21 @@ int DCategorizedSortFilterProxyModel::compareCategories(const QModelIndex &left,
     }
 
     return 0;
+}
+
+// -----------------------------------------------------------------------------------------------------------------------
+
+ActionSortFilterProxyModel::ActionSortFilterProxyModel(QObject* const parent)
+    : DCategorizedSortFilterProxyModel(parent)
+{
+}
+
+bool ActionSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    QModelIndex idx       = sourceModel()->index(source_row, 0, source_parent);
+    QAction* const action = static_cast<QAction*>(sourceModel()->data(idx, ActionItemModel::ItemActionRole).value<QObject*>());
+
+    return (action && action->isVisible());
 }
 
 } // namespace Digikam
