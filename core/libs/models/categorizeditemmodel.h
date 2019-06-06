@@ -58,7 +58,7 @@ public:
     QStandardItem* addItem(const QString& text, const QIcon& decoration, const QVariant& category,
                            const QVariant& categorySorting = QVariant());
 
-    DCategorizedSortFilterProxyModel* createFilterModel();
+    virtual DCategorizedSortFilterProxyModel* createFilterModel();
 };
 
 // -----------------------------------------------------------------------------------------------------------------------
@@ -106,6 +106,8 @@ public:
     void addActions(QWidget* widget);
     void addActions(QWidget* widget, const QList<QAction*>& actionWhiteList);
 
+    DCategorizedSortFilterProxyModel* createFilterModel() override;
+
     /**
      * Returns the action for the given index.
      * Note: these methods perform O(n).
@@ -140,7 +142,8 @@ protected:
 
 protected:
 
-    MenuCategoryMode m_mode;
+    MenuCategoryMode                  m_mode;
+    DCategorizedSortFilterProxyModel* m_filterModel;
 };
 
 } // namespace Digikam
