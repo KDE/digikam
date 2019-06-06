@@ -62,4 +62,5 @@ BUGFIXES:
 052 ==> 408311 - Opening and closing downloading windows.
 053 ==> 408334 - Windows elements design changed?
 054 ==> 408332 - Disabled Export plugins visible in rightside toolbar.
-055 ==> 
+055 ==> 342379 - Allow to use decimals values with custom size settings.
+056 ==> 
