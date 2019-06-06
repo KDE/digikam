@@ -370,6 +370,7 @@ void SubjectWidget::slotRefChanged()
 QString SubjectWidget::buildSubject() const
 {
     QString subject = m_iprEdit->text();
+
     subject.append(QLatin1Char(':'));
     subject.append(m_refEdit->text());
     subject.append(QLatin1Char(':'));
@@ -378,6 +379,12 @@ QString SubjectWidget::buildSubject() const
     subject.append(m_matterEdit->text());
     subject.append(QLatin1Char(':'));
     subject.append(m_detailEdit->text());
+
+    if (subject.right(4) == QLatin1String("::::"))
+    {
+        subject.clear();
+    }
+
     return subject;
 }
 
@@ -400,7 +407,7 @@ void SubjectWidget::slotRepSubject()
     if (!d->subjectsBox->selectedItems().isEmpty())
     {
         d->subjectsBox->selectedItems()[0]->setText(newSubject);
-        m_iprEdit->clear();
+        m_iprEdit->setText(m_iprDefault);
         m_refEdit->clear();
         m_nameEdit->clear();
         m_matterEdit->clear();
@@ -450,7 +457,7 @@ void SubjectWidget::slotAddSubject()
     if (!found)
     {
         d->subjectsBox->insertItem(d->subjectsBox->count(), newSubject);
-        m_iprEdit->clear();
+        m_iprEdit->setText(m_iprDefault);
         m_refEdit->clear();
         m_nameEdit->clear();
         m_matterEdit->clear();

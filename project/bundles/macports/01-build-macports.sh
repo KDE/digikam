@@ -254,8 +254,10 @@ port install \
              qt511-sqlite-plugin \
              qt511-mysql-plugin \
              qt511-qtscript \
-             wget +ssl \
-             sane-backends
+             wget +ssl
+
+#             sane-backends
+
 echo -e "\n"
 
 echo -e "---------- Compilation logs of Macports packages with suspicious installation\n"

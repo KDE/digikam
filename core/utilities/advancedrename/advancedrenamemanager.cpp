@@ -480,7 +480,12 @@ QString AdvancedRenameManager::newName(const QString& filename) const
         sysType.contains(QLatin1String("NTFS")) ||
         sysType.contains(QLatin1String("FUSEBLK")))
     {
-        regExpStr.append(QLatin1String("<>,+:=\";|\\\\/"));
+        regExpStr.append(QLatin1String("<>,:=\";|\\\\/"));
+
+        if (sysType.contains(QLatin1String("FAT")))
+        {
+            regExpStr.append(QLatin1Char('+'));
+        }
     }
 
     QRegExp regExp(regExpStr + QLatin1Char(']'));

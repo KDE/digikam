@@ -5,7 +5,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# Arguments : $1 : install path '/opt/local' (default).
+# Arguments : $1 : install path '/opt/digikam' (default).
 #             $2 : build type   'debug' to hack (default), 'release' for production.
 #             $3 : target type  'x86_64' for OSX Lion (default), 'i386' for Snow Leopard.
 #             $4 : Cmake extra configure options.
@@ -18,7 +18,7 @@ trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
 INSTALL_PREFIX=$1
 
 if [ "$INSTALL_PREFIX" = "" ]; then
-    INSTALL_PREFIX="/opt/local"
+    INSTALL_PREFIX="/opt/digikam"
     BUNDLE_INSTALL_DIR="/Applications/KF5"
     BUNDLE_DATA_INSTALL_DIR="/Library/Application Support"
 else
@@ -29,13 +29,13 @@ fi
 BUILD_TYPE=$2
 
 if [ "$BUILD_TYPE" = "" ]; then
-        BUILD_TYPE=debug
+    BUILD_TYPE=debug
 fi
 
 TARGET_TYPE=$3
 
 if [ "$TARGET_TYPE" = "" ]; then
-        TARGET_TYPE=x86_64
+    TARGET_TYPE=x86_64
 fi
 
 OPTIONS=$4

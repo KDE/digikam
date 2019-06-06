@@ -342,7 +342,7 @@ FilterAction ContentAwareFilter::filterAction()
     action.addParameter(QLatin1String("func"),                d->settings.func);
     action.addParameter(QLatin1String("resize_order"),        d->settings.resize_order);
 
-    return action;
+    return std::move(action);
 }
 
 void ContentAwareFilter::readParameters(const FilterAction& action)

@@ -155,8 +155,12 @@ endif()
 # Dependencies For unit tests and CLI test tools
 
 if(BUILD_TESTING)
-    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS
+    find_package(Qt5 ${QT_MIN_VERSION}
+                 NO_MODULE COMPONENTS
                  Test
+    )
+    find_package(Qt5 ${QT_MIN_VERSION}
+                 OPTIONAL_COMPONENTS
                  Qml WebView  # Optional, for 'sialis' O2 library test tool.
     )
 endif()
@@ -700,6 +704,20 @@ if(DIGIKAM_CAN_BE_COMPILED)
     while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
         string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
+
+    # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+
+        if (${GCC_VERSION} VERSION_GREATER "8.99.99")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+        endif()
+    endif()
+
+    # Remove -Winconsistent-missing-override Clang warnings which generate a lots of compile warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
+    endif()
 
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")

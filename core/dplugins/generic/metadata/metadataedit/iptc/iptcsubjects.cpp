@@ -37,6 +37,8 @@ namespace DigikamGenericMetadataEditPlugin
 IPTCSubjects::IPTCSubjects(QWidget* const parent)
     : SubjectWidget(parent)
 {
+    m_iprDefault = QLatin1String("IPTC");
+
     // Subject string only accept printable Ascii char excepted these one:
     // - '*' (\x2A)
     // - ':' (\x3A)
@@ -46,7 +48,7 @@ IPTCSubjects::IPTCSubjects(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    m_iprEdit->setText(QLatin1String("IPTC"));
+    m_iprEdit->setText(m_iprDefault);
     m_iprEdit->setValidator(subjectAsciiValidator);
     m_iprEdit->setWhatsThis(i18n("Enter here the Informative Provider Reference. "
                                  "I.P.R is a name registered with the IPTC/NAA, identifying the "

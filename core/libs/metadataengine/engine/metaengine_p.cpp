@@ -49,12 +49,12 @@ extern "C"
 #include "metaengine_data_p.h"
 
 // Pragma directives to reduce warnings from Exiv2.
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
+#if defined(Q_CC_CLANG)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -154,7 +154,11 @@ bool MetaEngine::Private::saveToXMPSidecar(const QFileInfo& finfo) const
         image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp,
                                             (const char*)(QFile::encodeName(filePath).constData()));
 
+#if EXIV2_TEST_VERSION(0,27,99)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -240,7 +244,11 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
         Exiv2::Image::AutoPtr image;
         image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath()).constData()));
 
+#if EXIV2_TEST_VERSION(0,27,99)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -807,10 +815,10 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 } // namespace Digikam
 
 // Restore warnings
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #   pragma GCC diagnostic pop
 #endif
 
-#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
+#if defined(Q_CC_CLANG)
 #   pragma clang diagnostic pop
 #endif

@@ -71,7 +71,7 @@ public:
 
     int                           animationState;
     QPropertyAnimation*           animation;
-    DWorkingPixmap    workingPixmap;
+    DWorkingPixmap                workingPixmap;
     DCategoryDrawer*              categoryDrawer;
     int                           thumbnailSize;
 
@@ -84,6 +84,7 @@ public:
     {
         if (const QStyleOptionViewItem* v3 = qstyleoption_cast<const QStyleOptionViewItem*>(&option))
             return v3->widget;
+
         return nullptr;
     }
 
@@ -239,7 +240,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QMode
 
     if (QStyleOptionViewItem* v4 = qstyleoption_cast<QStyleOptionViewItem*>(option))
     {
-        v4->features |= QStyleOptionViewItemV2::HasDecoration;
+        v4->features |= QStyleOptionViewItem::HasDecoration;
 
         if (d->inSizeHint)
         {
@@ -268,6 +269,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
     //qCDebug(DIGIKAM_GENERAL_LOG) << QApplication::style()->subElementRect(QStyle::SE_ItemViewItemDecoration, &option, 0);
+
     if (dynamic_cast<const ItemVersionsModel*>(index.model())->paintTree())
     {
         const_cast<QStyleOptionViewItem&>(option).rect.setLeft(option.rect.left() + (index.data(Qt::UserRole).toInt() * 16));

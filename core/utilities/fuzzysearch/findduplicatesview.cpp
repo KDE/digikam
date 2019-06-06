@@ -279,6 +279,11 @@ void FindDuplicatesView::populateTreeView()
         return;
     }
 
+    QTime waitCursorTime;
+    waitCursorTime.start();
+
+    bool waitCursor = false;
+
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
 
     for (AlbumList::const_iterator it = aList.constBegin() ; it != aList.constEnd() ; ++it)
@@ -290,6 +295,12 @@ void FindDuplicatesView::populateTreeView()
             FindDuplicatesAlbumItem* const item = new FindDuplicatesAlbumItem(d->listView, salbum);
             salbum->setExtraData(this, item);
         }
+
+        if (!waitCursor && waitCursorTime.elapsed() > 2000)
+        {
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+            waitCursor = true;
+        }
     }
 
     d->listView->setSortingEnabled(true);
@@ -297,6 +308,11 @@ void FindDuplicatesView::populateTreeView()
     d->listView->sortByColumn(1, Qt::DescendingOrder);
 
     d->albumSelectors->loadState();
+
+    if (waitCursor)
+    {
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void FindDuplicatesView::slotSelectFirstItem()

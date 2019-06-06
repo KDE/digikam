@@ -5,6 +5,14 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+if(NOT MSVC)
+
+    while(CMAKE_CXX_FLAGS MATCHES "-Wcast-align")
+        string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+
+endif()
+
 set(libpgfutils_SRCS
     pgfutils.cpp
     libpgf/Decoder.cpp

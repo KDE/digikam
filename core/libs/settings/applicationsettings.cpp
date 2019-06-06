@@ -250,7 +250,14 @@ void ApplicationSettings::readSettings()
     d->stringComparisonType              = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
 
 #ifdef HAVE_APPSTYLE_SUPPORT
-    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
+    QString applicationStyle             = qApp->style()->objectName();
+
+    if (applicationStyle.compare(QLatin1String("windowsvista"), Qt::CaseInsensitive) == 0)
+    {
+        applicationStyle                 = QLatin1String("Windows");
+    }
+
+    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, applicationStyle));
 #else
     setApplicationStyle(QLatin1String("Fusion"));
 #endif

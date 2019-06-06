@@ -229,7 +229,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     for (int i = 0 ; i < styleList.count() ; ++i)
     {
-        d->applicationStyle->addItem(styleList.at(i));
+        if (styleList.at(i).compare(QLatin1String("windowsvista"), Qt::CaseInsensitive) != 0)
+        {
+            d->applicationStyle->addItem(styleList.at(i), styleList.at(i).toLower());
+        }
     }
 
 #ifndef HAVE_APPSTYLE_SUPPORT
@@ -417,8 +420,7 @@ void SetupMisc::readSettings()
     }
 
 #ifdef HAVE_APPSTYLE_SUPPORT
-    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(),
-                                                                       Qt::MatchFixedString));
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->findData(settings->getApplicationStyle().toLower()));
 #endif
 
     d->applicationIcon->setCurrentIndex(d->applicationIcon->findData(settings->getIconTheme()));

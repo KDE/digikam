@@ -36,10 +36,8 @@ QRgb TransitionMngr::Private::convertFromPremult(const QRgb& p) const
                            alpha));
 }
 
-QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
+QImage TransitionMngr::Private::fastBlur(const QImage& image, int radius) const
 {
-    QRgb* p1 = nullptr;
-    QRgb* p2 = nullptr;
     int*  as = nullptr;
     int*  rs = nullptr;
     int*  gs = nullptr;
@@ -47,13 +45,14 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
     int x, y, w, h, mx, my, mw, mh, mt, xx, yy;
     int a, r, g, b;
 
-    if (radius < 1 || img.isNull() || img.width() < (radius << 1))
+    if (radius < 1 || image.isNull() || image.width() < (radius << 1))
     {
-        return img;
+        return image;
     }
 
-    w = img.width();
-    h = img.height();
+    QImage img = image;
+    w          = img.width();
+    h          = img.height();
 
     QImage buffer(w, h, img.hasAlphaChannel() ? QImage::Format_ARGB32
                                               : QImage::Format_RGB32);
@@ -79,7 +78,7 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
             mh = h - my;
         }
 
-        p1 = (QRgb*)buffer.scanLine(y);
+        QRgb* p1 = reinterpret_cast<QRgb*>(buffer.scanLine(y));
         memset(as, 0, w*sizeof(int));
         memset(rs, 0, w*sizeof(int));
         memset(gs, 0, w*sizeof(int));
@@ -89,7 +88,7 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
 
         for (yy = 0 ; yy < mh ; ++yy)
         {
-            p2 = (QRgb*)img.scanLine(yy + my);
+            QRgb* p2 = reinterpret_cast<QRgb*>(img.scanLine(yy + my));
 
             for (x = 0 ; x < w ; ++x, ++p2)
             {

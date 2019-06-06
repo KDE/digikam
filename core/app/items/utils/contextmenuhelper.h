@@ -216,8 +216,9 @@ public:
      * code duplication.
      *
      * @param imageIds the list of selected items
+     * @param lightTable for the light table
      */
-    void addOpenAndNavigateActions(const imageIds &ids);
+    void addOpenAndNavigateActions(const imageIds& ids, bool lightTable = false);
 
     /**
      * Add the services menu to the menu.
@@ -407,6 +408,7 @@ private Q_SLOTS:
     void slotOpenWith();
     void slotOpenWith(QAction* action);
     void slotOpenInFileManager();
+    void slotOpenImageFile();
     void slotDeselectAllAlbumItems();
     void slotOpenGroups();
     void slotCloseGroups();

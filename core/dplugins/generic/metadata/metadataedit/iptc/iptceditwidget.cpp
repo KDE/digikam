@@ -91,27 +91,27 @@ public:
     QByteArray            exifData;
     QByteArray            iptcData;
 
-    DConfigDlgWdgItem*     page_content;
-    DConfigDlgWdgItem*     page_properties;
-    DConfigDlgWdgItem*     page_subjects;
-    DConfigDlgWdgItem*     page_keywords;
-    DConfigDlgWdgItem*     page_categories;
-    DConfigDlgWdgItem*     page_credits;
-    DConfigDlgWdgItem*     page_status;
-    DConfigDlgWdgItem*     page_origin;
-    DConfigDlgWdgItem*     page_envelope;
+    DConfigDlgWdgItem*    page_content;
+    DConfigDlgWdgItem*    page_properties;
+    DConfigDlgWdgItem*    page_subjects;
+    DConfigDlgWdgItem*    page_keywords;
+    DConfigDlgWdgItem*    page_categories;
+    DConfigDlgWdgItem*    page_credits;
+    DConfigDlgWdgItem*    page_status;
+    DConfigDlgWdgItem*    page_origin;
+    DConfigDlgWdgItem*    page_envelope;
 
-    IPTCContent*         contentPage;
-    IPTCProperties*      propertiesPage;
-    IPTCSubjects*        subjectsPage;
-    IPTCKeywords*        keywordsPage;
-    IPTCCategories*      categoriesPage;
-    IPTCCredits*         creditsPage;
-    IPTCStatus*          statusPage;
-    IPTCOrigin*          originPage;
-    IPTCEnvelope*        envelopePage;
+    IPTCContent*          contentPage;
+    IPTCProperties*       propertiesPage;
+    IPTCSubjects*         subjectsPage;
+    IPTCKeywords*         keywordsPage;
+    IPTCCategories*       categoriesPage;
+    IPTCCredits*          creditsPage;
+    IPTCStatus*           statusPage;
+    IPTCOrigin*           originPage;
+    IPTCEnvelope*         envelopePage;
 
-    MetadataEditDialog*  dlg;
+    MetadataEditDialog*   dlg;
 };
 
 IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
@@ -271,6 +271,12 @@ void IPTCEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
+        DMetadata meta;
+        meta.load((*d->dlg->currentItem()).toLocalFile());
+
+        d->exifData = meta.getExifEncoded();
+        d->iptcData = meta.getIptc();
+
         d->contentPage->applyMetadata(d->exifData, d->iptcData);
         d->originPage->applyMetadata(d->exifData, d->iptcData);
         d->creditsPage->applyMetadata(d->iptcData);
@@ -281,12 +287,10 @@ void IPTCEditWidget::apply()
         d->propertiesPage->applyMetadata(d->iptcData);
         d->envelopePage->applyMetadata(d->iptcData);
 
-        DMetadata meta;
-
-        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.save((*d->dlg->currentItem()).toLocalFile());
+
         d->modified = false;
     }
 }

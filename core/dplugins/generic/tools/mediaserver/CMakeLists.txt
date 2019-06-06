@@ -158,7 +158,7 @@ set(libmediaserver_SRCS
 foreach(_currentfile ${libmediaserver_SRCS})
     if(NOT MSVC)
         set_source_files_properties(${_currentfile} PROPERTIES COMPILE_FLAGS
-            "-Wno-unused-parameter -Wno-sequence-point -Wno-unused-label -Wno-unused-variable -Wno-nonnull -Wno-narrowing")
+            "-Wno-unused-parameter -Wno-sequence-point -Wno-unused-label -Wno-unused-variable -Wno-nonnull -Wno-narrowing -Wno-cast-align -Wno-deprecated-declarations")
     endif()
 endforeach()
 
