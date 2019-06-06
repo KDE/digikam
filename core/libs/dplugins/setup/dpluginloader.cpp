@@ -74,8 +74,10 @@ void DPluginLoader::cleanUp()
     foreach (QPluginLoader* const loader, d->allLoaders)
     {
         loader->unload();
+        delete loader;
     }
 
+    d->allPlugins.clear();
     d->allLoaders.clear();
 }
 
