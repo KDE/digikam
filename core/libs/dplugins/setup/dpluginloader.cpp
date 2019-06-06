@@ -95,7 +95,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
 {
     QList<DPluginAction*> list;
 
-    foreach (DPlugin* const p, allPlugins())
+    foreach (DPlugin* const p, d->allPlugins)
     {
         DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
 
@@ -113,7 +113,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionType ty
 
     if (list.isEmpty())
     {
-        foreach (DPlugin* const p, allPlugins())
+        foreach (DPlugin* const p, d->allPlugins)
         {
             DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
 
@@ -138,7 +138,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
 {
     QList<DPluginAction*> list;
 
-    foreach (DPlugin* const p, allPlugins())
+    foreach (DPlugin* const p, d->allPlugins)
     {
         DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
 
@@ -156,7 +156,7 @@ QList<DPluginAction*> DPluginLoader::pluginsActions(DPluginAction::ActionCategor
 
     if (list.isEmpty())
     {
-        foreach (DPlugin* const p, allPlugins())
+        foreach (DPlugin* const p, d->allPlugins)
         {
             DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
 
@@ -181,7 +181,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
 {
     QList<DPluginAction*> list;
 
-    foreach (DPlugin* const p, allPlugins())
+    foreach (DPlugin* const p, d->allPlugins)
     {
         DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
 
@@ -201,7 +201,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
 
     if (list.isEmpty())
     {
-        foreach (DPlugin* const p, allPlugins())
+        foreach (DPlugin* const p, d->allPlugins)
         {
             DPluginEditor* const edit = dynamic_cast<DPluginEditor*>(p);
 
@@ -226,7 +226,7 @@ QList<DPluginAction*> DPluginLoader::pluginActions(const QString& pluginIID, QOb
 
 DPluginAction* DPluginLoader::pluginAction(const QString& actionName, QObject* const parent) const
 {
-    foreach (DPlugin* const p, allPlugins())
+    foreach (DPlugin* const p, d->allPlugins)
     {
         DPluginGeneric* const gene = dynamic_cast<DPluginGeneric*>(p);
 
