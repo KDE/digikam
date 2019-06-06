@@ -106,7 +106,7 @@ public:
     void addActions(QWidget* widget);
     void addActions(QWidget* widget, const QList<QAction*>& actionWhiteList);
 
-    virtual DCategorizedSortFilterProxyModel* createFilterModel() override;
+    DCategorizedSortFilterProxyModel* createFilterModel() override;
 
     /**
      * Returns the action for the given index.
