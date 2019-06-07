@@ -51,4 +51,16 @@ BUGFIXES:
 041 ==> 387770 - Plugin Instructions Unreadable in Some Themes.
 042 ==> 397599 - Usability deteriorated.
 043 ==> 388359 - Icons on the toolbar are not visible when background is dark.
-044 ==> 
+044 ==> 408147 - From LightTable, "Open" picture does not open the right one.
+045 ==> 408157 - "Tone Color Picker" cursor is not correctly positionned vs Mouse.
+046 ==> 408095 - Sort items by manual.
+047 ==> 378364 - Sequence number options need date-aware modifier.
+048 ==> 408213 - '+' symbol is a legitimate win10 file character but unable to enter it into digiKam via Rename.
+049 ==> 408261 - In Metadata editor, "Ok" and "Apply" buttons should save changes for all tabs, not just the active one.
+050 ==> 408265 - The stacked images tool appears to be non-functional.
+051 ==> 369657 - XMP subject matter code can be added twice.
+052 ==> 408311 - Opening and closing downloading windows.
+053 ==> 408334 - Windows elements design changed?
+054 ==> 408332 - Disabled Export plugins visible in rightside toolbar.
+055 ==> 342379 - Allow to use decimals values with custom size settings.
+056 ==> 

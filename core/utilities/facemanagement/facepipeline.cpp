@@ -503,7 +503,7 @@ FaceTagsIface FacePipeline::editRegion(const ItemInfo& info,
 
     face.setRegion(newRegion);
 
-    return face;
+    return std::move(face);
 }
 
 void FacePipeline::remove(const ItemInfo& info,

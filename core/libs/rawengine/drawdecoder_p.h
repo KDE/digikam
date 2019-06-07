@@ -28,15 +28,18 @@
 
 #include <QByteArray>
 
-// Pragma directives to reduce warnings from LibRaw header files.
+// Pragma directives to reduce warnings from LibRaw and LCMS2 headers
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#   pragma clang diagnostic ignored "-Wundef"
+#   pragma clang diagnostic ignored "-Wdeprecated-register"
+#   pragma clang diagnostic ignored "-Wmacro-redefined"
 #endif
 
 // LibRaw includes
@@ -45,11 +48,11 @@
 
 // Restore warnings
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 // Local includes

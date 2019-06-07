@@ -85,12 +85,12 @@ QFileInfoList DPluginLoader::Private::pluginEntriesList() const
 
     while (it.hasNext())
     {
-        QFileInfo info(it.next());
+        it.next();
 
-        if (!dupFiles.contains(info.baseName()))
+        if (!dupFiles.contains(it.fileInfo().baseName()))
         {
-            dupFiles << info.baseName();
-            allFiles << info;
+            dupFiles << it.fileInfo().baseName();
+            allFiles << it.fileInfo();
         }
     }
 

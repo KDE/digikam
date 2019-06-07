@@ -351,7 +351,7 @@ void ItemPreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
 
     // --------------------------------------------------------
 
-    cmHelper.addOpenAndNavigateActions(idList);
+    cmHelper.addOpenAndNavigateActions(idList, (d->mode == LightTablePreview));
     cmHelper.addSeparator();
 
     // --------------------------------------------------------

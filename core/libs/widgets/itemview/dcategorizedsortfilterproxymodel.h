@@ -180,6 +180,21 @@ private:
     Private *const d;
 };
 
+// -----------------------------------------------------------------------------------------------------------------------
+
+class DIGIKAM_EXPORT ActionSortFilterProxyModel : public DCategorizedSortFilterProxyModel
+{
+    Q_OBJECT
+
+public:
+
+    explicit ActionSortFilterProxyModel(QObject* const parent = nullptr);
+
+protected:
+
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+};
+
 } // namespace Digikam
 
 #endif // DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H

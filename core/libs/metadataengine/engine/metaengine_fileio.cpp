@@ -174,7 +174,11 @@ bool MetaEngine::loadFromSidecarAndMerge(const QString& filePath)
                 xmpsidecar->readMetadata();
 
                 // Merge
+#if EXIV2_TEST_VERSION(0,27,99)
+                d->loadSidecarData(std::move(xmpsidecar));
+#else
                 d->loadSidecarData(xmpsidecar);
+#endif
                 hasLoaded = true;
             }
         }

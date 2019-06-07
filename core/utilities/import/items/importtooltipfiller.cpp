@@ -85,8 +85,6 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
             tip                   += str + cnt.cellEnd;
         }
 
-        QSize dims;
-
         if (settings->getToolTipsShowImageType())
         {
             tip += cnt.cellBeg + i18n("Type:") + cnt.cellMid + info.mime + cnt.cellEnd;

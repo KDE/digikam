@@ -7,12 +7,24 @@
 include(MacroDPlugins)
 
 if(HAVE_MEDIAPLAYER)
+
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio)
+
 endif()
 
 if(HAVE_OPENGL)
+
+    if(NOT MSVC)
+
+        # Under MacOS 10.14 (Mojave), OpenGL API start to be deprecated in favor to Apple Metal API.
+        # https://appleinsider.com/articles/18/06/28/why-macos-mojave-requires-metal----and-deprecates-opengl
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
+
+    endif()
+
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opengl)
     include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
+
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dialogs
@@ -45,16 +57,19 @@ set(presentationplugin_SRCS
 )
 
 if(HAVE_OPENGL)
+
     set(presentationplugin_SRCS
         ${presentationplugin_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationgl.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/opengl/presentationkb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbeffect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/opengl/kbimageloader.cpp
-       )
+    )
+
 endif()
 
 if(HAVE_MEDIAPLAYER)
+
     set(presentationplugin_SRCS
         ${presentationplugin_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiolist.cpp
@@ -66,6 +81,7 @@ if(HAVE_MEDIAPLAYER)
                   ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentation_audiopage.ui
                   ${CMAKE_CURRENT_SOURCE_DIR}/audio/presentationaudiowidget.ui
     )
+
 endif()
 
 ki18n_wrap_ui(presentationplugin_SRCS
@@ -77,13 +93,17 @@ ki18n_wrap_ui(presentationplugin_SRCS
 
 
 if(HAVE_OPENGL)
+
     DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Presentation
-                                        SOURCES ${presentationplugin_SRCS}
-                                        DEPENDS Qt5::OpenGL
-                                                ${OPENGL_LIBRARIES}
+                               SOURCES ${presentationplugin_SRCS}
+                               DEPENDS Qt5::OpenGL
+                                       ${OPENGL_LIBRARIES}
     )
+
 else()
+
     DIGIKAM_ADD_GENERIC_PLUGIN(NAME    Presentation
-                                        SOURCES ${presentationplugin_SRCS}
+                               SOURCES ${presentationplugin_SRCS}
     )
+
 endif()

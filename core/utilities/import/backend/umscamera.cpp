@@ -52,10 +52,21 @@ extern "C"
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
+// Solid includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wnonportable-include-path"
+#endif
+
 #include <solid/device.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 // Local includes
 

@@ -87,7 +87,7 @@ public:
     XMPEditWidget*         tabXmp;
 
     ThumbnailImageCatcher* catcher;
-    
+
     DInfoInterface*        iface;
 };
 
@@ -179,7 +179,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, DInfoInterface* co
 
     connect(this, SIGNAL(signalMetadataChangedForUrl(QUrl)),
             d->iface, SLOT(slotMetadataChangedForUrl(QUrl)));
-        
+
     //----------------------------------------------------------
 
     readSettings();

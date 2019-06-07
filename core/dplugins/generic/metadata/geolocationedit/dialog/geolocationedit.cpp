@@ -1026,8 +1026,8 @@ MapWidget* GeolocationEdit::makeMapWidget(QWidget** const pvbox)
     QWidget* const dummyWidget = new QWidget(this);
     QVBoxLayout* const vbox    = new QVBoxLayout(dummyWidget);
     MapWidget* const mapWidget = new MapWidget(dummyWidget);
-    mapWidget->setAvailableMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
-    mapWidget->setVisibleMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
+    mapWidget->setAvailableMouseModes(MouseModePan | MouseModeZoomIntoGroup | MouseModeSelectThumbnail);
+    mapWidget->setVisibleMouseModes(MouseModePan | MouseModeZoomIntoGroup | MouseModeSelectThumbnail);
     mapWidget->setMouseMode(MouseModeSelectThumbnail);
     mapWidget->setGroupedModel(d->geoifaceMarkerModel);
     mapWidget->setDragDropHandler(d->mapDragDropHandler);
@@ -1052,7 +1052,7 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
 {
     if (d->mapLayout == MapLayoutOne)
     {
-        if (d->mapSplitter->count()>1)
+        if (d->mapSplitter->count() > 1)
         {
             delete d->mapSplitter->widget(1);
             d->mapWidget2 = nullptr;
