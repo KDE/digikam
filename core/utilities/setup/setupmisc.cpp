@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QApplication>
+#include <QDirIterator>
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
@@ -245,28 +246,41 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->applicationIcon         = new QComboBox(iconThemeHbox);
     d->applicationIcon->setToolTip(i18n("Set this option to choose the default icon theme."));
 
-    d->applicationIcon->addItem(i18n("Use Icon Theme From System"), QString());
-
-    const QString indexTheme = QLatin1String("/index.theme");
-    const QString breezeDark = QLatin1String("/breeze-dark");
-    const QString breeze     = QLatin1String("/breeze");
-
-    bool foundBreezeDark     = false;
-    bool foundBreeze         = false;
+    QMap<QString, QString> iconThemes;
+    QMap<QString, QString> themeWhiteList;
+    themeWhiteList.insert(QLatin1String("adwaita"),         i18nc("icon theme", "Adwaita"));
+    themeWhiteList.insert(QLatin1String("breeze"),          i18nc("icon theme", "Breeze"));
+    themeWhiteList.insert(QLatin1String("breeze-dark"),     i18nc("icon theme", "Breeze Dark"));
+    themeWhiteList.insert(QLatin1String("faenza"),          i18nc("icon theme", "Faenza"));
+    themeWhiteList.insert(QLatin1String("faenza-ambiance"), i18nc("icon theme", "Ambiance"));
+    themeWhiteList.insert(QLatin1String("oxygen"),          i18nc("icon theme", "Oxygen"));
 
     foreach (const QString& path, QIcon::themeSearchPaths())
     {
-        if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
-        {
-            d->applicationIcon->addItem(i18n("Breeze"), breeze.mid(1));
-            foundBreeze = true;
-        }
+        QDirIterator it(path, QDir::Dirs       |
+                              QDir::NoSymLinks |
+                              QDir::NoDotAndDotDot);
 
-        if (!foundBreezeDark && QFile::exists(path + breezeDark + indexTheme))
+        while (it.hasNext())
         {
-            d->applicationIcon->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
-            foundBreezeDark = true;
+            if (QFile::exists(it.next() + QLatin1String("/icon-theme.cache")))
+            {
+                QString iconKey = it.fileInfo().fileName().toLower();
+
+                if (themeWhiteList.contains(iconKey))
+                {
+                    iconThemes[themeWhiteList.value(iconKey)] = it.fileInfo().fileName();
+                }
+            }
         }
+    }
+
+    QMap<QString, QString>::const_iterator it = iconThemes.constBegin();
+    d->applicationIcon->addItem(i18n("Use Icon Theme From System"), QString());
+
+    for ( ; it != iconThemes.constEnd() ; ++it)
+    {
+        d->applicationIcon->addItem(it.key(), it.value());
     }
 
     d->applicationFont = new DFontSelect(i18n("Application font:"), appearancePanel);
