@@ -63,4 +63,5 @@ BUGFIXES:
 053 ==> 408334 - Windows elements design changed?
 054 ==> 408332 - Disabled Export plugins visible in rightside toolbar.
 055 ==> 342379 - Allow to use decimals values with custom size settings.
-056 ==> 
+056 ==> 408450 - digikam git r43105 cannot build without marble.
+057 ==> 

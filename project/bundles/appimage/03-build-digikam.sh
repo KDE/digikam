@@ -81,7 +81,6 @@ else
 
     git clone --progress --verbose $DK_GITURL digikam-$DK_VERSION
     cd digikam-$DK_VERSION
-    export GITSLAVE=".gitslave.bundle"
     ./download-repos
 
     if [ $? -ne 0 ] ; then

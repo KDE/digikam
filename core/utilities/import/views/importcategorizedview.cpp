@@ -81,7 +81,7 @@ public:
     {
     }
 
-    ImportItemModel*      model;
+    ImportItemModel*       model;
     ImportSortFilterModel* filterModel;
 
     ImportDelegate*        delegate;
@@ -254,9 +254,9 @@ QList<CamItemInfo> ImportCategorizedView::selectedCamItemInfosCurrentFirst() con
 {
     QList<QModelIndex> indexes = selectedIndexes();
     QModelIndex        current = currentIndex();
-    QList<CamItemInfo>   infos;
+    QList<CamItemInfo> infos;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         CamItemInfo info = d->filterModel->camItemInfo(index);
 
@@ -281,9 +281,9 @@ QList<CamItemInfo> ImportCategorizedView::camItemInfos() const
 QList<QUrl> ImportCategorizedView::urls() const
 {
     QList<CamItemInfo> infos = camItemInfos();
-    QList<QUrl>       urls;
+    QList<QUrl>        urls;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         urls << info.url();
     }
@@ -294,9 +294,9 @@ QList<QUrl> ImportCategorizedView::urls() const
 QList<QUrl> ImportCategorizedView::selectedUrls() const
 {
     QList<CamItemInfo> infos = selectedCamItemInfos();
-    QList<QUrl>       urls;
+    QList<QUrl>        urls;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         urls << info.url();
     }
@@ -324,7 +324,7 @@ CamItemInfo ImportCategorizedView::nextInOrder(const CamItemInfo& startingPoint,
 QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
     QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
-    CamItemInfo info   = d->filterModel->camItemInfo(anchor);
+    CamItemInfo info = d->filterModel->camItemInfo(anchor);
 
     //qCDebug(DIGIKAM_IMPORTUI_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
 
@@ -335,10 +335,10 @@ QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, cons
         // The hint is for a different info, but we may have a hint for the same info
         if (info != d->filterModel->camItemInfo(hint))
         {
-            int minDiff                            = d->filterModel->rowCount();
+            int minDiff                              = d->filterModel->rowCount();
             QList<QModelIndex> indexesForCamItemInfo = d->filterModel->mapListFromSource(d->model->indexesForCamItemInfo(info));
 
-            foreach(const QModelIndex& index, indexesForCamItemInfo)
+            foreach (const QModelIndex& index, indexesForCamItemInfo)
             {
                 if (index == anchor || !index.isValid() || removed.contains(index))
                 {
@@ -426,9 +426,9 @@ void ImportCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 {
     QItemSelection mySelection;
 
-    for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urlList.constBegin() ; it!=urlList.constEnd() ; ++it)
     {
-        const QString path = it->toLocalFile();
+        const QString path      = it->toLocalFile();
         const QModelIndex index = d->filterModel->indexForPath(path);
 
         if (!index.isValid())
@@ -450,7 +450,7 @@ void ImportCategorizedView::setSelectedCamItemInfos(const QList<CamItemInfo>& in
 {
     QItemSelection mySelection;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         QModelIndex index = d->filterModel->indexForCamItemInfo(info);
         mySelection.select(index, index);

@@ -11,6 +11,10 @@ if(NOT MSVC)
         string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
+    while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
+        string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+
 endif()
 
 set(libpgfutils_SRCS
