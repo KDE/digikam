@@ -24,7 +24,6 @@
 
 // Lib LensFun includes
 
-
 // Pragma directives to reduce warnings from Lensfun header files.
 #if defined(Q_CC_GNU)
 #   pragma GCC diagnostic push
