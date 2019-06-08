@@ -13,7 +13,7 @@ add_subdirectory(restoration)
 add_subdirectory(localcontrast)
 add_subdirectory(noisereduction)
 add_subdirectory(lensdistortion)
-
+add_subdirectory(healingclone)
 if(LensFun_FOUND)
     add_subdirectory(lensautofix)
 endif()
