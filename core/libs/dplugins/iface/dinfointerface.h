@@ -42,7 +42,11 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "gpsitemcontainer.h"
+#include "digikam_config.h"
+
+#ifdef HAVE_MARBLE
+#   include "gpsitemcontainer.h"
+#endif
 
 namespace Digikam
 {
@@ -113,7 +117,10 @@ public:
     // Return an instance of tag filter model if host application support this feature, else null pointer.
     virtual QAbstractItemModel* tagFilterModel();
 
+#ifdef HAVE_MARBLE
     virtual QList<GPSItemContainer*> currentGPSItems()   const;
+#endif
+
 };
 
 // -----------------------------------------------------------------

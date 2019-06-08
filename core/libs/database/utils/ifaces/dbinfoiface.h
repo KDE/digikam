@@ -30,7 +30,6 @@
 #include "applicationsettings.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
-#include "itemgps.h"
 
 namespace Digikam
 {
@@ -79,7 +78,9 @@ public:
 
     QAbstractItemModel* tagFilterModel()                        override;
 
+#ifdef HAVE_MARBLE
     QList<GPSItemContainer*> currentGPSItems()            const override;
+#endif
 
 private:
 
