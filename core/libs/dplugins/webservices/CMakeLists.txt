@@ -18,6 +18,10 @@ while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
     string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endwhile()
 
+while(CMAKE_CXX_FLAGS MATCHES "-Wextra-semi")
+    string(REPLACE "-Wextra-semi" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endwhile()
+
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)
 
