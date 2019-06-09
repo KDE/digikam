@@ -14,13 +14,8 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY)
 
 # Remove unwanted warnings from O2 library 
-while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
-    string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endwhile()
-
-while(CMAKE_CXX_FLAGS MATCHES "-Wextra-semi")
-    string(REPLACE "-Wextra-semi" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endwhile()
+REMOVE_COMPILER_WARNINGS("-pedantic")
+REMOVE_COMPILER_WARNINGS("-Wextra-semi")
 
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)

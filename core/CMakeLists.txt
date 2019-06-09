@@ -686,24 +686,16 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # Remove pedantic GCC flag which generate a lots of warnings on the console
     # with qCDebug()
-    while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
-        string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    REMOVE_COMPILER_WARNINGS("-pedantic")
 
-    # Remove Wsuggest-override GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wsuggest-override")
-        string(REPLACE "-Wsuggest-override" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    # Remove suggest-override GCC flag which generate a lots of compile warnings
+    REMOVE_COMPILER_WARNINGS("-Wsuggest-override")
 
     # Remove Wdate-time GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wdate-time")
-        string(REPLACE "-Wdate-time" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    REMOVE_COMPILER_WARNINGS("-Wdate-time")
 
     # Remove -Wzero-as-null-pointer-constant GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
-        string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
     # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
     if(CMAKE_COMPILER_IS_GNUCXX)

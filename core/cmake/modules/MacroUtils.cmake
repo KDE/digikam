@@ -177,3 +177,17 @@ macro(HEADER_DIRECTORIES return_list)
     set(${return_list} ${dir_list})
 
 endmacro()
+
+# -------------------------------------------------------------------------
+
+macro(REMOVE_COMPILER_WARNINGS COMPILATION_OPTION)
+
+    message(STATUS "Remove compiler option: ${COMPILATION_OPTION}")
+
+    while(CMAKE_CXX_FLAGS MATCHES ${COMPILATION_OPTION})
+
+        string(REPLACE ${COMPILATION_OPTION} "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+    endwhile()
+
+endmacro()
