@@ -297,7 +297,7 @@ endif()
 
 # -- check OpenCV --------------------------------------------------------------
 
-DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc imgcodecs)
+DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc imgcodecs dnn)
 
 if(${OpenCV_FOUND})
     if(${OpenCV_VERSION} VERSION_LESS 3.1.0)
