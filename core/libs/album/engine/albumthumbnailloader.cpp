@@ -44,6 +44,8 @@
 #include "metaenginesettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "facetagseditor.h"
+#include "thumbnailcreator.h"
 
 namespace Digikam
 {
@@ -235,6 +237,20 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
 
 QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
 {
+//    QList<FaceTagsIface> faces = FaceTagsEditor().databaseFaces(album->iconId());
+//    if (faces.size() != 0) {
+//        qDebug() << faces[0].region().toRect() << " | " << album->iconId();
+//        qDebug() << " !!! " << ItemInfo::thumbnailIdentifier(faces[0].imageId()).filePath << " !!! " << ItemInfo::thumbnailIdentifier(faces[0].imageId()).id;
+//        QImage img = ThumbnailCreator().loadDetail(ItemInfo::thumbnailIdentifier(faces[0].imageId()), faces[0].region().toRect());
+//        //return img;
+//    } else {
+//        qDebug() << "Size is 0 and " << album->iconId();
+//    }
+
+//    if (album->hasProperty(TagPropertyName::person())) {
+//        return getStandardTagIcon(album);
+//    }
+
     if (album->iconId() && d->iconSize > d->minBlendSize)
     {
         // icon cached?
@@ -327,8 +343,27 @@ void AlbumThumbnailLoader::addUrl(Album* const album, qlonglong id)
                         Qt::QueuedConnection);
             }
 
-            // use the asynchronous version - with queued connections, see above
-            d->iconTagThumbThread->find(ItemInfo::thumbnailIdentifier(id));
+            if (static_cast<TAlbum*>(album)->hasProperty(TagPropertyName::person())) {
+
+                QList<FaceTagsIface> faces = FaceTagsEditor().databaseFaces(id);
+                bool flag = false;
+                foreach(const FaceTagsIface& face, faces) {
+                    if (face.imageId() == id) {
+                        qDebug() << faces[0].region().toRect() << " | " << id;
+                        qDebug() << " !!! " << ItemInfo::thumbnailIdentifier(faces[0].imageId()).filePath << " !!! " << ItemInfo::thumbnailIdentifier(faces[0].imageId()).id;
+                        d->iconTagThumbThread->find(ItemInfo::thumbnailIdentifier(id), faces[0].region().toRect());
+                        flag = true;
+                    }
+                }
+                if (!flag) {
+                    qDebug() << "Something went wong " << id;
+                    d->iconTagThumbThread->find(ItemInfo::thumbnailIdentifier(id));
+                }
+
+            } else {
+                // use the asynchronous version - with queued connections, see above
+                d->iconTagThumbThread->find(ItemInfo::thumbnailIdentifier(id));
+            }
         }
         else
         {
