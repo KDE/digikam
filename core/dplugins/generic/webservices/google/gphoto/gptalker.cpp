@@ -116,9 +116,10 @@ public:
 
     State                  state;
 
-    QString                descriptionToUpload;
     QString                albumIdToUpload;
     QString                previousImageId;
+
+    QStringList            descriptionList;
     QStringList            uploadTokenList;
     QList<GSFolder>        albumList;
 
@@ -315,8 +316,8 @@ bool GPTalker::addPhoto(const QString& photoPath,
     QUrl url(d->apiUrl.arg(QLatin1String("uploads")));
 
     // Save album ID and description to upload
-    d->descriptionToUpload = info.description;
-    d->albumIdToUpload     = albumId;
+    d->descriptionList << info.description;
+    d->albumIdToUpload  = albumId;
 
     QString path(photoPath);
 
@@ -539,6 +540,9 @@ void GPTalker::cancel()
         m_reply = nullptr;
     }
 
+    d->descriptionList.clear();
+    d->uploadTokenList.clear();
+
     emit signalBusy(false);
 }
 
@@ -711,7 +715,16 @@ void GPTalker::slotUploadPhoto()
     {
         const QString& uploadToken = d->uploadTokenList.takeFirst();
         data += "{\"description\": \"";
-        data += d->descriptionToUpload.toUtf8();
+
+        if (d->descriptionList.isEmpty())
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "description list is empty";
+        }
+        else
+        {
+            data += d->descriptionList.takeFirst().toUtf8();
+        }
+
         data += "\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
