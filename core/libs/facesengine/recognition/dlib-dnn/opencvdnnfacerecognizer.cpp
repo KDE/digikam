@@ -34,13 +34,14 @@
 namespace Digikam
 {
 
+float OpenCVDNNFaceRecognizer::m_threshold = 15000.0;
+
 class Q_DECL_HIDDEN OpenCVDNNFaceRecognizer::Private
 {
 public:
 
     explicit Private()
-        : threshold(15000.0),
-          loaded(false)
+        : loaded(false)
     {
     }
 
@@ -57,10 +58,6 @@ public:
         return m_dnn;
     }
 
-public:
-
-    float        threshold;
-
 private:
 
     DNNFaceModel m_dnn;
@@ -70,17 +67,11 @@ private:
 OpenCVDNNFaceRecognizer::OpenCVDNNFaceRecognizer()
     : d(new Private)
 {
-    setThreshold(0.8);
 }
 
 OpenCVDNNFaceRecognizer::~OpenCVDNNFaceRecognizer()
 {
     delete d;
-}
-
-void OpenCVDNNFaceRecognizer::setThreshold(float threshold) const
-{
-    d->threshold = threshold;
 }
 
 namespace
@@ -131,7 +122,7 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
     d->dnn()->predict(inputImage, predictedLabel, confidence);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << predictedLabel << confidence;
 
-    if (confidence > d->threshold)
+    if (confidence > m_threshold)
     {
         return -1;
     }

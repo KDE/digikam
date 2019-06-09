@@ -32,6 +32,7 @@
 #include "digikam_debug.h"
 #include "facedbaccess.h"
 #include "facedb.h"
+#include "opencvdnnfacerecognizer.h"
 
 namespace Digikam
 {
@@ -53,7 +54,7 @@ DNNFaceModel::DNNFaceModel()
     : cv::Ptr<DNNFaceRecognizer>(DNNFaceRecognizer::create())/*,
       databaseId(0)*/
 {
-    ptr()->setThreshold(0.6);
+    ptr()->setThreshold(OpenCVDNNFaceRecognizer::m_threshold);
 }
 
 DNNFaceModel::~DNNFaceModel()

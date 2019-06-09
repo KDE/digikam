@@ -439,9 +439,6 @@ void RecognitionDatabase::Private::applyParameters()
 {
     if (lbphConst()   ||
         eigenConst()  ||
-#ifdef HAVE_FACESENGINE_DNN
-        dnnConst()    ||
-#endif
         fisherConst())
     {
         for (QVariantMap::const_iterator it = parameters.constBegin() ; it != parameters.constEnd() ; ++it)
@@ -460,12 +457,6 @@ void RecognitionDatabase::Private::applyParameters()
                 {
                     fisher()->setThreshold(it.value().toFloat());
                 }
-#ifdef HAVE_FACESENGINE_DNN
-                else if (recognizeAlgorithm == RecognitionDatabase::RecognizeAlgorithm::DNN)
-                {
-                    dnn()->setThreshold(it.value().toFloat());
-                }
-#endif
                 else
                 {
                     qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
@@ -473,6 +464,24 @@ void RecognitionDatabase::Private::applyParameters()
             }
         }
     }
+
+#ifdef HAVE_FACESENGINE_DNN
+    if(recognizeAlgorithm == RecognitionDatabase::RecognizeAlgorithm::DNN)
+    {
+        float threshold = 0.8;
+
+        if(parameters.contains(QLatin1String("threshold")))
+        {
+            threshold = parameters.value(QLatin1String("threshold")).toFloat();
+        }
+        else if(parameters.contains(QLatin1String("accuracy")))
+        {
+            threshold = parameters.value(QLatin1String("accuracy")).toFloat();
+        }
+
+        OpenCVDNNFaceRecognizer::m_threshold = threshold;
+    }
+#endif
 }
 
 cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
@@ -912,6 +921,11 @@ void RecognitionDatabase::setParameters(const QVariantMap& parameters)
     }
 
     d->applyParameters();
+}
+
+void RecognitionDatabase::setRecognizerThreshold(float threshold)
+{
+    OpenCVDNNFaceRecognizer::m_threshold = threshold;
 }
 
 QVariantMap RecognitionDatabase::parameters() const

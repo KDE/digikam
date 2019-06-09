@@ -46,8 +46,6 @@ public:
     explicit OpenCVDNNFaceRecognizer();
     ~OpenCVDNNFaceRecognizer();
 
-    void setThreshold(float threshold) const;
-
     /**
      *  Returns a cvMat created from the inputImage, optimized for recognition
      */
@@ -67,6 +65,8 @@ public:
                const std::vector<int>& labels,
                const QString& context,
                const std::vector<cv::Mat>& images_rgb);
+
+    static float m_threshold;
 
 private:
 
