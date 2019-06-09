@@ -13,6 +13,11 @@ remove_definitions(
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_NO_CAST_FROM_BYTEARRAY)
 
+# Remove unwanted warnings from O2 library 
+while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
+    string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endwhile()
+
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)
 
