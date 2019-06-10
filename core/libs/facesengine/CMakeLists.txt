@@ -116,6 +116,7 @@ if(ENABLE_FACESENGINE_DNN)
                                       recognition/dlib-dnn/dnnfacemodel.cpp
                                       recognition/dlib-dnn/opencvdnnfacerecognizer.cpp
                                       recognition/dlib-dnn/facerec_dnnborrowed.cpp
+                                      recognition/dlib-dnn/dnnfaceextractor.cpp
     )
 endif()
 
