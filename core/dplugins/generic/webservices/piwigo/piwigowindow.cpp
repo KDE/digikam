@@ -227,11 +227,11 @@ PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
 {
     d->pPiwigo = new PiwigoSession();
 
-    setWindowTitle( i18n("Piwigo Export") );
+    setWindowTitle( i18n("Piwigo Export"));
     setModal(false);
 
     // "Start Upload" button
-    startButton()->setText( i18n("Start Upload") );
+    startButton()->setText( i18n("Start Upload"));
     startButton()->setEnabled(false);
 
     connect(startButton(), SIGNAL(clicked()),
@@ -253,19 +253,14 @@ PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
     // connect functions
     connectSignals();
 
-    QPointer<PiwigoLoginDlg> configDlg;
     KConfig config;
 
-    if (!config.hasGroup("Piwigo Settings") )
+    if (!config.hasGroup("Piwigo Settings"))
     {
-        configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
-                                       d->pPiwigo,
-                                       i18n("Edit Piwigo Data") );
-
-        if (configDlg->exec() != QDialog::Accepted)
-        {
-            delete configDlg;
-        }
+        QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                          d->pPiwigo, i18n("Edit Piwigo Data"));
+        dlg->exec();
+        delete dlg;
     }
 
     readSettings();
@@ -284,6 +279,7 @@ PiwigoWindow::~PiwigoWindow()
     group.writeEntry("Quality",        d->qualitySpinBox->value());
 
     delete d->talker;
+    delete d->pPiwigo;
     delete d->pUploadList;
     delete d;
 }
@@ -378,17 +374,18 @@ void PiwigoWindow::slotLoginFailed(const QString& msg)
         return;
     }
 
-    QPointer<PiwigoLoginDlg> configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
-                                                            d->pPiwigo, i18n("Edit Piwigo Data") );
+    QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                      d->pPiwigo, i18n("Edit Piwigo Data"));
 
-    if (configDlg->exec() != QDialog::Accepted)
+    int result = dlg->exec();
+    delete dlg;
+
+    if (result != QDialog::Accepted)
     {
-        delete configDlg;
         return;
     }
 
     slotDoLogin();
-    delete configDlg;
 }
 
 void PiwigoWindow::slotBusy(bool val)
