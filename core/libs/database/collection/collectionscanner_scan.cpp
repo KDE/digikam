@@ -646,11 +646,8 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
                 if (settings.useXMPSidecar4Reading)
                 {
-                    QString fileForLR = info.fileName();
-                    fileForLR.chop(info.suffix().size());
-
-                    if (list.contains(fileForLR + QLatin1String("xmp")) ||
-                        list.contains(info.fileName() + QLatin1String(".xmp")))
+                    if (list.contains(info.fileName() + QLatin1String(".xmp")) ||
+                        list.contains(info.completeBaseName() + QLatin1String(".xmp")))
                     {
                         hasSidecar = true;
                     }
