@@ -67,4 +67,5 @@ BUGFIXES:
 057 ==> 408420 - Can't add images to Lightable.
 058 ==> 408466 - When exporting >1 picture to Google Photos, all pictures have title & caption of the last one.
 059 ==> 387093 - Option to select ignored folders on first setup crashes DigiKam.
-060 ==> 
+060 ==> 408513 - Piwigo export does not save connection details.
+061 ==> 
