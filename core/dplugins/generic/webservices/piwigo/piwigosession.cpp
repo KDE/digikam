@@ -99,15 +99,6 @@ void PiwigoSession::setPassword(const QString& password)
 
 void PiwigoSession::load()
 {
-    // FIXME: sure we need this?? (perhaps YES..)
-    static bool bln_loaded = false;
-
-    if (bln_loaded)
-        return;
-
-    bln_loaded = true;
-
-    // read config
     KConfig config;
     KConfigGroup group = config.group("Piwigo Settings");
 
