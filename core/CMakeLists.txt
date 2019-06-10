@@ -695,8 +695,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # Remove Wdate-time GCC and CLang flag which generate a lots of compile warnings
     REMOVE_COMPILER_WARNINGS("-Wdate-time")
 
-    # Remove -Wzero-as-null-pointer-constant GCC flag which generate a lots of compile warnings
-    REMOVE_GCC_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
+    # Remove zero-as-null-pointer-constant GCC and CLang flag which generate a lots of compile warnings
+    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
     # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
     if(CMAKE_COMPILER_IS_GNUCXX)
