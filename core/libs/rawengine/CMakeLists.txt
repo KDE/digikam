@@ -27,7 +27,7 @@ endif()
 
 if(NOT MSVC)
 
-    REMOVE_COMPILER_WARNINGS("-Werror=return-type")
+    REMOVE_GCC_COMPILER_WARNINGS("-Werror=return-type")
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
 

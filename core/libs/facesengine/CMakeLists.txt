@@ -93,10 +93,10 @@ if(ENABLE_FACESENGINE_DNN)
     if(NOT MSVC)
 
         # Dlib DNN generate plenty of wrong warnings. Remove these workaround later when code will be ported to OpenCV DNN.
-        REMOVE_COMPILER_WARNINGS("-Wcast-align")
-        REMOVE_COMPILER_WARNINGS("-Wextra")
-        REMOVE_COMPILER_WARNINGS("-Wundef")
-        REMOVE_COMPILER_WARNINGS("-Wall")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wcast-align")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wextra")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wundef")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wall")
 
     endif()
 

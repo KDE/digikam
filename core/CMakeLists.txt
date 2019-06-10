@@ -686,16 +686,16 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # Remove pedantic GCC flag which generate a lots of warnings on the console
     # with qCDebug()
-    REMOVE_COMPILER_WARNINGS("-pedantic")
+    REMOVE_GCC_COMPILER_WARNINGS("-pedantic")
 
     # Remove suggest-override GCC flag which generate a lots of compile warnings
-    REMOVE_COMPILER_WARNINGS("-Wsuggest-override")
+    REMOVE_GCC_COMPILER_WARNINGS("-Wsuggest-override")
 
     # Remove Wdate-time GCC flag which generate a lots of compile warnings
-    REMOVE_COMPILER_WARNINGS("-Wdate-time")
+    REMOVE_GCC_COMPILER_WARNINGS("-Wdate-time")
 
     # Remove -Wzero-as-null-pointer-constant GCC flag which generate a lots of compile warnings
-    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
+    REMOVE_GCC_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
     # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
     if(CMAKE_COMPILER_IS_GNUCXX)

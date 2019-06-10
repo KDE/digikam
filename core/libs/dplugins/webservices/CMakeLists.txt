@@ -14,8 +14,8 @@ remove_definitions(
     -DQT_NO_CAST_FROM_BYTEARRAY)
 
 # Remove unwanted warnings from O2 library 
-REMOVE_COMPILER_WARNINGS("-pedantic")
-REMOVE_COMPILER_WARNINGS("-Wextra-semi")
+REMOVE_GCC_COMPILER_WARNINGS("-pedantic")
+REMOVE_GCC_COMPILER_WARNINGS("-Wextra-semi")
 
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)
