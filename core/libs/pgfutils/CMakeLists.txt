@@ -8,8 +8,9 @@
 if(NOT MSVC)
 
     REMOVE_COMPILER_WARNINGS("-Wcast-align")
-    REMOVE_COMPILER_WARNINGS("-Wkeyword-macro")
     REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
+
+    DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-keyword-macro")
 
 endif()
 
