@@ -92,6 +92,7 @@ include(KDEFrameworkCompilerSettings)
 include(KDECompilerSettings)
 # Local macros
 include(MacroUtils)
+include(MacroCompiler)
 include(MacroOpenCV)
 include(MacroJPEG)
 include(MacroBoolTo01)
