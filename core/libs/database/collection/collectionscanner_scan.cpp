@@ -626,15 +626,6 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 continue;
             }
 
-            // ignore new files in subdirectories of ignored directories
-            foreach (const QString& ignore, d->ignoreDirectory)
-            {
-                if (info.path().contains(ignore))
-                {
-                    continue;
-                }
-            }
-
             int index = fileNameIndexHash.value(info.fileName(), -1);
 
             if (index != -1)
