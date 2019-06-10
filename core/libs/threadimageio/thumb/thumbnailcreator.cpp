@@ -329,7 +329,10 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     {
         // image is stored, or created, unrotated, and is now rotated for display
         // detail thumbnails are stored readily rotated
-        if (d->exifRotate && rect.isNull())
+        QMimeDatabase mimeDB;
+
+        if ((d->exifRotate && rect.isNull()) ||
+            mimeDB.mimeTypeForFile(info.filePath).name().startsWith(QLatin1String("video/")))
         {
             image.qimage = exifRotate(image.qimage, image.exifOrientation);
         }
