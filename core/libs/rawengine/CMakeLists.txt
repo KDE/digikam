@@ -28,8 +28,7 @@ endif()
 if(NOT MSVC)
 
     REMOVE_GCC_COMPILER_WARNINGS("-Werror=return-type")
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
+    DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-c++11-narrowing")
 
 endif()
 

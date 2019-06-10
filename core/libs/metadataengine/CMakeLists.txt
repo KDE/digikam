@@ -16,7 +16,8 @@ endif()
 if("${EXIV2_VERSION}" VERSION_LESS "0.27.99")
 
     # Exiv2 version > 0.28 use auto_ptr instead unique_ptr which is deprecated.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+    DISABLE_GCC_COMPILER_WARNINGS("5.99.99" "-Wno-deprecated")
+    DISABLE_CLANG_COMPILER_WARNINGS("5.99.99" "-Wno-deprecated")
 
 endif()
 

@@ -18,7 +18,8 @@ if(HAVE_OPENGL)
 
         # Under MacOS 10.14 (Mojave), OpenGL API start to be deprecated in favor to Apple Metal API.
         # https://appleinsider.com/articles/18/06/28/why-macos-mojave-requires-metal----and-deprecates-opengl
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
+
+        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-deprecated-declarations")
 
     endif()
 

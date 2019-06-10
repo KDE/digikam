@@ -699,18 +699,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
     REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
     # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
-
-        if (${GCC_VERSION} VERSION_GREATER "8.99.99")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
-        endif()
-    endif()
+    DISABLE_GCC_COMPILER_WARNINGS("8.99.99" "-Wno-deprecated-copy")
 
     # Remove -Winconsistent-missing-override Clang warnings which generate a lots of compile warnings
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
-    endif()
+    DISABLE_CLANG_COMPILER_WARNINGS("7.99.99" "-Wno-inconsistent-missing-override")
 
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
