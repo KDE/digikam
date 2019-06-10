@@ -1,0 +1,14 @@
+These are instructions to test facerec_dnn.py
+
+Required packages and dependencies:
+	1. clone openface folder from github (https://github.com/cmusatyalab/openface)
+	2. install dlib for python with: pip install dlib
+	3. download pretrained model (nn4.small2) to openface/models/openface, from this link: https://cmusatyalab.github.io/openface/models-and-accuracies/
+    4. download shape_predictor_68_face_landmarks.dat from http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2, unzip and move to openface/models/dlib
+    5. download SSD model for face detector from this github (https://github.com/weiliu89/caffe/tree/ssd#models), first link to 07+12: SSD300 and unzip 
+    6. copy and paste facerec_dnn.py to folder openface/demos
+    7. change sys.path.append at line 18 to "path/to/openface" on your machine
+
+How to run:
+	> ./facerec_dnn.py -d <path_to_orl_dataset> -m <path_to_nn4_model> -dt <path_to_folder_contain_deploy.prototxt_of_ssd_detector> -o <number_of_person_to_test> -s <number_of_image_of_each_person_to_process> -r <ratio_of_train/number_of_processed_images>
+
