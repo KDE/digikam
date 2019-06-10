@@ -68,4 +68,5 @@ BUGFIXES:
 058 ==> 408466 - When exporting >1 picture to Google Photos, all pictures have title & caption of the last one.
 059 ==> 387093 - Option to select ignored folders on first setup crashes DigiKam.
 060 ==> 408513 - Piwigo export does not save connection details.
-061 ==> 
+061 ==> 408525 - Flickr export - location lost and/or replaced.
+062 ==> 
