@@ -1106,12 +1106,13 @@ ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString& path)
     info.fileName     = fileInfo.fileName();
 
     QMimeDatabase mimeDB;
+    QString mimeType(mimeDB.mimeTypeForFile(path).name());
 
-    if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
+    if (mimeType.startsWith(QLatin1String("image/")))
     {
         info.mimeType = QLatin1String("image");
     }
-    else if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
+    else if (mimeType.startsWith(QLatin1String("video/")))
     {
         info.mimeType = QLatin1String("video");
     }
