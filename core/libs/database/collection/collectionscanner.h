@@ -231,7 +231,7 @@ protected:
     void markDatabaseAsScanned();
     void mainEntryPoint(bool complete);
     int  checkAlbum(const CollectionLocation& location, const QString& album);
-    void itemsWereRemoved(const QList<qlonglong> &removedIds);
+    void itemsWereRemoved(const QList<qlonglong>& removedIds);
     void updateRemovedItemsTime();
     void incrementDeleteRemovedCompleteScanCount();
     void resetDeleteRemovedSettings();

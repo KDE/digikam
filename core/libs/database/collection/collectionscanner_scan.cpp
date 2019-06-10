@@ -597,6 +597,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                                             QDir::NoDotAndDotDot,
                                             QDir::Name | QDir::DirsLast);
 
+    const QString xmpExt(QLatin1String(".xmp"));
     int counter = -1;
 
     foreach (const QString& entry, list)
@@ -633,9 +634,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos.at(index).id);
 
-                bool hasSidecar = (settings.useXMPSidecar4Reading &&
-                                   (list.contains(info.fileName() + QLatin1String(".xmp")) ||
-                                    list.contains(info.completeBaseName() + QLatin1String(".xmp"))));
+                bool hasSidecar = (settings.useXMPSidecar4Reading           &&
+                                   (list.contains(info.fileName() + xmpExt) ||
+                                    list.contains(info.completeBaseName() + xmpExt)));
 
                 scanFileNormal(info, scanInfos.at(index), hasSidecar);
             }
