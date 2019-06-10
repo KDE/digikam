@@ -4,8 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# =======================================================
-# Stand alone version of ExpoBlending tool
+DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-extra-semi")
 
 add_subdirectory(fbdemo)
 add_subdirectory(twdemo)
