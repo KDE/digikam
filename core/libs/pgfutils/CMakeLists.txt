@@ -7,8 +7,8 @@
 
 if(NOT MSVC)
 
-    REMOVE_GCC_COMPILER_WARNINGS("-Wcast-align")
-    REMOVE_GCC_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
+    REMOVE_COMPILER_WARNINGS("-Wcast-align")
+    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
 endif()
 
