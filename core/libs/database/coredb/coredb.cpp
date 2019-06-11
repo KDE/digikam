@@ -54,6 +54,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "coredbbackend.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
@@ -2641,12 +2642,38 @@ QList<qlonglong> CoreDB::getRelatedImagesToByType(DatabaseRelation::Type type) c
 QStringList CoreDB::getItemsURLsWithTag(int tagId) const
 {
     QList<QVariant> values;
+    QList<QVariant> boundValues;
 
-    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
-                                     "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
-                                     "LEFT JOIN Albums ON Albums.id=Images.album "
-                                     " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?;"),
-                   tagId, &values);
+    QString query(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+                                    "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
+                                    "LEFT JOIN Albums ON Albums.id=Images.album "
+                                    " WHERE Images.status=1 AND Images.category=1 AND"));
+
+    if (tagId == TagsCache::instance()->tagForPickLabel(NoPickLabel) ||
+        tagId == TagsCache::instance()->tagForColorLabel(NoColorLabel))
+    {
+        query += QString::fromUtf8(" ( ImageTags.tagid=? OR ImageTags.tagid<? "
+                                   "OR ImageTags.tagid>? OR ImageTags.tagid IS NULL );");
+        boundValues << tagId;
+
+        if (tagId == TagsCache::instance()->tagForPickLabel(NoPickLabel))
+        {
+            boundValues << TagsCache::instance()->tagForPickLabel(FirstPickLabel);
+            boundValues << TagsCache::instance()->tagForPickLabel(LastPickLabel);
+        }
+        else
+        {
+            boundValues << TagsCache::instance()->tagForColorLabel(FirstColorLabel);
+            boundValues << TagsCache::instance()->tagForColorLabel(LastColorLabel);
+        }
+    }
+    else
+    {
+        query += QString::fromUtf8(" ImageTags.tagid=?;");
+        boundValues << tagId;
+    }
+
+    d->db->execSql(query, boundValues, &values);
 
     QStringList urls;
     QString     albumRootPath, relativePath, name;
