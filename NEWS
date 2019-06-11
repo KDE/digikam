@@ -69,4 +69,5 @@ BUGFIXES:
 059 ==> 387093 - Option to select ignored folders on first setup crashes DigiKam.
 060 ==> 408513 - Piwigo export does not save connection details.
 061 ==> 408525 - Flickr export - location lost and/or replaced.
-062 ==> 
+062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
+063 ==> 
