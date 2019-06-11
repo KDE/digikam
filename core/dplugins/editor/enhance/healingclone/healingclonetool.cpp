@@ -90,7 +90,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     d->gboxSettings      = new EditorToolSettings(0);
     d->previewWidget     = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red);
-
+    d->previewWidget->setFocusPolicy(Qt::StrongFocus);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewTargetImage);
 
@@ -159,6 +159,8 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));
+
+
 }
 
 HealingCloneTool::~HealingCloneTool()
@@ -215,6 +217,7 @@ void HealingCloneTool::slotReplace(const QPoint& srcPoint, const QPoint& dstPoin
 void HealingCloneTool::slotRadiusChanged(int r)
 {
     d->previewWidget->setMaskPenSize(r);
+
 }
 
 void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoint& dstPoint, int radius)

@@ -44,6 +44,15 @@ public:
      * Should be changed to get rid of the inheritance
      */
     using ImageGuideWidget::ImageGuideWidget;
+    void setDefaults();
+
+    explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
+                              bool spotVisible = true,
+                              int guideMode = PickColorMode,
+                              const QColor& guideColor = Qt::red,
+                              int guideSize = 1,
+                              bool blink = false,
+                              ImageIface::PreviewType type= ImageIface::FullImage);
 
 public Q_SLOTS:
 
@@ -65,12 +74,22 @@ protected:
     void mouseReleaseEvent(QMouseEvent*);
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
+    void keyPressEvent(QKeyEvent *event) ;
+    void keyReleaseEvent(QKeyEvent *event) ;
+
 
 private:
 
     bool   srcSet = true;
     QPoint src;
     QPoint dst;
+    QPoint oldPos;
+    bool isMPressed= false;
+    int default_w;
+    int default_h;
+    float float_w;
+    float float_h;
+    bool first_time = true;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin

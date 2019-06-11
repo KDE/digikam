@@ -30,9 +30,39 @@
 namespace DigikamEditorHealingCloneToolPlugin
 {
 
+ ImageBrushGuideWidget::ImageBrushGuideWidget(QWidget* const parent ,
+                          bool spotVisible,
+                          int guideMode ,
+                          const QColor& guideColor ,
+                          int guideSize ,
+                          bool blink ,
+                          ImageIface::PreviewType type):
+     ImageGuideWidget( parent, spotVisible, guideMode , guideColor,  guideSize , blink, type)
+{
+
+
+}
+
+ void ImageBrushGuideWidget::setDefaults()
+ {
+     this->default_h = this->height();
+     this->default_w = this->width();
+     this->float_h = default_h;
+     this->float_w = default_w;
+ }
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if ((e->buttons() & Qt::LeftButton) && !srcSet)
+    if(!isMPressed)
+        oldPos = e->globalPos() ;
+    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "MPressed is: " <<isMPressed;
+    if (isMPressed)
+    {
+        const QPoint delta = e->globalPos() - oldPos;
+        move(x()+delta.x(), y()+delta.y());
+        oldPos = e->globalPos();
+        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Right@: " << x() << ", "<< y();
+    }
+    else if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
         qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Move The location is: " << e->x() << ", "<< e->y();
 
@@ -52,6 +82,8 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
     {
         ImageGuideWidget::mouseMoveEvent(e);
     }
+
+
 }
 
 void ImageBrushGuideWidget::mouseReleaseEvent(QMouseEvent* e)
@@ -72,7 +104,14 @@ void ImageBrushGuideWidget::mouseReleaseEvent(QMouseEvent* e)
 
 void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
 {
-    if (srcSet)
+
+     oldPos = e->globalPos() ;
+     if(isMPressed)
+     {
+         isMPressed = false;
+     }
+
+    else if (srcSet)
     {
         ImageGuideWidget::mousePressEvent(e);
     }
@@ -87,9 +126,48 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
 
             emit signalClone(currentSrc, currentDst);
         }
+
+    }
+
+}
+
+void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
+{
+    QWidget::keyPressEvent(e);
+
+    // Need to put the setDefault method in its appropriate place. This is a hook.
+    if(first_time)
+        setDefaults();
+
+    if(e->key() == Qt :: Key_M)
+    {
+
+        if(isMPressed)
+            isMPressed = false;
+        else
+            isMPressed = true;
+    }
+
+    if(e->key() == Qt :: Key_Plus)
+    {
+        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "AF keyPLus is: " << this->width() << this->height();
+        this->float_h += .1 * this->default_h;
+        this->float_w += .1 * this->default_w;
+        this->resize((int)this->float_w, (int)this->float_h);
+    }
+
+    if(e->key() == Qt :: Key_Minus)
+    {
+        this->float_h -= .1 * this->default_h;
+        this->float_w -= .1 * this->default_w;
+        this->resize((int)this->float_w, (int)this->float_h);
     }
 }
 
+void ImageBrushGuideWidget::  keyReleaseEvent(QKeyEvent *e)
+{
+
+}
 void ImageBrushGuideWidget::slotSetSourcePoint()
 {
     srcSet = true;
