@@ -2644,9 +2644,9 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId) const
     QList<QVariant> values;
     QList<QVariant> boundValues;
 
-    QString query(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+    QString query(QString::fromUtf8("SELECT DISTINCT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                                     "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
-                                    "LEFT JOIN Albums ON Albums.id=Images.album "
+                                    "INNER JOIN Albums ON Albums.id=Images.album "
                                     " WHERE Images.status=1 AND Images.category=1 AND"));
 
     if (tagId == TagsCache::instance()->tagForPickLabel(NoPickLabel) ||
