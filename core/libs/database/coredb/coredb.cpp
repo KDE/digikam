@@ -101,13 +101,13 @@ QString CoreDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelati
     {
         sql = QString::fromUtf8("SELECT object FROM ImageRelations "
                                 "INNER JOIN Images ON ImageRelations.object=Images.id "
-                                "WHERE subject=? %1 AND status<3 %2;");
+                                " WHERE subject=? %1 AND status<3 %2;");
     }
     else
     {
         sql = QString::fromUtf8("SELECT subject FROM ImageRelations "
                                 "INNER JOIN Images ON ImageRelations.subject=Images.id "
-                                "WHERE object=? %1 AND status<3 %2;");
+                                " WHERE object=? %1 AND status<3 %2;");
     }
 
     if (type != DatabaseRelation::UndefinedType)
@@ -1473,7 +1473,7 @@ ItemShortInfo CoreDB::getItemShortInfo(qlonglong imageID) const
 
     d->db->execSql(QString::fromUtf8("SELECT Images.name, Albums.albumRoot, Albums.relativePath, Albums.id "
                                      "FROM Images "
-                                     " LEFT JOIN Albums ON Albums.id=Images.album "
+                                     " INNER JOIN Albums ON Albums.id=Images.album "
                                      "  WHERE Images.id=?;"),
                    imageID, &values);
 
@@ -1496,7 +1496,7 @@ ItemShortInfo CoreDB::getItemShortInfo(int albumRootId, const QString& relativeP
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.id FROM Images "
-                                     "INNER JOIN Albums ON Images.album=Albums.id "
+                                     "INNER JOIN Albums ON Albums.id=Images.album "
                                      " WHERE name=? AND albumRoot=? AND relativePath=?;"),
                    name, albumRootId, relativePath, &values);
 
@@ -2706,7 +2706,7 @@ QStringList CoreDB::getDirtyOrMissingFaceImageUrls() const
 
     d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                                      "LEFT JOIN ImageScannedMatrix ON Images.id=ImageScannedMatrix.imageid "
-                                     "LEFT JOIN Albums ON Albums.id=Images.album "
+                                     "INNER JOIN Albums ON Albums.id=Images.album "
                                      " WHERE Images.status=1 AND Images.category=1 AND "
                                      " ( ImageScannedMatrix.imageid IS NULL "
                                      " OR Images.modificationDate != ImageScannedMatrix.modificationDate "
@@ -4242,8 +4242,9 @@ QMap<qlonglong, QString> CoreDB::getItemIDsAndURLsInAlbum(int albumID) const
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.relativePath, Images.name "
-                                     "FROM Images JOIN Albums ON Albums.id=Images.album "
-                                     " WHERE Albums.id=?;"),
+                                     "FROM Images "
+                                     " INNER JOIN Albums ON Albums.id=Images.album "
+                                     "  WHERE Albums.id=?;"),
                    albumID, &values);
 
     QString   path;
@@ -4295,10 +4296,9 @@ QHash<qlonglong, QPair<int, int> > CoreDB::getAllItemsWithAlbum() const
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.albumRoot, Albums.id "
-                                     "FROM Images "
-                                     " LEFT JOIN Albums ON Albums.id=Images.album "
-                                     "  WHERE Images.status<3;"),
+    d->db->execSql(QString::fromUtf8("SELECT Images.id, Albums.albumRoot, Albums.id FROM Images "
+                                     "INNER JOIN Albums ON Albums.id=Images.album "
+                                     " WHERE Images.status<3;"),
                    &values);
 
     QHash<qlonglong, QPair<int, int> > itemAlbumHash;
