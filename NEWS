@@ -64,4 +64,10 @@ BUGFIXES:
 054 ==> 408332 - Disabled Export plugins visible in rightside toolbar.
 055 ==> 342379 - Allow to use decimals values with custom size settings.
 056 ==> 408450 - digikam git r43105 cannot build without marble.
-057 ==> 
+057 ==> 408420 - Can't add images to Lightable.
+058 ==> 408466 - When exporting >1 picture to Google Photos, all pictures have title & caption of the last one.
+059 ==> 387093 - Option to select ignored folders on first setup crashes DigiKam.
+060 ==> 408513 - Piwigo export does not save connection details.
+061 ==> 408525 - Flickr export - location lost and/or replaced.
+062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
+063 ==> 

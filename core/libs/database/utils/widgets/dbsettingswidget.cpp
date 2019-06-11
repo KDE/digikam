@@ -184,22 +184,25 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbTypeMap[MysqlServer]   = dbTypeIdx++;
 #endif
 
-    d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
-                               "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
-                               "It is the default and recommended backend for collections with less than 100K items.</p>"
+    QString tip = i18n("<p>Select here the type of database backend.</p>"
+                       "<p><b>SQlite</b> backend is for local database storage with a small or medium collection sizes. "
+                       "It is the default and recommended backend for collections with less than 100K items.</p>");
+
+
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
-                               "This backend is recommend for local collections with more than 100K items.</p>"
-                               "<p><i>Be careful: this one still in experimental stage.</i></p>"
+    tip.append(i18n("<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
+                    "This backend is recommend for local collections with more than 100K items.</p>"
+                    "<p><i>Be careful: this one still in experimental stage.</i></p>"));
 #   endif
 
-                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
-                               "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
-                               "<p><i>Be careful: this one still in experimental stage.</i></p>"
+    tip.append(i18n("<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                    "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
+                    "<p><i>Be careful: this one still in experimental stage.</i></p>"));
 #endif
-                              ));
+
+    d->dbType->setToolTip(tip);
 
     // --------------------------------------------------------
 

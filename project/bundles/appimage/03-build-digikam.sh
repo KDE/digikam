@@ -81,7 +81,6 @@ else
 
     git clone --progress --verbose $DK_GITURL digikam-$DK_VERSION
     cd digikam-$DK_VERSION
-    ./download-repos
 
     if [ $? -ne 0 ] ; then
         echo "---------- Cannot clone repositories."

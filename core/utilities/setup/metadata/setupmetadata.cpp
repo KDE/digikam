@@ -832,10 +832,9 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
         d->exifAutoRotateShowedInfo = true;
         QMessageBox::information(this, qApp->applicationName(),
                                  i18nc("@info",
-                                       "Switching off exif auto rotation will most probably show your images "
-                                       "in a wrong orientation, so only change this option if you explicitly "
-                                       "require this. Furthermore, you need to regenerate all already stored "
-                                       "thumbnails via the <interface>Tools | Maintenance...</interface> menu."));
+                                       "Switching off exif auto rotation will most probably show "
+                                       "your images in a wrong orientation, so only change this "
+                                       "option if you explicitly require this."));
     }
 }
 

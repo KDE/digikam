@@ -49,10 +49,22 @@
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "previewloadthread.h"
+
+// OAuth2 library includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wextra-semi"
+#endif
+
 #include "o1.h"
 #include "o0globals.h"
 #include "o1requestor.h"
 #include "o0settingsstore.h"
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 namespace DigikamGenericFlickrPlugin
 {

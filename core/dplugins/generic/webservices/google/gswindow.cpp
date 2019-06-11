@@ -594,7 +594,7 @@ void GSWindow::slotStartTransfer()
         temp.gpsLon.setNum(info.longitude());
         temp.tags        = info.tagsPath();
 
-        d->transferQueue.append(Pair(d->widget->imagesList()->imageUrls().value(i),temp));
+        d->transferQueue.append(Pair(d->widget->imagesList()->imageUrls().value(i), temp));
     }
 
     d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();

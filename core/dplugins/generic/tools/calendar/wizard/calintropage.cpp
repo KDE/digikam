@@ -50,19 +50,25 @@ CalIntroPage::CalIntroPage(QWizard* const dialog, const QString& title)
 
     desc->setWordWrap(true);
     desc->setOpenExternalLinks(true);
-    desc->setText(i18n("<qt>"
+
+    QString str = i18n("<qt>"
                        "<p><h1><b>Welcome to Calendar Tool</b></h1></p>"
                        "<p>This assistant will guide you to create "
                        "and print a calendar with a selection of images taken "
-                       "from your collection.</p>"
-#ifdef HAVE_KCALENDAR
-                       "<p>This tool will also permit to set specific dates "
-                       "on your calendar using external data event files as "
-                       "<a href='http://en.wikipedia.org/wiki/VCalendar'>vCalendar</a>, and "
-                       "<a href='http://en.wikipedia.org/wiki/Icalendar'>iCalendar</a> formats.</p>"
-#endif
-                       "</qt>"));
+                       "from your collection.</p>");
 
+#ifdef HAVE_KCALENDAR
+
+    str.append(i18n("<p>This tool will also permit to set specific dates "
+                    "on your calendar using external data event files as "
+                    "<a href='http://en.wikipedia.org/wiki/VCalendar'>vCalendar</a>, and "
+                    "<a href='http://en.wikipedia.org/wiki/Icalendar'>iCalendar</a> formats.</p>"));
+
+#endif
+
+    str.append(QLatin1String("</qt>"));
+
+    desc->setText(str);
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("office-calendar")));
 }

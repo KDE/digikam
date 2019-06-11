@@ -37,6 +37,12 @@
 #include "gitversion.h"
 #include "daboutdata.h"
 
+// Remove GCC and Clang warnings about _DATE_ macro.
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdate-time"
+#endif
+
 namespace Digikam
 {
 
@@ -73,5 +79,10 @@ static inline QString additionalInformation()
 }
 
 }  // namespace Digikam
+
+// Restore warnings
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic pop
+#endif
 
 #endif // DIGIKAM_VERSION_H

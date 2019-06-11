@@ -7,13 +7,10 @@
 
 if(NOT MSVC)
 
-    while(CMAKE_CXX_FLAGS MATCHES "-Wcast-align")
-        string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    REMOVE_COMPILER_WARNINGS("-Wcast-align")
+    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
-    while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
-        string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-keyword-macro")
 
 endif()
 
