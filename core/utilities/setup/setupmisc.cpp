@@ -253,6 +253,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     themeWhiteList.insert(QLatin1String("breeze-dark"),     i18nc("icon theme", "Breeze Dark"));
     themeWhiteList.insert(QLatin1String("faenza"),          i18nc("icon theme", "Faenza"));
     themeWhiteList.insert(QLatin1String("faenza-ambiance"), i18nc("icon theme", "Ambiance"));
+    themeWhiteList.insert(QLatin1String("humanity"),        i18nc("icon theme", "Humanity"));
     themeWhiteList.insert(QLatin1String("oxygen"),          i18nc("icon theme", "Oxygen"));
 
     foreach (const QString& path, QIcon::themeSearchPaths())
