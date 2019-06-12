@@ -2647,13 +2647,13 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId) const
     QString query(QString::fromUtf8("SELECT DISTINCT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                                     "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
                                     "INNER JOIN Albums ON Albums.id=Images.album "
-                                    " WHERE Images.status=1 AND Images.category=1 AND"));
+                                    " WHERE Images.status=1 AND Images.category=1 AND "));
 
     if (tagId == TagsCache::instance()->tagForPickLabel(NoPickLabel) ||
         tagId == TagsCache::instance()->tagForColorLabel(NoColorLabel))
     {
-        query += QString::fromUtf8(" ( ImageTags.tagid=? OR ImageTags.tagid<? "
-                                   "OR ImageTags.tagid>? OR ImageTags.tagid IS NULL );");
+        query += QString::fromUtf8("( ImageTags.tagid=? OR ImageTags.tagid "
+                                   "NOT BETWEEN ? AND ? OR ImageTags.tagid IS NULL );");
         boundValues << tagId;
 
         if (tagId == TagsCache::instance()->tagForPickLabel(NoPickLabel))
@@ -2669,7 +2669,7 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId) const
     }
     else
     {
-        query += QString::fromUtf8(" ImageTags.tagid=?;");
+        query += QString::fromUtf8("ImageTags.tagid=?;");
         boundValues << tagId;
     }
 
