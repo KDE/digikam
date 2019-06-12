@@ -70,4 +70,6 @@ BUGFIXES:
 060 ==> 408513 - Piwigo export does not save connection details.
 061 ==> 408525 - Flickr export - location lost and/or replaced.
 062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
-063 ==> 
+063 ==> 408568 - Keywords are not showing up on video files.
+064 ==> 
+
