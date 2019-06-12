@@ -70,19 +70,28 @@ namespace Digikam
 
 DNNFaceExtractor::DNNFaceExtractor()
 {
-} 
+}
 
 void DNNFaceExtractor::getFaceEmbedding(cv::Mat faceImage, std::vector<float>& vecdata)
 {
+    std::vector<int> OUTER_EYES_AND_NOSE = {36,45,33};
+    cv::Mat FACE_TEMPLATE(3, 2, CV_32F);
+    FACE_TEMPLATE.at<float>(0,0) = 18.639072;
+    FACE_TEMPLATE.at<float>(0,1) = 16.249624;
+    FACE_TEMPLATE.at<float>(1,0) = 75.73048;
+    FACE_TEMPLATE.at<float>(1,1) = 15.18443;
+    FACE_TEMPLATE.at<float>(2,0) = 47.515285;
+    FACE_TEMPLATE.at<float>(2,1) = 49.38637;
+
     qCDebug(DIGIKAM_FACEDB_LOG) << "faceImage channels: " << faceImage.channels();
     qCDebug(DIGIKAM_FACEDB_LOG) << "faceImage size: (" << faceImage.rows << ", " << faceImage.cols << ")\n";
 
     // cv::imshow("face", faceImage);
     // cv::waitKey(0);
 
-/*
- *  // Detection, shapepredictor and extract face landmark (using for DNN dlib)
- *  // Codes of shape predictor are for extracting 68 points of face landmark
+
+    // Detection, shapepredictor and extract face landmark (using for DNN dlib)
+    // Codes of shape predictor are for extracting 68 points of face landmark
 
     redeye::ShapePredictor sp;
     QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
@@ -109,7 +118,7 @@ void DNNFaceExtractor::getFaceEmbedding(cv::Mat faceImage, std::vector<float>& v
     delete temp;
 
     matrix<rgb_pixel> img;
-    std::vector<matrix<rgb_pixel> > faces;
+    std::vector<cv::Mat> faces;
 
     assign_image(img, cv_image<rgb_pixel>(faceImage));
     bool face_flag = false;
@@ -142,20 +151,31 @@ void DNNFaceExtractor::getFaceEmbedding(cv::Mat faceImage, std::vector<float>& v
         cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
         FullObjectDetection object = sp(gray, new_rect);
         qCDebug(DIGIKAM_FACEDB_LOG) << "Full object detection finished";
-        matrix<rgb_pixel> face_chip;
-        extract_image_chip(img, get_face_chip_details(object, 150, 0.25), face_chip);
-        qCDebug(DIGIKAM_FACEDB_LOG) << "Extract image chip finished";
-        faces.push_back(move(face_chip));
+
+        cv::Mat landmarks(3,2,CV_32F);
+        int row = 0;
+        for(auto indx : OUTER_EYES_AND_NOSE)
+        {
+            landmarks.at<float>(row,0) = object.part(indx)[0];
+            landmarks.at<float>(row,1) = object.part(indx)[1];
+            row++;
+        }
+        cv::Mat affineTransformMatrix = cv::getAffineTransform(landmarks, FACE_TEMPLATE);
+        cv::Mat alignedFace;
+        cv::warpAffine(faceImage, alignedFace, affineTransformMatrix, cv::Size(96, 96));
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Align face finished";
+        
+        faces.push_back(move(alignedFace));
+        
         break;
     }
 
     if (!face_flag)
     {
-        cv::resize(faceImage, faceImage, cv::Size(150, 150));
-        assign_image(img, cv_image<rgb_pixel>(faceImage));
-        faces.push_back(img);
+        faces.push_back(faceImage);
     }
-*/
+
+    std::cout << "faces size: " << faces.size() << "\n";
 
     // Read pretrained neural network
     
@@ -165,19 +185,18 @@ void DNNFaceExtractor::getFaceEmbedding(cv::Mat faceImage, std::vector<float>& v
 
     qCDebug(DIGIKAM_FACEDB_LOG) << "Start neural network";
 
-    // cv::Mat face_descriptors;
-    // for(auto face : faces)
-    // {
-    //     cv::Mat faceCV = toMat(face);
-    //     cv::Mat blob = cv::dnn::blobFromImage(faceCV, 1.0 / 255, cv::Size(128, 128), cv::Scalar(0,0,0), false, true, CV_32F);
-    //     net.setInput(blob);
-    //     face_descriptors = net.forward();
-    // }
+    cv::Mat face_descriptors;
+    for(auto face : faces)
+    {
+        cv::Mat blob = cv::dnn::blobFromImage(face, 1.0 / 255, cv::Size(96, 96), cv::Scalar(0,0,0), false, true, CV_32F);
+        net.setInput(blob);
+        face_descriptors = net.forward();
+    }
 
-    cv::Mat blob = cv::dnn::blobFromImage(faceImage, 1.0 / 255, cv::Size(96, 96), cv::Scalar(0,0,0), false, true, CV_32F); // work for openface.nn4
+    // cv::Mat blob = cv::dnn::blobFromImage(faceImage, 1.0 / 255, cv::Size(96, 96), cv::Scalar(0,0,0), false, true, CV_32F); // work for openface.nn4
     // cv::Mat blob = cv::dnn::blobFromImage(faceImage, 1.0 / 255, cv::Size(224,224), cv::Scalar(0,0,0), false, true, CV_32F);
-    net.setInput(blob);
-    cv::Mat face_descriptors = net.forward();
+    // net.setInput(blob);
+    // cv::Mat face_descriptors = net.forward();
 
     qCDebug(DIGIKAM_FACEDB_LOG) << "Face descriptors size: (" << face_descriptors.rows << ", " << face_descriptors.cols << ")";
 
