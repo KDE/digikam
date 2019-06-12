@@ -122,7 +122,10 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
     d->dnn()->predict(inputImage, predictedLabel, confidence);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << predictedLabel << confidence;
 
-    if (confidence > m_threshold)
+    /** confidence must be greater than threshold, because distance used is cosine distance
+     * in case that we use euclidean distance, confidence must be less than threshold
+     */
+    if (confidence < m_threshold)
     {
         return -1;
     }

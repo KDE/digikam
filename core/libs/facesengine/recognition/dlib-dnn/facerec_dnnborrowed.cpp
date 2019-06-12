@@ -29,6 +29,8 @@
 #include <limits>
 #include <vector>
 #include <cmath>
+#include <cassert>
+#include <numeric>
 
 // Qt includes
 
@@ -41,6 +43,20 @@
 #include "digikam_debug.h"
 
 using namespace cv;
+
+/** This compute cosine distance between 2 vectors with formula:
+ *      cos(a) = (v1*v2) / (||v1||*||v2||)
+ */
+static double cosineDistance(std::vector<float> v1, std::vector<float> v2)
+{
+    assert(v1.size() == v2.size());
+
+    double scalarProduct = std::inner_product(v1.begin(), v1.end(), v2.begin(), 0.0);
+    double normV1 = sqrt(std::inner_product(v1.begin(), v1.end(), v1.begin(), 0.0));
+    double normV2 = sqrt(std::inner_product(v2.begin(), v2.end(), v2.begin(), 0.0));
+
+    return scalarProduct / normV1*normV2;
+}
 
 namespace Digikam
 {
@@ -187,7 +203,7 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     }
 }
 */
-void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minDist) const
+void DNNFaceRecognizer::predict(cv::InputArray _src, int& label, double& dist) const
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
@@ -195,15 +211,17 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
     std::vector<float> vecdata;
     FaceDb* const tmp_facedb = new FaceDb();
     tmp_facedb->getFaceVector(src, vecdata);
+    qCWarning(DIGIKAM_FACESENGINE_LOG) << "m_threshold " << m_threshold;
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "vecdata: " << vecdata[vecdata.size()-2] << " " << vecdata[vecdata.size()-1];
 
-    minDist  = DBL_MAX;
-    minClass = -1;
+    dist  = -1;
+    label = -1;
 
     // find nearest neighbor
 
     for (size_t sampleIdx = 0 ; sampleIdx < m_src.size() ; ++sampleIdx)
     {
+/*        
         double dist = 0;
 
         for (size_t i = 0 ; i < m_src[sampleIdx].size() ; ++i)
@@ -217,6 +235,15 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
         {
             minDist  = dist;
             minClass = m_labels.at<int>((int) sampleIdx);
+        }
+*/
+
+        double newDist = cosineDistance(vecdata, m_src[sampleIdx]);
+
+        if(newDist > dist)
+        {
+            dist = newDist;
+            label = m_labels.at<int>((int) sampleIdx);
         }
     }
 }
