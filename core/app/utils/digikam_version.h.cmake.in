@@ -38,7 +38,7 @@
 #include "daboutdata.h"
 
 // Remove GCC and Clang warnings about _DATE_ macro.
-#if defined(Q_CC_GNU)
+#if defined(__clang__) || defined(__GNUC__)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wdate-time"
 #endif
@@ -81,7 +81,7 @@ static inline QString additionalInformation()
 }  // namespace Digikam
 
 // Restore warnings
-#if defined(Q_CC_GNU)
+#if defined(__clang__) || defined(__GNUC__)
 #   pragma GCC diagnostic pop
 #endif
 
