@@ -38,12 +38,7 @@ class TreeBranch
 public:
 
     explicit TreeBranch()
-      : sourceIndex(),
-        parent(nullptr),
-        data(),
-        type(),
-        oldChildren(),
-        spacerChildren()
+      : parent(nullptr)
     {
     }
 

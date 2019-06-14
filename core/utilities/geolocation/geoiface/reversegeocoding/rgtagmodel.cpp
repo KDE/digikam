@@ -54,11 +54,7 @@ public:
       : tagModel(nullptr),
         rootTag(nullptr),
         startInsert(-1),
-        endInsert(-1),
-        newTags(),
-        auxTagList(),
-        auxIndexList(),
-        savedSpacerList()
+        endInsert(-1)
     {
     }
 
@@ -66,7 +62,8 @@ public:
     TreeBranch*                  rootTag;
 
     QModelIndex                  parent;
-    int                          startInsert, endInsert;
+    int                          startInsert;
+    int                          endInsert;
 
     QList<QList<TagData> >       newTags;
 
