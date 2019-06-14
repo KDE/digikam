@@ -74,4 +74,5 @@ BUGFIXES:
 064 ==> 408667 - In reverse geocoding, whow which address element correspond to each name.
 065 ==> 408666 - Reverse geocoding tool, confusing dialog question phrasing.
 066 ==> 406937 - Cannot change icon theme in Appimage.
-067 ==> 
+067 ==> 408687 - "Failed to update file timestamp" despite date being changed successfully in Adjust Date and Time tool.
+068 ==> 
