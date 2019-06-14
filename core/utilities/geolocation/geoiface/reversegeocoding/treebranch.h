@@ -57,6 +57,7 @@ public:
     QPersistentModelIndex sourceIndex;
     TreeBranch*           parent;
     QString               data;
+    QString               help;
     Type                  type;
     QList<TreeBranch*>    oldChildren;
     QList<TreeBranch*>    spacerChildren;

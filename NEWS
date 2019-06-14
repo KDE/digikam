@@ -71,5 +71,5 @@ BUGFIXES:
 061 ==> 408525 - Flickr export - location lost and/or replaced.
 062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
 063 ==> 408568 - Keywords are not showing up on video files.
-064 ==> 
-
+064 ==> 408667 - In reverse geocoding, whow which address element correspond to each name.
+065 ==> 

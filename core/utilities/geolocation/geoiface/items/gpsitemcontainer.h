@@ -56,6 +56,7 @@ enum Type
 typedef struct TagData
 {
     QString tagName;
+    QString tipName;
     Type    tagType;
 
 } TagData;

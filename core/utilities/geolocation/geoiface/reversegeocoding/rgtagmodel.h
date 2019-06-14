@@ -64,9 +64,9 @@ public:
     QModelIndex fromSourceIndex(const QModelIndex& externalTagModelIndex) const;
     QModelIndex toSourceIndex(const QModelIndex& tagModelIndex) const;
     void addSpacerTag(const QModelIndex& parent, const QString& spacerName);
-    QPersistentModelIndex addNewTag(const QModelIndex& parent, const QString& newTagName);
+    QPersistentModelIndex addNewTag(const QModelIndex& parent, const QString& newTagName, const QString& newElement);
     QList<QList<TagData> > addNewData(QStringList& elements, QStringList& resultedData);
-    void addDataInTree(TreeBranch* currentBranch, int currentRow,const QStringList& addressElements,const QStringList& elementsData);
+    void addDataInTree(TreeBranch* currentBranch, int currentRow,const QStringList& addressElements, const QStringList& elementsData);
     QList<TagData> getTagAddress();
     void findAndDeleteSpacersOrNewTags(TreeBranch* currentBranch, int currentRow, Type whatShouldRemove);
     void deleteAllSpacersOrNewTags(const QModelIndex& currentIndex, Type whatShouldRemove);
