@@ -935,7 +935,7 @@ void RGWidget::slotRGCanceled()
 
         const QString question = i18n("%1 out of %2 images have been reverse geocoded. "
                                       "Would you like to keep the tags which were "
-                                      "already obtained or discard them?",
+                                      "already obtained?",
                                       d->receivedRGCount, d->requestedRGCount);
 
         const int result = DMessageBox::showYesNo(QMessageBox::Warning, this,
