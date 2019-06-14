@@ -244,7 +244,6 @@ void ItemDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const 
     p->save();
     p->translate(option.rect.topLeft());
 
-    QRect r;
     bool isSelected = (option.state & QStyle::State_Selected);
 
     // Thumbnail

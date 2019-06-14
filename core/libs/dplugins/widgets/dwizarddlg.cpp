@@ -46,6 +46,7 @@ DWizardDlg::DWizardDlg(QWidget* const parent, const QString& objName)
     : QWizard(parent),
       m_tool(nullptr)
 {
+    setWizardStyle(QWizard::ClassicStyle);
     setObjectName(objName);
     restoreDialogSize();
 }

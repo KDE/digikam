@@ -191,12 +191,14 @@ ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
 ImportUI::~ImportUI()
 {
     saveSettings();
-    m_instance = nullptr;
     disconnect(d->view, nullptr, this, nullptr);
 
     delete d->view;
     delete d->rightSideBar;
     delete d->controller;
+
+    m_instance = nullptr;
+
     delete d;
 }
 

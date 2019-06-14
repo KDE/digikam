@@ -92,7 +92,7 @@ Digikam::FilterAction HotPixelFixer::filterAction()
         action.addParameter(QLatin1String("hotPixel"), hpString);
     }
 
-    return action;
+    return std::move(action);
 }
 
 void HotPixelFixer::readParameters(const FilterAction& action)

@@ -292,8 +292,8 @@ void ItemViewUtilities::insertSilentToQueueManager(const QList<ItemInfo>& list,
 }
 
 void ItemViewUtilities::openInfos(const ItemInfo& info,
-                                   const QList<ItemInfo>& allInfosToOpen,
-                                   Album* currentAlbum)
+                                  const QList<ItemInfo>& allInfosToOpen,
+                                  Album* currentAlbum)
 {
     if (info.isNull())
     {
@@ -322,8 +322,8 @@ void ItemViewUtilities::openInfos(const ItemInfo& info,
             this, SIGNAL(editorCurrentUrlChanged(QUrl)));
 
     imview->loadItemInfos(ItemInfoList(allInfosToOpen), info,
-                           currentAlbum ? i18n("Album \"%1\"", currentAlbum->title())
-                                        : QString());
+                          currentAlbum ? i18n("Album \"%1\"", currentAlbum->title())
+                                       : QString());
 
     if (imview->isHidden())
     {

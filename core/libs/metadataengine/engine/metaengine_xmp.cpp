@@ -585,7 +585,7 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
-                for (int i = 0 ; i < it->count() ; ++i)
+                for (int i = 0 ; i < (int)it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
@@ -701,7 +701,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
             {
                 QStringList seq;
 
-                for (int i = 0 ; i < it->count() ; ++i)
+                for (int i = 0 ; i < (int)it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
@@ -798,7 +798,7 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
             {
                 QStringList bag;
 
-                for (int i = 0 ; i < it->count() ; ++i)
+                for (int i = 0 ; i < (int)it->count() ; ++i)
                 {
                     std::ostringstream os;
                     os << it->toString(i);
@@ -989,7 +989,7 @@ QVariant MetaEngine::getXmpTagVariant(const char* xmpTagName, bool rationalAsLis
                 {
                     QStringList list;
 
-                    for (int i = 0 ; i < it->count() ; ++i)
+                    for (int i = 0 ; i < (int)it->count() ; ++i)
                     {
                         list << QString::fromUtf8(it->toString(i).c_str());
                     }

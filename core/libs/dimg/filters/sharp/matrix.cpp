@@ -43,7 +43,8 @@
 // Eigen includes
 
 // Pragma directives to reduce warnings from Eigen header files.
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -54,7 +55,7 @@
 #include <Eigen/LU>
 
 // Restore warnings
-#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
+#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #pragma GCC diagnostic pop
 #endif
 

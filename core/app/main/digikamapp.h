@@ -34,9 +34,18 @@
 #include <QString>
 #include <QMenu>
 
-// KDE includes
+// Solid includes
 
-#include <Solid/SolidNamespace>
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wnonportable-include-path"
+#endif
+
+#include <solid/solidnamespace.h>
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 // Local includes
 

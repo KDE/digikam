@@ -1,4 +1,4 @@
-RESUME
+RESUMEé
 ------
 Scripts to build binary digiKam package for MacOS
 
@@ -97,19 +97,13 @@ Note : the bundle is not relocatable.
 REQUIREMENTS
 ------------
 The scripts build digiKam with MacPorts, so you will need Xcode and the other
-prerequisites for Macports. To install it for MacOS versions 10.7 and later,
-download Xcode from the AppStore:
+prerequisites for Macports.
 
-http://itunes.apple.com/us/app/xcode/id497799835?mt=12
-
-NOTE: since Xcode 4.3.2, you need to install Xcode Command Line Tools extension package to be able to
-use Macport on your computer.
-Run Xcode and got to Preference menu entry, Download section, and install Command Line Tools component.
-See this url for details : http://guide.macports.org/#installing.xcode.
+See this url for details: http://guide.macports.org/#installing.xcode.
 
 For all other Macports requirement, see http://www.macports.org/install.php.
 
-You will also need to install Packages software from which does the actual packaging of the files needed to install digiKam:
+You will also need to install Packages software which does the actual packaging of the files needed to install digiKam:
 
 http://s.sudre.free.fr/Software/Packages/about.html
 

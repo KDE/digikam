@@ -299,7 +299,16 @@ int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortR
             return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
         case SortByManualOrder:
-            return compareByOrder(left.manualOrder(), right.manualOrder(), currentSortOrder);
+        {
+            int result;
+
+            if ((result = compareByOrder(left.manualOrder(), right.manualOrder(), currentSortOrder)) != 0)
+            {
+                return result;
+            }
+
+            return compareByOrder(left.dateTime(), right.dateTime(), currentSortOrder);
+        }
         default:
             return 1;
     }

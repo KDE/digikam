@@ -76,28 +76,28 @@ public:
         dlg           = nullptr;
     }
 
-    bool                 modified;
-    bool                 isReadOnly;
+    bool                modified;
+    bool                isReadOnly;
 
-    QByteArray           exifData;
-    QByteArray           iptcData;
-    QByteArray           xmpData;
+    QByteArray          exifData;
+    QByteArray          iptcData;
+    QByteArray          xmpData;
 
-    DConfigDlgWdgItem*     page_caption;
-    DConfigDlgWdgItem*     page_datetime;
-    DConfigDlgWdgItem*     page_lens;
-    DConfigDlgWdgItem*     page_device;
-    DConfigDlgWdgItem*     page_light;
-    DConfigDlgWdgItem*     page_adjust;
+    DConfigDlgWdgItem*  page_caption;
+    DConfigDlgWdgItem*  page_datetime;
+    DConfigDlgWdgItem*  page_lens;
+    DConfigDlgWdgItem*  page_device;
+    DConfigDlgWdgItem*  page_light;
+    DConfigDlgWdgItem*  page_adjust;
 
-    EXIFCaption*         captionPage;
-    EXIFDateTime*        datetimePage;
-    EXIFLens*            lensPage;
-    EXIFDevice*          devicePage;
-    EXIFLight*           lightPage;
-    EXIFAdjust*          adjustPage;
+    EXIFCaption*        captionPage;
+    EXIFDateTime*       datetimePage;
+    EXIFLens*           lensPage;
+    EXIFDevice*         devicePage;
+    EXIFLight*          lightPage;
+    EXIFAdjust*         adjustPage;
 
-    MetadataEditDialog*  dlg;
+    MetadataEditDialog* dlg;
 };
 
 EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
@@ -222,6 +222,13 @@ void EXIFEditWidget::apply()
 {
     if (d->modified && !d->isReadOnly)
     {
+        DMetadata meta;
+        meta.load((*d->dlg->currentItem()).toLocalFile());
+
+        d->exifData = meta.getExifEncoded();
+        d->iptcData = meta.getIptc();
+        d->xmpData  = meta.getXmp();
+
         d->captionPage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
         d->datetimePage->applyMetadata(d->exifData, d->iptcData, d->xmpData);
 
@@ -230,9 +237,6 @@ void EXIFEditWidget::apply()
         d->lightPage->applyMetadata(d->exifData);
         d->adjustPage->applyMetadata(d->exifData);
 
-        DMetadata meta;
-
-        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);

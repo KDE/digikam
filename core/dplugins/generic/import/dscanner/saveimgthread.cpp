@@ -180,8 +180,8 @@ void SaveImgThread::run()
     }
     else
     {
-        unsigned short* src = (unsigned short*)d->ksaneData.data();
-        unsigned short* dst = (unsigned short*)img.bits();
+        unsigned short* src = reinterpret_cast<unsigned short*>(d->ksaneData.data());
+        unsigned short* dst = reinterpret_cast<unsigned short*>(img.bits());
 
         for (int h = 0; h < d->height; ++h)
         {

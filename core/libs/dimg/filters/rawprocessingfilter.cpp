@@ -96,7 +96,7 @@ FilterAction RawProcessingFilter::filterAction()
 {
     DefaultFilterAction<RawProcessingFilter> action;
     m_settings.writeToFilterAction(action);
-    return action;
+    return std::move(action);
 }
 
 void RawProcessingFilter::readParameters(const FilterAction& action)
