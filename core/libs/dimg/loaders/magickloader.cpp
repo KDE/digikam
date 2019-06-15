@@ -35,9 +35,19 @@
 #   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #endif
 
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wkeyword-macro"
+#endif
+
 #include <Magick++.h>
 
 // Restore warnings
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
+
 #if defined(Q_CC_GNU)
 #   pragma GCC diagnostic pop
 #endif
