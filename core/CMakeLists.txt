@@ -689,16 +689,22 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # with qCDebug()
     REMOVE_GCC_COMPILER_WARNINGS("-pedantic")
 
+    # Remove date-time GCC flag which generate a lots of compile warnings
+    REMOVE_GCC_COMPILER_WARNINGS("-Wdate-time")
+
     # Remove suggest-override GCC flag which generate a lots of compile warnings
     REMOVE_GCC_COMPILER_WARNINGS("-Wsuggest-override")
 
     # Remove zero-as-null-pointer-constant GCC and CLang flag which generate a lots of compile warnings
     REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
-    # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
+    # Remove deprecated-copy GCC warnings which generate a lots of compile warnings
     DISABLE_GCC_COMPILER_WARNINGS("8.99.99" "-Wno-deprecated-copy")
 
-    # Remove -Winconsistent-missing-override Clang warnings which generate a lots of compile warnings
+    # Remove date-time Clang warnings which generate a lots of compile warnings
+    DISABLE_CLANG_COMPILER_WARNINGS("7.99.99" "-Wdate-time")
+
+    # Remove inconsistent-missing-override Clang warnings which generate a lots of compile warnings
     DISABLE_CLANG_COMPILER_WARNINGS("7.99.99" "-Wno-inconsistent-missing-override")
 
     # translations catalog
