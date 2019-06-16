@@ -380,7 +380,9 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
                 return false;
             }
 
-            if (droppedOn.isValid() && onlyInternal)
+            if (onlyInternal        &&
+                droppedOn.isValid() &&
+                e->keyboardModifiers() == Qt::NoModifier)
             {
                 action = groupAction(e, view);
             }
