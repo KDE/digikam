@@ -254,6 +254,11 @@ bool DImg::load(const QString& filePath,
         }
     }
 
+    if (observer && !observer->continueQuery(nullptr))
+    {
+        return false;
+    }
+
 #endif // HAVE_IMAGE_MAGICK
 
     {
