@@ -115,17 +115,13 @@ QImage scaleForDetection(const DImg& image, FaceDetector detector)
     return image.copyQImage();
 }
 
-QList<QRectF> processFaceDetection(const DImg& image, FaceDetector detector)
+QList<QRectF> processFaceDetection(const QImage& image, FaceDetector detector)
 {
-    QImage detectionImage = scaleForDetection(image, detector);
-    QList<QRectF> detectedFaces = detector.detectFaces(detectionImage, image.originalSize());
+    DImg img(image);
+    QImage detectionImage = scaleForDetection(img, detector);
+    QList<QRectF> detectedFaces = detector.detectFaces(detectionImage, img.originalSize());
 
     qDebug() << "Found " << detectedFaces.size() << " faces";
-
-    if(detectedFaces.size() == 0) // Found no face
-    {
-        detectedFaces << QRectF(QPointF(0,0), image.originalSize());
-    }
 
     return detectedFaces;
 }
@@ -142,6 +138,21 @@ QImage retrieveFace(const DImg& image, const QList<QRectF>& rects)
     QImage face = image.copyQImage(rect);
     
     return face;
+}
+
+QList<QImage> retrieveFaces(const QList<QImage>& images, const QList<QRectF>& rects)
+{
+    QList<QImage> faces;
+    unsigned index = 0;
+
+    foreach(const QRectF& rect, rects)
+    {
+        DImg temp(images.at(index));
+        faces << temp.copyQImage(rect);
+        index++;
+    }
+    
+    return faces;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -201,6 +212,7 @@ int main(int argc, char* argv[])
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);
     RecognitionDatabase db;
     db.activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm::DNN);
+    db.setRecognizerThreshold(0);
 
     // Create new IDs, clear existed IDs
 
@@ -262,6 +274,9 @@ int main(int argc, char* argv[])
     unsigned correct = 0, notRecognized = 0, falsePositive = 0, totalTrained = 0, totalRecognized = 0;
     unsigned elapsedTraining = 0, elapsedTesting = 0;
 
+/*
+ *  // Without using detector
+
     for (QMap<unsigned, QStringList>::const_iterator it = trainingset.constBegin() ;
          it != trainingset.constEnd() ; ++it)
     {
@@ -272,18 +287,86 @@ int main(int argc, char* argv[])
             qDebug() << "Identity management failed for person " << it.key();
         }
 
-        QList<QImage> rawImages = toImages(it.value());
+        QList<QImage> images = toImages(it.value());
         qDebug() << "Training directory " << it.key();
 
-        foreach(const QImage& img, rawImages)
-        {
-            DImg image(img);
-            QList<QRectF> detectedFaces = processFaceDetection(image, detector);
-            QImage face = retrieveFace(image, detectedFaces);
+        db.activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm::DNN);
+        db.train(identity, images, trainingContext);
+        totalTrained        += images.size();
+    }
 
-            db.train(identity, face, trainingContext);
-            totalTrained++;
+    elapsedTraining = time.restart();
+
+    for (QMap<unsigned, QStringList>::const_iterator it = testset.constBegin() ;
+         it != testset.constEnd() ; ++it)
+    {
+        Identity identity       = idMap.value(it.key());
+        QList<QImage> images    = toImages(it.value());
+        QList<Identity> results = db.recognizeFaces(images);
+
+        qDebug() << "Result for " << it.value().first() << " is identity " << results.first().id();
+
+        foreach (const Identity& foundId, results)
+        {
+            if (foundId.isNull())
+            {
+                notRecognized++;
+            }
+            else if (foundId == identity)
+            {
+                correct++;
+            }
+            else
+            {
+                falsePositive++;
+            }
         }
+
+        totalRecognized += images.size();
+    }
+
+*/
+
+    QStringList undetectedTrainedFaces;
+    QStringList undetectedTestedFaces;
+
+    for (QMap<unsigned, QStringList>::const_iterator it = trainingset.constBegin() ;
+         it != trainingset.constEnd() ; ++it)
+    {
+        Identity identity = db.findIdentity(QString::fromLatin1("name"), QString::number(it.key()));
+
+        if (identity.isNull())
+        {
+            qDebug() << "Identity management failed for person " << it.key();
+        }
+
+        QStringList imagePaths = it.value();
+
+        QList<QImage> detectedFaces;
+        QList<QRectF> bboxes;
+
+        QList<QImage> rawImages = toImages(imagePaths);
+        qDebug() << "Training directory " << it.key();
+
+        foreach(const QImage& image, rawImages)
+        {
+            QString imagePath = imagePaths.takeFirst();
+            QList<QRectF> detectedBoundingBox = processFaceDetection(image, detector);
+
+            if(detectedBoundingBox.size())
+            {
+                detectedFaces << image;
+                bboxes << detectedBoundingBox.first();
+                totalTrained++;
+            }
+            else
+            {
+                undetectedTrainedFaces << imagePath;
+            }
+        }
+        
+        QList<QImage> faces = retrieveFaces(detectedFaces, bboxes);
+        db.train(identity, faces, trainingContext);
     }
 
     elapsedTraining = time.restart();
@@ -294,20 +377,32 @@ int main(int argc, char* argv[])
         Identity identity       = idMap.value(it.key());
         QList<QImage> rawImages = toImages(it.value());
 
-        QList<Identity> results;
-        foreach(const QImage& img, rawImages)
-        {
-            DImg image(img);
-            QList<QRectF> detectedFaces = processFaceDetection(image, detector);
-            QImage face = retrieveFace(image, detectedFaces);
+        QStringList imagePaths = it.value();
 
-            results << db.recognizeFace(face);
-            totalRecognized++;
+        QList<QImage> detectedFaces;
+        QList<QRectF> bboxes;
+
+        foreach(const QImage& image, rawImages)
+        {
+            QString imagePath = imagePaths.takeFirst();
+            QList<QRectF> detectedBoundingBox = processFaceDetection(image, detector);
+
+            if(detectedBoundingBox.size())
+            {
+                detectedFaces << image;
+                bboxes << detectedBoundingBox.first();
+                totalRecognized++;
+            }
+            else
+            {
+                undetectedTestedFaces << imagePath;
+            }            
         }
 
-        // QList<Identity> results = db.recognizeFaces(images);
+        QList<QImage> faces = retrieveFaces(detectedFaces, bboxes);
+        QList<Identity> results = db.recognizeFaces(faces);        
 
-        qDebug() << "Result for " << it.value().first() << " is identity " << results.first().id();
+        // qDebug() << "Result for " << it.value().first() << " is identity " << results.first().id();
 
         foreach (const Identity& foundId, results)
         {
@@ -330,9 +425,28 @@ int main(int argc, char* argv[])
 
     elapsedTesting = time.elapsed();
 
+    unsigned nbUndetectedTrainedFaces = undetectedTrainedFaces.size();
+    qDebug() << "\n" << nbUndetectedTrainedFaces << " / " << totalTrained + nbUndetectedTrainedFaces 
+             << " (" << float(nbUndetectedTrainedFaces) / (totalTrained + nbUndetectedTrainedFaces) * 100 << "%)" 
+             << " faces cannot be detected for training";
+    foreach(const QString& path, undetectedTrainedFaces)
+    {
+        qDebug() << path;
+    }
+
     if (totalTrained)
     {
         qDebug() << "Training " << totalTrained << "of " << nbOfIdentities << " different objects took " << elapsedTraining << " ms, " << ((float)elapsedTraining/totalTrained) << " ms per image";
+    }
+
+
+    unsigned nbUndetectedTestedFaces = undetectedTestedFaces.size();
+    qDebug() << "\n" << nbUndetectedTestedFaces << " / " << totalRecognized + nbUndetectedTestedFaces 
+             << " (" << float(nbUndetectedTestedFaces) / (totalRecognized + nbUndetectedTestedFaces) * 100 << "%)" 
+             << " faces cannot be detected for testing";
+    foreach(const QString& path, undetectedTestedFaces)
+    {
+        qDebug() << path;
     }
 
     if (totalRecognized)
