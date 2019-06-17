@@ -55,6 +55,7 @@
 #include "digikam_debug.h"
 #include "thememanager.h"
 #include "dlayoutbox.h"
+#include "metaengine.h"
 
 using namespace QtAV;
 
