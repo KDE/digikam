@@ -80,4 +80,5 @@ BUGFIXES:
 070 ==> 408819 - Displayed number of entries.
 071 ==> 408793 - Memory leak when .psd file in album folder.
 072 ==> 408782 - In manual sorting, bad placement after new version creation.
-073 ==> 
+073 ==> 408471 - DigiKam crashes after about 10 photos viewed, random images then fail to load.
+074 ==> 
