@@ -79,4 +79,5 @@ BUGFIXES:
 069 ==> 408803 - Placement bug in Thumbnail view when using arrow keys.
 070 ==> 408819 - Displayed number of entries.
 071 ==> 408793 - Memory leak when .psd file in album folder.
-072 ==> 
+072 ==> 408782 - In manual sorting, bad placement after new version creation.
+073 ==> 

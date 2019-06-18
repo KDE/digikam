@@ -134,9 +134,10 @@ Qt::SortOrder ItemSortSettings::defaultSortOrderForSortRole(SortRole role)
     {
         case SortByFilePath:
         case SortByFileName:
-        case SortByManualOrder:
         case SortByCreationDate:
         case SortByModificationDate:
+        case SortByManualOrderAndName:
+        case SortByManualOrderAndDate:
             return Qt::AscendingOrder;
         case SortByRating:
         case SortByFileSize:
@@ -239,7 +240,12 @@ bool ItemSortSettings::lessThan(const ItemInfo& left, const ItemInfo& right) con
         return result < 0;
     }
 
-    if ((result = compare(left, right, SortByManualOrder)) != 0)
+    if ((result = compare(left, right, SortByManualOrderAndName)) != 0)
+    {
+        return result < 0;
+    }
+
+    if ((result = compare(left, right, SortByManualOrderAndDate)) != 0)
     {
         return result < 0;
     }
@@ -298,7 +304,8 @@ int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortR
             double rightSimilarity = right.id() == rightReferenceImageId ? 1.1 : right.currentSimilarity();
             return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
-        case SortByManualOrder:
+        case SortByManualOrderAndName:
+        case SortByManualOrderAndDate:
         {
             int result;
 
@@ -307,7 +314,13 @@ int ItemSortSettings::compare(const ItemInfo& left, const ItemInfo& right, SortR
                 return result;
             }
 
-            return compareByOrder(left.dateTime(), right.dateTime(), currentSortOrder);
+            if (role == SortByManualOrderAndDate)
+            {
+                return compareByOrder(left.dateTime(), right.dateTime(), currentSortOrder);
+            }
+
+            return naturalCompare(left.name(), right.name(),
+                                  currentSortOrder, sortCaseSensitivity, strTypeNatural);
         }
         default:
             return 1;
@@ -409,7 +422,8 @@ DatabaseFields::Set ItemSortSettings::watchFlags() const
             // TODO: Not sure what to do here....
             set |= DatabaseFields::Name;
             break;
-        case SortByManualOrder:
+        case SortByManualOrderAndName:
+        case SortByManualOrderAndDate:
             set |= DatabaseFields::ManualOrder;
             break;
     }
