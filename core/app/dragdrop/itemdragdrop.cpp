@@ -67,25 +67,28 @@ enum DropAction
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this item",
-                                                                                "Group here"));
+    return menu->addAction(QIcon::fromTheme(QLatin1String("go-bottom")),
+                           i18nc("@action:inmenu Group images with this item",
+                                 "Group here"));
 }
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("insert-image")), i18nc("@action:inmenu Insert dragged images before this item",
-                                                                                   "Insert Items here"));
+    return menu->addAction(QIcon::fromTheme(QLatin1String("insert-image")),
+                           i18nc("@action:inmenu Insert dragged images before this item",
+                                 "Insert Items here"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this item and move them to its album",
-                                                                                "Group here and move to album"));
+    return menu->addAction(QIcon::fromTheme(QLatin1String("go-bottom")),
+                           i18nc("@action:inmenu Group images with this item and move them to its album",
+                                 "Group here and move to album"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel") );
+    return menu->addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
 }
 
 static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, bool allowMove = true, bool askForGrouping = false)
@@ -193,7 +196,7 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
     ItemCategorizedView* const imgView = dynamic_cast<ItemCategorizedView*>(view);
-    int sortOrder                       = ApplicationSettings::instance()->getImageSortOrder();
+    int sortOrder                      = ApplicationSettings::instance()->getImageSortOrder();
 
     QMenu popMenu(view);
     QAction* sortAction        = nullptr;
@@ -553,17 +556,20 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
 
         if (selectedInfos.count() > 1)
         {
-            assignToSelectedAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tags to &Selected Items"));
+            assignToSelectedAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                       i18n("Assign Tags to &Selected Items"));
         }
 
         QAction* assignToThisAction = nullptr;
 
         if (droppedOn.isValid())
         {
-            assignToThisAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tags to &This Item"));
+            assignToThisAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                   i18n("Assign Tags to &This Item"));
         }
 
-        QAction* const assignToAllAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Assign Tags to &All Items"));
+        QAction* const assignToAllAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("tag")),
+                                                             i18n("Assign Tags to &All Items"));
 
         popMenu.addSeparator();
         popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("&Cancel"));
@@ -684,7 +690,7 @@ QMimeData* ItemDragDropHandler::createMimeData(const QList<QModelIndex>& indexes
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
 
-    foreach(const ItemInfo& info, infos)
+    foreach (const ItemInfo& info, infos)
     {
         urls.append(info.fileUrl());
         albumIDs.append(info.albumId());
