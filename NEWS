@@ -78,4 +78,5 @@ BUGFIXES:
 068 ==> 408804 - Deleted file in Digikam can't be found in Windows trash bin.
 069 ==> 408803 - Placement bug in Thumbnail view when using arrow keys.
 070 ==> 408819 - Displayed number of entries.
-071 ==> 
+071 ==> 408793 - Memory leak when .psd file in album folder.
+072 ==> 

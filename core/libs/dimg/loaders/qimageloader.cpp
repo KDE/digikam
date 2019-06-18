@@ -66,6 +66,8 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     {
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Error message from loader:" << reader.errorString();
+        loadingFailed();
+        return false;
     }
 
     int colorModel    = DImg::COLORMODELUNKNOWN;
