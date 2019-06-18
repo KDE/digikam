@@ -75,6 +75,8 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("image/")))
     {
+        qCDebug(DIGIKAM_DIMG_LOG) << "The ImageMagick codecs support only the image mime type";
+        loadingFailed();
         return false;
     }
 
