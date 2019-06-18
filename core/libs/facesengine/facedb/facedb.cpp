@@ -427,8 +427,8 @@ void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 {
     // DNNFaceKernel dnnFaceKernel;
     // dnnFaceKernel.getFaceVector(data, vecdata);
-    DNNFaceExtractor dnnFaceExtractor;
-    dnnFaceExtractor.getFaceEmbedding(data, vecdata);
+    DNNFaceExtractor::init();
+    DNNFaceExtractor::getFaceEmbedding(data, vecdata);
 }
 #endif
 

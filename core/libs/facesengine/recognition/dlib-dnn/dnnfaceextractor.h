@@ -40,7 +40,14 @@ class DNNFaceExtractor
 public:
 
     explicit DNNFaceExtractor();
-    void getFaceEmbedding(cv::Mat faceImage, std::vector<float>& vecdata);
+    static void init();
+
+    static void getFaceEmbedding(cv::Mat faceImage, std::vector<float>& vecdata);
+
+private:
+
+	static bool initialized;
+
 };
 
 }; // namespace Digikam
