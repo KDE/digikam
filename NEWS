@@ -82,4 +82,5 @@ BUGFIXES:
 072 ==> 408782 - In manual sorting, bad placement after new version creation.
 073 ==> 408471 - DigiKam crashes after about 10 photos viewed, random images then fail to load.
 074 ==> 408883 - Crash after opening video in Image Editor - /tmp runs out of space.
-075 ==> 
+075 ==> 376359 - Sort by Image Quality (assign quality tags) ignores many images.
+076 ==> 
