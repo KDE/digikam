@@ -181,7 +181,7 @@ QList<CamItemInfo> ImportItemModel::camItemInfos(const QList<QModelIndex>& index
 
     foreach(const QModelIndex& index, indexes)
     {
-        if (index.isValid())
+        if (d->isValid(index))
         {
             infos << camItemInfo(index);
         }
@@ -196,7 +196,7 @@ QList<qlonglong> ImportItemModel::camItemIds(const QList<QModelIndex>& indexes) 
 
     foreach(const QModelIndex& index, indexes)
     {
-        if (index.isValid())
+        if (d->isValid(index))
         {
             ids << camItemId(index);
         }

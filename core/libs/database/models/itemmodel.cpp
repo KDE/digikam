@@ -56,7 +56,9 @@ public:
         incrementalRefreshRequested = false;
     }
 
-    ItemInfoList                       infos;
+    ItemInfoList                        infos;
+    ItemInfo                            itemInfo;
+
     QList<QVariant>                     extraValues;
     QHash<qlonglong, int>               idHash;
 
@@ -124,7 +126,7 @@ public:
 
     QHash<qlonglong, int> oldIds;
     QList<QVariant>       oldExtraValues;
-    QList<ItemInfo>      newInfos;
+    QList<ItemInfo>       newInfos;
     QList<QVariant>       newExtraValues;
     QList<IntPairList>    modelRemovals;
 };
@@ -180,6 +182,11 @@ ItemInfo ItemModel::imageInfo(const QModelIndex& index) const
 
 ItemInfo& ItemModel::imageInfoRef(const QModelIndex& index) const
 {
+    if (!d->isValid(index))
+    {
+        return d->itemInfo;
+    }
+
     return d->infos[index.row()];
 }
 
@@ -199,7 +206,10 @@ QList<ItemInfo> ItemModel::imageInfos(const QList<QModelIndex>& indexes) const
 
     foreach (const QModelIndex& index, indexes)
     {
-        infos << imageInfo(index);
+        if (d->isValid(index))
+        {
+            infos << imageInfo(index);
+        }
     }
 
     return infos;
@@ -211,7 +221,10 @@ QList<qlonglong> ItemModel::imageIds(const QList<QModelIndex>& indexes) const
 
     foreach (const QModelIndex& index, indexes)
     {
-        ids << imageId(index);
+        if (d->isValid(index))
+        {
+            ids << imageId(index);
+        }
     }
 
     return ids;
@@ -219,7 +232,7 @@ QList<qlonglong> ItemModel::imageIds(const QList<QModelIndex>& indexes) const
 
 ItemInfo ItemModel::imageInfo(int row) const
 {
-    if (row >= d->infos.size())
+    if (row < 0 || row >= d->infos.size())
     {
         return ItemInfo();
     }
@@ -229,6 +242,11 @@ ItemInfo ItemModel::imageInfo(int row) const
 
 ItemInfo& ItemModel::imageInfoRef(int row) const
 {
+    if (row < 0 || row >= d->infos.size())
+    {
+        return d->itemInfo;
+    }
+
     return d->infos[row];
 }
 
