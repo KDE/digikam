@@ -84,4 +84,5 @@ BUGFIXES:
 074 ==> 408883 - Crash after opening video in Image Editor - /tmp runs out of space.
 075 ==> 376359 - Sort by Image Quality (assign quality tags) ignores many images.
 076 ==> 408958 - digikam crashes on deletion of new files from SD card (import window).
-077 ==> 
+077 ==> 398921 - digikam 5.9.0 slow to start on Mac but rapid on Ubuntu with same database.
+078 ==> 
