@@ -263,7 +263,8 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail)
 {
     m_cancel     = false;
-    QString path = folder + QLatin1Char('/') + itemName;
+    QString path = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
+    path        += itemName;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
@@ -307,14 +308,14 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     QFileInfo fi(path);
 
-    if (thumbnail.load(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".thm")))        // Lowercase
+    if (thumbnail.load(fi.filePath() + QLatin1Char('/') + fi.baseName() + QLatin1String(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
         {
             return true;
         }
     }
-    else if (thumbnail.load(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".THM")))   // Uppercase
+    else if (thumbnail.load(fi.filePath() + QLatin1Char('/') + fi.baseName() + QLatin1String(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
         {
@@ -341,12 +342,13 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
 bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMetadata& meta)
 {
+    QString path = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
     QFileInfo fi, thmlo, thmup;
     bool ret = false;
 
-    fi.setFile(folder    + QLatin1Char('/') + itemName);
-    thmlo.setFile(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".thm"));
-    thmup.setFile(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".THM"));
+    fi.setFile(path    + itemName);
+    thmlo.setFile(path + fi.baseName() + QLatin1String(".thm"));
+    thmup.setFile(path + fi.baseName() + QLatin1String(".THM"));
 
     if (thmlo.exists())
     {
@@ -370,7 +372,8 @@ bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMet
 bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, const QString& saveFile)
 {
     m_cancel     = false;
-    QString src  = folder + QLatin1Char('/') + itemName;
+    QString src  = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
+    src         += itemName;
     QString dest = saveFile;
 
     QFile sFile(src);
@@ -424,7 +427,8 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
 bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool lock)
 {
-    QString src = folder + QLatin1Char('/') + itemName;
+    QString src = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
+    src        += itemName;
 
     if (lock)
     {
@@ -448,20 +452,21 @@ bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool
 
 bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 {
-    m_cancel = false;
+    m_cancel     = false;
+    QString path = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
 
     // Any camera provide THM (thumbnail) file with real image. We need to remove it also.
 
-    QFileInfo fi(folder + QLatin1Char('/') + itemName);
+    QFileInfo fi(path + itemName);
 
-    QFileInfo thmLo(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".thm"));          // Lowercase
+    QFileInfo thmLo(path + fi.baseName() + QLatin1String(".thm"));          // Lowercase
 
     if (thmLo.exists())
     {
         ::unlink(QFile::encodeName(thmLo.filePath()).constData());
     }
 
-    QFileInfo thmUp(folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".THM"));          // Uppercase
+    QFileInfo thmUp(path + fi.baseName() + QLatin1String(".THM"));          // Uppercase
 
     if (thmUp.exists())
     {
@@ -469,13 +474,14 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
     }
 
     // Remove the real image.
-    return (::unlink(QFile::encodeName(folder + QLatin1Char('/') + itemName).constData()) == 0);
+    return (::unlink(QFile::encodeName(path + itemName).constData()) == 0);
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
 {
     m_cancel     = false;
-    QString dest = folder + QLatin1Char('/') + itemName;
+    QString dest = !folder.endsWith(QLatin1Char('/')) ? folder + QLatin1Char('/') : folder;
+    dest        += itemName;
     QString src  = localFile;
 
     QFile sFile(src);
