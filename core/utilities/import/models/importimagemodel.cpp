@@ -63,6 +63,8 @@ public:
 
     CameraController*                         controller;
     CamItemInfoList                           infos;
+    CamItemInfo                               camItemInfo;
+
     QHash<qlonglong, int>                     idHash;
     QHash<QString, qlonglong>                 fileUrlHash;
 
@@ -155,6 +157,11 @@ CamItemInfo ImportItemModel::camItemInfo(const QModelIndex& index) const
 
 CamItemInfo& ImportItemModel::camItemInfoRef(const QModelIndex& index) const
 {
+    if (!d->isValid(index))
+    {
+        return d->camItemInfo;
+    }
+
     return d->infos[index.row()];
 }
 
@@ -174,7 +181,10 @@ QList<CamItemInfo> ImportItemModel::camItemInfos(const QList<QModelIndex>& index
 
     foreach(const QModelIndex& index, indexes)
     {
-        infos << camItemInfo(index);
+        if (index.isValid())
+        {
+            infos << camItemInfo(index);
+        }
     }
 
     return infos;
@@ -186,7 +196,10 @@ QList<qlonglong> ImportItemModel::camItemIds(const QList<QModelIndex>& indexes) 
 
     foreach(const QModelIndex& index, indexes)
     {
-        ids << camItemId(index);
+        if (index.isValid())
+        {
+            ids << camItemId(index);
+        }
     }
 
     return ids;
@@ -194,7 +207,7 @@ QList<qlonglong> ImportItemModel::camItemIds(const QList<QModelIndex>& indexes) 
 
 CamItemInfo ImportItemModel::camItemInfo(int row) const
 {
-    if (row >= d->infos.size())
+    if (row < 0 || row >= d->infos.size())
     {
         return CamItemInfo();
     }
@@ -204,12 +217,17 @@ CamItemInfo ImportItemModel::camItemInfo(int row) const
 
 CamItemInfo& ImportItemModel::camItemInfoRef(int row) const
 {
+    if (row < 0 || row >= d->infos.size())
+    {
+        return d->camItemInfo;
+    }
+
     return d->infos[row];
 }
 
 qlonglong ImportItemModel::camItemId(int row) const
 {
-    if (row < 0 || (row >= d->infos.size()))
+    if (row < 0 || row >= d->infos.size())
     {
         return -1;
     }

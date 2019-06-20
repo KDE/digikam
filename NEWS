@@ -83,4 +83,5 @@ BUGFIXES:
 073 ==> 408471 - DigiKam crashes after about 10 photos viewed, random images then fail to load.
 074 ==> 408883 - Crash after opening video in Image Editor - /tmp runs out of space.
 075 ==> 376359 - Sort by Image Quality (assign quality tags) ignores many images.
-076 ==> 
+076 ==> 408958 - digikam crashes on deletion of new files from SD card (import window).
+077 ==> 
