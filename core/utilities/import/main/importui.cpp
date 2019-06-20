@@ -1598,7 +1598,7 @@ void ImportUI::slotMarkAsDownloaded()
 {
     CamItemInfoList list = d->view->selectedCamItemInfos();
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
@@ -1621,7 +1621,7 @@ void ImportUI::slotToggleLock()
         d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     }
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         QString folder = info.folder;
         QString file   = info.name;
@@ -1667,7 +1667,7 @@ void ImportUI::slotUpdateDownloadName()
     DownloadSettings settings = downloadSettings();
     QString newName;
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
         // qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
@@ -2299,7 +2299,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     QList<ParseSettings> renameFiles;
     CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
 
-    foreach(const CamItemInfo& info, list)
+    foreach (const CamItemInfo& info, list)
     {
         ParseSettings parseSettings;
 
