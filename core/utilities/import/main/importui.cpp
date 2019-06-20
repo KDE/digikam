@@ -1672,6 +1672,11 @@ void ImportUI::slotUpdateDownloadName()
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
         // qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
 
+        if (refInfo.isNull())
+        {
+            continue;
+        }
+
         newName = info.name;
 
         if (hasNoSelection || selected.contains(info.url()))

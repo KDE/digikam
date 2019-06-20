@@ -61,20 +61,20 @@ public:
 
 public:
 
-    CameraController*                         controller;
-    CamItemInfoList                           infos;
-    CamItemInfo                               camItemInfo;
+    CameraController*                        controller;
+    CamItemInfoList                          infos;
+    CamItemInfo                              camItemInfo;
 
-    QHash<qlonglong, int>                     idHash;
-    QHash<QString, qlonglong>                 fileUrlHash;
+    QHash<qlonglong, int>                    idHash;
+    QHash<QString, qlonglong>                fileUrlHash;
 
-    bool                                      keepFileUrlCache;
+    bool                                     keepFileUrlCache;
 
-    bool                                      refreshing;
-    bool                                      reAdding;
-    bool                                      incrementalRefreshRequested;
+    bool                                     refreshing;
+    bool                                     reAdding;
+    bool                                     incrementalRefreshRequested;
 
-    bool                                      sendRemovalSignals;
+    bool                                     sendRemovalSignals;
 
     class ImportItemModelIncrementalUpdater* incrementalUpdater;
 };
@@ -179,7 +179,7 @@ QList<CamItemInfo> ImportItemModel::camItemInfos(const QList<QModelIndex>& index
 {
     QList<CamItemInfo> infos;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
         {
@@ -194,7 +194,7 @@ QList<qlonglong> ImportItemModel::camItemIds(const QList<QModelIndex>& indexes) 
 {
     QList<qlonglong> ids;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
         {
@@ -390,7 +390,7 @@ CamItemInfo ImportItemModel::camItemInfo(const QUrl& fileUrl) const
     }
     else
     {
-        foreach(const CamItemInfo& info, d->infos)
+        foreach (const CamItemInfo& info, d->infos)
         {
             if (info.url() == fileUrl)
             {
@@ -412,7 +412,7 @@ QList<CamItemInfo> ImportItemModel::camItemInfos(const QUrl& fileUrl) const
 
         if (id)
         {
-            foreach(int index, d->idHash.values(id))
+            foreach (int index, d->idHash.values(id))
             {
                 infos << d->infos.at(index);
             }
@@ -420,7 +420,7 @@ QList<CamItemInfo> ImportItemModel::camItemInfos(const QUrl& fileUrl) const
     }
     else
     {
-        foreach(const CamItemInfo& info, d->infos)
+        foreach (const CamItemInfo& info, d->infos)
         {
             if (info.url() == fileUrl)
             {
@@ -550,7 +550,7 @@ void ImportItemModel::emitDataChangedForSelections(const QItemSelection& selecti
 {
     if (!selection.isEmpty())
     {
-        foreach(const QItemSelectionRange& range, selection)
+        foreach (const QItemSelectionRange& range, selection)
         {
             emit dataChanged(range.topLeft(), range.bottomRight());
         }
@@ -751,7 +751,7 @@ void ImportItemModel::removeIndexs(const QList<QModelIndex>& indexes)
 {
     QList<int> indexesList;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         if (d->isValid(index))
         {
@@ -776,7 +776,7 @@ void ImportItemModel::removeCamItemInfos(const QList<CamItemInfo>& infos)
 {
     QList<int> indexesList;
 
-    foreach(const CamItemInfo& info, infos)
+    foreach (const CamItemInfo& info, infos)
     {
         QModelIndex index = indexForCamItemId(info.id);
 
@@ -818,7 +818,7 @@ void ImportItemModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     int                     removedRows = 0;
     int                     offset      = 0;
 
-    foreach(const IntPair& pair, toRemove)
+    foreach (const IntPair& pair, toRemove)
     {
         const int begin = pair.first  - offset;
         const int end   = pair.second - offset;
@@ -971,12 +971,12 @@ QList<QPair<int, int> > ImportItemModelIncrementalUpdater::oldIndexes()
 {
     // first, apply all changes to indexes by direct removal in model
     // while the updater was active
-    foreach(const IntPairList& list, modelRemovals)
+    foreach (const IntPairList& list, modelRemovals)
     {
         int removedRows = 0;
         int offset      = 0;
 
-        foreach(const IntPair& pair, list)
+        foreach (const IntPair& pair, list)
         {
             const int begin = pair.first  - offset;
             const int end   = pair.second - offset; // inclusive
