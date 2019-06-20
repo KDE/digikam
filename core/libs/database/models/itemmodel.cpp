@@ -206,10 +206,7 @@ QList<ItemInfo> ItemModel::imageInfos(const QList<QModelIndex>& indexes) const
 
     foreach (const QModelIndex& index, indexes)
     {
-        if (d->isValid(index))
-        {
-            infos << imageInfo(index);
-        }
+        infos << imageInfo(index);
     }
 
     return infos;
@@ -221,10 +218,7 @@ QList<qlonglong> ItemModel::imageIds(const QList<QModelIndex>& indexes) const
 
     foreach (const QModelIndex& index, indexes)
     {
-        if (d->isValid(index))
-        {
-            ids << imageId(index);
-        }
+        ids << imageId(index);
     }
 
     return ids;
