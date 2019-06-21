@@ -27,6 +27,7 @@
 // Local includes
 
 #include "imageguidewidget.h"
+#include <QPainter>
 
 using namespace Digikam;
 
@@ -45,6 +46,7 @@ public:
      */
     using ImageGuideWidget::ImageGuideWidget;
     void setDefaults();
+    void zoomImage(int zoomPercent);
 
     explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
                               bool spotVisible = true,
@@ -76,6 +78,9 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent *event) ;
     void keyReleaseEvent(QKeyEvent *event) ;
+    void undoSlotSetSourcePoint();
+    void changeCursorShape(QColor color);
+
 
 
 private:
@@ -85,6 +90,7 @@ private:
     QPoint dst;
     QPoint oldPos;
     bool isMPressed= false;
+    bool isSPressed = false;
     int default_w;
     int default_h;
     float float_w;

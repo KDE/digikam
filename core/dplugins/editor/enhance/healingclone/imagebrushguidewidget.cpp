@@ -49,9 +49,11 @@ namespace DigikamEditorHealingCloneToolPlugin
      this->default_w = this->width();
      this->float_h = default_h;
      this->float_w = default_w;
+    setFocus();
  }
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
+
     if(!isMPressed)
         oldPos = e->globalPos() ;
     qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "MPressed is: " <<isMPressed;
@@ -81,6 +83,7 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
     if (srcSet)
     {
         ImageGuideWidget::mouseMoveEvent(e);
+
     }
 
 
@@ -93,12 +96,14 @@ void ImageBrushGuideWidget::mouseReleaseEvent(QMouseEvent* e)
     if (srcSet)
     {
         src    = getSpotPosition();
-        srcSet = false;
+        undoSlotSetSourcePoint();
+
     }
     else
     {
         QPoint p = translatePointPosition(src);
         setSpotPosition(p);
+
     }
 }
 
@@ -109,6 +114,7 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
      if(isMPressed)
      {
          isMPressed = false;
+         changeCursorShape(Qt::blue);
      }
 
     else if (srcSet)
@@ -134,23 +140,31 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
 void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
 {
     QWidget::keyPressEvent(e);
-
     // Need to put the setDefault method in its appropriate place. This is a hook.
     if(first_time)
+    {
         setDefaults();
+        first_time = false;
+    }
+
 
     if(e->key() == Qt :: Key_M)
     {
 
         if(isMPressed)
+        {
             isMPressed = false;
+            changeCursorShape(Qt::blue);
+        }
         else
+        {
             isMPressed = true;
+            changeCursorShape(Qt::yellow);
+        }
     }
 
     if(e->key() == Qt :: Key_Plus)
     {
-        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "AF keyPLus is: " << this->width() << this->height();
         this->float_h += .1 * this->default_h;
         this->float_w += .1 * this->default_w;
         this->resize((int)this->float_w, (int)this->float_h);
@@ -162,15 +176,67 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
         this->float_w -= .1 * this->default_w;
         this->resize((int)this->float_w, (int)this->float_h);
     }
+
+
 }
 
 void ImageBrushGuideWidget::  keyReleaseEvent(QKeyEvent *e)
 {
-
+    if(e->key() == Qt :: Key_S)
+    {
+        if(isSPressed)
+        {
+            undoSlotSetSourcePoint();
+        }
+        else
+        {
+            slotSetSourcePoint();
+        }
+    }
 }
 void ImageBrushGuideWidget::slotSetSourcePoint()
 {
     srcSet = true;
+    isSPressed = true;
+    changeCursorShape(QColor(Qt::red));
+}
+
+void ImageBrushGuideWidget::undoSlotSetSourcePoint()
+{
+    srcSet = false;
+    isSPressed = false;
+    changeCursorShape(Qt::blue);
+}
+void ImageBrushGuideWidget::changeCursorShape(QColor color)
+{
+    int size =20;
+    QPixmap pix(size,size);
+    pix.fill(Qt::transparent);
+
+    QPainter p(&pix);
+    p.setPen(QPen(color,2));
+    p.setRenderHint(QPainter::Antialiasing, true);
+
+    p.drawEllipse(1, 1, size - 2, size - 2);
+
+
+    setCursor(QCursor(pix));
+}
+
+void ImageBrushGuideWidget::zoomImage(int zoomPercent)
+{
+
+    if(first_time)
+    {
+        setDefaults();
+        first_time = false;
+    }
+    this->float_h = this->default_h * zoomPercent/100.0;
+    this->float_w = this->default_w * zoomPercent/100.0;
+    this->resize((int)this->float_w, (int)this->float_h);
+    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "zooom " << zoomPercent << this->float_h << this->float_w;
+
+
 }
 
 } // namespace DigikamEditorHealingCloneToolPlugin
