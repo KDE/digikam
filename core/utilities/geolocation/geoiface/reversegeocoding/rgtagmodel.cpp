@@ -54,11 +54,7 @@ public:
       : tagModel(nullptr),
         rootTag(nullptr),
         startInsert(-1),
-        endInsert(-1),
-        newTags(),
-        auxTagList(),
-        auxIndexList(),
-        savedSpacerList()
+        endInsert(-1)
     {
     }
 
@@ -66,7 +62,8 @@ public:
     TreeBranch*                  rootTag;
 
     QModelIndex                  parent;
-    int                          startInsert, endInsert;
+    int                          startInsert;
+    int                          endInsert;
 
     QList<QList<TagData> >       newTags;
 
@@ -218,7 +215,10 @@ QModelIndex RGTagModel::fromSourceIndex(const QModelIndex& externalTagModelIndex
     {
         if (subModelBranch->sourceIndex == externalTagModelIndex)
         {
-            return createIndex(subModelBranch->sourceIndex.row()+subModelBranch->parent->spacerChildren.count()+subModelBranch->parent->newChildren.count(), subModelBranch->sourceIndex.column(), subModelBranch);
+            return createIndex(subModelBranch->sourceIndex.row() +
+                               subModelBranch->parent->spacerChildren.count() +
+                               subModelBranch->parent->newChildren.count(),
+                               subModelBranch->sourceIndex.column(), subModelBranch);
         }
 
         int where = -1;
@@ -326,7 +326,7 @@ void RGTagModel::addSpacerTag(const QModelIndex& parent, const QString& spacerNa
  * @param parent The index of the parent.
  * @param newTagName The name of the new tag.
  */
-QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QString& newTagName)
+QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QString& newTagName, const QString& newElement)
 {
     TreeBranch* const parentBranch = branchFromIndex(parent);  //parent.isValid() ? static_cast<TreeBranch*>(parent.internalPointer()) : d->rootTag;
     bool found                     = false;
@@ -339,7 +339,7 @@ QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QSt
             if (parentBranch->newChildren[i]->data == newTagName)
             {
                 found    = true;
-                retIndex = createIndex(parentBranch->spacerChildren.count()+i,0,parentBranch->newChildren[i]);
+                retIndex = createIndex(parentBranch->spacerChildren.count()+i, 0, parentBranch->newChildren[i]);
                 break;
             }
         }
@@ -350,13 +350,16 @@ QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QSt
         TreeBranch* const newTagChild = new TreeBranch();
         newTagChild->parent           = parentBranch;
         newTagChild->data             = newTagName;
+        newTagChild->help             = newElement;
         newTagChild->type             = TypeNewChild;
 
-        beginInsertRows(parent, parentBranch->spacerChildren.count()+parentBranch->newChildren.count(), parentBranch->spacerChildren.count()+parentBranch->newChildren.count());
+        beginInsertRows(parent, parentBranch->spacerChildren.count()+parentBranch->newChildren.count(),
+                        parentBranch->spacerChildren.count()+parentBranch->newChildren.count());
         parentBranch->newChildren.append(newTagChild);
         endInsertRows();
 
-        retIndex                      = createIndex(parentBranch->spacerChildren.count()+parentBranch->newChildren.count()-1, 0, parentBranch->newChildren.last());
+        retIndex                      = createIndex(parentBranch->spacerChildren.count()+parentBranch->newChildren.count()-1, 0,
+                                                    parentBranch->newChildren.last());
     }
 
     return retIndex;
@@ -426,24 +429,26 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch,
                     if ((currentBranch->type != TypeSpacer || currentBranch->data.indexOf(QLatin1String("{")) != 0) ||
                         (d->auxIndexList.isEmpty()))
                     {
-                        auxIndex = addNewTag(currentIndex, elementsData[j]);
+                        auxIndex = addNewTag(currentIndex, elementsData[j], addressElements[j]);
                     }
                     else
                     {
-                        auxIndex = addNewTag(d->auxIndexList.last(), elementsData[j]);
+                        auxIndex = addNewTag(d->auxIndexList.last(), elementsData[j], addressElements[j]);
                     }
 
                     d->auxTagList.append(elementsData[j]);
                     d->auxTagTypeList.append(TypeNewChild);
                     d->auxIndexList.append(auxIndex);
-                    QList<TagData> newTag=getTagAddress();
+
+                    QList<TagData> newTag     = getTagAddress();
+                    newTag.last().tipName     = addressElements[j];
                     d->newTags.append(newTag);
                 }
             }
 
             if (currentBranch->spacerChildren.at(i))
             {
-                addDataInTree(currentBranch->spacerChildren[i],i, addressElements, elementsData);
+                addDataInTree(currentBranch->spacerChildren[i], i, addressElements, elementsData);
             }
 
             if (newDataAdded)
@@ -459,7 +464,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch,
     {
         d->auxTagList.append(currentBranch->newChildren[i]->data);
         d->auxTagTypeList.append(TypeNewChild);
-        addDataInTree(currentBranch->newChildren.at(i),i+currentBranch->spacerChildren.count(), addressElements, elementsData);
+        addDataInTree(currentBranch->newChildren.at(i), i+currentBranch->spacerChildren.count(), addressElements, elementsData);
         d->auxTagList.removeLast();
         d->auxTagTypeList.removeLast();
     }
@@ -546,6 +551,10 @@ QVariant RGTagModel::data(const QModelIndex& index, int role) const
     {
         return QColor(Qt::green);
     }
+    else if ((treeBranch->type == TypeNewChild) && (role == Qt::ToolTipRole))
+    {
+        return i18n(treeBranch->help.toUtf8().constData());
+    }
 
     return QVariant();
 }
@@ -576,7 +585,8 @@ QModelIndex RGTagModel::index(int row, int column, const QModelIndex& parent) co
         return createIndex(row, column, parentBranch->newChildren[row-parentBranch->spacerChildren.count()]);
     }
 
-    return fromSourceIndex(d->tagModel->index(row-parentBranch->spacerChildren.count()-parentBranch->newChildren.count(),column,toSourceIndex(parent)));
+    return fromSourceIndex(d->tagModel->index(row - parentBranch->spacerChildren.count() - parentBranch->newChildren.count(),
+                                              column, toSourceIndex(parent)));
 }
 
 QModelIndex RGTagModel::parent(const QModelIndex& index) const
@@ -833,7 +843,8 @@ void RGTagModel::deleteTag(const QModelIndex& currentIndex)
         {
             parentBranch->spacerChildren.append(currentChildBranch->spacerChildren[j]);
             parentBranch->spacerChildren.last()->parent = parentBranch;
-            /*QModelIndex testIndex                       = */createIndex(parentBranch->spacerChildren.count()-1,0, parentBranch->spacerChildren.last());
+            /*QModelIndex testIndex                       = */createIndex(parentBranch->spacerChildren.count()-1,0,
+                                                                          parentBranch->spacerChildren.last());
         }
 
         currentChildBranch->spacerChildren.clear();
@@ -843,7 +854,8 @@ void RGTagModel::deleteTag(const QModelIndex& currentIndex)
                       currentChildBranch->spacerChildren.count() + currentChildBranch->newChildren.count() - 1,
                       parentIndex, parentBranch->spacerChildren.count() + parentBranch->newChildren.count());
 
-        for (int j = currentChildBranch->spacerChildren.count(); j < currentChildBranch->spacerChildren.count()+currentChildBranch->newChildren.count(); ++j)
+        for (int j = currentChildBranch->spacerChildren.count() ;
+             j < currentChildBranch->spacerChildren.count() + currentChildBranch->newChildren.count() ; ++j)
         {
             parentBranch->newChildren.append(currentChildBranch->newChildren[j - currentChildBranch->spacerChildren.count()]);
             parentBranch->newChildren.last()->parent = parentBranch;
@@ -884,7 +896,7 @@ void RGTagModel::findAndDeleteSpacersOrNewTags( TreeBranch* currentBranch, int c
 
         if (whatShouldRemove == TypeSpacer)
         {
-            QModelIndex spacerIndex = createIndex(i,0,currentBranch->spacerChildren[i]);
+            QModelIndex spacerIndex = createIndex(i, 0, currentBranch->spacerChildren[i]);
             deleteTag(spacerIndex);
             i--;
         }
@@ -892,11 +904,11 @@ void RGTagModel::findAndDeleteSpacersOrNewTags( TreeBranch* currentBranch, int c
 
     for (int i = 0 ; i < currentBranch->newChildren.count() ; ++i)
     {
-        findAndDeleteSpacersOrNewTags(currentBranch->newChildren[i], i+currentBranch->spacerChildren.count(), whatShouldRemove);
+        findAndDeleteSpacersOrNewTags(currentBranch->newChildren[i], i + currentBranch->spacerChildren.count(), whatShouldRemove);
 
         if (whatShouldRemove == TypeNewChild)
         {
-            QModelIndex newTagIndex = createIndex(i+currentBranch->spacerChildren.count(),0,currentBranch->newChildren[i]);
+            QModelIndex newTagIndex = createIndex(i+currentBranch->spacerChildren.count(), 0, currentBranch->newChildren[i]);
             deleteTag(newTagIndex);
             i--;
         }
@@ -939,7 +951,7 @@ void RGTagModel::deleteAllSpacersOrNewTags(const QModelIndex& currentIndex, Type
  * @param tagAddressElements A list containing address elements. Example: {Country}, {City}...
  * @param elementsData A list containing the name of each address element found in elements. Example: France, Paris...
  */
-void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList<TagData> tagAddressElements, int currentAddressElementIndex)
+void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow, const QList<TagData> tagAddressElements, int currentAddressElementIndex)
 {
     bool found = false;
     int  foundIndex;
@@ -1023,7 +1035,8 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
                 currentIndex = createIndex(currentRow, 0, currentBranch);
             }
 
-            addNewTag(currentIndex, tagAddressElements[currentAddressElementIndex].tagName);
+            addNewTag(currentIndex, tagAddressElements[currentAddressElementIndex].tagName,
+                                    tagAddressElements[currentAddressElementIndex].tipName);
 
             if ((tagAddressElements.count() - 1) > currentAddressElementIndex)
             {
@@ -1050,7 +1063,9 @@ void RGTagModel::readdTag(TreeBranch*& currentBranch, int currentRow,const QList
 
         if (found)
         {
-            readdTag(currentBranch->oldChildren[foundIndex], foundIndex+currentBranch->spacerChildren.count()+currentBranch->newChildren.count(), tagAddressElements, currentAddressElementIndex+1);
+            readdTag(currentBranch->oldChildren[foundIndex],
+                     foundIndex+currentBranch->spacerChildren.count() + currentBranch->newChildren.count(),
+                     tagAddressElements, currentAddressElementIndex+1);
             return;
         }
         else
@@ -1180,7 +1195,7 @@ void RGTagModel::addAllExternalTagsToTreeView()
 /**
  * Adds all spacers found in spacerList to the tag tree.
  */
-void RGTagModel::addAllSpacersToTag(const QModelIndex currentIndex,const QStringList spacerList, int spacerListIndex)
+void RGTagModel::addAllSpacersToTag(const QModelIndex currentIndex, const QStringList spacerList, int spacerListIndex)
 {
     if (spacerListIndex >= spacerList.count())
         return;
@@ -1191,7 +1206,7 @@ void RGTagModel::addAllSpacersToTag(const QModelIndex currentIndex,const QString
     {
         if (currentBranch->data == spacerList[spacerListIndex])
         {
-            QModelIndex foundIndex = createIndex(i,0, currentBranch->spacerChildren[i]);
+            QModelIndex foundIndex = createIndex(i, 0, currentBranch->spacerChildren[i]);
             addAllSpacersToTag(foundIndex, spacerList, spacerListIndex+1);
             return;
         }

@@ -1147,7 +1147,7 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list, int thumbSize)
 
     QList<QVariant> itemsList;
 
-    foreach(CamItemInfo info, list)
+    foreach (const CamItemInfo& info, list)
     {
         itemsList.append(QStringList() << info.folder << info.name);
     }
@@ -1220,7 +1220,7 @@ void CameraController::downloadPrep(const SetupCamera::ConflictRule& rule)
 
 void CameraController::download(const DownloadSettingsList& list)
 {
-    foreach(const DownloadSettings& downloadSettings, list)
+    foreach (const DownloadSettings& downloadSettings, list)
     {
         download(downloadSettings);
     }

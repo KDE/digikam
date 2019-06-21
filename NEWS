@@ -70,4 +70,20 @@ BUGFIXES:
 060 ==> 408513 - Piwigo export does not save connection details.
 061 ==> 408525 - Flickr export - location lost and/or replaced.
 062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
-063 ==> 
+063 ==> 408568 - Keywords are not showing up on video files.
+064 ==> 408667 - In reverse geocoding, whow which address element correspond to each name.
+065 ==> 408666 - Reverse geocoding tool, confusing dialog question phrasing.
+066 ==> 406937 - Cannot change icon theme in Appimage.
+067 ==> 408687 - "Failed to update file timestamp" despite date being changed successfully in Adjust Date and Time tool.
+068 ==> 408804 - Deleted file in Digikam can't be found in Windows trash bin.
+069 ==> 408803 - Placement bug in Thumbnail view when using arrow keys.
+070 ==> 408819 - Displayed number of entries.
+071 ==> 408793 - Memory leak when .psd file in album folder.
+072 ==> 408782 - In manual sorting, bad placement after new version creation.
+073 ==> 408471 - DigiKam crashes after about 10 photos viewed, random images then fail to load.
+074 ==> 408883 - Crash after opening video in Image Editor - /tmp runs out of space.
+075 ==> 376359 - Sort by Image Quality (assign quality tags) ignores many images.
+076 ==> 408958 - digikam crashes on deletion of new files from SD card (import window).
+077 ==> 398921 - digikam 5.9.0 slow to start on Mac but rapid on Ubuntu with same database.
+078 ==> 408952 - Leaving Lighttable.
+079 ==> 

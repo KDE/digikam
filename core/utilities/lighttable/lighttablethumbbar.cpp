@@ -209,6 +209,9 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ItemInfo>)),
             this, SIGNAL(signalContentChanged()));
 
+    connect(d->imageInfoModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SIGNAL(signalContentChanged()));
+
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 }
@@ -448,7 +451,6 @@ void LightTableThumbBar::removeItemByInfo(const ItemInfo& info)
     }
 
     d->imageInfoModel->removeItemInfo(info);
-    emit signalContentChanged();
 }
 
 int LightTableThumbBar::countItems() const

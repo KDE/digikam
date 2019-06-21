@@ -39,6 +39,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "digikam_export.h"
 #include "dimg.h"
 
@@ -177,6 +178,14 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 
     Type* reserved = nullptr;
 
+#ifdef Q_OS_WIN
+    reserved = new Type[size];
+
+    if (reserved == nullptr)
+    {
+        qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size;
+    }
+#else
     try
     {
         reserved = new Type[size];
@@ -186,6 +195,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
         qCCritical(DIGIKAM_DIMG_LOG) << "Failed to allocate chunk of memory of size" << size << ex.what();
         reserved = nullptr;
     }
+#endif
 
     return reserved;
 }
