@@ -463,18 +463,18 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 
     if (thmLo.exists())
     {
-        ::unlink(QFile::encodeName(thmLo.filePath()).constData());
+        QFile::remove(thmLo.filePath());
     }
 
     QFileInfo thmUp(path + fi.baseName() + QLatin1String(".THM"));          // Uppercase
 
     if (thmUp.exists())
     {
-        ::unlink(QFile::encodeName(thmUp.filePath()).constData());
+        QFile::remove(thmUp.filePath());
     }
 
     // Remove the real image.
-    return (::unlink(QFile::encodeName(path + itemName).constData()) == 0);
+    return QFile::remove(path + itemName);
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
