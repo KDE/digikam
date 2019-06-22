@@ -192,11 +192,6 @@ DMetadata::MetaDataMap s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary
 
             if (QString::fromUtf8(entry->key) == QLatin1String("creation_time"))
             {
-                if (entryValue.endsWith(QLatin1Char('Z'), Qt::CaseInsensitive))
-                {
-                    entryValue.chop(1);
-                }
-
                 if (QDateTime::fromString(entryValue, Qt::ISODate).toMSecsSinceEpoch() == 0)
                 {
                     continue;
@@ -1466,10 +1461,19 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                              << QLatin1String("DATE_RECORDED")                                  // MKV files.
                                              << QLatin1String("com.apple.quicktime.creationdate");              // QT files.
 
-    if (rmeta.contains(QLatin1String("creation_time")) &&
-        rmeta.contains(QLatin1String("com.apple.quicktime.creationdate")))
+    if (rmeta.contains(QLatin1String("creation_time")))
     {
-        videoDateTimeOriginal.prepend(videoDateTimeOriginal.takeLast());
+        if (rmeta.contains(QLatin1String("com.apple.quicktime.creationdate")))
+        {
+            videoDateTimeOriginal.prepend(videoDateTimeOriginal.takeLast());
+        }
+        else if (!rmeta.contains(QLatin1String("com.android.version")))
+        {
+            if (rmeta[QLatin1String("creation_time")].endsWith(QLatin1Char('Z')))
+            {
+                rmeta[QLatin1String("creation_time")].chop(1);
+            }
+        }
     }
 
     data = s_setXmpTagStringFromEntry(this,
