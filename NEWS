@@ -89,4 +89,5 @@ BUGFIXES:
 079 ==> 408982 - Not being able to write person name when tagging faces despite text field having focus.
 080 ==> 404384 - Show number of entries in group.
 081 ==> 409038 - Erroneous extraction of date metadata for videos.
-082 ==> 
+082 ==> 405589 - Date taken metadata for video files (start video not used and difference of time).
+083 ==> 
