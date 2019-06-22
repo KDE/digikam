@@ -619,9 +619,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             data = s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("creation_time")                          // Generic.
-                                                     << QLatin1String("_STATISTICS_WRITING_DATE_UTC"),          // MKV files.
-                                       vmeta);
+                                              QStringList() << QLatin1String("creation_time")                   // Generic.
+                                                            << QLatin1String("_STATISTICS_WRITING_DATE_UTC"),   // MKV files.
+                                              vmeta);
 
             if (!data.isEmpty())
             {
@@ -1460,13 +1460,22 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("creation_time")                                  // Generic.
+    QStringList videoDateTimeOriginal;
+    videoDateTimeOriginal                    << QLatin1String("creation_time")                                  // Generic.
                                              << QLatin1String("DTIM")                                           // RIFF files.
                                              << QLatin1String("DATE_RECORDED")                                  // MKV files.
-                                             << QLatin1String("com.apple.quicktime.creationdate"),              // QT files.
-                               rmeta,
-                               QStringList() << QLatin1String("Xmp.video.DateTimeOriginal"));
+                                             << QLatin1String("com.apple.quicktime.creationdate");              // QT files.
+
+    if (rmeta.contains(QLatin1String("creation_time")) &&
+        rmeta.contains(QLatin1String("com.apple.quicktime.creationdate")))
+    {
+        videoDateTimeOriginal.prepend(videoDateTimeOriginal.takeLast());
+    }
+
+    data = s_setXmpTagStringFromEntry(this,
+                                      videoDateTimeOriginal,
+                                      rmeta,
+                                      QStringList() << QLatin1String("Xmp.video.DateTimeOriginal"));
 
     if (!data.isEmpty())
     {
@@ -1486,9 +1495,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("date")                                           // Generic.
-                                             << QLatin1String("DATE_RELEASED"),                                 // MKV files.
-                               rmeta);
+                                      QStringList() << QLatin1String("date")                                    // Generic.
+                                                    << QLatin1String("DATE_RELEASED"),                          // MKV files.
+                                      rmeta);
 
     if (!data.isEmpty())
     {
@@ -1506,12 +1515,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     //        '/' is always the terminaison character.
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("location")                                       // Generic.
-                                             << QLatin1String("RECORDING_LOCATION")                             // MKV files.
-                                             << QLatin1String("com.apple.quicktime.location.ISO6709"),          // QT files.
-                               rmeta,
-                               QStringList() << QLatin1String("Xmp.video.GPSCoordinates")
-                                             << QLatin1String("Xmp.xmpDM.shotLocation"));
+                                      QStringList() << QLatin1String("location")                                // Generic.
+                                                    << QLatin1String("RECORDING_LOCATION")                      // MKV files.
+                                                    << QLatin1String("com.apple.quicktime.location.ISO6709"),   // QT files.
+                                      rmeta,
+                                      QStringList() << QLatin1String("Xmp.video.GPSCoordinates")
+                                                    << QLatin1String("Xmp.xmpDM.shotLocation"));
 
     if (!data.isEmpty())
     {
