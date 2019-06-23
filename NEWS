@@ -90,4 +90,5 @@ BUGFIXES:
 080 ==> 404384 - Show number of entries in group.
 081 ==> 409038 - Erroneous extraction of date metadata for videos.
 082 ==> 405589 - Date taken metadata for video files (start video not used and difference of time).
-083 ==> 
+083 ==> 409087 - OpenGL Viewer does not respect the picture rotation.
+084 ==> 

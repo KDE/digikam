@@ -128,21 +128,6 @@ bool GLViewerTexture::load(const QString& fn, const QSize& size)
         return false;
     }
 
-    // handle rotation
-
-    DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(d->filename)));
-
-    if (info.orientation() != DMetadata::ORIENTATION_UNSPECIFIED)
-    {
-        DMetadata meta;
-        meta.rotateExifQImage(d->qimage, (DMetadata::ImageOrientation)info.orientation());
-    }
-
-    if (d->qimage.isNull())
-    {
-        return false;
-    }
-
     loadInternal();
     reset();
     d->rotate_idx = 0;
@@ -182,21 +167,6 @@ bool GLViewerTexture::loadFullSize()
     }
 
     d->initial_size = d->qimage.size();
-
-    // handle rotation
-
-    DItemInfo info(d->iface->itemInfo(QUrl::fromLocalFile(d->filename)));
-
-    if (info.orientation() != DMetadata::ORIENTATION_UNSPECIFIED)
-    {
-        DMetadata meta;
-        meta.rotateExifQImage(d->qimage, (DMetadata::ImageOrientation)info.orientation());
-    }
-
-    if (d->qimage.isNull())
-    {
-        return false;
-    }
 
     loadInternal();
     reset();
