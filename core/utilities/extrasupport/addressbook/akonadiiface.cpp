@@ -56,7 +56,6 @@
 namespace Digikam
 {
 
-// TODO: Port from KABC::AddressBook to libakonadi-kontact. For instance using Akonadi::ContactSearchJob.
 // See http://techbase.kde.org/Development/AkonadiPorting/AddressBook
 
 AkonadiIface::AkonadiIface(QMenu* const parent)
