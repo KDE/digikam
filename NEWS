@@ -86,4 +86,9 @@ BUGFIXES:
 076 ==> 408958 - digikam crashes on deletion of new files from SD card (import window).
 077 ==> 398921 - digikam 5.9.0 slow to start on Mac but rapid on Ubuntu with same database.
 078 ==> 408952 - Leaving Lighttable.
-079 ==> 
+079 ==> 408982 - Not being able to write person name when tagging faces despite text field having focus.
+080 ==> 404384 - Show number of entries in group.
+081 ==> 409038 - Erroneous extraction of date metadata for videos.
+082 ==> 405589 - Date taken metadata for video files (start video not used and difference of time).
+083 ==> 409087 - OpenGL Viewer does not respect the picture rotation.
+084 ==> 
