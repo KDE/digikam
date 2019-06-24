@@ -282,11 +282,14 @@ ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
     d->tagModel->setRootCheckable(false);
     d->tagCheckView = new TagCheckView(tagsArea, d->tagModel);
     d->tagCheckView->setCheckNewTags(true);
+    d->tagCheckView->filteredModel()->doNotListTagsWithProperty(TagPropertyName::person());
+    d->tagCheckView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
     d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
 
     d->newTagEdit  = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setSupportingTagModel(d->tagModel);
+    d->newTagEdit->setFilterModel(d->tagCheckView->filteredModel());
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ItemDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);

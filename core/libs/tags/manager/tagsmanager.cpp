@@ -180,6 +180,9 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
+     d->tagMngrView->getFilterModel()->doNotListTagsWithProperty(TagPropertyName::person());
+     d->tagMngrView->getFilterModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
+
      d->searchBar  = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagMngrView->filteredModel(),
