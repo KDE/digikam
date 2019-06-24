@@ -68,7 +68,7 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     m_ABCmenu = new QMenu(m_parent);
 
     QAction* const abcAction = m_ABCmenu->menuAction();
-    abcAction->setIcon(QIcon::fromTheme(QLatin1String("tag-addressbook")));
+    abcAction->setIcon(QIcon::fromTheme(QLatin1String("address-book-new")));
     abcAction->setText(i18n("Create Tag From Address Book"));
     m_parent->addMenu(m_ABCmenu);
 
