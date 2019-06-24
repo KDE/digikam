@@ -34,6 +34,7 @@
 #include "tagscache.h"
 #include "coredbaccess.h"
 #include "coredb.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -240,7 +241,9 @@ QList<TaggingAction> TaggingActionFactory::actions() const
             }
 
             actions << newUnderParent;
-            actions << newToplevel;
+            //Don't need to add top level for face tags
+            if (d->parentTagId != FaceTags::personParentTag())
+                actions << newToplevel;
         }
         else // if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
         {
@@ -391,7 +394,7 @@ QString TaggingActionFactory::suggestedUIString(const TaggingAction& action) con
     }
     else // shallCreateNewTag
     {
-        if (action.parentTagId())
+        if (action.parentTagId() && d->parentTagId != FaceTags::personParentTag())
         {
             return i18nc("Create New Tag <tag name> in <parent tag path>", "Create \"%1\" in %2",
                          action.newTagName(), TagsCache::instance()->tagPath(action.parentTagId(), TagsCache::NoLeadingSlash));
