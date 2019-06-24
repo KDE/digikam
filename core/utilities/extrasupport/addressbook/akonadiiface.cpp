@@ -126,7 +126,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     foreach (const QString& name, names)
     {
-        m_ABCmenu->addAction(name);
+        m_ABCmenu->addAction(QIcon::fromTheme(QLatin1String("im-user")), name);
     }
 
     connect(m_ABCmenu, SIGNAL(triggered(QAction*)),

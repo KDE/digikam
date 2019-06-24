@@ -173,7 +173,7 @@ void TagFolderView::slotTagNewFromABCMenu(const QString& personName)
         return;
     }
 
-    tagModificationHelper()->slotTagNew(parent, personName, QLatin1String("tag-people"));
+    tagModificationHelper()->slotTagNew(parent, personName, QLatin1String("im-user"));
 }
 
 void TagFolderView::slotExpandNode()
