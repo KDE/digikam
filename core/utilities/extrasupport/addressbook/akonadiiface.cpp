@@ -76,7 +76,6 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     nothingFound->setEnabled(false);
 
     Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
-    job->setQuery(Akonadi::ContactSearchJob::ContactUid, QLatin1String(""));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotABCSearchResult(KJob*)));
