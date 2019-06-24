@@ -154,7 +154,7 @@ CameraItemList::~CameraItemList()
 
 void CameraItemList::setItems(const CamItemInfoList& items)
 {
-    foreach(CamItemInfo info, items)
+    foreach (const CamItemInfo& info, items)
     {
         new CameraItem(this, info);
     }

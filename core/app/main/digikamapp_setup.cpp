@@ -521,42 +521,45 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("image_sort"), d->imageSortAction);
 
     // map to ItemSortSettings enum
-    QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
-    QAction* const sortByPathAction        = d->imageSortAction->addAction(i18n("By Path"));
-    QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Creation Date"));
-    QAction* const sortByModDateAction     = d->imageSortAction->addAction(i18n("By Modification Date"));
-    QAction* const sortByFileSizeAction    = d->imageSortAction->addAction(i18n("By File Size"));
-    QAction* const sortByRatingAction      = d->imageSortAction->addAction(i18n("By Rating"));
-    QAction* const sortByImageSizeAction   = d->imageSortAction->addAction(i18n("By Image Size"));
-    QAction* const sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
-    QAction* const sortBySimilarityAction  = d->imageSortAction->addAction(i18n("By Similarity"));
-    QAction* const sortByManualOrderAction = d->imageSortAction->addAction(i18n("By Manual"));
+    QAction* const sortByNameAction               = d->imageSortAction->addAction(i18n("By Name"));
+    QAction* const sortByPathAction               = d->imageSortAction->addAction(i18n("By Path"));
+    QAction* const sortByDateAction               = d->imageSortAction->addAction(i18n("By Creation Date"));
+    QAction* const sortByModDateAction            = d->imageSortAction->addAction(i18n("By Modification Date"));
+    QAction* const sortByFileSizeAction           = d->imageSortAction->addAction(i18n("By File Size"));
+    QAction* const sortByRatingAction             = d->imageSortAction->addAction(i18n("By Rating"));
+    QAction* const sortByImageSizeAction          = d->imageSortAction->addAction(i18n("By Image Size"));
+    QAction* const sortByAspectRatioAction        = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
+    QAction* const sortBySimilarityAction         = d->imageSortAction->addAction(i18n("By Similarity"));
+    QAction* const sortByManualOrderAndNameAction = d->imageSortAction->addAction(i18n("By Manual and Name"));
+    QAction* const sortByManualOrderAndDateAction = d->imageSortAction->addAction(i18n("By Manual and Date"));
 
     // activate the sort by similarity if the fuzzy search sidebar is active. Deactivate at start.
     sortBySimilarityAction->setEnabled(false);
     connect(d->view, SIGNAL(signalFuzzySidebarActive(bool)), sortBySimilarityAction, SLOT(setEnabled(bool)));
 
-    connect(sortByNameAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByModDateAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByFileSizeAction,    SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction,      SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByImageSizeAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByAspectRatioAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortBySimilarityAction,  SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByManualOrderAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByNameAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDateAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByModDateAction,            SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByFileSizeAction,           SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction,             SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByImageSizeAction,          SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByAspectRatioAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortBySimilarityAction,         SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByManualOrderAndNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByManualOrderAndDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
-    imageSortMapper->setMapping(sortByNameAction,        (int)ItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction,        (int)ItemSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction,        (int)ItemSortSettings::SortByCreationDate);
-    imageSortMapper->setMapping(sortByModDateAction,     (int)ItemSortSettings::SortByModificationDate);
-    imageSortMapper->setMapping(sortByFileSizeAction,    (int)ItemSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction,      (int)ItemSortSettings::SortByRating);
-    imageSortMapper->setMapping(sortByImageSizeAction,   (int)ItemSortSettings::SortByImageSize);
-    imageSortMapper->setMapping(sortByAspectRatioAction, (int)ItemSortSettings::SortByAspectRatio);
-    imageSortMapper->setMapping(sortBySimilarityAction,  (int)ItemSortSettings::SortBySimilarity);
-    imageSortMapper->setMapping(sortByManualOrderAction, (int)ItemSortSettings::SortByManualOrder);
+    imageSortMapper->setMapping(sortByNameAction,               (int)ItemSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction,               (int)ItemSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction,               (int)ItemSortSettings::SortByCreationDate);
+    imageSortMapper->setMapping(sortByModDateAction,            (int)ItemSortSettings::SortByModificationDate);
+    imageSortMapper->setMapping(sortByFileSizeAction,           (int)ItemSortSettings::SortByFileSize);
+    imageSortMapper->setMapping(sortByRatingAction,             (int)ItemSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByImageSizeAction,          (int)ItemSortSettings::SortByImageSize);
+    imageSortMapper->setMapping(sortByAspectRatioAction,        (int)ItemSortSettings::SortByAspectRatio);
+    imageSortMapper->setMapping(sortBySimilarityAction,         (int)ItemSortSettings::SortBySimilarity);
+    imageSortMapper->setMapping(sortByManualOrderAndNameAction, (int)ItemSortSettings::SortByManualOrderAndName);
+    imageSortMapper->setMapping(sortByManualOrderAndDateAction, (int)ItemSortSettings::SortByManualOrderAndDate);
 
     // -----------------------------------------------------------
 

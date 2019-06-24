@@ -29,6 +29,7 @@
 #include <QImage>
 #include <QByteArray>
 #include <QImageReader>
+#include <QMimeDatabase>
 
 // Local includes
 
@@ -47,6 +48,15 @@ QImageLoader::QImageLoader(DImg* const image)
 
 bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
+    QMimeDatabase mimeDB;
+
+    if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("image/")))
+    {
+        qCDebug(DIGIKAM_DIMG_LOG) << "QImageLoader support only the image mime type";
+        loadingFailed();
+        return false;
+    }
+
     readMetadata(filePath, DImg::QIMAGE);
 
     // Loading is opaque to us. No support for stopping from observer,
@@ -66,6 +76,8 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
     {
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "Error message from loader:" << reader.errorString();
+        loadingFailed();
+        return false;
     }
 
     int colorModel    = DImg::COLORMODELUNKNOWN;

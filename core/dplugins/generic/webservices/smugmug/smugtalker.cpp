@@ -52,12 +52,21 @@
 #include "smugmpform.h"
 #include "smugitem.h"
 
-// O2 includes
+// OAuth2 library includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wextra-semi"
+#endif
 
 #include "wstoolutils.h"
 #include "o0settingsstore.h"
 #include "o1requestor.h"
 #include "o0globals.h"
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 using namespace Digikam;
 

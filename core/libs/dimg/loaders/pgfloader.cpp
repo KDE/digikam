@@ -54,12 +54,32 @@ extern "C"
 // Windows includes
 
 #ifdef Q_OS_WIN32
-#include <windows.h>
+#   include <windows.h>
 #endif
 
 // Libpgf includes
 
+// Pragma directives to reduce warnings from Libpgf header files.
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wkeyword-macro"
+#endif
+
 #include "PGFimage.h"
+
+// Restore warnings
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
+
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic pop
+#endif
 
 // Local includes
 

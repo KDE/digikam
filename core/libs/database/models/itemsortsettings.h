@@ -123,7 +123,8 @@ public:
         SortByImageSize,            // pixel number
         SortByAspectRatio,          // width / height * 100000
         SortBySimilarity,
-        SortByManualOrder
+        SortByManualOrderAndName,
+        SortByManualOrderAndDate
     };
 
     SortRole                sortRole;
@@ -210,13 +211,9 @@ public:
     {
         QCollator collator;
         collator.setNumericMode(natural);
-        collator.setIgnorePunctuation(false);
         collator.setCaseSensitivity(caseSensitive);
-
-        if (a.contains(QLatin1String("_v"), Qt::CaseInsensitive))
-        {
-            collator.setIgnorePunctuation(true);
-        }
+        collator.setIgnorePunctuation(a.contains(QLatin1String("_v"),
+                                                 Qt::CaseInsensitive));
 
         if (sortOrder == Qt::AscendingOrder)
         {

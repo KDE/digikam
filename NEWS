@@ -63,4 +63,32 @@ BUGFIXES:
 053 ==> 408334 - Windows elements design changed?
 054 ==> 408332 - Disabled Export plugins visible in rightside toolbar.
 055 ==> 342379 - Allow to use decimals values with custom size settings.
-056 ==> 
+056 ==> 408450 - digikam git r43105 cannot build without marble.
+057 ==> 408420 - Can't add images to Lightable.
+058 ==> 408466 - When exporting >1 picture to Google Photos, all pictures have title & caption of the last one.
+059 ==> 387093 - Option to select ignored folders on first setup crashes DigiKam.
+060 ==> 408513 - Piwigo export does not save connection details.
+061 ==> 408525 - Flickr export - location lost and/or replaced.
+062 ==> 408562 - Applying the Exif rotation setting to images only, not videos.
+063 ==> 408568 - Keywords are not showing up on video files.
+064 ==> 408667 - In reverse geocoding, whow which address element correspond to each name.
+065 ==> 408666 - Reverse geocoding tool, confusing dialog question phrasing.
+066 ==> 406937 - Cannot change icon theme in Appimage.
+067 ==> 408687 - "Failed to update file timestamp" despite date being changed successfully in Adjust Date and Time tool.
+068 ==> 408804 - Deleted file in Digikam can't be found in Windows trash bin.
+069 ==> 408803 - Placement bug in Thumbnail view when using arrow keys.
+070 ==> 408819 - Displayed number of entries.
+071 ==> 408793 - Memory leak when .psd file in album folder.
+072 ==> 408782 - In manual sorting, bad placement after new version creation.
+073 ==> 408471 - DigiKam crashes after about 10 photos viewed, random images then fail to load.
+074 ==> 408883 - Crash after opening video in Image Editor - /tmp runs out of space.
+075 ==> 376359 - Sort by Image Quality (assign quality tags) ignores many images.
+076 ==> 408958 - digikam crashes on deletion of new files from SD card (import window).
+077 ==> 398921 - digikam 5.9.0 slow to start on Mac but rapid on Ubuntu with same database.
+078 ==> 408952 - Leaving Lighttable.
+079 ==> 408982 - Not being able to write person name when tagging faces despite text field having focus.
+080 ==> 404384 - Show number of entries in group.
+081 ==> 409038 - Erroneous extraction of date metadata for videos.
+082 ==> 405589 - Date taken metadata for video files (start video not used and difference of time).
+083 ==> 409087 - OpenGL Viewer does not respect the picture rotation.
+084 ==> 

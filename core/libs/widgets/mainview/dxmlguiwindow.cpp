@@ -883,23 +883,16 @@ void DXmlGuiWindow::setupIconTheme()
             QIcon::setThemeSearchPaths(QStringList() << QIcon::themeSearchPaths() << iconsDirs);
         }
 
-        // Tell icons loader an co. about the theme
-        KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
-
         if (hasBreeze)
         {
             QIcon::setThemeName(QLatin1String("breeze"));
-            cg.writeEntry("Theme", "breeze");
             qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons resource file found";
         }
         else if (hasBreezeDark)
         {
             QIcon::setThemeName(QLatin1String("breeze-dark"));
-            cg.writeEntry("Theme", "breeze-dark");
             qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons resource file found";
         }
-
-        cg.sync();
     }
     else
     {

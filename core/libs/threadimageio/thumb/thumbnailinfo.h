@@ -85,6 +85,11 @@ public:
      */
     QString   fileName;
 
+    /** The mime type of the original file.
+     *  Currently "image" or "video" otherwise empty.
+     */
+    QString   mimeType;
+
     /** A custom identifier, if neither filePath nor uniqueHash are applicable. */
     QString   customIdentifier;
 };

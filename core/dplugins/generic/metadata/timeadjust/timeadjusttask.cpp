@@ -350,7 +350,7 @@ void TimeAdjustTask::run()
         }
     }
 
-    if (status == TimeAdjustList::NOPROCESS_ERROR)
+    if ((status & TimeAdjustList::META_TIME_ERROR) != TimeAdjustList::META_TIME_ERROR)
     {
         emit signalDateTimeForUrl(d->url, dt, d->settings.updFileModDate);
     }

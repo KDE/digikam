@@ -30,13 +30,25 @@
 #include <QString>
 #include <QNetworkReply>
 
+// OAuth2 library includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wextra-semi"
+#endif
+
+#include "o2.h"
+#include "o0globals.h"
+#include "o1twitter.h"
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
+
 // Local includes
 
 #include "twitteritem.h"
-#include "o2.h"
-#include "o0globals.h"
 #include "dmetadata.h"
-#include "o1twitter.h"
 
 using namespace Digikam;
 

@@ -36,10 +36,20 @@
 #include "smugitem.h"
 #include "dinfointerface.h"
 
-// O2 include
+// OAuth2 library includes
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wextra-semi"
+#endif
+
 #include "o0globals.h"
 #include "o1smugmug.h"
 #include "o1requestor.h"
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
 
 class QNetworkReply;
 

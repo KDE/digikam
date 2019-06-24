@@ -249,6 +249,7 @@ QUrl DMetaInfoIface::defaultUploadUrl() const
     return place;
 }
 
+#ifdef HAVE_MARBLE
 QList<GPSItemContainer*> DMetaInfoIface::currentGPSItems() const
 {
     QList<GPSItemContainer*> items;
@@ -260,5 +261,6 @@ QList<GPSItemContainer*> DMetaInfoIface::currentGPSItems() const
 
     return items;
 }
+#endif
 
 } // namespace Digikam

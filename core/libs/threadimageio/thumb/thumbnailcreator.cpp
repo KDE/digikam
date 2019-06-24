@@ -329,7 +329,7 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     {
         // image is stored, or created, unrotated, and is now rotated for display
         // detail thumbnails are stored readily rotated
-        if (d->exifRotate && rect.isNull())
+        if ((d->exifRotate && rect.isNull()) || info.mimeType == QLatin1String("video"))
         {
             image.qimage = exifRotate(image.qimage, image.exifOrientation);
         }
@@ -511,9 +511,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     }
     else
     {
-        QMimeDatabase mimeDB;
-
-        if (mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("image/")))
+        if (info.mimeType == QLatin1String("image"))
         {
             if (qimage.isNull())
             {
@@ -1106,6 +1104,18 @@ ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString& path)
     QFileInfo fileInfo(path);
     info.isAccessible = fileInfo.exists();
     info.fileName     = fileInfo.fileName();
+
+    QMimeDatabase mimeDB;
+    QString mimeType(mimeDB.mimeTypeForFile(path).name());
+
+    if (mimeType.startsWith(QLatin1String("image/")))
+    {
+        info.mimeType = QLatin1String("image");
+    }
+    else if (mimeType.startsWith(QLatin1String("video/")))
+    {
+        info.mimeType = QLatin1String("video");
+    }
 
     if (!info.isAccessible)
     {

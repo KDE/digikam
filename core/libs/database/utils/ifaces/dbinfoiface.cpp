@@ -56,6 +56,10 @@
 #include "itemlisterreceiver.h"
 #include "dio.h"
 
+#ifdef HAVE_MARBLE
+#   include "itemgps.h"
+#endif
+
 namespace Digikam
 {
 
@@ -674,6 +678,7 @@ QAbstractItemModel* DBInfoIface::tagFilterModel()
     return filterModel;
 }
 
+#ifdef HAVE_MARBLE
 QList<GPSItemContainer*> DBInfoIface::currentGPSItems() const
 {
     QList<GPSItemContainer*> items;
@@ -686,5 +691,6 @@ QList<GPSItemContainer*> DBInfoIface::currentGPSItems() const
 
     return items;
 }
+#endif
 
 } // namespace Digikam

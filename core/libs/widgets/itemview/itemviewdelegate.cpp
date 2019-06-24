@@ -598,7 +598,7 @@ void ItemViewDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
         icon.paint(p, r);
         p->setOpacity(op);
 
-        QString text = QString::number(numberOfGroupedImages);
+        QString text = QString::number(numberOfGroupedImages + 1);
         p->drawText(r, Qt::AlignCenter, text);
     }
 }

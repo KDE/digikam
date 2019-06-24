@@ -93,21 +93,14 @@ if(ENABLE_FACESENGINE_DNN)
     if(NOT MSVC)
 
         # Dlib DNN generate plenty of wrong warnings. Remove these workaround later when code will be ported to OpenCV DNN.
-        while(CMAKE_CXX_FLAGS MATCHES "-Wcast-align")
-            string(REPLACE "-Wcast-align" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        endwhile()
+        REMOVE_GCC_COMPILER_WARNINGS("-Wextra")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wundef")
+        REMOVE_GCC_COMPILER_WARNINGS("-Wall")
 
-        while(CMAKE_CXX_FLAGS MATCHES "-Wextra")
-            string(REPLACE "-Wextra" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        endwhile()
-
-        while(CMAKE_CXX_FLAGS MATCHES "-Wundef")
-            string(REPLACE "-Wundef" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        endwhile()
-
-        while(CMAKE_CXX_FLAGS MATCHES "-Wall")
-            string(REPLACE "-Wall" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        endwhile()
+        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-cast-align")
+        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-sign-compare")
+        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-unused-parameter")
+        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-unused-variable")
 
     endif()
 
