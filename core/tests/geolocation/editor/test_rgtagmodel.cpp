@@ -261,7 +261,7 @@ void TestRGTagModel::testModelSpacerTags()
 
     //insert spacer below ti21
     tagModel->addSpacerTag(QModelIndex(), QLatin1String("{Country}"));
-    tagModel->addNewTag(QModelIndex(), QLatin1String("New Tag"));
+    tagModel->addNewTag(QModelIndex(), QLatin1String("New Tag"), QString());
 
     qDebug()<<"Added the spacers.";
 

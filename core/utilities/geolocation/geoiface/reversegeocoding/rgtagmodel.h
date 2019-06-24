@@ -64,9 +64,9 @@ public:
     QModelIndex fromSourceIndex(const QModelIndex& externalTagModelIndex) const;
     QModelIndex toSourceIndex(const QModelIndex& tagModelIndex) const;
     void addSpacerTag(const QModelIndex& parent, const QString& spacerName);
-    QPersistentModelIndex addNewTag(const QModelIndex& parent, const QString& newTagName);
+    QPersistentModelIndex addNewTag(const QModelIndex& parent, const QString& newTagName, const QString& newElement);
     QList<QList<TagData> > addNewData(QStringList& elements, QStringList& resultedData);
-    void addDataInTree(TreeBranch* currentBranch, int currentRow,const QStringList& addressElements,const QStringList& elementsData);
+    void addDataInTree(TreeBranch* currentBranch, int currentRow,const QStringList& addressElements, const QStringList& elementsData);
     QList<TagData> getTagAddress();
     void findAndDeleteSpacersOrNewTags(TreeBranch* currentBranch, int currentRow, Type whatShouldRemove);
     void deleteAllSpacersOrNewTags(const QModelIndex& currentIndex, Type whatShouldRemove);
@@ -86,22 +86,24 @@ public Q_SLOTS:
 
     void slotSourceDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
     void slotSourceHeaderDataChanged(const Qt::Orientation orientation, int first, int last);
-    void slotColumnsAboutToBeInserted ( const QModelIndex & parent, int start, int end);
-    void slotColumnsAboutToBeMoved ( const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn);
-    void slotColumnsAboutToBeRemoved ( const QModelIndex & parent, int start, int end );
-    void slotColumnsInserted ();
-    void slotColumnsMoved ();
-    void slotColumnsRemoved ();
-    void slotLayoutAboutToBeChanged ();
+    void slotColumnsAboutToBeInserted(const QModelIndex & parent, int start, int end);
+    void slotColumnsAboutToBeMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd,
+                                   const QModelIndex & destinationParent, int destinationColumn);
+    void slotColumnsAboutToBeRemoved(const QModelIndex & parent, int start, int end );
+    void slotColumnsInserted();
+    void slotColumnsMoved();
+    void slotColumnsRemoved();
+    void slotLayoutAboutToBeChanged();
     void slotLayoutChanged();
     void slotModelAboutToBeReset();
     void slotModelReset();
-    void slotRowsAboutToBeInserted (const QModelIndex & parent, int start, int end);
-    void slotRowsAboutToBeMoved (const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow);
-    void slotRowsAboutToBeRemoved (const QModelIndex & parent, int start, int end);
-    void slotRowsInserted ();
-    void slotRowsMoved ();
-    void slotRowsRemoved ();
+    void slotRowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
+    void slotRowsAboutToBeMoved(const QModelIndex & sourceParent, int sourceStart, int sourceEnd,
+                                const QModelIndex & destinationParent, int destinationRow);
+    void slotRowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
+    void slotRowsInserted();
+    void slotRowsMoved();
+    void slotRowsRemoved();
 
 private:
 

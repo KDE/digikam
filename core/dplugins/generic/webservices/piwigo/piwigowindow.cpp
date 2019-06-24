@@ -94,7 +94,7 @@ public:
     QProgressDialog*               progressDlg;
     unsigned int                   uploadCount;
     unsigned int                   uploadTotal;
-    QStringList*                   pUploadList;
+    QStringList                    pUploadList;
 };
 
 PiwigoWindow::Private::Private(PiwigoWindow* const parent,
@@ -106,7 +106,6 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
     progressDlg = nullptr;
     uploadCount = 0;
     uploadTotal = 0;
-    pUploadList = nullptr;
     widget      = new QWidget(parent);
     parent->setMainWidget(widget);
     parent->setModal(false);
@@ -227,11 +226,11 @@ PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
 {
     d->pPiwigo = new PiwigoSession();
 
-    setWindowTitle( i18n("Piwigo Export") );
+    setWindowTitle(i18n("Piwigo Export"));
     setModal(false);
 
     // "Start Upload" button
-    startButton()->setText( i18n("Start Upload") );
+    startButton()->setText(i18n("Start Upload"));
     startButton()->setEnabled(false);
 
     connect(startButton(), SIGNAL(clicked()),
@@ -248,24 +247,17 @@ PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
     d->progressDlg->setMaximum(0);
     d->progressDlg->reset();
 
-    d->pUploadList = new QStringList;
-
     // connect functions
     connectSignals();
 
-    QPointer<PiwigoLoginDlg> configDlg;
     KConfig config;
 
-    if (!config.hasGroup("Piwigo Settings") )
+    if (!config.hasGroup("Piwigo Settings"))
     {
-        configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
-                                       d->pPiwigo,
-                                       i18n("Edit Piwigo Data") );
-
-        if (configDlg->exec() != QDialog::Accepted)
-        {
-            delete configDlg;
-        }
+        QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                          d->pPiwigo, i18n("Edit Piwigo Data"));
+        dlg->exec();
+        delete dlg;
     }
 
     readSettings();
@@ -284,7 +276,7 @@ PiwigoWindow::~PiwigoWindow()
     group.writeEntry("Quality",        d->qualitySpinBox->value());
 
     delete d->talker;
-    delete d->pUploadList;
+    delete d->pPiwigo;
     delete d;
 }
 
@@ -378,17 +370,18 @@ void PiwigoWindow::slotLoginFailed(const QString& msg)
         return;
     }
 
-    QPointer<PiwigoLoginDlg> configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
-                                                            d->pPiwigo, i18n("Edit Piwigo Data") );
+    QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                      d->pPiwigo, i18n("Edit Piwigo Data"));
 
-    if (configDlg->exec() != QDialog::Accepted)
+    int result = dlg->exec();
+    delete dlg;
+
+    if (result != QDialog::Accepted)
     {
-        delete configDlg;
         return;
     }
 
     slotDoLogin();
-    delete configDlg;
 }
 
 void PiwigoWindow::slotBusy(bool val)
@@ -427,7 +420,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
     QList<QTreeWidgetItem*> parentItemList;
 
     // fill QTreeWidget
-    while ( !workList.isEmpty() )
+    while (!workList.isEmpty())
     {
         // the album to work on
         PiwigoAlbum album = workList.takeFirst();
@@ -436,10 +429,10 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
         if (parentRefNum == -1)
         {
             QTreeWidgetItem* const item = new QTreeWidgetItem();
-            item->setText(0, cleanName(album.m_name) );
-            item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")) );
-            item->setData(1, Qt::UserRole, QVariant(album.m_refNum) );
-            item->setText(2, i18n("Album") );
+            item->setText(0, cleanName(album.m_name));
+            item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")));
+            item->setData(1, Qt::UserRole, QVariant(album.m_refNum));
+            item->setText(2, i18n("Album"));
 
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Top : " << album.m_name << " " << album.m_refNum << "\n";
 
@@ -453,17 +446,17 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
             bool found                  = false;
             int i                       = 0;
 
-            while ( !found && i < parentItemList.size() )
+            while (!found && i < parentItemList.size())
             {
                 parentItem = parentItemList.at(i);
 
                 if (parentItem && (parentItem->data(1, Qt::UserRole).toInt() == parentRefNum))
                 {
                     QTreeWidgetItem* const item = new QTreeWidgetItem(parentItem);
-                    item->setText(0, cleanName(album.m_name) );
-                    item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")) );
-                    item->setData(1, Qt::UserRole, album.m_refNum );
-                    item->setText(2, i18n("Album") );
+                    item->setText(0, cleanName(album.m_name));
+                    item->setIcon(0, QIcon::fromTheme(QLatin1String("inode-directory")));
+                    item->setData(1, Qt::UserRole, album.m_refNum);
+                    item->setText(2, i18n("Album"));
 
                     parentItem->addChild(item);
                     d->albumDict.insert(album.m_name, album);
@@ -482,7 +475,7 @@ void PiwigoWindow::slotAlbumSelected()
     QTreeWidgetItem* const item = d->albumView->currentItem();
 
     // stop loading if user clicked an image
-    if (item && item->text(2) == i18n("Image") )
+    if (item && item->text(2) == i18n("Image"))
         return;
 
     if (!item)
@@ -496,7 +489,7 @@ void PiwigoWindow::slotAlbumSelected()
         int albumId = item->data(1, Qt::UserRole).toInt();
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << albumId << "\n";
 
-        if (d->talker->loggedIn() && albumId )
+        if (d->talker->loggedIn() && albumId)
         {
             startButton()->setEnabled(true);
         }
@@ -521,10 +514,10 @@ void PiwigoWindow::slotAddPhoto()
     for (QList<QUrl>::const_iterator it = urls.constBegin();
          it != urls.constEnd(); ++it)
     {
-        d->pUploadList->append( (*it).toLocalFile() );
+        d->pUploadList.append((*it).toLocalFile());
     }
 
-    d->uploadTotal = d->pUploadList->count();
+    d->uploadTotal = d->pUploadList.count();
     d->progressDlg->reset();
     d->progressDlg->setMaximum(d->uploadTotal);
     d->uploadCount = 0;
@@ -533,7 +526,7 @@ void PiwigoWindow::slotAddPhoto()
 
 void PiwigoWindow::slotAddPhotoNext()
 {
-    if (d->pUploadList->isEmpty())
+    if (d->pUploadList.isEmpty())
     {
         d->progressDlg->reset();
         d->progressDlg->hide();
@@ -544,7 +537,7 @@ void PiwigoWindow::slotAddPhotoNext()
     int column                  = d->albumView->currentColumn();
     QString albumTitle          = item->text(column);
     const PiwigoAlbum& album    = d->albumDict.value(albumTitle);
-    QString photoPath           = d->pUploadList->takeFirst();
+    QString photoPath           = d->pUploadList.takeFirst();
     bool res                    = d->talker->addPhoto(album.m_refNum, photoPath,
                                                       d->resizeCheckBox->isChecked(),
                                                       d->widthSpinBox->value(),
@@ -554,11 +547,11 @@ void PiwigoWindow::slotAddPhotoNext()
     if (!res)
     {
         slotAddPhotoFailed(i18n("The file %1 is not a supported image or video format",
-                                QUrl(photoPath).fileName()) );
+                                QUrl(photoPath).fileName()));
         return;
     }
 
-    d->progressDlg->setLabelText(i18n("Uploading file %1", QUrl(photoPath).fileName()) );
+    d->progressDlg->setLabelText(i18n("Uploading file %1", QUrl(photoPath).fileName()));
 
     if (d->progressDlg->isHidden())
         d->progressDlg->show();
@@ -623,7 +616,7 @@ void PiwigoWindow::slotSettings()
 {
     // TODO: reload albumlist if OK slot used.
     QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
-                                                      d->pPiwigo, i18n("Edit Piwigo Data") );
+                                                      d->pPiwigo, i18n("Edit Piwigo Data"));
 
     if (dlg->exec() == QDialog::Accepted)
     {

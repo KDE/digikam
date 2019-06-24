@@ -92,6 +92,7 @@ include(KDEFrameworkCompilerSettings)
 include(KDECompilerSettings)
 # Local macros
 include(MacroUtils)
+include(MacroCompiler)
 include(MacroOpenCV)
 include(MacroJPEG)
 include(MacroBoolTo01)
@@ -686,38 +687,25 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # Remove pedantic GCC flag which generate a lots of warnings on the console
     # with qCDebug()
-    while(CMAKE_CXX_FLAGS MATCHES "-pedantic")
-        string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    REMOVE_GCC_COMPILER_WARNINGS("-pedantic")
 
-    # Remove Wsuggest-override GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wsuggest-override")
-        string(REPLACE "-Wsuggest-override" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    # Remove date-time GCC flag which generate a lots of compile warnings
+    REMOVE_GCC_COMPILER_WARNINGS("-Wdate-time")
 
-    # Remove Wdate-time GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wdate-time")
-        string(REPLACE "-Wdate-time" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    # Remove suggest-override GCC flag which generate a lots of compile warnings
+    REMOVE_GCC_COMPILER_WARNINGS("-Wsuggest-override")
 
-    # Remove -Wzero-as-null-pointer-constant GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wzero-as-null-pointer-constant")
-        string(REPLACE "-Wzero-as-null-pointer-constant" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    # Remove zero-as-null-pointer-constant GCC and CLang flag which generate a lots of compile warnings
+    REMOVE_COMPILER_WARNINGS("-Wzero-as-null-pointer-constant")
 
-    # Remove -Wdeprecated-copy GCC warnings which generate a lots of compile warnings
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+    # Remove deprecated-copy GCC warnings which generate a lots of compile warnings
+    DISABLE_GCC_COMPILER_WARNINGS("8.99.99" "-Wno-deprecated-copy")
 
-        if (${GCC_VERSION} VERSION_GREATER "8.99.99")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
-        endif()
-    endif()
+    # Remove date-time Clang warnings which generate a lots of compile warnings
+    DISABLE_CLANG_COMPILER_WARNINGS("7.99.99" "-Wdate-time")
 
-    # Remove -Winconsistent-missing-override Clang warnings which generate a lots of compile warnings
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override")
-    endif()
+    # Remove inconsistent-missing-override Clang warnings which generate a lots of compile warnings
+    DISABLE_CLANG_COMPILER_WARNINGS("7.99.99" "-Wno-inconsistent-missing-override")
 
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")

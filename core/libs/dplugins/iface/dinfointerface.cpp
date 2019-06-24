@@ -135,10 +135,12 @@ QAbstractItemModel* DInfoInterface::tagFilterModel()
     return nullptr;
 }
 
+#ifdef HAVE_MARBLE
 QList<GPSItemContainer*> DInfoInterface::currentGPSItems() const
 {
     return QList<GPSItemContainer*>();
 }
+#endif
 
 // -----------------------------------------------------------------
 

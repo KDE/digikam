@@ -1914,6 +1914,15 @@ ThumbnailInfo ItemInfo::thumbnailInfo() const
     thumbinfo.uniqueHash       = uniqueHash();
     thumbinfo.fileSize         = fileSize();
 
+    if (category() == DatabaseItem::Image)
+    {
+        thumbinfo.mimeType = QLatin1String("image");
+    }
+    else if (category() == DatabaseItem::Video)
+    {
+        thumbinfo.mimeType = QLatin1String("video");
+    }
+
     return thumbinfo;
 }
 

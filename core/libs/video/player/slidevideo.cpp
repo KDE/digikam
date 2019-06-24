@@ -45,9 +45,9 @@
 
 // Local includes
 
-#include "metaenginesettings.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
+#include "metaengine.h"
 
 using namespace QtAV;
 
@@ -207,25 +207,22 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
         }
     }
 
-    if (MetaEngineSettings::instance()->settings().exifRotate)
+    switch (orientation)
     {
-        switch (orientation)
-        {
-            case MetaEngine::ORIENTATION_ROT_90:
-            case MetaEngine::ORIENTATION_ROT_90_HFLIP:
-            case MetaEngine::ORIENTATION_ROT_90_VFLIP:
-                d->videoOrientation = 90;
-                break;
-            case MetaEngine::ORIENTATION_ROT_180:
-                d->videoOrientation = 180;
-                break;
-            case MetaEngine::ORIENTATION_ROT_270:
-                d->videoOrientation = 270;
-                break;
-            default:
-                d->videoOrientation = 0;
-                break;
-        }
+        case MetaEngine::ORIENTATION_ROT_90:
+        case MetaEngine::ORIENTATION_ROT_90_HFLIP:
+        case MetaEngine::ORIENTATION_ROT_90_VFLIP:
+            d->videoOrientation = 90;
+            break;
+        case MetaEngine::ORIENTATION_ROT_180:
+            d->videoOrientation = 180;
+            break;
+        case MetaEngine::ORIENTATION_ROT_270:
+            d->videoOrientation = 270;
+            break;
+        default:
+            d->videoOrientation = 0;
+            break;
     }
 
     if (supportedCodec)

@@ -49,8 +49,8 @@ QSize ItemSelectionOverlayButton::sizeHint() const
 
 QIcon ItemSelectionOverlayButton::icon()
 {
-    return QIcon::fromTheme(isChecked() ? QLatin1String("vcs-removed")
-                                        : QLatin1String("vcs-added"));
+    return QIcon::fromTheme(isChecked() ? QLatin1String("list-remove")
+                                        : QLatin1String("list-add"));
 }
 
 void ItemSelectionOverlayButton::updateToolTip()

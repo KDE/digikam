@@ -37,8 +37,8 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "loadingcacheinterface.h"
 #include "applicationsettings.h"
-#include "thumbsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
 #include "setupcollections.h"
@@ -427,20 +427,7 @@ void Setup::slotOkClicked()
 
     if (d->metadataPage->exifAutoRotateHasChanged())
     {
-        QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
-                           "Do you want to rebuild all albums' items' thumbnails now?\n\n"
-                           "Note: thumbnail processing can take a while. You can start "
-                           "this job later from the \"Tools-Maintenance\" menu.");
-
-        int result = QMessageBox::warning(this, qApp->applicationName(), msg,
-                                          QMessageBox::Yes | QMessageBox::No);
-
-        if (result != QMessageBox::Yes)
-        {
-            return;
-        }
-
-        new ThumbsGenerator(true, -1);
+        LoadingCacheInterface::cleanThumbnailCache();
     }
 
     accept();

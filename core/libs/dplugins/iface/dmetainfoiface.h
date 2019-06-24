@@ -63,7 +63,9 @@ public:
 
     QUrl     defaultUploadUrl()                   const override;
 
+#ifdef HAVE_MARBLE
     QList<GPSItemContainer*> currentGPSItems()    const override;
+#endif
 
 private:
 

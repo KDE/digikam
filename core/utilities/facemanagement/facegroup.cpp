@@ -626,6 +626,12 @@ void FaceGroup::load()
     QList<FaceTagsIface> faces = FaceTagsEditor().databaseFaces(d->info.id());
     d->visibilityController->clear();
 
+    // See bug 408982
+    if (!faces.isEmpty())
+    {
+        d->view->setFocus();
+    }
+
     foreach (const FaceTagsIface& face, faces)
     {
         d->addItem(face);

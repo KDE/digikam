@@ -29,7 +29,28 @@
 
 // ImageMagick includes
 
+// Pragma directives to reduce warnings from ImageMagick header files.
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wkeyword-macro"
+#endif
+
 #include <Magick++.h>
+
+// Restore warnings
+
+#if defined(Q_CC_CLANG)
+#   pragma clang diagnostic pop
+#endif
+
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic pop
+#endif
 
 // Local includes
 
@@ -54,6 +75,8 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (!mimeDB.mimeTypeForFile(filePath).name().startsWith(QLatin1String("image/")))
     {
+        qCDebug(DIGIKAM_DIMG_LOG) << "The ImageMagick codecs support only the image mime type";
+        loadingFailed();
         return false;
     }
 

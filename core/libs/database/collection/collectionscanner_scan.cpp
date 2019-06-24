@@ -597,6 +597,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                                             QDir::NoDotAndDotDot,
                                             QDir::Name | QDir::DirsLast);
 
+    const QString xmpExt(QLatin1String(".xmp"));
     int counter = -1;
 
     foreach (const QString& entry, list)
@@ -619,20 +620,11 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
         if (info.isFile())
         {
             // filter with name filter
-            QString suffix = info.suffix().toLower();
+            QString suffix(info.suffix().toLower());
 
             if (!d->nameFilters.contains(suffix))
             {
                 continue;
-            }
-
-            // ignore new files in subdirectories of ignored directories
-            foreach (const QString& ignore, d->ignoreDirectory)
-            {
-                if (info.path().contains(ignore))
-                {
-                    continue;
-                }
             }
 
             int index = fileNameIndexHash.value(info.fileName(), -1);
@@ -642,19 +634,9 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 // mark item as "seen"
                 itemIdSet.remove(scanInfos.at(index).id);
 
-                bool hasSidecar = false;
-
-                if (settings.useXMPSidecar4Reading)
-                {
-                    QString fileForLR = info.fileName();
-                    fileForLR.chop(info.suffix().size());
-
-                    if (list.contains(fileForLR + QLatin1String("xmp")) ||
-                        list.contains(info.fileName() + QLatin1String(".xmp")))
-                    {
-                        hasSidecar = true;
-                    }
-                }
+                bool hasSidecar = (settings.useXMPSidecar4Reading           &&
+                                   (list.contains(info.fileName() + xmpExt) ||
+                                    list.contains(info.completeBaseName() + xmpExt)));
 
                 scanFileNormal(info, scanInfos.at(index), hasSidecar);
             }

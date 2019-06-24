@@ -151,7 +151,7 @@ void ImportThumbnailModel::slotThumbInfoReady(const CamItemInfo& info)
     d->thumbsCtrl->getThumbInfo(info, item);
 
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
-    foreach(const QModelIndex& index, indexesForUrl(info.url()))
+    foreach (const QModelIndex& index, indexesForUrl(info.url()))
     {
         if (item.second.isNull())
         {

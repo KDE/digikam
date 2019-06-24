@@ -27,11 +27,8 @@ endif()
 
 if(NOT MSVC)
 
-    while(CMAKE_CXX_FLAGS MATCHES "-Werror=return-type")
-        string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
+    REMOVE_GCC_COMPILER_WARNINGS("-Werror=return-type")
+    DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-c++11-narrowing")
 
 endif()
 

@@ -24,7 +24,18 @@
 
 // Lib LensFun includes
 
+// Pragma directives to reduce warnings from Lensfun header files.
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
+
 #include <lensfun.h>
+
+// Restore warnings
+#if defined(Q_CC_GNU)
+#   pragma GCC diagnostic pop
+#endif
 
 // Local includes
 

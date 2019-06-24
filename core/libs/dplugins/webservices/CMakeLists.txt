@@ -13,6 +13,10 @@ remove_definitions(
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_NO_CAST_FROM_BYTEARRAY)
 
+# Remove unwanted warnings from O2 library
+REMOVE_GCC_COMPILER_WARNINGS("-pedantic")
+DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-extra-semi")
+
 # It also does not export symbols, so export all by default
 unset(CMAKE_CXX_VISIBILITY_PRESET)
 

@@ -38,12 +38,7 @@ class TreeBranch
 public:
 
     explicit TreeBranch()
-      : sourceIndex(),
-        parent(nullptr),
-        data(),
-        type(),
-        oldChildren(),
-        spacerChildren()
+      : parent(nullptr)
     {
     }
 
@@ -57,6 +52,7 @@ public:
     QPersistentModelIndex sourceIndex;
     TreeBranch*           parent;
     QString               data;
+    QString               help;
     Type                  type;
     QList<TreeBranch*>    oldChildren;
     QList<TreeBranch*>    spacerChildren;
