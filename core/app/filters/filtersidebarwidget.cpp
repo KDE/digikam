@@ -92,7 +92,16 @@ public:
     TagModel*                              tagFilterModel;
     QAction*                               tagOrCondAction;
     QAction*                               tagAndCondAction;
-    ItemFilterSettings::MatchingCondition tagMatchCond;
+    ItemFilterSettings::MatchingCondition  tagMatchCond;
+
+    TagFilterView*                         faceFilterView;
+    SearchTextBar*                         faceFilterSearchBar;
+    QToolButton*                           faceOptionsBtn;
+    QMenu*                                 faceOptionsMenu;
+    TagModel*                              faceFilterModel;
+    QAction*                               faceOrCondAction;
+    QAction*                               faceAndCondAction;
+    ItemFilterSettings::MatchingCondition  faceMatchCond;
 
     ColorLabelFilter*                      colorLabelFilter;
     GeolocationFilter*                     geolocationFilter;
@@ -102,6 +111,7 @@ public:
     TextFilter*                            textFilter;
 
     QCheckBox*                             withoutTagCheckBox;
+    QCheckBox*                             withoutFaceCheckBox;
 
     DExpanderBox*                          expbox;
 };
@@ -146,6 +156,10 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagFilterModel     = tagFilterModel;
     d->tagFilterView      = new TagFilterView(box3, tagFilterModel);
     d->tagFilterView->setObjectName(QLatin1String("ItemIconViewTagFilterView"));
+
+    d->tagFilterView->filteredModel()->doNotListTagsWithProperty(TagPropertyName::person());
+    d->tagFilterView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
+
     d->tagFilterSearchBar = new SearchTextBar(box3, QLatin1String("ItemIconViewTagFilterSearchBar"));
     d->tagFilterSearchBar->setModel(d->tagFilterView->filteredModel(),
                                     AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
@@ -181,6 +195,52 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay3->setSpacing(0);
 
     d->expbox->addItem(box3, QIcon::fromTheme(QLatin1String("tag-assigned")), i18n("Tags Filter"), QLatin1String("TagsFilter"), true);
+
+    // --------------------------------------------------------------------------------------------------------
+
+    QWidget* const box5   = new QWidget(d->expbox);
+    d->faceFilterModel     = tagFilterModel;
+    d->faceFilterView      = new TagFilterView(box5, tagFilterModel);
+    d->faceFilterView->setObjectName(QLatin1String("ItemIconViewFaceTagFilterView"));
+
+    d->faceFilterView->filteredModel()->listOnlyTagsWithProperty(TagPropertyName::person());
+    d->faceFilterView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
+
+    d->faceFilterSearchBar = new SearchTextBar(box5, QLatin1String("ItemIconViewFaceTagFilterSearchBar"));
+    d->faceFilterSearchBar->setModel(d->faceFilterView->filteredModel(),
+                                    AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
+    d->faceFilterSearchBar->setFilterModel(d->faceFilterView->albumFilterModel());
+
+    const QString notfaceTaggedTitle   = i18n("Images Without Face tags");
+    d->withoutFaceCheckBox          = new QCheckBox(notfaceTaggedTitle, box5);
+    d->withoutFaceCheckBox->setWhatsThis(i18n("Show images without a face tag."));
+
+    d->faceOptionsBtn = new QToolButton(box5);
+    d->faceOptionsBtn->setToolTip( i18n("Face tags Matching Condition"));
+    d->faceOptionsBtn->setIcon(QIcon::fromTheme(QLatin1String("configure")));
+    d->faceOptionsBtn->setPopupMode(QToolButton::InstantPopup);
+    d->faceOptionsBtn->setWhatsThis(i18n("Defines in which way the selected tags are combined "
+                                        "to filter the images. This also includes the '%1' check box.",
+                                        notfaceTaggedTitle));
+
+    d->faceOptionsMenu  = new QMenu(d->faceOptionsBtn);
+    d->tagOrCondAction = d->faceOptionsMenu->addAction(i18n("OR"));
+    d->tagOrCondAction->setCheckable(true);
+    d->tagAndCondAction = d->faceOptionsMenu->addAction(i18n("AND"));
+    d->tagAndCondAction->setCheckable(true);
+    d->faceOptionsBtn->setMenu(d->faceOptionsMenu);
+
+    QGridLayout* const lay5 = new QGridLayout(box5);
+    lay5->addWidget(d->faceFilterView,      0, 0, 1, 3);
+    lay5->addWidget(d->faceFilterSearchBar, 1, 0, 1, 3);
+    lay5->addWidget(d->withoutFaceCheckBox, 2, 0, 1, 1);
+    lay5->addWidget(d->faceOptionsBtn,      2, 2, 1, 1);
+    lay5->setRowStretch(0, 100);
+    lay5->setColumnStretch(1, 10);
+    lay5->setContentsMargins(QMargins());
+    lay5->setSpacing(0);
+
+    d->expbox->addItem(box5, QIcon::fromTheme(QLatin1String("tag-assigned")), i18n("Face Tags Filter"), QLatin1String("FaceTagsFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
