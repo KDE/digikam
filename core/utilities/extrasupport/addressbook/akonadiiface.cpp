@@ -105,7 +105,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     QStringList names;
 
-    foreach(const KContacts::Addressee& addr, contacts)
+    foreach (const KContacts::Addressee& addr, contacts)
     {
         if (!addr.realName().isNull())
         {
@@ -124,7 +124,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     m_ABCmenu->clear();
 
-    foreach(const QString& name, names)
+    foreach (const QString& name, names)
     {
         m_ABCmenu->addAction(name);
     }
