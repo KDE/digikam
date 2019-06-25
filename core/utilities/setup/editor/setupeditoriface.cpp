@@ -231,10 +231,11 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
     QGroupBox* const restoreSettingsGroup = new QGroupBox(i18n("Tool Options"), panel);
     QVBoxLayout* const gLayout3           = new QVBoxLayout(restoreSettingsGroup);
 
-    d->restoreSettings                    = new QCheckBox(i18n("&Restore the tool settings of the last session"),
+    d->restoreSettings                    = new QCheckBox(i18n("&Restore the settings of the Image Editor tools"),
                                                           restoreSettingsGroup);
-    d->restoreSettings->setWhatsThis(i18n("Enable this option to restore the settings of the tools from the "
-                                          "last session. Otherwise the tools will use the default settings."));
+    d->restoreSettings->setWhatsThis(i18n("Enable this option to restore the settings of the Image "
+                                          "Editor tools from the last session. Otherwise, the "
+                                          "default settings will be used."));
 
     gLayout3->addWidget(d->restoreSettings);
     gLayout3->setContentsMargins(spacing, spacing, spacing, spacing);
