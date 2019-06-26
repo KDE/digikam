@@ -37,6 +37,7 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "applicationsettings.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -383,6 +384,22 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     if (!leftAlbum || !rightAlbum)
     {
         return QSortFilterProxyModel::lessThan(left, right);
+    }
+
+    if ((leftAlbum->id() == FaceTags::unconfirmedPersonTagId()) !=
+            (rightAlbum->id() == FaceTags::unconfirmedPersonTagId()))
+    {
+        // unconfirmed tag album go to the top, regardless of sort role
+        return (sortOrder() == Qt::AscendingOrder) ?
+                    leftAlbum->id() == FaceTags::unconfirmedPersonTagId() : leftAlbum->id() != FaceTags::unconfirmedPersonTagId();
+    }
+
+    if ((leftAlbum->id() == FaceTags::unknownPersonTagId()) !=
+            (rightAlbum->id() == FaceTags::unknownPersonTagId()))
+    {
+        // unknown tag albums go to the top, regardless of sort role
+        return (sortOrder() == Qt::AscendingOrder) ?
+                    leftAlbum->id() == FaceTags::unknownPersonTagId() : leftAlbum->id() != FaceTags::unknownPersonTagId();
     }
 
     if (leftAlbum->isTrashAlbum() != rightAlbum->isTrashAlbum())
