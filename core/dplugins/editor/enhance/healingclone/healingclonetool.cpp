@@ -45,7 +45,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "imagebrushguidewidget.h"
-#include<vector>
+
 
 namespace DigikamEditorHealingCloneToolPlugin
 {
@@ -80,15 +80,7 @@ public:
 };
 
 
-struct CloneInfo
-{
-  int dstX;
-  int dstY;
-  double scaleRatio;
-  DColor color;
-};
 
-std::vector<CloneInfo> CloneInfoVector;
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
 const QString HealingCloneTool::Private::configRadiusAdjustmentEntry(QLatin1String("RadiusAdjustment"));
@@ -171,6 +163,9 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     // --------------------------------------------------------
 
+    this->CloneInfoVector = new std::vector<CloneInfo>();
+    // --------------------------------------------------------
+
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotRadiusChanged(int)));
 
@@ -195,6 +190,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 HealingCloneTool::~HealingCloneTool()
 {
     delete d;
+    delete this->CloneInfoVector;
 }
 
 void HealingCloneTool::readSettings()
@@ -286,7 +282,7 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                 cSrc.blendAdd(cDst);
 
                 img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
-                CloneInfoVector.push_back({ dstPoint.x()+i, dstPoint.y()+j, scaleRatio,cSrc});
+                this->CloneInfoVector->push_back({dstPoint.x()+i, dstPoint.y()+j, scaleRatio,cSrc});
             }
         }
     }
@@ -302,12 +298,12 @@ void HealingCloneTool :: slotReclone()
     DImg* const img     = iface->previewReference();
 
 
-    for(int q = 0 ; q < CloneInfoVector.size(); q++)
+    for(int q = 0 ; q < CloneInfoVector->size(); q++)
     {
-        int x = CloneInfoVector[q].dstX;
-        int y = CloneInfoVector[q].dstY;
-        double thenScaleRatio = CloneInfoVector[q].scaleRatio;
-        DColor color = CloneInfoVector[q].color;
+        int x = (*CloneInfoVector)[q].dstX;
+        int y = (*CloneInfoVector)[q].dstY;
+        double thenScaleRatio = (*CloneInfoVector)[q].scaleRatio;
+        DColor color = (*CloneInfoVector)[q].color;
        double ratioOfRatios = currentScaleRatio/thenScaleRatio;
        int radius = ceil(ratioOfRatios);
        for(int k = 0 ; k < radius ; k++)

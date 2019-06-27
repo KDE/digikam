@@ -29,6 +29,7 @@
 
 #include "editortool.h"
 #include "dimg.h"
+#include<vector>
 
 using namespace Digikam;
 
@@ -89,7 +90,15 @@ private:
 private:
 
     class Private;
+    struct CloneInfo
+    {
+      int dstX;
+      int dstY;
+      double scaleRatio;
+      DColor color;
+    };
     Private* const d;
+    std::vector<CloneInfo> * CloneInfoVector;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin
