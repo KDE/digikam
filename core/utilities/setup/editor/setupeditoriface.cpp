@@ -61,6 +61,7 @@ public:
     explicit Private()
       : themebackgroundColor(nullptr),
         expoIndicatorMode(nullptr),
+        restoreSettings(nullptr),
         expoPreview(nullptr),
         colorBox(nullptr),
         backgroundColor(nullptr),
@@ -81,9 +82,11 @@ public:
     static const QString  configUnderExposurePercentsEntry;
     static const QString  configOverExposurePercentsEntry;
     static const QString  configExpoIndicatorModeEntry;
+    static const QString  configRestoreSettingsEntry;
 
     QCheckBox*            themebackgroundColor;
     QCheckBox*            expoIndicatorMode;
+    QCheckBox*            restoreSettings;
 
     QLabel*               expoPreview;
 
@@ -110,6 +113,7 @@ const QString SetupEditorIface::Private::configOverExposureColorEntry(QLatin1Str
 const QString SetupEditorIface::Private::configUnderExposurePercentsEntry(QLatin1String("UnderExposurePercentsEntry"));
 const QString SetupEditorIface::Private::configOverExposurePercentsEntry(QLatin1String("OverExposurePercentsEntry"));
 const QString SetupEditorIface::Private::configExpoIndicatorModeEntry(QLatin1String("ExpoIndicatorMode"));
+const QString SetupEditorIface::Private::configRestoreSettingsEntry(QLatin1String("RestoreToolSettings"));
 
 // --------------------------------------------------------
 
@@ -129,7 +133,8 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
     QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Interface Options"), panel);
     QVBoxLayout* const gLayout1            = new QVBoxLayout(interfaceOptionsGroup);
 
-    d->themebackgroundColor                = new QCheckBox(i18n("&Use theme background color"), interfaceOptionsGroup);
+    d->themebackgroundColor                = new QCheckBox(i18n("&Use theme background color"),
+                                                           interfaceOptionsGroup);
 
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
                                                "color in the image editor area."));
@@ -194,7 +199,8 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
     QLabel* const exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
     d->expoPreview             = new QLabel(exposureOptionsGroup);
     d->expoPreviewHisto        = new HistogramWidget(256, 128, exposureOptionsGroup, false, false);
-    d->preview                 = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/sample-aix.png")));
+    d->preview                 = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                             QLatin1String("digikam/data/sample-aix.png")));
 
     if (!d->preview.isNull())
     {
@@ -222,9 +228,25 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    QGroupBox* const restoreSettingsGroup = new QGroupBox(i18n("Tool Options"), panel);
+    QVBoxLayout* const gLayout3           = new QVBoxLayout(restoreSettingsGroup);
+
+    d->restoreSettings                    = new QCheckBox(i18n("&Restore the settings of the Image Editor tools"),
+                                                          restoreSettingsGroup);
+    d->restoreSettings->setWhatsThis(i18n("Enable this option to restore the settings of the Image "
+                                          "Editor tools from the last session. Otherwise, the "
+                                          "default settings will be used."));
+
+    gLayout3->addWidget(d->restoreSettings);
+    gLayout3->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout3->setSpacing(spacing);
+
+    // --------------------------------------------------------
+
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(d->fullScreenSettings);
     layout->addWidget(exposureOptionsGroup);
+    layout->addWidget(restoreSettingsGroup);
     layout->addStretch();
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
@@ -319,6 +341,7 @@ void SetupEditorIface::readSettings()
     d->expoIndicatorMode->setChecked(group.readEntry(d->configExpoIndicatorModeEntry,          true));
     d->underExposurePcents->setValue(group.readEntry(d->configUnderExposurePercentsEntry,      1.0));
     d->overExposurePcents->setValue(group.readEntry(d->configOverExposurePercentsEntry,        1.0));
+    d->restoreSettings->setChecked(group.readEntry(d->configRestoreSettingsEntry,              true));
     d->fullScreenSettings->readSettings(group);
 }
 
@@ -333,6 +356,7 @@ void SetupEditorIface::applySettings()
     group.writeEntry(d->configExpoIndicatorModeEntry,       d->expoIndicatorMode->isChecked());
     group.writeEntry(d->configUnderExposurePercentsEntry,   d->underExposurePcents->value());
     group.writeEntry(d->configOverExposurePercentsEntry,    d->overExposurePcents->value());
+    group.writeEntry(d->configRestoreSettingsEntry,         d->restoreSettings->isChecked());
 
     d->fullScreenSettings->saveSettings(group);
 

@@ -56,7 +56,6 @@
 namespace Digikam
 {
 
-// TODO: Port from KABC::AddressBook to libakonadi-kontact. For instance using Akonadi::ContactSearchJob.
 // See http://techbase.kde.org/Development/AkonadiPorting/AddressBook
 
 AkonadiIface::AkonadiIface(QMenu* const parent)
@@ -68,7 +67,7 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     m_ABCmenu = new QMenu(m_parent);
 
     QAction* const abcAction = m_ABCmenu->menuAction();
-    abcAction->setIcon(QIcon::fromTheme(QLatin1String("tag-addressbook")));
+    abcAction->setIcon(QIcon::fromTheme(QLatin1String("address-book-new")));
     abcAction->setText(i18n("Create Tag From Address Book"));
     m_parent->addMenu(m_ABCmenu);
 
@@ -76,7 +75,6 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     nothingFound->setEnabled(false);
 
     Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
-    job->setQuery(Akonadi::ContactSearchJob::ContactUid, QLatin1String(""));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotABCSearchResult(KJob*)));
@@ -106,7 +104,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     QStringList names;
 
-    foreach(const KContacts::Addressee& addr, contacts)
+    foreach (const KContacts::Addressee& addr, contacts)
     {
         if (!addr.realName().isNull())
         {
@@ -125,9 +123,9 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     m_ABCmenu->clear();
 
-    foreach(const QString& name, names)
+    foreach (const QString& name, names)
     {
-        m_ABCmenu->addAction(name);
+        m_ABCmenu->addAction(QIcon::fromTheme(QLatin1String("im-user")), name);
     }
 
     connect(m_ABCmenu, SIGNAL(triggered(QAction*)),
