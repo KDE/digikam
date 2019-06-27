@@ -45,6 +45,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "imagebrushguidewidget.h"
+#include<vector>
 
 namespace DigikamEditorHealingCloneToolPlugin
 {
@@ -77,6 +78,17 @@ public:
     QPoint                  destinationStartPoint;
     QPushButton*            srcButton;
 };
+
+
+struct CloneInfo
+{
+  int dstX;
+  int dstY;
+  double scaleRatio;
+  DColor color;
+};
+
+std::vector<CloneInfo> CloneInfoVector;
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
 const QString HealingCloneTool::Private::configRadiusAdjustmentEntry(QLatin1String("RadiusAdjustment"));
@@ -174,6 +186,9 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));
 
+    connect(d->previewWidget, SIGNAL(signalReclone()),
+            this, SLOT(slotReclone()));
+
 
 }
 
@@ -245,6 +260,7 @@ void HealingCloneTool :: slotZoomPercentChanged(int z)
 void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoint& dstPoint, int radius)
 {
     double blurPercent = d->blurPercent->value() / 100;
+    double scaleRatio = d->previewWidget->getScaleRatio();
 
     for (int i = -1 * radius ; i < radius ; ++i)
     {
@@ -270,11 +286,45 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                 cSrc.blendAdd(cDst);
 
                 img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
+                CloneInfoVector.push_back({ dstPoint.x()+i, dstPoint.y()+j, scaleRatio,cSrc});
             }
         }
     }
 }
 
+
+void HealingCloneTool :: slotReclone()
+{
+
+    double currentScaleRatio = d->previewWidget->getScaleRatio();
+
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg* const img     = iface->previewReference();
+
+
+    for(int q = 0 ; q < CloneInfoVector.size(); q++)
+    {
+        int x = CloneInfoVector[q].dstX;
+        int y = CloneInfoVector[q].dstY;
+        double thenScaleRatio = CloneInfoVector[q].scaleRatio;
+        DColor color = CloneInfoVector[q].color;
+       double ratioOfRatios = currentScaleRatio/thenScaleRatio;
+       int radius = ceil(ratioOfRatios);
+       for(int k = 0 ; k < radius ; k++)
+       {
+           for(int s = 0 ; s<radius ; s++)
+           {
+               img->setPixelColor(round(x * currentScaleRatio/thenScaleRatio)+k,
+                                  round(y*currentScaleRatio/thenScaleRatio) + s ,
+                                  color);
+
+           }
+       }
+    }
+
+    d->previewWidget->updatePreview();
+
+}
 
 
 } // namespace DigikamEditorHealingCloneToolPlugin

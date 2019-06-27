@@ -55,6 +55,18 @@ namespace DigikamEditorHealingCloneToolPlugin
     //this->slotPreviewModeChanged(PreviewToolBar::PreviewToggleOnMouseOver);
 
  }
+
+ double ImageBrushGuideWidget::getScaleRatio()
+ {
+     if(first_time)
+     {
+         setDefaults();
+         first_time = false;
+     }
+
+     return this->width()/this->default_w;
+
+ }
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
 
@@ -236,7 +248,7 @@ void ImageBrushGuideWidget::zoomImage(int zoomPercent)
         first_time = false;
     }
     this->float_h = this->default_h * zoomPercent/100.0;
-    this->float_w = this->default_w * zoomPercent/100.0;
+    this->float_w = this->default_w  * zoomPercent/100.0;
     this->resize((int)this->float_w, (int)this->float_h);
     qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "zooom " << zoomPercent << this->float_h << this->float_w;
 
@@ -248,27 +260,8 @@ void ImageBrushGuideWidget::zoomImage(int zoomPercent)
 void ImageBrushGuideWidget::resizeEvent(QResizeEvent* e)
 {
     qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Resized!";
-
-    // This is a second viable option to try in case saving the image as original before
-    // resize is not acceptable.
-    // In this option, I will just re-clone every single pixel cloned again
-    //following every resize.
-
-    //img->setPixelColor(100, 100, DColor(255,0,0));
-
-    if(!firstResize)
-    {
-        ImageIface iface;
-        DImg dest = this->imageIface()->preview();
-        FilterAction action(QLatin1String("digikam:healingCloneTool"), 1);
-        iface.setOriginal(i18n("healingClone"), action, dest);
-        ImageGuideWidget::resizeEvent(e);
-    }
-    else {
-        firstResize = false;
-        ImageGuideWidget::resizeEvent(e);
-    }
-    this->updatePreview();
+    ImageGuideWidget::resizeEvent(e);
+    emit signalReclone();
 
 }
 

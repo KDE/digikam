@@ -68,6 +68,7 @@ public Q_SLOTS:
     void slotReplace(const QPoint& srcPoint, const QPoint& dstPoint);
     void slotRadiusChanged(int r);
     void slotZoomPercentChanged(int z);
+    void slotReclone();
 
 private:
 

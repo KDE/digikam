@@ -48,6 +48,7 @@ public:
     using ImageGuideWidget::ImageGuideWidget;
     void setDefaults();
     void zoomImage(int zoomPercent);
+    double getScaleRatio();
 
     explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
                               bool spotVisible = true,
@@ -71,6 +72,7 @@ Q_SIGNALS:
      * and keeps emitting with motion
      */
     void signalClone(const QPoint& currentSrc, const QPoint& currentDst);
+    void signalReclone();
 
 protected:
 
@@ -93,10 +95,10 @@ private:
     QPoint oldPos;
     bool isMPressed= false;
     bool isSPressed = false;
-    int default_w;
-    int default_h;
-    float float_w;
-    float float_h;
+    double default_w;
+    double default_h;
+    double float_w;
+    double float_h;
     bool first_time = true;
     bool firstResize = true;
 };
