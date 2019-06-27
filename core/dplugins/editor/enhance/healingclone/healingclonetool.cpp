@@ -217,7 +217,10 @@ void HealingCloneTool::slotResetSettings()
 
 void HealingCloneTool::slotResized()
 {
+
+    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Resized!!" ;
     toolView()->update();
+
 }
 
 void HealingCloneTool::slotReplace(const QPoint& srcPoint, const QPoint& dstPoint)
@@ -271,5 +274,7 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
         }
     }
 }
+
+
 
 } // namespace DigikamEditorHealingCloneToolPlugin

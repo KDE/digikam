@@ -75,6 +75,7 @@ private:
     void writeSettings();
     void finalRendering();
 
+
     /**
      * @brief clone the method responsible for the clone/heal of preview image
      * @param img the preview image is passed to this method by reference

@@ -27,6 +27,9 @@
 
 #include "digikam_debug.h"
 
+// KDE includes
+#include <klocalizedstring.h>
+
 namespace DigikamEditorHealingCloneToolPlugin
 {
 
@@ -39,8 +42,7 @@ namespace DigikamEditorHealingCloneToolPlugin
                           ImageIface::PreviewType type):
      ImageGuideWidget( parent, spotVisible, guideMode , guideColor,  guideSize , blink, type)
 {
-
-
+   // this->slotPreviewModeChanged(PreviewToolBar::PreviewToggleOnMouseOver);
 }
 
  void ImageBrushGuideWidget::setDefaults()
@@ -50,23 +52,25 @@ namespace DigikamEditorHealingCloneToolPlugin
      this->float_h = default_h;
      this->float_w = default_w;
     setFocus();
+    //this->slotPreviewModeChanged(PreviewToolBar::PreviewToggleOnMouseOver);
+
  }
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
 
     if(!isMPressed)
         oldPos = e->globalPos() ;
-    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "MPressed is: " <<isMPressed;
+
     if (isMPressed)
     {
         const QPoint delta = e->globalPos() - oldPos;
         move(x()+delta.x(), y()+delta.y());
         oldPos = e->globalPos();
-        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Right@: " << x() << ", "<< y();
+
     }
     else if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
-        qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Move The location is: " << e->x() << ", "<< e->y();
+
 
         QPoint currentDst = QPoint(e->x(), e->y());
 
@@ -238,5 +242,35 @@ void ImageBrushGuideWidget::zoomImage(int zoomPercent)
 
 
 }
+
+
+
+void ImageBrushGuideWidget::resizeEvent(QResizeEvent* e)
+{
+    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Resized!";
+
+    // This is a second viable option to try in case saving the image as original before
+    // resize is not acceptable.
+    // In this option, I will just re-clone every single pixel cloned again
+    //following every resize.
+
+    //img->setPixelColor(100, 100, DColor(255,0,0));
+
+    if(!firstResize)
+    {
+        ImageIface iface;
+        DImg dest = this->imageIface()->preview();
+        FilterAction action(QLatin1String("digikam:healingCloneTool"), 1);
+        iface.setOriginal(i18n("healingClone"), action, dest);
+        ImageGuideWidget::resizeEvent(e);
+    }
+    else {
+        firstResize = false;
+        ImageGuideWidget::resizeEvent(e);
+    }
+    this->updatePreview();
+
+}
+
 
 } // namespace DigikamEditorHealingCloneToolPlugin

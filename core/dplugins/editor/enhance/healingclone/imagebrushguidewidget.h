@@ -27,6 +27,7 @@
 // Local includes
 
 #include "imageguidewidget.h"
+#include "previewtoolbar.h"
 #include <QPainter>
 
 using namespace Digikam;
@@ -78,6 +79,7 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent *event) ;
     void keyReleaseEvent(QKeyEvent *event) ;
+    void resizeEvent(QResizeEvent *) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
 
@@ -96,6 +98,7 @@ private:
     float float_w;
     float float_h;
     bool first_time = true;
+    bool firstResize = true;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin
