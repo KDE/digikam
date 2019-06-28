@@ -48,6 +48,8 @@ public:
     using ImageGuideWidget::ImageGuideWidget;
     void setDefaults();
     void zoomImage(int zoomPercent);
+    void zoomPlus();
+    void zoomMinus();
     double getScaleRatio();
 
     explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
@@ -82,6 +84,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) ;
     void keyReleaseEvent(QKeyEvent *event) ;
     void resizeEvent(QResizeEvent *) override;
+    void wheelEvent(QWheelEvent *event) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
 
