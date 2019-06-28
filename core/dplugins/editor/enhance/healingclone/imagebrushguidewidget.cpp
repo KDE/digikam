@@ -69,6 +69,7 @@ namespace DigikamEditorHealingCloneToolPlugin
 void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
 
+
     if(!isMPressed)
         oldPos = e->globalPos() ;
 
@@ -133,7 +134,12 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
 
      oldPos = e->globalPos() ;
 
-     if (isMPressed && (e->buttons() & Qt::LeftButton))
+     qCDebug(DIGIKAM_GENERAL_LOG) << "Inside MousePress " << this->amIFocused;
+     if(!this->amIFocused)
+     {
+         this->amIFocused = true;
+     }
+     else if (isMPressed && (e->buttons() & Qt::LeftButton))
      {
          setCursor(Qt::ClosedHandCursor);
      }
@@ -215,7 +221,15 @@ void ImageBrushGuideWidget:: wheelEvent(QWheelEvent *e)
         zoomMinus();
 }
 
+void ImageBrushGuideWidget::focusOutEvent(QFocusEvent *event)
+{
+    this->amIFocused = false;
+}
 
+void ImageBrushGuideWidget::focusInEvent(QFocusEvent *event)
+{
+
+}
 void ImageBrushGuideWidget::slotSetSourcePoint()
 {
     srcSet = true;

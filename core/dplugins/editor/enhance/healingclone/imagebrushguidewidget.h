@@ -85,6 +85,8 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) ;
     void resizeEvent(QResizeEvent *) override;
     void wheelEvent(QWheelEvent *event) override;
+    void focusOutEvent(QFocusEvent* event) override;
+    void focusInEvent(QFocusEvent * event) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
 
@@ -103,7 +105,7 @@ private:
     double float_w;
     double float_h;
     bool first_time = true;
-    bool firstResize = true;
+    bool amIFocused = false;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin
