@@ -49,7 +49,7 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
 
 Q_SIGNALS:
 
@@ -84,11 +84,11 @@ protected:
     void updatePosition();
     void updateRating();
 
-    virtual QWidget* createWidget();
-    virtual void setActive(bool);
-    virtual void visualChange();
-    virtual void slotEntered(const QModelIndex& index);
-    virtual bool checkIndex(const QModelIndex& index) const;
+    virtual QWidget* createWidget() override;
+    virtual void setActive(bool) override;
+    virtual void visualChange() override;
+    virtual void slotEntered(const QModelIndex& index) override;
+    virtual bool checkIndex(const QModelIndex& index) const override;
 
 protected:
 

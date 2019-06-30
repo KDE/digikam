@@ -71,9 +71,9 @@ public:
 
 protected:
 
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-    void paintEvent(QPaintEvent*);
+    void enterEvent(QEvent*) override;
+    void leaveEvent(QEvent*) override;
+    void paintEvent(QPaintEvent*) override;
     void updateToolTip();
 
 private Q_SLOTS:

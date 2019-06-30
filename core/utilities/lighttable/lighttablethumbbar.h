@@ -81,7 +81,7 @@ public Q_SLOTS:
 
 private:
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
     void showContextMenuOnInfo(QContextMenuEvent* e, const ItemInfo& info);
     void assignPickLabel(const ItemInfo& info, int pickId);
     void assignColorLabel(const ItemInfo& info, int colorId);

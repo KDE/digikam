@@ -84,7 +84,7 @@ private:
 
     void uploadNextItem();
 
-    void closeEvent(QCloseEvent* e) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent* e) override;
 
 private Q_SLOTS:
 

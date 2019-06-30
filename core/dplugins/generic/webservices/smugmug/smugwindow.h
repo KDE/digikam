@@ -65,7 +65,7 @@ public:
 
 protected:
 
-    void closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent*) override;
 
 private Q_SLOTS:
 
@@ -117,7 +117,7 @@ private Q_SLOTS:
     void slotDialogFinished();
 
     void slotImageListChanged();
-    
+
     void slotTemplateSelectionChanged(int index);
     /**
      * Categories now are deprecated in API v2

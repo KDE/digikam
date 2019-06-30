@@ -86,14 +86,14 @@ Q_SIGNALS:
 
 protected:
 
-    bool acceptsMouseClick(QMouseEvent* e);
-    void mousePressEvent(QMouseEvent* e);
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
-    void showEvent(QShowEvent* e);
-    void dropEvent(QDropEvent* e);
-    void dragMoveEvent(QDragMoveEvent* e);
-    void dragEnterEvent(QDragEnterEvent* e);
+    bool acceptsMouseClick(QMouseEvent* e) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void enterEvent(QEvent* e) override;
+    void leaveEvent(QEvent* e) override;
+    void showEvent(QShowEvent* e) override;
+    void dropEvent(QDropEvent* e) override;
+    void dragMoveEvent(QDragMoveEvent* e) override;
+    void dragEnterEvent(QDragEnterEvent* e) override;
 
 private Q_SLOTS:
 

@@ -114,7 +114,7 @@ protected:
 
     void readSettings();
     void saveSettings();
-    void closeEvent(QCloseEvent* e);
+    void closeEvent(QCloseEvent* e) override;
     void createMenus();
 
 private Q_SLOTS:

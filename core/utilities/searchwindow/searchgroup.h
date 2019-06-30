@@ -127,7 +127,7 @@ protected:
     void adjustOperatorOptions();
     void updateGroupLabel();
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
 
 private:
 

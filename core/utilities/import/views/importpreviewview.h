@@ -84,10 +84,10 @@ Q_SIGNALS:
 
 protected:
 
-    bool acceptsMouseClick(QMouseEvent* e);
-    void enterEvent(QEvent* e);
-    void leaveEvent(QEvent* e);
-    void showEvent(QShowEvent* e);
+    bool acceptsMouseClick(QMouseEvent* e) override;
+    void enterEvent(QEvent* e) override;
+    void leaveEvent(QEvent* e) override;
+    void showEvent(QShowEvent* e) override;
 
 private Q_SLOTS:
 

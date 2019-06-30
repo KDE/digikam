@@ -59,9 +59,9 @@ public:
 
 protected:
 
-    void resizeEvent(QResizeEvent* e);
-    void paintEvent(QPaintEvent*);
-    void mousePressEvent(QMouseEvent* e);
+    void resizeEvent(QResizeEvent* e) override;
+    void paintEvent(QPaintEvent*) override;
+    void mousePressEvent(QMouseEvent* e) override;
 
 private:
 
