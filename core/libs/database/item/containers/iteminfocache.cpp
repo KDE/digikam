@@ -219,7 +219,17 @@ QList<AlbumShortInfo>::const_iterator ItemInfoCache::findAlbum(int id)
     AlbumShortInfo info;
     info.id = id;
     // we use the fact that d->infos is sorted by id
-    return qBinaryFind(m_albums.constBegin(), m_albums.constEnd(), info, lessThanForAlbumShortInfo);
+    QList<AlbumShortInfo>::const_iterator it;
+    it = std::lower_bound(m_albums.constBegin(),
+                          m_albums.constEnd(), info,
+                          lessThanForAlbumShortInfo);
+
+    if (it == m_albums.constEnd() || info.id < (*it).id)
+    {
+        return m_albums.constEnd();
+    }
+
+    return it;
 }
 
 QString ItemInfoCache::albumRelativePath(int albumId)
