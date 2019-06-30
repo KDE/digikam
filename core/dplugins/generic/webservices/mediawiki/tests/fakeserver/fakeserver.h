@@ -78,7 +78,7 @@ public:
     ~FakeServer();
 
     void startAndWait();
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
     void setScenario(const QString& scenario, const QString& cookie = QStringLiteral("empty"));
     void addScenario(const QString& scenario, const QString& cookie = QStringLiteral("empty"));

@@ -32,6 +32,7 @@
 
 // KDE includes
 
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -65,6 +66,9 @@ public:
     {
     }
 
+    static const QString   configGroupName;
+    static const QString   configRestoreSettingsEntry;
+
     bool                   initPreview;
     QString                helpAnchor;
     QString                name;
@@ -77,9 +81,14 @@ public:
     EditorToolSettings*    settings;
 
     FilterAction::Category category;
-    
+
     DPluginEditor*         plugin;
 };
+
+const QString EditorTool::Private::configGroupName(QLatin1String("ImageViewer Settings"));
+const QString EditorTool::Private::configRestoreSettingsEntry(QLatin1String("RestoreToolSettings"));
+
+// --------------------------------------------------------
 
 EditorTool::EditorTool(QObject* const parent)
     : QObject(parent),
@@ -231,7 +240,20 @@ void EditorTool::setToolSettings(EditorToolSettings* const settings)
 
 void EditorTool::slotInit()
 {
-    readSettings();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->configGroupName);
+
+    // We always have to call readSettings(), some tools need it.
+    if (group.readEntry(d->configRestoreSettingsEntry, true))
+    {
+        readSettings();
+    }
+    else
+    {
+        writeSettings();
+        readSettings();
+    }
+
     // Unlock signals from preview and settings widgets when init is done.
     d->view->blockSignals(false);
     d->settings->blockSignals(false);

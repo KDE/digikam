@@ -48,7 +48,7 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
 };
 
 // ----------------------------------------------------------------------
@@ -67,11 +67,11 @@ protected:
 
     void updatePosition();
 
-    virtual QWidget* createWidget();
-    virtual void setActive(bool active);
-    virtual void visualChange();
-    virtual bool checkIndex(const QModelIndex& index) const;
-    virtual void slotEntered(const QModelIndex& index);
+    virtual QWidget* createWidget() override;
+    virtual void setActive(bool active) override;
+    virtual void visualChange() override;
+    virtual bool checkIndex(const QModelIndex& index) const override;
+    virtual void slotEntered(const QModelIndex& index) override;
 
 protected:
 

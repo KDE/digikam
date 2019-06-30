@@ -109,8 +109,8 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual bool eventFilter(QObject*, QEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
+    virtual bool eventFilter(QObject*, QEvent*) override;
+    virtual void mousePressEvent(QMouseEvent*) override;
 
     /**
      * Sets the date, without altering the display.

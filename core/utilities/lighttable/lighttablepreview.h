@@ -57,9 +57,9 @@ Q_SIGNALS:
 
 private:
 
-    void dragMoveEvent(QDragMoveEvent*);
-    void dragEnterEvent(QDragEnterEvent*);
-    void dropEvent(QDropEvent*);
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dropEvent(QDropEvent*) override;
     bool dragEventWrapper(const QMimeData*) const;
 };
 

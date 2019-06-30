@@ -74,7 +74,7 @@ protected:
      *
      * @param event context menu event triggered by right click
      */
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
 protected:
 

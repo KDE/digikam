@@ -63,14 +63,14 @@ public:
 
 protected:
 
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject* watched, QEvent* event) override;
 
     DECLARE_VIEW_DRAG_DROP_METHODS(QTreeView)
 
-    virtual AbstractItemDragDropHandler* dragDropHandler() const;
-    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
-    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
-    virtual void wheelEvent(QWheelEvent* event);
+    virtual AbstractItemDragDropHandler* dragDropHandler() const override;
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const override;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const override;
+    virtual void wheelEvent(QWheelEvent* event) override;
 
     virtual bool hasHiddenGroupedImages(const ItemInfo& info) const;
 

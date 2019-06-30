@@ -94,7 +94,7 @@ private:
 
     QString guessSensibleSetName(const QList<QUrl>& urlList) const;
 
-    void closeEvent(QCloseEvent*)  Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent*) override;
     void readSettings(QString uname);
     void writeSettings();
 

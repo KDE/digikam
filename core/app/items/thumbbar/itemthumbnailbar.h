@@ -65,8 +65,8 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void slotSetupChanged();
-    virtual bool event(QEvent*);
+    virtual void slotSetupChanged() override;
+    virtual bool event(QEvent*) override;
 
 private:
 

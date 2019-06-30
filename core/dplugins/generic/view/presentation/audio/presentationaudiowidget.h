@@ -57,7 +57,7 @@ public:
     bool canHide() const;
     bool isPaused() const;
     void setPaused(bool);
-    void keyPressEvent(QKeyEvent*);
+    void keyPressEvent(QKeyEvent*) override;
 
 public Q_SLOTS:
 

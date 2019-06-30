@@ -156,8 +156,8 @@ Q_SIGNALS:
 
 protected:
 
-    void keyPressEvent(QKeyEvent* e);
-    void showEvent(QShowEvent* e);
+    void keyPressEvent(QKeyEvent* e) override;
+    void showEvent(QShowEvent* e) override;
 
 protected Q_SLOTS:
 

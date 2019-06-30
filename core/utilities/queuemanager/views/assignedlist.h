@@ -111,13 +111,13 @@ private:
     void assignTools(const QMap<int, QString>& map, AssignedListViewItem* const preceding);
     void refreshIndex();
 
-    Qt::DropActions supportedDropActions()                        const;
-    QStringList     mimeTypes()                                   const;
-    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const;
+    Qt::DropActions supportedDropActions()                        const override;
+    QStringList     mimeTypes()                                   const override;
+    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const override;
 
-    void dragEnterEvent(QDragEnterEvent*);
-    void dragMoveEvent(QDragMoveEvent*);
-    void dropEvent(QDropEvent*);
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dropEvent(QDropEvent*) override;
 };
 
 } // namespace Digikam

@@ -51,7 +51,7 @@ public:
 
     explicit DatePickerValidator(DDatePicker* const parent);
 
-    State validate(QString& text, int&) const Q_DECL_OVERRIDE;
+    State validate(QString& text, int&) const override;
 
 private:
 

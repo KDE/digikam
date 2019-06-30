@@ -56,7 +56,7 @@ public:
                       const QString& toolName);
     ~DBWidget();
 
-    void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
+    void updateLabels(const QString& name = QString(), const QString& url = QString()) override;
 
 private:
 

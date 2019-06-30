@@ -107,8 +107,8 @@ public Q_SLOTS:
 
 protected:
 
-    void closeEvent(QCloseEvent* e);
-    void moveEvent(QMoveEvent* e);
+    void closeEvent(QCloseEvent* e) override;
+    void moveEvent(QMoveEvent* e) override;
 
 private:
 

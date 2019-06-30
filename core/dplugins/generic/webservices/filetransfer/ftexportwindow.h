@@ -113,7 +113,7 @@ protected:
     /**
      * Handle Close event from dialog title bar.
      */
-    void closeEvent(QCloseEvent* e) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent* e) override;
 
     /**
      * Refresh status (enabled / disabled) of the upload button according to

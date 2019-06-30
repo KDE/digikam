@@ -49,8 +49,8 @@ protected:
     /**
      * Reimplemented methods to enable custom drag-n-drop in QListView
      */
-    void startDrag(Qt::DropActions supportedActions);
-    void dropEvent(QDropEvent *e);
+    void startDrag(Qt::DropActions supportedActions) override;
+    void dropEvent(QDropEvent *e) override;
 
     QModelIndex indexVisuallyAt(const QPoint& p);
 
@@ -58,7 +58,7 @@ protected:
      * @brief contextMenuEvent - reimplemented method from QListView
      *                           to handle custom context menu
      */
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
 
 public Q_SLOTS:

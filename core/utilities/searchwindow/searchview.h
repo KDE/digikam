@@ -144,8 +144,8 @@ protected:
 
     QPixmap cachedBannerPixmap(int w, int h) const;
 
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void showEvent(QShowEvent* event);
+    virtual void paintEvent(QPaintEvent* e) override;
+    virtual void showEvent(QShowEvent* event) override;
 
     virtual SearchGroup* createSearchGroup();
     virtual void addGroupToLayout(SearchGroup* group);
@@ -176,7 +176,7 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) override;
 
 protected:
 

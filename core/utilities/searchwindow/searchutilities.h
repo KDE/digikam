@@ -88,8 +88,8 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 protected Q_SLOTS:
 

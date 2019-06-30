@@ -51,8 +51,8 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
+    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
 private:
 
