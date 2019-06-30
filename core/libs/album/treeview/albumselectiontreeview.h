@@ -82,7 +82,7 @@ private:
      *
      * @param event event to process.
      */
-    bool viewportEvent(QEvent* event);
+    bool viewportEvent(QEvent* event) override;
 
 private:
 

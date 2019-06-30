@@ -48,8 +48,8 @@ protected:
     /**
      * Reimplemented methods to enable custom drag-n-drop in QListView
      */
-    void startDrag(Qt::DropActions supportedActions);
-    void dropEvent(QDropEvent* e);
+    void startDrag(Qt::DropActions supportedActions) override;
+    void dropEvent(QDropEvent* e) override;
 
     QModelIndex indexVisuallyAt(const QPoint& p);
 

@@ -69,13 +69,13 @@ private:
 
     bool isReallyFullScreen() const;
 
-    void keyPressEvent(QKeyEvent* e);
-    void keyReleaseEvent(QKeyEvent* e);
-    void wheelEvent(QWheelEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
-    void mousePressEvent(QMouseEvent* e);
-    void mouseDoubleClickEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
+    void keyPressEvent(QKeyEvent* e) override;
+    void keyReleaseEvent(QKeyEvent* e) override;
+    void wheelEvent(QWheelEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseDoubleClickEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
 
     GLViewerTexture* loadImage(int file_index) const;
     void drawImage(GLViewerTexture* const tex);

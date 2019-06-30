@@ -88,8 +88,8 @@ public:
 
 protected:
 
-    void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
+    void parseResponse(QXmlQuery& response, RajceSession& state) override;
+    void cleanUpOnError(RajceSession& state)                     override;
 };
 
 // -----------------------------------------------------------------------
@@ -102,8 +102,8 @@ public:
 
 protected:
 
-    void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
+    void parseResponse(QXmlQuery& response, RajceSession& state) override;
+    void cleanUpOnError(RajceSession& state)                     override;
 };
 
 // -----------------------------------------------------------------------
@@ -119,8 +119,8 @@ public:
 
 protected:
 
-    void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
+    void parseResponse(QXmlQuery& response, RajceSession& state) override;
+    void cleanUpOnError(RajceSession& state)                     override;
 };
 
 // -----------------------------------------------------------------------
@@ -133,8 +133,8 @@ public:
 
 protected:
 
-    void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
+    void parseResponse(QXmlQuery& response, RajceSession& state) override;
+    void cleanUpOnError(RajceSession& state)                     override;
 };
 
 // -----------------------------------------------------------------------
@@ -147,8 +147,8 @@ public:
 
 protected:
 
-    void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
+    void parseResponse(QXmlQuery& response, RajceSession& state) override;
+    void cleanUpOnError(RajceSession& state)                     override;
 };
 
 // -----------------------------------------------------------------------
@@ -166,14 +166,14 @@ public:
 
 public:
 
-    QByteArray encode()      const Q_DECL_OVERRIDE;
-    QString    contentType() const Q_DECL_OVERRIDE;
+    QByteArray encode()      const override;
+    QString    contentType() const override;
 
 protected:
 
-    void    cleanUpOnError(RajceSession& state)                  Q_DECL_OVERRIDE;
-    void    parseResponse(QXmlQuery& query, RajceSession& state) Q_DECL_OVERRIDE;
-    QString additionalXml() const                                Q_DECL_OVERRIDE;
+    void    cleanUpOnError(RajceSession& state)                  override;
+    void    parseResponse(QXmlQuery& query, RajceSession& state) override;
+    QString additionalXml() const                                override;
 
 private:
 

@@ -265,7 +265,7 @@ public:
     /**
      * Reimplemented for internal reasons.
      */
-    QSize sizeHint(void) const Q_DECL_OVERRIDE;
+    QSize sizeHint(void) const override;
 
 Q_SIGNALS:
 

@@ -54,9 +54,9 @@ public:
 
 protected:
 
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* e);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* e);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* e);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* e) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* e) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent* e) override;
 
 private:
 

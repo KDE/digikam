@@ -67,10 +67,10 @@ public:
 
 protected:
 
-    void    mousePressEvent(QMouseEvent*);
-    void    mouseMoveEvent(QMouseEvent*);
-    void    wheelEvent(QWheelEvent*);
-    void    keyPressEvent(QKeyEvent*);
+    void    mousePressEvent(QMouseEvent*) override;
+    void    mouseMoveEvent(QMouseEvent*) override;
+    void    wheelEvent(QWheelEvent*) override;
+    void    keyPressEvent(QKeyEvent*) override;
 
     int     effectNone(bool);
     int     effectChessboard(bool doInit);

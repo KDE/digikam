@@ -72,8 +72,8 @@ private Q_SLOTS:
 
 protected:
 
-    void closeEvent(QCloseEvent*);
-    bool eventFilter(QObject*, QEvent*);
+    void closeEvent(QCloseEvent*) override;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private:
 

@@ -64,7 +64,7 @@ Q_SIGNALS:
 
 protected:
 
-    void keyPressEvent(QKeyEvent* event);
+    void keyPressEvent(QKeyEvent* event) override;
 
 private Q_SLOTS:
 

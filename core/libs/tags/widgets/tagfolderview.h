@@ -81,7 +81,7 @@ Q_SIGNALS:
 
 protected:
 
-    QString contextMenuTitle() const;
+    QString contextMenuTitle() const override;
 
     /**
      * Hook method to add custom actions to the generated context menu.
@@ -95,7 +95,7 @@ protected:
      * @param album tag on which the context menu will be created. May be null if
      *              it is requested on no tag entry
      */
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album) override;
 
     /**
      * Hook method to handle the custom context menu actions that were added
@@ -106,7 +106,7 @@ protected:
      * @param album the tag on which the context menu was requested. May be null
      *              if there was no
      */
-    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
+    virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album) override;
 
     /**
      * Reimplement contextMenuEvent from AbstractAlbumTree to support multiple
@@ -114,7 +114,7 @@ protected:
      *
      * @param event context menu event triggered by right click
      */
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
     /**
      * Implementation of AddCustomContextMenuActions(see above) that handle
@@ -126,7 +126,7 @@ protected:
      */
     virtual void setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums);
 
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event) override;
 
 private Q_SLOTS:
 

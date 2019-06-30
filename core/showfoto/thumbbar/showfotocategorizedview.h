@@ -51,7 +51,7 @@ public:
 
     void setModels(ShowfotoItemModel* model, ShowfotoSortFilterModel* filterModel);
 
-    ShowfotoItemModel*         showfotoItemModel()                    const;
+    ShowfotoItemModel*          showfotoItemModel()                     const;
     ShowfotoSortFilterModel*    showfotoSortFilterModel()               const;
 
     QItemSelectionModel*        getSelectionModel()                     const;
@@ -157,16 +157,16 @@ Q_SIGNALS:
 protected:
 
     // reimplemented from parent class
-    QSortFilterProxyModel*       filterModel()     const;
-    AbstractItemDragDropHandler* dragDropHandler() const;
-    QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
+    QSortFilterProxyModel*       filterModel()     const override;
+    AbstractItemDragDropHandler* dragDropHandler() const override;
+    QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const override;
 
     void setItemDelegate(ShowfotoDelegate* delegate);
-    void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
-    void currentChanged(const QModelIndex& index, const QModelIndex& previous);
-    void paintEvent(QPaintEvent* e);
-    void selectionChanged(const QItemSelection&, const QItemSelection&);
-    void updateGeometries();
+    void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers) override;
+    void currentChanged(const QModelIndex& index, const QModelIndex& previous) override;
+    void paintEvent(QPaintEvent* e) override;
+    void selectionChanged(const QItemSelection&, const QItemSelection&) override;
+    void updateGeometries() override;
 
     /// Reimplement these in a subclass
     virtual void activated(const ShowfotoItemInfo& info, Qt::KeyboardModifiers modifiers);

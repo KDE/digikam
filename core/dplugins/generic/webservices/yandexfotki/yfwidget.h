@@ -63,7 +63,7 @@ public:
 
     void updateLabels(const QString& name = QString(),
                       const QString& url  = QString())
-                      Q_DECL_OVERRIDE;
+                      override;
 
     QComboBox*    accessCB()          const;
     QCheckBox*    hideOriginalCB()    const;

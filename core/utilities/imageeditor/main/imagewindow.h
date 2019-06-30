@@ -86,10 +86,10 @@ private:
 
     void loadIndex(const QModelIndex& index);
 
-    void closeEvent(QCloseEvent* e);
-    void showEvent(QShowEvent*);
-    void dragMoveEvent(QDragMoveEvent* e);
-    void dropEvent(QDropEvent* e);
+    void closeEvent(QCloseEvent* e) override;
+    void showEvent(QShowEvent*) override;
+    void dragMoveEvent(QDragMoveEvent* e) override;
+    void dropEvent(QDropEvent* e) override;
 
     bool save();
     bool saveAs();
