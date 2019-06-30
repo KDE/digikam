@@ -60,10 +60,10 @@ public:
 
 protected:
 
-    bool eventFilter(QObject* object, QEvent* event);
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
+    bool eventFilter(QObject* object, QEvent* event) override;
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
 
 protected Q_SLOTS:
 

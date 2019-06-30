@@ -90,7 +90,7 @@ private:
 
     void    buttonStateChange(bool state);
 
-    void    closeEvent(QCloseEvent*);
+    void    closeEvent(QCloseEvent*) override;
 
 private:
 

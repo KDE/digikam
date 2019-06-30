@@ -79,7 +79,7 @@ public Q_SLOTS:
 
 private:
 
-    void closeEvent(QCloseEvent* e) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent* e) override;
     void setContinueUpload(bool state);
     void readSettings();
     void saveSettings();

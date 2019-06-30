@@ -84,7 +84,7 @@ private:
     bool prepareImageForUpload(const QString& imgPath, MassageType massage);
     void uploadNextPhoto();
     void buttonStateChange(bool state);
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
 private:
 

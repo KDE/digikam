@@ -105,11 +105,11 @@ private:
     ToolListViewItem* findTool(BatchTool* const tool);
     ToolListViewGroup* findToolGroup(BatchTool::BatchToolGroup group);
 
-    void startDrag(Qt::DropActions supportedActions);
-    QStringList mimeTypes() const;
-    QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+    void        startDrag(Qt::DropActions supportedActions) override;
+    QStringList mimeTypes() const override;
+    QMimeData*  mimeData(const QList<QTreeWidgetItem*> items) const override;
 
-    void mouseDoubleClickEvent(QMouseEvent*);
+    void mouseDoubleClickEvent(QMouseEvent*) override;
     QMap<int, QString> itemsToMap(const QList<QTreeWidgetItem*> items) const;
 };
 

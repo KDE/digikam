@@ -61,7 +61,7 @@ Q_SIGNALS:
 
 private:
 
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
     void setRejectButtonMode(QDialogButtonBox::StandardButton button);
 

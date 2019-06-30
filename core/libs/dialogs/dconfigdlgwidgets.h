@@ -324,9 +324,9 @@ public Q_SLOTS:
 
 protected:
 
-    void changeEvent(QEvent*)           Q_DECL_OVERRIDE;
-    void showEvent(QShowEvent*)         Q_DECL_OVERRIDE;
-    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    void changeEvent(QEvent*)           override;
+    void showEvent(QShowEvent*)         override;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private:
 

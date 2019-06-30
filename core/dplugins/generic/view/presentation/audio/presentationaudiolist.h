@@ -98,9 +98,9 @@ Q_SIGNALS:
 
 protected:
 
-    void dragEnterEvent(QDragEnterEvent*);
-    void dragMoveEvent(QDragMoveEvent*);
-    void dropEvent(QDropEvent*);
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dropEvent(QDropEvent*) override;
 };
 
 } // namespace DigikamGenericPresentationPlugin

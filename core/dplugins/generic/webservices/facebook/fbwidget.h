@@ -50,7 +50,7 @@ public:
     ~FbWidget();
 
     void updateLabels(const QString& name = QString(),
-                      const QString& url = QString()) Q_DECL_OVERRIDE;
+                      const QString& url = QString()) override;
 
 Q_SIGNALS:
 

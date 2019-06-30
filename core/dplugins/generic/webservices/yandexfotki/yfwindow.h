@@ -90,7 +90,7 @@ private Q_SLOTS:
 
 private:
 
-    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent* event) override;
 
     void readSettings();
     void writeSettings();

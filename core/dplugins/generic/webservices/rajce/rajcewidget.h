@@ -84,7 +84,7 @@ private Q_SLOTS:
 private:
 
     void updateLabels(const QString& name = QString(),
-                      const QString& url = QString()) Q_DECL_OVERRIDE;
+                      const QString& url = QString()) override;
     
     void setEnabledWidgets(bool);
 

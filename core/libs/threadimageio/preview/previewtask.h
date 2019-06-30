@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual void execute() Q_DECL_OVERRIDE;
+    virtual void execute() override;
 
 private:
 

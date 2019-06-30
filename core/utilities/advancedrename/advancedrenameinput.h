@@ -70,9 +70,9 @@ Q_SIGNALS:
 
 protected:
 
-    virtual void keyPressEvent(QKeyEvent* e);
-    virtual void wheelEvent(QWheelEvent* e);
-    virtual void scrollContentsBy(int dx, int dy);
+    virtual void keyPressEvent(QKeyEvent* e) override;
+    virtual void wheelEvent(QWheelEvent* e) override;
+    virtual void scrollContentsBy(int dx, int dy) override;
 
 private Q_SLOTS:
 
@@ -128,7 +128,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void changeEvent(QEvent* e);
+    virtual void changeEvent(QEvent* e) override;
 
 private Q_SLOTS:
 

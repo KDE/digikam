@@ -86,7 +86,7 @@ Q_SIGNALS:
 
 protected:
 
-    void moveEvent(QMoveEvent* e);
+    void moveEvent(QMoveEvent* e) override;
 
 public Q_SLOTS:
 

@@ -75,14 +75,14 @@ public Q_SLOTS:
 
 protected:
 
-    void moveEvent(QMoveEvent* e);
+    void moveEvent(QMoveEvent* e) override;
 
 private:
 
     void customizedFullScreenMode(bool set);
     void showSideBars(bool visible);
-    void closeEvent(QCloseEvent* e);
-    void showEvent(QShowEvent*);
+    void closeEvent(QCloseEvent* e) override;
+    void showEvent(QShowEvent*) override;
 
     void deleteItem(bool permanently);
     void deleteItem(const ItemInfo& info, bool permanently);
