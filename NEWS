@@ -93,4 +93,5 @@ BUGFIXES:
 083 ==> 409087 - OpenGL Viewer does not respect the picture rotation.
 084 ==> 408881 - Digikam Editor automatically reapplies last edition, even on a different picture.
 085 ==> 391840 - Timeline does not show any pictures if range is too big.
-086 ==> 
+086 ==> 408878 - 'Open with' shows nothing.
+087 ==> 
