@@ -97,4 +97,5 @@ BUGFIXES:
 087 ==> 387575 - Last note in server instructions is truncated.
 088 ==> 165753 - Scale image: Allow setting new size in inch/cm/mm.
 089 ==> 402063 - Database names is not valid.
-090 ==> 
+090 ==> 329438 - Rename function with Date & Time does not work with NTFS.
+091 ==> 
