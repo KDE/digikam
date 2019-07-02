@@ -96,4 +96,5 @@ BUGFIXES:
 086 ==> 408878 - 'Open with' shows nothing.
 087 ==> 387575 - Last note in server instructions is truncated.
 088 ==> 165753 - Scale image: Allow setting new size in inch/cm/mm.
-089 ==> 
+089 ==> 402063 - Database names is not valid.
+090 ==> 
