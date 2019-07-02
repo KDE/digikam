@@ -95,4 +95,5 @@ BUGFIXES:
 085 ==> 391840 - Timeline does not show any pictures if range is too big.
 086 ==> 408878 - 'Open with' shows nothing.
 087 ==> 387575 - Last note in server instructions is truncated.
-088 ==> 
+088 ==> 165753 - Scale image: Allow setting new size in inch/cm/mm.
+089 ==> 
