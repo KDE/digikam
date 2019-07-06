@@ -40,7 +40,7 @@ public:
         : DBinaryIface(
                        QLatin1String("kmail"),
                        QLatin1String("KMail"),
-                       QLatin1String("https://www.kde.org/applications/internet/kmail/"),
+                       QLatin1String("https://kde.org/applications/office/org.kde.kmail2"),
                        QLatin1String("SendByMail"),
                        QStringList(QLatin1String("-v")),
                        i18n("KDE Mail Client.")

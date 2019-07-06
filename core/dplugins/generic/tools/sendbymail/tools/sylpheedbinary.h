@@ -40,7 +40,7 @@ public:
         : DBinaryIface(
                        QLatin1String("sylpheed"),
                        QLatin1String("Sylpheed"),
-                       QLatin1String("http://sylpheed.sraoss.jp/en/"),
+                       QLatin1String("https://sylpheed.sraoss.jp/en/"),
                        QLatin1String("SendByMail"),
                        QStringList(QLatin1String("--version")),
                        i18n("GTK based Mail Client.")
