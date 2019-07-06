@@ -98,4 +98,5 @@ BUGFIXES:
 088 ==> 165753 - Scale image: Allow setting new size in inch/cm/mm.
 089 ==> 402063 - Database names is not valid.
 090 ==> 329438 - Rename function with Date & Time does not work with NTFS.
-091 ==> 
+091 ==> 409528 - Unable to select default email client / outlook for sending by email.
+092 ==> 
