@@ -57,6 +57,7 @@ public:
         EVOLUTION,
         KMAIL,
         NETSCAPE,       // Messenger (https://en.wikipedia.org/wiki/Netscape_Messenger_9)
+        OUTLOOK,
         SYLPHEED,
         THUNDERBIRD
     };

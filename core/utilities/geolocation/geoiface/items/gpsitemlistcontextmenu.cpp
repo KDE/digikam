@@ -532,7 +532,7 @@ void GPSItemListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer& 
     }
 
     undoCommand->setText(undoDescription);
-    emit(signalUndoCommand(undoCommand));
+    emit signalUndoCommand(undoCommand);
 }
 
 void GPSItemListContextMenu::slotBookmarkSelected(const GPSDataContainer& position)
@@ -637,7 +637,7 @@ void GPSItemListContextMenu::removeInformationFromSelectedImages(const GPSDataCo
     if (undoCommand->affectedItemCount() > 0)
     {
         undoCommand->setText(undoDescription);
-        emit(signalUndoCommand(undoCommand));
+        emit signalUndoCommand(undoCommand);
     }
     else
     {
@@ -719,8 +719,8 @@ void GPSItemListContextMenu::slotLookupMissingAltitudes()
     connect(d->altitudeLookup, SIGNAL(signalDone()),
             this, SLOT(slotAltitudeLookupDone()));
 
-    emit(signalSetUIEnabled(false, this, QLatin1String(SLOT(slotAltitudeLookupCancel()))));
-    emit(signalProgressSetup(altitudeQueries.count(), i18n("Looking up altitudes")));
+    emit signalSetUIEnabled(false, this, QLatin1String(SLOT(slotAltitudeLookupCancel())));
+    emit signalProgressSetup(altitudeQueries.count(), i18n("Looking up altitudes"));
 
     d->altitudeUndoCommand    = new GPSUndoCommand();
     d->altitudeRequestedCount = altitudeQueries.count();
@@ -779,7 +779,7 @@ void GPSItemListContextMenu::slotAltitudeLookupDone()
     {
         // at least some queries returned a result, save the undo command
         d->altitudeUndoCommand->setText(i18n("Altitude looked up"));
-        emit(signalUndoCommand(d->altitudeUndoCommand));
+        emit signalUndoCommand(d->altitudeUndoCommand);
     }
     else
     {
@@ -789,7 +789,7 @@ void GPSItemListContextMenu::slotAltitudeLookupDone()
     d->altitudeUndoCommand = nullptr;
     d->altitudeLookup->deleteLater();
 
-    emit(signalSetUIEnabled(true));
+    emit signalSetUIEnabled(true);
 }
 
 void GPSItemListContextMenu::slotAltitudeLookupCancel()

@@ -69,9 +69,8 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSItemModel* const gpsItemModel, QWidget* co
     d->parent = parent;
 
     const QString bookmarksFileName =
-        QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-                                         QLatin1Char('/') +
-                                         QLatin1String("digikam/geobookmarks.xml");
+        QStandardPaths::writableLocation(QStandardPaths::DataLocation) +
+                                         QLatin1String("/geobookmarks.xml");
     d->bookmarkManager              = new BookmarksManager(bookmarksFileName, this);
     d->bookmarkManager->load();
     d->bookmarkMenu                 = new BookmarksMenu(d->bookmarkManager, d->parent);
@@ -117,7 +116,7 @@ void GPSBookmarkOwner::slotOpenBookmark(const QUrl& url)
     {
         GPSDataContainer position;
         position.setCoordinates(coordinate);
-        emit(positionSelected(position));
+        emit positionSelected(position);
     }
 }
 

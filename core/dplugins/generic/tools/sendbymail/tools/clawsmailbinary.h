@@ -40,7 +40,7 @@ public:
         : DBinaryIface(
                        QLatin1String("claws-mail"),
                        QLatin1String("Claws Mail"),
-                       QLatin1String("claws-mail"),
+                       QLatin1String("https://www.claws-mail.org/"),
                        QLatin1String("SendByMail"),
                        QStringList(QLatin1String("-v")),
                        i18n("GTK based Mail Client.")

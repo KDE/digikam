@@ -249,7 +249,7 @@ QWidget* BackendMarble::mapWidget()
         /// @todo Do this only if we are set active!
         applyCacheToWidget();
 
-        emit(signalBackendReadyChanged(backendName()));
+        emit signalBackendReadyChanged(backendName());
     }
 
     return d->marbleWidget;
@@ -274,7 +274,7 @@ void BackendMarble::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
     d->marbleWidget    = nullptr;
     d->bmLayer         = nullptr;
 
-    emit(signalBackendReadyChanged(backendName()));
+    emit signalBackendReadyChanged(backendName());
 }
 
 GeoCoordinates BackendMarble::getCenter() const
@@ -1074,7 +1074,7 @@ void BackendMarble::slotMarbleZoomChanged()
     s->worldMapWidget->markClustersAsDirty();
     updateActionAvailability();
 
-    emit(signalZoomChanged(newZoomString));
+    emit signalZoomChanged(newZoomString);
 }
 
 void BackendMarble::setZoom(const QString& newZoom)
@@ -1446,7 +1446,7 @@ bool BackendMarble::eventFilter(QObject* object, QEvent* event)
                 s->haveMovingCluster                = false;
                 doFilterEvent                       = true;
 
-                emit(signalClustersClicked(QIntList() << mouseMoveClusterIndex));
+                emit signalClustersClicked(QIntList() << mouseMoveClusterIndex);
             }
             else
             {
@@ -1486,14 +1486,14 @@ bool BackendMarble::eventFilter(QObject* object, QEvent* event)
                     markerIndices << d->mouseMoveMarkerIndex;
 
                     // also emit a signal that the marker was moved:
-                    emit(signalSpecialMarkersMoved(markerIndices));
+                    emit signalSpecialMarkersMoved(markerIndices);
 */
                 }
                 else
                 {
                     // a cluster is being moved
                     s->clusterList[d->mouseMoveClusterIndex].coordinates = newCoordinates;
-                    emit(signalClustersMoved(QIntList() << d->mouseMoveClusterIndex, snapTargetIndex));
+                    emit signalClustersMoved(QIntList() << d->mouseMoveClusterIndex, snapTargetIndex);
                 }
             }
 

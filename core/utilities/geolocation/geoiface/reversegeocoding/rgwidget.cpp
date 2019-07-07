@@ -460,8 +460,8 @@ void RGWidget::slotButtonRGSelected()
         d->receivedRGCount  = 0;
         d->requestedRGCount = photoList.count();
 
-        emit(signalSetUIEnabled(false, this, QString::fromUtf8(SLOT(slotRGCanceled()))));
-        emit(signalProgressSetup(d->requestedRGCount, i18n("Retrieving RG info -")));
+        emit signalSetUIEnabled(false, this, QString::fromUtf8(SLOT(slotRGCanceled())));
+        emit signalProgressSetup(d->requestedRGCount, i18n("Retrieving RG info -"));
 
         d->currentBackend->callRGBackend(photoList, wantedLanguage);
     }
@@ -500,7 +500,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
         QMessageBox::critical(this, qApp->applicationName(), errorString);
 
         d->receivedRGCount+=returnedRGList.count();
-        emit(signalSetUIEnabled(true));
+        emit signalSetUIEnabled(true);
         return;
     }
 
@@ -954,12 +954,12 @@ void RGWidget::slotRGCanceled()
                 // the undo data was delayed, now send it
                 if (d->undoCommand)
                 {
-                    emit(signalUndoCommand(d->undoCommand));
+                    emit signalUndoCommand(d->undoCommand);
                     d->undoCommand = nullptr;
                 }
 
                 // unlock the UI
-                emit(signalSetUIEnabled(true));
+                emit signalSetUIEnabled(true);
             }
 
             return;

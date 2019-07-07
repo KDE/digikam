@@ -121,7 +121,7 @@ void GPSItemDelegate::setThumbnailSize(const int size)
     {
         // TODO: is it enough to emit this signal for only 1 item?
         // seems to work in Qt4.5 with QTreeView::setUniformRowHeights(true)
-        emit(sizeHintChanged(imageModel->index(0, 0)));
+        emit sizeHintChanged(imageModel->index(0, 0));
     }
 }
 

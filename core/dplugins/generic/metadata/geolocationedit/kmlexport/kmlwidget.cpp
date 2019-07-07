@@ -285,9 +285,9 @@ KmlWidget::~KmlWidget()
 
 void KmlWidget::slotKMLGenerate()
 {
-    emit(signalSetUIEnabled(false));
+    emit signalSetUIEnabled(false);
     m_geneBtn->setEnabled(false);
-    emit(signalProgressSetup(m_model->rowCount(), i18n("Generate KML file")));
+    emit signalProgressSetup(m_model->rowCount(), i18n("Generate KML file"));
 
     saveSettings();
 
@@ -307,7 +307,7 @@ void KmlWidget::slotKMLGenerate()
     m_kmlExport.generate();
 
     m_geneBtn->setEnabled(true);
-    emit(signalSetUIEnabled(true));
+    emit signalSetUIEnabled(true);
 }
 
 void KmlWidget::slotGoogleMapTargetRadioButtonToggled(bool)

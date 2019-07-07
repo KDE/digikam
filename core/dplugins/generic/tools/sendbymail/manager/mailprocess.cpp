@@ -569,6 +569,28 @@ bool MailProcess::invokeMailAgent()
 
                     break;
                 }
+                case MailSettings::OUTLOOK:
+                {
+                    QStringList args;
+
+                    args.append(QLatin1String("/a"));
+                    args.append(QDir::toNativeSeparators(fileList.first().toLocalFile()));
+
+                    QProcess process;
+                    process.setProcessEnvironment(adjustedEnvironmentForAppImage());
+
+                    if (!process.startDetached(prog, args))
+                    {
+                        invokeMailAgentError(prog, args);
+                    }
+                    else
+                    {
+                        invokeMailAgentDone(prog, args);
+                        agentInvoked = true;
+                    }
+
+                    break;
+                }
             }
         }
     }

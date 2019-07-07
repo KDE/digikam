@@ -36,8 +36,6 @@
 #include "digikam_export.h"
 #include "iccprofile.h"
 
-class QSignalMapper;
-
 namespace Digikam
 {
 
@@ -142,7 +140,6 @@ protected Q_SLOTS:
 protected:
 
     QObject*       m_parent;
-    QSignalMapper* m_mapper;
 };
 
 } // namespace Digikam

@@ -82,7 +82,7 @@ bool SimpleTreeModel::setData(const QModelIndex& index, const QVariant& value, i
         item->dataColumns.append(QMap<int, QVariant>());
 
     item->dataColumns[column].insert(role, value);
-    emit(dataChanged(index, index));
+    emit dataChanged(index, index);
 
     return true;
 }

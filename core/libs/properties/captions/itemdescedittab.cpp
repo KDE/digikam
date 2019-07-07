@@ -34,7 +34,6 @@
 #include <QStyle>
 #include <QGridLayout>
 #include <QScrollArea>
-#include <QSignalMapper>
 #include <QTimer>
 #include <QToolButton>
 #include <QApplication>
@@ -113,7 +112,6 @@ public:
         openTagMngr                = nullptr;
         moreMenu                   = nullptr;
         applyToAllVersionsButton   = nullptr;
-        recentTagsMapper           = nullptr;
         newTagEdit                 = nullptr;
         lastSelectedWidget         = nullptr;
         templateSelector           = nullptr;
@@ -137,8 +135,6 @@ public:
     QPushButton*         openTagMngr;
 
     QMenu*               moreMenu;
-
-    QSignalMapper*       recentTagsMapper;
 
     QPushButton*         applyBtn;
     QPushButton*         moreButton;
@@ -315,7 +311,6 @@ ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
     d->recentTagsBtn->setIconSize(QSize(16, 16));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper = new QSignalMapper(this);
 
     grid3->addWidget(d->openTagMngr,  0, 0, 1, 2);
     grid3->addWidget(d->newTagEdit,   1, 0, 1, 2);
@@ -402,9 +397,6 @@ ItemDescEditTab::ItemDescEditTab(QWidget* const parent)
 
     connect(d->moreMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotMoreMenu()));
-
-    connect(d->recentTagsMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotRecentTagsMenuActivated(int)));
 
     connect(d->metadataChangeTimer, SIGNAL(timeout()),
             this, SLOT(slotReloadForMetadataChange()));
@@ -1381,8 +1373,11 @@ void ItemDescEditTab::updateRecentTags()
                 if (parent)
                 {
                     QString text          = album->title() + QLatin1String(" (") + parent->prettyUrl() + QLatin1Char(')');
-                    QAction* const action = menu->addAction(icon, text, d->recentTagsMapper, SLOT(map()));
-                    d->recentTagsMapper->setMapping(action, album->id());
+                    QAction* const action = menu->addAction(icon, text);
+                    int id                = album->id();
+
+                    connect(action, &QAction::triggered,
+                            this, [this, id]() { slotRecentTagsMenuActivated(id); });
                 }
                 else
                 {

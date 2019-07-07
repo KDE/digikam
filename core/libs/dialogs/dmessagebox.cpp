@@ -38,7 +38,6 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QDialogButtonBox>
-#include <QSignalMapper>
 
 // KDE includes
 
@@ -222,18 +221,11 @@ int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
     buttons->button(QDialogButtonBox::No)->setDefault(true);
     buttons->button(QDialogButtonBox::No)->setShortcut(Qt::Key_Escape);
 
-    QSignalMapper* const signalMapper = new QSignalMapper(buttons);
-    signalMapper->setMapping(buttons->button(QDialogButtonBox::Yes), QDialogButtonBox::Yes);
-    signalMapper->setMapping(buttons->button(QDialogButtonBox::No),  QDialogButtonBox::No);
+    QObject::connect(buttons->button(QDialogButtonBox::Yes), &QAbstractButton::clicked,
+                     dialog, [dialog]() { dialog->done(QDialogButtonBox::Yes); });
 
-    QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
-                     signalMapper, SLOT(map()));
-
-    QObject::connect(buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
-                     signalMapper, SLOT(map()));
-
-    QObject::connect(signalMapper, SIGNAL(mapped(int)),
-                     dialog, SLOT(done(int)));
+    QObject::connect(buttons->button(QDialogButtonBox::No), &QAbstractButton::clicked,
+                     dialog, [dialog]() { dialog->done(QDialogButtonBox::No); });
 
     bool checkboxResult = false;
     int result          = createMessageBox(dialog, buttons, createIcon(icon), text, listWidget,

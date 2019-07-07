@@ -159,7 +159,17 @@ public:
         info.id = id;
 
         // we use the fact that d->infos is sorted by id
-        return qBinaryFind(infos.constBegin(), infos.constEnd(), info, lessThanForTagShortInfo);
+        QList<TagShortInfo>::const_iterator it;
+        it = std::lower_bound(infos.constBegin(),
+                              infos.constEnd(), info,
+                              lessThanForTagShortInfo);
+
+        if (it == infos.constEnd() || info.id < (*it).id)
+        {
+            return infos.constEnd();
+        }
+
+        return it;
     }
 
     TagPropertiesRange findProperties(int id) const
@@ -203,7 +213,7 @@ public:
     template <typename T>
     inline bool sortedListContains(const QList<T>& list, const T& value)
     {
-        return qBinaryFind(list, value) != list.end();
+        return std::binary_search(list.constBegin(), list.constEnd(), value);
     }
 
     void checkLabelTags()

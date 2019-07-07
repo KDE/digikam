@@ -119,7 +119,7 @@ void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& moved
                              QVariant::fromValue(targetCoordinates), RoleCoordinates);
     }
 
-    emit(signalMarkersMoved(movedIndices));
+    emit signalMarkersMoved(movedIndices);
 }
 
 // ----------------------------------------------------------------------
