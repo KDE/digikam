@@ -143,7 +143,7 @@ void DBinarySearch::addBinary(DBinaryIface& binary)
 
 void DBinarySearch::addDirectory(const QString& dir)
 {
-    emit(signalAddPossibleDirectory(dir));
+    emit signalAddPossibleDirectory(dir);
 }
 
 bool DBinarySearch::allBinariesFound()

@@ -74,10 +74,10 @@ QItemSelectionModel* ItemGPSModelHelper::selectionModel() const
 }
 
 bool ItemGPSModelHelper::itemCoordinates(const QModelIndex& index,
-                                          GeoCoordinates* const coordinates) const
+                                         GeoCoordinates* const coordinates) const
 {
     const GPSItemInfo currentGPSItemInfo = index.data(RoleGPSItemInfo).value<GPSItemInfo>();
-    *coordinates                           = currentGPSItemInfo.coordinates;
+    *coordinates                         = currentGPSItemInfo.coordinates;
 
     if (currentGPSItemInfo.coordinates.hasCoordinates())
     {
@@ -90,7 +90,7 @@ bool ItemGPSModelHelper::itemCoordinates(const QModelIndex& index,
 }
 
 QPixmap ItemGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
-                                                           const QSize& size)
+                                                          const QSize& size)
 {
     if (!index.isValid())
     {
@@ -118,21 +118,21 @@ QPixmap ItemGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
 }
 
 QPersistentModelIndex ItemGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
-                                                                           const int sortKey)
+                                                                          const int sortKey)
 {
     QModelIndex bestIndex         = list.first();
     GPSItemInfo bestGPSItemInfo = bestIndex.data(RoleGPSItemInfo).value<GPSItemInfo>();
 
-    for (int i = 1; i < list.count(); ++i)
+    for (int i = 1 ; i < list.count() ; ++i)
     {
         const QModelIndex currentIndex(list.at(i));
         const GPSItemInfo currentGPSItemInfo = currentIndex.data(RoleGPSItemInfo).value<GPSItemInfo>();
-        const bool currentFitsBetter           = GPSItemInfoSorter::fitsBetter(bestGPSItemInfo,
-                                                                                SelectedNone,
-                                                                                currentGPSItemInfo,
-                                                                                SelectedNone,
-                                                                                SelectedNone,
-                                                                                GPSItemInfoSorter::SortOptions(sortKey));
+        const bool currentFitsBetter         = GPSItemInfoSorter::fitsBetter(bestGPSItemInfo,
+                                                                             SelectedNone,
+                                                                             currentGPSItemInfo,
+                                                                             SelectedNone,
+                                                                             SelectedNone,
+                                                                             GPSItemInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)
         {
@@ -145,18 +145,18 @@ QPersistentModelIndex ItemGPSModelHelper::bestRepresentativeIndexFromList(const 
 }
 
 void ItemGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription,
-                                              const QPixmap& thumb)
+                                             const QPixmap& thumb)
 {
-    for (int i = 0; i < d->itemModel->rowCount(); ++i)
+    for (int i = 0 ; i < d->itemModel->rowCount() ; ++i)
     {
-        const QStandardItem* const item        = static_cast<QStandardItem*>(d->itemModel->item(i));
+        const QStandardItem* const item      = static_cast<QStandardItem*>(d->itemModel->item(i));
         const GPSItemInfo currentGPSItemInfo = item->data(RoleGPSItemInfo).value<GPSItemInfo>();
 
         if (currentGPSItemInfo.url.toLocalFile() == loadingDescription.filePath)
         {
-            const QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
+            const QPersistentModelIndex goodIndex(d->itemModel->index(i, 0));
 
-            emit(signalThumbnailAvailableForIndex(goodIndex, thumb));
+            emit signalThumbnailAvailableForIndex(goodIndex, thumb);
         }
     }
 }

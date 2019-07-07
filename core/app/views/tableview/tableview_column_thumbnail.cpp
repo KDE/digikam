@@ -196,7 +196,7 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
 
     const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
 
-    emit(signalDataChanged(imageId));
+    emit signalDataChanged(imageId);
 }
 
 void ColumnThumbnail::updateThumbnailSize()
@@ -205,7 +205,7 @@ void ColumnThumbnail::updateThumbnailSize()
 
     m_thumbnailSize = s->tableView->getThumbnailSize().size();
 
-    emit(signalAllDataChanged());
+    emit signalAllDataChanged();
 }
 
 } // namespace TableViewColumns

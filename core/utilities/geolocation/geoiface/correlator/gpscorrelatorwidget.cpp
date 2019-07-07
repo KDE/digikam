@@ -504,11 +504,11 @@ void GPSCorrelatorWidget::slotAllItemsCorrelated()
         d->correlationUndoCommand->setText(i18np("1 image correlated",
                                                  "%1 images correlated",
                                                  d->correlationCorrelatedCount));
-        emit(signalUndoCommand(d->correlationUndoCommand));
+        emit signalUndoCommand(d->correlationUndoCommand);
     }
 
     // enable the UI:
-    emit(signalSetUIEnabled(true));
+    emit signalSetUIEnabled(true);
 }
 
 void GPSCorrelatorWidget::saveSettingsToGroup(KConfigGroup* const group)

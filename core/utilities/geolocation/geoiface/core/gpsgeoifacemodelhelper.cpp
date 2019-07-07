@@ -161,7 +161,7 @@ QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(co
 void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index,
                                                     const QPixmap& pixmap)
 {
-    emit(signalThumbnailAvailableForIndex(index, pixmap));
+    emit signalThumbnailAvailableForIndex(index, pixmap);
 }
 
 void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
@@ -211,7 +211,7 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
 
     undoCommand->setText(i18np("1 image moved", "%1 images moved", movedMarkers.count()));
 
-    emit(signalUndoCommand(undoCommand));
+    emit signalUndoCommand(undoCommand);
 }
 
 void GPSGeoIfaceModelHelper::addUngroupedModelHelper(GeoModelHelper* const newModelHelper)

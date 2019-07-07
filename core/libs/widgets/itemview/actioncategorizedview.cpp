@@ -28,7 +28,6 @@
 #include <QString>
 #include <QPropertyAnimation>
 #include <QScrollBar>
-#include <QSignalMapper>
 #include <QApplication>
 #include <QStyle>
 

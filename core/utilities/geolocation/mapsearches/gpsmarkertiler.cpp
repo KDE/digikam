@@ -619,7 +619,7 @@ void GPSMarkerTiler::slotMapImagesJobResult()
         addMarkerToTileAndChildren(currentItemInfo.id, markerTileIndex, static_cast<MyTile*>(rootTile()), 0);
     }
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 /**
@@ -771,7 +771,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         }
     }
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 /**
@@ -784,7 +784,7 @@ void GPSMarkerTiler::slotNewModelData(const QList<ItemInfo>& infoList)
     /// @todo Also monitor removed, reset, etc. signals
     Q_UNUSED(infoList);
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void GPSMarkerTiler::setRegionSelection(const GeoCoordinates::Pair& sel)
@@ -800,7 +800,7 @@ void GPSMarkerTiler::setRegionSelection(const GeoCoordinates::Pair& sel)
         d->mapGlobalGroupState &= ~RegionSelectedMask;
     }
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void GPSMarkerTiler::removeCurrentRegionSelection()
@@ -809,7 +809,7 @@ void GPSMarkerTiler::removeCurrentRegionSelection()
 
     d->mapGlobalGroupState &= ~RegionSelectedMask;
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
@@ -964,7 +964,7 @@ void GPSMarkerTiler::setPositiveFilterIsActive(const bool state)
 
     /// @todo Somehow, a delay is necessary before emitting this signal - probably the order in which the filtering is propagated to other parts of digikam is wrong or just takes too long
     QTimer::singleShot(100, this, SIGNAL(signalTilesOrSelectionChanged()));
-    //     emit(signalTilesOrSelectionChanged());
+    //     emit signalTilesOrSelectionChanged();
 }
 
 void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
@@ -973,7 +973,7 @@ void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const 
     Q_UNUSED(selected);
     Q_UNUSED(deselected);
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, const TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile)

@@ -438,16 +438,9 @@ void EditorWindow::setupStandardActions()
     connect(m_undoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
 
-    // we are using a signal mapper to identify which of a bunch of actions was triggered
-    d->undoSignalMapper = new QSignalMapper(this);
-
-    // connect mapper to view
-    connect(d->undoSignalMapper, SIGNAL(mapped(int)),
-            m_canvas, SLOT(slotUndo(int)));
-
     // connect simple undo action
-    connect(m_undoAction, SIGNAL(triggered()), d->undoSignalMapper, SLOT(map()));
-    d->undoSignalMapper->setMapping(m_undoAction, 1);
+    connect(m_undoAction, &QAction::triggered,
+            this, [this]() { m_canvas->slotUndo(1); });
 
     m_redoAction = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Redo"), this);
     m_redoAction->setEnabled(false);
@@ -457,13 +450,9 @@ void EditorWindow::setupStandardActions()
     connect(m_redoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
 
-    d->redoSignalMapper = new QSignalMapper(this);
-
-    connect(d->redoSignalMapper, SIGNAL(mapped(int)),
-            m_canvas, SLOT(slotRedo(int)));
-
-    connect(m_redoAction, SIGNAL(triggered()), d->redoSignalMapper, SLOT(map()));
-    d->redoSignalMapper->setMapping(m_redoAction, 1);
+    // connect simple redo action
+    connect(m_redoAction, &QAction::triggered,
+            this, [this]() { m_canvas->slotRedo(1); });
 
     d->selectAllAction = new QAction(i18nc("Create a selection containing the full image", "Select All"), this);
     connect(d->selectAllAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectAll()));
@@ -722,8 +711,11 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* const action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
-        d->undoSignalMapper->setMapping(action, i + 1);
+        QAction* const action = m_undoAction->menu()->addAction(titles.at(i));
+        int id                = i + 1;
+
+        connect(action, &QAction::triggered,
+                this, [this, id]() { m_canvas->slotUndo(id); });
     }
 }
 
@@ -734,8 +726,11 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* const action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
-        d->redoSignalMapper->setMapping(action, i + 1);
+        QAction* const action = m_redoAction->menu()->addAction(titles.at(i));
+        int id                = i + 1;
+
+        connect(action, &QAction::triggered,
+                this, [this, id]() { m_canvas->slotRedo(id); });
     }
 }
 

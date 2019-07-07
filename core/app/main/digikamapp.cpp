@@ -405,8 +405,11 @@ void DigikamApp::slotAboutToShowBackwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* const action = d->backwardActionMenu->menu()->addAction(titles.at(i), d->backwardSignalMapper, SLOT(map()));
-        d->backwardSignalMapper->setMapping(action, i + 1);
+        QAction* const action = d->backwardActionMenu->menu()->addAction(titles.at(i));
+        int id                = i + 1;
+
+        connect(action, &QAction::triggered,
+                this, [this, id]() { d->view->slotAlbumHistoryBack(id); });
     }
 }
 
@@ -418,8 +421,11 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* const action = d->forwardActionMenu->menu()->addAction(titles.at(i), d->forwardSignalMapper, SLOT(map()));
-        d->forwardSignalMapper->setMapping(action, i + 1);
+        QAction* const action = d->forwardActionMenu->menu()->addAction(titles.at(i));
+        int id                = i + 1;
+
+        connect(action, &QAction::triggered,
+                this, [this, id]() { d->view->slotAlbumHistoryForward(id); });
     }
 }
 

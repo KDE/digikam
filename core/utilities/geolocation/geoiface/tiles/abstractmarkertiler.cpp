@@ -84,7 +84,7 @@ void AbstractMarkerTiler::setDirty(const bool state)
     if (state && !d->isDirty)
     {
         d->isDirty = true;
-        emit(signalTilesOrSelectionChanged());
+        emit signalTilesOrSelectionChanged();
     }
     else
     {

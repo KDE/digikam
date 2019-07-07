@@ -187,13 +187,13 @@ void TagFolderView::slotExpandNode()
         }
 
         int it            = 0;
-        QModelIndex child = current.child(it++, 0);
+        QModelIndex child = current.model()->index(it++, 0, current);
 
         while (child.isValid())
         {
             expand(child);
             greyNodes.enqueue(child);
-            child = current.child(it++, 0);
+            child = current.model()->index(it++, 0, current);
         }
     }
 }
@@ -222,13 +222,13 @@ void TagFolderView::slotCollapseNode()
         }
 
         int it            = 0;
-        QModelIndex child = current.child(it++, 0);
+        QModelIndex child = current.model()->index(it++, 0, current);
 
         while (child.isValid())
         {
             collapse(child);
             greyNodes.enqueue(child);
-            child = current.child(it++, 0);
+            child = current.model()->index(it++, 0, current);
         }
     }
 }

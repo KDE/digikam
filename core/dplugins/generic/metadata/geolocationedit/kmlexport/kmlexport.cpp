@@ -466,7 +466,7 @@ void KmlExport::generate()
             logWarning(i18n("No position data for '%1'", info.name()));
         }
 
-        emit(signalProgressChanged(pos));
+        emit signalProgressChanged(pos);
         QApplication::processEvents();
     }
 

@@ -128,11 +128,11 @@ void GPSItemModel::addItem(GPSItemContainer* const newItem)
 
 void GPSItemModel::setColumnCount(const int nColumns)
 {
-    emit(layoutAboutToBeChanged());
+    emit layoutAboutToBeChanged();
 
     d->columnCount = nColumns;
 
-    emit(layoutChanged());
+    emit layoutChanged();
 }
 
 void GPSItemModel::itemChanged(GPSItemContainer* const changedItem)
@@ -145,7 +145,7 @@ void GPSItemModel::itemChanged(GPSItemContainer* const changedItem)
     const QModelIndex itemModelIndexStart = createIndex(itemIndex, 0, (void*)nullptr);
     const QModelIndex itemModelIndexEnd   = createIndex(itemIndex, d->columnCount - 1, (void*)nullptr);
 
-    emit(dataChanged(itemModelIndexStart, itemModelIndexEnd));
+    emit dataChanged(itemModelIndexStart, itemModelIndexEnd);
 }
 
 GPSItemContainer* GPSItemModel::itemFromIndex(const QModelIndex& index) const
@@ -281,7 +281,7 @@ void GPSItemModel::slotThumbnailLoaded(const LoadingDescription& loadingDescript
     if (currentIndex.isValid())
     {
         QPersistentModelIndex goodIndex(currentIndex);
-        emit(signalThumbnailForIndexAvailable(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2)));
+        emit signalThumbnailForIndexAvailable(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2));
     }
 }
 
