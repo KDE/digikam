@@ -112,7 +112,7 @@ bool SearchResultModelHelper::itemCoordinates(const QModelIndex& index,
 void SearchResultModelHelper::setVisibility(const bool state)
 {
     d->visible = state;
-    emit(signalVisibilityChanged());
+    emit signalVisibilityChanged();
 }
 
 bool SearchResultModelHelper::itemIcon(const QModelIndex& index,
@@ -161,7 +161,7 @@ void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     undoCommand->setText(i18np("1 image snapped to '%2'",
                                "%1 images snapped to '%2'", snappedIndices.count(), targetItem.result.name));
 
-    emit(signalUndoCommand(undoCommand));
+    emit signalUndoCommand(undoCommand);
 }
 
 } // namespace DigikamGenericGeolocationEditPlugin

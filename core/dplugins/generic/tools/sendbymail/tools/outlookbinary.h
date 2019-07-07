@@ -1,12 +1,13 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * https://www.digikam.org
+ * http://www.digikam.org
  *
- * Date        : 2017-07-04
- * Description : Autodetect kmail binary program
+ * Date        : 2019-07-06
+ * Description : Autodetect outlook binary program
  *
- * Copyright (C) 2017-2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2019 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2019 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,40 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef KMAIL_BINARY_H
-#define KMAIL_BINARY_H
+#ifndef OUTLOOK_BINARY_H
+#define OUTLOOK_BINARY_H
 
 // Local includes
 
 #include "dbinaryiface.h"
 
-using namespace Digikam;
-
-namespace DigikamGenericSendByMailPlugin
+namespace Digikam
 {
 
-class KmailBinary : public DBinaryIface
+class OutlookBinary : public DBinaryIface
 {
 public:
 
-    explicit KmailBinary()
+    OutlookBinary()
         : DBinaryIface(
-                       QLatin1String("kmail"),
-                       QLatin1String("KMail"),
-                       QLatin1String("https://kde.org/applications/office/org.kde.kmail2"),
+                       QLatin1String("outlook"),
+                       QLatin1String("Outlook"),
+                       QLatin1String("https://www.microsoft.com/"),
                        QLatin1String("SendByMail"),
-                       QStringList(QLatin1String("-v")),
-                       i18n("KDE Mail Client.")
+                       QStringList(),
+                       i18n("Outlook Mail Client.")
                       )
         {
             setup();
         }
 
-    ~KmailBinary()
+    ~OutlookBinary()
     {
     }
 };
 
-} // namespace DigikamGenericSendByMailPlugin
+} // namespace Digikam
 
-#endif // KMAIL_BINARY_H
+#endif // OUTLOOK_BINARY_H

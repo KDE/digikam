@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QSignalMapper>
 #include <QSet>
 #include <QMenu>
 #include <QIcon>
@@ -189,20 +188,12 @@ IccProfilesMenuAction::IccProfilesMenuAction(const QIcon& icon, const QString& t
       m_parent(parent)
 {
     setIcon(icon);
-    m_mapper = new QSignalMapper(this);
-
-    connect(m_mapper, SIGNAL(mapped(QObject*)),
-            this, SLOT(slotTriggered(QObject*)));
 }
 
 IccProfilesMenuAction::IccProfilesMenuAction(const QString& text, QObject* const parent)
     : QMenu(text),
       m_parent(parent)
 {
-    m_mapper = new QSignalMapper(this);
-
-    connect(m_mapper, SIGNAL(mapped(QObject*)),
-            this, SLOT(slotTriggered(QObject*)));
 }
 
 void IccProfilesMenuAction::replaceProfiles(const QList<IccProfile>& profiles)
@@ -236,10 +227,8 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 
-    connect(action, SIGNAL(triggered()),
-            m_mapper, SLOT(map()));
-
-    m_mapper->setMapping(action, action);
+    connect(action, &QAction::triggered,
+            this, [this, action]() { slotTriggered(action); });
 }
 
 void IccProfilesMenuAction::disableIfEmpty()

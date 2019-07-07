@@ -84,7 +84,7 @@ void TrackCorrelator::correlate(const Correlation::List& itemsToCorrelate,
 
 void TrackCorrelator::slotThreadItemsCorrelated(const Correlation::List& correlatedItems)
 {
-    emit(signalItemsCorrelated(correlatedItems));
+    emit signalItemsCorrelated(correlatedItems);
 }
 
 void TrackCorrelator::slotThreadFinished()
@@ -95,11 +95,11 @@ void TrackCorrelator::slotThreadFinished()
 
     if (threadCanceled)
     {
-        emit(signalCorrelationCanceled());
+        emit signalCorrelationCanceled();
     }
     else
     {
-        emit(signalAllItemsCorrelated());
+        emit signalAllItemsCorrelated();
     }
 }
 

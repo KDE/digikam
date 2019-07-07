@@ -359,7 +359,7 @@ void GPSSearchView::setActive(bool state)
     if (!state)
     {
         // make sure we reset the custom filters set by the map:
-        emit(signalMapSoloItems(QList<qlonglong>(), QLatin1String("gpssearch")));
+        emit signalMapSoloItems(QList<qlonglong>(), QLatin1String("gpssearch"));
         d->mapSearchWidget->setActive(false);
     }
     else
@@ -609,7 +609,7 @@ void GPSSearchView::slotCheckNameEditGPSConditions()
  */
 void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 {
-    emit(signalMapSoloItems(idList, QLatin1String("gpssearch")));
+    emit signalMapSoloItems(idList, QLatin1String("gpssearch"));
     d->mapSearchWidget->slotUpdateActionsEnabled();
 }
 

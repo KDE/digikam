@@ -147,19 +147,8 @@ void DigikamApp::setupActions()
     connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
 
-    // we are using a signal mapper to identify which of a bunch of actions was triggered
-    d->backwardSignalMapper = new QSignalMapper(this);
-
-    // connect mapper to view
-    connect(d->backwardSignalMapper, SIGNAL(mapped(int)),
-            d->view, SLOT(slotAlbumHistoryBack(int)));
-
-    // connect action to mapper
-    connect(d->backwardActionMenu, SIGNAL(triggered()),
-            d->backwardSignalMapper, SLOT(map()));
-
-    // inform mapper about number of steps
-    d->backwardSignalMapper->setMapping(d->backwardActionMenu, 1);
+    connect(d->backwardActionMenu, &QAction::triggered,
+            this, [this]() { d->view->slotAlbumHistoryBack(1); });
 
     // -----------------------------------------------------------------
 
@@ -171,13 +160,8 @@ void DigikamApp::setupActions()
     connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowForwardMenu()));
 
-    d->forwardSignalMapper = new QSignalMapper(this);
-
-    connect(d->forwardSignalMapper, SIGNAL(mapped(int)),
-            d->view, SLOT(slotAlbumHistoryForward(int)));
-
-    connect(d->forwardActionMenu, SIGNAL(triggered()), d->forwardSignalMapper, SLOT(map()));
-    d->forwardSignalMapper->setMapping(d->forwardActionMenu, 1);
+     connect(d->forwardActionMenu, &QAction::triggered,
+            this, [this]() { d->view->slotAlbumHistoryForward(1); });
 
     // -----------------------------------------------------------------
 
@@ -188,10 +172,6 @@ void DigikamApp::setupActions()
     ac->setDefaultShortcut(d->refreshAction, Qt::Key_F5);
 
     // -----------------------------------------------------------------
-
-    QSignalMapper* const browseActionsMapper = new QSignalMapper(this);
-    connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
-            d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
 
     foreach(SidebarWidget* const leftWidget, d->view->leftSidebarWidgets())
     {
@@ -205,8 +185,9 @@ void DigikamApp::setupActions()
         QAction* const action = new QAction(leftWidget->getIcon(), leftWidget->getCaption(), this);
         ac->addAction(actionName, action);
         ac->setDefaultShortcut(action, QKeySequence(leftWidget->property("Shortcut").toInt()));
-        connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
-        browseActionsMapper->setMapping(action, leftWidget);
+
+        connect(action, &QAction::triggered,
+                this, [this, leftWidget]() { d->view->slotLeftSideBarActivate(leftWidget); });
     }
 
     // -----------------------------------------------------------------
@@ -516,8 +497,6 @@ void DigikamApp::setupActions()
 
     d->imageSortAction                   = new KSelectAction(i18n("&Sort Items"), this);
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
-    QSignalMapper* const imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     ac->addAction(QLatin1String("image_sort"), d->imageSortAction);
 
     // map to ItemSortSettings enum
@@ -537,53 +516,60 @@ void DigikamApp::setupActions()
     sortBySimilarityAction->setEnabled(false);
     connect(d->view, SIGNAL(signalFuzzySidebarActive(bool)), sortBySimilarityAction, SLOT(setEnabled(bool)));
 
-    connect(sortByNameAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction,               SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByModDateAction,            SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByFileSizeAction,           SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction,             SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByImageSizeAction,          SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByAspectRatioAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortBySimilarityAction,         SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByManualOrderAndNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByManualOrderAndDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByNameAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByFileName); });
 
-    imageSortMapper->setMapping(sortByNameAction,               (int)ItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction,               (int)ItemSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction,               (int)ItemSortSettings::SortByCreationDate);
-    imageSortMapper->setMapping(sortByModDateAction,            (int)ItemSortSettings::SortByModificationDate);
-    imageSortMapper->setMapping(sortByFileSizeAction,           (int)ItemSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction,             (int)ItemSortSettings::SortByRating);
-    imageSortMapper->setMapping(sortByImageSizeAction,          (int)ItemSortSettings::SortByImageSize);
-    imageSortMapper->setMapping(sortByAspectRatioAction,        (int)ItemSortSettings::SortByAspectRatio);
-    imageSortMapper->setMapping(sortBySimilarityAction,         (int)ItemSortSettings::SortBySimilarity);
-    imageSortMapper->setMapping(sortByManualOrderAndNameAction, (int)ItemSortSettings::SortByManualOrderAndName);
-    imageSortMapper->setMapping(sortByManualOrderAndDateAction, (int)ItemSortSettings::SortByManualOrderAndDate);
+    connect(sortByPathAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByFilePath); });
+
+    connect(sortByDateAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByCreationDate); });
+
+    connect(sortByModDateAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByModificationDate); });
+
+    connect(sortByFileSizeAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByFileSize); });
+
+    connect(sortByRatingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByRating); });
+
+    connect(sortByImageSizeAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByImageSize); });
+
+    connect(sortByAspectRatioAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByAspectRatio); });
+
+    connect(sortBySimilarityAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortBySimilarity); });
+
+    connect(sortByManualOrderAndNameAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByManualOrderAndName); });
+
+    connect(sortByManualOrderAndDateAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImages((int)ItemSortSettings::SortByManualOrderAndDate); });
 
     // -----------------------------------------------------------
 
     d->imageSortOrderAction                   = new KSelectAction(i18n("Item Sort &Order"), this);
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
-    QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
-    connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     ac->addAction(QLatin1String("image_sort_order"), d->imageSortOrderAction);
 
-    QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
-    QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
+    QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),
+                                                                             i18n("Ascending"));
+    QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")),
+                                                                             i18n("Descending"));
 
-    connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
-    connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortAscendingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesOrder((int)ItemSortSettings::AscendingOrder); });
 
-    imageSortOrderMapper->setMapping(sortAscendingAction,  (int)ItemSortSettings::AscendingOrder);
-    imageSortOrderMapper->setMapping(sortDescendingAction, (int)ItemSortSettings::DescendingOrder);
+    connect(sortDescendingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesOrder((int)ItemSortSettings::DescendingOrder); });
 
     // -----------------------------------------------------------
 
     d->imageSeparationAction                   = new KSelectAction(i18n("Separate Items"), this);
     d->imageSeparationAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
-    QSignalMapper* const imageSeparationMapper = new QSignalMapper(this);
-    connect(imageSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
     ac->addAction(QLatin1String("image_separation"), d->imageSeparationAction);
 
     // map to ItemSortSettings enum
@@ -592,32 +578,34 @@ void DigikamApp::setupActions()
     QAction* const separateByFormatAction = d->imageSeparationAction->addAction(i18n("By Format"));
     QAction* const separateByMonthAction  = d->imageSeparationAction->addAction(i18n("By Month"));
 
-    connect(noCategoriesAction,     SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
-    connect(separateByAlbumAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
-    connect(separateByFormatAction, SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
-    connect(separateByMonthAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
+    connect(noCategoriesAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)ItemSortSettings::OneCategory); });
 
-    imageSeparationMapper->setMapping(noCategoriesAction,     (int)ItemSortSettings::OneCategory);
-    imageSeparationMapper->setMapping(separateByAlbumAction,  (int)ItemSortSettings::CategoryByAlbum);
-    imageSeparationMapper->setMapping(separateByFormatAction, (int)ItemSortSettings::CategoryByFormat);
-    imageSeparationMapper->setMapping(separateByMonthAction,  (int)ItemSortSettings::CategoryByMonth);
+    connect(separateByAlbumAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)ItemSortSettings::CategoryByAlbum); });
+
+    connect(separateByFormatAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)ItemSortSettings::CategoryByFormat); });
+
+    connect(separateByMonthAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)ItemSortSettings::CategoryByMonth); });
 
     // -----------------------------------------------------------------
 
     d->imageSeparationSortOrderAction                   = new KSelectAction(i18n("Item Separation Order"), this);
     d->imageSeparationSortOrderAction->setWhatsThis(i18n("The sort order of the groups of separated items"));
-    QSignalMapper* const imageSeparationSortOrderMapper = new QSignalMapper(this);
-    connect(imageSeparationSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotImageSeparationSortOrder(int)));
     ac->addAction(QLatin1String("image_separation_sort_order"), d->imageSeparationSortOrderAction);
 
-    QAction* const sortSeparationsAscending  = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
-    QAction* const sortSeparationsDescending = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
+    QAction* const sortSeparationsAscending  = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),
+                                                                                            i18n("Ascending"));
+    QAction* const sortSeparationsDescending = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")),
+                                                                                            i18n("Descending"));
 
-    connect(sortSeparationsAscending,  SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
-    connect(sortSeparationsDescending, SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
+    connect(sortSeparationsAscending, &QAction::triggered,
+            this, [this]() { d->view->slotImageSeparationSortOrder((int)ItemSortSettings::AscendingOrder); });
 
-    imageSeparationSortOrderMapper->setMapping(sortSeparationsAscending, (int)ItemSortSettings::AscendingOrder);
-    imageSeparationSortOrderMapper->setMapping(sortSeparationsDescending, (int)ItemSortSettings::DescendingOrder);
+    connect(sortSeparationsDescending, &QAction::triggered,
+            this, [this]() { d->view->slotImageSeparationSortOrder((int)ItemSortSettings::DescendingOrder); });
 
     // -----------------------------------------------------------------
 
@@ -875,12 +863,7 @@ void DigikamApp::setupAccelerators()
 
 void DigikamApp::setupExifOrientationActions()
 {
-    KActionCollection* const ac                = actionCollection();
-    QSignalMapper* const exifOrientationMapper = new QSignalMapper(d->view);
-
-    connect(exifOrientationMapper, SIGNAL(mapped(int)),
-            d->view, SLOT(slotImageExifOrientation(int)));
-
+    KActionCollection* const ac       = actionCollection();
     d->imageExifOrientationActionMenu = new QMenu(i18n("Adjust Exif Orientation Tag"), this);
     ac->addAction(QLatin1String("image_set_exif_orientation"), d->imageExifOrientationActionMenu->menuAction());
 
@@ -930,38 +913,29 @@ void DigikamApp::setupExifOrientationActions()
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation7Action);
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation8Action);
 
-    connect(d->imageSetExifOrientation1Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation1Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(1); });
 
-    connect(d->imageSetExifOrientation2Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation2Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(2); });
 
-    connect(d->imageSetExifOrientation3Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation3Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(3); });
 
-    connect(d->imageSetExifOrientation4Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation4Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(4); });
 
-    connect(d->imageSetExifOrientation5Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation5Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(5); });
 
-    connect(d->imageSetExifOrientation6Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation6Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(6); });
 
-    connect(d->imageSetExifOrientation7Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
+    connect(d->imageSetExifOrientation7Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(7); });
 
-    connect(d->imageSetExifOrientation8Action, SIGNAL(triggered()),
-            exifOrientationMapper, SLOT(map()));
-
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation1Action, 1);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation2Action, 2);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation3Action, 3);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation4Action, 4);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation5Action, 5);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation6Action, 6);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation7Action, 7);
-    exifOrientationMapper->setMapping(d->imageSetExifOrientation8Action, 8);
+    connect(d->imageSetExifOrientation8Action, &QAction::triggered,
+            this, [this]() { d->view->slotImageExifOrientation(8); });
 }
 
 void DigikamApp::setupImageTransformActions()

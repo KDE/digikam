@@ -87,20 +87,6 @@ SetupCollectionDelegate::SetupCollectionDelegate(QAbstractItemView* const view, 
     m_sampleUpdateButton->hide();
     m_sampleDeleteButton = new QToolButton(view);
     m_sampleDeleteButton->hide();
-
-    // Implement mapping of signals. Every button gets a mapping ID from the model
-    m_categoryButtonMapper = new QSignalMapper(this);
-    m_updateMapper         = new QSignalMapper(this);
-    m_deleteMapper         = new QSignalMapper(this);
-
-    connect(m_categoryButtonMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(categoryButtonPressed(int)));
-
-    connect(m_updateMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(updatePressed(int)));
-
-    connect(m_deleteMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(deletePressed(int)));
 }
 
 SetupCollectionDelegate::~SetupCollectionDelegate()
@@ -116,22 +102,22 @@ QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*
     QPushButton* const pushButton = new QPushButton();
     list << pushButton;
 
-    connect(pushButton, SIGNAL(clicked()),
-            m_categoryButtonMapper, SLOT(map()));
+    connect(pushButton, &QPushButton::clicked,
+            this, [this, pushButton]() { emit categoryButtonPressed(pushButton->property("id").toInt()); });
 
     QToolButton* const updateButton = new QToolButton();
     updateButton->setAutoRaise(true);
     list << updateButton;
 
-    connect(updateButton, SIGNAL(clicked()),
-            m_updateMapper, SLOT(map()));
+    connect(updateButton, &QToolButton::clicked,
+            this, [this, updateButton]() { emit updatePressed(updateButton->property("id").toInt()); });
 
     QToolButton* const deleteButton = new QToolButton();
     deleteButton->setAutoRaise(true);
     list << deleteButton;
 
-    connect(deleteButton, SIGNAL(clicked()),
-            m_deleteMapper, SLOT(map()));
+    connect(deleteButton, &QToolButton::clicked,
+            this, [this, deleteButton]() { emit deletePressed(deleteButton->property("id").toInt()); });
 
     return list;
 }
@@ -191,7 +177,7 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
 void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
                                                 const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
 {
-    QPushButton* const pushButton  = static_cast<QPushButton*>(widgets.at(0));
+    QPushButton* const pushButton   = static_cast<QPushButton*>(widgets.at(0));
     QToolButton* const updateButton = static_cast<QToolButton*>(widgets.at(1));
     QToolButton* const deleteButton = static_cast<QToolButton*>(widgets.at(2));
 
@@ -208,9 +194,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         deleteButton->hide();
 
         pushButton->setEnabled(itemView()->isEnabled());
-
-        // get the mapping id from model. The signal mapper will associate the id with the signal from this button.
-        m_categoryButtonMapper->setMapping(pushButton, index.data(SetupCollectionModel::CategoryButtonMapId).toInt());
+        pushButton->setProperty("id", index.data(SetupCollectionModel::CategoryButtonMapId).toInt());
     }
     else if (index.data(SetupCollectionModel::IsUpdateRole).toBool())
     {
@@ -221,8 +205,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         pushButton->hide();
 
         updateButton->setEnabled(itemView()->isEnabled());
-
-        m_updateMapper->setMapping(updateButton, index.data(SetupCollectionModel::UpdateMapId).toInt());
+        updateButton->setProperty("id", index.data(SetupCollectionModel::UpdateMapId).toInt());
     }
     else if (index.data(SetupCollectionModel::IsDeleteRole).toBool())
     {
@@ -233,8 +216,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         pushButton->hide();
 
         deleteButton->setEnabled(itemView()->isEnabled());
-
-        m_deleteMapper->setMapping(deleteButton, index.data(SetupCollectionModel::DeleteMapId).toInt());
+        deleteButton->setProperty("id", index.data(SetupCollectionModel::DeleteMapId).toInt());
     }
     else
     {

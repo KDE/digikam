@@ -49,7 +49,7 @@ QList<SolidVolumeInfo> CollectionManager::Private::listVolumes()
     else
     {
         // emit a blocking queued signal to move call to main thread
-        emit(s->triggerUpdateVolumesList());
+        emit s->triggerUpdateVolumesList();
         return volumesListCache;
     }
 }

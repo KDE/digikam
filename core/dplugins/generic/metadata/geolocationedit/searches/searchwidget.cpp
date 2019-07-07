@@ -463,7 +463,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     undoCommand->setText(i18np("1 image moved to '%2'",
                                "%1 images moved to '%2'", selectedImageIndices.count(), currentItem.result.name));
 
-    emit(signalUndoCommand(undoCommand));
+    emit signalUndoCommand(undoCommand);
 }
 
 void SearchWidget::setPrimaryMapWidget(MapWidget* const mapWidget)

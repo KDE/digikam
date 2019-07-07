@@ -55,7 +55,7 @@ public:
      * @brief setupUi   setup all gui elements for Tag Manager
      * @param Dialog    parent dialog
      */
-    void setupUi(KMainWindow* const Dialog);
+    void setupUi(KMainWindow* const dialog);
 
     static QPointer<TagsManager> internalPtr;
     static TagsManager* instance();
