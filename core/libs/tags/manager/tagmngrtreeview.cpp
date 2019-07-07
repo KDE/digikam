@@ -215,7 +215,7 @@ void TagMngrTreeView::slotExpandTree()
         if (isExpanded(current))
         {
             int it            = 0;
-            QModelIndex child = current.child(it++, 0);
+            QModelIndex child = current.model()->index(it++, 0, current);
 
             while (child.isValid())
             {
@@ -228,7 +228,7 @@ void TagMngrTreeView::slotExpandTree()
                     expand(child);
                 }
 
-                child = current.child(it++, 0);
+                child = current.model()->index(it++, 0, current);
             }
         }
         else

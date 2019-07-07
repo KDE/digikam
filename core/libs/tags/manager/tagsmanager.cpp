@@ -491,7 +491,7 @@ void TagsManager::slotInvertSel()
         }
 
         int it            = 0;
-        QModelIndex child = current.child(it++, 0);
+        QModelIndex child = current.model()->index(it++, 0, current);
 
         while (child.isValid())
         {
@@ -515,7 +515,7 @@ void TagsManager::slotInvertSel()
                 greyNodes.enqueue(child);
             }
 
-            child = current.child(it++, 0);
+            child = current.model()->index(it++, 0, current);
         }
     }
 }
@@ -602,12 +602,12 @@ void TagsManager::slotWipeAll()
     AlbumPointerList<TAlbum> tagList;
     const QModelIndex root  = d->tagMngrView->model()->index(0, 0);
     int iter                = 0;
-    QModelIndex child       = root.child(iter++, 0);
+    QModelIndex child       = root.model()->index(iter++, 0, root);
 
     while (child.isValid())
     {
         tagList <<  AlbumPointer<TAlbum>(d->tagMngrView->albumForIndex(child));
-        child = root.child(iter++, 0);
+        child = root.model()->index(iter++, 0, root);
     }
 
     AlbumPointerList<TAlbum>::iterator it;
@@ -895,9 +895,9 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     int iter = 0;
 
-    while (root.child(iter, 0).isValid())
+    while (root.model()->hasIndex(iter, 0, root))
     {
-        greyNodes.append(root.child(iter++, 0));
+        greyNodes.append(root.model()->index(iter++, 0, root));
     }
 
     while (!greyNodes.isEmpty())
@@ -909,14 +909,14 @@ void TagsManager::slotRemoveNotAssignedTags()
             continue;
         }
 
-        if (current.child(0, 0).isValid())
+        if (current.model()->hasIndex(0, 0, current))
         {
             // Add in the list
             int iterator = 0;
 
-            while (current.child(iterator, 0).isValid())
+            while (current.model()->hasIndex(iterator, 0, current))
             {
-                greyNodes.append(current.child(iterator++, 0));
+                greyNodes.append(current.model()->index(iterator++, 0, current));
             }
         }
         else

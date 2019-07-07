@@ -1379,7 +1379,7 @@ QModelIndex TableViewModel::deepRowIndex(const int rowNumber) const
     {
         if (hasChildren(cIndex))
         {
-            cIndex = cIndex.child(0, 0);
+            cIndex = index(0, 0, cIndex);
         }
         else
         {
@@ -1421,7 +1421,7 @@ int TableViewModel::indexToDeepRowNumber(const QModelIndex& rowIndex) const
 
         if (hasChildren(cIndex))
         {
-            cIndex = cIndex.child(0, 0);
+            cIndex = index(0, 0, cIndex);
         }
         else
         {
@@ -1462,7 +1462,7 @@ int TableViewModel::deepRowCount() const
 
         if (hasChildren(cIndex))
         {
-            cIndex = cIndex.child(0, 0);
+            cIndex = index(0, 0, cIndex);
         }
         else
         {
@@ -1508,7 +1508,7 @@ int TableViewModel::firstDeepRowNotInList(const QList<QModelIndex>& needleList)
 
         if (hasChildren(cIndex))
         {
-            cIndex = cIndex.child(0, 0);
+            cIndex = index(0, 0, cIndex);
         }
         else
         {
