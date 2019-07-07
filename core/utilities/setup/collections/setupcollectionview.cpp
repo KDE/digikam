@@ -103,21 +103,21 @@ QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*
     list << pushButton;
 
     connect(pushButton, &QPushButton::clicked,
-            this, [this, pushButton](){ emit categoryButtonPressed(pushButton->property("id").toInt()); });
+            this, [this, pushButton]() { emit categoryButtonPressed(pushButton->property("id").toInt()); });
 
     QToolButton* const updateButton = new QToolButton();
     updateButton->setAutoRaise(true);
     list << updateButton;
 
     connect(updateButton, &QToolButton::clicked,
-            this, [this, updateButton](){ emit updatePressed(updateButton->property("id").toInt()); });
+            this, [this, updateButton]() { emit updatePressed(updateButton->property("id").toInt()); });
 
     QToolButton* const deleteButton = new QToolButton();
     deleteButton->setAutoRaise(true);
     list << deleteButton;
 
     connect(deleteButton, &QToolButton::clicked,
-            this, [this, deleteButton](){ emit deletePressed(deleteButton->property("id").toInt()); });
+            this, [this, deleteButton]() { emit deletePressed(deleteButton->property("id").toInt()); });
 
     return list;
 }
