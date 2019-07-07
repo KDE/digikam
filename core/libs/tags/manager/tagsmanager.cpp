@@ -122,7 +122,7 @@ TagsManager::TagsManager()
       d(new Private())
 {
     setObjectName(QLatin1String("Tags Manager"));
-    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
+    d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);
     d->tagModel->setCheckable(false);
     setupUi(this);
 
@@ -149,9 +149,7 @@ TagsManager::TagsManager()
 TagsManager::~TagsManager()
 {
     StateSavingObject::saveState();
-    delete d->listView;
-    delete d->tagMngrView;
-    delete d->tagModel;
+
     delete d;
 }
 
@@ -165,10 +163,10 @@ TagsManager* TagsManager::instance()
     return TagsManager::internalPtr;
 }
 
-void TagsManager::setupUi(KMainWindow* const Dialog)
+void TagsManager::setupUi(KMainWindow* const dialog)
 {
-     Dialog->resize(972, 722);
-     Dialog->setWindowTitle(i18n("Tags Manager"));
+     dialog->resize(972, 722);
+     dialog->setWindowTitle(i18n("Tags Manager"));
 
      QHBoxLayout* const mainLayout = new QHBoxLayout();
 
@@ -195,7 +193,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
 
      d->splitter      = new QSplitter();
 
-     d->listView      = new TagList(d->tagMngrView,Dialog);
+     d->listView      = new TagList(d->tagMngrView, dialog);
 
      d->splitter->addWidget(d->listView);
      d->splitter->addWidget(d->tagMngrView);
@@ -300,7 +298,7 @@ void TagsManager::slotDeleteAction()
     QStringList tagsWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
-    foreach(const QModelIndex& index, selected)
+    foreach (const QModelIndex& index, selected)
     {
         if (!index.isValid())
         {
@@ -852,7 +850,7 @@ void TagsManager::setHelpText(QAction *action, const QString& text)
 
 void TagsManager::enableRootTagActions(bool value)
 {
-    foreach(QAction* const action, d->rootDisabledOptions)
+    foreach (QAction* const action, d->rootDisabledOptions)
     {
         if (value)
             action->setEnabled(true);
@@ -949,7 +947,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     QList<TAlbum*> toRemove;
 
-    foreach(QModelIndex toDelete, redNodes)
+    foreach (QModelIndex toDelete, redNodes)
     {
         QModelIndex current = toDelete;
 
@@ -977,7 +975,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     int deleteCounter = 0;
 
-    foreach(TAlbum* const elem, toRemove)
+    foreach (TAlbum* const elem, toRemove)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << elem->title();
         QString errMsg;
