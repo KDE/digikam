@@ -1293,7 +1293,7 @@ void MapWidget::addUngroupedModel(GeoModelHelper* const modelHelper)
                 this, SLOT(slotUngroupedModelChanged()));
     }
 
-    emit(signalUngroupedModelChanged(s->ungroupedModels.count() - 1));
+    emit signalUngroupedModelChanged(s->ungroupedModels.count() - 1);
 }
 
 void MapWidget::removeUngroupedModel(GeoModelHelper* const modelHelper)
@@ -1332,7 +1332,7 @@ void MapWidget::removeUngroupedModel(GeoModelHelper* const modelHelper)
     // will cause the backends to see that the last model is missing
     for (int i = modelIndex ; i <= s->ungroupedModels.count() ; ++i)
     {
-        emit(signalUngroupedModelChanged(i));
+        emit signalUngroupedModelChanged(i);
     }
 }
 
@@ -1488,7 +1488,7 @@ void MapWidget::slotClustersClicked(const QIntList& clusterIndices)
 
             s->selectionRectangle = newSelection;
             d->currentBackend->regionSelectionChanged();
-            emit(signalRegionSelectionChanged());
+            emit signalRegionSelectionChanged();
         }
     }
     else if ((s->currentMouseMode == MouseModeFilter && s->selectionRectangle.first.hasCoordinates()) ||
@@ -1980,7 +1980,7 @@ void MapWidget::slotNewSelectionFromMap(const Digikam::GeoCoordinates::Pair& sel
     s->selectionRectangle = sel;
 
     slotUpdateActionsEnabled();
-    emit(signalRegionSelectionChanged());
+    emit signalRegionSelectionChanged();
 }
 
 void MapWidget::slotRemoveCurrentRegionSelection()
@@ -1989,7 +1989,7 @@ void MapWidget::slotRemoveCurrentRegionSelection()
     d->currentBackend->regionSelectionChanged();
 
     slotUpdateActionsEnabled();
-    emit(signalRegionSelectionChanged());
+    emit signalRegionSelectionChanged();
 }
 
 void MapWidget::slotUngroupedModelChanged()
@@ -2004,7 +2004,7 @@ void MapWidget::slotUngroupedModelChanged()
         {
             if (s->ungroupedModels.at(i)->model() == senderModel)
             {
-                emit(signalUngroupedModelChanged(i));
+                emit signalUngroupedModelChanged(i);
 
                 break;
             }
@@ -2020,7 +2020,7 @@ void MapWidget::slotUngroupedModelChanged()
         {
             if (s->ungroupedModels.at(i) == senderHelper)
             {
-                emit(signalUngroupedModelChanged(i));
+                emit signalUngroupedModelChanged(i);
 
                 break;
             }
@@ -2035,7 +2035,7 @@ void MapWidget::slotUngroupedModelChanged()
         {
             if (s->ungroupedModels.at(i)->selectionModel()==senderSelectionModel)
             {
-                emit(signalUngroupedModelChanged(i));
+                emit signalUngroupedModelChanged(i);
 
                 break;
             }
@@ -2167,7 +2167,7 @@ void MapWidget::setEnabledExtraActions(const GeoExtraActions actions)
 void MapWidget::slotStickyModeChanged()
 {
     slotUpdateActionsEnabled();
-    emit(signalStickyModeChanged());
+    emit signalStickyModeChanged();
 }
 
 void MapWidget::setAllowModifications(const bool state)
@@ -2292,7 +2292,7 @@ void MapWidget::slotMouseModeChanged(QAction* triggeredAction)
         d->currentBackend->mouseModeChanged();
     }
 
-    emit(signalMouseModeChanged(s->currentMouseMode));
+    emit signalMouseModeChanged(s->currentMouseMode);
 
     /// @todo Update action availability?
 }

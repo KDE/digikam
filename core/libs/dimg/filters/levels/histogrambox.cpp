@@ -252,12 +252,12 @@ void HistogramBox::slotChannelChanged()
             break;
     }
 
-    emit(signalChannelChanged(channel()));
+    emit signalChannelChanged(channel());
 }
 
 void HistogramBox::slotScaleChanged()
 {
-    emit(signalScaleChanged(scale()));
+    emit signalScaleChanged(scale());
 }
 
 void HistogramBox::setHistogramType(HistogramBoxType type)

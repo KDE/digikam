@@ -126,12 +126,12 @@ public:
 
     QList<TableViewColumn*>     columnObjects;
     TableViewModel::Item*       rootItem;
-    ItemFilterSettings         imageFilterSettings;
+    ItemFilterSettings          imageFilterSettings;
     int                         sortColumn;
     Qt::SortOrder               sortOrder;
     bool                        sortRequired;
     GroupingMode                groupingMode;
-    QHash<qlonglong, ItemInfo> cachedItemInfos;
+    QHash<qlonglong, ItemInfo>  cachedItemInfos;
     bool                        outdated;
 };
 
@@ -393,7 +393,7 @@ void TableViewModel::slotColumnDataChanged(const qlonglong imageId)
     }
 
     const QModelIndex changedIndex      = indexFromImageId(imageId, iColumn);
-    emit(dataChanged(changedIndex, changedIndex));
+    emit dataChanged(changedIndex, changedIndex);
 }
 
 void TableViewModel::slotColumnAllDataChanged()
@@ -411,7 +411,7 @@ void TableViewModel::slotColumnAllDataChanged()
     const QModelIndex changedIndexTopLeft     = index(0, iColumn, QModelIndex());
     const QModelIndex changedIndexBottomRight = index(rowCount(QModelIndex())-1, iColumn, QModelIndex());
 
-    emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
+    emit dataChanged(changedIndexTopLeft, changedIndexBottomRight);
 }
 
 void TableViewModel::removeColumnAt(const int columnIndex)
@@ -599,7 +599,7 @@ void TableViewModel::slotSourceLayoutAboutToBeChanged()
     ///       It looks like ItemFilterModel emits layoutAboutToBeChanged and layoutChanged
     ///       even when the resulting dataset will be empty, and ModelTest does not like that.
     ///       For now, the easiest workaround is resetting the model
-//     emit(layoutAboutToBeChanged());
+//     emit layoutAboutToBeChanged();
     beginResetModel();
 }
 
@@ -658,7 +658,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
                 continue;
             }
 
-            const ItemInfo imageInfo          = s->imageModel->imageInfo(imageModelIndex);
+            const ItemInfo imageInfo           = s->imageModel->imageInfo(imageModelIndex);
 
             if (d->imageFilterSettings.matches(imageInfo))
             {
@@ -709,7 +709,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
 
             if (changedIndexBottomRight.isValid())
             {
-                emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
+                emit dataChanged(changedIndexTopLeft, changedIndexBottomRight);
             }
         }
     }
@@ -825,7 +825,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
     ASSERT_MODEL(imageModelIndex, s->imageModel);
 
     const ItemInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
-    const bool passedFilter   = d->imageFilterSettings.matches(imageInfo);
+    const bool passedFilter  = d->imageFilterSettings.matches(imageInfo);
 
     if (!passedFilter)
     {
@@ -1360,7 +1360,7 @@ void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroup
         d->groupingMode = newGroupingMode;
         QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
 
-        emit(signalGroupingModeChanged());
+        emit signalGroupingModeChanged();
     }
 }
 
@@ -1501,7 +1501,7 @@ int TableViewModel::firstDeepRowNotInList(const QList<QModelIndex>& needleList)
 
     while (cIndex.isValid())
     {
-        if (cIndex!=currentNeedleIndex)
+        if (cIndex != currentNeedleIndex)
         {
             return deepRowNumber;
         }

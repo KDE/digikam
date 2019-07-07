@@ -228,7 +228,7 @@ QItemSelectionModel* GPSItemList::getSelectionModel() const
 void GPSItemList::slotInternalTreeViewImageActivated(const QModelIndex& index)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << index << d->imageSortProxyModel->mapToSource(index);
-    emit(signalImageActivated(d->imageSortProxyModel->mapToSource(index)));
+    emit signalImageActivated(d->imageSortProxyModel->mapToSource(index));
 }
 
 GPSItemSortProxyModel* GPSItemList::getSortProxyModel() const

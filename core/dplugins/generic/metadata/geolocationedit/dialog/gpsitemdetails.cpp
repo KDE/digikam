@@ -443,7 +443,7 @@ void GPSItemDetails::slotApply()
     undoInfo.readNewDataFromItem(gpsItem);
     undoCommand->addUndoInfo(undoInfo);
     undoCommand->setText(i18n("Details changed"));
-    emit(signalUndoCommand(undoCommand));
+    emit signalUndoCommand(undoCommand);
 }
 
 void GPSItemDetails::slotSetActive(const bool state)

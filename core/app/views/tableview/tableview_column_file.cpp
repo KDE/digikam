@@ -245,7 +245,7 @@ void ColumnFileProperties::setConfiguration(const TableViewColumnConfiguration& 
 {
     configuration = newConfiguration;
 
-    emit(signalAllDataChanged());
+    emit signalAllDataChanged();
 }
 
 TableViewColumnConfigurationWidget* ColumnFileProperties::getConfigurationWidget(QWidget* const parentWidget) const
