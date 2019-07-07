@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QSignalMapper>
 #include <QSet>
 #include <QMenu>
 #include <QIcon>
