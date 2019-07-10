@@ -113,10 +113,13 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
         return;
     }
 
-    cmh.addActionNewTag(tagModificationHelper(), tag);
+    if (tag->id() != FaceTags::unconfirmedPersonTagId() && tag->id() != FaceTags::unknownPersonTagId())
+    {
+        cmh.addActionNewTag(tagModificationHelper(), tag);
 #ifdef HAVE_AKONADICONTACT
-    cmh.addCreateTagFromAddressbookMenu();
+        cmh.addCreateTagFromAddressbookMenu();
 #endif
+    }
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 
@@ -140,10 +143,12 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addExportMenu();
     cmh.addSeparator();
 
-    cmh.addActionDeleteTag(tagModificationHelper(), tag);
-    cmh.addSeparator();
-
-    cmh.addActionEditTag(tagModificationHelper(), tag);
+    if (tag->id() != FaceTags::unconfirmedPersonTagId() && tag->id() != FaceTags::unknownPersonTagId())
+    {
+        cmh.addActionDeleteTag(tagModificationHelper(), tag);
+        cmh.addSeparator();
+        cmh.addActionEditTag(tagModificationHelper(), tag);
+    }
 
     connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(QString)),
             this, SLOT(slotTagNewFromABCMenu(QString)));
