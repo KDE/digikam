@@ -52,6 +52,7 @@
 #include "digikam_config.h"
 #include "dxmlguiwindow.h"
 #include "digikam_export.h"
+#include "facetags.h"
 
 namespace Solid
 {

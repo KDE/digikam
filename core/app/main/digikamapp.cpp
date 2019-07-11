@@ -452,7 +452,9 @@ void DigikamApp::slotAlbumSelected(Album* album)
 
             // Special case if Tag album.
 
-            bool enabled = (album->type() == Album::TAG) && !album->isRoot();
+            bool enabled = (album->type() == Album::TAG) && !album->isRoot() &&
+                    album->id() != FaceTags::unconfirmedPersonTagId() && album->id() != FaceTags::unknownPersonTagId();
+
             d->newTagAction->setEnabled(enabled);
             d->deleteTagAction->setEnabled(enabled);
             d->editTagAction->setEnabled(enabled);
