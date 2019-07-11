@@ -25,8 +25,6 @@ if(MINGW)
         GIT_REPOSITORY https://github.com/wang-bin/QtAV.git
         GIT_TAG ${QTAV_VERSION}
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-version.patch
-
         CONFIGURE_COMMAND rm -rfv ${MXE_INSTALL_PREFIX}/qt5/include/QtAV &&
                           rm -rfv ${MXE_INSTALL_PREFIX}/qt5/include/QtAVWidgets &&
                           rm -fv  ${MXE_INSTALL_PREFIX}/qt5/lib/libQtAV1.a &&
@@ -63,8 +61,7 @@ elseif(APPLE)
                       rm -rfv ${INSTALL_ROOT}/libexec/qt5/lib/QtAVWidgets.framework &&
                       rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAV &&
                       rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAVWidgets &&
-                      ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-macos.patch &&
-                      ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-version.patch
+                      ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-macos.patch
 
         CONFIGURE_COMMAND mkdir build && cd build && qmake ..
 
@@ -95,8 +92,7 @@ else() #Linux
         GIT_REPOSITORY https://github.com/wang-bin/QtAV.git
         GIT_TAG ${QTAV_VERSION}
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-appimage.patch &&
-                      ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-version.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-appimage.patch
 
         CONFIGURE_COMMAND rm -rfv ${INSTALL_ROOT}/include/QtAV &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAVWidgets &&
