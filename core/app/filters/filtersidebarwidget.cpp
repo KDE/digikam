@@ -298,6 +298,12 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)),
             this, SIGNAL(signalRatingFilterChanged(int,ItemFilterSettings::RatingCondition,bool)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()), d->faceFilterView, SLOT(setPeopleAsRoot()));
+
+    //Have to do like this
+    //Something strange is happening when trying to access filteredModel()->filterChanged() signal
+    connect(d->faceFilterSearchBar, &SearchTextBar::signalSearchTextSettings, d->faceFilterView, &TagFolderView::setPeopleAsRoot);
 }
 
 FilterSideBarWidget::~FilterSideBarWidget()

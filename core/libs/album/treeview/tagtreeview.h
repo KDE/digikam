@@ -29,6 +29,7 @@
 // Local includes
 
 #include "abstractcheckablealbumtreeview.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -71,6 +72,9 @@ public Q_SLOTS:
 
     void setCurrentAlbums(const QList<Album*>& tags, bool selectInAlbumManager = true);
     void setCurrentAlbum(int tagId, bool selectInAlbumManager = true);
+
+    ///For face tags
+    void setPeopleAsRoot();
 
 Q_SIGNALS:
 

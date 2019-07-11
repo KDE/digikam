@@ -68,6 +68,7 @@
 #include "labelstreeview.h"
 #include "coredb.h"
 #include "dexpanderbox.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -1466,6 +1467,12 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
 
     connect(d->rescanButton, SIGNAL(pressed()),
             this, SLOT(slotScanForFaces()) );
+
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()), d->tagFolderView, SLOT(setPeopleAsRoot()));
+
+    //Have to do like this
+    //Something strange is happening when trying to access filteredModel()->filterChanged() signal
+    connect(d->tagSearchBar, &SearchTextBar::signalSearchTextSettings, d->tagFolderView, &TagFolderView::setPeopleAsRoot);
 }
 
 PeopleSideBarWidget::~PeopleSideBarWidget()

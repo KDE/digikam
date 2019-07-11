@@ -149,4 +149,25 @@ void TagTreeView::setCurrentAlbum(int albumId, bool selectInAlbumManager)
     setCurrentAlbums(QList<Album*>() << album, selectInAlbumManager);
 }
 
+void TagTreeView::setPeopleAsRoot()
+{
+
+    //Unfortunately the only way to set new Root Index is to use QAbstractItemModel directly
+    //Indexes from our filterModel or TagModel don't work here
+    static int i = 0;
+    qDebug() << QString(QLatin1String("AAAAAAAAAAAAAA: ")) << i++;
+    for(int i = 0; ;++i)
+    {
+        if (!model()->hasIndex(i, 0))
+            break;
+        QModelIndex ind = model()->index(i, 0);
+        if (model()->data(ind, TagModel::AlbumIdRole) ==
+                FaceTags::personParentTag())
+        {
+            setRootIndex(ind);
+            break;
+        }
+    }
+}
+
 } // namespace Digikam
