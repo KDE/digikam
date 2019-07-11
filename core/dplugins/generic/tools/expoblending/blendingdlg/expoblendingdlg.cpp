@@ -188,7 +188,7 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     // ---------------------------------------------------------------
 
     QGroupBox* const save            = new QGroupBox(rightPanel);
-    save->setTitle(i18n("Save Settings"));
+    save->setTitle(i18n("Save Result"));
     QVBoxLayout* const slay = new QVBoxLayout(save);
     save->setLayout(slay);
 

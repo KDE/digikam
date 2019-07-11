@@ -100,4 +100,5 @@ BUGFIXES:
 090 ==> 329438 - Rename function with Date & Time does not work with NTFS.
 091 ==> 409528 - Unable to select default email client / outlook for sending by email.
 092 ==> 409686 - Digikam hits database deadlock on start with gelocation query.
-093 ==> 
+093 ==> 409698 - Typo in digiKam menu.
+094 ==> 
