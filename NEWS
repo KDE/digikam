@@ -1,10 +1,14 @@
-digiKam 6.2.0 - Release date: 2019-06-??
+digiKam 6.2.0 - Release date: 2019-07-??
 
 *****************************************************************************************************
 NEW FEATURES:
 
 IconView : HiDPI support for 4K screens.
-
+General  : Internal Libraw updated to last stable 0.19.3. New camera supported:
+           Canon A560, FujiFilm X-T30, Nikon Coolpix A1000, Z6, Z7, Olympus E-M1X,
+           Sony ILCE-6400, Several dng files from phones and drones.
+           Full camera List supported: https://www.libraw.org/supported-cameras-snapshot-201903
+ 
 *****************************************************************************************************
 BUGFIXES:
 
