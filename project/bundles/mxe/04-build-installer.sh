@@ -15,6 +15,8 @@ set -eE
 trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
 trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
 
+export LANG=C
+
 #################################################################################################
 # Manage script traces to log file
 
@@ -155,7 +157,7 @@ kbuildsycoca5.exe \
 for app in $EXE_FILES ; do
 
     cp $MXE_INSTALL_PREFIX/bin/$app $BUNDLEDIR/
-    LANG=C $ORIG_WD/rll.py --copy --installprefix $MXE_INSTALL_PREFIX --odir $BUNDLEDIR --efile $BUNDLEDIR/$app
+    $ORIG_WD/rll.py --copy --installprefix $MXE_INSTALL_PREFIX --odir $BUNDLEDIR --efile $BUNDLEDIR/$app
 
 done
 
