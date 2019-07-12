@@ -1,10 +1,14 @@
-digiKam 6.2.0 - Release date: 2019-06-??
+digiKam 6.2.0 - Release date: 2019-07-??
 
 *****************************************************************************************************
 NEW FEATURES:
 
 IconView : HiDPI support for 4K screens.
-
+General  : Internal Libraw updated to last stable 0.19.3. New camera supported:
+           Canon A560, FujiFilm X-T30, Nikon Coolpix A1000, Z6, Z7, Olympus E-M1X,
+           Sony ILCE-6400, Several dng files from phones and drones.
+           Full camera List supported: https://www.libraw.org/supported-cameras-snapshot-201903
+ 
 *****************************************************************************************************
 BUGFIXES:
 
@@ -101,4 +105,5 @@ BUGFIXES:
 091 ==> 409528 - Unable to select default email client / outlook for sending by email.
 092 ==> 409686 - Digikam hits database deadlock on start with gelocation query.
 093 ==> 409698 - Typo in digiKam menu.
-094 ==> 
+094 ==> 409721 - Showfoto export WebP images without colour space.
+095 ==> 
