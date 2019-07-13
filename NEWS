@@ -107,4 +107,5 @@ BUGFIXES:
 093 ==> 409698 - Typo in digiKam menu.
 094 ==> 409721 - Showfoto export WebP images without colour space.
 095 ==> 409699 - Strange menu name.
-096 ==> 
+096 ==> 391674 - AppImage version 5.8.0 errors on update.
+097 ==> 
