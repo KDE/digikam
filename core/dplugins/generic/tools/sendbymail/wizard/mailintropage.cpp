@@ -48,6 +48,7 @@
 #include "kmailbinary.h"
 #include "evolutionbinary.h"
 #include "netscapebinary.h"
+#include "outlookbinary.h"
 #include "sylpheedbinary.h"
 #include "thunderbirdbinary.h"
 
@@ -83,6 +84,7 @@ public:
     EvolutionBinary   evoluBin;
     KmailBinary       kmailBin;
     NetscapeBinary    netscBin;
+    OutlookBinary     outloBin;
     SylpheedBinary    sylphBin;
     ThunderbirdBinary thundBin;
 };
@@ -125,6 +127,7 @@ MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
     d->binSearch->addBinary(d->kmailBin);
     d->binSearch->addBinary(d->evoluBin);
     d->binSearch->addBinary(d->netscBin);
+    d->binSearch->addBinary(d->outloBin);
     d->binSearch->addBinary(d->sylphBin);
     d->binSearch->addBinary(d->thundBin);
 
@@ -200,6 +203,9 @@ void MailIntroPage::slotBinariesFound()
 
     d->wizard->settings()->binPaths.insert(MailSettings::NETSCAPE, d->netscBin.isValid() ?
                                            d->netscBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::OUTLOOK, d->outloBin.isValid() ?
+                                           d->outloBin.path() : QString());
 
     d->wizard->settings()->binPaths.insert(MailSettings::SYLPHEED, d->sylphBin.isValid() ?
                                            d->sylphBin.path() : QString());

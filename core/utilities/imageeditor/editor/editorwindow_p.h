@@ -28,7 +28,6 @@
 
 #include <QList>
 #include <QString>
-#include <QSignalMapper>
 #include <QMenu>
 
 // KDE includes
@@ -87,9 +86,6 @@ public:
         zoomPlusAction(nullptr),
         zoomTo100percents(nullptr),
         openWithAction(nullptr),
-        undoSignalMapper(nullptr),
-        redoSignalMapper(nullptr),
-        formatMenuActionMapper(nullptr),
         waitingLoop(nullptr),
         currentWindowModalDialog(nullptr),
         zoomFitToWindowAction(nullptr),
@@ -159,10 +155,6 @@ public:
     QAction*                     zoomPlusAction;
     QAction*                     zoomTo100percents;
     QAction*                     openWithAction;
-
-    QSignalMapper*               undoSignalMapper;
-    QSignalMapper*               redoSignalMapper;
-    QSignalMapper*               formatMenuActionMapper;
 
     QEventLoop*                  waitingLoop;
     QDialog*                     currentWindowModalDialog;
@@ -268,20 +260,11 @@ void EditorWindow::Private::legacyUpdateSplitterState(KConfigGroup& group)
 void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, QMenu* const menuAction,
                                                          const QString& text, const QString& format)
 {
-    if (!formatMenuActionMapper)
-    {
-        formatMenuActionMapper = new QSignalMapper(q);
-
-        connect(formatMenuActionMapper, SIGNAL(mapped(QString)),
-                q, SLOT(saveNewVersionInFormat(QString)));
-    }
-
     QAction* const action = new QAction(text, q);
 
-    connect(action, SIGNAL(triggered()),
-            formatMenuActionMapper, SLOT(map()));
+    connect(action, &QAction::triggered,
+            q, [q, format]() { q->saveNewVersionInFormat(format); });
 
-    formatMenuActionMapper->setMapping(action, format);
     menuAction->addAction(action);
 }
 

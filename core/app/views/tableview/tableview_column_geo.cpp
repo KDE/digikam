@@ -275,7 +275,7 @@ void ColumnGeoProperties::setConfiguration(const TableViewColumnConfiguration& n
 {
     configuration = newConfiguration;
 
-    emit(signalAllDataChanged());
+    emit signalAllDataChanged();
 }
 
 } // namespace TableViewColumns

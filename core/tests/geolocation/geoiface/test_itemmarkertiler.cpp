@@ -55,7 +55,7 @@ void MarkerModelHelper::slotDataChanged(const QModelIndex& topLeft,
 {
     Q_UNUSED(topLeft)
     Q_UNUSED(bottomRight)
-    emit(signalModelChangedDrastically());
+    emit signalModelChangedDrastically();
 }
 
 QAbstractItemModel* MarkerModelHelper::model() const

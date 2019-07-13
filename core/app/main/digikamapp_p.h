@@ -30,7 +30,6 @@
 #include <QEventLoop>
 #include <QMap>
 #include <QPointer>
-#include <QSignalMapper>
 #include <QString>
 #include <QAction>
 #include <QMenu>
@@ -261,8 +260,6 @@ public:
         addCameraSeparatorAction(nullptr),
         quitAction(nullptr),
         tipAction(nullptr),
-        backwardSignalMapper(nullptr),
-        forwardSignalMapper(nullptr),
         manualCameraActionGroup(nullptr),
         solidCameraActionGroup(nullptr),
         solidUsmActionGroup(nullptr),
@@ -393,8 +390,6 @@ public:
     QAction*                            quitAction;
     QAction*                            tipAction;
 
-    QSignalMapper*                      backwardSignalMapper;
-    QSignalMapper*                      forwardSignalMapper;
     QActionGroup*                       manualCameraActionGroup;
     QActionGroup*                       solidCameraActionGroup;
     QActionGroup*                       solidUsmActionGroup;

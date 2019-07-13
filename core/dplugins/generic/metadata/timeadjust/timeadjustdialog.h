@@ -97,7 +97,7 @@ private:
 
 protected:
 
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
 private:
 

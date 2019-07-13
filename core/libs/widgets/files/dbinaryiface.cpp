@@ -302,41 +302,57 @@ bool DBinaryIface::checkDirForPath(const QString& possibleDir)
     QString possiblePath = path(possibleDir);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Testing " << possiblePath << "...";
-    QProcess process;
-    process.setProcessChannelMode(QProcess::MergedChannels);
-    process.setProcessEnvironment(adjustedEnvironmentForAppImage());
-    process.start(possiblePath, m_binaryArguments);
 
-    bool val = process.waitForFinished();
-
-    if (val && (process.error() != QProcess::FailedToStart))
+    if (m_binaryArguments.isEmpty())
     {
-        m_isFound = true;
-
-        if (m_checkVersion)
-        {
-            QString stdOut = QString::fromUtf8(process.readAllStandardOutput());
-
-            if (parseHeader(stdOut))
-            {
-                m_pathDir = possibleDir;
-                writeConfig();
-
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
-                ret = true;
-            }
-            else
-            {
-                // TODO: do something if the version is not right or not found
-            }
-        }
-        else
+        if (QFile::exists(possiblePath))
         {
             m_pathDir = possibleDir;
+            m_isFound = true;
             writeConfig();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path();
             ret = true;
+        }
+    }
+    else
+    {
+        QProcess process;
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.setProcessEnvironment(adjustedEnvironmentForAppImage());
+        process.start(possiblePath, m_binaryArguments);
+
+        bool val = process.waitForFinished();
+
+        if (val && (process.error() != QProcess::FailedToStart))
+        {
+            m_isFound = true;
+
+            if (m_checkVersion)
+            {
+                QString stdOut = QString::fromUtf8(process.readAllStandardOutput());
+
+                if (parseHeader(stdOut))
+                {
+                    m_pathDir = possibleDir;
+                    writeConfig();
+
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
+                    ret = true;
+                }
+                else
+                {
+                    // TODO: do something if the version is not right or not found
+                }
+            }
+            else
+            {
+                m_pathDir = possibleDir;
+                writeConfig();
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path();
+                ret = true;
+            }
         }
     }
 

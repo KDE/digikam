@@ -67,17 +67,17 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual QWidget* createWidget();
-    virtual void     setActive(bool);
-    virtual void     visualChange();
-    virtual void     showOnIndex(const QModelIndex& index);
-    virtual void     hide();
-    virtual bool     checkIndex(const QModelIndex& index) const;
-    virtual void     viewportLeaveEvent(QObject* obj, QEvent* event);
-    virtual void     widgetEnterEvent();
-    virtual void     widgetLeaveEvent();
-    virtual void     setFocusOnWidget();
-    virtual bool     eventFilter(QObject* o, QEvent* e);
+    virtual QWidget* createWidget() override;
+    virtual void     setActive(bool) override;
+    virtual void     visualChange() override;
+    virtual void     showOnIndex(const QModelIndex& index) override;
+    virtual void     hide() override;
+    virtual bool     checkIndex(const QModelIndex& index) const override;
+    virtual void     viewportLeaveEvent(QObject* obj, QEvent* event) override;
+    virtual void     widgetEnterEvent() override;
+    virtual void     widgetLeaveEvent() override;
+    virtual void     setFocusOnWidget() override;
+    virtual bool     eventFilter(QObject* o, QEvent* e) override;
 
     void updatePosition();
     void updateFace();

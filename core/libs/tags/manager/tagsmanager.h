@@ -55,7 +55,7 @@ public:
      * @brief setupUi   setup all gui elements for Tag Manager
      * @param Dialog    parent dialog
      */
-    void setupUi(KMainWindow* const Dialog);
+    void setupUi(KMainWindow* const dialog);
 
     static QPointer<TagsManager> internalPtr;
     static TagsManager* instance();
@@ -154,10 +154,10 @@ private Q_SLOTS:
 
 protected:
 
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
 
-    virtual void doLoadState();
-    virtual void doSaveState();
+    virtual void doLoadState() override;
+    virtual void doSaveState() override;
 
 private:
 

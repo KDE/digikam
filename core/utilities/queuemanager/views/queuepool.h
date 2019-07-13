@@ -61,8 +61,8 @@ Q_SIGNALS:
 
 private:
 
-    void dragEnterEvent(QDragEnterEvent* e);
-    void dragMoveEvent(QDragMoveEvent* e);
+    void dragEnterEvent(QDragEnterEvent* e) override;
+    void dragMoveEvent(QDragMoveEvent* e) override;
 };
 
 // --------------------------------------------------------------------------------------

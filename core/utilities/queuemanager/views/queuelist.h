@@ -158,18 +158,18 @@ private:
     void hideToolTip();
     bool acceptToolTip(const QPoint& pos) const;
 
-    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const;
-    Qt::DropActions supportedDropActions()                        const;
-    void            startDrag(Qt::DropActions supportedActions);
+    QMimeData*      mimeData(const QList<QTreeWidgetItem*> items) const override;
+    Qt::DropActions supportedDropActions()                        const override;
+    void            startDrag(Qt::DropActions supportedActions) override;
 
-    void dragMoveEvent(QDragMoveEvent*);
-    void dragEnterEvent(QDragEnterEvent*);
-    void dropEvent(QDropEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void wheelEvent(QWheelEvent*);
-    void keyPressEvent(QKeyEvent*);
-    void focusOutEvent(QFocusEvent*);
-    void leaveEvent(QEvent*);
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dropEvent(QDropEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
+    void keyPressEvent(QKeyEvent*) override;
+    void focusOutEvent(QFocusEvent*) override;
+    void leaveEvent(QEvent*) override;
     void resetQueue();
 
     void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;

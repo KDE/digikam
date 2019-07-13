@@ -205,7 +205,7 @@ void ItemMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const
         return;
     }
 //     d->isDirty=true;
-//     emit(signalTilesOrSelectionChanged());
+//     emit signalTilesOrSelectionChanged();
 //     return;
 
     for (int i = 0; i < selected.count(); ++i)
@@ -267,7 +267,7 @@ void ItemMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const
         }
     }
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void ItemMarkerTiler::slotSourceModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
@@ -295,12 +295,12 @@ void ItemMarkerTiler::slotSourceModelRowsInserted(const QModelIndex& parentIndex
         addMarkerIndexToGrid(QPersistentModelIndex(d->markerModel->index(i, 0, parentIndex)));
     }
 
-    emit(signalTilesOrSelectionChanged());
+    emit signalTilesOrSelectionChanged();
 }
 
 void ItemMarkerTiler::slotSourceModelRowsAboutToBeRemoved(const QModelIndex& parentIndex, int start, int end)
 {
-    // TODO: emit(signalTilesOrSelectionChanged()); in rowsWereRemoved
+    // TODO: emit signalTilesOrSelectionChanged(); in rowsWereRemoved
 #if QT_VERSION < 0x040600
     // removeMarkerIndexFromGrid does not work in Qt 4.5 because the model has already deleted all
     // the data of the item, but we need the items coordinates to work efficiently
@@ -326,7 +326,7 @@ void ItemMarkerTiler::slotSourceModelRowsAboutToBeRemoved(const QModelIndex& par
 
 void ItemMarkerTiler::slotThumbnailAvailableForIndex(const QPersistentModelIndex& index, const QPixmap& pixmap)
 {
-    emit(signalThumbnailAvailableForIndex(QVariant::fromValue(index), pixmap));
+    emit signalThumbnailAvailableForIndex(QVariant::fromValue(index), pixmap);
 }
 
 void ItemMarkerTiler::slotSourceModelReset()

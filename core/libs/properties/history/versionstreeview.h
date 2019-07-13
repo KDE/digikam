@@ -58,15 +58,15 @@ public:
 
 protected:
 
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual bool viewportEvent(QEvent* event);
-    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers);
+    virtual void paintEvent(QPaintEvent* e) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual bool viewportEvent(QEvent* event) override;
+    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
 
     DECLARE_VIEW_DRAG_DROP_METHODS(QTreeView)
-    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index)    const;
-    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
-    virtual AbstractItemDragDropHandler* dragDropHandler()               const;
+    virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index)    const override;
+    virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const override;
+    virtual AbstractItemDragDropHandler* dragDropHandler()               const override;
     virtual void setDragDropHandler(AbstractItemDragDropHandler* handler);
 
 protected:

@@ -124,15 +124,15 @@ private:
     int           statForDateTime(const QDateTime& dt, SelectionMode& selected) const;
     void          setRefDateTime(const QDateTime& dateTime);
 
-    void          paintEvent(QPaintEvent*);
-    void          wheelEvent(QWheelEvent*);
+    void          paintEvent(QPaintEvent*) override;
+    void          wheelEvent(QWheelEvent*) override;
 
-    void          mousePressEvent(QMouseEvent*);
-    void          mouseMoveEvent(QMouseEvent*);
-    void          mouseReleaseEvent(QMouseEvent*);
+    void          mousePressEvent(QMouseEvent*) override;
+    void          mouseMoveEvent(QMouseEvent*) override;
+    void          mouseReleaseEvent(QMouseEvent*) override;
 
-    void          keyPressEvent(QKeyEvent *e);
-    void          keyReleaseEvent(QKeyEvent *);
+    void          keyPressEvent(QKeyEvent *e) override;
+    void          keyReleaseEvent(QKeyEvent *) override;
     void          keyScroll(bool isScrollNext);
 
     QDateTime     dateTimeForPoint(const QPoint& pt, bool& isOnSelectionArea);

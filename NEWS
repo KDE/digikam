@@ -1,10 +1,14 @@
-digiKam 6.2.0 - Release date: 2019-06-??
+digiKam 6.2.0 - Release date: 2019-07-??
 
 *****************************************************************************************************
 NEW FEATURES:
 
 IconView : HiDPI support for 4K screens.
-
+General  : Internal Libraw updated to last stable 0.19.3. New camera supported:
+           Canon A560, FujiFilm X-T30, Nikon Coolpix A1000, Z6, Z7, Olympus E-M1X,
+           Sony ILCE-6400, Several dng files from phones and drones.
+           Full camera List supported: https://www.libraw.org/supported-cameras-snapshot-201903
+ 
 *****************************************************************************************************
 BUGFIXES:
 
@@ -92,4 +96,18 @@ BUGFIXES:
 082 ==> 405589 - Date taken metadata for video files (start video not used and difference of time).
 083 ==> 409087 - OpenGL Viewer does not respect the picture rotation.
 084 ==> 408881 - Digikam Editor automatically reapplies last edition, even on a different picture.
-085 ==> 
+085 ==> 391840 - Timeline does not show any pictures if range is too big.
+086 ==> 408878 - 'Open with' shows nothing.
+087 ==> 387575 - Last note in server instructions is truncated.
+088 ==> 165753 - Scale image: Allow setting new size in inch/cm/mm.
+089 ==> 402063 - Database names is not valid.
+090 ==> 329438 - Rename function with Date & Time does not work with NTFS.
+091 ==> 409528 - Unable to select default email client / outlook for sending by email.
+092 ==> 409686 - Digikam hits database deadlock on start with gelocation query.
+093 ==> 409698 - Typo in digiKam menu.
+094 ==> 409721 - Showfoto export WebP images without colour space.
+095 ==> 409699 - Strange menu name.
+096 ==> 391674 - AppImage version 5.8.0 errors on update.
+097 ==> 409585 - QMYSQL driver not loaded.
+098 ==> 
+

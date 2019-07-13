@@ -692,7 +692,7 @@ void DisjointMetadata::loadTags(const QList<int>& tagIds)
     {
         if (it.value() == MetadataAvailable)
         {
-            if (qBinaryFind(loadedTagIds.begin(), loadedTagIds.end(), it.key()) == loadedTagIds.end())
+            if (!std::binary_search(loadedTagIds.begin(), loadedTagIds.end(), it.key()))
             {
                 it.value() = MetadataDisjoint;
             }

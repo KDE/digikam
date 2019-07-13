@@ -178,7 +178,7 @@ protected Q_SLOTS:
 
 private:
 
-    void keyPressEvent(QKeyEvent*);
+    void keyPressEvent(QKeyEvent*) override;
 
 private:
 

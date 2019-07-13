@@ -254,7 +254,7 @@ void WSAuthentication::prepareForUpload()
 
     if (d->transferQueue.isEmpty())
     {
-        emit(QLatin1String("transferQueue is empty"), true);
+        emit signalMessage(QLatin1String("transferQueue is empty"), true);
         return;
     }
 

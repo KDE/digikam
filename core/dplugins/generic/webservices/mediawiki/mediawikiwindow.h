@@ -67,8 +67,8 @@ private Q_SLOTS:
 
 private:
 
-    bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent*)                 Q_DECL_OVERRIDE;
+    bool eventFilter(QObject* obj, QEvent* event) override;
+    void closeEvent(QCloseEvent*)                 override;
     void readSettings();
     void saveSettings();
 

@@ -384,15 +384,17 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<p>...</p>"
                                                "<p>quit</p>"
                                                "<p>NOTE: If you have an enormous collection, you should start MySQL server with "
-                                               "mysql --max_allowed_packet=128M OR in my.ini or ~/.my.cnf, change the settings</p>"),
+                                               "mysql --max_allowed_packet=128M OR in my.ini or ~/.my.cnf, change the settings</p><p></p>"),
                                           d->dbNoticeBox);
     notice2->setWordWrap(true);
+    notice2->setSizePolicy(QSizePolicy::MinimumExpanding,
+                           QSizePolicy::MinimumExpanding);
 
     vlay2->addWidget(notice);
     vlay2->addWidget(d->sqlInit);
+    vlay2->addWidget(notice2);
     vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay2->setSpacing(spacing);
-    vlay2->addWidget(notice2);
 
     d->tab->addTab(d->dbNoticeBox, i18n("Requirements"));
 
@@ -421,6 +423,8 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "Look in <b>Requirements</b> tab for details.</p>"),
                                           d->dbDetailsBox);
     details->setWordWrap(true);
+    details->setSizePolicy(QSizePolicy::MinimumExpanding,
+                           QSizePolicy::MinimumExpanding);
 
     vlay3->addWidget(details);
     vlay3->setContentsMargins(spacing, spacing, spacing, spacing);

@@ -99,7 +99,7 @@ void ExpoBlendingPlugin::setup(QObject* const parent)
 {
     DPluginAction* const ac = new DPluginAction(parent);
     ac->setIcon(icon());
-    ac->setText(i18nc("@action", "Create Stacked Images..."));
+    ac->setText(i18nc("@action", "Blend Stacked Images..."));
     ac->setObjectName(QLatin1String("expoblending"));
     ac->setActionCategory(DPluginAction::GenericTool);
 

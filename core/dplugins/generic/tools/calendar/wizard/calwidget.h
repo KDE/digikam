@@ -52,7 +52,7 @@ public Q_SLOTS:
 
 protected:
 
-    void paintEvent(QPaintEvent* e);
+    void paintEvent(QPaintEvent* e) override;
 
 protected:
 

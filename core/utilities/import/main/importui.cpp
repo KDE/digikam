@@ -47,7 +47,6 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScrollArea>
-#include <QSignalMapper>
 #include <QSplitter>
 #include <QTimer>
 #include <QToolButton>
@@ -485,31 +484,33 @@ void ImportUI::setupActions()
 
     d->itemSortAction                    = new KSelectAction(i18nc("@title:menu", "&Sort Items"), this);
     d->itemSortAction->setWhatsThis(i18nc("@info:whatsthis", "The value by which the items are sorted in the thumbnail view"));
-    QSignalMapper* const imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesBy(int)));
     ac->addAction(QLatin1String("item_sort"), d->itemSortAction);
 
     // map to CamItemSortSettings enum
     QAction* const sortByNameAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Name"));
     QAction* const sortByPathAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Path"));
-    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Date")); //TODO: Implement sort by creation date.
+    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Date"));
     QAction* const sortByFileSizeAction = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Size"));
     QAction* const sortByRatingAction   = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Rating"));
     QAction* const sortByDownloadAction = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Download State"));
 
-    connect(sortByNameAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map())); //TODO: Implement sort by creation date.
-    connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByNameAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByFileName); });
 
-    imageSortMapper->setMapping(sortByNameAction,     (int)CamItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction,     (int)CamItemSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction,     (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
-    imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction,   (int)CamItemSortSettings::SortByRating);
-    imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
+    connect(sortByPathAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByFilePath); });
+
+    connect(sortByDateAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByCreationDate); });
+
+    connect(sortByFileSizeAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByFileSize); });
+
+    connect(sortByRatingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByRating); });
+
+    connect(sortByDownloadAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesBy((int)CamItemSortSettings::SortByDownloadState); });
 
     d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
 
@@ -517,18 +518,18 @@ void ImportUI::setupActions()
 
     d->itemSortOrderAction                    = new KSelectAction(i18nc("@title:inmenu", "Item Sorting &Order"), this);
     d->itemSortOrderAction->setWhatsThis(i18nc("@info:whatsthis", "Defines whether items are sorted in ascending or descending manner."));
-    QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
-    connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     ac->addAction(QLatin1String("item_sort_order"), d->itemSortOrderAction);
 
-    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")), i18nc("@item:inmenu Sorting Order", "Ascending"));
-    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18nc("@item:inmenu Sorting Order", "Descending"));
+    QAction* const sortAscendingAction  = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),
+                                                                            i18nc("@item:inmenu Sorting Order", "Ascending"));
+    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")),
+                                                                            i18nc("@item:inmenu Sorting Order", "Descending"));
 
-    connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
-    connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortAscendingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesOrder((int)CamItemSortSettings::AscendingOrder); });
 
-    imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
-    imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
+    connect(sortDescendingAction, &QAction::triggered,
+            this, [this]() { d->view->slotSortImagesOrder((int)CamItemSortSettings::DescendingOrder); });
 
     d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
 
@@ -536,25 +537,25 @@ void ImportUI::setupActions()
 
     d->itemsGroupAction                  = new KSelectAction(i18nc("@title:menu", "&Group Items"), this);
     d->itemsGroupAction->setWhatsThis(i18nc("@info:whatsthis", "The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* const itemSeparationMapper = new QSignalMapper(this);
-    connect(itemSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
     ac->addAction(QLatin1String("item_group"), d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
     QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "Flat List"));
     QAction* const groupByFolderAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Folder"));
     QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Format"));
-    QAction* const groupByDateAction =   d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Date"));
+    QAction* const groupByDateAction   = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Date"));
 
-    connect(noCategoriesAction,  SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
-    connect(groupByFolderAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
-    connect(groupByDateAction,   SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(noCategoriesAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)CamItemSortSettings::NoCategories); });
 
-    itemSeparationMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
-    itemSeparationMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
-    itemSeparationMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
-    itemSeparationMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
+    connect(groupByFolderAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)CamItemSortSettings::CategoryByFolder); });
+
+    connect(groupByFormatAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)CamItemSortSettings::CategoryByFormat); });
+
+    connect(groupByDateAction, &QAction::triggered,
+            this, [this]() { d->view->slotSeparateImages((int)CamItemSortSettings::CategoryByDate); });
 
     d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageSeparationMode());
 

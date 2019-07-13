@@ -215,7 +215,7 @@ public:
     {
     }
 
-    ItemFilterModel*           model;
+    ItemFilterModel*            model;
     ImportFilterModel*          importModel;
     QItemSelectionModel*        selectionModel;
     ThumbnailLoadThread*        thumbnailLoadThread;
@@ -413,7 +413,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
     QList<QModelIndex> indexList;
     QModelIndex        bestIndex;
 
-    for (int i=0; i < list.count(); ++i)
+    for (int i = 0 ; i < list.count() ; ++i)
     {
         const QModelIndex newIndex(list.at(i));
         indexList.append(newIndex);
@@ -447,15 +447,15 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             bestIndex                     = indexList.first();
             GPSItemInfo bestGPSItemInfo = gpsItemInfoList.first();
 
-            for (int i=1; i < gpsItemInfoList.count(); ++i)
+            for (int i = 1 ; i < gpsItemInfoList.count() ; ++i)
             {
                 const GPSItemInfo& currentInfo = gpsItemInfoList.at(i);
 
                 if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
-                                                   currentInfo, SelectedNone,
-                                                   SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
+                                                  currentInfo, SelectedNone,
+                                                  SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
                 {
-                    bestIndex        = indexList.at(i);
+                    bestIndex       = indexList.at(i);
                     bestGPSItemInfo = currentInfo;
                 }
             }
@@ -508,15 +508,15 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             bestIndex                     = indexList.first();
             GPSItemInfo bestGPSItemInfo = gpsItemInfoList.first();
 
-            for (int i=1; i < gpsItemInfoList.count(); ++i)
+            for (int i = 1 ; i < gpsItemInfoList.count() ; ++i)
             {
                 const GPSItemInfo& currentInfo = gpsItemInfoList.at(i);
 
                 if (GPSItemInfoSorter::fitsBetter(bestGPSItemInfo, SelectedNone,
-                                                   currentInfo, SelectedNone,
-                                                   SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
+                                                  currentInfo, SelectedNone,
+                                                  SelectedNone, GPSItemInfoSorter::SortOptions(sortKey)))
                 {
-                    bestIndex        = indexList.at(i);
+                    bestIndex       = indexList.at(i);
                     bestGPSItemInfo = currentInfo;
                 }
             }
@@ -547,7 +547,7 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
     if (currentIndex.isValid())
     {
         QPersistentModelIndex goodIndex(currentIndex);
-        emit(signalThumbnailAvailableForIndex(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2)));
+        emit signalThumbnailAvailableForIndex(goodIndex, thumb.copy(1, 1, thumb.size().width()-2, thumb.size().height()-2));
     }
 }
 
@@ -574,7 +574,7 @@ void MapViewModelHelper::slotThumbnailLoaded(const CamItemInfo& info)
     if (currentIndex.isValid())
     {
         QPersistentModelIndex goodIndex(currentIndex);
-        emit(signalThumbnailAvailableForIndex(goodIndex, pix.copy(1, 1, pix.size().width()-2, pix.size().height()-2)));
+        emit signalThumbnailAvailableForIndex(goodIndex, pix.copy(1, 1, pix.size().width()-2, pix.size().height()-2));
     }
 }
 
@@ -616,9 +616,9 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 //    const DatabaseFields::ItemPositions imagePositionChanges = changes;
 
     /// @todo More detailed check
-    if (( changes & DatabaseFields::LatitudeNumber )  ||
-        ( changes & DatabaseFields::LongitudeNumber ) ||
-        ( changes & DatabaseFields::Altitude ) )
+    if ((changes & DatabaseFields::LatitudeNumber)  ||
+        (changes & DatabaseFields::LongitudeNumber) ||
+        (changes & DatabaseFields::Altitude))
     {
         foreach (const qlonglong& id, changeset.ids())
         {
@@ -626,7 +626,7 @@ void MapViewModelHelper::slotImageChange(const ImageChangeset& changeset)
 
             if (index.isValid())
             {
-                emit(signalModelChangedDrastically());
+                emit signalModelChangedDrastically();
                 break;
             }
         }

@@ -32,7 +32,6 @@
 #include <QList>
 #include <QTreeView>
 #include <QStyledItemDelegate>
-#include <QSignalMapper>
 #include <QPushButton>
 #include <QToolButton>
 
@@ -240,9 +239,9 @@ public:
 
 Q_SIGNALS:
 
-    void categoryButtonPressed(int mappedId);
-    void updatePressed(int mappedId);
-    void deletePressed(int mappedId);
+    void categoryButtonPressed(int mappedId) const;
+    void updatePressed(int mappedId) const;
+    void deletePressed(int mappedId) const;
 
 protected:
 
@@ -252,10 +251,6 @@ protected:
     QToolButton*         m_sampleUpdateButton;
     QToolButton*         m_sampleDeleteButton;
     int                  m_categoryMaxStyledWidth;
-
-    QSignalMapper*       m_categoryButtonMapper;
-    QSignalMapper*       m_updateMapper;
-    QSignalMapper*       m_deleteMapper;
 };
 
 } // namespace Digikam
