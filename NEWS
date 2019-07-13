@@ -8,7 +8,8 @@ General  : Internal Libraw updated to last stable 0.19.3. New camera supported:
            Canon A560, FujiFilm X-T30, Nikon Coolpix A1000, Z6, Z7, Olympus E-M1X,
            Sony ILCE-6400, Several dng files from phones and drones.
            Full camera List supported: https://www.libraw.org/supported-cameras-snapshot-201903
- 
+General  : Portable archive for Windows 32 and 64 bits will be provided now at release time.
+
 *****************************************************************************************************
 BUGFIXES:
 
@@ -110,5 +111,5 @@ BUGFIXES:
 096 ==> 391674 - AppImage version 5.8.0 errors on update.
 097 ==> 409585 - QMYSQL driver not loaded.
 098 ==> 404289 - Install message warning uninstall current instance.
-099 ==> 
-
+099 ==> 407311 - Archive file of Windows bundles to make Portable version.
+100 ==> 
