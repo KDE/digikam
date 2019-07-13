@@ -193,22 +193,26 @@ else
     find $BUNDLEDIR -name \*dll | xargs ${MXE_BUILDROOT}/usr/bin/${MXE_BUILD_TARGETS}-strip
 fi
 
-#################################################################################################
-# Build NSIS installer.
-
-echo -e "\n---------- Build NSIS installer\n"
-
 #if [[ $DK_DEBUG = 1 ]] ; then
 #    DEBUG_SUF="-debug"
 #fi
+
+#################################################################################################
+# Build NSIS installer and Portable archive.
+
+echo -e "\n---------- Build NSIS installer and Portable archive\n"
 
 mkdir -p $ORIG_WD/bundle
 
 if [ $MXE_BUILD_TARGETS == "i686-w64-mingw32.shared" ]; then
     TARGET_INSTALLER=digiKam-$DK_RELEASEID$DK_EPOCH-Win32$DEBUG_SUF.exe
+    PORTABLE_FILE=digiKam-$DK_RELEASEID$DK_EPOCH-Win32$DEBUG_SUF.tar.xz
+    CHECKSUM_FILE=digiKam-$DK_RELEASEID$DK_EPOCH-Win32$DEBUG_SUF.sum
     rm -f $ORIG_WD/bundle/*Win32* || true
 else
     TARGET_INSTALLER=digiKam-$DK_RELEASEID$DK_EPOCH-Win64$DEBUG_SUF.exe
+    PORTABLE_FILE=digiKam-$DK_RELEASEID$DK_EPOCH-Win64$DEBUG_SUF.tar.xz
+    CHECKSUM_FILE=digiKam-$DK_RELEASEID$DK_EPOCH-Win64$DEBUG_SUF.sum
     rm -f $ORIG_WD/bundle/*Win64* || true
 fi
 
@@ -216,10 +220,12 @@ cd $ORIG_WD/installer
 
 makensis -DVERSION=$DK_RELEASEID -DBUNDLEPATH=$BUNDLEDIR -DTARGETARCH=$MXE_ARCHBITS -DOUTPUT=$ORIG_WD/bundle/$TARGET_INSTALLER ./digikam.nsi
 
-#################################################################################################
-# Show resume information and future instructions to host installer file to remotz server
+tar cf - $BUNDLEDIR | xz -4e > $PORTABLE_FILE
 
-echo -e "\n---------- Compute package checksums for digiKam $DK_RELEASEID\n"             > $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+#################################################################################################
+# Show resume information and future instructions to host target files on remote server
+
+echo -e "\n---------- Compute installer checksums for digiKam $DK_RELEASEID\n"          >  $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 echo    "File       : $TARGET_INSTALLER"                                                >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 echo -n "Size       : "                                                                 >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 du -h "$ORIG_WD/bundle/$TARGET_INSTALLER"        | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
@@ -231,9 +237,25 @@ echo -n "SHA256 sum : "                                                         
 shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
 # Checksums to post on Phabricator at release time.
-shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" > $ORIG_WD/bundle/sha256_release.sum
+shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER" > $ORIG_WD/bundle/$CHECKSUM_FILE
+
+echo -e "\n---------- Compute Portable archive checksums for digiKam $DK_RELEASEID\n"   >  $ORIG_WD/bundle/$PORTABLE_FILE.sum
+echo    "File       : $PORTABLE_FILE"                                                   >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+echo -n "Size       : "                                                                 >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+du -h "$ORIG_WD/bundle/$PORTABLE_FILE"        | { read first rest ; echo $first ; }     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+echo -n "MD5 sum    : "                                                                 >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+md5sum "$ORIG_WD/bundle/$PORTABLE_FILE"       | { read first rest ; echo $first ; }     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+echo -n "SHA1 sum   : "                                                                 >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+shasum -a1 "$ORIG_WD/bundle/$PORTABLE_FILE"   | { read first rest ; echo $first ; }     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+echo -n "SHA256 sum : "                                                                 >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+shasum -a256 "$ORIG_WD/bundle/$PORTABLE_FILE" | { read first rest ; echo $first ; }     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+
+# Checksums to post on Phabricator at release time.
+shasum -a256 "$ORIG_WD/bundle/$PORTABLE_FILE" >> $ORIG_WD/bundle/$CHECKSUM_FILE
 
 if [[ $DK_SIGN = 1 ]] ; then
+
+    echo -e "\n---------- Compute Signature checksums for digiKam installer $DK_RELEASEID\n"    >  $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
     cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv "$ORIG_WD/bundle/$TARGET_INSTALLER"
     mv -f $ORIG_WD/bundle/$TARGET_INSTALLER.asc $ORIG_WD/bundle/$TARGET_INSTALLER.sig
@@ -249,11 +271,30 @@ if [[ $DK_SIGN = 1 ]] ; then
     shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER.sig" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$TARGET_INSTALLER.sum
 
     # Checksums to post on Phabricator at release time.
-    shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER.sig" >> $ORIG_WD/bundle/sha256_release.sum
+    shasum -a256 "$ORIG_WD/bundle/$TARGET_INSTALLER.sig" >> $ORIG_WD/bundle/$CHECKSUM_FILE
+
+    echo -e "\n---------- Compute Signature checksums for digiKam Portable $DK_RELEASEID\n"     >  $ORIG_WD/bundle/$PORTABLE_FILE.sum
+
+    cat ~/.gnupg/dkorg-gpg-pwd.txt | gpg --batch --yes --passphrase-fd 0 -sabv "$ORIG_WD/bundle/$PORTABLE_FILE"
+    mv -f $ORIG_WD/bundle/$PORTABLE_FILE.asc $ORIG_WD/bundle/$PORTABLE_FILE.sig
+
+    echo    "File       : $PORTABLE_FILE.sig"                                                >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    echo -n "Size       : "                                                                     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    du -h "$ORIG_WD/bundle/$PORTABLE_FILE.sig"        | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    echo -n "MD5 sum    : "                                                                     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    md5sum "$ORIG_WD/bundle/$PORTABLE_FILE.sig"       | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    echo -n "SHA1 sum   : "                                                                     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    shasum -a1 "$ORIG_WD/bundle/$PORTABLE_FILE.sig"   | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    echo -n "SHA256 sum : "                                                                     >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+    shasum -a256 "$ORIG_WD/bundle/$PORTABLE_FILE.sig" | { read first rest ; echo $first ; }  >> $ORIG_WD/bundle/$PORTABLE_FILE.sum
+
+    # Checksums to post on Phabricator at release time.
+    shasum -a256 "$ORIG_WD/bundle/$PORTABLE_FILE.sig" >> $ORIG_WD/bundle/$CHECKSUM_FILE
 
 fi
 
 cat $ORIG_WD/bundle/$TARGET_INSTALLER.sum
+cat $ORIG_WD/bundle/$PORTABLE_FILE.sum
 
 if [[ $DK_UPLOAD = 1 ]] ; then
 
@@ -261,17 +302,22 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     if [ $MXE_BUILD_TARGETS == "i686-w64-mingw32.shared" ]; then
         ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-Win32*.exe*
+        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-Win32*.tar.xz*
     else
         ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-Win64*.exe*
+        ssh $DK_UPLOADURL rm -f $DK_UPLOADDIR*-Win64*.tar.xz*
     fi
 
     echo -e "---------- Upload new Windows bundle files to files.kde.org repository \n"
 
-    rsync -r -v --progress -e ssh $ORIG_WD/bundle/$TARGET_INSTALLER     $DK_UPLOADURL:$DK_UPLOADDIR
+    rsync -r -v --progress -e ssh $ORIG_WD/bundle/$TARGET_INSTALLER $DK_UPLOADURL:$DK_UPLOADDIR
+    rsync -r -v --progress -e ssh $ORIG_WD/bundle/$PORTABLE_FILE $DK_UPLOADURL:$DK_UPLOADDIR
     scp $ORIG_WD/bundle/$TARGET_INSTALLER.sum $DK_UPLOADURL:$DK_UPLOADDIR
+    scp $ORIG_WD/bundle/$PORTABLE_FILE.sum $DK_UPLOADURL:$DK_UPLOADDIR
 
     if [[ $DK_SIGN = 1 ]] ; then
         scp $ORIG_WD/bundle/$TARGET_INSTALLER.sig $DK_UPLOADURL:$DK_UPLOADDIR
+        scp $ORIG_WD/bundle/$PORTABLE_FILE.sig $DK_UPLOADURL:$DK_UPLOADDIR
     fi
 
 else
