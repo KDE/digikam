@@ -87,6 +87,7 @@ public:
         labelImageRatio(nullptr),
         labelImageBitDepth(nullptr),
         labelImageColorMode(nullptr),
+        labelHasSidecar(nullptr),
         labelPhotoMake(nullptr),
         labelPhotoModel(nullptr),
         labelPhotoDateTime(nullptr),
@@ -131,6 +132,7 @@ public:
     DTextLabelValue* labelImageRatio;
     DTextLabelValue* labelImageBitDepth;
     DTextLabelValue* labelImageColorMode;
+    DTextLabelValue* labelHasSidecar;
 
     DTextLabelValue* labelPhotoMake;
     DTextLabelValue* labelPhotoModel;
@@ -218,12 +220,14 @@ ItemPropertiesTab::ItemPropertiesTab(QWidget* const parent)
     DTextLabelName* const ratio      = new DTextLabelName(i18n("Aspect Ratio: "), w2);
     DTextLabelName* const bitDepth   = new DTextLabelName(i18n("Bit depth: "),    w2);
     DTextLabelName* const colorMode  = new DTextLabelName(i18n("Color mode: "),   w2);
+    DTextLabelName* const hasSidecar = new DTextLabelName(i18n("Has Sidecar: "),  w2);
 
     d->labelImageMime                = new DTextLabelValue(QString(), w2);
     d->labelImageDimensions          = new DTextLabelValue(QString(), w2);
     d->labelImageRatio               = new DTextLabelValue(QString(), w2);
     d->labelImageBitDepth            = new DTextLabelValue(QString(), w2);
     d->labelImageColorMode           = new DTextLabelValue(QString(), w2);
+    d->labelHasSidecar               = new DTextLabelValue(QString(), w2);
 
     glay2->addWidget(mime,                    0, 0, 1, 1);
     glay2->addWidget(d->labelImageMime,       0, 1, 1, 1);
@@ -235,6 +239,8 @@ ItemPropertiesTab::ItemPropertiesTab(QWidget* const parent)
     glay2->addWidget(d->labelImageBitDepth,   3, 1, 1, 1);
     glay2->addWidget(colorMode,               4, 0, 1, 1);
     glay2->addWidget(d->labelImageColorMode,  4, 1, 1, 1);
+    glay2->addWidget(hasSidecar,              5, 0, 1, 1);
+    glay2->addWidget(d->labelHasSidecar,      5, 1, 1, 1);
     glay2->setContentsMargins(spacing, spacing, spacing, spacing);
     glay2->setColumnStretch(0, 10);
     glay2->setColumnStretch(1, 10);
@@ -411,6 +417,7 @@ void ItemPropertiesTab::setCurrentURL(const QUrl& url)
         d->labelImageRatio->setAdjustedText();
         d->labelImageBitDepth->setAdjustedText();
         d->labelImageColorMode->setAdjustedText();
+        d->labelHasSidecar->setAdjustedText();
 
         d->labelPhotoMake->setAdjustedText();
         d->labelPhotoModel->setAdjustedText();
@@ -515,6 +522,11 @@ void ItemPropertiesTab::setImageBitDepth(const QString& str)
 void ItemPropertiesTab::setImageColorMode(const QString& str)
 {
     d->labelImageColorMode->setAdjustedText(str);
+}
+
+void ItemPropertiesTab::setHasSidecar(const QString& str)
+{
+    d->labelHasSidecar->setAdjustedText(str);
 }
 
 void ItemPropertiesTab::setPhotoMake(const QString& str)
