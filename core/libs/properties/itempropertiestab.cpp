@@ -220,7 +220,7 @@ ItemPropertiesTab::ItemPropertiesTab(QWidget* const parent)
     DTextLabelName* const ratio      = new DTextLabelName(i18n("Aspect Ratio: "), w2);
     DTextLabelName* const bitDepth   = new DTextLabelName(i18n("Bit depth: "),    w2);
     DTextLabelName* const colorMode  = new DTextLabelName(i18n("Color mode: "),   w2);
-    DTextLabelName* const hasSidecar = new DTextLabelName(i18n("Has Sidecar: "),  w2);
+    DTextLabelName* const hasSidecar = new DTextLabelName(i18n("Has sidecar: "),  w2);
 
     d->labelImageMime                = new DTextLabelValue(QString(), w2);
     d->labelImageDimensions          = new DTextLabelValue(QString(), w2);
