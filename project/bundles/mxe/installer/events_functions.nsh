@@ -90,7 +90,8 @@ Function .onInit
     ;TODO: need to internationalize string (see VLC / clementine / etc)
 
     MessageBox MB_YESNO|MB_ICONEXCLAMATION|MB_TOPMOST|MB_SETFOREGROUND "$R2 is currently installed but only a single instance of ${MY_PRODUCT} can be installed at any time.$\r$\n$\r$\n\
-        Note: only the application binary files will be removed from your system. Your collections kept untouched. Database schemas can be upgraded between major releases, so it's recommended to backup these files before to continue.$\r$\n$\r$\n\
+        Note: only the application binary files will be removed from your system at this stage. Your collections and database files kept untouched.$\r$\n$\r$\n\
+        Important: database schemas can be upgraded between major releases, so it's recommended to backup all database files before to start a new digiKam session after this install.$\r$\n$\r$\n\
         Do you want to uninstall the current instance of ${MY_PRODUCT} and continue installing ${MY_PRODUCT} ${VERSION}?" /SD IDYES IDNO noInstall
 
     ;Run the uninstaller
