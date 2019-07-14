@@ -116,4 +116,5 @@ BUGFIXES:
 101 ==> 407556 - Selecting thunderbird program is impossible.
 102 ==> 405287 - Dialogs are hard to read.
 103 ==> 408567 - 4k Video files do not generate valid thumbnails, thumbnails show as only static.
-104 ==> 
+104 ==> 409537 - Impossible to select binaries for internal MariaDB database on Windows.
+105 ==> 
