@@ -31,7 +31,6 @@
 
 #include <QList>
 #include <QApplication>
-#include <QDesktopWidget>
 
 // Local includes
 
@@ -43,14 +42,14 @@ namespace Digikam
 ImageZoomSettings::ImageZoomSettings()
     : m_zoom(1),
       m_zoomConst(1),
-      m_zoomRatio(QApplication::desktop()->devicePixelRatioF())
+      m_zoomRatio(qApp->devicePixelRatio())
 {
 }
 
 ImageZoomSettings::ImageZoomSettings(const QSize& imageSize, const QSize& originalSize)
     : m_zoom(1),
       m_zoomConst(1),
-      m_zoomRatio(QApplication::desktop()->devicePixelRatioF())
+      m_zoomRatio(qApp->devicePixelRatio())
 {
     setImageSize(imageSize, originalSize);
 }

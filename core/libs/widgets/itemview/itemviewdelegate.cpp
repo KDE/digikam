@@ -37,7 +37,6 @@
 #include <QPainter>
 #include <QIcon>
 #include <QApplication>
-#include <QDesktopWidget>
 
 // KDE includes
 
@@ -280,7 +279,7 @@ QRect ItemViewDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const
     }
 
     QRect r      = thumbRect;
-    double ratio = QApplication::desktop()->devicePixelRatioF();
+    double ratio = qApp->devicePixelRatio();
     int thumbW   = qRound((double)thumbnail.width()  / ratio);
     int thumbH   = qRound((double)thumbnail.height() / ratio);
 
