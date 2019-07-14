@@ -133,4 +133,15 @@ BUGFIXES:
 118 ==> 389677 - digiKam fails to migrate database schema from version 8 to version 9.
 119 ==> 391340 - Mysql Migration fails (makeUpdates 8 to 9).
 120 ==> 391720 - Metadata (tags) is not updated after being edited externally.
-121 ==> 
+121 ==> 338560 - digiKam for Windows won't resize images.
+122 ==> 289300 - Writing metadata control panel in configuration dialog.
+123 ==> 346097 - when tagging a face it hangs or will no longer load pictures from thumbnail.
+124 ==> 365919 - Slideshow does not show any more than the first slide.
+125 ==> 365942 - Going to full screen mode when window is maximized messes up window settings and hides menu bar.
+126 ==> 370440 - KML Export fails when destination directory partition differs then the temp directory partition.
+127 ==> 235593 - can not open nef files with ufraw through digiKam.
+128 ==> 372096 - Keyboard Shortcut for NEW FaceTagging.
+129 ==> 374785 - Controls on preview window are difficult to see over some images.
+130 ==> 376427 - Range selection in thumbnail view gets wrong endpoint.
+131 ==> 376627 - Face Tag Filter List Disappears On Even Number Key Presses.
+132 ==>
