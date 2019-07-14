@@ -25,7 +25,8 @@ if(MINGW)
         GIT_REPOSITORY https://github.com/wang-bin/QtAV.git
         GIT_TAG ${QTAV_VERSION}
 
-        CONFIGURE_COMMAND rm -rfv ${MXE_INSTALL_PREFIX}/qt5/include/QtAV &&
+        CONFIGURE_COMMAND cd QtAV && git submodule update --init && cd .. &&
+                          rm -rfv ${MXE_INSTALL_PREFIX}/qt5/include/QtAV &&
                           rm -rfv ${MXE_INSTALL_PREFIX}/qt5/include/QtAVWidgets &&
                           rm -fv  ${MXE_INSTALL_PREFIX}/qt5/lib/libQtAV1.a &&
                           rm -fv  ${MXE_INSTALL_PREFIX}/qt5/lib/libQtAVWidgets1.a &&
@@ -57,13 +58,14 @@ elseif(APPLE)
         GIT_REPOSITORY https://github.com/wang-bin/QtAV.git
         GIT_TAG ${QTAV_VERSION}
 
-        PATCH_COMMAND rm -rfv ${INSTALL_ROOT}/libexec/qt5/lib/QtAV.framework &&
-                      rm -rfv ${INSTALL_ROOT}/libexec/qt5/lib/QtAVWidgets.framework &&
-                      rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAV &&
-                      rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAVWidgets &&
-                      ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-macos.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-macos.patch
 
-        CONFIGURE_COMMAND mkdir build && cd build && qmake ..
+        CONFIGURE_COMMAND cd QtAV && git submodule update --init && cd .. &&
+                          rm -rfv ${INSTALL_ROOT}/libexec/qt5/lib/QtAV.framework &&
+                          rm -rfv ${INSTALL_ROOT}/libexec/qt5/lib/QtAVWidgets.framework &&
+                          rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAV &&
+                          rm -rfv ${INSTALL_ROOT}/libexec/qt5/include/QtAVWidgets &&
+                          mkdir build && cd build && qmake ..
 
         BUILD_COMMAND cd build && $(MAKE)
 
@@ -94,7 +96,8 @@ else() #Linux
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-appimage.patch
 
-        CONFIGURE_COMMAND rm -rfv ${INSTALL_ROOT}/include/QtAV &&
+        CONFIGURE_COMMAND cd QtAV && git submodule update --init && cd .. &&
+                          rm -rfv ${INSTALL_ROOT}/include/QtAV &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAVWidgets &&
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAV.so &&
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAV.so.1 &&
