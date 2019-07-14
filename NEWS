@@ -114,4 +114,6 @@ BUGFIXES:
 099 ==> 407311 - Archive file of Windows bundles to make Portable version.
 100 ==> 401964 - Wrong datestamp video/mp4.
 101 ==> 407556 - Selecting thunderbird program is impossible.
-102 ==> 
+102 ==> 405287 - Dialogs are hard to read.
+103 ==> 
+
