@@ -115,5 +115,5 @@ BUGFIXES:
 100 ==> 401964 - Wrong datestamp video/mp4.
 101 ==> 407556 - Selecting thunderbird program is impossible.
 102 ==> 405287 - Dialogs are hard to read.
-103 ==> 
-
+103 ==> 408567 - 4k Video files do not generate valid thumbnails, thumbnails show as only static.
+104 ==> 
