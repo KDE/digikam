@@ -96,7 +96,7 @@ else() #Linux
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-appimage.patch
 
-        CONFIGURE_COMMAND git submodule update --init &&
+        CONFIGURE_COMMAND cd <SOURCE_DIR> && git submodule update --init &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAV &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAVWidgets &&
                           rm -fv  ${INSTALL_ROOT}/lib/libQtAV.so &&
