@@ -674,19 +674,20 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             break;
         case (Private::GP_GETPHOTO):
 
-            QVariant redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+            QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 
-            if (redirectUrl.isValid() && d->redirectCounter++ < 3)
+            if (redirectUrl.isValid() && reply->url() != redirectUrl && d->redirectCounter++ < 3)
             {
-                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Redirection to:" << redirectUrl.toUrl();
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Redirection to:" << redirectUrl;
 
-                m_reply  = d->netMngr->get(QNetworkRequest(redirectUrl.toUrl()));
+                m_reply  = d->netMngr->get(QNetworkRequest(redirectUrl));
                 d->state = Private::GP_GETPHOTO;
             }
             else
             {
-                // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
                 // all we get is data of the image
+                // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
+
                 QString header         = reply->header(QNetworkRequest::ContentDispositionHeader).toString();
                 QStringList headerList = header.split(QLatin1Char(';'));
                 QString fileName;
