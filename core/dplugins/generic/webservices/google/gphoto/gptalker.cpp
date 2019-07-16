@@ -97,6 +97,7 @@ public:
     {
         state           = GP_LOGOUT;
         netMngr         = nullptr;
+        redirectCounter = 0;
 
         userInfoUrl     = QLatin1String("https://www.googleapis.com/plus/v1/people/me");
 
@@ -124,6 +125,8 @@ public:
     QList<GSFolder>        albumList;
 
     QNetworkAccessManager* netMngr;
+
+    int                    redirectCounter;
 };
 
 GPTalker::GPTalker(QWidget* const parent)
@@ -529,7 +532,8 @@ void GPTalker::getPhoto(const QString& imgPath)
 
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
-    d->state = Private::GP_GETPHOTO;
+    d->state           = Private::GP_GETPHOTO;
+    d->redirectCounter = 0;
 }
 
 void GPTalker::cancel()
@@ -670,20 +674,33 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             break;
         case (Private::GP_GETPHOTO):
 
-            // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
-            // all we get is data of the image
-            QString header         = reply->header(QNetworkRequest::ContentDispositionHeader).toString();
-            QStringList headerList = header.split(QLatin1Char(';'));
-            QString fileName;
+            QVariant redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 
-            if (headerList.count() > 1                          &&
-                headerList.at(0) == QLatin1String("attachment") &&
-                headerList.at(1).startsWith(QLatin1String("filename=")))
+            if (redirectUrl.isValid() && d->redirectCounter++ < 3)
             {
-                fileName = headerList.at(1).section(QLatin1Char('"'), 1, 1);
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Redirection to:" << redirectUrl.toUrl();
+
+                m_reply  = d->netMngr->get(QNetworkRequest(redirectUrl.toUrl()));
+                d->state = Private::GP_GETPHOTO;
+            }
+            else
+            {
+                // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
+                // all we get is data of the image
+                QString header         = reply->header(QNetworkRequest::ContentDispositionHeader).toString();
+                QStringList headerList = header.split(QLatin1Char(';'));
+                QString fileName;
+
+                if (headerList.count() > 1                          &&
+                    headerList.at(0) == QLatin1String("attachment") &&
+                    headerList.at(1).contains(QLatin1String("filename=")))
+                {
+                    fileName = headerList.at(1).section(QLatin1Char('"'), 1, 1);
+                }
+
+                emit signalGetPhotoDone(1, QString(), buffer, fileName);
             }
 
-            emit signalGetPhotoDone(1, QString(), buffer, fileName);
             break;
     }
 
@@ -869,7 +886,14 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
         photo.width         = metadata[QLatin1String("width")].toString();
         photo.height        = metadata[QLatin1String("height")].toString();
 
-        photo.originalURL   = QUrl(photo.baseUrl + QLatin1String("=d"));
+        QString option      = QLatin1String("=d");
+
+        if (photo.mimeType.startsWith(QLatin1String("video/")))
+        {
+            option.append(QLatin1Char('v'));
+        }
+
+        photo.originalURL   = QUrl(photo.baseUrl + option);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
 
         photoList.append(photo);
