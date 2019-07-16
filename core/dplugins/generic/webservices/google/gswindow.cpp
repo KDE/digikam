@@ -233,8 +233,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
                     this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
-            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
-                    this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
+            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray,QString)),
+                    this, SLOT(slotGetPhotoDone(int,QString,QByteArray,QString)));
 
             readSettings();
             buttonStateChange(false);
@@ -836,18 +836,27 @@ void GSWindow::downloadNextPhoto()
     d->gphotoTalker->getPhoto(imgPath);
 }
 
-void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData)
+void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
+                                const QByteArray& photoData, const QString& fileName)
 {
     GSPhoto item = d->transferQueue.first().second;
 
     /**
      * (Trung)
-     * Google Photo API now does not support title for image, so we use creation time for image name instead
+     * Google Photo API now does not support title for image,
+     * so we use the file name from the header. As fallback
+     * the creation time for image name instead.
      */
     QString itemName(item.title);
     QString suffix(item.mimeType.section(QLatin1Char('/'), -1));
 
-    if (item.title.isEmpty())
+    if (itemName.isEmpty() && !fileName.isEmpty())
+    {
+        QFileInfo info(fileName);
+        itemName = info.completeBaseName();
+    }
+
+    if (itemName.isEmpty())
     {
         itemName = QString::fromLatin1("image-%1").arg(item.creationTime);
         // Replace colon for Windows file systems

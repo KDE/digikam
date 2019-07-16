@@ -94,12 +94,13 @@ private Q_SLOTS:
     void slotAccessTokenObtained();
     void slotAuthenticationRefused();
     void slotSetUserName(const QString& msg);
-    void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);
+    void slotListAlbumsDone(int, const QString&, const QList <GSFolder>&);
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
-    void slotCreateFolderDone(int,const QString& msg, const QString& = QStringLiteral("-1"));
-    void slotAddPhotoDone(int,const QString& msg);
+    void slotCreateFolderDone(int, const QString& msg, const QString& = QLatin1String("-1"));
+    void slotAddPhotoDone(int, const QString& msg);
     void slotUploadPhotoDone(int, const QString& msg, const QStringList&);
-    void slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData);
+    void slotGetPhotoDone(int errCode, const QString& errMsg,
+                          const QByteArray& photoData, const QString& fileName);
     void slotTransferCancel();
 
 private:

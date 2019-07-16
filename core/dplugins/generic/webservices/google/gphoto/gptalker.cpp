@@ -672,7 +672,18 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
             // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
             // all we get is data of the image
-            emit signalGetPhotoDone(1, QString(), buffer);
+            QString header         = reply->header(QNetworkRequest::ContentDispositionHeader).toString();
+            QStringList headerList = header.split(QLatin1Char(';'));
+            QString fileName;
+
+            if (headerList.count() > 1                          &&
+                headerList.at(0) == QLatin1String("attachment") &&
+                headerList.at(1).startsWith(QLatin1String("filename=")))
+            {
+                fileName = headerList.at(1).section(QLatin1Char('"'), 1, 1);
+            }
+
+            emit signalGetPhotoDone(1, QString(), buffer, fileName);
             break;
     }
 
