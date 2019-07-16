@@ -573,7 +573,7 @@ void GSWindow::slotStartTransfer()
     {
         DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i)));
         GSPhoto temp;
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info" <<info.title() << info.comment();
 
         switch (d->service)
         {
@@ -626,7 +626,7 @@ void GSWindow::slotStartTransfer()
 
 void GSWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto " << d->transferQueue.count();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto" << d->transferQueue.count();
 
     if (d->transferQueue.isEmpty())
     {
@@ -956,7 +956,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
 
     newUrl      = DFileOperations::getUniqueFileUrl(newUrl);
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location" << newUrl;
 
     if (!QFile::rename(tmpUrl.toLocalFile(), newUrl.toLocalFile()))
     {
@@ -1048,7 +1048,7 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
 
             QUrl fileUrl = item.first;
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID: " << photoId;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID:" << photoId;
 
             if (d->widget->getPhotoIdCheckBox()->isChecked() &&
                 d->meta.supportXmp()                         &&
