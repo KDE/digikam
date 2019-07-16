@@ -59,6 +59,7 @@
 #include "gptalker.h"
 #include "gsreplacedlg.h"
 #include "digikam_debug.h"
+#include "dfileoperations.h"
 
 namespace DigikamGenericGoogleServicesPlugin
 {
@@ -953,34 +954,9 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
     QUrl newUrl = QUrl::fromLocalFile(QString::fromLatin1("%1/%2").arg(d->widget->getDestinationPath())
                                                                   .arg(tmpUrl.fileName()));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl.url();
+    newUrl      = DFileOperations::getUniqueFileUrl(newUrl);
 
-    QFileInfo targetInfo(newUrl.toLocalFile());
-
-    if (targetInfo.exists())
-    {
-        int i          = 0;
-        bool fileFound = false;
-
-        do
-        {
-            QFileInfo newTargetInfo(newUrl.toLocalFile());
-
-            if (!newTargetInfo.exists())
-            {
-                fileFound = false;
-            }
-            else
-            {
-                newUrl = newUrl.adjusted(QUrl::RemoveFilename);
-                newUrl.setPath(newUrl.path() + targetInfo.completeBaseName() +
-                                               QString::fromUtf8("_%1.").arg(++i) +
-                                               targetInfo.completeSuffix());
-                fileFound = true;
-            }
-        }
-        while (fileFound);
-    }
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl;
 
     if (!QFile::rename(tmpUrl.toLocalFile(), newUrl.toLocalFile()))
     {
