@@ -528,7 +528,7 @@ void GPTalker::getPhoto(const QString& imgPath)
     emit signalBusy(true);
 
     QUrl url(imgPath);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo " << url.url();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo " << url;
 
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
@@ -613,7 +613,7 @@ void GPTalker::slotError(const QString & error)
     };
 
     QMessageBox::critical(QApplication::activeWindow(), i18nc("@title:window", "Error"),
-                          i18n("Error occurred: %1\nUnable to proceed further.",transError + error));
+                          i18n("Error occurred: %1\nUnable to proceed further.", transError + error));
 }
 
 void GPTalker::slotFinished(QNetworkReply* reply)
@@ -874,27 +874,27 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
 
         GSPhoto photo;
 
-        photo.baseUrl       = obj[QLatin1String("baseUrl")].toString();
-        photo.description   = obj[QLatin1String("description")].toString();
-        photo.id            = obj[QLatin1String("id")].toString();
-        photo.mimeType      = obj[QLatin1String("mimeType")].toString();
-        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future
+        photo.baseUrl        = obj[QLatin1String("baseUrl")].toString();
+        photo.description    = obj[QLatin1String("description")].toString();
+        photo.id             = obj[QLatin1String("id")].toString();
+        photo.mimeType       = obj[QLatin1String("mimeType")].toString();
+        photo.location       = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future
 
         QJsonObject metadata = obj[QLatin1String("mediaMetadata")].toObject();
 
-        photo.creationTime  = metadata[QLatin1String("creationTime")].toString();
-        photo.width         = metadata[QLatin1String("width")].toString();
-        photo.height        = metadata[QLatin1String("height")].toString();
+        photo.creationTime   = metadata[QLatin1String("creationTime")].toString();
+        photo.width          = metadata[QLatin1String("width")].toString();
+        photo.height         = metadata[QLatin1String("height")].toString();
 
-        QString option      = QLatin1String("=d");
+        QString option       = QLatin1String("=d");
 
         if (photo.mimeType.startsWith(QLatin1String("video/")))
         {
             option.append(QLatin1Char('v'));
         }
 
-        photo.originalURL   = QUrl(photo.baseUrl + option);
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
+        photo.originalURL    = QUrl(photo.baseUrl + option);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL;
 
         photoList.append(photo);
     }
