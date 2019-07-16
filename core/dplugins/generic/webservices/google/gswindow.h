@@ -66,6 +66,10 @@ public:
 
     void reactivate();
 
+Q_SIGNALS:
+
+    void updateHostApp(const QUrl& url);
+
 private:
 
     void readSettings();

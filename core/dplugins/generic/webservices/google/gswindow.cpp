@@ -980,6 +980,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
                                    newUrl.toLocalFile()));
     }
 
+    emit updateHostApp(newUrl);
     downloadNextPhoto();
 }
 
