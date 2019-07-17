@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "imagebrushguidewidget.h"
+#include "overlaywidget.h"
 
 // Local includes
 
@@ -80,6 +81,12 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
         oldPos = e->globalPos();
 
     }
+    else if (isPPressed && (e->buttons() & Qt::LeftButton))
+     {
+        QPoint dst = QPoint(e->x(),e->y());
+        //qCDebug(DIGIKAM_GENERAL_LOG()) << "Emitting Signal Lasso";
+        emit signalLasso(dst);
+     }
     else if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
 
@@ -117,7 +124,7 @@ void ImageBrushGuideWidget::mouseReleaseEvent(QMouseEvent* e)
 
     else if (srcSet)
     {
-        src    = getSpotPosition();
+        src   = getSpotPosition();
         undoSlotSetSourcePoint();
 
     }
@@ -134,7 +141,6 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
 
      oldPos = e->globalPos() ;
 
-     qCDebug(DIGIKAM_GENERAL_LOG) << "Inside MousePress " << this->amIFocused;
      if(!this->amIFocused)
      {
          this->amIFocused = true;
@@ -147,6 +153,11 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
     {
         ImageGuideWidget::mousePressEvent(e);
     }
+    else if (isPPressed && (e->buttons() & Qt::LeftButton))
+     {
+        QPoint dst = QPoint(e->x(),e->y());
+        emit signalLasso(dst);
+     }
     else
     {
         if (e->button() == Qt::LeftButton)
@@ -180,6 +191,21 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
             isMPressed = true;
             isSPressed = false;
             setCursor(Qt::OpenHandCursor);
+        }
+    }
+
+    else if(e->key() == Qt :: Key_P)
+    {
+        if(!isPPressed)
+        {
+            isPPressed = true;
+            isMPressed = false;
+            isSPressed = false;
+            changeCursorShape(Qt::yellow);
+        }
+        else {
+            isPPressed = false;
+            changeCursorShape(Qt::blue);
         }
     }
 

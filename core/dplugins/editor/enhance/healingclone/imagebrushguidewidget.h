@@ -75,6 +75,7 @@ Q_SIGNALS:
      */
     void signalClone(const QPoint& currentSrc, const QPoint& currentDst);
     void signalReclone();
+    void signalLasso(const QPoint& dst);
 
 protected:
 
@@ -92,6 +93,7 @@ protected:
 
 
 
+
 private:
 
     bool   srcSet = true;
@@ -100,6 +102,7 @@ private:
     QPoint oldPos;
     bool isMPressed= false;
     bool isSPressed = false;
+    bool isPPressed = false;
     double default_w;
     double default_h;
     double float_w;

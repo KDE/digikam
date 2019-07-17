@@ -70,6 +70,7 @@ public Q_SLOTS:
     void slotRadiusChanged(int r);
     void slotZoomPercentChanged(int z);
     void slotReclone();
+    void slotLasso(const QPoint& dst);
 
 private:
 
@@ -99,6 +100,7 @@ private:
     };
     Private* const d;
     std::vector<CloneInfo> * CloneInfoVector;
+    std::vector<DColor> lassoColors;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin

@@ -164,6 +164,10 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     // --------------------------------------------------------
 
     this->CloneInfoVector = new std::vector<CloneInfo>();
+    this->lassoColors.push_back(DColor(Qt::red));
+    this->lassoColors.push_back(DColor(Qt::white));
+    this->lassoColors.push_back(DColor(Qt::black));
+    this->lassoColors.push_back(DColor(Qt::yellow));
     // --------------------------------------------------------
 
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
@@ -183,6 +187,9 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalReclone()),
             this, SLOT(slotReclone()));
+
+    connect(d->previewWidget, SIGNAL(signalLasso(QPoint)),
+            this, SLOT(slotLasso(QPoint)));
 
 
 }
@@ -322,5 +329,24 @@ void HealingCloneTool :: slotReclone()
 
 }
 
+void HealingCloneTool :: slotLasso(const QPoint& dst)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG()) << "Lasso !" << dst ;
+    static uint colorCounter = 0;
+    uint radius = 5;
+
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg* const img     = iface->previewReference();
+    for(int i = 0 ; i < radius ; i++)
+    {
+        for(int j = 0; j<radius ; j++)
+        {
+
+            img->setPixelColor(dst.x()+i,dst.y()+j,this->lassoColors[(colorCounter)%4]);
+            colorCounter++;
+        }
+    }
+    d->previewWidget->updatePreview();
+}
 
 } // namespace DigikamEditorHealingCloneToolPlugin
