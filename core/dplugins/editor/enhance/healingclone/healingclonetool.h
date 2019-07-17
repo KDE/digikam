@@ -87,6 +87,8 @@ private:
      * @param radius radius of cloning brush
      */
     void clone(DImg* const img, const QPoint& srcPoint, const QPoint& dstPoint, int radius);
+    std::vector<QPoint> interpolate(const QPoint& start,const QPoint& end);
+    QPoint previousLassoPoint;
 
 private:
 

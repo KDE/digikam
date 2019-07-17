@@ -333,20 +333,50 @@ void HealingCloneTool :: slotLasso(const QPoint& dst)
 {
 
     static uint colorCounter = 0;
+    static QPoint previous = dst;
+    std::vector<QPoint> points = interpolate(previous, dst);
+    for(QPoint x: points){
+        qCDebug(DIGIKAM_GENERAL_LOG()) << x ;
+    }
+    previous = dst;
+    qCDebug(DIGIKAM_GENERAL_LOG()) << "\n";
     uint radius = 5;
 
     ImageIface* const iface = d->previewWidget->imageIface();
     DImg* const img     = iface->previewReference();
-    for(int i = 0 ; i < radius ; i++)
+    for (QPoint p: points)
     {
-        for(int j = 0; j<radius ; j++)
+        for(uint i = 0 ; i < radius ; i++)
         {
+            for(uint j = 0; j<radius ; j++)
+            {
 
-            img->setPixelColor(dst.x()+i,dst.y()+j,this->lassoColors[(colorCounter)%4]);
-            colorCounter++;
+                img->setPixelColor(p.x()+i,p.y()+j,this->lassoColors[(colorCounter)%4]);
+                colorCounter++;
+            }
         }
     }
     d->previewWidget->updatePreview();
+}
+
+std::vector<QPoint> HealingCloneTool :: interpolate(const QPoint& start, const QPoint& end)
+{
+    std::vector<QPoint> points;
+    points.push_back(start);
+    QPointF distanceVec = QPoint(end.x()-start.x() , end.y() - start.y());
+    double distance = sqrt(distanceVec.x() * distanceVec.x() + distanceVec.y() * distanceVec.y());
+    //creating a unit vector
+    distanceVec.setX(distanceVec.x()/distance);
+    distanceVec.setY(distanceVec.y()/distance);
+    int steps = (int) distance ;
+    for(int i = 0 ; i<steps ; i++)
+    {
+        points.push_back(QPoint(start.x() + i*distanceVec.x() ,start.y() + i*distanceVec.y()));
+    }
+
+    points.push_back(end);
+
+    return points;
 }
 
 } // namespace DigikamEditorHealingCloneToolPlugin
