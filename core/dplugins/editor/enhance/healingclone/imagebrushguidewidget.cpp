@@ -205,6 +205,7 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
         }
         else {
             isPPressed = false;
+            this->resetPixels();
             changeCursorShape(Qt::blue);
         }
     }
@@ -234,6 +235,7 @@ void ImageBrushGuideWidget::  keyReleaseEvent(QKeyEvent *e)
         {
             slotSetSourcePoint();
             isMPressed = false;
+            isPPressed = false;
         }
     }
 }
@@ -331,6 +333,20 @@ void ImageBrushGuideWidget::zoomMinus()
     this->float_h -= .1 * this->default_h;
     this->float_w -= .1 * this->default_w;
     this->resize((int)this->float_w, (int)this->float_h);
+}
+
+void ImageBrushGuideWidget::resetPixels()
+{
+
+    int w = (int)this->float_w;
+    int h = (int) this->float_h;
+    // This is a workaround. I am mainly using this to restore all lasso-colored pixels to the original image colors.
+    // I am forcing a resize event with the same width and height, as a resizeEvent function in ImageGuideWidget already
+    // does this resetting for me.
+    QResizeEvent event(QSize(w,h),QSize(w,h));
+    ImageGuideWidget::resizeEvent(&event);
+
+    emit(signalReclone());
 }
 
 } // namespace DigikamEditorHealingCloneToolPlugin

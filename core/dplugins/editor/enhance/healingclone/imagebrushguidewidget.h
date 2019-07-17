@@ -90,6 +90,7 @@ protected:
     void focusInEvent(QFocusEvent * event) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
+    void resetPixels();
 
 
 

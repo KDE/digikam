@@ -18,7 +18,6 @@ set(healingclonetoolplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/imagebrushguidewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/healingclonetoolplugin.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/healingclonetool.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/overlaywidget.cpp
 )
 
 DIGIKAM_ADD_EDITOR_PLUGIN(NAME    HealingCloneTool

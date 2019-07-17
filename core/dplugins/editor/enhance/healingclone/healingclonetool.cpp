@@ -331,7 +331,7 @@ void HealingCloneTool :: slotReclone()
 
 void HealingCloneTool :: slotLasso(const QPoint& dst)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG()) << "Lasso !" << dst ;
+
     static uint colorCounter = 0;
     uint radius = 5;
 
