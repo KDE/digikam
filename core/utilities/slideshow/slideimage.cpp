@@ -159,14 +159,8 @@ void SlideImage::updatePixmap()
        we need to increase the pixel size of the rendered
        pixmap.
     */
-#ifdef USE_QT_SCALING
-    double xratio  = double(d->preview.width())  / width();
-    double yratio  = double(d->preview.height()) / height();
-    double ratio   = qMax(qMin(xratio, yratio), 1.0);
-#else
-    // Maybe we can use it for Mac OS X as well.
-    double ratio   = devicePixelRatioF();
-#endif
+
+    double ratio   = qApp->devicePixelRatio();
 
     QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
     d->pixmap      = QPixmap(fullSize);

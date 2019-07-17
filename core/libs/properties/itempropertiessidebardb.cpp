@@ -546,9 +546,10 @@ void ItemPropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             }
 
             m_propertiesTab->setImageRatio(str);
-            m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
-            m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
             m_propertiesTab->setImageMime(commonInfo.format);
+            m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
+            m_propertiesTab->setHasSidecar(DMetadata::hasSidecar(url.toLocalFile()) ? i18n("Yes") : i18n("No"));
+            m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
 
             // -- Photograph information ------------------------------------------
 

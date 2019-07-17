@@ -160,7 +160,24 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         }
         else
         {
-            image.ping(filePath.toUtf8().constData());
+            try
+            {
+                image.ping(filePath.toUtf8().constData());
+            }
+            catch (Warning& warning)
+            {
+                qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick warning [" << filePath << "]" << warning.what();
+            }
+
+            imageWidth()  = image.columns();
+            imageHeight() = image.rows();
+
+#if MagickLibVersion < 0x700
+            m_hasAlpha    = image.matte();
+#else
+            m_hasAlpha    = image.alpha();
+#endif
+
             imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
             imageSetAttribute(QLatin1String("originalColorModel"), DImg::RGB);
             imageSetAttribute(QLatin1String("originalBitDepth"),   (QuantumRange >= 16) ? 16 : 8);

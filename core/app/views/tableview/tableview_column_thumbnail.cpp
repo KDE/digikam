@@ -26,7 +26,6 @@
 
 #include <QPainter>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QStyleOptionViewItem>
 
 // KDE includes
@@ -141,7 +140,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
         // However, digiKam limits the thumbnail size, so we also do that here
         maxSize       = qMin(maxSize, (int)ThumbnailSize::maxThumbsSize());
-        double ratio  = QApplication::desktop()->devicePixelRatioF();
+        double ratio  = qApp->devicePixelRatio();
         maxSize       = qRound((double)maxSize * ratio);
 
         QPixmap thumbnail;

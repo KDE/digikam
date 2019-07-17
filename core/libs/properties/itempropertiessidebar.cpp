@@ -253,8 +253,9 @@ void ItemPropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     else m_propertiesTab->aspectRatioToString(dims.width(), dims.height(), str);
 
     m_propertiesTab->setImageRatio(str);
-    m_propertiesTab->setImageBitDepth(bitDepth.isEmpty()   ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
+    m_propertiesTab->setImageBitDepth(bitDepth.isEmpty()   ? unavailable : i18n("%1 bpp", bitDepth));
+    m_propertiesTab->setHasSidecar(DMetadata::hasSidecar(url.toLocalFile()) ? i18n("Yes") : i18n("No"));
 
     // -- Photograph information ------------------------------------------
 

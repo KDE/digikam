@@ -109,10 +109,8 @@ public:
         authUrl         = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/authorize");
         accessTokenUrl  = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getAccessToken");
 
-//         apikey          = QLatin1String("66NGWpNDWmnsW6qZKLp6hNMTDZ9C24pN");
-//         clientSecret    = QLatin1String("GbtsCvH3GMGnQ6Lf4XmGXwMQs2pm5SpSvVJdPsQDpHMRbsPQSWqzhxXKRRXhMwP5");
-        apikey          = QLatin1String("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
-        clientSecret    = QLatin1String("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
+        apikey          = QLatin1String("xKp43CXF8MHgjhgGdgdgfgc7cWjqQcck");
+        clientSecret    = QLatin1String("3CKcLcWx64Rm8HVRwX3bf4HCtJpnGrwnk9xSn4DK8wRhGLVsRBBFktD95W4HTRHD");
         iface           = nullptr;
         netMngr         = nullptr;
         reply           = nullptr;

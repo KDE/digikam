@@ -26,9 +26,9 @@
 // Qt includes
 
 #include <QApplication>
-#include <QDesktopWidget>
-#include <QPointer>
 #include <QPushButton>
+#include <QPointer>
+#include <QScreen>
 
 // KDE includes
 
@@ -98,9 +98,15 @@ void DPluginDialog::restoreDialogSize()
     }
     else
     {
-        QDesktopWidget* const desktop = QApplication::desktop();
-        int screen                    = desktop->screenNumber();
-        QRect srect                   = desktop->availableGeometry(screen);
+        QScreen* screen       = QApplication::primaryScreen();
+        QWidget* const widget = QApplication::activeWindow();
+
+        if (widget)
+        {
+            screen = widget->windowHandle()->screen();
+        }
+
+        QRect srect = screen->availableGeometry();
         resize(800 <= srect.width()  ? 800 : srect.width(),
                750 <= srect.height() ? 750 : srect.height());
     }

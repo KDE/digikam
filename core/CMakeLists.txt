@@ -556,13 +556,6 @@ MACRO_BOOL_TO_01(ENABLE_FACESENGINE_DNN     HAVE_FACESENGINE_DNN)
 MACRO_BOOL_TO_01(ENABLE_DRMINGW             HAVE_DRMINGW)
 MACRO_BOOL_TO_01(ImageMagick_Magick++_FOUND HAVE_IMAGE_MAGICK)
 
-# Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
-# can make use of the higher physical resolution of Retina
-# displays. However, it seems that other Qt renderers perform badly at
-# this, so disable. If other renderers switch to coarser logical
-# pixels, one probably needs this feature on these platforms as well.
-MACRO_BOOL_TO_01(APPLE USE_QT_SCALING)
-
 # Set config files accordingly with optional dependencies
 
 configure_file(app/utils/digikam_config.h.cmake.in
