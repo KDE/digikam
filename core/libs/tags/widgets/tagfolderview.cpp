@@ -292,24 +292,25 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbu
     cmh.addExportMenu();
     cmh.addSeparator();
 
-    if (d->showDeleteFaceTagsAction)
-    {
-        cmh.addActionDeleteFaceTags(tagModificationHelper(), albums);
-    }
-    else
-    {
-        cmh.addActionDeleteTags(tagModificationHelper(), albums);
-        // If one of the selected tags is no face tag, add the action to mark them as face tags.
-        foreach (TAlbum* const tag, albums)
-        {
-            if (!FaceTags::isPerson(tag->id()))
-            {
-                cmh.addSeparator();
-                cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
-                break;
-            }
-        }
-    }
+//    if (d->showDeleteFaceTagsAction)
+//    {
+//        cmh.addActionDeleteFaceTags(tagModificationHelper(), albums);
+//    }
+//    else
+//    {
+//        cmh.addActionDeleteTags(tagModificationHelper(), albums);
+//        // If one of the selected tags is no face tag, add the action to mark them as face tags.
+//        foreach (TAlbum* const tag, albums)
+//        {
+//            if (!FaceTags::isPerson(tag->id()))
+//            {
+//                cmh.addSeparator();
+//                cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
+//                break;
+//            }
+//        }
+//    }
+    cmh.addActionDeleteTags(tagModificationHelper(), albums);
 
     cmh.addSeparator();
 }
