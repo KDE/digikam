@@ -76,6 +76,7 @@ Q_SIGNALS:
     void signalClone(const QPoint& currentSrc, const QPoint& currentDst);
     void signalReclone();
     void signalLasso(const QPoint& dst);
+    void signalResetLassoPoint();
 
 protected:
 

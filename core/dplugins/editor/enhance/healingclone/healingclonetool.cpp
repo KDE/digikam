@@ -190,6 +190,8 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalLasso(QPoint)),
             this, SLOT(slotLasso(QPoint)));
+    connect(d->previewWidget, SIGNAL(signalResetLassoPoint()),
+            this, SLOT(slotResetLassoPoint()));
 
 
 }
@@ -333,12 +335,16 @@ void HealingCloneTool :: slotLasso(const QPoint& dst)
 {
 
     static uint colorCounter = 0;
-    static QPoint previous = dst;
-    std::vector<QPoint> points = interpolate(previous, dst);
+    if(this->resetLassoPoint)
+    {
+    this->previousLassoPoint = dst;
+     this->resetLassoPoint = false;
+    }
+    std::vector<QPoint> points = interpolate(this->previousLassoPoint, dst);
     for(QPoint x: points){
         qCDebug(DIGIKAM_GENERAL_LOG()) << x ;
     }
-    previous = dst;
+    this->previousLassoPoint = dst;
     qCDebug(DIGIKAM_GENERAL_LOG()) << "\n";
     uint radius = 5;
 
@@ -377,6 +383,11 @@ std::vector<QPoint> HealingCloneTool :: interpolate(const QPoint& start, const Q
     points.push_back(end);
 
     return points;
+}
+
+void HealingCloneTool ::slotResetLassoPoint()
+{
+    this->resetLassoPoint = true;
 }
 
 } // namespace DigikamEditorHealingCloneToolPlugin

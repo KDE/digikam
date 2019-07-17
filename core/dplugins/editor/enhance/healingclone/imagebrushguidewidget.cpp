@@ -155,6 +155,7 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
     }
     else if (isPPressed && (e->buttons() & Qt::LeftButton))
      {
+
         QPoint dst = QPoint(e->x(),e->y());
         emit signalLasso(dst);
      }
@@ -202,6 +203,7 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
             isMPressed = false;
             isSPressed = false;
             changeCursorShape(Qt::yellow);
+            emit signalResetLassoPoint();
         }
         else {
             isPPressed = false;
