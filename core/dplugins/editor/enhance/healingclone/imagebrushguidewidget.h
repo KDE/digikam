@@ -51,6 +51,7 @@ public:
     void zoomPlus();
     void zoomMinus();
     double getScaleRatio();
+     void resetPixels();
 
     explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
                               bool spotVisible = true,
@@ -78,6 +79,7 @@ Q_SIGNALS:
     void signalLasso(const QPoint& dst);
     void signalResetLassoPoint();
     void signalContinuePolygon();
+    void signalEndLassoSession();
 
 protected:
 
@@ -92,7 +94,7 @@ protected:
     void focusInEvent(QFocusEvent * event) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
-    void resetPixels();
+
 
 
 

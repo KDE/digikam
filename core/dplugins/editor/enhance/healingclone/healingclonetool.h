@@ -73,6 +73,7 @@ public Q_SLOTS:
     void slotLasso(const QPoint& dst);
     void slotResetLassoPoint();
     void slotContinuePolygon();
+    void slotEndLassoSession();
 
 private:
 
@@ -91,6 +92,7 @@ private:
     void clone(DImg* const img, const QPoint& srcPoint, const QPoint& dstPoint, int radius);
     std::vector<QPoint> interpolate(const QPoint& start,const QPoint& end);
     void updateLasso(std::vector<QPoint>& points);
+    void initializeLassoFlags();
 
 
 
@@ -109,10 +111,12 @@ private:
     std::vector<CloneInfo> * CloneInfoVector;
     std::vector<DColor> lassoColors;
     bool resetLassoPoint = true;
+    bool insideLassoOperation = false;
     QPoint previousLassoPoint;
     QPoint startLassoPoint;
     std::vector<QPoint> lassoPoints;
     QPolygon lassoPolygon;
+    std::vector<std::vector<bool>> lassoFlags;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin

@@ -85,7 +85,7 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
      {
         QPoint dst = QPoint(e->x(),e->y());
         //qCDebug(DIGIKAM_GENERAL_LOG()) << "Emitting Signal Lasso";
-        emit signalLasso(dst);
+        emit signalLasso(translateItemPosition(dst, false));
      }
     else if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
@@ -157,7 +157,7 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
      {
 
         QPoint dst = QPoint(e->x(),e->y());
-        emit signalLasso(dst);
+        emit signalLasso(translateItemPosition(dst, false));
      }
     else
     {
@@ -220,6 +220,7 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
             isPPressed = false;
             this->resetPixels();
             changeCursorShape(Qt::blue);
+            emit signalEndLassoSession();
         }
     }
 

@@ -244,7 +244,7 @@ void HealingCloneTool::slotResetSettings()
 void HealingCloneTool::slotResized()
 {
 
-    qCDebug(DIGIKAM_DPLUGIN_EDITOR_LOG) << "Resized!!" ;
+
     toolView()->update();
 
 }
@@ -273,6 +273,8 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
     double blurPercent = d->blurPercent->value() / 100;
     double scaleRatio = d->previewWidget->getScaleRatio();
 
+
+
     for (int i = -1 * radius ; i < radius ; ++i)
     {
         for (int j = -1 * radius ; j < radius ; ++j)
@@ -287,6 +289,26 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                     dstPoint.y()+j < 0 || dstPoint.y()+j >= (int)img->height())
                 {
                     continue;
+                }
+
+
+                if(insideLassoOperation)
+                {
+                    if(this->lassoFlags.at(srcPoint.x() +i).at(srcPoint.y() +j) ||
+                       this->lassoFlags.at(dstPoint.x()+i).at(dstPoint.y()+j))
+                    {
+                        continue;
+                    }
+
+                    bool isInside = this->lassoPolygon.containsPoint(QPoint(dstPoint.x()+i,dstPoint.y()+j),
+                                                                     Qt::OddEvenFill);
+
+                     if(!isInside)
+                        {
+                            continue;
+                        }
+
+
                 }
 
                 double rP   = blurPercent * rPercent / (radius * radius);
@@ -351,6 +373,7 @@ void HealingCloneTool :: updateLasso(std::vector<QPoint>& points)
             {
 
                 img->setPixelColor(p.x()+i,p.y()+j,this->lassoColors[(colorCounter)%this->lassoColors.size()]);
+                this->lassoFlags.at(p.x()+i).at(p.y()+j) = true;
                 colorCounter++;
             }
         }
@@ -400,7 +423,9 @@ void HealingCloneTool ::slotResetLassoPoint()
 {
     this->resetLassoPoint = true;
     this->lassoPoints.clear();
-
+    this->insideLassoOperation = true;
+    this->lassoPolygon.clear();
+    this->initializeLassoFlags();
 }
 
 void HealingCloneTool :: slotContinuePolygon()
@@ -420,8 +445,35 @@ void HealingCloneTool :: slotContinuePolygon()
     }
 
     this->lassoPolygon = QPolygon(polygon);
-    qCDebug(DIGIKAM_GENERAL_LOG()) <<this->lassoPolygon.size() << "\n" << this->lassoPolygon;
+
 }
 
+void HealingCloneTool :: slotEndLassoSession()
+{
+    this->insideLassoOperation = false;
+    this->d->previewWidget->resetPixels();
+
+}
+
+void HealingCloneTool :: initializeLassoFlags()
+{
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg* const img     = iface->previewReference();
+    int w = img->width();
+    int h = img->height();
+    this->lassoFlags.resize(w);
+    for(int i = 0 ; i < w; i++)
+    {
+        this->lassoFlags.at(i).resize(h);
+    }
+
+    for(int i = 0 ; i < w; i++)
+    {
+        for(int j = 0 ; j < h ; j++)
+        {
+            this->lassoFlags.at(i).at(j) = false;
+        }
+    }
+}
 
 } // namespace DigikamEditorHealingCloneToolPlugin
