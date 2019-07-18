@@ -77,6 +77,7 @@ Q_SIGNALS:
     void signalReclone();
     void signalLasso(const QPoint& dst);
     void signalResetLassoPoint();
+    void signalContinuePolygon();
 
 protected:
 

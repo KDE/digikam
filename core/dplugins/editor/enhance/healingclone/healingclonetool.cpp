@@ -168,6 +168,8 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     this->lassoColors.push_back(DColor(Qt::white));
     this->lassoColors.push_back(DColor(Qt::black));
     this->lassoColors.push_back(DColor(Qt::yellow));
+    this->lassoColors.push_back(DColor(Qt::blue));
+    this->lassoColors.push_back(DColor(Qt::yellow));
     // --------------------------------------------------------
 
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
@@ -190,8 +192,12 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget, SIGNAL(signalLasso(QPoint)),
             this, SLOT(slotLasso(QPoint)));
+
     connect(d->previewWidget, SIGNAL(signalResetLassoPoint()),
             this, SLOT(slotResetLassoPoint()));
+
+    connect(d->previewWidget,SIGNAL(signalContinuePolygon()),
+            this, SLOT(slotContinuePolygon()));
 
 
 }
@@ -331,23 +337,10 @@ void HealingCloneTool :: slotReclone()
 
 }
 
-void HealingCloneTool :: slotLasso(const QPoint& dst)
+void HealingCloneTool :: updateLasso(std::vector<QPoint>& points)
 {
-
-    static uint colorCounter = 0;
-    if(this->resetLassoPoint)
-    {
-    this->previousLassoPoint = dst;
-     this->resetLassoPoint = false;
-    }
-    std::vector<QPoint> points = interpolate(this->previousLassoPoint, dst);
-    for(QPoint x: points){
-        qCDebug(DIGIKAM_GENERAL_LOG()) << x ;
-    }
-    this->previousLassoPoint = dst;
-    qCDebug(DIGIKAM_GENERAL_LOG()) << "\n";
     uint radius = 5;
-
+    static uint colorCounter = 0;
     ImageIface* const iface = d->previewWidget->imageIface();
     DImg* const img     = iface->previewReference();
     for (QPoint p: points)
@@ -357,12 +350,30 @@ void HealingCloneTool :: slotLasso(const QPoint& dst)
             for(uint j = 0; j<radius ; j++)
             {
 
-                img->setPixelColor(p.x()+i,p.y()+j,this->lassoColors[(colorCounter)%4]);
+                img->setPixelColor(p.x()+i,p.y()+j,this->lassoColors[(colorCounter)%this->lassoColors.size()]);
                 colorCounter++;
             }
         }
     }
+
     d->previewWidget->updatePreview();
+}
+
+void HealingCloneTool :: slotLasso(const QPoint& dst)
+{
+
+    if(this->resetLassoPoint)
+    {
+        this->previousLassoPoint = dst;
+        this->resetLassoPoint = false;
+        this->startLassoPoint = dst;
+    }
+    std::vector<QPoint> points = interpolate(this->previousLassoPoint, dst);
+    this->lassoPoints.push_back(dst);
+    this->previousLassoPoint = dst;
+    this->updateLasso(points);
+
+
 }
 
 std::vector<QPoint> HealingCloneTool :: interpolate(const QPoint& start, const QPoint& end)
@@ -388,6 +399,29 @@ std::vector<QPoint> HealingCloneTool :: interpolate(const QPoint& start, const Q
 void HealingCloneTool ::slotResetLassoPoint()
 {
     this->resetLassoPoint = true;
+    this->lassoPoints.clear();
+
 }
+
+void HealingCloneTool :: slotContinuePolygon()
+{
+    QPoint& start = this->startLassoPoint;
+    QPoint& end = this->previousLassoPoint;
+    std::vector<QPoint> points = interpolate(end,start);
+    updateLasso(points);
+
+    this->lassoPoints.push_back(start);
+
+
+    QVector<QPoint> polygon;
+    for(QPoint point: this->lassoPoints)
+    {
+        polygon.append(point);
+    }
+
+    this->lassoPolygon = QPolygon(polygon);
+    qCDebug(DIGIKAM_GENERAL_LOG()) <<this->lassoPolygon.size() << "\n" << this->lassoPolygon;
+}
+
 
 } // namespace DigikamEditorHealingCloneToolPlugin

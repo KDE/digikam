@@ -204,8 +204,19 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
             isSPressed = false;
             changeCursorShape(Qt::yellow);
             emit signalResetLassoPoint();
+            this->resetPixels();
         }
         else {
+            isPPressed = false;
+            changeCursorShape(Qt::blue);
+            emit signalContinuePolygon();
+        }
+    }
+
+    if(e->key() == Qt :: Key_L)
+    {
+        if(isPPressed)
+        {
             isPPressed = false;
             this->resetPixels();
             changeCursorShape(Qt::blue);
