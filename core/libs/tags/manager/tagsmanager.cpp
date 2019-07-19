@@ -30,9 +30,9 @@
 #include <QTreeView>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <QDesktopWidget>
 #include <QSplitter>
 #include <QApplication>
+#include <QScreen>
 #include <QAction>
 #include <QMessageBox>
 #include <QMenu>
@@ -143,7 +143,9 @@ TagsManager::TagsManager()
     StateSavingObject::loadState();
 
     /** Set KMainWindow in center of the screen **/
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->mapToGlobal(QPoint()));
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+    move(qApp->screens().at(activeScreenIndex)->geometry().center() - rect().center());
 }
 
 TagsManager::~TagsManager()
@@ -215,7 +217,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
 
      QWidget* const centraW = new QWidget(this);
      centraW->setLayout(mainLayout);
-     this->setCentralWidget(centraW);
+     setCentralWidget(centraW);
 }
 
 void TagsManager::slotOpenProperties()
@@ -817,7 +819,7 @@ void TagsManager::setupActions()
     d->mainToolbar->addAction(d->organizeAction->menuAction());
     d->mainToolbar->addAction(d->syncexportAction->menuAction());
     d->mainToolbar->addAction(new DLogoAction(this));
-    this->addToolBar(d->mainToolbar);
+    addToolBar(d->mainToolbar);
 
     /**
      * Right Toolbar with vertical properties button
