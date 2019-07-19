@@ -29,8 +29,8 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QDesktopWidget>
 #include <QApplication>
+#include <QScreen>
 #include <QStyle>
 #include <QComboBox>
 
@@ -175,9 +175,11 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     choices.append(i18nc("@label:listbox The current screen, for the presentation mode", "Current Screen"));
     choices.append(i18nc("@label:listbox The default screen for the presentation mode",  "Default Screen"));
 
-    for (int i = 0 ; i < qApp->desktop()->numScreens() ; i++ )
+    for (int i = 0 ; i < qApp->screens().count() ; ++i)
     {
-        choices.append(i18nc("@label:listbox %1 is the screen number (0, 1, ...)", "Screen %1", i));
+        QString model = qApp->screens().at(i)->model();
+        choices.append(i18nc("@label:listbox %1 is the screen number (0, 1, ...)", "Screen %1", i) +
+                             QString::fromUtf8(" (%1)").arg(model.left(model.length() - 1)));
     }
 
     d->screenPlacement->addItems(choices);
@@ -281,7 +283,7 @@ void SetupSlideShow::readSettings()
 
     const int screen = settings.slideScreen;
 
-    if (screen >= -2 && screen < qApp->desktop()->numScreens())
+    if (screen >= -2 && screen < qApp->screens().count())
     {
         d->screenPlacement->setCurrentIndex(screen + 2);
     }
