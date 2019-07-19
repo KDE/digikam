@@ -79,7 +79,7 @@ SlideProperties::~SlideProperties()
 
 void SlideProperties::setCurrentUrl(const QUrl& url)
 {
-    setFixedSize(qApp->screenAt(geometry().center())->availableGeometry().size() / 1.5);
+    setFixedSize(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry().size() / 1.5);
     d->url  = url;
     update();
 }

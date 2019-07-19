@@ -92,7 +92,7 @@ void SlideImage::setLoadUrl(const QUrl& url)
 {
     d->currentImage = url;
     // calculate preview size which is used for fast previews
-    QSize desktopSize = qApp->screenAt(geometry().center())->geometry().size();
+    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
     d->previewThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }
@@ -100,7 +100,7 @@ void SlideImage::setLoadUrl(const QUrl& url)
 void SlideImage::setPreloadUrl(const QUrl& url)
 {
     // calculate preview size which is used for fast previews
-    QSize desktopSize = qApp->screenAt(geometry().center())->geometry().size();
+    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
     d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }

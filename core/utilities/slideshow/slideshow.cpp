@@ -685,6 +685,9 @@ void SlideShow::slotScreenSelected(int screen)
 
     setWindowState(windowState() | Qt::WindowFullScreen);
 
+    // update OSD position
+    d->osd->setCurrentUrl(currentItem());
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Slideshow: move to screen: " << screen
                                  << " :: " << deskRect;
 }
