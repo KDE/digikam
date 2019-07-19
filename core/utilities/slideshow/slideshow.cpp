@@ -27,13 +27,13 @@
 
 // Qt includes
 
-#include <QDesktopWidget>
 #include <QMimeDatabase>
 #include <QApplication>
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QKeyEvent>
+#include <QScreen>
 #include <QCursor>
 #include <QTimer>
 #include <QColor>
@@ -172,25 +172,27 @@ SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& setti
 
     // ---------------------------------------------------------------
 
-    QDesktopWidget const* desktop = qApp->desktop();
-    const int preferenceScreen    = d->settings.slideScreen;
-    int screen                    = 0;
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->mapToGlobal(QPoint()));
+    const int activeScreenIndex = qApp->screens().indexOf(activeScreen);
+    const int preferenceScreen  = d->settings.slideScreen;
+    int screen                  = 0;
 
     if (preferenceScreen == -2)
     {
-        screen = desktop->screenNumber(qApp->activeWindow());
+        screen = activeScreenIndex;
     }
     else if (preferenceScreen == -1)
     {
-        screen = desktop->primaryScreen();
+        QScreen* const primaryScreen = qApp->primaryScreen();
+        screen                       = qApp->screens().indexOf(primaryScreen);
     }
-    else if ((preferenceScreen >= 0) && (preferenceScreen < desktop->numScreens()))
+    else if ((preferenceScreen >= 0) && (preferenceScreen < qApp->screens().count()))
     {
         screen = preferenceScreen;
     }
     else
     {
-        screen                  = desktop->screenNumber(qApp->activeWindow());
+        screen                  = activeScreenIndex;
         d->settings.slideScreen = -2;
         d->settings.writeToConfig();
     }
@@ -674,10 +676,14 @@ void SlideShow::slotPlay()
 
 void SlideShow::slotScreenSelected(int screen)
 {
-    QRect deskRect = qApp->desktop()->screenGeometry(screen);
+    QRect deskRect = qApp->screens().at(screen)->geometry();
+
+    setWindowState(windowState() & ~Qt::WindowFullScreen);
 
     move(deskRect.x(), deskRect.y());
     resize(deskRect.width(), deskRect.height());
+
+    setWindowState(windowState() | Qt::WindowFullScreen);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Slideshow: move to screen: " << screen
                                  << " :: " << deskRect;

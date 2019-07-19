@@ -25,13 +25,13 @@
 
 // Qt includes
 
-#include <QTimer>
-#include <QLayout>
-#include <QDesktopWidget>
-#include <QEvent>
-#include <QStyle>
 #include <QApplication>
 #include <QProgressBar>
+#include <QLayout>
+#include <QScreen>
+#include <QTimer>
+#include <QEvent>
+#include <QStyle>
 
 // Windows includes
 
@@ -266,7 +266,7 @@ void SlideOSD::setCurrentUrl(const QUrl& url)
     layout()->activate();
     resize(sizeHint());
 
-    QRect geometry(QApplication::desktop()->availableGeometry(parentWidget()));
+    QRect geometry(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry());
     move(10, geometry.bottom() - height());
     show();
     raise();

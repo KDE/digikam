@@ -26,12 +26,12 @@
 
 // Qt includes
 
-#include <QPixmap>
-#include <QToolButton>
-#include <QDesktopWidget>
-#include <QActionGroup>
-#include <QMenu>
 #include <QApplication>
+#include <QActionGroup>
+#include <QToolButton>
+#include <QPixmap>
+#include <QScreen>
+#include <QMenu>
 
 // KDE includes
 
@@ -54,18 +54,15 @@ public:
         stopBtn(nullptr),
         nextBtn(nullptr),
         prevBtn(nullptr),
-        screenSelectBtn(nullptr),
-        desktop(qApp->desktop())
+        screenSelectBtn(nullptr)
     {
     }
 
-    QToolButton*    playBtn;
-    QToolButton*    stopBtn;
-    QToolButton*    nextBtn;
-    QToolButton*    prevBtn;
-    QToolButton*    screenSelectBtn;
-
-    QDesktopWidget* desktop;
+    QToolButton* playBtn;
+    QToolButton* stopBtn;
+    QToolButton* nextBtn;
+    QToolButton* prevBtn;
+    QToolButton* screenSelectBtn;
 };
 
 SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
@@ -99,7 +96,7 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->nextBtn->setIcon(QIcon::fromTheme(QLatin1String("media-skip-forward")));
     d->stopBtn->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
 
-    int num = d->desktop->numScreens();
+    int num = qApp->screens().count();
 
     if (num > 1)
     {
@@ -117,7 +114,9 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
 
         for (int i = 0 ; i < num ; ++i)
         {
-            QAction* const act = screenMenu->addAction(i18nc("%1 is the screen number (0, 1, ...)", "Screen %1", i));
+            QString model      = qApp->screens().at(i)->model();
+            QAction* const act = screenMenu->addAction(i18nc("%1 is the screen number (0, 1, ...)", "Screen %1", i) +
+                                                       QString::fromUtf8(" (%1)").arg(model.left(model.length() - 1)));
             act->setData(qVariantFromValue(i));
             act->setCheckable(true);
             group->addAction(act);
