@@ -266,8 +266,8 @@ void SlideOSD::setCurrentUrl(const QUrl& url)
     layout()->activate();
     resize(sizeHint());
 
-    QRect geometry(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry());
-    move(10, geometry.bottom() - height());
+    QRect screenRect(qApp->screenAt(geometry().center())->availableGeometry());
+    move(10, screenRect.bottom() - height());
     show();
     raise();
 }

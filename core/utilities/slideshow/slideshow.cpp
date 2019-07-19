@@ -172,7 +172,7 @@ SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& setti
 
     // ---------------------------------------------------------------
 
-    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->mapToGlobal(QPoint()));
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
     const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
     const int preferenceScreen  = d->settings.slideScreen;
     int screen                  = 0;
