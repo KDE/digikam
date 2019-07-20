@@ -28,7 +28,6 @@
 
 #include <QHash>
 #include <QApplication>
-#include <QDesktopWidget>
 
 // Local includes
 
@@ -229,7 +228,7 @@ QVariant ItemThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(QVariant::Pixmap);
         }
 
-        double ratio  = QApplication::desktop()->devicePixelRatioF();
+        double ratio  = qApp->devicePixelRatio();
         int thumbSize = qRound((double)d->thumbSize.size() * ratio);
 
         if (!d->detailRect.isNull())

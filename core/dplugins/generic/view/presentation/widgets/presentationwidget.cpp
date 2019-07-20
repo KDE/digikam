@@ -37,7 +37,6 @@
 #include <QCursor>
 #include <QFont>
 #include <QKeyEvent>
-#include <QMatrix>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -46,7 +45,7 @@
 #include <QTimer>
 #include <QWheelEvent>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 // KDE includes
 
@@ -185,11 +184,14 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QRect deskRect  = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
-    d->deskX        = deskRect.x();
-    d->deskY        = deskRect.y();
-    d->deskWidth    = deskRect.width();
-    d->deskHeight   = deskRect.height();
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+
+    QRect deskRect = qApp->screens().at(activeScreenIndex)->geometry();
+    d->deskX       = deskRect.x();
+    d->deskY       = deskRect.y();
+    d->deskWidth   = deskRect.width();
+    d->deskHeight  = deskRect.height();
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
@@ -1244,10 +1246,10 @@ int PresentationWidget::effectCubism(bool aInit)
     m_psx  = r;
     m_psy  = r;
 
-    QMatrix matrix;
-    matrix.rotate((qrand() % 20) - 10);
+    QTransform transform;
+    transform.rotate((qrand() % 20) - 10);
     QRect rect(m_px, m_py, m_psx, m_psy);
-    bufferPainter.setMatrix(matrix);
+    bufferPainter.setTransform(transform);
     bufferPainter.fillRect(rect, QBrush(d->currImage));
     bufferPainter.end();
     repaint();

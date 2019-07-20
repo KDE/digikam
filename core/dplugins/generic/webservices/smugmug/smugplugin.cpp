@@ -135,9 +135,15 @@ void SmugPlugin::slotSmugMugImport()
 {
     if (!reactivateToolDialog(m_toolDlgImport))
     {
+        DInfoInterface* const iface = infoIface(sender());
+
         delete m_toolDlgImport;
-        m_toolDlgImport = new SmugWindow(infoIface(sender()), nullptr, true);
+        m_toolDlgImport = new SmugWindow(iface, nullptr, true);
         m_toolDlgImport->setPlugin(this);
+
+        connect(m_toolDlgImport, SIGNAL(updateHostApp(QUrl)),
+                iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+
         m_toolDlgImport->show();
     }
 }

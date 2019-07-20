@@ -89,7 +89,7 @@ Q_SIGNALS:
     void signalAddPhotoDone(int, const QString&);
     void signalUploadPhotoDone(int, const QString&, const QStringList&);
     void signalGetPhotoDone(int errCode, const QString& errMsg,
-                            const QByteArray& photoData);
+                            const QByteArray& photoData, const QString& fileName);
     void signalReadyToUpload();
 
 private:

@@ -25,9 +25,9 @@
 
 // Qt includes
 
-#include <QPainter>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QPainter>
+#include <QScreen>
 
 // Local includes
 
@@ -44,15 +44,13 @@ class Q_DECL_HIDDEN SlideImage::Private
 public:
 
     explicit Private()
-      : deskSize(1024),
-        previewThread(nullptr),
+      : previewThread(nullptr),
         previewPreloadThread(nullptr)
     {
     }
 
     PreviewSettings     previewSettings;
 
-    int                 deskSize;
     QPixmap             pixmap;
 
     QUrl                currentImage;
@@ -88,20 +86,23 @@ SlideImage::~SlideImage()
 void SlideImage::setPreviewSettings(const PreviewSettings& settings)
 {
     d->previewSettings = settings;
-    // calculate preview size which is used for fast previews
-    QSize desktopSize  = QApplication::desktop()->screenGeometry(parentWidget()).size();
-    d->deskSize        = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
 }
 
 void SlideImage::setLoadUrl(const QUrl& url)
 {
     d->currentImage = url;
-    d->previewThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
+    // calculate preview size which is used for fast previews
+    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
+    int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
+    d->previewThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }
 
 void SlideImage::setPreloadUrl(const QUrl& url)
 {
-    d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
+    // calculate preview size which is used for fast previews
+    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
+    int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
+    d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }
 
 void SlideImage::paintEvent(QPaintEvent*)
@@ -159,14 +160,8 @@ void SlideImage::updatePixmap()
        we need to increase the pixel size of the rendered
        pixmap.
     */
-#ifdef USE_QT_SCALING
-    double xratio  = double(d->preview.width())  / width();
-    double yratio  = double(d->preview.height()) / height();
-    double ratio   = qMax(qMin(xratio, yratio), 1.0);
-#else
-    // Maybe we can use it for Mac OS X as well.
-    double ratio   = devicePixelRatioF();
-#endif
+
+    double ratio   = qApp->devicePixelRatio();
 
     QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
     d->pixmap      = QPixmap(fullSize);

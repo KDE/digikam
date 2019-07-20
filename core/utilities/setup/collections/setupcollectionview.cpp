@@ -194,7 +194,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         deleteButton->hide();
 
         pushButton->setEnabled(itemView()->isEnabled());
-        pushButton->setProperty("id", index.data(SetupCollectionModel::CategoryButtonMapId).toInt());
+        pushButton->setProperty("id", index.data(SetupCollectionModel::CategoryButtonMapId));
     }
     else if (index.data(SetupCollectionModel::IsUpdateRole).toBool())
     {
@@ -205,7 +205,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         pushButton->hide();
 
         updateButton->setEnabled(itemView()->isEnabled());
-        updateButton->setProperty("id", index.data(SetupCollectionModel::UpdateMapId).toInt());
+        updateButton->setProperty("id", index.data(SetupCollectionModel::UpdateMapId));
     }
     else if (index.data(SetupCollectionModel::IsDeleteRole).toBool())
     {
@@ -216,7 +216,7 @@ void SetupCollectionDelegate::updateItemWidgets(const QList<QWidget*> widgets,
         pushButton->hide();
 
         deleteButton->setEnabled(itemView()->isEnabled());
-        deleteButton->setProperty("id", index.data(SetupCollectionModel::DeleteMapId).toInt());
+        deleteButton->setProperty("id", index.data(SetupCollectionModel::DeleteMapId));
     }
     else
     {

@@ -34,10 +34,10 @@
 #include <QEvent>
 #include <QHoverEvent>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QKeySequence>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QScreen>
 #include <QMenu>
 #include <QUrl>
 #include <QDomDocument>
@@ -606,7 +606,7 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
                     if (mev)
                     {
                         QPoint pos(mev->pos());
-                        QRect  desktopRect = QApplication::desktop()->screenGeometry(this);
+                        QRect  desktopRect = windowHandle()->screen()->geometry();
 
                         QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
                         QRect topLeft, topRight;

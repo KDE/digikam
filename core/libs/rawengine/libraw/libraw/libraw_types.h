@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_types.h
- * Copyright 2008-2018 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2019 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C data structures
@@ -97,17 +97,17 @@ typedef unsigned long long UINT64;
   typedef unsigned short ushort;
 
 #ifdef WIN32
-#   ifdef LIBRAW_NODLL
-#       define DllDef
-#   else
-#       ifdef LIBRAW_BUILDLIB
-#           define DllDef __declspec(dllexport)
-#       else
-#          define DllDef __declspec(dllimport)
-#       endif
-#   endif
+#ifdef LIBRAW_NODLL
+#define DllDef
 #else
-#   define DllDef __attribute__((visibility("default")))
+#ifdef LIBRAW_BUILDLIB
+#define DllDef __declspec(dllexport)
+#else
+#define DllDef __declspec(dllimport)
+#endif
+#endif
+#else
+#define DllDef
 #endif
 
   typedef struct

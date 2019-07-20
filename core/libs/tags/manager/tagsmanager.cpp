@@ -30,9 +30,9 @@
 #include <QTreeView>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <QDesktopWidget>
 #include <QSplitter>
 #include <QApplication>
+#include <QScreen>
 #include <QAction>
 #include <QMessageBox>
 #include <QMenu>
@@ -143,7 +143,9 @@ TagsManager::TagsManager()
     StateSavingObject::loadState();
 
     /** Set KMainWindow in center of the screen **/
-    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+    move(qApp->screens().at(activeScreenIndex)->geometry().center() - rect().center());
 }
 
 TagsManager::~TagsManager()
@@ -170,7 +172,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
 
      QHBoxLayout* const mainLayout = new QHBoxLayout();
 
-     d->tagPixmap = new QLabel();
+     d->tagPixmap   = new QLabel();
      d->tagPixmap->setText(QLatin1String("Tag Pixmap"));
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30, 30));
@@ -178,7 +180,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
      d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
-     d->searchBar  = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
+     d->searchBar   = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagMngrView->filteredModel(),
                             AbstractAlbumModel::AlbumIdRole,
@@ -215,7 +217,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
 
      QWidget* const centraW = new QWidget(this);
      centraW->setLayout(mainLayout);
-     this->setCentralWidget(centraW);
+     setCentralWidget(centraW);
 }
 
 void TagsManager::slotOpenProperties()
@@ -259,9 +261,10 @@ void TagsManager::slotItemChanged()
 
 void TagsManager::slotAddAction()
 {
-    TAlbum*       parent = d->tagMngrView->currentAlbum();
-    QString       title, icon;
-    QKeySequence  ks;
+    TAlbum*      parent = d->tagMngrView->currentAlbum();
+    QString      title;
+    QString      icon;
+    QKeySequence ks;
 
     if (!parent)
     {
@@ -331,6 +334,7 @@ void TagsManager::slotDeleteAction()
         }
 
         QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
+
         if (!assignedItems.isEmpty())
         {
             tagsWithImages.append(tag->title());
@@ -450,7 +454,7 @@ void TagsManager::slotResetTagIcon()
     const QList<TAlbum*> selected = d->tagMngrView->selectedTagAlbums();
     const QString icon = QLatin1String("tag");
 
-    for (QList<TAlbum*>::const_iterator it = selected.constBegin() ; it != selected.constEnd() ; ++it )
+    for (QList<TAlbum*>::const_iterator it = selected.constBegin() ; it != selected.constEnd() ; ++it)
     {
         TAlbum* const tag = *it;
 
@@ -817,7 +821,7 @@ void TagsManager::setupActions()
     d->mainToolbar->addAction(d->organizeAction->menuAction());
     d->mainToolbar->addAction(d->syncexportAction->menuAction());
     d->mainToolbar->addAction(new DLogoAction(this));
-    this->addToolBar(d->mainToolbar);
+    addToolBar(d->mainToolbar);
 
     /**
      * Right Toolbar with vertical properties button
@@ -947,7 +951,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     QList<TAlbum*> toRemove;
 
-    foreach (QModelIndex toDelete, redNodes)
+    foreach (const QModelIndex& toDelete, redNodes)
     {
         QModelIndex current = toDelete;
 

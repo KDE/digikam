@@ -10,8 +10,8 @@ SET(PREFIX_ext_ffmpeg "${EXTPREFIX}")
 
 ExternalProject_Add(ext_ffmpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://ffmpeg.org/releases/ffmpeg-3.3.9.tar.xz
-    URL_MD5 d0dc359e247070a0d25964f4822cab4f
+    URL https://ffmpeg.org/releases/ffmpeg-3.3.6.tar.xz
+    URL_MD5 e7701ebfce77e44f7b4cc57dd001e7eb
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}
                                              --datadir=${CMAKE_BINARY_DIR}/etc
@@ -41,6 +41,7 @@ ExternalProject_Add(ext_ffmpeg
                                              --enable-librtmp
                                              --enable-libfreetype
                                              --enable-libass
+                                             --enable-openssl
 
     UPDATE_COMMAND ""
     ALWAYS 0

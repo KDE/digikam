@@ -44,9 +44,9 @@
 #include <QToolButton>
 #include <QIcon>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QEventLoop>
 #include <QKeyEvent>
+#include <QScreen>
 
 // KDE includes
 
@@ -194,7 +194,12 @@ void PanIconFrame::resizeEvent(QResizeEvent* e)
 void PanIconFrame::popup(const QPoint& pos)
 {
     // Make sure the whole popup is visible.
-    QRect desktopGeometry = QApplication::desktop()->screenGeometry( pos );
+    QScreen* screen = qApp->screenAt(pos);
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
+    QRect desktopGeometry = screen->geometry();
 
     int x = pos.x();
     int y = pos.y();

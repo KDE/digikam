@@ -29,7 +29,9 @@
 // Qt includes
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
+#include <QWidget>
+#include <QWindow>
 #include <QDir>
 #include <QFileInfo>
 #include <QMutex>
@@ -169,7 +171,7 @@ bool IccSettings::monitorProfileFromSystem() const
     // Second, check all toplevel widgets
     QList<QWidget*> topLevels = qApp->topLevelWidgets();
 
-    foreach(QWidget* const widget, topLevels)
+    foreach (QWidget* const widget, topLevels)
     {
         if (!d->profileFromWindowSystem(widget).isNull())
         {
@@ -201,15 +203,35 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
     unsigned long appRootWindow;
     QString       atomName;
 
-    QDesktopWidget* const desktop = QApplication::desktop();
+    QScreen* const screen = qApp->primaryScreen();
 
-    if (!desktop)
+    if (!screen)
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "No desktop widget available for application";
+        qCDebug(DIGIKAM_DIMG_LOG) << "No screen available for application";
         return IccProfile();
     }
 
-    int screenNumber = desktop->screenNumber(widget);
+    QScreen* widgetScreen = screen;
+
+    if (widget)
+    {
+        QWindow* winHandle = widget->windowHandle();
+
+        if (!winHandle)
+        {
+            if (QWidget* const nativeParent = widget->nativeParentWidget())
+            {
+                winHandle = nativeParent->windowHandle();
+            }
+        }
+
+        if (winHandle)
+        {
+            widgetScreen = winHandle->screen();
+        }
+    }
+
+    int screenNumber = qMax(qApp->screens().indexOf(widgetScreen), 0);
 
     IccProfile profile;
     {
@@ -221,7 +243,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
         }
     }
 
-    if (desktop->isVirtualDesktop())
+    if (screen->virtualSiblings().size() > 1)
     {
         appRootWindow = QX11Info::appRootWindow(QX11Info::appScreen());
         atomName      = QString::fromLatin1("_ICC_PROFILE_%1").arg(screenNumber);
@@ -418,7 +440,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
     filters << QLatin1String("*.icc") << QLatin1String("*.icm");
     qCDebug(DIGIKAM_DIMG_LOG) << dirs;
 
-    foreach(const QString& dirPath, dirs)
+    foreach (const QString& dirPath, dirs)
     {
         QDir dir(dirPath);
 
@@ -440,7 +462,7 @@ void IccSettings::Private::scanDirectory(const QString& path, const QStringList&
     infos << dir.entryInfoList(filter, QDir::Files | QDir::Readable);
     infos << dir.entryInfoList(QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot);
 
-    foreach(const QFileInfo& info, infos)
+    foreach (const QFileInfo& info, infos)
     {
         if (info.isFile())
         {
@@ -505,7 +527,7 @@ QList<IccProfile> IccSettings::workspaceProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
+    foreach (IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -541,7 +563,7 @@ QList<IccProfile> IccSettings::inputProfiles()
 {
     QList<IccProfile> profiles;
 
-    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
+    foreach (IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         switch (profile.type())
         {
@@ -582,7 +604,7 @@ QList<IccProfile> IccSettings::profilesForDescription(const QString& description
         return profiles;
     }
 
-    foreach(IccProfile profile, allProfiles())  // krazy:exclude=foreach
+    foreach (IccProfile profile, allProfiles())  // krazy:exclude=foreach
     {
         if (profile.description() == description)
         {
@@ -598,7 +620,7 @@ void IccSettings::loadAllProfilesProperties()
     allProfiles();
     const int size = d->profiles.size();
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         IccProfile& profile = d->profiles[i];
 

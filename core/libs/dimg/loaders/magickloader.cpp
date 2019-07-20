@@ -98,7 +98,14 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
         if (m_loadFlags & LoadImageData)
         {
-            image.read(filePath.toUtf8().constData());
+            try
+            {
+                image.read(filePath.toUtf8().constData());
+            }
+            catch (Warning& warning)
+            {
+                qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick warning [" << filePath << "]" << warning.what();
+            }
 
             if (observer)
             {
@@ -119,6 +126,22 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
                 observer->progressInfo(m_image, 0.9F);
             }
 
+            if (m_loadFlags & LoadICCData)
+            {
+                Blob iccBlob(image.iccColorProfile());
+                QByteArray iccRawProfile((char*)iccBlob.data(), iccBlob.length());
+
+                if (!iccRawProfile.isEmpty())
+                {
+                    imageSetIccProfile(IccProfile(iccRawProfile));
+                }
+            }
+
+            if (observer)
+            {
+                observer->progressInfo(m_image, 1.0F);
+            }
+
             imageWidth()  = image.columns();
             imageHeight() = image.rows();
             imageData()   = (uchar*)pixelBlob->data();
@@ -137,16 +160,33 @@ bool MagickLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         }
         else
         {
-            image.ping(filePath.toUtf8().constData());
+            try
+            {
+                image.ping(filePath.toUtf8().constData());
+            }
+            catch (Warning& warning)
+            {
+                qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick warning [" << filePath << "]" << warning.what();
+            }
+
+            imageWidth()  = image.columns();
+            imageHeight() = image.rows();
+
+#if MagickLibVersion < 0x700
+            m_hasAlpha    = image.matte();
+#else
+            m_hasAlpha    = image.alpha();
+#endif
+
             imageSetAttribute(QLatin1String("format"),             QLatin1String("PNG"));
             imageSetAttribute(QLatin1String("originalColorModel"), DImg::RGB);
             imageSetAttribute(QLatin1String("originalBitDepth"),   (QuantumRange >= 16) ? 16 : 8);
             imageSetAttribute(QLatin1String("originalSize"),       QSize(image.columns(), image.rows()));
         }
     }
-    catch (Exception& error_)
+    catch (Exception& error)
     {
-        qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick exception [" << filePath << "]" << error_.what();
+        qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick exception [" << filePath << "]" << error.what();
         loadingFailed();
         return false;
     }
@@ -191,11 +231,20 @@ bool MagickLoader::save(const QString& filePath, DImgLoaderObserver* const obser
 
         image.read(pixelBlob);
         image.magick(format.data());
+
+        QByteArray iccRawProfile = m_image->getIccProfile().data();
+
+        if (!iccRawProfile.isEmpty())
+        {
+            Blob iccBlob(iccRawProfile.data(), iccRawProfile.size());
+            image.iccColorProfile(iccBlob);
+        }
+
         image.write(filePath.toUtf8().constData());
 
         if (observer)
         {
-            observer->progressInfo(m_image, 0.9F);
+            observer->progressInfo(m_image, 1.0F);
         }
 
         imageSetAttribute(QLatin1String("format"), format.toUpper());
@@ -203,9 +252,9 @@ bool MagickLoader::save(const QString& filePath, DImgLoaderObserver* const obser
         saveMetadata(filePath);
         return true;
     }
-    catch (Exception& error_)
+    catch (Exception& error)
     {
-        qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick exception [" << filePath << "]" << error_.what();
+        qCWarning(DIGIKAM_DIMG_LOG) << "ImageMagick exception [" << filePath << "]" << error.what();
         return false;
     }
 

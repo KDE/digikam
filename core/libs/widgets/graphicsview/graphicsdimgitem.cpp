@@ -27,14 +27,14 @@
 
 // Qt includes
 
+#include <QStyleOptionGraphicsItem>
+#include <QApplication>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>
-#include <QStyleOptionGraphicsItem>
 
 // Local includes
 
-#include "digikam_config.h"
 #include "dimg.h"
 #include "imagezoomsettings.h"
 
@@ -194,16 +194,14 @@ QRectF GraphicsDImgItem::boundingRect() const
     return QRectF(QPointF(0, 0), d->zoomSettings.zoomedSize()).toAlignedRect();
 }
 
-void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     Q_D(GraphicsDImgItem);
 
-    QRect   drawRect = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+    QRect   drawRect     = option->exposedRect.intersected(boundingRect()).toAlignedRect();
     QRect   pixSourceRect;
     QPixmap pix;
-
-    QSize completeSize = boundingRect().size().toSize();
-
+    QSize   completeSize = boundingRect().size().toSize();
 
     /* For high resolution ("retina") displays, Mac OS X / Qt
        report only half of the physical resolution in terms of
@@ -223,15 +221,8 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
        we need to increase the pixel size of the rendered
        pixmap.
     */
-#ifdef USE_QT_SCALING
-    Q_UNUSED(widget);
-    double xratio = double(d->image.width()) / completeSize.width();
-    double yratio = double(d->image.height()) / completeSize.height();
-    double ratio  = qMax(qMin(xratio, yratio), 1.0);
-#else
-    // Maybe we can use it for Mac OS X as well.
-    double ratio  = widget->devicePixelRatioF();
-#endif
+
+    double ratio          = qApp->devicePixelRatio();
 
     QRect  scaledDrawRect = QRectF(ratio*drawRect.x(), ratio*drawRect.y(),
                                    ratio*drawRect.width(), ratio*drawRect.height()).toRect();
