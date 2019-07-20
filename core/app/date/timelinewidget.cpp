@@ -30,12 +30,12 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPainter>
+#include <QScreen>
+#include <QLocale>
 #include <QPixmap>
 #include <QTimer>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QLocale>
 #include <QDate>
 
 // KDE includes
@@ -968,9 +968,14 @@ void TimeLineWidget::keyReleaseEvent(QKeyEvent *)
 
 void TimeLineWidget::keyScroll(bool isScrollNext)
 {
+    QScreen* screen = qApp->screenAt(mapToGlobal(geometry().center()));
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
     QRect barRect;
-    QRect deskRect = QApplication::desktop()->screenGeometry(this);
-    int items      = deskRect.width() / d->barWidth;
+    QRect deskRect  = screen->geometry();
+    int items       = deskRect.width() / d->barWidth;
 
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
@@ -1924,7 +1929,12 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool& isOnSelection
     QDateTime ref = d->refDateTime;
     ref.setTime(QTime(0, 0, 0, 0));
 
-    QRect deskRect = QApplication::desktop()->screenGeometry(this);
+    QScreen* screen = qApp->screenAt(mapToGlobal(geometry().center()));
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
+    QRect deskRect = screen->geometry();
     int items      = deskRect.width() / d->barWidth;
 
     for (int i = 0 ; i < items ; ++i)

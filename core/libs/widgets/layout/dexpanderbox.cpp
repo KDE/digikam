@@ -35,7 +35,6 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
-#include <QDesktopWidget>
 #include <QScreen>
 
 // KDE includes
@@ -45,7 +44,6 @@
 // Local includes
 
 #include "dlayoutbox.h"
-#include "digikam_debug.h"
 
 namespace Digikam
 {
