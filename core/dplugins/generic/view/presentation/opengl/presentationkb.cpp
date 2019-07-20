@@ -41,10 +41,8 @@
 #include <QCursor>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QScreen>
-#include <QWindow>
 
 // KDE includes
 
@@ -217,7 +215,10 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+
+    QRect deskRect = qApp->screens().at(activeScreenIndex)->geometry();
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
@@ -237,16 +238,9 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     {
         int rate = 25;
 
-        QWindow* const handle = QApplication::desktop()->windowHandle();
-
-        if (handle)
+        if (activeScreen)
         {
-            QScreen* const screen = handle->screen();
-
-            if (screen)
-            {
-                rate = (int)screen->refreshRate();
-            }
+            rate = (int)activeScreen->refreshRate();
         }
 
         frameRate = rate * 2;

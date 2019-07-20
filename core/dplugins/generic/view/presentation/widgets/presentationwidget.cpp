@@ -45,7 +45,7 @@
 #include <QTimer>
 #include <QWheelEvent>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 // KDE includes
 
@@ -184,11 +184,14 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QRect deskRect  = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
-    d->deskX        = deskRect.x();
-    d->deskY        = deskRect.y();
-    d->deskWidth    = deskRect.width();
-    d->deskHeight   = deskRect.height();
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+
+    QRect deskRect = qApp->screens().at(activeScreenIndex)->geometry();
+    d->deskX       = deskRect.x();
+    d->deskY       = deskRect.y();
+    d->deskWidth   = deskRect.width();
+    d->deskHeight  = deskRect.height();
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
