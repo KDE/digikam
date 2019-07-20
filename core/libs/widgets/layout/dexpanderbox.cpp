@@ -36,6 +36,7 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QDesktopWidget>
+#include <QScreen>
 
 // KDE includes
 
@@ -44,6 +45,7 @@
 // Local includes
 
 #include "dlayoutbox.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -114,8 +116,13 @@ QSize DAdjustableLabel::minimumSizeHint() const
 
 QSize DAdjustableLabel::sizeHint() const
 {
+    QScreen* screen = qApp->screenAt(mapToGlobal(geometry().center()));
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
     QFontMetrics fm(fontMetrics());
-    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+    int maxW     = screen->geometry().width() * 3 / 4;
     int currentW = fm.width(d->ajdText);
 
     return (QSize(currentW > maxW ? maxW : currentW, QLabel::sizeHint().height()));

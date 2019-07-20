@@ -36,7 +36,8 @@
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QValidator>
-#include <QDesktopWidget>
+#include <QWindow>
+#include <QScreen>
 #include <QLocale>
 
 // KDE includes
@@ -204,7 +205,7 @@ void DDateEdit::showPopup()
         return;
     }
 
-    QRect desk          = QApplication::desktop()->screenGeometry(this);
+    QRect desk          = windowHandle()->screen()->geometry();
     QPoint popupPoint   = mapToGlobal(QPoint(0, 0));
     int dateFrameHeight = d->popup->sizeHint().height();
 
