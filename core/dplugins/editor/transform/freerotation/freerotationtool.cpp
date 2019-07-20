@@ -165,8 +165,15 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     QFontMetrics fm(fnt);
 
     const int offset = (pm1.width() * 2) + 10;
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int minWidth1    = fm.horizontalAdvance(invalidText) + offset;
+    int minWidth2    = fm.horizontalAdvance(validText) + offset;
+#else
     int minWidth1    = fm.width(invalidText) + offset;
     int minWidth2    = fm.width(validText) + offset;
+#endif
+
     int minWidth     = qMax<int>(minWidth1, minWidth2);
 
     // set new minwidth

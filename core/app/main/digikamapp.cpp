@@ -91,7 +91,12 @@ DigikamApp::DigikamApp()
     // creation of the engine on first use - when drawing -
     // can take considerable time and cause a noticeable hang in the UI thread.
     QFontMetrics fm(font());
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    fm.horizontalAdvance(QLatin1String("a"));
+#else
     fm.width(QLatin1String("a"));
+#endif
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
