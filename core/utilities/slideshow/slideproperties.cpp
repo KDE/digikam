@@ -25,13 +25,13 @@
 
 // Qt includes
 
+#include <QTextDocument>
+#include <QApplication>
 #include <QDateTime>
 #include <QPainter>
 #include <QPixmap>
-#include <QTextDocument>
-#include <QDesktopWidget>
-#include <QApplication>
 #include <QLocale>
+#include <QScreen>
 
 // KDE includes
 
@@ -69,7 +69,6 @@ SlideProperties::SlideProperties(const SlideShowSettings& settings, QWidget* con
       d(new Private)
 {
     d->settings = settings;
-    setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size() / 1.5);
     setMouseTracking(true);
 }
 
@@ -80,6 +79,7 @@ SlideProperties::~SlideProperties()
 
 void SlideProperties::setCurrentUrl(const QUrl& url)
 {
+    setFixedSize(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry().size() / 1.5);
     d->url  = url;
     update();
 }

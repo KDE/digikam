@@ -37,7 +37,6 @@
 #include <QCursor>
 #include <QFont>
 #include <QKeyEvent>
-#include <QMatrix>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
@@ -1244,10 +1243,10 @@ int PresentationWidget::effectCubism(bool aInit)
     m_psx  = r;
     m_psy  = r;
 
-    QMatrix matrix;
-    matrix.rotate((qrand() % 20) - 10);
+    QTransform transform;
+    transform.rotate((qrand() % 20) - 10);
     QRect rect(m_px, m_py, m_psx, m_psy);
-    bufferPainter.setMatrix(matrix);
+    bufferPainter.setTransform(transform);
     bufferPainter.fillRect(rect, QBrush(d->currImage));
     bufferPainter.end();
     repaint();

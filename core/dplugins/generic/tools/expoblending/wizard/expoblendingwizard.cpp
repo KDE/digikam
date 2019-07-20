@@ -23,12 +23,6 @@
 
 #include "expoblendingwizard.h"
 
-// Qt includes
-
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QMenu>
-
 // KDE includes
 
 #include <klocalizedstring.h>

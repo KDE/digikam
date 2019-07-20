@@ -26,9 +26,9 @@
 
 // QT includes
 
+#include <QApplication>
 #include <QTreeWidget>
 #include <QPainter>
-#include <QApplication>
 #include <QUrl>
 
 // Local includes
@@ -161,9 +161,9 @@ QPixmap LabelsTreeView::goldenStarPixmap(bool fillin) const
     QPen pen(palette().color(QPalette::Active, foregroundRole()));
     p1.setPen(pen);
 
-    QMatrix matrix;
-    matrix.scale(4, 4);     // 60px/15px (RatingWidget::starPolygon() size is 15*15px)
-    p1.setMatrix(matrix);
+    QTransform transform;
+    transform.scale(4, 4);     // 60px/15px (RatingWidget::starPolygon() size is 15*15px)
+    p1.setTransform(transform);
 
     p1.drawPolygon(RatingWidget::starPolygon(), Qt::WindingFill);
     p1.end();
