@@ -29,7 +29,6 @@
 
 // Qt includes
 
-#include <QMatrix>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPolygon>

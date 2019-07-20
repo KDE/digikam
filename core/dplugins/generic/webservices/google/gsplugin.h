@@ -58,14 +58,14 @@ public:
 
 private Q_SLOTS:
 
-    void slotExportGphoto();
     void slotImportGphoto();
+    void slotExportGphoto();
     void slotExportGdrive();
 
 private:
 
-    QPointer<GSWindow> m_toolDlgExportGphoto;
     QPointer<GSWindow> m_toolDlgImportGphoto;
+    QPointer<GSWindow> m_toolDlgExportGphoto;
     QPointer<GSWindow> m_toolDlgExportGdrive;
 };
 

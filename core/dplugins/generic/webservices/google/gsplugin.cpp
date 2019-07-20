@@ -133,6 +133,23 @@ void GSPlugin::setup(QObject* const parent)
     addAction(ac3);
 }
 
+void GSPlugin::slotImportGphoto()
+{
+    if (!reactivateToolDialog(m_toolDlgImportGphoto))
+    {
+        DInfoInterface* const iface = infoIface(sender());
+
+        delete m_toolDlgImportGphoto;
+        m_toolDlgImportGphoto = new GSWindow(iface, nullptr, QLatin1String("googlephotoimport"));
+        m_toolDlgImportGphoto->setPlugin(this);
+
+        connect(m_toolDlgImportGphoto, SIGNAL(updateHostApp(QUrl)),
+                iface, SLOT(slotMetadataChangedForUrl(QUrl)));
+
+        m_toolDlgImportGphoto->show();
+    }
+}
+
 void GSPlugin::slotExportGphoto()
 {
     if (!reactivateToolDialog(m_toolDlgExportGphoto))
@@ -141,17 +158,6 @@ void GSPlugin::slotExportGphoto()
         m_toolDlgExportGphoto = new GSWindow(infoIface(sender()), nullptr, QLatin1String("googlephotoexport"));
         m_toolDlgExportGphoto->setPlugin(this);
         m_toolDlgExportGphoto->show();
-    }
-}
-
-void GSPlugin::slotImportGphoto()
-{
-    if (!reactivateToolDialog(m_toolDlgImportGphoto))
-    {
-        delete m_toolDlgImportGphoto;
-        m_toolDlgImportGphoto = new GSWindow(infoIface(sender()), nullptr, QLatin1String("googlephotoimport"));
-        m_toolDlgImportGphoto->setPlugin(this);
-        m_toolDlgImportGphoto->show();
     }
 }
 

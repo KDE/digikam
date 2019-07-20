@@ -63,6 +63,10 @@ public:
      */
     void reactivate();
 
+Q_SIGNALS:
+
+    void updateHostApp(const QUrl& url);
+
 protected:
 
     void closeEvent(QCloseEvent*) override;

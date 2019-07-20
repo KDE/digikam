@@ -400,9 +400,9 @@ QIcon RatingWidget::buildIcon(int rate, int size)
     QPixmap pix(size, size);
     pix.fill(Qt::transparent);
     QPainter p(&pix);
-    QMatrix matrix;
-    matrix.scale(size/15.0, size/15.0);
-    p.setMatrix(matrix);
+    QTransform transform;
+    transform.scale(size/15.0, size/15.0);
+    p.setTransform(transform);
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setPen(qApp->palette().color(QPalette::Active, QPalette::ButtonText));
 

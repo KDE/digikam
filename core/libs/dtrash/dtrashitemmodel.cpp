@@ -31,7 +31,6 @@
 #include <QMimeType>
 #include <QApplication>
 #include <QMimeDatabase>
-#include <QDesktopWidget>
 #include <QPersistentModelIndex>
 
 // KDE includes
@@ -217,7 +216,7 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
 
 bool DTrashItemModel::pixmapForItem(const QString& path, QPixmap& pix) const
 {
-    double ratio  = QApplication::desktop()->devicePixelRatioF();
+    double ratio  = qApp->devicePixelRatio();
     int thumbSize = qMin(qRound((double)d->thumbSize * ratio), (int)ThumbnailSize::HD);
 
     bool ret      = d->thumbnailThread->find(ThumbnailIdentifier(path), pix, thumbSize);

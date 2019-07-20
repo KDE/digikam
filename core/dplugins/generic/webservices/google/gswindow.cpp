@@ -59,6 +59,7 @@
 #include "gptalker.h"
 #include "gsreplacedlg.h"
 #include "digikam_debug.h"
+#include "dfileoperations.h"
 
 namespace DigikamGenericGoogleServicesPlugin
 {
@@ -233,8 +234,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
                     this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
-            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
-                    this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
+            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray,QString)),
+                    this, SLOT(slotGetPhotoDone(int,QString,QByteArray,QString)));
 
             readSettings();
             buttonStateChange(false);
@@ -572,7 +573,7 @@ void GSWindow::slotStartTransfer()
     {
         DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i)));
         GSPhoto temp;
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info" <<info.title() << info.comment();
 
         switch (d->service)
         {
@@ -625,7 +626,7 @@ void GSWindow::slotStartTransfer()
 
 void GSWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto " << d->transferQueue.count();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto" << d->transferQueue.count();
 
     if (d->transferQueue.isEmpty())
     {
@@ -836,18 +837,27 @@ void GSWindow::downloadNextPhoto()
     d->gphotoTalker->getPhoto(imgPath);
 }
 
-void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData)
+void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
+                                const QByteArray& photoData, const QString& fileName)
 {
     GSPhoto item = d->transferQueue.first().second;
 
     /**
      * (Trung)
-     * Google Photo API now does not support title for image, so we use creation time for image name instead
+     * Google Photo API now does not support title for image,
+     * so we use the file name from the header. As fallback
+     * the creation time for image name instead.
      */
     QString itemName(item.title);
     QString suffix(item.mimeType.section(QLatin1Char('/'), -1));
 
-    if (item.title.isEmpty())
+    if (itemName.isEmpty() && !fileName.isEmpty())
+    {
+        QFileInfo info(fileName);
+        itemName = info.completeBaseName();
+    }
+
+    if (itemName.isEmpty())
     {
         itemName = QString::fromLatin1("image-%1").arg(item.creationTime);
         // Replace colon for Windows file systems
@@ -944,34 +954,9 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
     QUrl newUrl = QUrl::fromLocalFile(QString::fromLatin1("%1/%2").arg(d->widget->getDestinationPath())
                                                                   .arg(tmpUrl.fileName()));
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl.url();
+    newUrl      = DFileOperations::getUniqueFileUrl(newUrl);
 
-    QFileInfo targetInfo(newUrl.toLocalFile());
-
-    if (targetInfo.exists())
-    {
-        int i          = 0;
-        bool fileFound = false;
-
-        do
-        {
-            QFileInfo newTargetInfo(newUrl.toLocalFile());
-
-            if (!newTargetInfo.exists())
-            {
-                fileFound = false;
-            }
-            else
-            {
-                newUrl = newUrl.adjusted(QUrl::RemoveFilename);
-                newUrl.setPath(newUrl.path() + targetInfo.completeBaseName() +
-                                               QString::fromUtf8("_%1.").arg(++i) +
-                                               targetInfo.completeSuffix());
-                fileFound = true;
-            }
-        }
-        while (fileFound);
-    }
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location" << newUrl;
 
     if (!QFile::rename(tmpUrl.toLocalFile(), newUrl.toLocalFile()))
     {
@@ -980,6 +965,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
                                    newUrl.toLocalFile()));
     }
 
+    emit updateHostApp(newUrl);
     downloadNextPhoto();
 }
 
@@ -1062,7 +1048,7 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
 
             QUrl fileUrl = item.first;
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID: " << photoId;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID:" << photoId;
 
             if (d->widget->getPhotoIdCheckBox()->isChecked() &&
                 d->meta.supportXmp()                         &&

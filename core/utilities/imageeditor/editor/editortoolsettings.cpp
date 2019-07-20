@@ -37,7 +37,7 @@
 #include <QScrollBar>
 #include <QPushButton>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QStyle>
 
 // KDE includes
@@ -309,9 +309,14 @@ QSize EditorToolSettings::minimumSizeHint() const
     // Set scroll area to a horizontal minimum size sufficient for the settings.
     // Do not touch vertical size hint.
     // Limit to 40% of the desktop width.
-    QSize hint        = QScrollArea::minimumSizeHint();
-    QRect desktopRect = QApplication::desktop()->screenGeometry(d->settingsArea);
+    QScreen* screen = qApp->screenAt(mapToGlobal(d->settingsArea->geometry().center()));
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
+    QRect desktopRect = screen->geometry();
     int wSB           = verticalScrollBar()->height();
+    QSize hint        = QScrollArea::minimumSizeHint();
     hint.setWidth(qMin(d->settingsArea->sizeHint().width() + wSB, desktopRect.width() * 2 / 5));
     return hint;
 }

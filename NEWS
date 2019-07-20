@@ -1,9 +1,14 @@
-digiKam 6.2.0 - Release date: 2019-06-??
+digiKam 6.2.0 - Release date: 2019-07-??
 
 *****************************************************************************************************
 NEW FEATURES:
 
 IconView : HiDPI support for 4K screens.
+General  : Internal Libraw updated to last stable 0.19.3. New camera supported:
+           Canon A560, FujiFilm X-T30, Nikon Coolpix A1000, Z6, Z7, Olympus E-M1X,
+           Sony ILCE-6400, Several dng files from phones and drones.
+           Full camera List supported: https://www.libraw.org/supported-cameras-snapshot-201903
+General  : Portable archive for Windows 32 and 64 bits will be provided now at release time.
 
 *****************************************************************************************************
 BUGFIXES:
@@ -99,4 +104,46 @@ BUGFIXES:
 089 ==> 402063 - Database names is not valid.
 090 ==> 329438 - Rename function with Date & Time does not work with NTFS.
 091 ==> 409528 - Unable to select default email client / outlook for sending by email.
-092 ==> 
+092 ==> 409686 - digiKam hits database deadlock on start with gelocation query.
+093 ==> 409698 - Typo in digiKam menu.
+094 ==> 409721 - Showfoto export WebP images without colour space.
+095 ==> 409699 - Strange menu name.
+096 ==> 391674 - AppImage version 5.8.0 errors on update.
+097 ==> 409585 - QMYSQL driver not loaded.
+098 ==> 404289 - Install message warning uninstall current instance.
+099 ==> 407311 - Archive file of Windows bundles to make Portable version.
+100 ==> 401964 - Wrong datestamp video/mp4.
+101 ==> 407556 - Selecting thunderbird program is impossible.
+102 ==> 405287 - Dialogs are hard to read.
+103 ==> 408567 - 4k Video files do not generate valid thumbnails, thumbnails show as only static.
+104 ==> 409537 - Impossible to select binaries for internal MariaDB database on Windows.
+105 ==> 391746 - Can't ignore already well named files when renaming files ("OK" button greyed).
+106 ==> 362411 - Selecting grouped files and renaming only acts on one file of every group.
+107 ==> 391330 - Albums view does not display icons on kubuntu 18.04 beta.
+108 ==> 402729 - Discard/Work/Keep labels not displayed.
+109 ==> 383081 - Locate the picture in the file explorer (Windows).
+110 ==> 403626 - Sort items.
+111 ==> 375024 - Edits are saved with file names ending _1 not v1 - not recognized as new version.
+112 ==> 408017 - Thumbnails disappear after workflow initiated.
+113 ==> 400669 - Lost synchronisation with database with pictures on NAS.
+114 ==> 392088 - digiKam loses DB content after power saving mode of Win10.
+115 ==> 401338 - All images lost from albums when connection to network share is lost.
+116 ==> 405954 - "slotSolidDeviceChanged" messages forever after plugging in/out USB drive.
+117 ==> 381386 - Failed to update the database schema from version 7 to version 8.
+118 ==> 389677 - digiKam fails to migrate database schema from version 8 to version 9.
+119 ==> 391340 - Mysql Migration fails (makeUpdates 8 to 9).
+120 ==> 391720 - Metadata (tags) is not updated after being edited externally.
+121 ==> 338560 - digiKam for Windows won't resize images.
+122 ==> 289300 - Writing metadata control panel in configuration dialog.
+123 ==> 346097 - when tagging a face it hangs or will no longer load pictures from thumbnail.
+124 ==> 365919 - Slideshow does not show any more than the first slide.
+125 ==> 365942 - Going to full screen mode when window is maximized messes up window settings and hides menu bar.
+126 ==> 370440 - KML Export fails when destination directory partition differs then the temp directory partition.
+127 ==> 235593 - can not open nef files with ufraw through digiKam.
+128 ==> 372096 - Keyboard Shortcut for NEW FaceTagging.
+129 ==> 374785 - Controls on preview window are difficult to see over some images.
+130 ==> 376427 - Range selection in thumbnail view gets wrong endpoint.
+131 ==> 376627 - Face Tag Filter List Disappears On Even Number Key Presses.
+132 ==> 409839 - Google Photos import does not download videos correctly.
+133 ==> 409952 - "Image" menu is missing.
+134 ==> 

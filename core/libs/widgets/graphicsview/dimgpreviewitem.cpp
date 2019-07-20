@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 // KDE includes
 
@@ -81,8 +81,8 @@ void DImgPreviewItem::DImgPreviewItemPrivate::init(DImgPreviewItem* const q)
 
     // get preview size from screen size, but limit from VGA to WQXGA
     previewSize = qBound(640,
-                         qMax(QApplication::desktop()->availableGeometry(-1).height(),
-                              QApplication::desktop()->availableGeometry(-1).width()),
+                         qMax(qApp->primaryScreen()->availableGeometry().height(),
+                              qApp->primaryScreen()->availableGeometry().width()),
                          2560);
 
     LoadingCacheInterface::connectToSignalFileChanged(q, SLOT(slotFileChanged(QString)));

@@ -39,7 +39,7 @@
 #include <QTextDocument>
 #include <QByteArray>
 #include <QBuffer>
-#include <QDesktopWidget>
+#include <QScreen>
 
 // KDE includes
 
@@ -237,7 +237,12 @@ void DItemToolTip::reposition()
     d->corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
 
-    QRect desk = QApplication::desktop()->screenGeometry(rect.center());
+    QScreen* screen = qApp->screenAt(geometry().center());
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
+    QRect desk = screen->geometry();
 
     if (rect.center().x() + width() > desk.right())
     {

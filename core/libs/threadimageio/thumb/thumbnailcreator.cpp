@@ -37,7 +37,6 @@
 #include <QUrlQuery>
 #include <QApplication>
 #include <QMimeDatabase>
-#include <QDesktopWidget>
 #include <QTemporaryFile>
 
 // KDE includes
@@ -124,7 +123,7 @@ int ThumbnailCreator::Private::storageSize() const
 {
     // on-disk thumbnail sizes according to freedesktop spec
     // for thumbnail db it's always max size
-    double ratio = QApplication::desktop()->devicePixelRatioF();
+    double ratio = qApp->devicePixelRatio();
 
     if (onlyLargeThumbnails)
     {

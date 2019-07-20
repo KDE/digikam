@@ -97,6 +97,7 @@ public:
     {
         state           = GP_LOGOUT;
         netMngr         = nullptr;
+        redirectCounter = 0;
 
         userInfoUrl     = QLatin1String("https://www.googleapis.com/plus/v1/people/me");
 
@@ -124,6 +125,8 @@ public:
     QList<GSFolder>        albumList;
 
     QNetworkAccessManager* netMngr;
+
+    int                    redirectCounter;
 };
 
 GPTalker::GPTalker(QWidget* const parent)
@@ -200,7 +203,7 @@ void GPTalker::listAlbums(const QString& nextPageToken)
         url.setQuery(query);
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums" << url;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -228,8 +231,8 @@ void GPTalker::getLoggedInUser()
 
     QUrl url(d->userInfoUrl);
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_accessToken " << m_accessToken;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums" << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_accessToken" << m_accessToken;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -260,7 +263,7 @@ void GPTalker::listPhotos(const QString& albumId, const QString& /*imgmax*/)
     data += "\"albumId\":\"";
     data += albumId.toUtf8();
     data += "\"}";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos : " << data;
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos:" << data;
 
     m_reply = d->netMngr->post(netRequest, data);
 
@@ -282,7 +285,7 @@ void GPTalker::createAlbum(const GSFolder& album)
     data += "{\"title\":\"";
     data += album.title.toUtf8();
     data += "\"}}";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
     QUrl url(d->apiUrl.arg(QLatin1String("albums")));
 
@@ -377,7 +380,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
     netRequest.setRawHeader("X-Goog-Upload-File-Name", imageName.toUtf8());
     netRequest.setRawHeader("X-Goog-Upload-Protocol", "raw");
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << imageName;
 
     m_reply = d->netMngr->post(netRequest, data);
 
@@ -525,11 +528,12 @@ void GPTalker::getPhoto(const QString& imgPath)
     emit signalBusy(true);
 
     QUrl url(imgPath);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo " << url.url();
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo" << url;
 
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
-    d->state = Private::GP_GETPHOTO;
+    d->state           = Private::GP_GETPHOTO;
+    d->redirectCounter = 0;
 }
 
 void GPTalker::cancel()
@@ -609,7 +613,7 @@ void GPTalker::slotError(const QString & error)
     };
 
     QMessageBox::critical(QApplication::activeWindow(), i18nc("@title:window", "Error"),
-                          i18n("Error occurred: %1\nUnable to proceed further.",transError + error));
+                          i18n("Error occurred: %1\nUnable to proceed further.", transError + error));
 }
 
 void GPTalker::slotFinished(QNetworkReply* reply)
@@ -623,7 +627,8 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     m_reply = nullptr;
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply error : " << reply->error() << " - " << reply->errorString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reply error:" << reply->error()
+                                     << "-" << reply->errorString();
 
     if (reply->error() != QNetworkReply::NoError)
     {
@@ -670,9 +675,34 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             break;
         case (Private::GP_GETPHOTO):
 
-            // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
-            // all we get is data of the image
-            emit signalGetPhotoDone(1, QString(), buffer);
+            QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+
+            if (redirectUrl.isValid() && reply->url() != redirectUrl && d->redirectCounter++ < 3)
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "redirection counter:" << d->redirectCounter;
+
+                m_reply  = d->netMngr->get(QNetworkRequest(redirectUrl));
+                d->state = Private::GP_GETPHOTO;
+            }
+            else
+            {
+                // all we get is data of the image
+                // qCDebug(DIGIKAM_WEBSERVICES_LOG) << buffer;
+
+                QString header         = reply->header(QNetworkRequest::ContentDispositionHeader).toString();
+                QStringList headerList = header.split(QLatin1Char(';'));
+                QString fileName;
+
+                if (headerList.count() > 1                          &&
+                    headerList.at(0) == QLatin1String("attachment") &&
+                    headerList.at(1).contains(QLatin1String("filename=")))
+                {
+                    fileName = headerList.at(1).section(QLatin1Char('"'), 1, 1);
+                }
+
+                emit signalGetPhotoDone(1, QString(), buffer, fileName);
+            }
+
             break;
     }
 
@@ -753,7 +783,7 @@ void GPTalker::slotUploadPhoto()
     }
 
     data += "}\r\n";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -783,7 +813,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
 
     QJsonObject jsonObject  = doc.object();
     QJsonArray jsonArray    = jsonObject[QLatin1String("albums")].toArray();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
+    // qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
 
     /**
      * Google-photos allows user to post photos on their main page (not in any albums)
@@ -832,7 +862,8 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
     {
         emit signalBusy(false);
         emit signalListPhotosDone(0, i18n("Failed to fetch photo-set list"), QList<GSPhoto>());
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code: " << err.error << ", msg: " << err.errorString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code:" << err.error
+                                         << ", msg:" << err.errorString();
         return;
     }
 
@@ -846,20 +877,27 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
 
         GSPhoto photo;
 
-        photo.baseUrl       = obj[QLatin1String("baseUrl")].toString();
-        photo.description   = obj[QLatin1String("description")].toString();
-        photo.id            = obj[QLatin1String("id")].toString();
-        photo.mimeType      = obj[QLatin1String("mimeType")].toString();
-        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future
+        photo.baseUrl        = obj[QLatin1String("baseUrl")].toString();
+        photo.description    = obj[QLatin1String("description")].toString();
+        photo.id             = obj[QLatin1String("id")].toString();
+        photo.mimeType       = obj[QLatin1String("mimeType")].toString();
+        photo.location       = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future
 
         QJsonObject metadata = obj[QLatin1String("mediaMetadata")].toObject();
 
-        photo.creationTime  = metadata[QLatin1String("creationTime")].toString();
-        photo.width         = metadata[QLatin1String("width")].toString();
-        photo.height        = metadata[QLatin1String("height")].toString();
+        photo.creationTime   = metadata[QLatin1String("creationTime")].toString();
+        photo.width          = metadata[QLatin1String("width")].toString();
+        photo.height         = metadata[QLatin1String("height")].toString();
 
-        photo.originalURL   = QUrl(photo.baseUrl + QLatin1String("=d"));
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
+        QString option       = QLatin1String("=d");
+
+        if (photo.mimeType.startsWith(QLatin1String("video/")))
+        {
+            option.append(QLatin1Char('v'));
+        }
+
+        photo.originalURL    = QUrl(photo.baseUrl + option);
+        // qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL;
 
         photoList.append(photo);
     }
@@ -885,7 +923,7 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
 
     QJsonObject jsonObject  = doc.object();
     QString albumId         = jsonObject[QLatin1String("id")].toString();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id"  << doc;
 
     emit signalCreateAlbumDone(1, QLatin1String(""), albumId);
 }
@@ -893,7 +931,7 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
 void GPTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhoto";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response" << data;
 
     d->uploadTokenList << QString::fromUtf8(data);
     emit signalAddPhotoDone(1, QString());
@@ -928,7 +966,7 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "doc " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "doc" << doc;
 
     if (err.error != QJsonParseError::NoError)
     {
@@ -952,7 +990,7 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
 
     d->previousImageId = listPhotoId.last();
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(QLatin1String(", "));
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id" << listPhotoId.join(QLatin1String(", "));
 
     emit signalBusy(false);
     emit signalUploadPhotoDone(1, QString(), listPhotoId);
