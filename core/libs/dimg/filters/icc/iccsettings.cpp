@@ -221,11 +221,13 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
         {
             if (QWidget* const nativeParent = widget->nativeParentWidget())
             {
-                if (winHandle = nativeParent->windowHandle())
-                {
-                    widgetScreen = winHandle->screen();
-                }
+                winHandle = nativeParent->windowHandle();
             }
+        }
+
+        if (winHandle)
+        {
+            widgetScreen = winHandle->screen();
         }
     }
 
