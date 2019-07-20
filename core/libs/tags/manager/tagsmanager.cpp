@@ -170,7 +170,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
 
      QHBoxLayout* const mainLayout = new QHBoxLayout();
 
-     d->tagPixmap = new QLabel();
+     d->tagPixmap   = new QLabel();
      d->tagPixmap->setText(QLatin1String("Tag Pixmap"));
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30, 30));
@@ -181,7 +181,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
      d->tagMngrView->getFilterModel()->doNotListTagsWithProperty(TagPropertyName::person());
      d->tagMngrView->getFilterModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
-     d->searchBar  = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
+     d->searchBar   = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagMngrView->filteredModel(),
                             AbstractAlbumModel::AlbumIdRole,
