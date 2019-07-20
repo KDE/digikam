@@ -29,9 +29,9 @@
 // Qt includes
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QEventLoop>
 #include <QKeyEvent>
+#include <QScreen>
 
 namespace Digikam
 {
@@ -174,7 +174,12 @@ void DPopupFrame::resizeEvent(QResizeEvent* e)
 void DPopupFrame::popup(const QPoint& p)
 {
     // Make sure the whole popup is visible.
-    QRect desktopGeometry = QApplication::desktop()->screenGeometry(p);
+    QScreen* screen = qApp->screenAt(p);
+
+    if (!screen)
+        screen = qApp->primaryScreen();
+
+    QRect desktopGeometry = screen->geometry();
 
     int x = p.x();
     int y = p.y();

@@ -33,7 +33,7 @@
 // Qt includes
 
 #include <QCursor>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QEvent>
 #include <QFileInfo>
 #include <QFontMetrics>
@@ -161,7 +161,10 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QRect deskRect = QApplication::desktop()->screenGeometry(QApplication::activeWindow());
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+
+    QRect deskRect = qApp->screens().at(activeScreenIndex)->geometry();
     d->deskX       = deskRect.x();
     d->deskY       = deskRect.y();
     d->deskWidth   = deskRect.width();
@@ -314,8 +317,8 @@ void PresentationGL::initializeGL()
     // allow only maximum texture value of 1024. anything bigger and things slow down
     maxTexVal = qMin(1024, maxTexVal);
 
-    d->width  = QApplication::desktop()->width();
-    d->height = QApplication::desktop()->height();
+    d->width  = d->deskWidth;
+    d->height = d->deskHeight;
 
     d->width  = 1 << (int)ceil(log((float)d->width)  / log((float)2)) ;
     d->height = 1 << (int)ceil(log((float)d->height) / log((float)2));

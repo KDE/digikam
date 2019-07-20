@@ -167,10 +167,10 @@ int TransitionMngr::Private::transitionCubism(bool aInit)
     eff_psx  = r;
     eff_psy  = r;
 
-    QMatrix matrix;
-    matrix.rotate((qrand() % 20) - 10);
+    QTransform transform;
+    transform.rotate((qrand() % 20) - 10);
     QRect rect(eff_px, eff_py, eff_psx, eff_psy);
-    bufferPainter.setMatrix(matrix);
+    bufferPainter.setTransform(transform);
     bufferPainter.fillRect(rect, QBrush(eff_outImage));
     bufferPainter.end();
 

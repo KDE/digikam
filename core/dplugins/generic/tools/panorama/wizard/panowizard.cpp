@@ -24,12 +24,6 @@
 
 #include "panowizard.h"
 
-// Qt includes
-
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QWindow>
-
 // KDE includes
 
 #include <kconfig.h>

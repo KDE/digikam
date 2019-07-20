@@ -25,13 +25,14 @@
 
 // Qt includes
 
-#include <QDesktopWidget>
-#include <QPointer>
+#include <QApplication>
+#include <QScreen>
 #include <QUrl>
 #include <QList>
 #include <QIcon>
-#include <QMimeDatabase>
+#include <QPointer>
 #include <QMimeType>
+#include <QMimeDatabase>
 #include <QStandardPaths>
 
 // KDE includes
@@ -115,7 +116,6 @@ public:
         vertex_right  = 0.0F;
         vertex_bottom = 0.0F;
         wheelAction   = zoomImage;
-        screen_width  = 0;
         iface         = nullptr;
         plugin        = nullptr;
     }
@@ -124,8 +124,10 @@ public:
     unsigned int     file_idx;
     Cache            cache[CACHESIZE];
     GLViewerTexture* texture;
+
     float            ratio_view_y, ratio_view_x, delta;
     float            vertex_height, vertex_width, vertex_left, vertex_top, vertex_right, vertex_bottom;
+
     QPoint           startdrag, previous_pos;
     WheelAction      wheelAction;
     bool             firstImage;
@@ -134,7 +136,8 @@ public:
     QCursor          moveCursor, zoomCursor;
     float            zoomfactor_scrollwheel, zoomfactor_mousemove, zoomfactor_keyboard;
     QPixmap          nullImage;
-    int              screen_width;
+    QSize            screenSize;
+
     DInfoInterface*  iface;
     DPlugin*         plugin;
 };
@@ -148,15 +151,16 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     d->plugin = plugin;
     d->iface  = iface;
 
+    //determine screen size for isReallyFullScreen
+    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+    d->screenSize               = qApp->screens().at(activeScreenIndex)->size();
+
     QList<QUrl> myfiles;                                            // pics which are displayed in imageviewer
     QList<QUrl> selection = d->iface->currentSelectedItems();
     QString selectedImage;                                          // selected pic in hostapp
 
     int foundNumber = 0;
-
-    //determine screen size for isReallyFullScreen
-    QDesktopWidget dw;
-    d->screen_width = dw.screenGeometry(this).width();
 
     if (selection.count() == 0)
     {
@@ -580,9 +584,7 @@ GLViewerTexture* GLViewerWidget::loadImage(int file_index) const
         if (d->firstImage)
         {
             //determine screensize since its not yet known by the widget
-            QDesktopWidget dw;
-            //QRect r = dw.screenGeometry(this);
-            size    = dw.size();
+            size = d->screenSize;
             //qCDebug(DIGIKAM_DPLUGIN_GENERIC_LOG) << "first image:size=" << size.width();
         }
         else
@@ -888,7 +890,7 @@ OGLstate GLViewerWidget::getOGLstate() const
  */
 bool GLViewerWidget::isReallyFullScreen() const
 {
-    return (width() == d->screen_width);
+    return (width() == d->screenSize.width());
 }
 
 } // namespace DigikamGenericGLViewerPlugin
