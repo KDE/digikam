@@ -676,6 +676,11 @@ void SlideShow::slotPlay()
 
 void SlideShow::slotScreenSelected(int screen)
 {
+    if (screen >= qApp->screens().count())
+    {
+        return;
+    }
+
     QRect deskRect = qApp->screens().at(screen)->geometry();
 
     setWindowState(windowState() & ~Qt::WindowFullScreen);

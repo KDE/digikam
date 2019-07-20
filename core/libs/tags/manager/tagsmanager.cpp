@@ -172,7 +172,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
 
      QHBoxLayout* const mainLayout = new QHBoxLayout();
 
-     d->tagPixmap = new QLabel();
+     d->tagPixmap   = new QLabel();
      d->tagPixmap->setText(QLatin1String("Tag Pixmap"));
      d->tagPixmap->setMaximumWidth(40);
      d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30, 30));
@@ -180,7 +180,7 @@ void TagsManager::setupUi(KMainWindow* const dialog)
      d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
 
-     d->searchBar  = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
+     d->searchBar   = new SearchTextBar(this, QLatin1String("ItemIconViewTagSearchBar"));
      d->searchBar->setHighlightOnResult(true);
      d->searchBar->setModel(d->tagMngrView->filteredModel(),
                             AbstractAlbumModel::AlbumIdRole,
@@ -261,9 +261,10 @@ void TagsManager::slotItemChanged()
 
 void TagsManager::slotAddAction()
 {
-    TAlbum*       parent = d->tagMngrView->currentAlbum();
-    QString       title, icon;
-    QKeySequence  ks;
+    TAlbum*      parent = d->tagMngrView->currentAlbum();
+    QString      title;
+    QString      icon;
+    QKeySequence ks;
 
     if (!parent)
     {
@@ -333,6 +334,7 @@ void TagsManager::slotDeleteAction()
         }
 
         QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
+
         if (!assignedItems.isEmpty())
         {
             tagsWithImages.append(tag->title());
@@ -452,7 +454,7 @@ void TagsManager::slotResetTagIcon()
     const QList<TAlbum*> selected = d->tagMngrView->selectedTagAlbums();
     const QString icon = QLatin1String("tag");
 
-    for (QList<TAlbum*>::const_iterator it = selected.constBegin() ; it != selected.constEnd() ; ++it )
+    for (QList<TAlbum*>::const_iterator it = selected.constBegin() ; it != selected.constEnd() ; ++it)
     {
         TAlbum* const tag = *it;
 
@@ -949,7 +951,7 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     QList<TAlbum*> toRemove;
 
-    foreach (QModelIndex toDelete, redNodes)
+    foreach (const QModelIndex& toDelete, redNodes)
     {
         QModelIndex current = toDelete;
 
