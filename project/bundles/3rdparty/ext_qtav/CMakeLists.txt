@@ -97,8 +97,6 @@ else() #Linux
         GIT_REPOSITORY https://github.com/wang-bin/QtAV.git
         GIT_TAG ${QTAV_VERSION}
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtav-rules-appimage.patch
-
         CONFIGURE_COMMAND cd <SOURCE_DIR> && git submodule update --init &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAV &&
                           rm -rfv ${INSTALL_ROOT}/include/QtAVWidgets &&
