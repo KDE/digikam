@@ -109,6 +109,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     d->radiusInput->setWhatsThis(i18n("A radius of 0 has no effect, "
                                       "1 and above determine the brush radius "
                                       "that determines the size of parts copied in the image."));
+    d->previewWidget->setBrushRadius(d->radiusInput->value());
 
     // --------------------------------------------------------
 
@@ -175,6 +176,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotRadiusChanged(int)));
 
+
     connect(d->zoomInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotZoomPercentChanged(int)));
 
@@ -198,8 +200,13 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget,SIGNAL(signalContinuePolygon()),
             this, SLOT(slotContinuePolygon()));
-    connect(d->previewWidget,SIGNAL(signalEndLassoSession()),
-            this, SLOT(slotEndLassoSession()));
+
+
+    connect(d->previewWidget,SIGNAL(signalIncreaseBrushRadius()),
+            this, SLOT(slotIncreaseBrushRadius()));
+
+    connect(d->previewWidget,SIGNAL(signalDecreaseBrushRadius()),
+            this, SLOT(slotDecreaseBrushRadius()));
 
 
 }
@@ -262,6 +269,7 @@ void HealingCloneTool::slotReplace(const QPoint& srcPoint, const QPoint& dstPoin
 void HealingCloneTool::slotRadiusChanged(int r)
 {
     d->previewWidget->setMaskPenSize(r);
+    d->previewWidget->setBrushRadius(r);
 
 }
 
@@ -293,11 +301,11 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                     continue;
                 }
 
-                qCDebug(DIGIKAM_GENERAL_LOG()) << insideLassoOperation << this->lassoPoints.empty();
+
+                DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
                 if(insideLassoOperation && !this->lassoPoints.empty())
                 {
-                    if(this->lassoFlags.at(srcPoint.x() +i).at(srcPoint.y() +j) ||
-                       this->lassoFlags.at(dstPoint.x()+i).at(dstPoint.y()+j))
+                    if(this->lassoFlags.at(dstPoint.x()+i).at(dstPoint.y()+j))
                     {
                         continue;
                     }
@@ -310,16 +318,20 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                             continue;
                         }
 
+                     if(this->lassoFlags.at(srcPoint.x() +i).at(srcPoint.y() +j))
+                     {
+                         cSrc = this->lassoColorsMap[std::make_pair(srcPoint.x()+i,srcPoint.y()+j)];
+                     }
+
 
                 }
 
                 double rP   = blurPercent * rPercent / (radius * radius);
-                DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
+
                 DColor cDst = img->getPixelColor(dstPoint.x()+i, dstPoint.y()+j);
                 cSrc.multiply(1 - rP);
                 cDst.multiply(rP);
                 cSrc.blendAdd(cDst);
-
                 img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
                 this->CloneInfoVector->push_back({dstPoint.x()+i, dstPoint.y()+j, scaleRatio,cSrc});
             }
@@ -373,9 +385,13 @@ void HealingCloneTool :: updateLasso(std::vector<QPoint>& points)
         {
             for(uint j = 0; j<radius ; j++)
             {
+                uint x_shifted = p.x()+i;
+                uint y_shifted = p.y()+j;
+                DColor c = img->getPixelColor(x_shifted,y_shifted);
 
-                img->setPixelColor(p.x()+i,p.y()+j,this->lassoColors[(colorCounter)%this->lassoColors.size()]);
-                this->lassoFlags.at(p.x()+i).at(p.y()+j) = true;
+                this->lassoColorsMap.insert(std::make_pair(std::make_pair(x_shifted,y_shifted), c)) ;
+                img->setPixelColor(x_shifted,y_shifted,this->lassoColors[(colorCounter)%this->lassoColors.size()]);
+                this->lassoFlags.at(x_shifted).at(y_shifted) = true;
                 colorCounter++;
             }
         }
@@ -427,6 +443,7 @@ void HealingCloneTool ::slotResetLassoPoint()
     this->lassoPoints.clear();
     this->insideLassoOperation = true;
     this->lassoPolygon.clear();
+    this->lassoColorsMap.clear();
     this->initializeLassoFlags();
 
 }
@@ -453,13 +470,16 @@ void HealingCloneTool :: slotContinuePolygon()
 
 }
 
-void HealingCloneTool :: slotEndLassoSession()
+void HealingCloneTool :: slotIncreaseBrushRadius()
 {
-    this->slotResetLassoPoint();
-    this->insideLassoOperation = false;
-    this->d->previewWidget->resetPixels();
-    qCDebug(DIGIKAM_GENERAL_LOG()) << "ENDING LASSO OPERATION, L PRESSED";
+    int size = d->radiusInput->value();
+    d->radiusInput->setValue(size+1);
+}
 
+void HealingCloneTool :: slotDecreaseBrushRadius()
+{
+    int size = d->radiusInput->value();
+    d->radiusInput->setValue(size-1);
 }
 
 void HealingCloneTool :: initializeLassoFlags()

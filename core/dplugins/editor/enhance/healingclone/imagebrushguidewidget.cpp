@@ -81,7 +81,7 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
         oldPos = e->globalPos();
 
     }
-    else if (isPPressed && (e->buttons() & Qt::LeftButton))
+    else if (isLPressed && (e->buttons() & Qt::LeftButton))
      {
         QPoint dst = QPoint(e->x(),e->y());
         //qCDebug(DIGIKAM_GENERAL_LOG()) << "Emitting Signal Lasso";
@@ -153,7 +153,7 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
     {
         ImageGuideWidget::mousePressEvent(e);
     }
-    else if (isPPressed && (e->buttons() & Qt::LeftButton))
+    else if (isLPressed && (e->buttons() & Qt::LeftButton))
      {
 
         QPoint dst = QPoint(e->x(),e->y());
@@ -195,11 +195,11 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
         }
     }
 
-    else if(e->key() == Qt :: Key_P)
+    else if(e->key() == Qt :: Key_L)
     {
-        if(!isPPressed)
+        if(!isLPressed)
         {
-            isPPressed = true;
+            isLPressed = true;
             isMPressed = false;
             isSPressed = false;
             changeCursorShape(Qt::yellow);
@@ -207,23 +207,12 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
             this->resetPixels();
         }
         else {
-            isPPressed = false;
+            isLPressed = false;
             changeCursorShape(Qt::blue);
             emit signalContinuePolygon();
         }
     }
 
-    if(e->key() == Qt :: Key_L)
-    {
-        if(isPPressed)
-        {
-            isPPressed = false;
-        }
-            this->resetPixels();
-            changeCursorShape(Qt::blue);
-            emit signalEndLassoSession();
-
-    }
 
     if(e->key() == Qt :: Key_Plus)
     {
@@ -234,6 +223,17 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
     {
         zoomMinus();
     }
+
+    if(e->key() == Qt :: Key_BracketLeft)
+    {
+     emit signalDecreaseBrushRadius();
+    }
+
+    if(e->key() == Qt :: Key_BracketRight)
+    {
+        emit signalIncreaseBrushRadius();
+    }
+
 
 
 }
@@ -250,7 +250,7 @@ void ImageBrushGuideWidget::  keyReleaseEvent(QKeyEvent *e)
         {
             slotSetSourcePoint();
             isMPressed = false;
-            isPPressed = false;
+            isLPressed = false;
         }
     }
 }
@@ -288,18 +288,31 @@ void ImageBrushGuideWidget::undoSlotSetSourcePoint()
 }
 void ImageBrushGuideWidget::changeCursorShape(QColor color)
 {
-    int size =20;
+    int radius =this->brushRadius;
+    int size = radius * 2;
+    this->brushColor = color;
+    int penSize = 2;
     QPixmap pix(size,size);
     pix.fill(Qt::transparent);
 
     QPainter p(&pix);
-    p.setPen(QPen(color,2));
+    p.setPen(QPen(color,penSize));
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    p.drawEllipse(1, 1, size - 2, size - 2);
+    p.drawEllipse(1, 1, size-2, size-2);
 
 
     setCursor(QCursor(pix));
+}
+
+void ImageBrushGuideWidget :: updateCursor()
+{
+    changeCursorShape(this->brushColor);
+}
+void ImageBrushGuideWidget::setBrushRadius(int value)
+{
+    this->brushRadius = value;
+    updateCursor();
 }
 
 void ImageBrushGuideWidget::zoomImage(int zoomPercent)

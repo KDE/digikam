@@ -51,7 +51,8 @@ public:
     void zoomPlus();
     void zoomMinus();
     double getScaleRatio();
-     void resetPixels();
+    void resetPixels();
+    void setBrushRadius(int value);
 
     explicit ImageBrushGuideWidget(QWidget* const parent = nullptr,
                               bool spotVisible = true,
@@ -79,7 +80,8 @@ Q_SIGNALS:
     void signalLasso(const QPoint& dst);
     void signalResetLassoPoint();
     void signalContinuePolygon();
-    void signalEndLassoSession();
+    void signalIncreaseBrushRadius();
+    void signalDecreaseBrushRadius();
 
 protected:
 
@@ -94,6 +96,7 @@ protected:
     void focusInEvent(QFocusEvent * event) override;
     void undoSlotSetSourcePoint();
     void changeCursorShape(QColor color);
+    void updateCursor();
 
 
 
@@ -107,13 +110,15 @@ private:
     QPoint oldPos;
     bool isMPressed= false;
     bool isSPressed = false;
-    bool isPPressed = false;
+    bool isLPressed = false;
     double default_w;
     double default_h;
     double float_w;
     double float_h;
     bool first_time = true;
     bool amIFocused = false;
+    int brushRadius;
+    QColor brushColor = QColor(Qt::blue);
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin

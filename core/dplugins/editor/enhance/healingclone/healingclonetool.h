@@ -73,7 +73,8 @@ public Q_SLOTS:
     void slotLasso(const QPoint& dst);
     void slotResetLassoPoint();
     void slotContinuePolygon();
-    void slotEndLassoSession();
+    void slotIncreaseBrushRadius();
+    void slotDecreaseBrushRadius();
 
 private:
 
@@ -117,6 +118,7 @@ private:
     std::vector<QPoint> lassoPoints;
     QPolygon lassoPolygon;
     std::vector<std::vector<bool>> lassoFlags;
+    std::map<std::pair<int,int>, DColor> lassoColorsMap;
 };
 
 } // namespace DigikamEditorHealingCloneToolPlugin
