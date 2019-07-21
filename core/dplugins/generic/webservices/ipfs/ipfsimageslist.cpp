@@ -148,9 +148,9 @@ void IpfsImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)
 IpfsImagesListViewItem::IpfsImagesListViewItem(DItemsListView* const view, const QUrl& url)
     : DItemsListViewItem(view, url)
 {
-    const QColor blue(50, 50, 255);
+    QBrush blue(QColor(50, 50, 255));
 
-    setTextColor(IpfsImagesList::Url, blue);
+    setForeground(IpfsImagesList::Url, blue);
 }
 
 void IpfsImagesListViewItem::setTitle(const QString& str)

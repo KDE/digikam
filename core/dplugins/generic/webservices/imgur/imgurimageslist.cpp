@@ -164,10 +164,10 @@ void ImgurImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)
 ImgurImageListViewItem::ImgurImageListViewItem(DItemsListView* const view, const QUrl& url)
     : DItemsListViewItem(view, url)
 {
-    const QColor blue(50, 50, 255);
+    QBrush blue(QColor(50, 50, 255));
 
-    setTextColor(ImgurImagesList::URL,       blue);
-    setTextColor(ImgurImagesList::DeleteURL, blue);
+    setForeground(ImgurImagesList::URL,       blue);
+    setForeground(ImgurImagesList::DeleteURL, blue);
 }
 
 void ImgurImageListViewItem::setTitle(const QString& str)
