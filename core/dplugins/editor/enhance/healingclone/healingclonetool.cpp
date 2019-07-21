@@ -198,6 +198,8 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     connect(d->previewWidget,SIGNAL(signalContinuePolygon()),
             this, SLOT(slotContinuePolygon()));
+    connect(d->previewWidget,SIGNAL(signalEndLassoSession()),
+            this, SLOT(slotEndLassoSession()));
 
 
 }
@@ -291,8 +293,8 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                     continue;
                 }
 
-
-                if(insideLassoOperation)
+                qCDebug(DIGIKAM_GENERAL_LOG()) << insideLassoOperation << this->lassoPoints.empty();
+                if(insideLassoOperation && !this->lassoPoints.empty())
                 {
                     if(this->lassoFlags.at(srcPoint.x() +i).at(srcPoint.y() +j) ||
                        this->lassoFlags.at(dstPoint.x()+i).at(dstPoint.y()+j))
@@ -426,10 +428,13 @@ void HealingCloneTool ::slotResetLassoPoint()
     this->insideLassoOperation = true;
     this->lassoPolygon.clear();
     this->initializeLassoFlags();
+
 }
 
 void HealingCloneTool :: slotContinuePolygon()
 {
+    if(this->lassoPoints.empty())
+        return;
     QPoint& start = this->startLassoPoint;
     QPoint& end = this->previousLassoPoint;
     std::vector<QPoint> points = interpolate(end,start);
@@ -450,8 +455,10 @@ void HealingCloneTool :: slotContinuePolygon()
 
 void HealingCloneTool :: slotEndLassoSession()
 {
+    this->slotResetLassoPoint();
     this->insideLassoOperation = false;
     this->d->previewWidget->resetPixels();
+    qCDebug(DIGIKAM_GENERAL_LOG()) << "ENDING LASSO OPERATION, L PRESSED";
 
 }
 

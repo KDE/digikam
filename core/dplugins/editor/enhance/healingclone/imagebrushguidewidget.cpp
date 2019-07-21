@@ -218,10 +218,11 @@ void ImageBrushGuideWidget :: keyPressEvent(QKeyEvent *e)
         if(isPPressed)
         {
             isPPressed = false;
+        }
             this->resetPixels();
             changeCursorShape(Qt::blue);
             emit signalEndLassoSession();
-        }
+
     }
 
     if(e->key() == Qt :: Key_Plus)
