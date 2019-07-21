@@ -74,17 +74,6 @@ urpmi --auto \
       xcb-util-keysyms-devel \
       xcb-util-devel \
       xkeyboard-config \
-      ${LIBSUFFIX}xcb-util1 \
-      ${LIBSUFFIX}xi-devel \
-      ${LIBSUFFIX}xtst-devel \
-      ${LIBSUFFIX}xrandr-devel \
-      ${LIBSUFFIX}xcursor-devel \
-      ${LIBSUFFIX}xcomposite-devel \
-      ${LIBSUFFIX}xrender-devel \
-      ${LIBSUFFIX}mesagl1-devel \
-      ${LIBSUFFIX}mesaglu1-devel \
-      ${LIBSUFFIX}mesaegl1-devel \
-      ${LIBSUFFIX}mesaegl1 \
       xscreensaver \
       gperf \
       ruby \
@@ -93,8 +82,6 @@ urpmi --auto \
       zlib-devel \
       expat-devel \
       fuse-devel \
-      ${LIBSUFFIX}ltdl-devel \
-      ${LIBSUFFIX}glib2.0-devel \
       glibc-devel \
       mysql-devel \
       eigen3-devel \
@@ -107,7 +94,6 @@ urpmi --auto \
       glibc-devel \
       libudev-devel \
       sqlite-devel \
-      ${LIBSUFFIX}usb1.0-devel \
       libexif-devel \
       libxslt-devel \
       xz-devel \
@@ -124,12 +110,28 @@ urpmi --auto \
       dpkg \
       python \
       ruby \
+      ruby-devel \
+      sqlite3-devel \
       ffmpeg-devel \
       boost-devel \
       gphoto2-devel \
       sane-backends \
-      ${LIBSUFFIX}jpeg-devel \
       jasper-devel \
+      ${LIBSUFFIX}xcb-util1 \
+      ${LIBSUFFIX}xi-devel \
+      ${LIBSUFFIX}xtst-devel \
+      ${LIBSUFFIX}xrandr-devel \
+      ${LIBSUFFIX}xcursor-devel \
+      ${LIBSUFFIX}xcomposite-devel \
+      ${LIBSUFFIX}xrender-devel \
+      ${LIBSUFFIX}mesagl1-devel \
+      ${LIBSUFFIX}mesaglu1-devel \
+      ${LIBSUFFIX}mesaegl1-devel \
+      ${LIBSUFFIX}mesaegl1 \
+      ${LIBSUFFIX}ltdl-devel \
+      ${LIBSUFFIX}glib2.0-devel \
+      ${LIBSUFFIX}usb1.0-devel \
+      ${LIBSUFFIX}jpeg-devel \
       ${LIBSUFFIX}png-devel \
       ${LIBSUFFIX}tiff-devel \
       ${LIBSUFFIX}icu-devel \
