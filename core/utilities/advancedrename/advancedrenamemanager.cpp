@@ -61,7 +61,12 @@ struct SortByDate
     {
         QFileInfo fi1(s1);
         QFileInfo fi2(s2);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        return fi1.birthTime() < fi2.birthTime();
+#else
         return fi1.created() < fi2.created();
+#endif
     }
 };
 

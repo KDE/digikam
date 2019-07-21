@@ -294,7 +294,12 @@ bool PiwigoTalker::addPhoto(int   albumId,
     d->title   = fi.completeBaseName();
     d->comment = QString();
     d->author  = QString();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    d->date    = fi.birthTime();
+#else
     d->date    = fi.created();
+#endif
 
     // Look in the host database
 
