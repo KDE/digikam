@@ -283,7 +283,7 @@ bool BookmarksModel::removeRows(int row, int count, const QModelIndex& parent)
 
     BookmarkNode* const bookmarkNode = node(parent);
 
-    for (int i = (row + count - 1) ; i >= row ; i--)
+    for (int i = (row + count - 1) ; i >= row ; --i)
     {
         BookmarkNode* const node = bookmarkNode->children().at(i);
         d->manager->removeBookmark(node);

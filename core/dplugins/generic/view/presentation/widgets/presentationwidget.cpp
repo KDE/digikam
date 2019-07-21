@@ -1108,7 +1108,7 @@ int PresentationWidget::effectSweep(bool aInit)
         int x;
         int i;
 
-        for (w = 2, i = 4, x = d->x ; i > 0 ; i--, w <<= 1, x -= d->dx)
+        for (w = 2, i = 4, x = d->x ; i > 0 ; --i, w <<= 1, x -= d->dx)
         {
             m_px  = x;
             m_py  = 0;
@@ -1137,7 +1137,7 @@ int PresentationWidget::effectSweep(bool aInit)
         int y;
         int i;
 
-        for (h = 2, i = 4, y = d->y ; i > 0 ; i--, h <<= 1, y -= d->dy)
+        for (h = 2, i = 4, y = d->y ; i > 0 ; --i, h <<= 1, y -= d->dy)
         {
             m_px  = 0;
             m_py  = y;
@@ -1402,7 +1402,7 @@ int PresentationWidget::effectMultiCircleOut(bool aInit)
         return -1;
     }
 
-    for (alpha = d->alpha, i = d->i ; i >= 0 ; i--, alpha += d->fd)
+    for (alpha = d->alpha, i = d->i ; i >= 0 ; --i, alpha += d->fd)
     {
         x    = (d->w >> 1) + (int)(d->fy * cos(-alpha));
         y    = (d->h >> 1) + (int)(d->fy * sin(-alpha));

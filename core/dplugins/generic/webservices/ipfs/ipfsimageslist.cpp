@@ -71,7 +71,7 @@ QList<const IpfsImagesListViewItem*> IpfsImagesList::getPendingItems() const
 
     for (int i = 0 ; i < listView()->topLevelItemCount() ; ++i)
     {
-        const auto* item = dynamic_cast<const IpfsImagesListViewItem*>(listView()->topLevelItem(i));
+        auto* const item = dynamic_cast<const IpfsImagesListViewItem*>(listView()->topLevelItem(i));
 
         if (item && item->IpfsUrl().isEmpty())
         {

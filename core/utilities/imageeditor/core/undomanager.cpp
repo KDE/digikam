@@ -210,7 +210,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
     if (isAtOrigin())
     {
         // undoing from an origin: need to switch to previous origin?
-        for (lastOrigin = d->undoActions.size() - 1; lastOrigin >= 0; lastOrigin--)
+        for (lastOrigin = d->undoActions.size() - 1 ; lastOrigin >= 0 ; --lastOrigin)
         {
             if (d->undoActions.at(lastOrigin)->hasFileOriginData())
             {
@@ -374,7 +374,7 @@ void UndoManager::getSnapshot(int index, DImg* const img) const
 
 void UndoManager::clearPreviousOriginData()
 {
-    for (int i = d->undoActions.size() - 1; i >= 0; i--)
+    for (int i = d->undoActions.size() - 1 ; i >= 0 ; --i)
     {
         UndoAction* const action = d->undoActions[i];
 
@@ -404,7 +404,7 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
     int step = d->undoActions.size() - stepsBack;
     int snapshot;
 
-    for (snapshot = step; snapshot < d->undoActions.size(); ++snapshot)
+    for (snapshot = step ; snapshot < d->undoActions.size() ; ++snapshot)
     {
         if (dynamic_cast<UndoActionIrreversible*>(d->undoActions.at(snapshot)))
         {
@@ -431,7 +431,7 @@ bool UndoManager::putImageDataAndHistory(DImg* const img, int stepsBack) const
         }
 
         // revert reversible actions, until reaching desired step
-        for (; snapshot > step; snapshot--)
+        for ( ; snapshot > step ; --snapshot)
         {
             UndoActionReversible* const reversible = dynamic_cast<UndoActionReversible*>(d->undoActions.at(snapshot - 1));
             if (!reversible) // would be a bug
@@ -470,7 +470,7 @@ void UndoManager::clearUndoActions()
     UndoAction* action = nullptr;
     QList<UndoAction*>::const_iterator it;
 
-    for (it = d->undoActions.constBegin(); it != d->undoActions.constEnd(); ++it)
+    for (it = d->undoActions.constBegin() ; it != d->undoActions.constEnd() ; ++it)
     {
         action = *it;
         delete action;
@@ -517,7 +517,7 @@ QStringList UndoManager::getUndoHistory() const
 {
     QStringList titles;
 
-    foreach(UndoAction* const action, d->undoActions)
+    foreach (UndoAction* const action, d->undoActions)
     {
         titles.prepend(action->getTitle());
     }
@@ -529,7 +529,7 @@ QStringList UndoManager::getRedoHistory() const
 {
     QStringList titles;
 
-    foreach(UndoAction* const action, d->redoActions)
+    foreach (UndoAction* const action, d->redoActions)
     {
         titles.prepend(action->getTitle());
     }

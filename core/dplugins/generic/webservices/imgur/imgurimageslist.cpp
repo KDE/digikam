@@ -77,12 +77,14 @@ QList<const ImgurImageListViewItem*> ImgurImagesList::getPendingItems()
 {
     QList<const ImgurImageListViewItem*> ret;
 
-    for (unsigned int i = listView()->topLevelItemCount(); i--;)
+    for (int i = 0 ; i < listView()->topLevelItemCount() ; ++i)
     {
-        const auto* item = dynamic_cast<const ImgurImageListViewItem*>(listView()->topLevelItem(i));
+        auto* const item = dynamic_cast<const ImgurImageListViewItem*>(listView()->topLevelItem(i));
 
         if (item && item->ImgurUrl().isEmpty())
+        {
             ret << item;
+        }
     }
 
     return ret;
@@ -95,7 +97,7 @@ void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
 
     DMetadata meta;
 
-    for (QList<QUrl>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+    for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         // Already in the list?
         if (listView()->findItem(*it) == nullptr)
