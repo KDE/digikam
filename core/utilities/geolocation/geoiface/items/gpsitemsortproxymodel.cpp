@@ -103,10 +103,8 @@ public:
         QObject::connect(q_ptr, &QItemSelectionModel::currentChanged, q_ptr,
                          [this](const QModelIndex& idx) { slotCurrentChanged(idx); } );
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
         QObject::connect(q_ptr, &QItemSelectionModel::modelChanged, q_ptr,
                          [this]{ reinitializeIndexMapper(); } );
-#endif
     }
 
 public:
@@ -205,10 +203,8 @@ void GPSLinkItemSelectionModel::setLinkedItemSelectionModel(QItemSelectionModel*
             connect(d->m_linkedItemSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                     this, SLOT(sourceCurrentChanged(QModelIndex)));
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
             connect(d->m_linkedItemSelectionModel, &QItemSelectionModel::modelChanged,
                     this, [this] { d_ptr->reinitializeIndexMapper(); });
-#endif
         }
 
         d->reinitializeIndexMapper();

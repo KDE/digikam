@@ -285,7 +285,13 @@ QSize TagToggleMenuWidget::menuItemSize(QStyleOptionMenuItem* opt) const
     QSize size;
 
     QFontMetrics fm(fontMetrics());
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    size.setWidth(fm.horizontalAdvance(m_action->text()));
+#else
     size.setWidth(fm.width(m_action->text()));
+#endif
+
     size.setHeight(fm.height());
 
     if (!m_action->icon().isNull())

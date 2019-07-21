@@ -98,10 +98,10 @@ void DPluginDialog::restoreDialogSize()
     }
     else
     {
-        QScreen* screen       = QApplication::primaryScreen();
-        QWidget* const widget = QApplication::activeWindow();
+        QScreen* screen       = qApp->primaryScreen();
+        QWidget* const widget = qApp->activeWindow();
 
-        if (widget)
+        if (widget && widget->windowHandle())
         {
             screen = widget->windowHandle()->screen();
         }

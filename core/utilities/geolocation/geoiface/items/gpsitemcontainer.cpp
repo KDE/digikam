@@ -199,7 +199,12 @@ bool GPSItemContainer::loadImageData()
         // Get date from filesystem.
         QFileInfo info(m_url.toLocalFile());
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        QDateTime ctime = info.birthTime();
+#else
         QDateTime ctime = info.created();
+#endif
+
         QDateTime mtime = info.lastModified();
 
         if (ctime.isNull() || mtime.isNull())

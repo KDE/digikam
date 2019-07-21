@@ -240,6 +240,8 @@ yum -y --nogpgcheck install libass-devel \
                             libwebp-devel \
                             OpenEXR-devel \
                             jbigkit-devel \
+                            pulseaudio-libs-devel \
+                            portaudio-devel \
                             yasm
 
 #################################################################################################
@@ -258,7 +260,6 @@ yum -y erase qt-devel \
              ffmpeg \
              ffmpeg-devel \
              ant \
-             pulseaudio-libs-devel \
              libicu-devel
 
 #################################################################################################

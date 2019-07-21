@@ -145,4 +145,5 @@ BUGFIXES:
 130 ==> 376427 - Range selection in thumbnail view gets wrong endpoint.
 131 ==> 376627 - Face Tag Filter List Disappears On Even Number Key Presses.
 132 ==> 409839 - Google Photos import does not download videos correctly.
-133 ==> 
+133 ==> 409952 - "Image" menu is missing.
+134 ==> 
