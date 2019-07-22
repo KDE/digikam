@@ -19,16 +19,6 @@ if [ "root" != "$USER" ]; then
     exit
 fi
 
-if [[ "$(arch)" = "x86_64" ]] ; then
-
-    LIB_PATH_ALT=lib64
-
-else
-
-    LIB_PATH_ALT=lib
-
-fi
-
 #################################################################################################
 # Manage script traces to log file
 
@@ -50,6 +40,12 @@ StartScript
 ChecksCPUCores
 HostAdjustments
 RegisterRemoteServers
+
+if [[ "$(arch)" = "x86_64" ]] ; then
+    LIBSUFFIX=lib64
+else
+    LIBSUFFIX=lib
+fi
 
 #################################################################################################
 
@@ -133,7 +129,7 @@ cp -r /usr/share/solid                    ./usr/share
 cp -r /usr/share/OpenCV                   ./usr/share
 cp -r /usr/share/dbus-1/interfaces/kf5*   ./usr/share/dbus-1/interfaces/
 cp -r /usr/share/dbus-1/services/*kde*    ./usr/share/dbus-1/services/
-cp -r /usr/$LIB_PATH_ALT/libexec/kf5      ./usr/lib/libexec/
+cp -r /usr/${LIBSUFFIX}/libexec/kf5      ./usr/lib/libexec/
 
 # AppImage stream data file
 cp -r /usr/share/metainfo/org.kde.digikam.appdata.xml   ./usr/share/metainfo/digikam.appdata.xml
@@ -145,13 +141,12 @@ if [[ $DK_QTWEBENGINE = 1 ]] ; then
 fi
 
 # copy libgphoto2 drivers
-find  /usr/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
-find  /usr/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
+find  /usr/${LIBSUFFIX}/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
+find  /usr/${LIBSUFFIX}/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
 
 # copy sane backends
-cp -r /usr/lib/sane                       ./usr/lib
-rm ./usr/lib/sane/*.la
-cp -r /usr/etc/sane.d                     ./usr/etc
+cp -r /usr/${LIBSUFFIX}/sane              ./usr/lib
+cp -r /etc/sane.d                         ./usr/etc
 
 # copy i18n
 
@@ -196,14 +191,14 @@ done
 
 # Marble data and plugins files
 
-cp -r /usr/$LIB_PATH_ALT/marble/plugins/ ./usr/bin/
+cp -r /usr/${LIBSUFFIX}/marble/plugins/ ./usr/bin/
 
-cp -r /usr/share/marble/data             ./usr/bin/
+cp -r /usr/share/marble/data            ./usr/bin/
 
 # otherwise segfaults!?
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libsasl2.so.2    | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /$LIBSUFFIX/libsasl2.so.3    | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /${LIBSUFFIX}/libGL.so.1       | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /${LIBSUFFIX}/libGLU.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # Fedora 23 seemed to be missing SOMETHING from the Centos 6.7. The only message was:
 # This application failed to start because it could not find or load the Qt platform plugin "xcb".
@@ -213,13 +208,13 @@ cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libGLU.so.1      | cut -d ">" -f 2 | 
 # Which means that we have to copy libEGL.so.1 in too
 
 # Otherwise F23 cannot load the Qt platform plugin "xcb"
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /${LIBSUFFIX}/libEGL.so.1      | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # let's not copy xcb itself, that breaks on dri3 systems https://bugs.kde.org/show_bug.cgi?id=360552
 #cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 # For Fedora 20
-cp $(ldconfig -p | grep /usr/$LIB_PATH_ALT/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
+cp $(ldconfig -p | grep /${LIBSUFFIX}/libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/
 
 cp /usr/bin/digikam                 ./usr/bin
 cp /usr/bin/showfoto                ./usr/bin
@@ -241,7 +236,7 @@ CopyReccursiveDependencies /usr/bin/digikam                  ./usr/lib
 CopyReccursiveDependencies /usr/bin/showfoto                 ./usr/lib
 CopyReccursiveDependencies /usr/plugins/platforms/libqxcb.so ./usr/lib
 
-FILES=$(ls /usr/$LIB_PATH_ALT/libdigikam*.so)
+FILES=$(ls /usr/${LIBSUFFIX}/libdigikam*.so)
 
 for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
