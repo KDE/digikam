@@ -40,7 +40,6 @@ StartScript
 ChecksCPUCores
 HostAdjustments
 RegisterRemoteServers
-. /opt/rh/devtoolset-6/enable
 
 #################################################################################################
 
@@ -98,7 +97,7 @@ fi
 echo -e "\n\n"
 echo "---------- Configure digiKam $DK_VERSION"
 
-cmake3 -G "Unix Makefiles" .. \
+cmake -G "Unix Makefiles" .. \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DBUILD_TESTING=OFF \

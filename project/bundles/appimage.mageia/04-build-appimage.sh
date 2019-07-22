@@ -50,7 +50,6 @@ StartScript
 ChecksCPUCores
 HostAdjustments
 RegisterRemoteServers
-. /opt/rh/devtoolset-6/enable
 
 #################################################################################################
 
@@ -67,11 +66,11 @@ cd $ORIG_WD/icon-rcc
 
 rm -f CMakeCache.txt > /dev/null
 
-cmake3 -DCMAKE_INSTALL_PREFIX="/usr" \
-       -DCMAKE_BUILD_TYPE=debug \
-       -DCMAKE_COLOR_MAKEFILE=ON \
-       -Wno-dev \
-       .
+cmake -DCMAKE_INSTALL_PREFIX="/usr" \
+      -DCMAKE_BUILD_TYPE=debug \
+      -DCMAKE_COLOR_MAKEFILE=ON \
+      -Wno-dev \
+      .
 
 make -j$CPU_CORES
 
