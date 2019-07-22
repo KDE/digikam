@@ -71,7 +71,18 @@ QPixmap ItemFaceDelegate::thumbnailPixmap(const QModelIndex& index) const
     }
 
     // parent implementation already resets the thumb size and rect set on model
-    return DigikamItemDelegate::thumbnailPixmap(index);
+
+    QPixmap res = DigikamItemDelegate::thumbnailPixmap(index);
+
+    if (face(index).isUnconfirmedName()) {
+        QPainter borderPainter(&res);
+        borderPainter.setPen(QPen(Qt::green, 4));
+        borderPainter.drawRect(2, 2, res.width() - 4, res.height() - 4);
+        borderPainter.end();
+    }
+
+    return res;
+    //return DigikamItemDelegate::thumbnailPixmap(index);
 }
 
 QRect ItemFaceDelegate::faceRect(const QModelIndex& index) const
