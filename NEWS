@@ -146,4 +146,5 @@ BUGFIXES:
 131 ==> 376627 - Face Tag Filter List Disappears On Even Number Key Presses.
 132 ==> 409839 - Google Photos import does not download videos correctly.
 133 ==> 409952 - "Image" menu is missing.
-134 ==> 
+134 ==> 410085 - Can't import from Google Photos.
+135 ==> 
