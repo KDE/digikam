@@ -15,13 +15,13 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 )
 
 set(facebookplugin_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbmpform.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbnewalbumdlg.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/fbmpform.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/fbnewalbumdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fbplugin.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/fbtalker_wizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwidget.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/fbwidget.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/fbwindow.cpp
 )
 
 DIGIKAM_ADD_GENERIC_PLUGIN(NAME    FaceBook
