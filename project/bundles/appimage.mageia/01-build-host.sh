@@ -140,6 +140,13 @@ urpmi --auto \
 
 #################################################################################################
 
+echo -e "---------- Clean-up Old Packages\n"
+
+# Remove system based devel package to prevent conflict with new one.
+urpme --auto ${LIBSUFFIX}qt5core5
+
+#################################################################################################
+
 echo -e "---------- Prepare Linux host to Compile Extra Dependencies\n"
 
 # Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
@@ -155,6 +162,7 @@ cd /
 if [ ! -d $BUILDING_DIR ] ; then
     mkdir $BUILDING_DIR
 fi
+
 if [ ! -d $DOWNLOAD_DIR ] ; then
     mkdir $DOWNLOAD_DIR
 fi
