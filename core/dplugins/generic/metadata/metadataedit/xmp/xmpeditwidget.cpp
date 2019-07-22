@@ -248,7 +248,7 @@ void XMPEditWidget::slotItemChanged()
 
     d->isReadOnly = (MetaEngineSettings::instance()->settings()
                         .metadataWritingMode == DMetadata::WRITE_TO_FILE_ONLY &&
-                    !DMetadata::canWriteXmp((*d->dlg->currentItem()).toLocalFile()));
+                     !DMetadata::canWriteXmp((*d->dlg->currentItem()).toLocalFile()));
 
     emit signalSetReadOnly(d->isReadOnly);
 
