@@ -34,6 +34,7 @@
 #include <QPaintEvent>
 #include <QKeyEvent>
 #include <QScreen>
+#include <QWindow>
 #include <QCursor>
 #include <QTimer>
 #include <QColor>
@@ -172,32 +173,43 @@ SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& setti
 
     // ---------------------------------------------------------------
 
-    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
-    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    const int activeScreenIndex = qMax(qApp->screens().indexOf(screen), 0);
     const int preferenceScreen  = d->settings.slideScreen;
-    int screen                  = 0;
+    int screenIndex             = 0;
 
     if (preferenceScreen == -2)
     {
-        screen = activeScreenIndex;
+        screenIndex = activeScreenIndex;
     }
     else if (preferenceScreen == -1)
     {
         QScreen* const primaryScreen = qApp->primaryScreen();
-        screen                       = qApp->screens().indexOf(primaryScreen);
+        screenIndex                  = qApp->screens().indexOf(primaryScreen);
     }
     else if ((preferenceScreen >= 0) && (preferenceScreen < qApp->screens().count()))
     {
-        screen = preferenceScreen;
+        screenIndex = preferenceScreen;
     }
     else
     {
-        screen                  = activeScreenIndex;
+        screenIndex             = activeScreenIndex;
         d->settings.slideScreen = -2;
         d->settings.writeToConfig();
     }
 
-    slotScreenSelected(screen);
+    slotScreenSelected(screenIndex);
 
     // ---------------------------------------------------------------
 

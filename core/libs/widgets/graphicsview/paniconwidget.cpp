@@ -47,6 +47,7 @@
 #include <QEventLoop>
 #include <QKeyEvent>
 #include <QScreen>
+#include <QWindow>
 
 // KDE includes
 
@@ -194,10 +195,17 @@ void PanIconFrame::resizeEvent(QResizeEvent* e)
 void PanIconFrame::popup(const QPoint& pos)
 {
     // Make sure the whole popup is visible.
-    QScreen* screen = qApp->screenAt(pos);
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = windowHandle();
 
-    if (!screen)
-        screen = qApp->primaryScreen();
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
 
     QRect desktopGeometry = screen->geometry();
 

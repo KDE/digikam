@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QScreen>
+#include <QWindow>
 
 // Local includes
 
@@ -92,7 +93,19 @@ void SlideImage::setLoadUrl(const QUrl& url)
 {
     d->currentImage = url;
     // calculate preview size which is used for fast previews
-    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    QSize desktopSize = screen->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
     d->previewThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }
@@ -100,7 +113,19 @@ void SlideImage::setLoadUrl(const QUrl& url)
 void SlideImage::setPreloadUrl(const QUrl& url)
 {
     // calculate preview size which is used for fast previews
-    QSize desktopSize = qApp->screenAt(mapToGlobal(QPoint()))->geometry().size();
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    QSize desktopSize = screen->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
     d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, deskSize);
 }
