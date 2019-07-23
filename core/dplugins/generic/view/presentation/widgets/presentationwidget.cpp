@@ -185,17 +185,13 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = qApp->activeWindow())
     {
-        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
     QRect deskRect  = qApp->screens().at(screenIndex)->geometry();
