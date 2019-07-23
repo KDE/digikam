@@ -26,21 +26,23 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition/opencv-fisherfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment/congealing
                     ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/shape-predictor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing
+#                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/recognition
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment/flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/tantriggs
 )
 
-if(ENABLE_FACESENGINE_DNN)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/dnn_base
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_processing
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_transforms
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/matrix
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/nn
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface
-                        ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn
-    )
-endif()
+# if(ENABLE_FACESENGINE_DNN)
+#     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/dnn_base
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_processing
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_transforms
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/matrix
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/nn
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn
+#     )
+# endif()
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          preprocessing/shape-predictor/fullobjectdetection.cpp
@@ -48,6 +50,11 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp
+#                        preprocessing/recognition/recognitionpreprocessor.cpp
+#                        preprocessing/recognition/openfacepreprocessor.cpp
+                         preprocessing/shape-predictor/matrixoperations.cpp
+                         preprocessing/shape-predictor/pointtransformaffine.cpp
+                         preprocessing/shape-predictor/shapepredictor.cpp
 
                          detection/opencv3-face/facerec.cpp
                          detection/opencv3-face/lbph_faces.cpp
