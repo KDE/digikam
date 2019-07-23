@@ -33,6 +33,11 @@ QMap<int, int> AlbumManager::getFaceCount() const
     return d->fAlbumsCount;
 }
 
+QMap<int, int> AlbumManager::getUnconfirmedFaceCount() const
+{
+    return d->uAlbumsCount;
+}
+
 void AlbumManager::personItemsCount()
 {
     if (d->personListJob)
@@ -79,7 +84,13 @@ void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& faces
         return;
     }
 
-    // For now, we only use the sum of confirmed and unconfirmed faces
+    d->uAlbumsCount.clear();
+    //I think this is a bug
+    //Why autodetectedFace have all autodetected tags?
+    //They should be in autodetectedPerson
+    if (facesStatMap.contains(ImageTagPropertyName::autodetectedFace())) //autodetectedPerson
+        d->uAlbumsCount = *facesStatMap.find(ImageTagPropertyName::autodetectedFace()); //autodetectedPerson
+
     d->fAlbumsCount.clear();
     typedef QMap<int, int> IntIntMap;
 
@@ -93,7 +104,7 @@ void AlbumManager::slotPeopleJobData(const QMap<QString, QMap<int, int> >& faces
         }
     }
 
-    emit signalFaceCountsDirty(d->fAlbumsCount);
+    emit signalFaceCountsDirty(d->fAlbumsCount, d->uAlbumsCount);
 }
 
 } // namespace Digikam

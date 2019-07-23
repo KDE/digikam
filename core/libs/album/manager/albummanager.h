@@ -800,6 +800,14 @@ public:
      */
     QMap<int, int> getFaceCount() const;
 
+    /**
+     * Returns the latest count for unconfirmed faces only
+     * as also emitted via signalFaceCountsDirty.
+     *
+     * @return count map for unconfirmed faces only
+     */
+    QMap<int, int> getUnconfirmedFaceCount() const;
+
 private Q_SLOTS:
 
     void slotPeopleJobResult();
@@ -808,7 +816,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalFaceCountsDirty(const QMap<int, int>&);
+    void signalFaceCountsDirty(const QMap<int, int>&, const QMap<int, int>&);
 
     //@}
 

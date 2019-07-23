@@ -38,6 +38,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "albumthumbnailloader.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -101,6 +102,18 @@ TAlbum* TagModel::albumForIndex(const QModelIndex& index) const
     return static_cast<TAlbum*>(AbstractCheckableAlbumModel::albumForIndex(index));
 }
 
+QVariant TagModel::albumData(Album *a, int role) const
+{
+    if (role == Qt::DisplayRole && !a->isRoot() &&
+            m_unconfirmedFaceCount.contains(a->id()) && a->id() != FaceTags::unknownPersonTagId())
+    {
+        QString res = AbstractCheckableAlbumModel::albumData(a, role).toString() +
+                QString::fromUtf8(" (%1 new)").arg(m_unconfirmedFaceCount.find(a->id()).value());
+        return res;
+    }
+    return AbstractCheckableAlbumModel::albumData(a, role);
+}
+
 QVariant TagModel::decorationRoleData(Album* album) const
 {
     QPixmap pix = AlbumThumbnailLoader::instance()->getTagThumbnailDirectly(static_cast<TAlbum*>(album));
@@ -118,9 +131,6 @@ void TagModel::setTagCount(TagCountMode mode)
     disconnect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(QMap<int,int>)),
             this, SLOT(setCountMap(QMap<int,int>)));
 
-    disconnect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(QMap<int,int>)),
-            this, SLOT(setCountMap(QMap<int,int>)));
-
     if (mode == NormalTagCount)
     {
         connect(AlbumManager::instance(), SIGNAL(signalTAlbumsDirty(QMap<int,int>)),
@@ -130,8 +140,12 @@ void TagModel::setTagCount(TagCountMode mode)
     }
     else
     {
-        connect(AlbumManager::instance(), SIGNAL(signalFaceCountsDirty(QMap<int,int>)),
-                this, SLOT(setCountMap(QMap<int,int>)));
+        connect(AlbumManager::instance(), &AlbumManager::signalFaceCountsDirty,
+                [=](const QMap<int, int> &faceCount, const QMap<int, int>& unconfirmedFaceCount)
+        {
+            setCountMap(faceCount);
+            m_unconfirmedFaceCount = unconfirmedFaceCount;
+        });
 
         setCountMap(AlbumManager::instance()->getFaceCount());
     }
