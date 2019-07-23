@@ -144,7 +144,7 @@ urpmi --auto \
 echo -e "---------- Clean-up Old Packages\n"
 
 # Remove system based devel package to prevent conflict with new one.
-urpme --auto ${LIBSUFFIX}qt5core5
+urpme --auto --force ${LIBSUFFIX}qt5core5 || true
 
 #################################################################################################
 
