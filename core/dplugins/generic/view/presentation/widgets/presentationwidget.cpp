@@ -185,17 +185,13 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = qApp->activeWindow())
     {
-        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
     QRect deskRect  = qApp->screens().at(screenIndex)->geometry();
@@ -566,9 +562,14 @@ void PresentationWidget::printProgress()
     QPainter p;
     p.begin(&d->currImage);
 
-    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') + QString::number(d->sharedData->urlList.count()));
+    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') +
+                                     QString::number(d->sharedData->urlList.count()));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int stringLength = p.fontMetrics().horizontalAdvance(progress) * progress.length();
+#else
     int stringLength = p.fontMetrics().width(progress) * progress.length();
+#endif
 
     p.setPen(QColor(Qt::black));
 

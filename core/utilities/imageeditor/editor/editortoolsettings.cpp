@@ -310,17 +310,13 @@ QSize EditorToolSettings::minimumSizeHint() const
     // Set scroll area to a horizontal minimum size sufficient for the settings.
     // Do not touch vertical size hint.
     // Limit to 40% of the desktop width.
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = d->settingsArea->windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = d->settingsArea->nativeParentWidget())
     {
-        if (QWidget* const nativeParent = d->settingsArea->nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QRect desktopRect = screen->geometry();
     int wSB           = verticalScrollBar()->height();

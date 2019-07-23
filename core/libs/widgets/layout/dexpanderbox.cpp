@@ -115,17 +115,13 @@ QSize DAdjustableLabel::minimumSizeHint() const
 
 QSize DAdjustableLabel::sizeHint() const
 {
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = nativeParentWidget())
     {
-        if (QWidget* const nativeParent = nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QFontMetrics fm(fontMetrics());
     int maxW     = screen->geometry().width() * 3 / 4;
