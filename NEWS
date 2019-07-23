@@ -151,4 +151,6 @@ BUGFIXES:
 136 ==> 399305 - When browsing images in preview mode, videos are often not shown (black preview area), only sound is heard.
 137 ==> 406428 - Video preview - no sound.
 138 ==> 395200 - ALSA Sound Broken in 5.9.0.
-139 ==> 
+139 ==> 164441 - Create a export to slideshow with audio function.
+140 ==> 407680 - Cannot hear sound with video files.
+141 ==> 
