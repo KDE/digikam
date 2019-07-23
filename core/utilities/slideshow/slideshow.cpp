@@ -701,6 +701,7 @@ void SlideShow::slotScreenSelected(int screen)
     // update OSD position
     if (d->fileIndex != -1)
     {
+        qApp->processEvents();
         d->osd->setCurrentUrl(currentItem());
     }
 
