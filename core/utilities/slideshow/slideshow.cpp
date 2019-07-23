@@ -173,17 +173,13 @@ SlideShow::SlideShow(DInfoInterface* const iface, const SlideShowSettings& setti
 
     // ---------------------------------------------------------------
 
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = qApp->activeWindow())
     {
-        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     const int activeScreenIndex = qMax(qApp->screens().indexOf(screen), 0);
     const int preferenceScreen  = d->settings.slideScreen;
@@ -705,6 +701,7 @@ void SlideShow::slotScreenSelected(int screen)
     // update OSD position
     if (d->fileIndex != -1)
     {
+        qApp->processEvents();
         d->osd->setCurrentUrl(currentItem());
     }
 

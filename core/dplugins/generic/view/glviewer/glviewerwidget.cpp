@@ -153,17 +153,13 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     d->iface  = iface;
 
     //determine screen size for isReallyFullScreen
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = qApp->activeWindow())
     {
-        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
     d->screenSize   = qApp->screens().at(screenIndex)->size();

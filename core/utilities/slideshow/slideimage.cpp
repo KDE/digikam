@@ -93,17 +93,13 @@ void SlideImage::setLoadUrl(const QUrl& url)
 {
     d->currentImage = url;
     // calculate preview size which is used for fast previews
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = nativeParentWidget())
     {
-        if (QWidget* const nativeParent = nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QSize desktopSize = screen->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
@@ -113,17 +109,13 @@ void SlideImage::setLoadUrl(const QUrl& url)
 void SlideImage::setPreloadUrl(const QUrl& url)
 {
     // calculate preview size which is used for fast previews
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = nativeParentWidget())
     {
-        if (QWidget* const nativeParent = nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QSize desktopSize = screen->geometry().size();
     int deskSize      = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
