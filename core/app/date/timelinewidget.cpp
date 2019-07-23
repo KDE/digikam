@@ -969,17 +969,13 @@ void TimeLineWidget::keyReleaseEvent(QKeyEvent *)
 
 void TimeLineWidget::keyScroll(bool isScrollNext)
 {
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = nativeParentWidget())
     {
-        if (QWidget* const nativeParent = nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QRect barRect;
     QRect deskRect  = screen->geometry();
@@ -1937,17 +1933,13 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool& isOnSelection
     QDateTime ref = d->refDateTime;
     ref.setTime(QTime(0, 0, 0, 0));
 
-    QScreen* screen    = qApp->primaryScreen();
-    QWindow* winHandle = windowHandle();
+    QScreen* screen = qApp->primaryScreen();
 
-    if (!winHandle)
+    if (QWidget* const widget = nativeParentWidget())
     {
-        if (QWidget* const nativeParent = nativeParentWidget())
-            winHandle = nativeParent->windowHandle();
+        if (QWindow* const window = widget->windowHandle())
+            screen = window->screen();
     }
-
-    if (winHandle)
-        screen = winHandle->screen();
 
     QRect deskRect = screen->geometry();
     int items      = deskRect.width() / d->barWidth;

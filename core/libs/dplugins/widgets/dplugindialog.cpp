@@ -98,12 +98,12 @@ void DPluginDialog::restoreDialogSize()
     }
     else
     {
-        QScreen* screen       = qApp->primaryScreen();
-        QWidget* const widget = qApp->activeWindow();
+        QScreen* screen = qApp->primaryScreen();
 
-        if (widget && widget->windowHandle())
+        if (QWidget* const widget = qApp->activeWindow())
         {
-            screen = widget->windowHandle()->screen();
+            if (QWindow* const window = widget->windowHandle())
+                screen = window->screen();
         }
 
         QRect srect = screen->availableGeometry();
