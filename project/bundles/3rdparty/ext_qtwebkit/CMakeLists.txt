@@ -11,7 +11,7 @@ SET(EXTPREFIX_qtwebkit "${EXTPREFIX}")
 ExternalProject_Add(ext_qtwebkit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.qt.io/snapshots/ci/qtwebkit/5.212/latest/src/submodules/qtwebkit-everywhere-src-5.212.tar.xz
-    URL_MD5 8110be295ea448804e3c1eb92fe17d94
+    URL_MD5 51b4eb9235af00218cbd75bf1e2825be
     INSTALL_DIR ${EXTPREFIX_qtwebkit}
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtwebkit-fixdeps.patch

@@ -27,6 +27,7 @@
 
 #include <QApplication>
 #include <QScreen>
+#include <QWindow>
 #include <QUrl>
 #include <QList>
 #include <QIcon>
@@ -152,9 +153,20 @@ GLViewerWidget::GLViewerWidget(DPlugin* const plugin, DInfoInterface* const ifac
     d->iface  = iface;
 
     //determine screen size for isReallyFullScreen
-    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
-    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
-    d->screenSize               = qApp->screens().at(activeScreenIndex)->size();
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
+    d->screenSize   = qApp->screens().at(screenIndex)->size();
 
     QList<QUrl> myfiles;                                            // pics which are displayed in imageviewer
     QList<QUrl> selection = d->iface->currentSelectedItems();

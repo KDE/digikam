@@ -41,6 +41,7 @@
 
 #include "digikam_debug.h"
 #include "metadataedit.h"
+#include "metaenginesettings.h"
 #include "xmpcategories.h"
 #include "xmpcontent.h"
 #include "xmpcredits.h"
@@ -245,7 +246,10 @@ void XMPEditWidget::slotItemChanged()
     d->statusPage->readMetadata(d->xmpData);
     d->propertiesPage->readMetadata(d->xmpData);
 
-    d->isReadOnly = !DMetadata::canWriteXmp((*d->dlg->currentItem()).toLocalFile());
+    d->isReadOnly = (MetaEngineSettings::instance()->settings()
+                        .metadataWritingMode == DMetadata::WRITE_TO_FILE_ONLY &&
+                     !DMetadata::canWriteXmp((*d->dlg->currentItem()).toLocalFile()));
+
     emit signalSetReadOnly(d->isReadOnly);
 
     d->page_content->setEnabled(!d->isReadOnly);

@@ -444,6 +444,12 @@ void GSWindow::slotListAlbumsDone(int code, const QString& errMsg, const QList <
 
             for (int i = 0 ; i < list.size() ; ++i)
             {
+                if (d->service == GoogleService::GPhotoImport && i == 0)
+                {
+                    // remove <auto-create> album
+                    continue;
+                }
+
                 QString albumIcon;
 
                 if (list.at(i).isWriteable)

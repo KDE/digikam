@@ -29,6 +29,7 @@
 #include <QProgressBar>
 #include <QLayout>
 #include <QScreen>
+#include <QWindow>
 #include <QTimer>
 #include <QEvent>
 #include <QStyle>
@@ -266,7 +267,19 @@ void SlideOSD::setCurrentUrl(const QUrl& url)
     layout()->activate();
     resize(sizeHint());
 
-    QRect geometry(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry());
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    QRect geometry(screen->availableGeometry());
     move(10, geometry.bottom() - height());
     show();
     raise();

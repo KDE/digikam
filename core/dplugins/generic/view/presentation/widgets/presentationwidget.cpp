@@ -46,6 +46,7 @@
 #include <QWheelEvent>
 #include <QApplication>
 #include <QScreen>
+#include <QWindow>
 
 // KDE includes
 
@@ -184,14 +185,24 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::Popup);
 
-    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
-    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = qApp->activeWindow()->windowHandle();
 
-    QRect deskRect = qApp->screens().at(activeScreenIndex)->geometry();
-    d->deskX       = deskRect.x();
-    d->deskY       = deskRect.y();
-    d->deskWidth   = deskRect.width();
-    d->deskHeight  = deskRect.height();
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
+    QRect deskRect  = qApp->screens().at(screenIndex)->geometry();
+    d->deskX        = deskRect.x();
+    d->deskY        = deskRect.y();
+    d->deskWidth    = deskRect.width();
+    d->deskHeight   = deskRect.height();
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
