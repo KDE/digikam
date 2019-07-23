@@ -148,4 +148,7 @@ BUGFIXES:
 133 ==> 409952 - "Image" menu is missing.
 134 ==> 410085 - Can't import from Google Photos.
 135 ==> 401970 - digikam break icc profile in png when modifiying metadata.
-136 ==> 
+136 ==> 399305 - When browsing images in preview mode, videos are often not shown (black preview area), only sound is heard.
+137 ==> 406428 - Video preview - no sound.
+138 ==> 395200 - ALSA Sound Broken in 5.9.0.
+139 ==> 
