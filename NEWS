@@ -153,4 +153,5 @@ BUGFIXES:
 138 ==> 395200 - ALSA Sound Broken in 5.9.0.
 139 ==> 164441 - Create a export to slideshow with audio function.
 140 ==> 407680 - Cannot hear sound with video files.
-141 ==> 
+141 ==> 089648 - Featurerequest: digikam should at least allow import of mpgs in an album so they can be managed with the photos.
+142 ==> 
