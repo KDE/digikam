@@ -526,7 +526,13 @@ void DDatePicker::setFontSize(int s)
 
     // stolen from QToolButton
     QSize textSize = metrics.size(Qt::TextShowMnemonic, longestMonth);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    textSize.setWidth(textSize.width() + metrics.horizontalAdvance(QLatin1Char(' ')) * 2);
+#else
     textSize.setWidth(textSize.width() + metrics.width(QLatin1Char(' ')) * 2);
+#endif
+
     int w          = textSize.width();
     int h          = textSize.height();
     opt.rect.setHeight(h);   // PM_MenuButtonIndicator depends on the height

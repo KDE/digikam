@@ -32,6 +32,7 @@
 #include <QPixmap>
 #include <QLocale>
 #include <QScreen>
+#include <QWindow>
 
 // KDE includes
 
@@ -79,7 +80,19 @@ SlideProperties::~SlideProperties()
 
 void SlideProperties::setCurrentUrl(const QUrl& url)
 {
-    setFixedSize(qApp->screenAt(mapToGlobal(QPoint()))->availableGeometry().size() / 1.5);
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    setFixedSize(screen->availableGeometry().size() / 1.5);
     d->url  = url;
     update();
 }

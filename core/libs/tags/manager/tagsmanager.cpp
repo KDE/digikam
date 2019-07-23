@@ -33,6 +33,7 @@
 #include <QSplitter>
 #include <QApplication>
 #include <QScreen>
+#include <QWindow>
 #include <QAction>
 #include <QMessageBox>
 #include <QMenu>
@@ -143,9 +144,20 @@ TagsManager::TagsManager()
     StateSavingObject::loadState();
 
     /** Set KMainWindow in center of the screen **/
-    QScreen* const activeScreen = qApp->screenAt(qApp->activeWindow()->geometry().center());
-    const int activeScreenIndex = qMax(qApp->screens().indexOf(activeScreen), 0);
-    move(qApp->screens().at(activeScreenIndex)->geometry().center() - rect().center());
+    QScreen* screen    = qApp->primaryScreen();
+    QWindow* winHandle = qApp->activeWindow()->windowHandle();
+
+    if (!winHandle)
+    {
+        if (QWidget* const nativeParent = qApp->activeWindow()->nativeParentWidget())
+            winHandle = nativeParent->windowHandle();
+    }
+
+    if (winHandle)
+        screen = winHandle->screen();
+
+    int screenIndex = qMax(qApp->screens().indexOf(screen), 0);
+    move(qApp->screens().at(screenIndex)->geometry().center() - rect().center());
 }
 
 TagsManager::~TagsManager()

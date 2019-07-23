@@ -242,7 +242,11 @@ QAction* ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* 
     QFontMetrics fm(font());
 
     if (d->maxWidth == -1)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        d->maxWidth = fm.horizontalAdvance(QLatin1Char('m')) * 30;
+#else
         d->maxWidth = fm.width(QLatin1Char('m')) * 30;
+#endif
 
     QString smallText = fm.elidedText(text, Qt::ElideMiddle, d->maxWidth);
 

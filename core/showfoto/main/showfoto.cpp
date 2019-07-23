@@ -284,7 +284,13 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
         iteminfo.size      = fi.size();
         iteminfo.url       = QUrl::fromLocalFile(fi.filePath());
         iteminfo.folder    = fi.path();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        iteminfo.dtime     = fi.birthTime();
+#else
         iteminfo.dtime     = fi.created();
+#endif
+
         meta.load(fi.filePath());
         iteminfo.ctime     = meta.getItemDateTime();
         iteminfo.width     = meta.getItemDimensions().width();
@@ -349,7 +355,13 @@ void ShowFoto::openFolder(const QUrl& url)
         iteminfo.size      = (*fi).size();
         iteminfo.folder    = (*fi).path();
         iteminfo.url       = QUrl::fromLocalFile((*fi).filePath());
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        iteminfo.dtime     = (*fi).birthTime();
+#else
         iteminfo.dtime     = (*fi).created();
+#endif
+
         meta.load((*fi).filePath());
         iteminfo.ctime     = meta.getItemDateTime();
         iteminfo.width     = meta.getItemDimensions().width();

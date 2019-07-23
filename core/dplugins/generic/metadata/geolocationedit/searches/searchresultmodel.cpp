@@ -195,12 +195,12 @@ void SearchResultModel::addResults(const SearchBackend::SearchResult::List& resu
     // first check which items are not duplicates
     QList<int> nonDuplicates;
 
-    for (int i = 0; i < results.count(); ++i)
+    for (int i = 0 ; i < results.count() ; ++i)
     {
         const SearchBackend::SearchResult& currentResult = results.at(i);
         bool isDuplicate                                 = false;
 
-        for (int j = 0; j < d->searchResults.count(); ++j)
+        for (int j = 0 ; j < d->searchResults.count() ; ++j)
         {
             if (currentResult.internalId == d->searchResults.at(j).result.internalId)
             {
@@ -222,7 +222,7 @@ void SearchResultModel::addResults(const SearchBackend::SearchResult::List& resu
 
     beginInsertRows(QModelIndex(), d->searchResults.count(), d->searchResults.count()+nonDuplicates.count()-1);
 
-    for (int i = 0; i < nonDuplicates.count(); ++i)
+    for (int i = 0 ; i < nonDuplicates.count() ; ++i)
     {
         SearchResultItem item;
         item.result = results.at(nonDuplicates.at(i));
@@ -302,7 +302,7 @@ void SearchResultModel::removeRowsByIndexes(const QModelIndexList& rowsList)
     // extract the row numbers first:
     QList<int> rowNumbers;
 
-    foreach(const QModelIndex& index, rowsList)
+    foreach (const QModelIndex& index, rowsList)
     {
         if (index.isValid())
         {
@@ -318,7 +318,7 @@ void SearchResultModel::removeRowsByIndexes(const QModelIndexList& rowsList)
     std::sort(rowNumbers.begin(), rowNumbers.end());
 
     // now delete the rows, starting with the last row:
-    for (int i = rowNumbers.count()-1; i >= 0; i--)
+    for (int i = rowNumbers.count()-1 ; i >= 0 ; --i)
     {
         const int rowNumber = rowNumbers.at(i);
 
@@ -334,7 +334,7 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     // extract the row numbers first:
     QList<QPair<int, int> > rowRanges;
 
-    foreach(const QItemSelectionRange& range, selectionList)
+    foreach (const QItemSelectionRange& range, selectionList)
     {
         rowRanges << QPair<int, int>(range.top(), range.bottom());
     }
@@ -343,14 +343,14 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     std::sort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
 
     // now delete the rows, starting with the last row:
-    for (int i = rowRanges.count()-1; i >= 0; i--)
+    for (int i = rowRanges.count()-1 ; i >= 0 ; --i)
     {
         const QPair<int, int> currentRange = rowRanges.at(i);
 
         /// @todo This is very slow for several indexes, because the views update after every removal
         beginRemoveRows(QModelIndex(), currentRange.first, currentRange.second);
 
-        for (int j = currentRange.second; j >= currentRange.first; j--)
+        for (int j = currentRange.second ; j >= currentRange.first ; --j)
         {
             d->searchResults.removeAt(j);
         }

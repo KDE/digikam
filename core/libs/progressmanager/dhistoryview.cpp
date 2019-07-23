@@ -63,18 +63,18 @@ public:
                 break;
             case DHistoryView::WarningEntry:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-warning")));
-                setTextColor(2, Qt::darkYellow);
+                setForeground(2, QBrush(QColor(Qt::darkYellow)));
                 break;
             case DHistoryView::ErrorEntry:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-error")));
-                setTextColor(2, Qt::red);
+                setForeground(2, QBrush(QColor(Qt::red)));
                 break;
             case DHistoryView::ProgressEntry:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-information")));
                 break;
             case DHistoryView::CancelEntry:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-cancel")));
-                setTextColor(2, Qt::darkBlue);
+                setForeground(2, QBrush(QColor(Qt::darkBlue)));
                 break;
             default:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-information")));
