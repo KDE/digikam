@@ -41,7 +41,7 @@ ORIG_WD="`pwd`"
 
 echo -e "---------- Update Linux Host\n"
 
-urpmi --auto-update
+urpmi --auto --auto-update
 
 #################################################################################################
 
@@ -117,7 +117,7 @@ urpmi --auto \
       gphoto2-devel \
       sane-backends \
       jasper-devel \
-      ${LIBSUFFIX}sane1-devel
+      ${LIBSUFFIX}sane1-devel \
       ${LIBSUFFIX}xcb-util1 \
       ${LIBSUFFIX}xi-devel \
       ${LIBSUFFIX}xtst-devel \
