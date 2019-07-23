@@ -276,7 +276,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend,
 
         if (queryStateResult != BdEngineBackend::NoErrors &&
             toDBbackend.lastSQLError().isValid()          &&
-            toDBbackend.lastSQLError().number() != 0)
+            !toDBbackend.lastSQLError().nativeErrorCode().isEmpty())
         {
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: error while converting table data. Details: " << toDBbackend.lastSQLError();
             QString errorMsg = i18n("Error while converting the database.\n Details: %1", toDBbackend.lastSQLError().databaseText());

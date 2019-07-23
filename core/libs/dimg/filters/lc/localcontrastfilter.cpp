@@ -544,7 +544,7 @@ void LocalContrastFilter::stretchContrast(float* const data, int datasize)
         }
     }
 
-    for (int i = histogram_size - 1 ; runningFlag() && (i >= 0) ; i--)
+    for (int i = histogram_size - 1 ; runningFlag() && (i >= 0) ; --i)
     {
         sum_max += histogram[i];
 

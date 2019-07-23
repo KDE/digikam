@@ -278,8 +278,8 @@ bool BdEngineBackendPrivate::reconnectOnError() const
 bool BdEngineBackendPrivate::isSQLiteLockError(const DbEngineSqlQuery& query) const
 {
     return parameters.isSQLite() &&
-           (query.lastError().number() == 5 /*SQLITE_BUSY*/  ||
-            query.lastError().number() == 6 /*SQLITE_LOCKED*/);
+           (query.lastError().nativeErrorCode() == QLatin1String("5") /*SQLITE_BUSY*/  ||
+            query.lastError().nativeErrorCode() == QLatin1String("6") /*SQLITE_LOCKED*/);
 }
 
 bool BdEngineBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
@@ -302,8 +302,8 @@ bool BdEngineBackendPrivate::isConnectionError(const DbEngineSqlQuery& query) co
     }
 
     return (
-            query.lastError().type()   == QSqlError::ConnectionError ||
-            query.lastError().number() == 2006
+            query.lastError().type()            == QSqlError::ConnectionError ||
+            query.lastError().nativeErrorCode() == QLatin1String("2006")
            );
 }
 
@@ -347,7 +347,7 @@ void BdEngineBackendPrivate::debugOutputFailedQuery(const QSqlQuery& query) cons
     qCDebug(DIGIKAM_DBENGINE_LOG) << "Failure executing query:\n"
                                   << query.executedQuery()
                                   << "\nError messages:" << query.lastError().driverText() << query.lastError().databaseText()
-                                  << query.lastError().number() << query.lastError().type()
+                                  << query.lastError().nativeErrorCode() << query.lastError().type()
                                   << "\nBound values: " << query.boundValues().values();
 }
 
@@ -355,7 +355,7 @@ void BdEngineBackendPrivate::debugOutputFailedTransaction(const QSqlError& error
 {
     qCDebug(DIGIKAM_DBENGINE_LOG) << "Failure executing transaction. Error messages:\n"
                                   << error.driverText() << error.databaseText()
-                                  << error.number() << error.type();
+                                  << error.nativeErrorCode() << error.type();
 }
 
 void BdEngineBackendPrivate::transactionFinished()
@@ -746,7 +746,7 @@ QSqlQuery BdEngineBackend::execDBActionQuery(const DbEngineAction& action, const
             qCDebug(DIGIKAM_DBENGINE_LOG) << "Error, only DBActions with mode 'query' are allowed at this call!";
         }
 
-        if (result.lastError().isValid() && result.lastError().number())
+        if (result.lastError().isValid() && !result.lastError().nativeErrorCode().isEmpty())
         {
             qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction [" <<  action.name
                                           << "] Statement [" << actionElement.statement

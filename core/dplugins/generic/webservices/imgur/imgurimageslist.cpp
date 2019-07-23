@@ -77,12 +77,14 @@ QList<const ImgurImageListViewItem*> ImgurImagesList::getPendingItems()
 {
     QList<const ImgurImageListViewItem*> ret;
 
-    for (unsigned int i = listView()->topLevelItemCount(); i--;)
+    for (int i = 0 ; i < listView()->topLevelItemCount() ; ++i)
     {
-        const auto* item = dynamic_cast<const ImgurImageListViewItem*>(listView()->topLevelItem(i));
+        auto* const item = dynamic_cast<const ImgurImageListViewItem*>(listView()->topLevelItem(i));
 
         if (item && item->ImgurUrl().isEmpty())
+        {
             ret << item;
+        }
     }
 
     return ret;
@@ -95,7 +97,7 @@ void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
 
     DMetadata meta;
 
-    for (QList<QUrl>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+    for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         // Already in the list?
         if (listView()->findItem(*it) == nullptr)
@@ -164,10 +166,10 @@ void ImgurImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)
 ImgurImageListViewItem::ImgurImageListViewItem(DItemsListView* const view, const QUrl& url)
     : DItemsListViewItem(view, url)
 {
-    const QColor blue(50, 50, 255);
+    QBrush blue(QColor(50, 50, 255));
 
-    setTextColor(ImgurImagesList::URL,       blue);
-    setTextColor(ImgurImagesList::DeleteURL, blue);
+    setForeground(ImgurImagesList::URL,       blue);
+    setForeground(ImgurImagesList::DeleteURL, blue);
 }
 
 void ImgurImageListViewItem::setTitle(const QString& str)

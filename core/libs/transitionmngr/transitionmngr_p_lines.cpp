@@ -53,7 +53,7 @@ int TransitionMngr::Private::transitionSweep(bool aInit)
         int x;
         int i;
 
-        for (w = 2, i = 4, x = eff_x ; i > 0 ; i--, w <<= 1, x -= eff_dx)
+        for (w = 2, i = 4, x = eff_x ; i > 0 ; --i, w <<= 1, x -= eff_dx)
         {
             eff_px  = x;
             eff_py  = 0;
@@ -80,7 +80,7 @@ int TransitionMngr::Private::transitionSweep(bool aInit)
         int y;
         int i;
 
-        for (h = 2, i = 4, y = eff_y ; i > 0 ; i--, h <<= 1, y -= eff_dy)
+        for (h = 2, i = 4, y = eff_y ; i > 0 ; --i, h <<= 1, y -= eff_dy)
         {
             eff_px  = 0;
             eff_py  = y;
@@ -194,7 +194,7 @@ int TransitionMngr::Private::transitionMultiCircleOut(bool aInit)
         return -1;
     }
 
-    for (alpha = eff_alpha, i = eff_i ; i >= 0 ; i--, alpha += eff_fd)
+    for (alpha = eff_alpha, i = eff_i ; i >= 0 ; --i, alpha += eff_fd)
     {
         x     = (eff_w >> 1) + (int)(eff_fy * cos(-alpha));
         y     = (eff_h >> 1) + (int)(eff_fy * sin(-alpha));
