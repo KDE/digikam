@@ -63,7 +63,7 @@ class Q_DECL_HIDDEN RecognitionDatabase::Private
 public:
 
     bool                                    dbAvailable;
-    QMutex                                  mutex;
+    mutable QMutex                          mutex;
     QVariantMap                             parameters;
     QHash<int, Identity>                    identityCache;
     RecognitionDatabase::RecognizeAlgorithm recognizeAlgorithm;
@@ -78,6 +78,8 @@ public:
     template <class T>
     T* getObjectOrCreate(T* &ptr) const
     {
+        QMutexLocker lock(&mutex);
+
         if (!ptr)
         {
             qCDebug(DIGIKAM_FACESENGINE_LOG) << "create recognizer";
