@@ -54,9 +54,8 @@ DNNFaceExtractor::DNNFaceExtractor(Preprocessor* p)
     //                                           QLatin1String("digikam/facesengine/dnnface/deep-residual-networks/ResNet-50-model.caffemodel"));
     // net = cv::dnn::readNetFromCaffe(nnproto, nnmodel);
 
-    // QString nnmodel = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-    //                                          QLatin1String("digikam/facesengine/dnnface/openface_nn4_small2_v1_t7.dat"));
-    QString nnmodel = QLatin1String("/usr/share/digikam/facesengine/openface_nn4.small2.v1.t7");
+    QString nnmodel = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                             QLatin1String("digikam/facesengine/openface_nn4.small2.v1.t7"));
     qCDebug(DIGIKAM_FACEDB_LOG) << nnmodel;
     net = cv::dnn::readNetFromTorch(nnmodel.toStdString());
 }

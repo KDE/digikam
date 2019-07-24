@@ -23,6 +23,10 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/dlib_face_recognition_resnet_m
         DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine
 )
 
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/openface_nn4.small2.v1.t7
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine
+)
+
 # ---------------------------------------------------------------
 
 # add_custom_command(OUTPUT face-funnel.data
