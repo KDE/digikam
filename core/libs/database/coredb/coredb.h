@@ -390,6 +390,12 @@ public:
     QList<int> getRecentlyAssignedTags() const;
 
     /**
+     * Get a list of recently assigned face tags (only last 6 face tags are listed)
+     * @return the list of recently assigned face tags
+     */
+    QList<int> getRecentlyAssignedFaceTags() const;
+
+    /**
      * Deletes a tag from the database. This will not delete the
      * subtags of the tag.
      * @param tagID the id of the tag
