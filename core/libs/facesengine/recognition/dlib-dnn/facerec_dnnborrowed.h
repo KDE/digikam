@@ -91,14 +91,14 @@ public:
     /**
      * Getter and setter functions.
      */
-    double getThreshold() const                             { return m_threshold;                  }
-    void   setThreshold(double _threshold)                  { m_threshold = _threshold;            }
+    double getThreshold() const                                 { return m_threshold;                  }
+    void   setThreshold(double _threshold)                      { m_threshold = _threshold;            }
 
-    std::vector<std::vector<float> > getSrc() const         { return m_src;                        }
-    void setSrc(std::vector<std::vector<float> > _src)      { m_src = _src;                        }
+    std::vector<std::vector<float> > getSrc() const             { return m_src;                        }
+    void setSrc(const std::vector<std::vector<float> >& _src)   { m_src = _src;                        }
 
-    cv::Mat getLabels() const                               { return m_labels;                     }
-    void setLabels(cv::Mat _labels)                         { m_labels = _labels;                  }
+    cv::Mat getLabels() const                                   { return m_labels;                     }
+    void setLabels(cv::Mat _labels)                             { m_labels = _labels;                  }
 
 private:
 
