@@ -48,7 +48,7 @@
 // #   include "cv_image.h"
 // #   include "dnn_face.h"
 #   include "dnnfacemodel.h"
-#   include "dnnfaceextractor.h"
+// #   include "dnnfaceextractor.h"
 #endif
 
 // Local includes
@@ -427,8 +427,8 @@ void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 {
     // DNNFaceKernel dnnFaceKernel;
     // dnnFaceKernel.getFaceVector(data, vecdata);
-    DNNFaceExtractor::init();
-    DNNFaceExtractor::getFaceEmbedding(data, vecdata);
+    // DNNFaceExtractor::init();
+    // DNNFaceExtractor::getFaceEmbedding(data, vecdata);
 }
 #endif
 

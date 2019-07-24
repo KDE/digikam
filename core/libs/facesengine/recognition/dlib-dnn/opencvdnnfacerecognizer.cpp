@@ -30,6 +30,8 @@
 #include "facedb.h"
 #include "dnnfacemodel.h"
 #include "digikam_debug.h"
+#include "dnnfaceextractor.h"
+#include "recognitionpreprocessor.h"
 
 namespace Digikam
 {
@@ -41,8 +43,15 @@ class Q_DECL_HIDDEN OpenCVDNNFaceRecognizer::Private
 public:
 
     explicit Private()
-        : loaded(false)
+        : loaded(false),
+          m_preprocessor(0)
     {
+    }
+
+    ~Private()
+    {
+        delete m_preprocessor;
+        delete m_extractor;
     }
 
 public:
@@ -52,11 +61,22 @@ public:
         if (!loaded)
         {
             m_dnn  = FaceDbAccess().db()->dnnFaceModel();
+
+            m_preprocessor = new RecognitionPreprocessor;
+            m_preprocessor->init(PreprocessorSelection::OPENFACE);
+
+            m_extractor = new DNNFaceExtractor(m_preprocessor);
+
             loaded = true;
         }
 
         return m_dnn;
     }
+
+public:
+
+    RecognitionPreprocessor* m_preprocessor;
+    DNNFaceExtractor* m_extractor;
 
 private:
 
@@ -119,7 +139,7 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
 {
     int predictedLabel = -1;
     double confidence  = 0;
-    d->dnn()->predict(inputImage, predictedLabel, confidence);
+    d->dnn()->predict(inputImage, predictedLabel, confidence, d->m_extractor);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << predictedLabel << confidence;
 
     /** confidence must be greater than threshold, because distance used is cosine distance
@@ -144,7 +164,7 @@ void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images,
         return;
     }
 
-    d->dnn().update(images_rgb, labels, context);
+    d->dnn().update(images_rgb, labels, context, d->m_extractor);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "DNN Train: Adding model to Facedb";
     // add to database waiting
     FaceDbAccess().db()->updateDNNFaceModel(d->dnn());

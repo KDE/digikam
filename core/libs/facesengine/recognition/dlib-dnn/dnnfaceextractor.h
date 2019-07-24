@@ -31,22 +31,29 @@
 // OpenCV includes
 
 #include <opencv2/core.hpp>
+#include <opencv2/dnn.hpp>
+
+// Local includes
+
+#include "preprocessor.h"
 
 namespace Digikam
 {
 
 class DNNFaceExtractor
 {
+
 public:
 
-    explicit DNNFaceExtractor();
-    static void init();
+    explicit DNNFaceExtractor(Preprocessor* p);
+    ~DNNFaceExtractor();
 
-    static void getFaceEmbedding(cv::Mat faceImage, std::vector<float>& vecdata);
+	void getFaceEmbedding(cv::Mat faceImage, std::vector<float>& vecdata);
 
 private:
 
-	static bool initialized;
+	Preprocessor*	preprocessor;
+	cv::dnn::Net 	net;
 
 };
 

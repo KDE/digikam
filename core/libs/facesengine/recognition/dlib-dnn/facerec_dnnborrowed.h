@@ -29,6 +29,7 @@
 #include "digikam_opencv.h"
 #include "facedb.h"
 #include "face.hpp"
+#include "dnnfaceextractor.h"
 
 // C++ includes
 
@@ -84,7 +85,8 @@ public:
     /**
      * Predicts the label and confidence for a given sample.
      */
-    void predict(cv::InputArray _src, int& label, double& dist) const;
+    void predict(cv::InputArray _src, int& label, double& dist,
+                 DNNFaceExtractor* const extractor) const;
 
     /**
      * Getter and setter functions.

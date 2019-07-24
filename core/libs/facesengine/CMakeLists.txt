@@ -27,7 +27,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment/congealing
                     ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/shape-predictor
                     ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing
-#                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/recognition
+                    ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/recognition
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment/flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/tantriggs
@@ -50,8 +50,8 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp
-#                        preprocessing/recognition/recognitionpreprocessor.cpp
-#                        preprocessing/recognition/openfacepreprocessor.cpp
+                         preprocessing/recognition/recognitionpreprocessor.cpp
+                         preprocessing/recognition/openfacepreprocessor.cpp
                          preprocessing/shape-predictor/matrixoperations.cpp
                          preprocessing/shape-predictor/pointtransformaffine.cpp
                          preprocessing/shape-predictor/shapepredictor.cpp

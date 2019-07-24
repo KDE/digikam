@@ -157,14 +157,16 @@ void DNNFaceModel::setMats(const QList<std::vector<float> >& mats, const QList<D
     }
 }
 
-void DNNFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
+void DNNFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context,
+                          DNNFaceExtractor* const extractor)
 {
     std::vector<std::vector<float> > src;
 
     foreach (const cv::Mat& mat, images)
     {
         std::vector<float> vecdata;
-        FaceDbAccess().db()->getFaceVector(mat, vecdata);
+        // FaceDbAccess().db()->getFaceVector(mat, vecdata);
+        extractor->getFaceEmbedding(mat, vecdata);
         qCDebug(DIGIKAM_FACEDB_LOG) << "vecdata: " << vecdata[vecdata.size()-2]
                                                    << vecdata[vecdata.size()-1];
         src.push_back(vecdata);

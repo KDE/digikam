@@ -203,14 +203,16 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     }
 }
 */
-void DNNFaceRecognizer::predict(cv::InputArray _src, int& label, double& dist) const
+void DNNFaceRecognizer::predict(cv::InputArray _src, int& label, double& dist,
+                                DNNFaceExtractor* const extractor) const
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
     cv::Mat src              = _src.getMat();//254*254
     std::vector<float> vecdata;
-    FaceDb* const tmp_facedb = new FaceDb();
-    tmp_facedb->getFaceVector(src, vecdata);
+    // FaceDb* const tmp_facedb = new FaceDb();
+    // tmp_facedb->getFaceVector(src, vecdata);
+    extractor->getFaceEmbedding(src, vecdata);
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "m_threshold " << m_threshold;
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "vecdata: " << vecdata[vecdata.size()-2] << " " << vecdata[vecdata.size()-1];
 
@@ -252,7 +254,7 @@ int DNNFaceRecognizer::predict(InputArray _src) const
 {
     int    label;
     double dummy;
-    predict(_src, label, dummy);
+    //predict(_src, label, dummy);
 
     return label;
 }
