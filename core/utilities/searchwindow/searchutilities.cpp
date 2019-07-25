@@ -490,7 +490,7 @@ void CustomStepsIntSpinBox::setInvertStepping(bool invert)
 void CustomStepsIntSpinBox::enableFractionMagic(const QString& prefix)
 {
     d->fractionPrefix = prefix;
-    std::sort(d->values.begin(), d->values.end(), qGreater<int>());
+    std::sort(d->values.begin(), d->values.end(), std::greater<int>());
 }
 
 void CustomStepsIntSpinBox::reset()

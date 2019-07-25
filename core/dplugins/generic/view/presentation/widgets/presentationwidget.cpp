@@ -453,7 +453,7 @@ void PresentationWidget::printFilename()
 
     for (int x = 9 ; x <= 11 ; ++x)
     {
-        for (int y = 31 ; y >= 29 ; y--)
+        for (int y = 31 ; y >= 29 ; --y)
         {
             p.drawText(x, height() - y, d->imageLoader->currFileName());
         }
@@ -542,7 +542,7 @@ void PresentationWidget::printComments()
         for (int x = 9 ; x <= 11 ; ++x)
         {
             for (int y = (int)(yPos + lineNumber * 1.5 * d->sharedData->captionFont->pointSize() + 1) ;
-                 y >= (int)(yPos + lineNumber * 1.5 * d->sharedData->captionFont->pointSize() - 1) ; y--)
+                 y >= (int)(yPos + lineNumber * 1.5 * d->sharedData->captionFont->pointSize() - 1) ; --y)
             {
                 p.drawText(x, height() - y, commentsByLines[lineNumber]);
             }
@@ -575,7 +575,7 @@ void PresentationWidget::printProgress()
 
     for (int x = 9 ; x <= 11 ; ++x)
     {
-        for (int y = 21 ; y >= 19 ; y--)
+        for (int y = 21 ; y >= 19 ; --y)
         {
             p.drawText(width() - stringLength - x, y, progress);
         }
