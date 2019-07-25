@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Script to build digiKam under Linux
+# Script to build digiKam under Linux host
 # This script must be run as sudo
 #
 # Copyright (c) 2015-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
@@ -27,8 +27,8 @@ exec > >(tee ./logs/build-digikam.full.log) 2>&1
 
 #################################################################################################
 
-echo "03-build-digikam.sh : build digiKam using CentOS 6."
-echo "---------------------------------------------------"
+echo "03-build-digikam.sh : build digiKam."
+echo "------------------------------------"
 
 #################################################################################################
 # Pre-processing checks

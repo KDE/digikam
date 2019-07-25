@@ -21,14 +21,16 @@ trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
 StartScript
 ChecksRunAsRoot
 ChecksCPUCores
-CentOS6Adjustments
+HostAdjustments
 
-echo "+++++++++++++++++++++++ Update Linux AppImage bundle ++++++++++++++++++++++++++++++"
+echo "This script will build from scratch the digiKam AppImage bundle for Linux."
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
+./01-build-host.sh
+./02-build-extralibs.sh
 ./03-build-digikam.sh
 ./04-build-appimage.sh
 
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 TerminateScript
