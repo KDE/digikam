@@ -27,9 +27,10 @@
 
 // Qt includes
 
+#include <QFlags>
+#include <QDebug>
 #include <QString>
 #include <QStringList>
-#include <QDebug>
 
 // Local includes
 
