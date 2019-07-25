@@ -95,7 +95,7 @@ REQUIREMENTS
 COMPONENTS
 ----------
 There are 4 scripts to be run by the user. 2 first ones installs
-components on CentOS 6 and all dependencies, next one digiKam, and last one makes a
+components on Mageia 6 and all dependencies, next one digiKam, and last one makes a
 binary AppImage bundle for Linux.
 
 
