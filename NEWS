@@ -161,6 +161,6 @@ BUGFIXES:
 156 ==> 368036 - Lazy Sync doesn't write Tags to file.
 157 ==> 368125 - No hint when adding face within album view.
 158 ==> 369668 - EXIF orientation tag is not the same after a RAW export in JPEG.
-159 ==> 
-
+159 ==> 369833 - digiKam 5: Some keys do not work as in digiKam 4 when tagging images.
+160 ==> 
 
