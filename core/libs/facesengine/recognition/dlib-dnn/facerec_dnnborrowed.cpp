@@ -195,6 +195,7 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
     std::vector<float> vecdata;
     FaceDb* const tmp_facedb = new FaceDb();
     tmp_facedb->getFaceVector(src, vecdata);
+    qCWarning(DIGIKAM_FACESENGINE_LOG) << "vecdata: " << vecdata[vecdata.size()-2] << " " << vecdata[vecdata.size()-1];
 
     minDist  = DBL_MAX;
     minClass = -1;
