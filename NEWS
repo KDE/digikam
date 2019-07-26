@@ -155,6 +155,6 @@ BUGFIXES:
 140 ==> 407680 - Cannot hear sound with video files.
 141 ==> 089648 - Featurerequest: digikam should at least allow import of mpgs in an album so they can be managed with the photos.
 142 ==> 299827 - Add location bookmark interface is unintuitive.
-143 ==> 362268 - Digikam database gets corrupted when metadata are written to sidecar files.
-144 ==> 
-
+143 ==> 362268 - digiKam database gets corrupted when metadata are written to sidecar files.
+144 ==> 364614 - Images/albums not deleted in database when deleting/moving in digiKam
+145 ==> 
