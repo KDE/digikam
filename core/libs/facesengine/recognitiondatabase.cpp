@@ -52,7 +52,6 @@
 #include "facedboperationgroup.h"
 #include "dataproviders.h"
 #include "recognitiondatabase.h"            // krazy:exclude=includes
-#include "algs.h"
 #include "facedb.h"
 #include "digikam_debug.h"
 

@@ -27,29 +27,7 @@
 // OpenCV includes need to show up before Qt includes
 
 #ifdef HAVE_FACESENGINE_DNN
-// #   include "tensor.h"
-// #   include "input.h"
-// #   include "layers.h"
-// #   include "loss.h"
-// #   include "core.h"
-// #   include "solvers.h"
-// #   include "cpu_dlib.h"
-// #   include "tensor_tools.h"
-// #   include "utilities.h"
-// #   include "validation.h"
-// #   include "serialize.h"
-// #   include "matrix.h"
-// #   include "matrix_utilities.h"
-// #   include "matrix_subexp.h"
-// #   include "matrix_math_functions.h"
-// #   include "matrix_generic_image.h"
-// #   include "assign_image.h"
-// #   include "interpolation.h"
-// #   include "frontal_face_detector.h"
-// #   include "cv_image.h"
-// #   include "dnn_face.h"
-#   include "dnnfacemodel.h"
-// #   include "dnnfaceextractor.h"
+#include "dnnfacemodel.h"
 #endif
 
 // Local includes
@@ -74,15 +52,6 @@ public:
 
     FaceDbBackend* db;
 };
-
-/*
- * NOTE: This constructor is only used in facerec_dnnborrowed.cpp.
- * Create an object of FaceDb to invoke the method getFaceVector
- */
-FaceDb::FaceDb()
-    : d(new Private)
-{
-}
 
 FaceDb::FaceDb(FaceDbBackend* const db)
     : d(new Private)
@@ -423,16 +392,6 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
     }
 }
 
-#ifdef HAVE_FACESENGINE_DNN
-void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
-{
-    // DNNFaceKernel dnnFaceKernel;
-    // dnnFaceKernel.getFaceVector(data, vecdata);
-    // DNNFaceExtractor::init();
-    // DNNFaceExtractor::getFaceEmbedding(data, vecdata);
-}
-#endif
-
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb)
 {
     QList<EigenFaceMatMetadata> metadataList = model.matMetadata();
@@ -465,10 +424,13 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                 QByteArray compressed = qCompress(data.data);
                 std::vector<float> vecdata;
 
-                // FIXME !!! Why the Eigen face use DNN code here ???
-#ifdef HAVE_FACESENGINE_DNN
-                this->getFaceVector(mat_rgb, vecdata);
-#endif
+                /** FIXME !!! Why the Eigen face use DNN code here ???
+                  * Otherwise, how does it comput vecdata ???
+                  * Buggy codes from GSoC 2017
+                  */
+// #ifdef HAVE_FACESENGINE_DNN
+//                 this->getFaceVector(mat_rgb, vecdata);
+// #endif
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* const fp = (float*)vec_byte.data();
 

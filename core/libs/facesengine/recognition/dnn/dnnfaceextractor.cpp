@@ -58,6 +58,12 @@ DNNFaceExtractor::DNNFaceExtractor(Preprocessor* p)
                                              QLatin1String("digikam/facesengine/openface_nn4.small2.v1.t7"));
     qCDebug(DIGIKAM_FACEDB_LOG) << nnmodel;
     net = cv::dnn::readNetFromTorch(nnmodel.toStdString());
+
+    // As we use OpenFace, we need to set appropriate values for image color space and image size
+
+    imageSize = cv::Size(96,96);
+    scaleFactor = 1.0 / 255.0;
+    meanValToSubtract = cv::Scalar(0.0, 0.0, 0.0);
 }
 
 DNNFaceExtractor::~DNNFaceExtractor()
@@ -80,7 +86,7 @@ void DNNFaceExtractor::getFaceEmbedding(cv::Mat faceImage, std::vector<float>& v
 
     timer.start();
     cv::Mat face_descriptors;
-    cv::Mat blob = cv::dnn::blobFromImage(alignedFace, 1.0 / 255, cv::Size(96, 96), cv::Scalar(0,0,0), false, true, CV_32F);
+    cv::Mat blob = cv::dnn::blobFromImage(alignedFace, scaleFactor, imageSize, meanValToSubtract);
     net.setInput(blob);
     face_descriptors = net.forward();
 

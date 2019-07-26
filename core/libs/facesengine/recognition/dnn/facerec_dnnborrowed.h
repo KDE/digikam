@@ -64,8 +64,6 @@ public:
 
     static cv::Ptr<DNNFaceRecognizer> create(double threshold = DBL_MAX);
 
-    //void getFaceVector(cv::Mat data, std::vector<float>& vecdata) const;
-
     /**
      * Computes a DNNFace model with images in src and
      * corresponding labels in labels.

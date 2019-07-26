@@ -33,17 +33,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing/tantriggs
 )
 
-# if(ENABLE_FACESENGINE_DNN)
-#     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/dnn_base
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_processing
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/image_transforms
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/matrix
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface/nn
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn/dnnface
-#                         ${CMAKE_CURRENT_SOURCE_DIR}/recognition/dlib-dnn
-#     )
-# endif()
-
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          detection/opencvdnnfacedetector.cpp
                          preprocessing/shape-predictor/fullobjectdetection.cpp
@@ -98,26 +87,12 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
 
 if(ENABLE_FACESENGINE_DNN)
 
-    if(NOT MSVC)
-
-        # Dlib DNN generate plenty of wrong warnings. Remove these workaround later when code will be ported to OpenCV DNN.
-        REMOVE_GCC_COMPILER_WARNINGS("-Wextra")
-        REMOVE_GCC_COMPILER_WARNINGS("-Wundef")
-        REMOVE_GCC_COMPILER_WARNINGS("-Wall")
-
-        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-cast-align")
-        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-sign-compare")
-        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-unused-parameter")
-        DISABLE_CLANG_COMPILER_WARNINGS("4.99.99" "-Wno-unused-variable")
-
-    endif()
-
     set(facesengine_database_LIB_SRCS ${facesengine_database_LIB_SRCS}
-                                      # Neural NetWork Faces recognition module based on Dlib
-                                      recognition/dlib-dnn/dnnfacemodel.cpp
-                                      recognition/dlib-dnn/opencvdnnfacerecognizer.cpp
-                                      recognition/dlib-dnn/facerec_dnnborrowed.cpp
-                                      recognition/dlib-dnn/dnnfaceextractor.cpp
+                                      # Neural NetWork Faces recognition module based on OpenCV DNN
+                                      recognition/dnn/dnnfacemodel.cpp
+                                      recognition/dnn/opencvdnnfacerecognizer.cpp
+                                      recognition/dnn/facerec_dnnborrowed.cpp
+                                      recognition/dnn/dnnfaceextractor.cpp
     )
 endif()
 

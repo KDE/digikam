@@ -53,7 +53,12 @@ public:
 private:
 
 	Preprocessor*	preprocessor;
+
 	cv::dnn::Net 	net;
+
+    cv::Size        imageSize;
+    float           scaleFactor;
+    cv::Scalar      meanValToSubtract;
 
 };
 

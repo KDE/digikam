@@ -57,7 +57,6 @@ class FaceDb
 {
 public:
 
-    FaceDb();
     explicit FaceDb(FaceDbBackend* const db);
     ~FaceDb();
 
@@ -91,7 +90,6 @@ public:
 #ifdef HAVE_FACESENGINE_DNN
     /// DNN
     void updateDNNFaceModel(DNNFaceModel& model);
-    void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     DNNFaceModel dnnFaceModel() const;
 #endif
 
