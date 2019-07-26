@@ -159,5 +159,6 @@ BUGFIXES:
 144 ==> 364614 - Images/albums not deleted in database when deleting/moving in digiKam
 145 ==> 367844 - In Face Detection Options, if you select one album, in fact it scan all albums.
 156 ==> 368036 - Lazy Sync doesn't write Tags to file.
-157 ==> 
+157 ==> 368125 - No hint when adding face within album view.
+158 ==> 
 
