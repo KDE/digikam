@@ -44,22 +44,23 @@ using namespace Digikam;
 
 // --------------------------------------- Static global variables -----------------------------------
 
-// Template for face landmark to perform alignment with open face
+/** Template for face landmark to perform alignment with open face
+  * This variable must be declared as static so that it is allocated as long as
+  * dk is still running. We need that because this variable is the internal data 
+  * for matrix faceTemplate below.
+  */ 
 static float FACE_TEMPLATE[3][2] =  { 
                                         {18.639072, 16.249624}, 
                                         {75.73048, 15.18443}, 
                                         {47.515285, 49.38637} 
                                     };
 
-// Outer eyes and nose positions in face landmarks
-static std::array<int, 3> OUTER_EYES_AND_NOSE{36,45,33};
-
 // ---------------------------------------------------------------------------------------------------
 
 OpenfacePreprocessor::OpenfacePreprocessor()
   : outImageSize(cv::Size(96, 96)),
     faceTemplate(cv::Mat(3, 2, CV_32F, &FACE_TEMPLATE)),
-    outerEyesNosePositions(OUTER_EYES_AND_NOSE)
+    outerEyesNosePositions({36,45,33})
 {
 }
 
