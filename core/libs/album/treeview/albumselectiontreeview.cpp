@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QMessageBox>
 #include <QAction>
 #include <QEvent>
 #include <QIcon>
@@ -227,13 +228,27 @@ void AlbumSelectionTreeView::slotScanForFaces()
         return;
     }
 
+    AlbumList albums;
+    albums << album;
+
+    if (album->childCount())
+    {
+        if (QMessageBox::question(this, i18n("Scan for Faces"),
+                                  i18n("Should be scanned in the "
+                                       "sub-albums also for faces?"))
+            == QMessageBox::Yes)
+        {
+            albums << album->childAlbums(true);
+        }
+    }
+
     FaceScanSettings settings;
 
     settings.accuracy               = ApplicationSettings::instance()->getFaceDetectionAccuracy();
     settings.recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::LBP;
     settings.task                   = FaceScanSettings::DetectAndRecognize;
     settings.alreadyScannedHandling = FaceScanSettings::Rescan;
-    settings.albums                 = QList<Album*>() << album;
+    settings.albums                 = albums;
 
     FacesDetector* const tool = new FacesDetector(settings);
     tool->start();
