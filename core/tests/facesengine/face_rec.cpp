@@ -89,7 +89,7 @@ void prepareForTrain(QString orlDir,
         {
             QString path = orlDir + QString::fromLatin1("s%1/%2.pgm").arg(i).arg(j);
 
-            if (j <= qRound(nbOfSamples * ratio))
+            if (j <= static_cast<unsigned int>(qRound(nbOfSamples * ratio)))
             {
                 trainingset[i] << path;
                 qDebug() << path;
@@ -240,7 +240,7 @@ int main(int argc, char* argv[])
         }
     }
     
-    db.clearTraining(existedIDs, trainingContext);
+    db.clearTraining(existedIDs, trainingContext); // Force reload OpenCVDNNFaceRecognizer instance
 
     // Create training set, test set
     
@@ -330,6 +330,8 @@ int main(int argc, char* argv[])
     QStringList undetectedTrainedFaces;
     QStringList undetectedTestedFaces;
 
+    QStringList falsePositiveFaces;
+
     for (QMap<unsigned, QStringList>::const_iterator it = trainingset.constBegin() ;
          it != trainingset.constEnd() ; ++it)
     {
@@ -396,7 +398,9 @@ int main(int argc, char* argv[])
             else
             {
                 undetectedTestedFaces << imagePath;
-            }            
+            }
+
+            imagePaths << imagePath;
         }
 
         QList<QImage> faces = retrieveFaces(detectedFaces, bboxes);
@@ -406,6 +410,8 @@ int main(int argc, char* argv[])
 
         foreach (const Identity& foundId, results)
         {
+            QString imagePath = imagePaths.takeFirst();
+
             if (foundId.isNull())
             {
                 notRecognized++;
@@ -417,6 +423,9 @@ int main(int argc, char* argv[])
             else
             {
                 falsePositive++;
+                falsePositiveFaces << QString::fromLatin1("Image at %1 with identity %2")
+                                        .arg(imagePath)
+                                        .arg(foundId.id());
             }
         }
 
@@ -459,6 +468,12 @@ int main(int argc, char* argv[])
     else
     {
         qDebug() << "No face recognized";
+    }
+
+    qDebug() << "\nFalse positive faces";
+    foreach(const QString& path, falsePositiveFaces)
+    {
+        qDebug() << path;
     }
 
     return 0;
