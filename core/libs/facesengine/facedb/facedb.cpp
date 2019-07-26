@@ -465,6 +465,9 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
 #ifdef HAVE_FACESENGINE_DNN
                 this->getFaceVector(mat_rgb, vecdata);
 #endif
+                qCDebug(DIGIKAM_FACEDB_LOG) << "vecdata: " << vecdata[vecdata.size()-2]
+                                                           << vecdata[vecdata.size()-1];
+
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* const fp = (float*)vec_byte.data();
 
