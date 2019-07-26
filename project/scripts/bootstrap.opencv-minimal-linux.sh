@@ -38,6 +38,7 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_opencv_calib3d=ON \
                       -DBUILD_opencv_features2d=ON \
                       -DBUILD_opencv_flann=ON \
+                      -DBUILD_opencv_dnn=ON \
                       -DBUILD_opencv_photo=OFF \
                       -DBUILD_opencv_java=OFF \
                       -DBUILD_opencv_java_bindings_generator=OFF \
@@ -54,7 +55,6 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_opencv_videoio=OFF \
                       -DBUILD_opencv_video=OFF \
                       -DBUILD_opencv_apps=OFF \
-                      -DBUILD_opencv_dnn=OFF \
                       -DBUILD_opencv_gapi=OFF \
                       -DWITH_1394=OFF \
                       -DWITH_VTK=OFF \
