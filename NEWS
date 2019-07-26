@@ -157,4 +157,6 @@ BUGFIXES:
 142 ==> 299827 - Add location bookmark interface is unintuitive.
 143 ==> 362268 - digiKam database gets corrupted when metadata are written to sidecar files.
 144 ==> 364614 - Images/albums not deleted in database when deleting/moving in digiKam
-145 ==> 
+145 ==> 367844 - In Face Detection Options, if you select one album, in fact it scan all albums.
+156 ==> 
+
