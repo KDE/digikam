@@ -22,7 +22,8 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
-#include "opencvfacedetector.h"
+// #include "opencvfacedetector.h"
+#include "opencvdnnfacedetector.h"
 
 // Qt includes
 
@@ -51,6 +52,7 @@ public:
         delete m_backend;
     }
 
+/*
     OpenCVFaceDetector* backend()
     {
         if (!m_backend)
@@ -72,10 +74,26 @@ public:
     {
         return m_backend;
     }
+*/
+
+    OpenCVDNNFaceDetector* backend()
+    {
+        if (!m_backend)
+        {
+            m_backend = new OpenCVDNNFaceDetector;
+        }
+
+        return m_backend;
+    }
+
+    const OpenCVDNNFaceDetector* constBackend() const
+    {
+        return m_backend;
+    }
 
     void applyParameters()
     {
-        if (!m_backend)
+/*        if (!m_backend)
         {
             return;
         }
@@ -97,7 +115,7 @@ public:
             {
                 backend()->setSpecificity(1.0 - it.value().toDouble());
             }
-        }
+        }*/
     }
 
 public:
@@ -106,7 +124,8 @@ public:
 
 private:
 
-    OpenCVFaceDetector* m_backend;
+    // OpenCVFaceDetector* m_backend;
+    OpenCVDNNFaceDetector* m_backend;
 };
 
 // ---------------------------------------------------------------------------------
@@ -238,7 +257,8 @@ QVariantMap FaceDetector::parameters() const
 int FaceDetector::recommendedImageSize(const QSize& availableSize) const
 {
     Q_UNUSED(availableSize);
-    return OpenCVFaceDetector::recommendedImageSizeForDetection();
+    // return OpenCVFaceDetector::recommendedImageSizeForDetection();
+    return OpenCVDNNFaceDetector::recommendedImageSizeForDetection();
 }
 
 // -- Static methods -------------------------------------------------------------

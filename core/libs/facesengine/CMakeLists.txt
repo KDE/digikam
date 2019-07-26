@@ -45,6 +45,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 # endif()
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
+                         detection/opencvdnnfacedetector.cpp
                          preprocessing/shape-predictor/fullobjectdetection.cpp
                          preprocessing/shape-predictor/qdatastreamoverloads.cpp
                          facedetector.cpp
