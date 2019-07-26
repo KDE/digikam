@@ -164,4 +164,6 @@ BUGFIXES:
 159 ==> 369833 - digiKam 5: Some keys do not work as in digiKam 4 when tagging images.
 160 ==> 372701 - Cannot drag images on map (OSM or Google).
 161 ==> 410221 - "Scan for Faces" ("Nach Gesichtern suchen") for an album with nested sub-albums doesn't scan sub-albums.
-162 ==> 
+162 ==> 374087 - Create Calendar creates corrupt looking image when using High setting when sending to other than printer.
+163 ==> 
+
