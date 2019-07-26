@@ -56,6 +56,7 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DBUILD_opencv_video=OFF \
                       -DBUILD_opencv_apps=OFF \
                       -DBUILD_opencv_gapi=OFF \
+                      -DWITH_PROTOBUF=ON \
                       -DWITH_1394=OFF \
                       -DWITH_VTK=OFF \
                       -DWITH_DIRECTX=OFF \
@@ -86,7 +87,6 @@ export OpenCVOptions='-DBUILD_EXAMPLES=OFF \
                       -DWITH_XINE=OFF \
                       -DWITH_VA_INTEL=OFF \
                       -DWITH_GPHOTO2=OFF \
-                      -DWITH_PROTOBUF=OFF \
                       -DWITH_WEBP=OFF \
                       -DWITH_IMGCODEC_HDR=OFF \
                       -DWITH_IMGCODEC_SUNRASTER=OFF \
