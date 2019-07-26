@@ -162,5 +162,7 @@ BUGFIXES:
 157 ==> 368125 - No hint when adding face within album view.
 158 ==> 369668 - EXIF orientation tag is not the same after a RAW export in JPEG.
 159 ==> 369833 - digiKam 5: Some keys do not work as in digiKam 4 when tagging images.
-160 ==> 
+160 ==> 372701 - Cannot drag images on map (OSM or Google).
+161 ==> 
+
 
