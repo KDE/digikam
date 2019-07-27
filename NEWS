@@ -215,5 +215,6 @@ BUGFIXES:
 210 ==> 108747 - Picture-viewer crash on special JPEG-pictures without exif.
 211 ==> 139273 - Problem downloading raw images.
 212 ==> 205718 - digiKam jpeg convert crash.
-213 ==> 
+213 ==> 220133 - Trying to edit JPEG picture (by the context menu or F4 key...).
 214 ==> 
+215 ==> 
