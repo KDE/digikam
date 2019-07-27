@@ -223,7 +223,7 @@ BUGFIXES:
 218 ==> 354035 - Picture rotation of PNG is not written to file.
 219 ==> 212072 - TIFFs generated with digiKam are broken/corrupted.
 220 ==> 217593 - Uncompressed tiffs are saved brokenly.
-221 ==> 
+221 ==> 301122 - Crash when writing geolocation information.
 222 ==> 
 223 ==> 
 224 ==> 
