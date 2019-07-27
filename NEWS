@@ -214,6 +214,6 @@ BUGFIXES:
 209 ==> 315544 - Crash by opening files.
 210 ==> 108747 - Picture-viewer crash on special JPEG-pictures without exif.
 211 ==> 139273 - Problem downloading raw images.
-212 ==> 
+212 ==> 205718 - digiKam jpeg convert crash.
 213 ==> 
 214 ==> 
