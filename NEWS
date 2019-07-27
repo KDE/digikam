@@ -194,7 +194,8 @@ BUGFIXES:
 189 ==> 280970 - Cannot share an image by email if not stored localy.
 190 ==> 130899 - ImageShack integration or support.
 191 ==> 256715 - Add export to imgur.com.
-192 ==> 
+192 ==> 290934 - Export to imgur.
+193 ==> 
 
 
 
