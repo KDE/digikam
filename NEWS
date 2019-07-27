@@ -219,5 +219,5 @@ BUGFIXES:
 214 ==> 256481 - Crash when resizing jpegs.
 215 ==> 144268 - Showfoto unable to open some png file.
 216 ==> 229412 - digiKam crashes on save or save as png.
-217 ==> 
+217 ==> 256330 - Crash by importing png's from SD.
 218 ==> 
