@@ -184,6 +184,7 @@ BUGFIXES:
 179 ==> 358424 - Crashes when exporting to Google photo.
 180 ==> 374244 - Importing video to Google photo fails.
 181 ==> 157148 - Cannot upload photos to Google photo.
-182 ==> 
+182 ==> 175260 - Google photo IPTC keywords are not uploaded.
+183 ==> 
 
 
