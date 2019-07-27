@@ -170,5 +170,6 @@ BUGFIXES:
 165 ==> 374753 - No refresh during google photos import.
 166 ==> 376975 - Can't update photo in google photo.
 167 ==> 380196 - Cannot create new album when uploading to Google Photos.
-168 ==> 
+168 ==> 406616 - Flickr upload doesn't find my account and doesn't allow to add an account.
+169 ==> 
 
