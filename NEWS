@@ -185,6 +185,7 @@ BUGFIXES:
 180 ==> 374244 - Importing video to Google photo fails.
 181 ==> 157148 - Cannot upload photos to Google photo.
 182 ==> 175260 - Google photo IPTC keywords are not uploaded.
-183 ==> 
+183 ==> 233727 - Google photo unable to fetch album list.
+184 ==> 
 
 
