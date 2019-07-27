@@ -183,5 +183,7 @@ BUGFIXES:
 178 ==> 317474 - Crash while uploading to Google photo.
 179 ==> 358424 - Crashes when exporting to Google photo.
 180 ==> 374244 - Importing video to Google photo fails.
-181 ==> 
+181 ==> 157148 - Cannot upload photos to Google photo.
+182 ==> 
+
 
