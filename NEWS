@@ -213,7 +213,7 @@ BUGFIXES:
 208 ==> 308648 - .NEF files rendered horribly in image editor.
 209 ==> 315544 - Crash by opening files.
 210 ==> 108747 - Picture-viewer crash on special JPEG-pictures without exif.
-211 ==> 
+211 ==> 139273 - Problem downloading raw images.
 212 ==> 
 213 ==> 
 214 ==> 
