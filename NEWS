@@ -177,6 +177,7 @@ BUGFIXES:
 172 ==> 238766 - Google photo export don't run.
 173 ==> 241671 - Export to Google photo no longer working.
 174 ==> 244980 - Cannot upload to Google photo.
-175 ==> 
+175 ==> 272437 - Google photo, unable to send photo.
+176 ==> 
 
 
