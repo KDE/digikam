@@ -200,4 +200,5 @@ BUGFIXES:
 195 ==> 265202 - Export images to Wikimedia Commons.
 196 ==> 244188 - digiKam crashing on launch.
 197 ==> 243011 - Crash at first startup / collection scanning.
-198 ==> 
+198 ==> 116161 - digiKam should support Nikon NEF and other raw format.
+199 ==> 
