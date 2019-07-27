@@ -165,5 +165,6 @@ BUGFIXES:
 160 ==> 372701 - Cannot drag images on map (OSM or Google).
 161 ==> 410221 - "Scan for Faces" ("Nach Gesichtern suchen") for an album with nested sub-albums doesn't scan sub-albums.
 162 ==> 374087 - Create Calendar creates corrupt looking image when using High setting when sending to other than printer.
-163 ==> 
+163 ==> 407691 - Hangs on Startup, with Album on Network share (on MacOS).
+164 ==> 
 
