@@ -168,5 +168,5 @@ BUGFIXES:
 163 ==> 407691 - Hangs on Startup, with Album on Network share (on MacOS).
 164 ==> 373983 - Crash on export to SmugMug.
 165 ==> 374753 - No refresh during google photos import.
-166 ==> 
-
+166 ==> 376975 - Can't update photo in google photo.
+167 ==> 
