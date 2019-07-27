@@ -169,4 +169,6 @@ BUGFIXES:
 164 ==> 373983 - Crash on export to SmugMug.
 165 ==> 374753 - No refresh during google photos import.
 166 ==> 376975 - Can't update photo in google photo.
-167 ==> 
+167 ==> 380196 - Cannot create new album when uploading to Google Photos.
+168 ==> 
+
