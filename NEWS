@@ -205,5 +205,6 @@ BUGFIXES:
 200 ==> 242387 - digiKam not detecting Exiv2.
 201 ==> 255538 - digiKam crash on startup.
 202 ==> 256571 - digiKam crashes on startup (scanning albums).
-203 ==> 
+203 ==> 257116 - digiKam crashed while importing raw file.
+204 ==> 
 
