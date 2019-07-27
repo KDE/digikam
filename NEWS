@@ -204,5 +204,6 @@ BUGFIXES:
 199 ==> 148561 - Missing options in RAW conversion; terrible conversion of dark photos.
 200 ==> 242387 - digiKam not detecting Exiv2.
 201 ==> 255538 - digiKam crash on startup.
-202 ==> 
+202 ==> 256571 - digiKam crashes on startup (scanning albums).
+203 ==> 
 
