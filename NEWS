@@ -203,5 +203,6 @@ BUGFIXES:
 198 ==> 116161 - digiKam should support Nikon NEF and other raw format.
 199 ==> 148561 - Missing options in RAW conversion; terrible conversion of dark photos.
 200 ==> 242387 - digiKam not detecting Exiv2.
-201 ==> 
+201 ==> 255538 - digiKam crash on startup.
+202 ==> 
 
