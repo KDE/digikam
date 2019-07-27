@@ -211,4 +211,5 @@ BUGFIXES:
 206 ==> 272187 - Crash when copy/pasting RAW (.NEF) images to subfolder.
 207 ==> 304673 - digiKam fails to edit raw format.
 208 ==> 308648 - .NEF files rendered horribly in image editor.
-209 ==> 
+209 ==> 315544 - Crash by opening files.
+210 ==> 
