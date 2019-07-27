@@ -208,4 +208,6 @@ BUGFIXES:
 203 ==> 257116 - digiKam crashed while importing raw file.
 204 ==> 257905 - digiKam crashes on start up.
 205 ==> 271922 - digiKam crashes on startup.
-206 ==> 
+206 ==> 272187 - Crash when copy/pasting RAW (.NEF) images to subfolder.
+207 ==> 
+
