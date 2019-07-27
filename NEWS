@@ -222,9 +222,9 @@ BUGFIXES:
 217 ==> 256330 - Crash by importing png's from SD.
 218 ==> 354035 - Picture rotation of PNG is not written to file.
 219 ==> 212072 - TIFFs generated with digiKam are broken/corrupted.
-220 ==> 
+220 ==> 217593 - Uncompressed tiffs are saved brokenly.
 221 ==> 
 222 ==> 
 223 ==> 
-
+224 ==> 
 
