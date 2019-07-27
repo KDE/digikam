@@ -176,5 +176,7 @@ BUGFIXES:
 171 ==> 235026 - Can't get albums list when uploading to Google photo. Error: "Call Failed: Failed to fetch photo-set list".
 172 ==> 238766 - Google photo export don't run.
 173 ==> 241671 - Export to Google photo no longer working.
-174 ==> 
+174 ==> 244980 - Cannot upload to Google photo.
+175 ==> 
+
 
