@@ -207,5 +207,5 @@ BUGFIXES:
 202 ==> 256571 - digiKam crashes on startup (scanning albums).
 203 ==> 257116 - digiKam crashed while importing raw file.
 204 ==> 257905 - digiKam crashes on start up.
-205 ==> 
-
+205 ==> 271922 - digiKam crashes on startup.
+206 ==> 
