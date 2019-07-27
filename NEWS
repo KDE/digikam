@@ -181,6 +181,7 @@ BUGFIXES:
 176 ==> 292226 - Export to Google photo tool don't save my gmail account password.
 177 ==> 308349 - Crash when uploading to Google photo.
 178 ==> 317474 - Crash while uploading to Google photo.
-179 ==> 
+179 ==> 358424 - Crashes when exporting to Google photo.
+180 ==> 
 
 
