@@ -220,4 +220,6 @@ BUGFIXES:
 215 ==> 144268 - Showfoto unable to open some png file.
 216 ==> 229412 - digiKam crashes on save or save as png.
 217 ==> 256330 - Crash by importing png's from SD.
-218 ==> 
+218 ==> 354035 - Picture rotation of PNG is not written to file.
+219 ==> 
+
