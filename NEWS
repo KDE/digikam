@@ -216,5 +216,5 @@ BUGFIXES:
 211 ==> 139273 - Problem downloading raw images.
 212 ==> 205718 - digiKam jpeg convert crash.
 213 ==> 220133 - Trying to edit JPEG picture (by the context menu or F4 key...).
-214 ==> 
+214 ==> 256481 - Crash when resizing jpegs.
 215 ==> 
