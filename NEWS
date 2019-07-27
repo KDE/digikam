@@ -224,7 +224,7 @@ BUGFIXES:
 219 ==> 212072 - TIFFs generated with digiKam are broken/corrupted.
 220 ==> 217593 - Uncompressed tiffs are saved brokenly.
 221 ==> 301122 - Crash when writing geolocation information.
-222 ==> 
+222 ==> 307275 - digiKam crash after long "throttling-phase".
 223 ==> 
 224 ==> 
 
