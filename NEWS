@@ -188,7 +188,9 @@ BUGFIXES:
 183 ==> 233727 - Google photo unable to fetch album list.
 184 ==> 234095 - Google photo movie geotag disappears.
 185 ==> 316592 - Switch to Google photo.
-186 ==> 
+186 ==> 134039 - Support for Google photo upload.
+187 ==> 
+
 
 
 
