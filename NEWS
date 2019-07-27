@@ -180,6 +180,7 @@ BUGFIXES:
 175 ==> 272437 - Google photo, unable to send photo.
 176 ==> 292226 - Export to Google photo tool don't save my gmail account password.
 177 ==> 308349 - Crash when uploading to Google photo.
-178 ==> 
+178 ==> 317474 - Crash while uploading to Google photo.
+179 ==> 
 
 
