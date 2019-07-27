@@ -199,4 +199,5 @@ BUGFIXES:
 194 ==> 142017 - Export images to wikipedia commons interface.
 195 ==> 265202 - Export images to Wikimedia Commons.
 196 ==> 244188 - digiKam crashing on launch.
-197 ==> 
+197 ==> 243011 - Crash at first startup / collection scanning.
+198 ==> 
