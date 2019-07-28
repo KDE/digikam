@@ -226,5 +226,22 @@ BUGFIXES:
 221 ==> 301122 - Crash when writing geolocation information.
 222 ==> 307275 - digiKam crash after long "throttling-phase".
 223 ==> 347271 - The ImageEditor can not show my tiff images, the preview of the tiffs is ok.
-224 ==> 
-
+224 ==> 306492 - Since update on digiKam several "sudden crashes".
+225 ==> 307013 - digiKam crashes after long time doing nothing.
+226 ==> 312063 - digiKam crashes when creatuing preview of whole pics collection.
+227 ==> 132649 - Random crash when opening image in editor.
+228 ==> 214038 - If a a second "action" that writes metadata to files is started, the currently running "action" is aborted.
+229 ==> 215040 - digiKam crashed while browsing collection.
+230 ==> 215458 - Also on OpenSuse, the error occurs. Can you please give me a hint what to do?
+231 ==> 274651 - Image View in digiKam causes application crash.
+232 ==> 285319 - digiKam crashes when opening another picture for editing.
+233 ==> 295020 - digiKam crashed while I was doing absolutely nothing.
+234 ==> 307119 - Crash some minutes after booting and browsing a few pics.
+235 ==> 308572 - digiKam crashes when doing "services".
+236 ==> 317990 - Crash after deleting an image in image editor.
+237 ==> 319415 - digiKam crash.
+238 ==> 328784 - After adding a pics path, digiKam keeps on crashing at startup.
+239 ==> 338586 - digiKam crashes regularily.
+240 ==> 340559 - digiKam crashed at start.
+241 ==> 403217 - Show progress bar when moving photos to another album.
+242 ==> 
