@@ -254,4 +254,6 @@ BUGFIXES:
 249 ==> 299552 - Export failed.
 250 ==> 330181 - Google photo export needs new password every time with 2-step verification.
 251 ==> 339354 - Google drive must renew each time the connection.
-252 ==> 
+252 ==> 410289 - View changes when working on duplicates.
+253 ==> 
+
