@@ -393,6 +393,8 @@ MapWidget::~MapWidget()
     }
 
     qDeleteAll(d->loadedBackends);
+    d->currentBackend = nullptr;
+    d->loadedBackends.clear();
     delete d;
 
     /// @todo delete s, but make sure it is not accessed by any other objects any more!
