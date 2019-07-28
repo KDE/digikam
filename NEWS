@@ -250,4 +250,8 @@ BUGFIXES:
 245 ==> 319070 - digiKam crashed when is was creating a new database.
 246 ==> 410282 - Crash when clearing unused tags in the Tag Manager tool.
 247 ==> 410283 - Missing warning when deleting images from media.
-248 ==> 
+248 ==> 298020 - Allow to store passwords used by remote web services.
+249 ==> 299552 - Export failed.
+250 ==> 330181 - Google photo export needs new password every time with 2-step verification.
+251 ==> 339354 - Google drive must renew each time the connection.
+252 ==> 
