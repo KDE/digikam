@@ -855,6 +855,7 @@ void DXmlGuiWindow::setupIconTheme()
 
     if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons))
     {
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons resource file found";
         QResource::registerResource(breezeIcons);
         hasBreeze = true;
     }
@@ -865,6 +866,7 @@ void DXmlGuiWindow::setupIconTheme()
 
     if (!breezeDarkIcons.isEmpty() && QFile::exists(breezeDarkIcons))
     {
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons resource file found";
         QResource::registerResource(breezeDarkIcons);
         hasBreezeDark = true;
     }
@@ -886,12 +888,10 @@ void DXmlGuiWindow::setupIconTheme()
         if (hasBreeze)
         {
             QIcon::setThemeName(QLatin1String("breeze"));
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons resource file found";
         }
         else if (hasBreezeDark)
         {
             QIcon::setThemeName(QLatin1String("breeze-dark"));
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons resource file found";
         }
     }
     else
