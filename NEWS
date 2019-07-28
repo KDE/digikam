@@ -256,5 +256,13 @@ BUGFIXES:
 251 ==> 339354 - Google drive must renew each time the connection.
 252 ==> 410289 - View changes when working on duplicates.
 253 ==> 410303 - Blending pre-processing never completes.
-254 ==> 
+254 ==> 364494 - Exposure Blending Tool Autoalign Crash.
+255 ==> 361102 - digiKam crashes when using enfuse.
+256 ==> 302123 - "Blend bracketed images" menu entry doesn't appear.
+257 ==> 327257 - Stitching with enfuse is broken.
+258 ==> 357838 - digiKam crashed when performing HDR reconstruction.
+259 ==> 361312 - digiKam crashes when using enfuse.
+260 ==> 361802 - digiKam crash when tyring to fuse 3 pics.
+261 ==> 
+
 
