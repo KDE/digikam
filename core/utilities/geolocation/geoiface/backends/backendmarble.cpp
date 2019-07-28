@@ -182,7 +182,6 @@ BackendMarble::~BackendMarble()
     {
         d->marbleWidget->removeLayer(d->bmLayer);
 
-        delete d->bmLayer;
         delete d->marbleWidget;
     }
 

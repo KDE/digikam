@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to build extra libraries using CentOS 6.
+# Script to build extra libraries using Linux host.
 # This script must be run as sudo
 #
 # Copyright (c) 2015-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@ exec > >(tee ./logs/build-extralibs.full.log) 2>&1
 
 #################################################################################################
 
-echo "02-build-extralibs.sh : build extra libraries under CentoOS 6."
-echo "--------------------------------------------------------------"
+echo "02-build-extralibs.sh : build extra libraries."
+echo "----------------------------------------------"
 
 #################################################################################################
 # Pre-processing checks

@@ -101,8 +101,8 @@ public:
     bool                 useItemInfos;
 
     AlbumPointerList<>   albumTodoList;
-    ItemInfoList        infoTodoList;
-    ItemInfoJob         albumListing;
+    ItemInfoList         infoTodoList;
+    ItemInfoJob          albumListing;
     FacePipeline         pipeline;
 };
 
@@ -232,7 +232,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     }
     else
     {
-        d->infoTodoList  = settings.infos;
+        d->infoTodoList = settings.infos;
         d->useItemInfos = true;
     }
 }
@@ -266,7 +266,7 @@ void FacesDetector::slotStart()
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
-    foreach(Album* const album, d->albumTodoList)
+    foreach (Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
@@ -299,7 +299,7 @@ void FacesDetector::slotStart()
 
     QMap<Album*, int> progressValueMap;
 
-    foreach(Album* const album, d->albumTodoList)
+    foreach (Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
@@ -317,7 +317,7 @@ void FacesDetector::slotStart()
 
     int total = 0;
 
-    foreach(int count, progressValueMap)
+    foreach (int count, progressValueMap)
     {
         total += count;
     }
