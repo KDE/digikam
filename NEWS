@@ -263,6 +263,13 @@ BUGFIXES:
 258 ==> 357838 - digiKam crashed when performing HDR reconstruction.
 259 ==> 361312 - digiKam crashes when using enfuse.
 260 ==> 361802 - digiKam crash when tyring to fuse 3 pics.
-261 ==> 
+261 ==> 118201 - Correcting verticals and horizontals.
+262 ==> 148538 - Tool for contrast masking of images.
+263 ==> 150671 - New way for resizing images - Seam Carving.
+264 ==> 193336 - Fill Light tool request.
+265 ==> 
+
+
+
 
 
