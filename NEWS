@@ -269,10 +269,18 @@ BUGFIXES:
 264 ==> 193336 - Fill Light tool request.
 265 ==> 116224 - Images are recompressed when no recompression box is checked.
 266 ==> 146517 - Export html gallery xml file could not accessed.
-267 ==> 
-268 ==> 
-
-
-
-
-
+267 ==> 249072 - Crash under kubuntu 10.04.
+268 ==> 256544 - Image viewer crash report.
+269 ==> 096318 - digiKam is not Xinerama aware (slideshows are split between screens).
+270 ==> 122282 - Slideshow button should be available in the toolbar.
+271 ==> 134838 - No automatic progress on dia show.
+272 ==> 141706 - Specify screen used by the slideshow.
+273 ==> 164771 - Possibility to slideshow to sort pictures.
+274 ==> 173715 - Button to mark pictures (like star in picasa) in slideshow mode.
+275 ==> 229190 - Improve slideshow functionality in digiKam.
+276 ==> 253645 - Add an option to rate an image in slideshow.
+277 ==> 256880 - digiKam crashed while deleting files.
+278 ==> 275605 - Wish: SlideShow to second monitor.
+279 ==> 284652 - Add option to view the new image 'Title' tag in slide shows.
+280 ==> 340792 - digiKam crashes when running slideshow with more than 5 pictures.
+281 ==> 
