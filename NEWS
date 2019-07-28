@@ -244,4 +244,8 @@ BUGFIXES:
 239 ==> 338586 - digiKam crashes regularily.
 240 ==> 340559 - digiKam crashed at start.
 241 ==> 403217 - Show progress bar when moving photos to another album.
-242 ==> 
+242 ==> 197353 - Colormanagement is somehow broken.
+243 ==> 200153 - digikam color profile error.
+244 ==> 306087 - Assigning profile should mark image as modified.
+245 ==> 319070 - digiKam crashed when is was creating a new database.
+246 ==> 
