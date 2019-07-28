@@ -957,7 +957,7 @@ void TagsManager::slotRemoveNotAssignedTags()
         }
     }
 
-    QList<TAlbum*> toRemove;
+    QList<int> toRemove;
 
     foreach (const QModelIndex& toDelete, redNodes)
     {
@@ -971,9 +971,9 @@ void TagsManager::slotRemoveNotAssignedTags()
             {
                 QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(t->id());
 
-                if (assignedItems.isEmpty() && !toRemove.contains(t))
+                if (assignedItems.isEmpty() && !toRemove.contains(t->id()))
                 {
-                    toRemove.append(t);
+                    toRemove.append(t->id());
                 }
                 else
                 {
@@ -985,26 +985,28 @@ void TagsManager::slotRemoveNotAssignedTags()
         }
     }
 
-    int deleteCounter = 0;
-
-    foreach (TAlbum* const elem, toRemove)
+    foreach (int id, toRemove)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << elem->title();
+        TAlbum* const talbum = AlbumManager::instance()->findTAlbum(id);
+
+        if (!talbum)
+        {
+            continue;
+        }
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << talbum->title();
         QString errMsg;
 
-        if (!AlbumManager::instance()->deleteTAlbum(elem, errMsg))
+        if (!AlbumManager::instance()->deleteTAlbum(talbum, errMsg))
         {
             QMessageBox::critical(this, qApp->applicationName(), errMsg);
-        }
-        else
-        {
-            ++deleteCounter;
+            return;
         }
     }
 
     QMessageBox::information(this, qApp->applicationName(),
                              i18np("%1 unused tag were removed.",
-                                   "%1 unused tags were removed.", deleteCounter));
+                                   "%1 unused tags were removed.", toRemove.count()));
 }
 
 } // namespace Digikam

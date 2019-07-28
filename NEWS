@@ -248,4 +248,5 @@ BUGFIXES:
 243 ==> 200153 - digikam color profile error.
 244 ==> 306087 - Assigning profile should mark image as modified.
 245 ==> 319070 - digiKam crashed when is was creating a new database.
-246 ==> 
+246 ==> 410282 - Crash when clearing unused tags in the Tag Manager tool.
+247 ==> 
