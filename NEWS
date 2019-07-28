@@ -283,4 +283,15 @@ BUGFIXES:
 278 ==> 275605 - Wish: SlideShow to second monitor.
 279 ==> 284652 - Add option to view the new image 'Title' tag in slide shows.
 280 ==> 340792 - digiKam crashes when running slideshow with more than 5 pictures.
-281 ==> 
+281 ==> 133638 - Image backup with thumbs and metadata database for fast searching.
+282 ==> 147459 - Wish: Export to plugable media.
+283 ==> 162113 - "set as background" export tool.
+284 ==> 325273 - digitaglinktree : CLI tool doesn't work with MySQL.
+285 ==> 338281 - Add Sync to export.
+286 ==> 109316 - WISH: renice batch processes.
+287 ==> 186767 - Batch process of a folder does not process all images in folder.
+288 ==> 281431 - Crash while conducting batch services.
+289 ==> 308246 - digiKam crashed after cancelling a running and starting a new queгу.
+290 ==> 308375 - digiKam crashed batch tagging.
+291 ==> 327815 - Batch operations on a large number of pictures eats up all RAM.
+292 ==> 
