@@ -267,7 +267,10 @@ BUGFIXES:
 262 ==> 148538 - Tool for contrast masking of images.
 263 ==> 150671 - New way for resizing images - Seam Carving.
 264 ==> 193336 - Fill Light tool request.
-265 ==> 
+265 ==> 116224 - Images are recompressed when no recompression box is checked.
+266 ==> 146517 - Export html gallery xml file could not accessed.
+267 ==> 
+268 ==> 
 
 
 
