@@ -474,10 +474,10 @@ void ImageGuideWidget::drawText(QPainter* const p, const QPoint& corner, const Q
     semiTransBg.setAlpha(190);
     p->setBrush(semiTransBg);
     //p->translate(0.5, 0.5);
-    p->drawRoundRect(textRect, 10, 10);
+    p->drawRoundedRect(textRect, 10.0, 10.0);
 
     // Draw shadow and text
-    p->setPen(palette().color(QPalette::Window).dark(115));
+    p->setPen(palette().color(QPalette::Window).darker(115));
     p->drawText(textRect.translated(3, 1), text);
     p->setPen(palette().color(QPalette::WindowText));
     p->drawText(textRect.translated(2, 0), text);
