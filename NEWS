@@ -294,4 +294,13 @@ BUGFIXES:
 289 ==> 308246 - digiKam crashed after cancelling a running and starting a new queгу.
 290 ==> 308375 - digiKam crashed batch tagging.
 291 ==> 327815 - Batch operations on a large number of pictures eats up all RAM.
-292 ==> 
+292 ==> 208293 - "Embedded preview loads full image size" must not do auto-exposure.
+293 ==> 303560 - Extract JPEG Preview from RAW file through preview mode.
+294 ==> 208288 - Delete image from level of image viewer.
+295 ==> 339158 - digiKam crash on startup.
+296 ==> 339880 - digiKam crashes when opening album with CRW, TIF files.
+297 ==> 228585 - digiKam neither read nor write xmp files.
+298 ==> 256705 - Exiv2 crash through MetaEngine (XMP parsing on JPEG file).
+299 ==> 194800 - RAW files can't be rotated.
+300 ==> 196383 - Exif-tag rotate RAW files when pressing new image rotate buttons.
+301 ==> 
