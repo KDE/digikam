@@ -393,6 +393,8 @@ MapWidget::~MapWidget()
     }
 
     qDeleteAll(d->loadedBackends);
+    d->currentBackend = nullptr;
+    d->loadedBackends.clear();
     delete d;
 
     /// @todo delete s, but make sure it is not accessed by any other objects any more!
@@ -403,7 +405,7 @@ QStringList MapWidget::availableBackends() const
     QStringList result;
     MapBackend* backend = nullptr;
 
-    foreach(backend, d->loadedBackends)
+    foreach (backend, d->loadedBackends)
     {
         result.append(backend->backendName());
     }
@@ -457,7 +459,7 @@ bool MapWidget::setBackend(const QString& backendName)
 
     MapBackend* backend = nullptr;
 
-    foreach(backend, d->loadedBackends)
+    foreach (backend, d->loadedBackends)
     {
         if (backend->backendName() == backendName)
         {
@@ -698,7 +700,7 @@ void MapWidget::rebuildConfigurationMenu()
     {
         QAction* const backendAction = backendSelectionActions.at(i);
 
-        if (backendAction->data().toString()==d->currentBackendName)
+        if (backendAction->data().toString() == d->currentBackendName)
         {
             backendAction->setChecked(true);
         }
@@ -947,7 +949,7 @@ void MapWidget::slotUpdateActionsEnabled()
     // make sure the action for the current mouse mode is checked
     const QList<QAction*> mouseModeActions = d->mouseModeActionGroup->actions();
 
-    foreach(QAction* const action, mouseModeActions)
+    foreach (QAction* const action, mouseModeActions)
     {
         if (action->data().value<GeoMouseModes>() == s->currentMouseMode)
         {
@@ -2325,7 +2327,7 @@ void MapWidget::setTrackManager(TrackManager* const trackManager)
 
     // Some backends track the track manager activity even when not active
     // therefore they have to be notified.
-    foreach(MapBackend* const backend, d->loadedBackends)
+    foreach (MapBackend* const backend, d->loadedBackends)
     {
         backend->slotTrackManagerChanged();
     }

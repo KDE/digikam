@@ -214,16 +214,16 @@ int Album::globalID(Type type, int id)
             return id;
 
         case (TAG):
-            return id | (1 << 28);
+            return id | (1 << 27);
 
         case (DATE):
-            return id | (1 << 29);
+            return id | (1 << 28);
 
         case (SEARCH):
-            return id | (1 << 30);
+            return id | (1 << 29);
 
         case (FACE):
-            return id | (1 << 31);
+            return id | (1 << 30);
 
         default:
             qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown album type";

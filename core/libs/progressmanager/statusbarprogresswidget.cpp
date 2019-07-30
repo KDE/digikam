@@ -104,7 +104,12 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
     d->progressView = progressView;
     d->bShowButton  = button;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int w           = fontMetrics().horizontalAdvance(QLatin1String(" 999.9 kB/s 00:00:01 ")) + 8;
+#else
     int w           = fontMetrics().width(QLatin1String(" 999.9 kB/s 00:00:01 ")) + 8;
+#endif
+
     d->box          = new QHBoxLayout(this);
     d->box->setContentsMargins(QMargins());
     d->box->setSpacing(0);

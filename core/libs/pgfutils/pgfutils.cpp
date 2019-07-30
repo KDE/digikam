@@ -203,7 +203,12 @@ bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool 
     {
         // We will use uncompressed image bytes size to allocate PGF stream in memory. In all case, due to PGF compression ratio,
         // PGF data will be so far lesser than image raw size.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        int rawSize          = image.sizeInBytes();
+#else
         int rawSize          = image.byteCount();
+#endif
+
         CPGFMemoryStream stream(rawSize);
 
         if (verbose)

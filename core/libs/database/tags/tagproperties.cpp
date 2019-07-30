@@ -44,12 +44,12 @@ class Q_DECL_HIDDEN TagProperties::TagPropertiesPriv : public QSharedData
 {
 public:
 
-    static TagPropertiesPrivSharedPointer createGuarded(int tagId);
-
-    TagPropertiesPriv()
+    explicit TagPropertiesPriv()
+      : tagId(-1)
     {
-        tagId = -1;
     }
+
+    static TagPropertiesPrivSharedPointer createGuarded(int tagId);
 
     bool isNull() const;
 
@@ -80,6 +80,7 @@ TagPropertiesPrivSharedPointer TagProperties::TagPropertiesPriv::createGuarded(i
         qCDebug(DIGIKAM_DATABASE_LOG) << "Attempt to create tag properties for tag id" << tagId;
         return *tagPropertiesPrivSharedNull;
     }
+
     return TagPropertiesPrivSharedPointer(new TagPropertiesPriv);
 }
 

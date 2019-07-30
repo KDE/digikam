@@ -47,8 +47,8 @@ if(MINGW)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
         # To use official release tarball
-        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
-        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
+        URL https://github.com/Exiv2/exiv2/archive/v0.27.2.tar.gz
+        URL_MD5 15780152b1dfb5a0d2c0cdfe5f5a1588
 
         # To use current implementation from Git with tag 0.27 rc1
 
@@ -76,8 +76,8 @@ elseif(APPLE)
 
         # To use official release tarball
 
-        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
-        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
+        URL https://github.com/Exiv2/exiv2/archive/v0.27.2.tar.gz
+        URL_MD5 15780152b1dfb5a0d2c0cdfe5f5a1588
 
         # To use current implementation from Git
 
@@ -103,8 +103,8 @@ else() # Linux
 
         # To use official release tarball
 
-        URL https://github.com/Exiv2/exiv2/archive/0.27.1.tar.gz
-        URL_MD5 1dabdd50018fd12a85299aeeed38c4e9
+        URL https://github.com/Exiv2/exiv2/archive/v0.27.2.tar.gz
+        URL_MD5 15780152b1dfb5a0d2c0cdfe5f5a1588
 
         # To use current implementation from Git
 

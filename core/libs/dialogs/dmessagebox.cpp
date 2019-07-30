@@ -50,18 +50,20 @@ namespace Digikam
 
 bool DMessageBox::readMsgBoxShouldBeShown(const QString& dontShowAgainName)
 {
-    if (dontShowAgainName.isEmpty()) return true;
+    if (dontShowAgainName.isEmpty())
+        return false;
 
     KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup group      = config->group("Notification Messages");
-    bool value              = group.readEntry(dontShowAgainName, true);
+    bool value              = group.readEntry(dontShowAgainName, false);
 
     return value;
 }
 
 void DMessageBox::saveMsgBoxShouldBeShown(const QString& dontShowAgainName, bool value)
 {
-    if (dontShowAgainName.isEmpty()) return;
+    if (dontShowAgainName.isEmpty())
+        return;
 
     KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup group      = config->group("Notification Messages");
@@ -89,7 +91,7 @@ void DMessageBox::showInformationWidget(QMessageBox::Icon icon,
                                         QWidget* const listWidget,
                                         const QString& dontShowAgainName)
 {
-    if (!readMsgBoxShouldBeShown(dontShowAgainName))
+    if (readMsgBoxShouldBeShown(dontShowAgainName))
     {
         return;
     }
@@ -143,7 +145,7 @@ int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
                                           QWidget* const listWidget,
                                           const QString& dontAskAgainName)
 {
-    if (!readMsgBoxShouldBeShown(dontAskAgainName))
+    if (readMsgBoxShouldBeShown(dontAskAgainName))
     {
         return QMessageBox::Yes;
     }
@@ -207,7 +209,7 @@ int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
                                  QWidget* const listWidget,
                                  const QString& dontAskAgainName)
 {
-    if (!readMsgBoxShouldBeShown(dontAskAgainName))
+    if (readMsgBoxShouldBeShown(dontAskAgainName))
     {
         return QMessageBox::Yes;
     }

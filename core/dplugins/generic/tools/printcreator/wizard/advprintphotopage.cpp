@@ -677,7 +677,12 @@ void AdvPrintPhotoPage::slotBtnPrintOrderDownClicked()
                                  << " to  "
                                  << currentIndex;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+    d->settings->photos.swapItemsAt(currentIndex, currentIndex - 1);
+#else
     d->settings->photos.swap(currentIndex, currentIndex - 1);
+#endif
+
     d->photoUi->mPrintList->blockSignals(false);
     d->wizard->previewPhotos();
 }
@@ -692,7 +697,12 @@ void AdvPrintPhotoPage::slotBtnPrintOrderUpClicked()
                                  << " to  "
                                  << currentIndex + 1;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+    d->settings->photos.swapItemsAt(currentIndex, currentIndex + 1);
+#else
     d->settings->photos.swap(currentIndex, currentIndex + 1);
+#endif
+
     d->photoUi->mPrintList->blockSignals(false);
     d->wizard->previewPhotos();
 }
