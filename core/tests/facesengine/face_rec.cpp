@@ -78,16 +78,26 @@ QList<QImage> toImages(const QStringList& paths)
     return images;
 }
 
-void prepareForTrain(QString orlDir,
+void prepareForTrain(QString testSetPath,
                      QMap<unsigned, QStringList>& testset, QMap<unsigned, QStringList>& trainingset,
                      unsigned nbOfSamples, unsigned nbOfObjects,
                      double ratio)
 {
+    QDir testSet(testSetPath);
+    QStringList subjects = testSet.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
     for (unsigned i = 1 ; i <= nbOfObjects ; ++i)
     {
+        QString subjectPath = QString::fromLatin1("%1/%2").arg(testSetPath)
+                                                          .arg(subjects.takeFirst());
+        QDir subjectDir(subjectPath);
+
+        QStringList files = subjectDir.entryList(QDir::Files);
+
         for (unsigned j = 1 ; j <= nbOfSamples ; ++j)
         {
-            QString path = orlDir + QString::fromLatin1("s%1/%2.pgm").arg(i).arg(j);
+            QString path = QString::fromLatin1("%1/%2").arg(subjectPath)
+                                                       .arg(files.takeFirst());
 
             if (j <= static_cast<unsigned int>(qRound(nbOfSamples * ratio)))
             {
