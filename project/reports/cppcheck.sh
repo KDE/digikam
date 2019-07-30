@@ -62,7 +62,7 @@ cppcheck-htmlreport --file=report.cppcheck.xml \
                     --title=$TITLE
 
 # update www.digikam.org report section.
-updateReportToWebsite "cppcheck" $REPORT_DIR $TITLE $(parseGitBranch)
+#updateReportToWebsite "cppcheck" $REPORT_DIR $TITLE $(parseGitBranch)
 
 cd $ORIG_DIR
 

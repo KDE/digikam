@@ -397,6 +397,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
 uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
 {
     uint** p = nullptr;
+    (void)p;    // To prevent cppcheck warnings.
     int i, j = 0;
     ullong val, inc;
 
@@ -416,6 +417,7 @@ uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
 ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
 {
     ullong** p = nullptr;
+    (void)p;    // To prevent cppcheck warnings.
     int i, j   = 0;
     ullong val, inc;
 
@@ -434,7 +436,8 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
 
 int* DImgScale::dimgCalcXPoints(int sw, int dw)
 {
-    int* p=nullptr, i, j = 0;
+    int* p = nullptr, i, j = 0;
+    (void)p;    // To prevent cppcheck warnings.
     ullong val, inc;
 
     p   = new int[dw+1];
@@ -452,7 +455,8 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
 
 int* DImgScale::dimgCalcApoints(int s, int d, int up)
 {
-    int* p=nullptr, i, j = 0;
+    int* p = nullptr, i, j = 0;
+    (void)p;    // To prevent cppcheck warnings.
 
     p = new int[d];
 
@@ -498,10 +502,10 @@ int* DImgScale::dimgCalcApoints(int s, int d, int up)
 }
 
 DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
-        int sw, int sh,
-        int dw, int dh,
-        bool /*sixteenBit*/,
-        bool aa)
+                                            int sw, int sh,
+                                            int dw, int dh,
+                                            bool /*sixteenBit*/,
+                                            bool aa)
 {
     DImgScaleInfo* isi = new DImgScaleInfo;
     int scw, sch;
@@ -648,8 +652,7 @@ dimgScaleAARGBA : scale by area sampling. Arguments:
 void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                                 int dxx, int dyy,
                                 int dw, int dh,
-                                int dow, int sow
-                               )
+                                int dow, int sow)
 {
     dimgScaleAARGBA(isi, dest, dxx, dyy, dw, dh, dow, sow,
                     0, 0, dw, dh);
@@ -660,8 +663,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
                                 int dw, int dh,
                                 int dow, int sow,
                                 int clip_dx, int clip_dy,
-                                int clip_dw, int clip_dh
-                               )
+                                int clip_dw, int clip_dh)
 {
     Q_UNUSED(dw);
     Q_UNUSED(dh);
@@ -1121,8 +1123,7 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
 void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
                                int dxx, int dyy,
                                int dw, int dh,
-                               int dow, int sow
-                              )
+                               int dow, int sow)
 {
     dimgScaleAARGB(isi, dest, dxx, dyy, dw, dh, dow, sow,
                    0, 0, dw, dh);

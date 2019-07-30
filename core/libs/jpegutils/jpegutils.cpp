@@ -623,6 +623,9 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
     FILE* input_file  = nullptr;
     FILE* output_file = nullptr;
+    // To prevent cppcheck warnings.
+    (void)input_file;
+    (void)output_file;
 
     input_file = fopen(in.constData(), "rb");
 
