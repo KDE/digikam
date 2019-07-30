@@ -110,6 +110,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     ImageIface iface;
     DImg thumbImage       = iface.original()->smoothScale(128, 128, Qt::KeepAspectRatio);
     PreviewListItem* item = nullptr;
+    (void)item; // to prevent cppcheck warnings.
     d->gboxSettings       = new EditorToolSettings(nullptr);
     d->gboxSettings->setTools(EditorToolSettings::Histogram);
     d->gboxSettings->setHistogramType(LRGBC);
