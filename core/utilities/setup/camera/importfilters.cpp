@@ -98,6 +98,10 @@ ImportFilters::ImportFilters(QWidget* const parent)
     QLabel* label                     = nullptr;
     QHBoxLayout* horizontalLayout     = nullptr;
     QSpacerItem* spacer               = nullptr;
+    // To prevent cppcheck warnings.
+    (void)label;
+    (void)horizontalLayout;
+    (void)spacer;
 
     label            = new QLabel(page);
     label->setText(i18n("Name:"));
