@@ -28,6 +28,7 @@
 
 // Qt includes
 
+#include <QFlags>
 #include <QPoint>
 #include <QPointer>
 #include <QSharedData>

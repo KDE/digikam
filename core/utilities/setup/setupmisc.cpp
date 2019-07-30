@@ -264,7 +264,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
         while (it.hasNext())
         {
-            if (QFile::exists(it.next() + QLatin1String("/icon-theme.cache")))
+            if (QFile::exists(it.next() + QLatin1String("/index.theme")))
             {
                 QString iconKey = it.fileInfo().fileName().toLower();
 

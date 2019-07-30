@@ -266,7 +266,11 @@ bool LoadingCache::hasThumbnailPixmap(const QString& cacheKey) const
 
 void LoadingCache::putThumbnail(const QString& cacheKey, const QImage& thumb, const QString& filePath)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    int cost = thumb.sizeInBytes();
+#else
     int cost = thumb.byteCount();
+#endif
 
     if (d->thumbnailImageCache.insert(cacheKey, new QImage(thumb), cost))
     {
@@ -300,8 +304,13 @@ void LoadingCache::removeThumbnails()
 
 void LoadingCache::setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps)
 {
-    d->thumbnailImageCache.setMaxCost(numberOfQImages * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * 4);
-    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8);
+    d->thumbnailImageCache.setMaxCost(numberOfQImages *
+                                      ThumbnailSize::maxThumbsSize() *
+                                      ThumbnailSize::maxThumbsSize() * 4);
+
+    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps *
+                                       ThumbnailSize::maxThumbsSize() *
+                                       ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8);
 }
 
 void LoadingCache::setFileWatch(LoadingCacheFileWatch* const watch)

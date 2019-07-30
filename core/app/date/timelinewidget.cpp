@@ -1026,7 +1026,13 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
 
     d->bottomMargin = (int)(p.fontMetrics().height() * 1.5);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    d->barWidth     = p.fontMetrics().horizontalAdvance(QLatin1String("00"));
+#else
     d->barWidth     = p.fontMetrics().width(QLatin1String("00"));
+#endif
+
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
     d->startPos     = (int)((width() / 2.0) - ((float)(d->barWidth) / 2.0));
     QDateTime     ref;

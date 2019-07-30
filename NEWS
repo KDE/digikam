@@ -1,4 +1,4 @@
-digiKam 6.2.0 - Release date: 2019-07-??
+digiKam 6.2.0 - Release date: 2019-08-04
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -148,4 +148,159 @@ BUGFIXES:
 133 ==> 409952 - "Image" menu is missing.
 134 ==> 410085 - Can't import from Google Photos.
 135 ==> 401970 - digikam break icc profile in png when modifiying metadata.
-136 ==> 
+136 ==> 399305 - When browsing images in preview mode, videos are often not shown (black preview area), only sound is heard.
+137 ==> 406428 - Video preview - no sound.
+138 ==> 395200 - ALSA Sound Broken in 5.9.0.
+139 ==> 164441 - Create a export to slideshow with audio function.
+140 ==> 407680 - Cannot hear sound with video files.
+141 ==> 089648 - Featurerequest: digikam should at least allow import of mpgs in an album so they can be managed with the photos.
+142 ==> 299827 - Add location bookmark interface is unintuitive.
+143 ==> 362268 - digiKam database gets corrupted when metadata are written to sidecar files.
+144 ==> 364614 - Images/albums not deleted in database when deleting/moving in digiKam
+145 ==> 367844 - In Face Detection Options, if you select one album, in fact it scan all albums.
+156 ==> 368036 - Lazy Sync doesn't write Tags to file.
+157 ==> 368125 - No hint when adding face within album view.
+158 ==> 369668 - EXIF orientation tag is not the same after a RAW export in JPEG.
+159 ==> 369833 - digiKam 5: Some keys do not work as in digiKam 4 when tagging images.
+160 ==> 372701 - Cannot drag images on map (OSM or Google).
+161 ==> 410221 - "Scan for Faces" ("Nach Gesichtern suchen") for an album with nested sub-albums doesn't scan sub-albums.
+162 ==> 374087 - Create Calendar creates corrupt looking image when using High setting when sending to other than printer.
+163 ==> 407691 - Hangs on Startup, with Album on Network share (on MacOS).
+164 ==> 373983 - Crash on export to SmugMug.
+165 ==> 374753 - No refresh during google photos import.
+166 ==> 376975 - Can't update photo in google photo.
+167 ==> 380196 - Cannot create new album when uploading to Google Photos.
+168 ==> 406616 - Flickr upload doesn't find my account and doesn't allow to add an account.
+169 ==> 199138 - New album not default one when exporting.
+170 ==> 215691 - Crashed uploading to Google photo.
+171 ==> 235026 - Can't get albums list when uploading to Google photo. Error: "Call Failed: Failed to fetch photo-set list".
+172 ==> 238766 - Google photo export don't run.
+173 ==> 241671 - Export to Google photo no longer working.
+174 ==> 244980 - Cannot upload to Google photo.
+175 ==> 272437 - Google photo, unable to send photo.
+176 ==> 292226 - Export to Google photo tool don't save my gmail account password.
+177 ==> 308349 - Crash when uploading to Google photo.
+178 ==> 317474 - Crash while uploading to Google photo.
+179 ==> 358424 - Crashes when exporting to Google photo.
+180 ==> 374244 - Importing video to Google photo fails.
+181 ==> 157148 - Cannot upload photos to Google photo.
+182 ==> 175260 - Google photo IPTC keywords are not uploaded.
+183 ==> 233727 - Google photo unable to fetch album list.
+184 ==> 234095 - Google photo movie geotag disappears.
+185 ==> 316592 - Switch to Google photo.
+186 ==> 134039 - Support for Google photo upload.
+187 ==> 139984 - Ability to export to Google photo.
+188 ==> 143337 - Function to export to Google photo.
+189 ==> 280970 - Cannot share an image by email if not stored localy.
+190 ==> 130899 - ImageShack integration or support.
+191 ==> 256715 - Add export to imgur.com.
+192 ==> 290934 - Export to imgur.
+193 ==> 402993 - Export image to dropbox.
+194 ==> 142017 - Export images to wikipedia commons interface.
+195 ==> 265202 - Export images to Wikimedia Commons.
+196 ==> 244188 - digiKam crashing on launch.
+197 ==> 243011 - Crash at first startup / collection scanning.
+198 ==> 116161 - digiKam should support Nikon NEF and other raw format.
+199 ==> 148561 - Missing options in RAW conversion; terrible conversion of dark photos.
+200 ==> 242387 - digiKam not detecting Exiv2.
+201 ==> 255538 - digiKam crash on startup.
+202 ==> 256571 - digiKam crashes on startup (scanning albums).
+203 ==> 257116 - digiKam crashed while importing raw file.
+204 ==> 257905 - digiKam crashes on start up.
+205 ==> 271922 - digiKam crashes on startup.
+206 ==> 272187 - Crash when copy/pasting RAW (.NEF) images to subfolder.
+207 ==> 304673 - digiKam fails to edit raw format.
+208 ==> 308648 - .NEF files rendered horribly in image editor.
+209 ==> 315544 - Crash by opening files.
+210 ==> 108747 - Picture-viewer crash on special JPEG-pictures without exif.
+211 ==> 139273 - Problem downloading raw images.
+212 ==> 205718 - digiKam jpeg convert crash.
+213 ==> 220133 - Trying to edit JPEG picture (by the context menu or F4 key...).
+214 ==> 256481 - Crash when resizing jpegs.
+215 ==> 144268 - Showfoto unable to open some png file.
+216 ==> 229412 - digiKam crashes on save or save as png.
+217 ==> 256330 - Crash by importing png's from SD.
+218 ==> 354035 - Picture rotation of PNG is not written to file.
+219 ==> 212072 - TIFFs generated with digiKam are broken/corrupted.
+220 ==> 217593 - Uncompressed tiffs are saved brokenly.
+221 ==> 301122 - Crash when writing geolocation information.
+222 ==> 307275 - digiKam crash after long "throttling-phase".
+223 ==> 347271 - The ImageEditor can not show my tiff images, the preview of the tiffs is ok.
+224 ==> 306492 - Since update on digiKam several "sudden crashes".
+225 ==> 307013 - digiKam crashes after long time doing nothing.
+226 ==> 312063 - digiKam crashes when creatuing preview of whole pics collection.
+227 ==> 132649 - Random crash when opening image in editor.
+228 ==> 214038 - If a a second "action" that writes metadata to files is started, the currently running "action" is aborted.
+229 ==> 215040 - digiKam crashed while browsing collection.
+230 ==> 215458 - Also on OpenSuse, the error occurs. Can you please give me a hint what to do?
+231 ==> 274651 - Image View in digiKam causes application crash.
+232 ==> 285319 - digiKam crashes when opening another picture for editing.
+233 ==> 295020 - digiKam crashed while I was doing absolutely nothing.
+234 ==> 307119 - Crash some minutes after booting and browsing a few pics.
+235 ==> 308572 - digiKam crashes when doing "services".
+236 ==> 317990 - Crash after deleting an image in image editor.
+237 ==> 319415 - digiKam crash.
+238 ==> 328784 - After adding a pics path, digiKam keeps on crashing at startup.
+239 ==> 338586 - digiKam crashes regularily.
+240 ==> 340559 - digiKam crashed at start.
+241 ==> 403217 - Show progress bar when moving photos to another album.
+242 ==> 197353 - Colormanagement is somehow broken.
+243 ==> 200153 - digikam color profile error.
+244 ==> 306087 - Assigning profile should mark image as modified.
+245 ==> 319070 - digiKam crashed when is was creating a new database.
+246 ==> 410282 - Crash when clearing unused tags in the Tag Manager tool.
+247 ==> 410283 - Missing warning when deleting images from media.
+248 ==> 298020 - Allow to store passwords used by remote web services.
+249 ==> 299552 - Export failed.
+250 ==> 330181 - Google photo export needs new password every time with 2-step verification.
+251 ==> 339354 - Google drive must renew each time the connection.
+252 ==> 410289 - View changes when working on duplicates.
+253 ==> 410303 - Blending pre-processing never completes.
+254 ==> 364494 - Exposure Blending Tool Autoalign Crash.
+255 ==> 361102 - digiKam crashes when using enfuse.
+256 ==> 302123 - "Blend bracketed images" menu entry doesn't appear.
+257 ==> 327257 - Stitching with enfuse is broken.
+258 ==> 357838 - digiKam crashed when performing HDR reconstruction.
+259 ==> 361312 - digiKam crashes when using enfuse.
+260 ==> 361802 - digiKam crash when tyring to fuse 3 pics.
+261 ==> 118201 - Correcting verticals and horizontals.
+262 ==> 148538 - Tool for contrast masking of images.
+263 ==> 150671 - New way for resizing images - Seam Carving.
+264 ==> 193336 - Fill Light tool request.
+265 ==> 116224 - Images are recompressed when no recompression box is checked.
+266 ==> 146517 - Export html gallery xml file could not accessed.
+267 ==> 249072 - Crash under kubuntu 10.04.
+268 ==> 256544 - Image viewer crash report.
+269 ==> 096318 - digiKam is not Xinerama aware (slideshows are split between screens).
+270 ==> 122282 - Slideshow button should be available in the toolbar.
+271 ==> 134838 - No automatic progress on dia show.
+272 ==> 141706 - Specify screen used by the slideshow.
+273 ==> 164771 - Possibility to slideshow to sort pictures.
+274 ==> 173715 - Button to mark pictures (like star in picasa) in slideshow mode.
+275 ==> 229190 - Improve slideshow functionality in digiKam.
+276 ==> 253645 - Add an option to rate an image in slideshow.
+277 ==> 256880 - digiKam crashed while deleting files.
+278 ==> 275605 - Wish: SlideShow to second monitor.
+279 ==> 284652 - Add option to view the new image 'Title' tag in slide shows.
+280 ==> 340792 - digiKam crashes when running slideshow with more than 5 pictures.
+281 ==> 133638 - Image backup with thumbs and metadata database for fast searching.
+282 ==> 147459 - Wish: Export to plugable media.
+283 ==> 162113 - "set as background" export tool.
+284 ==> 325273 - digitaglinktree : CLI tool doesn't work with MySQL.
+285 ==> 338281 - Add Sync to export.
+286 ==> 109316 - WISH: renice batch processes.
+287 ==> 186767 - Batch process of a folder does not process all images in folder.
+288 ==> 281431 - Crash while conducting batch services.
+289 ==> 308246 - digiKam crashed after cancelling a running and starting a new queгу.
+290 ==> 308375 - digiKam crashed batch tagging.
+291 ==> 327815 - Batch operations on a large number of pictures eats up all RAM.
+292 ==> 208293 - "Embedded preview loads full image size" must not do auto-exposure.
+293 ==> 303560 - Extract JPEG Preview from RAW file through preview mode.
+294 ==> 208288 - Delete image from level of image viewer.
+295 ==> 339158 - digiKam crash on startup.
+296 ==> 339880 - digiKam crashes when opening album with CRW, TIF files.
+297 ==> 228585 - digiKam neither read nor write xmp files.
+298 ==> 256705 - Exiv2 crash through MetaEngine (XMP parsing on JPEG file).
+299 ==> 194800 - RAW files can't be rotated.
+300 ==> 196383 - Exif-tag rotate RAW files when pressing new image rotate buttons.
+301 ==> 

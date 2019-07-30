@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to build a CentOS 6 installation to compile an AppImage bundle of digiKam.
+# Script to build a Linux Host installation to compile an AppImage bundle of digiKam.
 # This script must be run as sudo
 #
 # Copyright (c) 2015-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@ exec > >(tee ./logs/build-host.full.log) 2>&1
 
 #################################################################################################
 
-echo "01-build-host.sh : build a Linux host installation to compile an AppImage of digiKam."
-echo "--------------------------------------------------------------------------------------"
+echo "01-build-host.sh : build a Linux host installation to compile an AppImage bundle."
+echo "---------------------------------------------------------------------------------"
 
 #################################################################################################
 # Pre-processing checks
@@ -150,7 +150,7 @@ urpme --auto --force ${LIBSUFFIX}qt5core5 || true
 
 echo -e "---------- Prepare Linux host to Compile Extra Dependencies\n"
 
-# Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
+# Workaround for: On Mageia 6, .pc files in /usr/lib/pkgconfig are not recognized
 # However, this is where .pc files get installed when bulding libraries... (FIXME)
 # I found this by comparing the output of librevenge's "make install" command
 # between Ubuntu and CentOS 6

@@ -64,11 +64,17 @@ static int minimumListWidth(const QListWidget* list)
 {
     int w = 0;
 
-    for (int i = 0; i < list->count(); ++i)
+    for (int i = 0 ; i < list->count() ; ++i)
     {
         int itemWidth = list->visualItemRect(list->item(i)).width();
         // ...and add a space on both sides for not too tight look.
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        itemWidth    += list->fontMetrics().horizontalAdvance(QLatin1Char(' ')) * 2;
+#else
         itemWidth    += list->fontMetrics().width(QLatin1Char(' ')) * 2;
+#endif
+
         w = qMax(w, itemWidth);
     }
 
@@ -727,7 +733,7 @@ void DFontProperties::Private::_d_family_chosen_slot(const QString& family)
     qtStyles.clear();
     styleIDs.clear();
 
-    foreach(const QString& style, styles)
+    foreach (const QString& style, styles)
     {
         // Sometimes the font database will report an invalid style,
         // that falls back to another when set.
@@ -927,7 +933,7 @@ void DFontProperties::Private::_d_size_value_slot(double dval)
 
         if (val - selFont.pointSizeF() > 0)
         {
-            for (nrow = row + 1; nrow < nrows; ++nrow)
+            for (nrow = row + 1 ; nrow < nrows ; ++nrow)
             {
                 if (QLocale::system().toDouble(sizeListBox->item(nrow)->text()) >= val)
                 {
@@ -937,7 +943,7 @@ void DFontProperties::Private::_d_size_value_slot(double dval)
         }
         else
         {
-            for (nrow = row - 1; nrow >= 0; --nrow)
+            for (nrow = row - 1 ; nrow >= 0 ; --nrow)
             {
                 if (QLocale::system().toDouble(sizeListBox->item(nrow)->text()) <= val)
                 {
@@ -1039,7 +1045,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
     sizeListBox->clear();
     std::sort(sizes.begin(), sizes.end());
 
-    foreach(qreal size, sizes)
+    foreach (qreal size, sizes)
     {
         sizeListBox->addItem(formatFontSize(size));
     }
@@ -1073,7 +1079,7 @@ qreal DFontProperties::Private::setupSizeListBox(const QString& family, const QS
 
         QList<int> smoothSizes = dbase.smoothSizes(family, style);
 
-        foreach(int size, smoothSizes)
+        foreach (int size, smoothSizes)
         {
             sizes.append(size);
         }
@@ -1225,7 +1231,7 @@ void DFontProperties::getFontList(QStringList& list, uint fontListCriteria)
     {
         QStringList lstFonts;
 
-        for (QStringList::const_iterator it = lstSys.constBegin(); it != lstSys.constEnd(); ++it)
+        for (QStringList::const_iterator it = lstSys.constBegin() ; it != lstSys.constEnd() ; ++it)
         {
             if ((fontListCriteria & FixedWidthFonts) > 0 && !dbase.isFixedPitch(*it))
             {
@@ -1386,7 +1392,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     QStringList             trNames;
     QHash<QString, QString> trMap;
 
-    foreach(const QString& name, names)
+    foreach (const QString& name, names)
     {
         QString trName = translateFontName(name);
 
@@ -1404,7 +1410,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     // Prepend generic fonts, in the predefined order.
 
-    foreach(const QString& genericName, genericNames)
+    foreach (const QString& genericName, genericNames)
     {
         QString trGenericName = translateFontName(genericName);
 

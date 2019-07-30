@@ -45,7 +45,7 @@ class HTMLWidget : public QWebView
 
 public:
 
-    explicit HTMLWidget(QWidget* const parent = 0);
+    explicit HTMLWidget(QWidget* const parent = nullptr);
     ~HTMLWidget();
 
     void loadInitialHTML(const QString& initialHTML);

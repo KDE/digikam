@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Common methods for script to build AppImage bundle.
+#
 # Copyright (c) 2013-2019, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -59,10 +61,10 @@ echo "Elaspsed time for script execution : $(($difftimelps / 3600 )) hours $((($
 HostAdjustments()
 {
 
-# Check if we are inside CentOS 6 or not.
+# Check if we are inside Mageia 6 or not.
 grep -r "Mageia release 6" /etc/mageia-release || exit 1
 
-# That's not always set correctly in CentOS 6.7
+# That's not always set correctly in Mageia 6 ?
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 

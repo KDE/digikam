@@ -415,7 +415,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
             }
 
             // Ensure that the control points are used exactly
-
+/*
             for (i = 0 ; i < num_pts ; ++i)
             {
                 int x, y;
@@ -424,7 +424,7 @@ void ImageCurves::curvesCalculateCurve(int channel)
                 y = d->curves->points[channel][points[i]][1];
                 d->curves->curve[channel][x] = y;
             }
-
+*/
             break;
         }
     }
