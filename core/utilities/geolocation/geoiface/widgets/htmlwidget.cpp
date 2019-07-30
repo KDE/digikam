@@ -45,7 +45,7 @@ class Q_DECL_HIDDEN HTMLWidget::Private
 public:
 
     explicit Private()
-      : parent(0),
+      : parent(nullptr),
         isReady(false),
         selectionStatus(false),
         firstSelectionPoint(),
@@ -68,7 +68,7 @@ public:
 HTMLWidget::HTMLWidget(QWidget* const parent)
     : QWebView(parent),
       d(new Private()),
-      s(0)
+      s(nullptr)
 {
     d->parent = parent;
     setAcceptDrops(false);

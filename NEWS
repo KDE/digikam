@@ -1,4 +1,4 @@
-digiKam 6.2.0 - Release date: 2019-07-??
+digiKam 6.2.0 - Release date: 2019-08-04
 
 *****************************************************************************************************
 NEW FEATURES:
@@ -256,5 +256,51 @@ BUGFIXES:
 251 ==> 339354 - Google drive must renew each time the connection.
 252 ==> 410289 - View changes when working on duplicates.
 253 ==> 410303 - Blending pre-processing never completes.
-254 ==> 
-
+254 ==> 364494 - Exposure Blending Tool Autoalign Crash.
+255 ==> 361102 - digiKam crashes when using enfuse.
+256 ==> 302123 - "Blend bracketed images" menu entry doesn't appear.
+257 ==> 327257 - Stitching with enfuse is broken.
+258 ==> 357838 - digiKam crashed when performing HDR reconstruction.
+259 ==> 361312 - digiKam crashes when using enfuse.
+260 ==> 361802 - digiKam crash when tyring to fuse 3 pics.
+261 ==> 118201 - Correcting verticals and horizontals.
+262 ==> 148538 - Tool for contrast masking of images.
+263 ==> 150671 - New way for resizing images - Seam Carving.
+264 ==> 193336 - Fill Light tool request.
+265 ==> 116224 - Images are recompressed when no recompression box is checked.
+266 ==> 146517 - Export html gallery xml file could not accessed.
+267 ==> 249072 - Crash under kubuntu 10.04.
+268 ==> 256544 - Image viewer crash report.
+269 ==> 096318 - digiKam is not Xinerama aware (slideshows are split between screens).
+270 ==> 122282 - Slideshow button should be available in the toolbar.
+271 ==> 134838 - No automatic progress on dia show.
+272 ==> 141706 - Specify screen used by the slideshow.
+273 ==> 164771 - Possibility to slideshow to sort pictures.
+274 ==> 173715 - Button to mark pictures (like star in picasa) in slideshow mode.
+275 ==> 229190 - Improve slideshow functionality in digiKam.
+276 ==> 253645 - Add an option to rate an image in slideshow.
+277 ==> 256880 - digiKam crashed while deleting files.
+278 ==> 275605 - Wish: SlideShow to second monitor.
+279 ==> 284652 - Add option to view the new image 'Title' tag in slide shows.
+280 ==> 340792 - digiKam crashes when running slideshow with more than 5 pictures.
+281 ==> 133638 - Image backup with thumbs and metadata database for fast searching.
+282 ==> 147459 - Wish: Export to plugable media.
+283 ==> 162113 - "set as background" export tool.
+284 ==> 325273 - digitaglinktree : CLI tool doesn't work with MySQL.
+285 ==> 338281 - Add Sync to export.
+286 ==> 109316 - WISH: renice batch processes.
+287 ==> 186767 - Batch process of a folder does not process all images in folder.
+288 ==> 281431 - Crash while conducting batch services.
+289 ==> 308246 - digiKam crashed after cancelling a running and starting a new queгу.
+290 ==> 308375 - digiKam crashed batch tagging.
+291 ==> 327815 - Batch operations on a large number of pictures eats up all RAM.
+292 ==> 208293 - "Embedded preview loads full image size" must not do auto-exposure.
+293 ==> 303560 - Extract JPEG Preview from RAW file through preview mode.
+294 ==> 208288 - Delete image from level of image viewer.
+295 ==> 339158 - digiKam crash on startup.
+296 ==> 339880 - digiKam crashes when opening album with CRW, TIF files.
+297 ==> 228585 - digiKam neither read nor write xmp files.
+298 ==> 256705 - Exiv2 crash through MetaEngine (XMP parsing on JPEG file).
+299 ==> 194800 - RAW files can't be rotated.
+300 ==> 196383 - Exif-tag rotate RAW files when pressing new image rotate buttons.
+301 ==> 

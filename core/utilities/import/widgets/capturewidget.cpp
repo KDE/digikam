@@ -73,7 +73,7 @@ void CaptureWidget::setPreview(const QImage& preview)
 
 void CaptureWidget::updatePixmap()
 {
-    d->pixmap.fill(palette().background().color());
+    d->pixmap.fill(palette().window().color());
     QPainter p(&(d->pixmap));
 
     if (!d->preview.isNull())
