@@ -76,6 +76,9 @@ void SearchGroup::setup(Type type)
 
     SearchFieldGroup*      group = nullptr;
     SearchFieldGroupLabel* label = nullptr;
+    // To prevent Cppcheck warnings.
+    (void)group;
+    (void)label;
 
     // ----- //
 
