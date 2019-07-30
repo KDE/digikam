@@ -303,4 +303,13 @@ BUGFIXES:
 298 ==> 256705 - Exiv2 crash through MetaEngine (XMP parsing on JPEG file).
 299 ==> 194800 - RAW files can't be rotated.
 300 ==> 196383 - Exif-tag rotate RAW files when pressing new image rotate buttons.
-301 ==> 
+301 ==> 153823 - Simpler red eye reduction dialog wanted.
+302 ==> 251707 - Remove RedEyes tool process wrong image regions, fill image parts with green color.
+303 ==> 387571 - Red Eye Correction crashes ShowFoto.
+304 ==> 396584 - ShowFoto crashes when using Red eye function.
+305 ==> 086995 - Merge 'properties' and 'exif info' views.
+306 ==> 177876 - Broken sliders in several tools.
+307 ==> 178291 - Side Panel in edit mode always needs to scroll or re-size.
+308 ==> 330085 - digiKam window is oversizing screen size.
+309 ==> 400551 - Undo missing.
+310 ==> 
