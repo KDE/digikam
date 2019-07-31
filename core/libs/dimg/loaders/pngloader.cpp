@@ -87,10 +87,15 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 {
     png_uint_32  w32, h32;
     int          width, height;
-    FILE*        f          = nullptr;
     int          bit_depth, color_type, interlace_type;
+    FILE*        f          = nullptr;
     png_structp  png_ptr    = nullptr;
     png_infop    info_ptr   = nullptr;
+
+    // To prevent cppcheck warnings.
+    (void)f;
+    (void)png_ptr;
+    (void)info_ptr;
 
     readMetadata(filePath, DImg::PNG);
 
@@ -425,6 +430,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         cleanupData->setData(data);
 
         uchar** lines = nullptr;
+        (void)lines;    // to prevent cppcheck warnings.
         lines         = (uchar**)malloc(height * sizeof(uchar*));
         cleanupData->setLines(lines);
 
@@ -611,16 +617,23 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE*          f           = nullptr;
     png_structp    png_ptr;
     png_infop      info_ptr;
-    uchar*         ptr         = nullptr;
-    uchar*         data        = nullptr;
     uint           x, y, j;
     png_bytep      row_ptr;
     png_color_8    sig_bit;
+    FILE*          f           = nullptr;
+    uchar*         ptr         = nullptr;
+    uchar*         data        = nullptr;
     int            quality     = 75;
     int            compression = 3;
+
+    // Tp prevent cppcheck warnings.
+    (void)f;
+    (void)ptr;
+    (void)data;
+    (void)quality;
+    (void)compression;
 
     // -------------------------------------------------------------------
     // Open the file
