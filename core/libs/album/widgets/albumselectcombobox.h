@@ -143,7 +143,7 @@ public:
 
 protected:
 
-    virtual void installView(QAbstractItemView* view = nullptr);
+    virtual void installView(QAbstractItemView* view = nullptr) override;
     virtual void sendViewportEventToView(QEvent* e);
 
 protected:

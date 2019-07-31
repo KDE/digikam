@@ -43,7 +43,7 @@ public:
 
 protected:
 
-    virtual QString parseOperation(ParseSettings& settings) = 0;
+    virtual QString parseOperation(ParseSettings& settings) override = 0;
 
 private:
 

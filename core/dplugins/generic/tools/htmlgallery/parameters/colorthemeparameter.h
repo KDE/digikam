@@ -38,8 +38,8 @@ class ColorThemeParameter : public AbstractThemeParameter
 {
 public:
 
-    virtual QWidget* createWidget(QWidget* parent, const QString& value) const;
-    virtual QString  valueFromWidget(QWidget*)                           const;
+    virtual QWidget* createWidget(QWidget* parent, const QString& value) const override;
+    virtual QString  valueFromWidget(QWidget*)                           const override;
 };
 
 } // namespace DigikamGenericHtmlGalleryPlugin

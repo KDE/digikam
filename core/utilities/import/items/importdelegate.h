@@ -64,15 +64,15 @@ public:
 
     int calculatethumbSizeToFit(int ws);
 
-    virtual void setSpacing(int spacing);
-    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
+    virtual void setSpacing(int spacing) override;
+    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option) override;
     virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect* tooltipRect = nullptr) const;
+                                const QModelIndex& index, QRect* tooltipRect = nullptr) const override;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect* activationRect = nullptr) const;
+                                   const QModelIndex& index, QRect* activationRect = nullptr) const override;
 
-    virtual QRect pixmapRect() const;
-    virtual QRect imageInformationRect() const;
+    virtual QRect pixmapRect() const override;
+    virtual QRect imageInformationRect() const override;
 
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
@@ -117,8 +117,8 @@ protected:
 
     virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
 
-    virtual void invalidatePaintingCache();
-    virtual void updateSizeRectsAndPixmaps();
+    virtual void invalidatePaintingCache() override;
+    virtual void updateSizeRectsAndPixmaps() override;
 
 protected Q_SLOTS:
 
@@ -149,14 +149,14 @@ public:
     int maximumSize() const;
     int minimumSize() const;
 
-    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
+    virtual void setDefaultViewOptions(const QStyleOptionViewItem& option) override;
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
-                                   QRect* activationRect) const;
+                                   QRect* activationRect) const override;
 
 protected:
 
-    virtual void updateContentWidth();
-    virtual void updateRects();
+    virtual void updateContentWidth() override;
+    virtual void updateRects() override;
     int thumbnailPixmapSize(bool withHighlight, int size);
 
 private:
@@ -179,7 +179,7 @@ protected:
 
     ImportNormalDelegate(ImportNormalDelegatePrivate& dd, ImportCategorizedView* const parent);
 
-    virtual void updateRects();
+    virtual void updateRects() override;
 
 private:
 

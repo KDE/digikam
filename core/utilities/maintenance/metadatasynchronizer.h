@@ -65,16 +65,16 @@ public:
 
     ~MetadataSynchronizer();
 
-    void setUseMultiCoreCPU(bool b);
+    void setUseMultiCoreCPU(bool b) override;
 
 private Q_SLOTS:
 
-    void slotStart();
+    void slotStart() override;
     void slotParseAlbums();
     void slotAlbumParsed(const ItemInfoList&);
     void slotAdvance();
     void slotOneAlbumIsComplete();
-    void slotCancel();
+    void slotCancel() override;
 
 private:
 

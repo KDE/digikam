@@ -45,7 +45,7 @@ public:
 
 protected:
 
-    virtual void updateRects();
+    virtual void updateRects() override;
 
     DigikamItemDelegate(DigikamItemDelegatePrivate& dd, ItemCategorizedView* parent);
 

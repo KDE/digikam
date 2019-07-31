@@ -77,8 +77,8 @@ Q_SIGNALS:
 
 protected:
 
-    virtual SearchGroup* createSearchGroup();
-    virtual void addGroupToLayout(SearchGroup* group);
+    virtual SearchGroup* createSearchGroup() override;
+    virtual void addGroupToLayout(SearchGroup* group) override;
 
 protected:
 

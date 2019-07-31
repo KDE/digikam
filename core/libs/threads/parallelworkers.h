@@ -136,12 +136,12 @@ public:
     // Internal Implementation
     // I know this is a hack
 
-    int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a)
+    int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a) override
     {
         return WorkerObject::qt_metacall(_c, _id, _a);
     }
 
-    const QMetaObject* mocMetaObject() const
+    const QMetaObject* mocMetaObject() const override
     {
         return A::metaObject();
     }
@@ -166,7 +166,7 @@ public:
         return ParallelWorkers::replacementQtMetacall(_c, _id, _a);
     }
 
-    virtual QObject* asQObject()
+    virtual QObject* asQObject() override
     {
         return this;
     }

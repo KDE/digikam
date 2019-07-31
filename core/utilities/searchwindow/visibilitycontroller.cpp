@@ -51,12 +51,12 @@ public:
     {
     }
 
-    virtual void setVisible(bool visible)
+    virtual void setVisible(bool visible) override
     {
         return m_widget->setVisible(visible);
     }
 
-    virtual bool isVisible()
+    virtual bool isVisible() override
     {
         return m_widget->isVisible();
     }

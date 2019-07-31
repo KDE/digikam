@@ -61,7 +61,7 @@ public:
                                 ProgressItem* const parent = nullptr);
     ~ImageQualitySorter();
 
-    void setUseMultiCoreCPU(bool b);
+    void setUseMultiCoreCPU(bool b) override;
 
 private:
 
@@ -69,8 +69,8 @@ private:
 
 private Q_SLOTS:
 
-    void slotStart();
-    void slotCancel();
+    void slotStart() override;
+    void slotCancel() override;
     void slotAdvance(const QImage&);
 
 private:

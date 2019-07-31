@@ -47,9 +47,9 @@ public:
     explicit SimpleTrainingDataProvider(const Identity& identity, const QList<QImage>& newImages);
     ~SimpleTrainingDataProvider();
 
-    ImageListProvider* newImages(const Identity& id);
+    ImageListProvider* newImages(const Identity& id) override;
 
-    ImageListProvider* images(const Identity&);
+    ImageListProvider* images(const Identity&) override;
 
 public:
 
