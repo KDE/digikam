@@ -67,10 +67,10 @@ public:
 
 public:
 
-    void writeOrientationToFiles(FileActionItemInfoList infos, int orientation);
-    void writeMetadataToFiles(FileActionItemInfoList infos);
-    void writeMetadata(FileActionItemInfoList infos, int flags);
-    void transform(FileActionItemInfoList infos, int orientation);
+    void writeOrientationToFiles(FileActionItemInfoList infos, int orientation) override;
+    void writeMetadataToFiles(FileActionItemInfoList infos) override;
+    void writeMetadata(FileActionItemInfoList infos, int flags) override;
+    void transform(FileActionItemInfoList infos, int orientation) override;
     void adjustFaceRectangles(const ItemInfo& info, bool rotatedPixels,
                                                     int newOrientation,
                                                     int oldOrientation);
