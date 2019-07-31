@@ -384,7 +384,7 @@ bool ItemFilterSettings::matches(const ItemInfo& info, bool* const foundText) co
         {
             matchPL = true;
         }
-        else if (!matchPL)
+        else
         {
             int noPickLabelTagId = TagsCache::instance()->tagForPickLabel(NoPickLabel);
 
@@ -410,7 +410,7 @@ bool ItemFilterSettings::matches(const ItemInfo& info, bool* const foundText) co
         {
             matchCL = true;
         }
-        else if (!matchCL)
+        else
         {
             int noColorLabelTagId = TagsCache::instance()->tagForColorLabel(NoColorLabel);
 
