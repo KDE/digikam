@@ -312,4 +312,5 @@ BUGFIXES:
 307 ==> 178291 - Side Panel in edit mode always needs to scroll or re-size.
 308 ==> 330085 - digiKam window is oversizing screen size.
 309 ==> 400551 - Undo missing.
-310 ==> 
+310 ==> 410240 - Icon Theme missing Breeze Dark Icons.
+
