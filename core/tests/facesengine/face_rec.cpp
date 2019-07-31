@@ -78,36 +78,41 @@ QList<QImage> toImages(const QStringList& paths)
     return images;
 }
 
-void prepareForTrain(QString testSetPath,
-                     QMap<unsigned, QStringList>& testset, QMap<unsigned, QStringList>& trainingset,
-                     unsigned nbOfSamples, unsigned nbOfObjects,
-                     double ratio)
+void prepareForTrain(QString testSetPath, QMap<unsigned, QStringList>& testset, 
+                     QMap<unsigned, QStringList>& trainingset, double ratio,
+                     unsigned int nbOfSamples, unsigned int& nbOfIdentities)
 {
     QDir testSet(testSetPath);
     QStringList subjects = testSet.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    for (unsigned i = 1 ; i <= nbOfObjects ; ++i)
+    if(nbOfIdentities == 0)
     {
-        QString subjectPath = QString::fromLatin1("%1/%2").arg(testSetPath)
-                                                          .arg(subjects.takeFirst());
+        nbOfIdentities = subjects.size();
+    }
+
+    for (unsigned i = 1 ; i <= nbOfIdentities ; ++i)
+    {
+        QString subjectPath = QString::fromLatin1("%1%2").arg(testSetPath)
+                                                         .arg(subjects.takeFirst());
         QDir subjectDir(subjectPath);
 
         QStringList files = subjectDir.entryList(QDir::Files);
+        unsigned int nbOfSamplePerIdentity = (nbOfSamples == 0) ? files.size() : nbOfSamples;
 
-        for (unsigned j = 1 ; j <= nbOfSamples ; ++j)
+        for (unsigned j = 1 ; j <= nbOfSamplePerIdentity ; ++j)
         {
             QString path = QString::fromLatin1("%1/%2").arg(subjectPath)
                                                        .arg(files.takeFirst());
 
-            if (j <= static_cast<unsigned int>(qRound(nbOfSamples * ratio)))
+            if (j <= static_cast<unsigned int>(qRound(nbOfSamplePerIdentity * ratio)))
             {
                 trainingset[i] << path;
-                qDebug() << path;
+                qDebug() << "training " << path;
             }
             else
             {
                 testset[i] << path;
-                qDebug() << path;
+                qDebug() << "test " << path;
             }
         }
     }    
@@ -181,6 +186,7 @@ int main(int argc, char* argv[])
     parser.addOption(QCommandLineOption(QLatin1String("ds"), QLatin1String("Training set (dev set) folder"), QLatin1String("path relative to db folder")));
     parser.addOption(QCommandLineOption(QLatin1String("ni"), QLatin1String("Number of total objects"), QLatin1String("nbIdentities")));
     parser.addOption(QCommandLineOption(QLatin1String("ns"), QLatin1String("Number of samples per object"), QLatin1String("nbSamples")));
+    parser.addOption(QCommandLineOption(QLatin1String("as"), QLatin1String("All set"), QLatin1String("Run on the entire set")));
     parser.addHelpOption();
     parser.process(app);
 
@@ -189,24 +195,41 @@ int main(int argc, char* argv[])
     if(parser.optionNames().empty())
     {
         parser.showHelp();
-        return 0;
+        return 1;
     }
     else if(parser.isSet(QLatin1String("ts")))
     {
         if(!parser.isSet(QLatin1String("ds")))
         {
-            qWarning() << "Dev set missing!!!";
-            return 0;
+            qWarning() << "UNKNOWN Dev set!!!";
+            return 1;
         }
     }
     else if(parser.isSet(QLatin1String("ds")))
     {
-        qWarning() << "Test set missing!!!";
-        return 0;
+        qWarning() << "UNKNOWN Test set!!!";
+        return 1;
     }
 
-    unsigned nbOfSamples = parser.value(QLatin1String("ns")).toUInt();
-    unsigned nbOfIdentities = parser.value(QLatin1String("ni")).toUInt();
+    if(!parser.isSet(QLatin1String("as"))
+       && (!parser.isSet(QLatin1String("ni")) || !parser.isSet(QLatin1String("ns"))))
+    {
+        qWarning() << "UNKNOWN training set / test set separation!!!";
+        return 1;
+    }
+
+    unsigned nbOfSamples, nbOfIdentities;
+    if(!parser.isSet(QLatin1String("as")))
+    {
+        nbOfSamples = parser.value(QLatin1String("ns")).toUInt();
+        nbOfIdentities = parser.value(QLatin1String("ni")).toUInt();
+    }
+    else
+    {
+        nbOfSamples = 0;
+        nbOfIdentities = 0;
+    }
+
     double ratio = 0;
     if(parser.isSet(QLatin1String("rs")))
     {
@@ -223,6 +246,21 @@ int main(int argc, char* argv[])
     RecognitionDatabase db;
     db.activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm::DNN);
     db.setRecognizerThreshold(0);
+
+    // Construct training set, test set
+
+    QMap<unsigned, QStringList> testset, trainingset;
+    if(ratio > 0)
+    {
+        prepareForTrain(facedb, testset, trainingset, ratio, nbOfSamples, nbOfIdentities);
+    }
+    else
+    {
+        QString testsetFolder = parser.value(QLatin1String("ts"));
+        QString trainingsetFoler = parser.value(QLatin1String("ds"));
+
+        // TODO: Overload of prepareForTrain() to create training set and test set here
+    }
 
     // Create new IDs, clear existed IDs
 
@@ -251,24 +289,6 @@ int main(int argc, char* argv[])
     }
     
     db.clearTraining(existedIDs, trainingContext); // Force reload OpenCVDNNFaceRecognizer instance
-
-    // Create training set, test set
-    
-    QMap<unsigned, QStringList> testset, trainingset;
-    if(ratio > 0)
-    {
-        prepareForTrain(facedb, 
-                        testset, trainingset, 
-                        nbOfSamples, nbOfIdentities,
-                        ratio);
-    }
-    else
-    {
-        QString testsetFolder = parser.value(QLatin1String("ts"));
-        QString trainingsetFoler = parser.value(QLatin1String("ds"));
-
-        // TODO: Overload of prepareForTrain() to create training set and test set here
-    }
 
     // Init FaceDetector used for detecting faces and bounding box
     // before recognizing
