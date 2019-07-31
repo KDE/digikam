@@ -204,8 +204,8 @@ void PanoLastPage::checkFiles()
         {
             if (input != d->mngr->preProcessedMap()[input].preprocessedUrl)
             {
-                QString dir = input.toString(QUrl::RemoveFilename);
-                QUrl derawUrl(dir + d->mngr->preProcessedMap()[input].preprocessedUrl.fileName());
+                QString dir2 = input.toString(QUrl::RemoveFilename);
+                QUrl derawUrl(dir2 + d->mngr->preProcessedMap()[input].preprocessedUrl.fileName());
                 QFile derawFile(derawUrl.toString(QUrl::PreferLocalFile));
                 rawsOk &= !derawFile.exists();
             }
