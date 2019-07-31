@@ -197,7 +197,7 @@
       <li xml:lang="fi">SQLite- tai MySQL-tallennustila albumien sisällölle ja matatiedoille sekä edistyneet hakutyökalut</li>
       <li xml:lang="fr">Stockage du contenu des albums et des métadonnées fonctionnant avec SQLite ou MySQL et des outils de recherche avancée</li>
       <li xml:lang="gl">Almacenamento mediante SQLite ou MySQL para o contido dos álbums e os seus metadatos con ferramentas de busca avanzadas.</li>
-      <li xml:lang="id">Penyimpanan yang diberdayakan SQLite atau Mysql untuk konten album dan metadatanya dengan alat pencarian tingkatlanjut</li>
+      <li xml:lang="id">Penyimpanan yang diberdayakan SQLite atau Mysql untuk konten album dan metadatanya dengan alat pencarian tingkat-lanjut</li>
       <li xml:lang="it">Memorizzazione del contenuto degli album e dei suoi metadati fornita da SQLite o Mysql, con strumenti di ricerca avanzati</li>
       <li xml:lang="ko">SQLite 및 MySQL 기반 앨범과 메타데이터 저장소 및 고급 검색 도구</li>
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
@@ -310,7 +310,7 @@
       <li xml:lang="fi">Valotaulu kuvien vertailemiseksi rinnakkain</li>
       <li xml:lang="fr">Table lumineuse pour comparer des photos côte-à-côte</li>
       <li xml:lang="gl">Táboa de luz para comparar fotos unha ao lado da outra.</li>
-      <li xml:lang="id">Light Table untuk membandingkan foto sisi demi sisi</li>
+      <li xml:lang="id">Table Terang untuk membandingkan foto sisi demi sisi</li>
       <li xml:lang="it">Tavolo luminoso per confrontare le foto fianco a fianco</li>
       <li xml:lang="ko">사진을 양쪽으로 비교하는 조명 테이블</li>
       <li xml:lang="nl">Lichttafel om foto's naast elkaar te vergelijken</li>
@@ -387,7 +387,7 @@
       <li xml:lang="fi">Lisätyökaluissa kuvamuokkain kuvien pikakorjauksiin</li>
       <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités pour réparer rapidement une photo</li>
       <li xml:lang="gl">Inclúe un editor de imaxes con ferramentas avanzadas para arranxar fotos rapidamente.</li>
-      <li xml:lang="id">Tersemat editor image dengan alat tingkatlanjut untuk memperbaiki foto secara cepat</li>
+      <li xml:lang="id">Tersemat editor citra dengan alat tingkat-lanjut untuk memperbaiki foto secara cepat</li>
       <li xml:lang="it">Editor delle immagini con strumenti avanzati inclusi per la correzione rapida delle foto</li>
       <li xml:lang="ko">사진을 빠르게 편집할 수 있는 고급 기능이 있는 그림 편집기</li>
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
