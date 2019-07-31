@@ -141,6 +141,15 @@ QList<QRectF> processFaceDetection(const QImage& image, FaceDetector detector)
     return detectedFaces;
 }
 
+QList<QRectF> processFaceDetection(const QString& imagePath, FaceDetector detector)
+{
+    QList<QRectF> detectedFaces = detector.detectFaces(imagePath);
+
+    qDebug() << "(Input CV) Found " << detectedFaces.size() << " faces";
+
+    return detectedFaces;
+}
+
 QImage retrieveFace(const DImg& image, const QList<QRectF>& rects)
 {
     if(rects.size() > 1)
@@ -186,7 +195,7 @@ int main(int argc, char* argv[])
     parser.addOption(QCommandLineOption(QLatin1String("ds"), QLatin1String("Training set (dev set) folder"), QLatin1String("path relative to db folder")));
     parser.addOption(QCommandLineOption(QLatin1String("ni"), QLatin1String("Number of total objects"), QLatin1String("nbIdentities")));
     parser.addOption(QCommandLineOption(QLatin1String("ns"), QLatin1String("Number of samples per object"), QLatin1String("nbSamples")));
-    parser.addOption(QCommandLineOption(QLatin1String("as"), QLatin1String("All set"), QLatin1String("Run on the entire set")));
+    parser.addOption(QCommandLineOption(QLatin1String("as"), QLatin1String("Option to run test on the entire set")));
     parser.addHelpOption();
     parser.process(app);
 
@@ -383,7 +392,7 @@ int main(int argc, char* argv[])
         foreach(const QImage& image, rawImages)
         {
             QString imagePath = imagePaths.takeFirst();
-            QList<QRectF> detectedBoundingBox = processFaceDetection(image, detector);
+            QList<QRectF> detectedBoundingBox = processFaceDetection(imagePath, detector);
 
             if(detectedBoundingBox.size())
             {
@@ -417,7 +426,7 @@ int main(int argc, char* argv[])
         foreach(const QImage& image, rawImages)
         {
             QString imagePath = imagePaths.takeFirst();
-            QList<QRectF> detectedBoundingBox = processFaceDetection(image, detector);
+            QList<QRectF> detectedBoundingBox = processFaceDetection(imagePath, detector);
 
             if(detectedBoundingBox.size())
             {
