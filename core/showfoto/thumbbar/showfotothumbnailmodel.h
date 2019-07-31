@@ -114,7 +114,7 @@ Q_SIGNALS:
 
 protected:
 
-    void showfotoItemInfosCleared();
+    void showfotoItemInfosCleared() override;
 
 protected Q_SLOTS:
 

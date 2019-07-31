@@ -89,7 +89,7 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album);
+    virtual void addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album) override;
 
 private Q_SLOTS:
 

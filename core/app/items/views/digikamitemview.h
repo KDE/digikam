@@ -51,7 +51,7 @@ public:
 
     int  fitToWidthIcons();
 
-    virtual void setThumbnailSize(const ThumbnailSize& size);
+    virtual void setThumbnailSize(const ThumbnailSize& size) override;
 
     ItemInfoList allItemInfos(bool grouping = false) const;
     ItemInfoList selectedItemInfos(bool grouping = false) const;
@@ -101,10 +101,10 @@ protected:
     void addRejectionOverlay(ItemDelegate* delegate = nullptr);
     void addAssignNameOverlay(ItemDelegate* delegate = nullptr);
 
-    virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info);
+    virtual void activated(const ItemInfo& info, Qt::KeyboardModifiers modifiers) override;
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ItemInfo& info) override;
     virtual void showContextMenu(QContextMenuEvent* event);
-    virtual void slotSetupChanged();
+    virtual void slotSetupChanged() override;
 
     virtual bool hasHiddenGroupedImages(const ItemInfo& info) const;
 

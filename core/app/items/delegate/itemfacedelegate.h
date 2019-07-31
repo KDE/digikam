@@ -44,7 +44,8 @@ public:
     explicit ItemFaceDelegate(ItemCategorizedView* const parent);
     ~ItemFaceDelegate();
 
-    virtual void prepareThumbnails(ItemThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
+    virtual void prepareThumbnails(ItemThumbnailModel* thumbModel,
+                                   const QList<QModelIndex>& indexes) override;
     QRect faceRect(const QModelIndex& index) const;
     QRect largerFaceRect(const QModelIndex& index) const;
 
@@ -52,9 +53,9 @@ public:
 
 protected:
 
-    virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;
-    virtual void updateRects();
-    virtual void clearModelDataCaches();
+    virtual QPixmap thumbnailPixmap(const QModelIndex& index) const override;
+    virtual void updateRects() override;
+    virtual void clearModelDataCaches() override;
 
 private:
 

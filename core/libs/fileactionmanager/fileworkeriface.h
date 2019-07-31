@@ -42,10 +42,10 @@ class FileWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void writeOrientationToFiles(FileActionItemInfoList, int){};
-    virtual void writeMetadataToFiles(FileActionItemInfoList)        {};
-    virtual void writeMetadata(FileActionItemInfoList, int)          {};
-    virtual void transform(FileActionItemInfoList, int)              {};
+    virtual void writeOrientationToFiles(FileActionItemInfoList, int) {};
+    virtual void writeMetadataToFiles(FileActionItemInfoList)         {};
+    virtual void writeMetadata(FileActionItemInfoList, int)           {};
+    virtual void transform(FileActionItemInfoList, int)               {};
 
 Q_SIGNALS:
 

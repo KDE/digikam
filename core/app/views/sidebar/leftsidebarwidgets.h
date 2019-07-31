@@ -357,13 +357,13 @@ public:
                                     QItemSelectionModel* const itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
-    void    setActive(bool active);
+    void    setActive(bool active) override;
     void    doLoadState();
     void    doSaveState();
-    void    applySettings();
-    void    changeAlbumFromHistory(const QList<Album*>& album);
-    const QIcon   getIcon();
-    const QString getCaption();
+    void    applySettings() override;
+    void    changeAlbumFromHistory(const QList<Album*>& album) override;
+    const QIcon   getIcon() override;
+    const QString getCaption() override;
 
 Q_SIGNALS:
 

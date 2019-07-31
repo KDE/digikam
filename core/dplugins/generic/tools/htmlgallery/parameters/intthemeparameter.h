@@ -41,9 +41,9 @@ public:
     explicit IntThemeParameter();
     virtual ~IntThemeParameter();
 
-    virtual void init(const QByteArray& internalName, const KConfigGroup* configGroup);
-    virtual QWidget* createWidget(QWidget* parent, const QString& value) const;
-    virtual QString valueFromWidget(QWidget*) const;
+    virtual void init(const QByteArray& internalName, const KConfigGroup* configGroup) override;
+    virtual QWidget* createWidget(QWidget* parent, const QString& value) const override;
+    virtual QString valueFromWidget(QWidget*) const override;
 
 private:
 
