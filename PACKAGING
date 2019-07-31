@@ -53,11 +53,18 @@ Notice to make release tarballs from GIT
 
     ftp://upload.kde.org/incoming for the final publication.
 
-    Create system admin task to publish the file officialy on download servers with url
+    Create a "system admin task" to publish the files officialy on download servers from this url:
 
     https://phabricator.kde.org/maniphest/task/edit/form/2/
 
-    Don't forget to join all file sha256 checksums generated in file sha256_release.sum.
+    Title: "New digiKam release X.Y.Z tarball and bundles for Windows, Linux, and MacOS"
+
+    Description:
+
+        Destination: stable/digikam/X.Y.Z/
+        ...
+        List of sha256 + file names
+        ...
 
 10/ Create bundles files with signatures for Linux, MacOS, and Windows. See README.BUNDLES for details.
     Use same worflow than source tarball.
