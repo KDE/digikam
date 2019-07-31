@@ -50,7 +50,7 @@ public:
     CamItemInfo  camItemInfo(const QString& folder, const QString& file);
     CamItemInfo& camItemInfoRef(const QString& folder, const QString& file);
 
-    virtual void setThumbnailSize(const ThumbnailSize& size);
+    virtual void setThumbnailSize(const ThumbnailSize& size) override;
 
 public Q_SLOTS:
 
@@ -88,8 +88,8 @@ private Q_SLOTS:
 
 protected:
 
-    virtual void activated(const CamItemInfo& info, Qt::KeyboardModifiers modifiers);
-    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
+    virtual void activated(const CamItemInfo& info, Qt::KeyboardModifiers modifiers) override;
+    virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info) override;
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
 

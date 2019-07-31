@@ -59,12 +59,12 @@ public:
 
 private Q_SLOTS:
 
-    void slotStart();
+    void slotStart() override;
     void slotScanStarted(const QString&);
     void slotPartialScanDone(const QString&);
     void slotTotalFilesToScan(int);
     void slotFilesScanned(int);
-    void slotCancel();
+    void slotCancel() override;
 
 private:
 

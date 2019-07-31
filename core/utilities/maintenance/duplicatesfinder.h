@@ -72,9 +72,9 @@ public:
 
 private Q_SLOTS:
 
-    void slotStart();
-    void slotDone();
-    void slotCancel();
+    void slotStart() override;
+    void slotDone() override;
+    void slotCancel() override;
     void slotDuplicatesSearchTotalAmount(int);
     void slotDuplicatesSearchProcessedAmount(int);
 

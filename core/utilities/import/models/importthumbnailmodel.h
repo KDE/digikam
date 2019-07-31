@@ -51,7 +51,7 @@ public:
     ~ImportThumbnailModel();
 
     /// Sets the camera thumbs controller which is used to get the thumbnails for item infos.
-    void setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl);
+    void setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl) override;
 
     /// Get the thumbnail size
     ThumbnailSize thumbnailSize() const;
