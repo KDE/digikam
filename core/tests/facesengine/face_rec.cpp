@@ -8,9 +8,7 @@
  *               NOTE: This tool integrates the whole Face Management
  *               work flow, especially designed to verify and benchmark
  *               Face Recognition algorithm. It is adapted from recognize.cpp
- *               developped by Aditya Bhatt. It uses ORL database, see 
- *               here for details:
- *               http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
+ *               developped by Aditya Bhatt.
  *
  * Copyright (C) 2019 by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
