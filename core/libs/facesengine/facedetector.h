@@ -82,6 +82,8 @@ public:
      */
     QList<QRectF> detectFaces(const Digikam::DImg& image, const QSize& originalSize = QSize());
 
+    QList<QRectF> detectFaces(const QString& imagePath);
+
     /**
      * Tunes backend parameters.
      * Available parameters:

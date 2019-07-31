@@ -50,7 +50,8 @@ public:
 
     cv::Mat prepareForDetection(const QImage& inputImage) const;
     cv::Mat prepareForDetection(const Digikam::DImg& inputImage) const;
-    QList<QRect> detectFaces(const cv::Mat& inputImage, const cv::Size& originalSize = cv::Size(0, 0));
+    cv::Mat prepareForDetection(const QString& inputImagePath, cv::Size& paddedSize) const;
+    QList<QRect> detectFaces(const cv::Mat& inputImage, const cv::Size& paddedSize);
 
     /**
      * Returns the image size (one dimension)
@@ -66,6 +67,7 @@ private:
 
     float           scaleFactor;
     cv::Scalar      meanValToSubtract;
+    cv::Size        inputImageSize;
 
 };
 

@@ -42,8 +42,10 @@
 namespace Digikam
 {
 
+static float nmsThreshold = 0.4;
+
 OpenCVDNNFaceDetector::OpenCVDNNFaceDetector()
-  : confidenceThreshold(0.8)
+  : confidenceThreshold(0.5)
 {
 
     QString nnproto = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
@@ -59,6 +61,7 @@ OpenCVDNNFaceDetector::OpenCVDNNFaceDetector()
 
     scaleFactor = 1.0;
     meanValToSubtract = cv::Scalar(104.0, 177.0, 123.0);
+    inputImageSize = cv::Size(300,300);
 }
 
 OpenCVDNNFaceDetector::~OpenCVDNNFaceDetector()
@@ -175,8 +178,31 @@ cv::Mat OpenCVDNNFaceDetector::prepareForDetection(const Digikam::DImg& inputIma
     return cvImage;
 }
 
+cv::Mat OpenCVDNNFaceDetector::prepareForDetection(const QString& inputImagePath, cv::Size& paddedSize) const
+{
+    cv::Mat image = cv::imread(inputImagePath.toStdString()), imagePadded;
 
-QList<QRect> OpenCVDNNFaceDetector::detectFaces(const cv::Mat& inputImage, const cv::Size& originalSize)
+    float k = qMin(inputImageSize.width*1.0/image.cols, inputImageSize.height*1.0/image.rows);
+
+    int newWidth = (int)(k*image.cols);
+    int newHeight = (int)(k*image.rows);
+    cv::resize(image, image, cv::Size(newWidth, newHeight));
+
+    // Pad with black pixels
+    int padX = (inputImageSize.width - newWidth) / 2;
+    int padY = (inputImageSize.height - newHeight) / 2;
+    cv::copyMakeBorder(image, imagePadded,
+                       padY, padY,
+                       padX, padX,
+                       cv::BORDER_CONSTANT,
+                       cv::Scalar(0,0,0));
+
+    paddedSize = cv::Size(padX, padY);
+
+    return imagePadded;
+}
+
+QList<QRect> OpenCVDNNFaceDetector::detectFaces(const cv::Mat& inputImage, const cv::Size& paddedSize)
 {
     if (inputImage.empty())
     {
@@ -184,17 +210,15 @@ QList<QRect> OpenCVDNNFaceDetector::detectFaces(const cv::Mat& inputImage, const
         return QList<QRect>();
     }
 
-    // qDebug() << "original size " << inputImage.size().width << ", " << inputImage.size().height;
-
-    // cv::imshow("image", inputImg);
-    // cv::waitKey(0);
-
-    cv::Mat inputBlob = cv::dnn::blobFromImage(inputImage, scaleFactor, cv::Size(originalSize.width, originalSize.height), meanValToSubtract);
+    cv::Mat inputBlob = cv::dnn::blobFromImage(inputImage, scaleFactor, inputImageSize, meanValToSubtract, true, false);
     net.setInput(inputBlob);
     cv::Mat detection = net.forward();
 
     QList<QRect> results; 
     cv::Mat detectionMat(detection.size[2], detection.size[3], CV_32F, detection.ptr<float>());
+
+    std::vector<float> goodConfidences, doubtConfidences, confidences;
+    std::vector<cv::Rect> goodBoxes, doubtBoxes, boxes;
 
     for(int i = 0; i < detectionMat.rows; i++)
     {
@@ -202,20 +226,62 @@ QList<QRect> OpenCVDNNFaceDetector::detectFaces(const cv::Mat& inputImage, const
 
         if(confidence > confidenceThreshold)
         {
-            int x1 = static_cast<int>(detectionMat.at<float>(i, 3) * originalSize.width);
-            int y1 = static_cast<int>(detectionMat.at<float>(i, 4) * originalSize.height);
-            int x2 = static_cast<int>(detectionMat.at<float>(i, 5) * originalSize.width);
-            int y2 = static_cast<int>(detectionMat.at<float>(i, 6) * originalSize.height);
+            float leftOffset = detectionMat.at<float>(i, 3);
+            float topOffset = detectionMat.at<float>(i, 4);
+            float rightOffset = detectionMat.at<float>(i, 5);
+            float bottomOffset = detectionMat.at<float>(i, 6);
 
-            // qDebug() << detectionMat.at<float>(detectedPos, 3) << ", " << detectionMat.at<float>(detectedPos, 4) << ", " << detectionMat.at<float>(detectedPos, 5) << ", " << detectionMat.at<float>(detectedPos, 6);
+            int left = (int)(leftOffset*inputImageSize.width);
+            int right = (int)(rightOffset*inputImageSize.width);
+            int top = (int)(topOffset*inputImageSize.height);
+            int bottom = (int)(bottomOffset*inputImageSize.height);
 
-            results << QRect(x1, y1, x2-x1, y2-y1);
+            cv::Rect bbox(left, top, right - left + 1, bottom - top + 1);
+
+            if(left >= paddedSize.width && right <= inputImageSize.width - paddedSize.width - 1
+               && top >= paddedSize.height && bottom <= inputImageSize.height - paddedSize.height - 1)
+            {
+                goodBoxes.push_back(bbox);
+                goodConfidences.push_back(confidence);
+                qDebug() << "Good rect = " << QRect(bbox.x, bbox.y, bbox.width, bbox.height) << ", conf = " << confidence;
+            }
+            else if(right > left && right > paddedSize.width && left < inputImageSize.width - paddedSize.width - 1
+                    && bottom > top && bottom > paddedSize.height && top < inputImageSize.height - paddedSize.height - 1)
+            {
+                doubtBoxes.push_back(bbox);
+                doubtConfidences.push_back(confidence);
+                qDebug() << "Doubt rect = " << QRect(bbox.x, bbox.y, bbox.width, bbox.height) << ", conf = " << confidence;
+            }
         }
+    }
+
+    if(goodBoxes.empty())
+    {
+        boxes = doubtBoxes;
+        confidences = doubtConfidences;
+    }
+    else
+    {
+        boxes = goodBoxes;
+        confidences = goodConfidences;
+    }
+
+    std::vector<int> indices;
+    cv::dnn::NMSBoxes(boxes, confidences, confidenceThreshold, nmsThreshold, indices);
+    for (size_t i = 0; i < indices.size(); ++i)
+    {
+        int idx = indices[i];
+        cv::Rect bbox = boxes[idx];
+        results << QRect(bbox.x - paddedSize.width, bbox.y - paddedSize.height, bbox.width, bbox.height);
+        cv::rectangle(inputImage, bbox, cv::Scalar(0,128,0));
     }
 
     // qDebug() << detectedConfidence << ", " << detectedPos;
 
-    // qDebug() << results.first();
+    qDebug() << results;
+
+    // cv::imshow("image", inputImage);
+    // cv::waitKey(0);
 
     return results;
 }
