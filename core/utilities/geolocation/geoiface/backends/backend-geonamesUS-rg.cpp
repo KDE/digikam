@@ -227,6 +227,7 @@ void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
     {
         d->errorMessage = reply->errorString();
         emit signalRGReady(d->jobs.first().request);
+        reply->deleteLater();
         d->jobs.clear();
         return;
     }
@@ -269,6 +270,8 @@ void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
             break;
         }
     }
+
+    reply->deleteLater();
 }
 
 void BackendGeonamesUSRG::cancelRequests()
