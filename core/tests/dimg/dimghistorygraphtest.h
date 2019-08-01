@@ -40,8 +40,8 @@ class DImgHistoryGraphTest : public DImgAbstractHistoryTest
 
 public Q_SLOTS:
 
-    void slotImageLoaded(const QString&, bool);
-    void slotImageSaved(const QString&, bool);
+    void slotImageLoaded(const QString&, bool) override;
+    void slotImageSaved(const QString&, bool) override;
 
 private Q_SLOTS:
 
