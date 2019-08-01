@@ -89,6 +89,8 @@ BatchToolsFactory::BatchToolsFactory()
 
 BatchToolsFactory::~BatchToolsFactory()
 {
+    d->toolsList.clear();
+
     delete d;
 }
 
