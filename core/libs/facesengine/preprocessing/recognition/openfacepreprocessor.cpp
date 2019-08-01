@@ -38,7 +38,7 @@
 
 
 #include <opencv2/imgproc.hpp>
-//#include <opencv2/highgui.hpp>
+#include <opencv2/highgui.hpp>
 
 using namespace Digikam;
 
@@ -122,7 +122,7 @@ cv::Mat OpenfacePreprocessor::process(const cv::Mat& image)
     cv::Rect new_rect(0, 0, image.cols, image.rows);
     cv::Mat landmarks(3,2,CV_32F);
     FullObjectDetection object = sp(gray, new_rect);
-    for(int i = 0; i < outerEyesNosePositions.size(); i++)
+    for(size_t i = 0; i < outerEyesNosePositions.size(); i++)
     {
     	int index = outerEyesNosePositions[i];
         landmarks.at<float>(i,0) = object.part(index)[0];
