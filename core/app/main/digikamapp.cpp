@@ -226,7 +226,7 @@ DigikamApp::~DigikamApp()
 #ifdef HAVE_KFILEMETADATA
     if (BalooWrap::isCreated())
     {
-        BalooWrap::internalPtr.clear();
+        delete BalooWrap::internalPtr;
     }
 #endif
 
