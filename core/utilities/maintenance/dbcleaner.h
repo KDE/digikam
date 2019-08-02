@@ -57,12 +57,12 @@ public:
                        ProgressItem* const parent = nullptr);
     virtual ~DbCleaner();
 
-    void setUseMultiCoreCPU(bool b);
+    void setUseMultiCoreCPU(bool b) override;
 
 private Q_SLOTS:
 
-    void slotStart();
-    void slotCancel();
+    void slotStart() override;
+    void slotCancel() override;
     void slotAdvance();
     void slotShrinkNextDBInfo(bool done, bool passed);
 
@@ -80,7 +80,7 @@ private Q_SLOTS:
     void slotCleanedSimilarity();
     void slotShrinkDatabases();
 
-    void slotDone();
+    void slotDone() override;
 
 private:
 

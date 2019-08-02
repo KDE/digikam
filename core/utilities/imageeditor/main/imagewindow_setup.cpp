@@ -240,16 +240,13 @@ void ImageWindow::slotContextMenu()
         addServicesMenu();
         m_contextMenu->addSeparator();
 
-        TagsPopupMenu* assignTagsMenu = nullptr;
-        TagsPopupMenu* removeTagsMenu = nullptr;
-
         // Bulk assignment/removal of tags --------------------------
 
         QList<qlonglong> idList;
         idList << d->currentItemInfo.id();
 
-        assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::RECENTLYASSIGNED, this);
-        removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
+        TagsPopupMenu* const assignTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::RECENTLYASSIGNED, this);
+        TagsPopupMenu* const removeTagsMenu = new TagsPopupMenu(idList, TagsPopupMenu::REMOVE, this);
         assignTagsMenu->menuAction()->setText(i18n("Assign Tag"));
         removeTagsMenu->menuAction()->setText(i18n("Remove Tag"));
 

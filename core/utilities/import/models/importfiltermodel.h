@@ -136,7 +136,7 @@ public:
     //bool isAllGroupsOpen() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ImportFilterModel* importFilterModel()                              const;
+    virtual ImportFilterModel* importFilterModel()                              const override;
 
 public Q_SLOTS:
 
@@ -183,7 +183,7 @@ protected:
 
 protected:
 
-    virtual void setDirectSourceImportModel(ImportItemModel* const sourceModel);
+    virtual void setDirectSourceImportModel(ImportItemModel* const sourceModel) override;
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 

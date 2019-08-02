@@ -172,6 +172,7 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
                                  double correlation, double noise)
 {
     CMat* matrix = nullptr;
+    (void)matrix; // To prevent cppcheck warnings.
 
     // Compute matrix
     qCDebug(DIGIKAM_DIMG_LOG) << "RefocusFilter::Compute matrix...";

@@ -419,8 +419,10 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
         //  Determine input intensity.
 
         if (d->levels->high_input[j] != d->levels->low_input[j])
+        {
             inten = ((double)((float)(d->sixteenBit ? 65535 : 255) * inten - d->levels->low_input[j]) /
                      (double)(d->levels->high_input[j] - d->levels->low_input[j]));
+        }
         else
         {
             inten = (double)((float)(d->sixteenBit ? 65535 : 255) * inten - d->levels->low_input[j]);
@@ -441,12 +443,15 @@ float ImageLevels::levelsLutFunc(int n_channels, int channel, float value)
         //  determine the output intensity.
 
         if (d->levels->high_output[j] >= d->levels->low_output[j])
+        {
             inten = (double)(inten * (d->levels->high_output[j] -
                                       d->levels->low_output[j]) + d->levels->low_output[j]);
-
-        else if (d->levels->high_output[j] < d->levels->low_output[j])
+        }
+        else
+        {
             inten = (double)(d->levels->low_output[j] - inten *
                              (d->levels->low_output[j] - d->levels->high_output[j]));
+        }
 
         inten /= (float)(d->sixteenBit ? 65535 : 255);
     }

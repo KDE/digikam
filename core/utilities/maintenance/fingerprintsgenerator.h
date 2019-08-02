@@ -49,7 +49,7 @@ public:
     explicit FingerPrintsGenerator(const bool rebuildAll, const AlbumList& list=AlbumList(), ProgressItem* const parent = nullptr);
     ~FingerPrintsGenerator();
 
-    void setUseMultiCoreCPU(bool b);
+    void setUseMultiCoreCPU(bool b) override;
 
 private:
 
@@ -57,9 +57,9 @@ private:
 
 private Q_SLOTS:
 
-    void slotStart();
-    void slotDone();
-    void slotCancel();
+    void slotStart() override;
+    void slotDone() override;
+    void slotCancel() override;
     void slotAdvance(const QImage&);
 
 private:

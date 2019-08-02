@@ -534,6 +534,11 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         jas_stream_t*  icc_stream  = nullptr;
         jas_cmprof_t*  cm_profile  = nullptr;
 
+        // To prevent cppcheck warnings.
+        (void)icc_profile;
+        (void)icc_stream;
+        (void)cm_profile;
+
         cm_profile = jas_image_cmprof(jp2_image);
 
         if (cm_profile != nullptr)
@@ -681,6 +686,10 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     jas_cmprof_t*  cm_profile  = nullptr;
     jas_iccprof_t* icc_profile = nullptr;
+
+    // To prevent cppcheck warnings.
+    (void)cm_profile;
+    (void)icc_profile;
 
     QByteArray profile_rawdata = m_image->getIccProfile().data();
 

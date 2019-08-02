@@ -651,8 +651,10 @@ QPoint PerspectiveWidget::buildPerspective(const QPoint& orignTopLeft, const QPo
     return QPoint(lround(newCenterX), lround(newCenterY));
 }
 
-void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destImage,
-                                        const Matrix& matrix, const DColor& background)
+void PerspectiveWidget::transformAffine(DImg* const orgImage,
+                                        DImg* const destImage,
+                                        const Matrix& matrix,
+                                        const DColor& background)
 {
     Matrix m(matrix);
 
@@ -669,15 +671,20 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
                                  //  \ /    direction (in target space)
                                  //   4
 
-    double tu[5],tv[5],tw[5];    // undivided source coordinates and divisor
+    double tu[5], tv[5], tw[5];    // undivided source coordinates and divisor
 
-    uchar* data = nullptr, *newData = nullptr;
+    uchar* data    = nullptr;
+    uchar* newData = nullptr;
+    // To prevent cppcheck warnings.
+    (void)data;
+    (void)newData;
+
     bool   sixteenBit;
     int    coords;
     int    width, height;
     int    bytesDepth;
     int    offset;
-    uchar* d2 = nullptr;
+    uchar* d2   = nullptr;
     DColor color;
 
     bytesDepth  = orgImage->bytesDepth();
@@ -721,7 +728,7 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
     // these loops could be rearranged, depending on which bit of code
     // you'd most like to write more than once.
 
-    for (y = y1; y < y2; ++y)
+    for (y = y1 ; y < y2 ; ++y)
     {
         // set up inverse transform steps
 
@@ -731,11 +738,11 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
 
         d2 = dest.data();
 
-        for (x = x1; x < x2; ++x)
+        for (x = x1 ; x < x2 ; ++x)
         {
             int i;     //  normalize homogeneous coords
 
-            for (i = 0; i < coords; ++i)
+            for (i = 0 ; i < coords ; ++i)
             {
                 if (tw[i] == 1.0)
                 {
@@ -797,7 +804,7 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
                 d2 += bytesDepth;
             }
 
-            for (i = 0; i < coords; ++i)
+            for (i = 0 ; i < coords ; ++i)
             {
                 tu[i] += uinc;
                 tv[i] += vinc;

@@ -560,6 +560,7 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
     float d_x   = x - (int)x;
     float d_y   = y - (int)y;
     uchar* data = nullptr;
+    (void)data;     // To prevent cppcheck warnings.
 
     DColor d00, d01, d10, d11;
     DColor col;

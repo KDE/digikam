@@ -181,14 +181,18 @@ bool HTMLOutputPage::isComplete() const
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
 
     if (!wizard)
+    {
         return false;
+    }
 
     GalleryInfo* const info  = wizard->galleryInfo();
 
     bool b                   = !d->destUrl->fileDlgPath().isEmpty();
 
     if (info->m_getOption == GalleryInfo::IMAGES)
-        b = b & !d->imageSelectionTitle->text().isEmpty();
+    {
+        b = (b & !d->imageSelectionTitle->text().isEmpty());
+    }
 
     return b;
 }

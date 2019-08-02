@@ -111,15 +111,16 @@ void FbPlugin::slotFaceBook()
 {
 //    if (!reactivateToolDialog(m_toolDlg))
     {
-        QMessageBox message(QMessageBox::Information, i18n("Facebook"),
-                            i18n("<p>Currently, as an open source project, we are unable to meet "
-                                 "the Facebook requirements for reactivating this plugin.</p>"
-                                 "<p>For more information look here: "
-                                 "<a href='https://bugs.kde.org/show_bug.cgi?id=182838'>"
-                                 "KDE Bugtracking System</a></p>"));
+        QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Information, i18n("Facebook"),
+                 i18n("<p>Currently, as an open source project, we are unable to meet "
+                      "the Facebook requirements for reactivating this plugin.</p>"
+                      "<p>For more information look here: "
+                      "<a href='https://bugs.kde.org/show_bug.cgi?id=182838'>"
+                      "KDE Bugtracking System</a></p>"));
 
-        message.setTextInteractionFlags(Qt::LinksAccessibleByMouse);
-        message.exec();
+        msgBox->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+        msgBox->exec();
+        delete msgBox;
 
 //        delete m_toolDlg;
 //        m_toolDlg = new FbWindow(infoIface(sender()), nullptr);

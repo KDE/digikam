@@ -122,8 +122,8 @@ public:
     void read(const QString& search);
     QString write() const;
 
-    QPixmap groupLabelPixmap(int w, int h);
-    QPixmap bottomBarPixmap(int w, int h);
+    QPixmap groupLabelPixmap(int w, int h) override;
+    QPixmap bottomBarPixmap(int w, int h) override;
 
 Q_SIGNALS:
 
@@ -147,8 +147,8 @@ protected:
     virtual void paintEvent(QPaintEvent* e) override;
     virtual void showEvent(QShowEvent* event) override;
 
-    virtual SearchGroup* createSearchGroup();
-    virtual void addGroupToLayout(SearchGroup* group);
+    virtual SearchGroup* createSearchGroup() override;
+    virtual void addGroupToLayout(SearchGroup* group) override;
 
 private:
 

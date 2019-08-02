@@ -56,8 +56,8 @@ class Q_DECL_HIDDEN PrivateProgressItemCreator : public QObject, public FileActi
 
 public:
 
-    ProgressItem* createProgressItem(const QString& action) const;
-    void addProgressItem(ProgressItem* const item);
+    ProgressItem* createProgressItem(const QString& action) const override;
+    void addProgressItem(ProgressItem* const item) override;
 
     QAtomicInt activeProgressItems;
 

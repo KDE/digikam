@@ -47,7 +47,7 @@ if [ -d "$INSTALL_PREFIX" ] ; then
     fi
 
     echo "---------- Removing existing Macports build"
-    rm -fr $INSTALL_PREFIX
+    mv $INSTALL_PREFIX $INSTALL_PREFIX.old && rm -fr $INSTALL_PREFIX.old
 
 fi
 

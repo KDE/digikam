@@ -49,38 +49,38 @@ public:
                       const QString& port, const QString& path);
     ~GPCamera();
 
-    QByteArray                 cameraMD5ID();
-    DKCamera::CameraDriverType cameraDriverType();
+    QByteArray                 cameraMD5ID() override;
+    DKCamera::CameraDriverType cameraDriverType() override;
 
-    bool doConnect();
+    bool doConnect() override;
 
-    void cancel();
+    void cancel() override;
 
-    bool getFolders(const QString& folder);
+    bool getFolders(const QString& folder) override;
     bool getItemsList(const QString& folder, QStringList& itemsList);
-    bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items);
-    void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
+    bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items) override;
+    void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata) override;
 
-    bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail);
-    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta);
+    bool getThumbnail(const QString& folder, const QString& itemName, QImage& thumbnail) override;
+    bool getMetadata(const QString& folder, const QString& itemName, DMetadata& meta) override;
 
-    bool setLockItem(const QString& folder, const QString& itemName, bool lock);
+    bool setLockItem(const QString& folder, const QString& itemName, bool lock) override;
 
-    bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile);
-    bool deleteItem(const QString& folder, const QString& itemName);
+    bool downloadItem(const QString& folder, const QString& itemName, const QString& saveFile) override;
+    bool deleteItem(const QString& folder, const QString& itemName) override;
 
     // recursively delete all items
     bool deleteAllItems(const QString& folder);
 
-    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo);
+    bool uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& itemInfo) override;
 
-    bool cameraSummary(QString& summary);
-    bool cameraManual(QString& manual);
-    bool cameraAbout(QString& about);
+    bool cameraSummary(QString& summary) override;
+    bool cameraManual(QString& manual) override;
+    bool cameraAbout(QString& about) override;
 
-    bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
-    bool getPreview(QImage& preview);
-    bool capture(CamItemInfo& itemInfo);
+    bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail) override;
+    bool getPreview(QImage& preview) override;
+    bool capture(CamItemInfo& itemInfo) override;
 
     // Public static methods shared with Setup Camera
 

@@ -349,13 +349,15 @@ libopenal.so.1 \
 libdbus-1.so.3 \
 "
 
-#liblber-2.4.so.2       # needed for debian wheezy
-#libldap_r-2.4.so.2     # needed for debian wheezy
+#liblber-2.4.so.2       # needed for Debian Wheezy
+#libldap_r-2.4.so.2     # needed for Debian Wheezy
 
 #libffi.so.6            # needed for Ubuntu 11.04
 #libxcb-glx.so.0        # needed for Ubuntu 11.04
 
 #libkeyutils.so.1       # Originally removed in linuxdeployqt, but needed for Gentoo (see https://bugs.kde.org/show_bug.cgi?id=406171#c2)
+#libz.so.1              # needed for Mint 18.1 (see http://digikam.1695700.n4.nabble.com/digikam-6-2-0-64-bit-appimage-error-td4708921.html)
+
 
 for FILE in $EXCLUDE_FILES ; do
     if [[ -f usr/lib/${FILE} ]] ; then
@@ -422,7 +424,7 @@ APP=digikam
 if [[ $DK_QTWEBENGINE = 1 ]] ; then
     WEB_BROWSER="-qtwebengine"
 else
-    WEB_BROWSER="-qtwebkit"
+    WEB_BROWSER=""
 fi
 
 if [[ "$ARCH" = "x86_64" ]] ; then
@@ -531,7 +533,7 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     echo -e "---------- Upload new bundle AppImage files to files.kde.org repository \n"
 
-    rsync -r -v --progress -e ssh $ORIG_WD/bundle/$APPIMAGE     $DK_UPLOADURL:$DK_UPLOADDIR
+    rsync -r -v --progress -e ssh $ORIG_WD/bundle/$APPIMAGE $DK_UPLOADURL:$DK_UPLOADDIR
     scp $ORIG_WD/bundle/$APPIMAGE.sum $DK_UPLOADURL:$DK_UPLOADDIR
 
     if [[ $DK_SIGN = 1 ]] ; then

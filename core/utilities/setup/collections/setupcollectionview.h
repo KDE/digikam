@@ -232,10 +232,10 @@ public:
     virtual QSize    sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual void     updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-    virtual QList<QWidget*> createItemWidgets(const QModelIndex& index) const;
+    virtual QList<QWidget*> createItemWidgets(const QModelIndex& index) const override;
     virtual void            updateItemWidgets(const QList<QWidget*> widgets,
                                               const QStyleOptionViewItem& option,
-                                              const QPersistentModelIndex& index) const;
+                                              const QPersistentModelIndex& index) const override;
 
 Q_SIGNALS:
 
