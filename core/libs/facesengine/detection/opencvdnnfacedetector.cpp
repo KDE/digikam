@@ -202,7 +202,7 @@ cv::Mat OpenCVDNNFaceDetector::prepareForDetection(const QString& inputImagePath
     return imagePadded;
 }
 
-QList<QRect> OpenCVDNNFaceDetector::detectFaces(const cv::Mat& inputImage, const cv::Size& paddedSize)
+QList<QRect> OpenCVDNNFaceDetector::detectFaces(cv::Mat& inputImage, const cv::Size& paddedSize)
 {
     if (inputImage.empty())
     {

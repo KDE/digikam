@@ -51,7 +51,7 @@ public:
     cv::Mat prepareForDetection(const QImage& inputImage) const;
     cv::Mat prepareForDetection(const Digikam::DImg& inputImage) const;
     cv::Mat prepareForDetection(const QString& inputImagePath, cv::Size& paddedSize) const;
-    QList<QRect> detectFaces(const cv::Mat& inputImage, const cv::Size& paddedSize);
+    QList<QRect> detectFaces(cv::Mat& inputImage, const cv::Size& paddedSize);
 
     /**
      * Returns the image size (one dimension)
