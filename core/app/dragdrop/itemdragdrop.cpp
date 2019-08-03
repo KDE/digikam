@@ -50,6 +50,8 @@
 #include "iteminfo.h"
 #include "iteminfolist.h"
 #include "tableview_treeview.h"
+#include "digikamitemview.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -549,6 +551,55 @@ bool ItemDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDrop
             return false;
         }
 
+        //Face tags
+        if (talbum->hasProperty(TagPropertyName::person()))
+        {
+            if (tagIDs.first() == FaceTags::unconfirmedPersonTagId()
+                    || tagIDs.first() == FaceTags::unknownPersonTagId()
+                    || !FaceTags::isPerson(tagIDs.first()))
+                return false;
+
+            DigikamItemView* dview = qobject_cast<DigikamItemView*>(abstractview);
+            if (dview == nullptr || !droppedOn.isValid())
+            {
+                return false;
+            }
+
+            QMenu popFaceTagMenu(dview);
+
+            QAction* assignFace = nullptr;
+            QAction* assignFaces = nullptr;
+
+            if (dview->selectionModel()->selectedIndexes().size() > 1)
+            {
+                assignFaces = popFaceTagMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Change Face Tags"));
+            }
+            else
+            {
+                assignFace = popFaceTagMenu.addAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Change Face Tag"));
+            }
+
+            popFaceTagMenu.addSeparator();
+            popFaceTagMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("&Cancel"));
+            popFaceTagMenu.setMouseTracking(true);
+
+            QAction* res = popFaceTagMenu.exec(dview->mapToGlobal(e->pos()));
+
+            if (res) {
+                if (res == assignFace)
+                {
+                    dview->confirmFaces({droppedOn}, tagIDs.first());
+                }
+                else if (res == assignFaces)
+                {
+                    dview->confirmFaces(dview->selectionModel()->selectedIndexes(), tagIDs.first());
+                }
+            }
+
+            return true;
+        }
+
+        //Standart tags
         QMenu popMenu(view);
 
         QList<ItemInfo> selectedInfos  = view->selectedItemInfosCurrentFirst();
