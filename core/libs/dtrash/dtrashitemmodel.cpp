@@ -126,12 +126,12 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
         {
             thumbPath = item.collectionPath;
         }
-        else
+        else if (!d->failedThumbnails.contains(item.trashPath))
         {
             thumbPath = item.trashPath;
         }
 
-        if (pixmapForItem(thumbPath, pix))
+        if (thumbPath.isEmpty() || pixmapForItem(thumbPath, pix))
         {
             if (pix.isNull())
             {
