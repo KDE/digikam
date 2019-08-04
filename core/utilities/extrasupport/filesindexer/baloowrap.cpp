@@ -143,15 +143,8 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
 
     foreach (const QString& tag, md.tags().toSet())
     {
-        // fix wrong translations without a slash
-        QString balooTags = i18n("BalooTags/");
-
-        if (!balooTags.endsWith(QLatin1Char('/')))
-        {
-            balooTags.append(QLatin1Char('/'));
-        }
-
-        bInfo.tags.append(balooTags + tag);
+        bInfo.tags.append(i18n("BalooTags") +
+                          QLatin1Char('/')  + tag);
     }
 
     return bInfo;
