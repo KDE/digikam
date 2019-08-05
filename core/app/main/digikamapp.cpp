@@ -195,6 +195,7 @@ DigikamApp::~DigikamApp()
         ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         // close the window
         ImageWindow::imageWindow()->close();
+        qApp->processEvents();
     }
 
     // Close and delete light table instance.
@@ -203,6 +204,7 @@ DigikamApp::~DigikamApp()
     {
         LightTableWindow::lightTableWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         LightTableWindow::lightTableWindow()->close();
+        qApp->processEvents();
     }
 
     // Close and delete Batch Queue Manager instance.
@@ -211,6 +213,7 @@ DigikamApp::~DigikamApp()
     {
         QueueMgrWindow::queueManagerWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
         QueueMgrWindow::queueManagerWindow()->close();
+        qApp->processEvents();
     }
 
     if (TagsManager::isCreated())

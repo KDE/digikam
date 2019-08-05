@@ -172,11 +172,6 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
 ToolSettingsView::~ToolSettingsView()
 {
-    foreach (BatchTool* const tool, BatchToolsFactory::instance()->toolsList())
-    {
-        tool->deleteSettingsWidget();
-    }
-
     delete d;
 }
 

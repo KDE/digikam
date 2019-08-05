@@ -54,6 +54,13 @@ DPluginBqm::DPluginBqm(QObject* const parent)
 
 DPluginBqm::~DPluginBqm()
 {
+    foreach (BatchTool* const t, d->tools)
+    {
+        t->deleteSettingsWidget();
+    }
+
+    d->tools.clear();
+
     delete d;
 }
 
