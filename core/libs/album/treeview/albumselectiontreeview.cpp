@@ -45,6 +45,8 @@
 #include "thumbsgenerator.h"
 #include "newitemsfinder.h"
 #include "facesdetector.h"
+#include "coredbaccess.h"
+#include "coredb.h"
 
 namespace Digikam
 {
@@ -87,6 +89,7 @@ public:
         resetIconAction(nullptr),
         findDuplAction(nullptr),
         scanFacesAction(nullptr),
+        resetGroupingAction(nullptr),
         rebuildThumbsAction(nullptr),
         contextMenuElement(nullptr)
     {
@@ -101,6 +104,7 @@ public:
     QAction*                                  resetIconAction;
     QAction*                                  findDuplAction;
     QAction*                                  scanFacesAction;
+    QAction*                                  resetGroupingAction;
     QAction*                                  rebuildThumbsAction;
 
     class AlbumSelectionTreeViewContextMenuElement;
@@ -160,6 +164,10 @@ public:
         cmh.addAlbumActions();
         cmh.addSeparator();
         // --------------------------------------------------------
+        cmh.addAction(d->resetGroupingAction);
+        d->albumModificationHelper->bindAlbum(d->resetGroupingAction, album);
+        cmh.addSeparator();
+        // --------------------------------------------------------
         cmh.addActionDeleteAlbum(d->albumModificationHelper, album);
         cmh.addSeparator();
         // --------------------------------------------------------
@@ -183,6 +191,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
     d->toolTip                 = new AlbumViewToolTip(this);
     d->findDuplAction          = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")),  i18n("Find Duplicates..."), this);
     d->scanFacesAction         = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")), i18n("Scan for Faces"),     this);
+    d->resetGroupingAction     = new QAction(QIcon::fromTheme(QLatin1String("edit-group")),    i18n("Reset Grouping"),     this);
     d->rebuildThumbsAction     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),  i18n("Refresh"),            this);
 
     connect(d->findDuplAction, SIGNAL(triggered()),
@@ -190,6 +199,9 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
 
     connect(d->scanFacesAction, SIGNAL(triggered()),
             this, SLOT(slotScanForFaces()));
+
+    connect(d->resetGroupingAction, SIGNAL(triggered()),
+            this, SLOT(slotResetGrouping()));
 
     connect(d->rebuildThumbsAction, SIGNAL(triggered()),
             this, SLOT(slotRebuildThumbs()));
@@ -252,6 +264,24 @@ void AlbumSelectionTreeView::slotScanForFaces()
 
     FacesDetector* const tool = new FacesDetector(settings);
     tool->start();
+}
+
+void AlbumSelectionTreeView::slotResetGrouping()
+{
+    PAlbum* const album = d->albumModificationHelper->boundAlbum(sender());
+
+    if (!album)
+    {
+        return;
+    }
+
+    const QList<qlonglong>& itemIds = CoreDbAccess().db()->getItemIDsInAlbum(album->id());
+
+    foreach (const qlonglong& id, itemIds)
+    {
+        CoreDbAccess().db()->removeAllImageRelationsFrom(id, DatabaseRelation::Grouped);
+        CoreDbAccess().db()->removeAllImageRelationsTo(id, DatabaseRelation::Grouped);
+    }
 }
 
 void AlbumSelectionTreeView::slotRebuildThumbs()
