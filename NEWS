@@ -12,4 +12,5 @@ BUGFIXES:
 003 ==> 393635 - Segfault when saving TIFF after modifying RAW.
 004 ==> 410634 - The xmp tag data is not handled correctly for raw images with sidecar files.
 005 ==> 379503 - When detecting a new jpg with xmp sidecarfile in album: tags are not read/lost.
-006 ==> 
+006 ==> 410661 - Aspect ratio crop of 1024 x 500 always results in portret mode.
+007 ==> 
