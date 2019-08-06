@@ -56,30 +56,43 @@ namespace Digikam
 
 SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 {
+    // First, the sidecar urls will be added so that they are first copied or renamed.
+
     foreach (const QUrl& url, files)
     {
-        if (DMetadata::hasSidecar(url.toLocalFile()))
+        QString path(url.toLocalFile());
+
+        if (!path.endsWith(QLatin1String(".xmp")) && DMetadata::hasSidecar(path))
         {
             localFiles << DMetadata::sidecarUrl(url);
             localFileSuffixes << QLatin1String(".xmp");
             qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
         }
 
-        foreach (QString suffix, MetaEngineSettings::instance()->settings().sidecarExtensions)
+        foreach (const QString& ext, MetaEngineSettings::instance()->settings().sidecarExtensions)
         {
-            suffix = QLatin1Char('.') + suffix;
-            QString sidecarName = url.toLocalFile() + suffix;
+            QString suffix(QLatin1Char('.')  + ext);
+            QString sidecarPath(url.toLocalFile() + suffix);
+            QUrl    sidecarUrl(QUrl::fromLocalFile(sidecarPath));
 
-            if (QFileInfo::exists(sidecarName) && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
+            if (QFileInfo::exists(sidecarPath) && !localFiles.contains(sidecarUrl))
             {
-                localFiles << QUrl::fromLocalFile(sidecarName);
+                localFiles << sidecarUrl;
                 localFileSuffixes << suffix;
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
             }
         }
+    }
 
-        localFiles << url;
-        localFileSuffixes << QString();
+    // Now the files, if the user has selected sidecars, these are ignored.
+
+    foreach (const QUrl& url, files)
+    {
+        if (!localFiles.contains(url))
+        {
+            localFiles << url;
+            localFileSuffixes << QString();
+        }
     }
 }
 

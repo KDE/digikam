@@ -10,4 +10,6 @@ BUGFIXES:
 001 ==> 410501 - Dark Themes show white frames with light grey text in menu etc. - not readible.
 002 ==> 382646 - XMP sidecar file doesn't contain GPS tags.
 003 ==> 393635 - Segfault when saving TIFF after modifying RAW.
-004 ==> 
+004 ==> 410634 - The xmp tag data is not handled correctly for raw images with sidecar files.
+005 ==> 379503 - When detecting a new jpg with xmp sidecarfile in album: tags are not read/lost.
+006 ==> 
