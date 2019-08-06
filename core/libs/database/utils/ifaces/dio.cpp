@@ -71,7 +71,7 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 
         foreach (const QString& ext, MetaEngineSettings::instance()->settings().sidecarExtensions)
         {
-            QString suffix(QLatin1Char('.')  + ext);
+            QString suffix(QLatin1Char('.') + ext);
             QString sidecarPath(url.toLocalFile() + suffix);
             QUrl    sidecarUrl(QUrl::fromLocalFile(sidecarPath));
 
