@@ -261,7 +261,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeRawFilesBox->setEnabled(MetaEngine::supportMetadataWritting(QLatin1String("image/x-raw")));
 
     d->updateFileTimeStampBox = new QCheckBox;
-    d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when files are modified"));
+    d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file modification timestamp when files are modified"));
     d->updateFileTimeStampBox->setWhatsThis(i18nc("@info:whatsthis",
                                                   "Turn off this option to not update file timestamps when files are changed as "
                                                   "when you update metadata or image data. Note: disabling this option can "
